@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+
 namespace Sirenix.OdinInspector.Demos.RPGEditor
 {
     using System;
@@ -18,7 +18,7 @@ namespace Sirenix.OdinInspector.Demos.RPGEditor
         [ValidateInput("IsBody")]
         public EquipableItem Body;
 
-#if UNITY_EDITOR
+
         private bool IsBody(EquipableItem value)
         {
             return value == null || value.Type == ItemTypes.Body;
@@ -38,7 +38,5 @@ namespace Sirenix.OdinInspector.Demos.RPGEditor
         {
             return value == null || value.Type == ItemTypes.OffHand;
         }
-#endif
     }
 }
-#endif

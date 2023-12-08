@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+
 namespace Sirenix.OdinInspector.Demos.RPGEditor
 {
     using Sirenix.Utilities;
@@ -41,4 +41,3 @@ namespace Sirenix.OdinInspector.Demos.RPGEditor
 #endif
     }
 }
-#endif
