@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.exhard.exbasekit": {
+      "version": "https://github.com/No78Vino/ExBaseKit.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "357c539bda33f817d3f5479bc49b355ca1b9660c"
+    },
     "com.unity.collab-proxy": {
       "version": "2.2.0",
       "depth": 0,
@@ -56,6 +63,13 @@
     "com.unity.ide.vscode": {
       "version": "1.2.5",
       "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.mathematics": {
+      "version": "1.2.6",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
