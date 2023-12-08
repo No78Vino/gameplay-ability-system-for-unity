@@ -3,36 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime.Tags
 {
     [CreateAssetMenu( menuName = "GAS/Tag", order = 0)]
-    public class GameplayTagScriptableObject : ScriptableObject
+    public class GameplayTagsScriptableObject : ScriptableObject
     {
-        [SerializeField] private GameplayTagScriptableObject Parent;
+        [SerializeField] private GameplayTagsScriptableObject Parent;
         [SerializeField] private int ancestorsToFind = 4;
         public GameplayTag TagData;
-
-        /// <summary>
-        /// <para>Check is this gameplay tag is a descendant of another gameplay tag.</para>
-        /// By default, only 4 levels of ancestors are searched.
-        /// </summary>
-        /// <param name="other">Ancestor gameplay tag</param>
-        /// <returns>True if this gameplay tag is a descendant of the other gameplay tag</returns>
-        public bool IsDescendantOf(GameplayTagScriptableObject other, int nSearchLimit = 4)
+        
+        public bool IsDescendantOf(GameplayTagsScriptableObject other, int nSearchLimit = 4)
         {
             int i = 0;
-            GameplayTagScriptableObject tag = Parent;
+            GameplayTagsScriptableObject tags = Parent;
             while (nSearchLimit > i++)
             {
                 // tag will be invalid once we are at the root ancestor
-                if (!tag) return false;
+                if (!tags) return false;
 
                 // Match found, so we can return true
-                if (tag == other) return true;
+                if (tags == other) return true;
 
                 // No match found, so try again with the next ancestor
-                tag = tag.Parent;
+                tags = tags.Parent;
             }
 
 
@@ -66,20 +62,24 @@ namespace GAS.Runtime.Tags
 
             return new GameplayTag()
             {
-                Tag = this.GetInstanceID(),
-                Ancestors = ancestors.ToArray()
+                tag = this.GetInstanceID(),
+                ancestors = ancestors.ToArray()
             };
         }
 
         [Serializable]
         public struct GameplayTag
         {
-            public int Tag;
-            public int[] Ancestors;
+            private string _name;
+            public string Name => _name;
+            
+            
+            public int tag;
+            public int[] ancestors;
 
             public bool IsDescendantOf(GameplayTag other)
             {
-                return other.Ancestors.Contains(Tag);
+                return other.ancestors.Contains(tag);
             }
 
             public override bool Equals(object obj)
@@ -89,16 +89,16 @@ namespace GAS.Runtime.Tags
 
             public override int GetHashCode()
             {
-                return Tag.GetHashCode();
+                return tag.GetHashCode();
             }
             public static bool operator ==(GameplayTag x, GameplayTag y)
             {
-                return x.Tag == y.Tag;
+                return x.tag == y.tag;
             }
 
             public static bool operator !=(GameplayTag x, GameplayTag y)
             {
-                return !(x == y);
+                return x.tag != y.tag;
             }
         }
     }
