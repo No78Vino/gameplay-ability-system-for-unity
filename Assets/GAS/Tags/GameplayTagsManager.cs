@@ -14,7 +14,7 @@ namespace GAS.Editor.Tags
         
         //[HorizontalGroup("Bridge",250,5,5)]
         [InfoBox("Draws the toggle button before the label for a bool property.")]
-        [LabelText("自动保存"),LabelWidth(100)]
+        [LabelText("auto save"),LabelWidth(100)]
         [ToggleLeft][OnValueChanged("OnSwitchAutoSave")]
         public bool autoSave;
 

@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -923,7 +924,7 @@ MonoBehaviour:
       - Type: 0
         Value: 56.95519
   StartingEquipment:
-    MainHand: {fileID: 11400000, guid: e927c9ab37d3bd247a2d546c2acdbe1d, type: 2}
+    MainHand: {fileID: 11400000, guid: c3191bc4db2097f489c2fea5510b960b, type: 2}
     Offhand: {fileID: 0}
     Head: {fileID: 11400000, guid: c3191bc4db2097f489c2fea5510b960b, type: 2}
     Body: {fileID: 0}

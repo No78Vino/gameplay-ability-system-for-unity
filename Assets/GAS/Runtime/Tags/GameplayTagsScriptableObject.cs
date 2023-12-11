@@ -1,66 +1,91 @@
-// using System.Collections.Generic;
-// using Unity.Mathematics;
-// using UnityEngine;
-//
-// namespace GAS.Runtime.Tags
-// {
-//     public class GameplayTagsScriptableObject : ScriptableObject
-//     {
-//         [SerializeField] private GameplayTagsScriptableObject Parent;
-//         [SerializeField] private int ancestorsToFind = 4;
-//         public GameplayTag TagData;
-//
-//         public void OnValidate()
-//         {
-//             UpdateCache();
-//         }
-//
-//         public bool IsDescendantOf(GameplayTagsScriptableObject other, int nSearchLimit = 4)
-//         {
-//             var i = 0;
-//             var tags = Parent;
-//             while (nSearchLimit > i++)
-//             {
-//                 // tag will be invalid once we are at the root ancestor
-//                 if (!tags) return false;
-//
-//                 // Match found, so we can return true
-//                 if (tags == other) return true;
-//
-//                 // No match found, so try again with the next ancestor
-//                 tags = tags.Parent;
-//             }
-//
-//
-//             // If we've exhausted the search limit, no ancestor was found
-//             return false;
-//         }
-//
-//         private void UpdateCache()
-//         {
-//             TagData = new GameplayTag(name);
-//         }
-//
-//         public GameplayTag Build(int nSearchLimit = 4)
-//         {
-//             return 
-//             if (nSearchLimit < 0) nSearchLimit = ancestorsToFind;
-//
-//             var ancestors = new List<int>();
-//             var parent = Parent;
-//             for (var i = 0; i < nSearchLimit; i++)
-//             {
-//                 ancestors.Add(parent?.GetInstanceID() ?? 0);
-//                 // Leave the loop early if there no further ancestors
-//                 parent = parent?.Parent;
-//                 i = math.select(i, nSearchLimit, parent == null);
-//             }
-//
-//             return new GameplayTag
-//             {
-//                 HashCode = GetInstanceID(),
-//                 ancestors = ancestors.ToArray()
-//             };
-//         }
-//     }
-// }
+using System.Collections.Generic;
+using System.Linq;
+using GAS.Editor.Tags;
+using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine;
+
+namespace GAS.Runtime.Tags
+{
+    [CreateAssetMenu(menuName = "Gameplay Ability System/Gameplay Tags Settings", fileName = "GameplayTagsSettings")]
+    public class GameplayTagsScriptableObject : ScriptableObject
+    {
+        [BoxGroup("Tags", order: 1)] [TableList(IsReadOnly = true)]
+        public List<GameplayTag> Tags = new();
+        
+        /// <summary>
+        /// Cache the root tags for quick access.
+        /// </summary>
+        [HideInInspector]
+        public List<GameplayTag> RootTags = new();
+
+        /// <summary>
+        /// Cache the tag data for quick access.
+        /// </summary>
+        public Dictionary<int,GameplayTag> TagData = new();
+        
+        public void OnValidate()
+        {
+            UpdateCache();
+        }
+
+        private void UpdateCache()
+        {
+            // First, Complete the remaining gaps in the ancestor tags.
+            var currentTagCount = Tags.Count;
+            for (var i = 0; i < currentTagCount; i++)
+            {
+                var tag = Tags[i];
+                for (var j = 0; j < tag.AncestorHashCodes.Length; j++)
+                {
+                    var ancestor = tag.AncestorHashCodes[j];
+                    if (!ContainTag(ancestor)) Tags.Add(new GameplayTag(tag.AncestorNames[j]));
+                }
+            }
+
+            // Second, Add the direct descendant and direct ancestor to the ancestor tags.
+            for (var i = 0; i < Tags.Count; i++)
+            {
+                Tags[i].ClearDescendants();
+                foreach (var t in Tags)
+                    if (!t.Root && t.AncestorHashCodes.Last() == Tags[i].HashCode)
+                        Tags[i].AddDescendant(t);
+            }
+
+            // Finally, Build the tag cache.
+            TagData.Clear();
+            foreach (var tag in Tags)
+                TagData.Add(tag.HashCode,tag);
+            
+            RootTags.Clear();
+            foreach (var tag in Tags)
+                if (tag.Root)
+                    RootTags.Add(tag);
+            
+            EditorUtility.SetDirty(this);
+            EditorApplication.delayCall += AssetDatabase.SaveAssets;
+        }
+
+        private bool ContainTag(int tagHashCode)
+        {
+            foreach (var t in Tags)
+                if (t.GetHashCode() == tagHashCode)
+                    return true;
+
+            return false;
+        }
+
+        [BoxGroup("Buttons",order:0)]
+        [Button("Add Tag",ButtonSizes.Medium)]
+        public void OpenCreateTagWindow()
+        {
+            CreateTagWindow.OpenWindow(this);
+        }
+
+        public void CreateNewTag(string tagName)
+        {
+            Tags.Add(new GameplayTag(tagName));
+            UpdateCache();
+        }
+    }
+}
