@@ -23,7 +23,9 @@ namespace GAS.Editor.Tags
         {
             if (_editor == null) Load();
 
+            EditorGUILayout.BeginVertical(GUI.skin.box,GUILayout.Width(500));
             _editor.OnInspectorGUI();
+            EditorGUILayout.EndHorizontal();
         }
 
         private static void Load()

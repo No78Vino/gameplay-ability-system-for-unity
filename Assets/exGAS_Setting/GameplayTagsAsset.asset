@@ -16,13 +16,19 @@ MonoBehaviour:
   - _id: 1
     _name: Root
     _depth: -1
-  - _id: 4
-    _name: GG
+  - _id: 6
+    _name: DDD
     _depth: 0
-  - _id: 3
+  - _id: 12
+    _name: QWD
+    _depth: 1
+  - _id: 13
+    _name: sDC
+    _depth: 2
+  - _id: 11
+    _name: DSFGV
+    _depth: 1
+  - _id: 5
     _name: A
-    _depth: 0
-  - _id: 2
-    _name: Ability
     _depth: 0
   Tags: []
