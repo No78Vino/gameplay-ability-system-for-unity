@@ -1,21 +1,18 @@
 using System;
-using GAS.Runtime.Tags;
 using Sirenix.OdinInspector;
-using UnityEngine;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
-using UnityEditor;
 using Sirenix.Utilities.Editor;
-using Unity.VisualScripting;
+using UnityEngine;
 
 namespace GAS.Editor.Tags
 {
     public class CreateTagWindow : OdinEditorWindow
     {
-        [LabelText("Tag:")][LabelWidth(100)]
-        public string _tagName = "";
+        [LabelText("Tag:")] [LabelWidth(100)] public string _tagName = "";
+
         private Action<string> _confirmCallback;
-        
+
         public static void OpenWindow(Action<string> confirmCallback)
         {
             var window = GetWindow<CreateTagWindow>();
@@ -29,18 +26,18 @@ namespace GAS.Editor.Tags
         {
             _confirmCallback = confirmCallback;
         }
-        
+
         [HorizontalGroup("Buttons")]
         [Button("Create")]
-        void Create()
+        private void Create()
         {
             _confirmCallback?.Invoke(_tagName);
             Close();
         }
-        
+
         [HorizontalGroup("Buttons")]
         [Button("Close")]
-        void CloseWindow()
+        private void CloseWindow()
         {
             Close();
         }

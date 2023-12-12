@@ -1,39 +1,49 @@
-using System;
-using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities;
-using Sirenix.Utilities.Editor;
+using GAS.Core;
 using UnityEditor;
 using UnityEngine;
 
 namespace GAS.Editor.Tags
 {
-    public class GameplayTagsManager:OdinEditorWindow
+    public class GameplayTagsManager
     {
-        private const string KeyNameOfTagManagerAutoSave = "TagManagerAutoSave";
+        private static UnityEditor.Editor _editor;
         
-        //[HorizontalGroup("Bridge",250,5,5)]
-        [InfoBox("Draws the toggle button before the label for a bool property.")]
-        [LabelText("auto save"),LabelWidth(100)]
-        [ToggleLeft][OnValueChanged("OnSwitchAutoSave")]
-        public bool autoSave;
-
-        [MenuItem("GAS/Gameplay Tags Manager")]
-        public static void Open()
+        [SettingsProvider]
+        private static SettingsProvider GameplayTagsManagerSetting()
         {
-            var window = GetWindow<GameplayTagsManager>("Gameplay Tags Manager");
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(800, 500);
+            var provider = new SettingsProvider("Project/EX Gameplay Ability System/Tag Manager", SettingsScope.Project)
+            {
+                guiHandler = (string key) => { SettingGUI(); },
+                keywords = new string[] {},
+            };
+            return provider;
         }
 
-        void OnSwitchAutoSave()
+        private static void SettingGUI()
         {
-            EditorPrefs.SetBool(KeyNameOfTagManagerAutoSave, autoSave);
-        }
-
-        protected override void OnImGUI()
-        {
-            base.OnImGUI();
+            if (_editor==null)
+            {
+                Load();
+            }
             
+            _editor.OnInspectorGUI();
+        }
+
+        private static void Load()
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GasDefine.GAS_TAG_ASSET_PATH);
+            if (asset == null)
+            {
+                GasDefine.CheckGasAssetFolder();
+                
+                var a = ScriptableObject.CreateInstance<GameplayTagsAsset>();
+                AssetDatabase.CreateAsset(a, GasDefine.GAS_TAG_ASSET_PATH);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                asset = ScriptableObject.CreateInstance<GameplayTagsAsset>();
+            }
+            
+            _editor = UnityEditor.Editor.CreateEditor(asset);
         }
     }
 }
