@@ -7,25 +7,22 @@ namespace GAS.Editor.Tags
     public class GameplayTagsManager
     {
         private static UnityEditor.Editor _editor;
-        
+
         [SettingsProvider]
         private static SettingsProvider GameplayTagsManagerSetting()
         {
             var provider = new SettingsProvider("Project/EX Gameplay Ability System/Tag Manager", SettingsScope.Project)
             {
-                guiHandler = (string key) => { SettingGUI(); },
-                keywords = new string[] {},
+                guiHandler = key => { SettingGUI(); },
+                keywords = new string[] { }
             };
             return provider;
         }
 
         private static void SettingGUI()
         {
-            if (_editor==null)
-            {
-                Load();
-            }
-            
+            if (_editor == null) Load();
+
             _editor.OnInspectorGUI();
         }
 
@@ -35,14 +32,14 @@ namespace GAS.Editor.Tags
             if (asset == null)
             {
                 GasDefine.CheckGasAssetFolder();
-                
+
                 var a = ScriptableObject.CreateInstance<GameplayTagsAsset>();
                 AssetDatabase.CreateAsset(a, GasDefine.GAS_TAG_ASSET_PATH);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 asset = ScriptableObject.CreateInstance<GameplayTagsAsset>();
             }
-            
+
             _editor = UnityEditor.Editor.CreateEditor(asset);
         }
     }
