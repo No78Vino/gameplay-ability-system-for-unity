@@ -74,13 +74,6 @@ namespace GAS.Runtime.Tags
             return false;
         }
 
-        [BoxGroup("Buttons",order:0)]
-        [Button("Add Tag",ButtonSizes.Medium)]
-        public void OpenCreateTagWindow()
-        {
-            //CreateTagWindow.OpenWindow(this);
-        }
-
         public void CreateNewTag(string tagName)
         {
             Tags.Add(new GameplayTag(tagName));

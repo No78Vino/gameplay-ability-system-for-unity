@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GAS
+namespace GAS.Core
 {
     public interface IGameplayAbilitySystem
     {
