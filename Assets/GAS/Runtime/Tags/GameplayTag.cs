@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 namespace GAS.Runtime.Tags
 {
     [Serializable]
-    public class GameplayTag:TreeElement
+    public struct GameplayTag
     {
         [SerializeField]private string _name;
         [SerializeField]private int _hashCode;

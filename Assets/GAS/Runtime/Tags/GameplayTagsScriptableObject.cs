@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using GAS.Editor.Tags;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -79,7 +78,7 @@ namespace GAS.Runtime.Tags
         [Button("Add Tag",ButtonSizes.Medium)]
         public void OpenCreateTagWindow()
         {
-            CreateTagWindow.OpenWindow(this);
+            //CreateTagWindow.OpenWindow(this);
         }
 
         public void CreateNewTag(string tagName)

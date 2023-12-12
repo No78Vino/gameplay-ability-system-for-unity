@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace UnityEditor.TreeViewExamples
+namespace UnityEditor.TreeDataModel
 {
 	// The TreeModel is a utility class working on a list of serializable TreeElements where the order and the depth of each TreeElement define
 	// the tree structure. Note that the TreeModel itself is not serializable (in Unity we are currently limited to serializing lists/arrays) but the 
@@ -16,15 +16,12 @@ namespace UnityEditor.TreeViewExamples
 	public class TreeModel<T> where T : TreeElement
 	{
 		IList<T> m_Data;
-		T m_Root;
 		int m_MaxID;
 	
-		public T root { get { return m_Root; } set { m_Root = value; } }
+		public T Root { get; private set; }
+
 		public event Action modelChanged;
-		public int numberOfDataElements
-		{
-			get { return m_Data.Count; }
-		}
+		public int NumberOfDataElements => m_Data.Count;
 
 		public TreeModel (IList<T> data)
 		{
@@ -33,7 +30,7 @@ namespace UnityEditor.TreeViewExamples
 
 		public T Find (int id)
 		{
-			return m_Data.FirstOrDefault (element => element.id == id);
+			return m_Data.FirstOrDefault (element => element.ID == id);
 		}
 	
 		public void SetData (IList<T> data)
@@ -43,14 +40,19 @@ namespace UnityEditor.TreeViewExamples
 
 		void Init (IList<T> data)
 		{
-			if (data == null)
-				throw new ArgumentNullException("data", "Input data is null. Ensure input is a non-null list.");
-
-			m_Data = data;
+			m_Data = data ?? throw new ArgumentNullException("data", "Input data is null. Ensure input is a non-null list.");
 			if (m_Data.Count > 0)
-				m_Root = TreeElementUtility.ListToTree(data);
+			{
+				Root = TreeElementUtility.ListToTree(data);
+			}
+			else
+			{
+				T root = Activator.CreateInstance(typeof(T), "Root", -1, 0) as T;
+				AddRoot(root);
+				Root = root;
+			}
 
-			m_MaxID = m_Data.Max(e => e.id);
+			m_MaxID = m_Data.Max(e => e.ID);
 		}
 
 		public int GenerateUniqueID ()
@@ -64,10 +66,10 @@ namespace UnityEditor.TreeViewExamples
 			TreeElement T = Find(id);
 			if (T != null)
 			{
-				while (T.parent != null)
+				while (T.Parent != null)
 				{
-					parents.Add(T.parent.id);
-					T = T.parent;
+					parents.Add(T.Parent.ID);
+					T = T.Parent;
 				}
 			}
 			return parents;
@@ -92,10 +94,10 @@ namespace UnityEditor.TreeViewExamples
 			while (stack.Count > 0)
 			{
 				TreeElement current = stack.Pop();
-				if (current.hasChildren)
+				if (current.HasChildren)
 				{
-					parentsBelow.Add(current.id);
-					foreach (var T in current.children)
+					parentsBelow.Add(current.ID);
+					foreach (var T in current.Children)
 					{
 						stack.Push(T);
 					}
@@ -107,25 +109,25 @@ namespace UnityEditor.TreeViewExamples
 
 		public void RemoveElements (IList<int> elementIDs)
 		{
-			IList<T> elements = m_Data.Where (element => elementIDs.Contains (element.id)).ToArray ();
+			IList<T> elements = m_Data.Where (element => elementIDs.Contains (element.ID)).ToArray ();
 			RemoveElements (elements);
 		}
 
 		public void RemoveElements (IList<T> elements)
 		{
 			foreach (var element in elements)
-				if (element == m_Root)
+				if (element == Root)
 					throw new ArgumentException("It is not allowed to remove the root element");
 		
 			var commonAncestors = TreeElementUtility.FindCommonAncestorsWithinList (elements);
 
 			foreach (var element in commonAncestors)
 			{
-				element.parent.children.Remove (element);
-				element.parent = null;
+				element.Parent.Children.Remove (element);
+				element.Parent = null;
 			}
 
-			TreeElementUtility.TreeToList(m_Root, m_Data);
+			TreeElementUtility.TreeToList(Root, m_Data);
 
 			Changed();
 		}
@@ -139,18 +141,18 @@ namespace UnityEditor.TreeViewExamples
 			if (parent == null)
 				throw new ArgumentNullException("parent", "parent is null");
 
-			if (parent.children == null)
-				parent.children = new List<TreeElement>();
+			if (parent.Children == null)
+				parent.Children = new List<TreeElement>();
 
-			parent.children.InsertRange(insertPosition, elements.Cast<TreeElement> ());
+			parent.Children.InsertRange(insertPosition, elements.Cast<TreeElement> ());
 			foreach (var element in elements)
 			{
-				element.parent = parent;
-				element.depth = parent.depth + 1;
+				element.Parent = parent;
+				element.Depth = parent.Depth + 1;
 				TreeElementUtility.UpdateDepthValues(element);
 			}
 
-			TreeElementUtility.TreeToList(m_Root, m_Data);
+			TreeElementUtility.TreeToList(Root, m_Data);
 
 			Changed();
 		}
@@ -166,8 +168,9 @@ namespace UnityEditor.TreeViewExamples
 			if (m_Data.Count != 0)
 				throw new InvalidOperationException("AddRoot is only allowed on empty data list");
 
-			root.id = GenerateUniqueID ();
-			root.depth = -1;
+			root.Name = "Root";
+			root.ID = GenerateUniqueID ();
+			root.Depth = -1;
 			m_Data.Add (root);
 		}
 
@@ -178,14 +181,14 @@ namespace UnityEditor.TreeViewExamples
 			if (parent == null)
 				throw new ArgumentNullException("parent", "parent is null");
 		
-			if (parent.children == null)
-				parent.children = new List<TreeElement> ();
+			if (parent.Children == null)
+				parent.Children = new List<TreeElement> ();
 
-			parent.children.Insert (insertPosition, element);
-			element.parent = parent;
+			parent.Children.Insert (insertPosition, element);
+			element.Parent = parent;
 
 			TreeElementUtility.UpdateDepthValues(parent);
-			TreeElementUtility.TreeToList(m_Root, m_Data);
+			TreeElementUtility.TreeToList(Root, m_Data);
 
 			Changed ();
 		}
@@ -201,23 +204,23 @@ namespace UnityEditor.TreeViewExamples
 
 			// We are moving items so we adjust the insertion index to accomodate that any items above the insertion index is removed before inserting
 			if (insertionIndex > 0)
-				insertionIndex -= parentElement.children.GetRange(0, insertionIndex).Count(elements.Contains);
+				insertionIndex -= parentElement.Children.GetRange(0, insertionIndex).Count(elements.Contains);
 
 			// Remove draggedItems from their parents
 			foreach (var draggedItem in elements)
 			{
-				draggedItem.parent.children.Remove(draggedItem);	// remove from old parent
-				draggedItem.parent = parentElement;					// set new parent
+				draggedItem.Parent.Children.Remove(draggedItem);	// remove from old parent
+				draggedItem.Parent = parentElement;					// set new parent
 			} 
 
-			if (parentElement.children == null)
-				parentElement.children = new List<TreeElement>();
+			if (parentElement.Children == null)
+				parentElement.Children = new List<TreeElement>();
 
 			// Insert dragged items under new parent
-			parentElement.children.InsertRange(insertionIndex, elements);
+			parentElement.Children.InsertRange(insertionIndex, elements);
 
-			TreeElementUtility.UpdateDepthValues (root);
-			TreeElementUtility.TreeToList (m_Root, m_Data);
+			TreeElementUtility.UpdateDepthValues (Root);
+			TreeElementUtility.TreeToList (Root, m_Data);
 
 			Changed ();
 		}
