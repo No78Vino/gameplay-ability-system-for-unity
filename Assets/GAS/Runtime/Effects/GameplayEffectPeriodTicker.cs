@@ -1,14 +1,33 @@
-﻿namespace GAS.Runtime.Effects
+﻿using UnityEngine;
+
+namespace GAS.Runtime.Effects
 {
     public class GameplayEffectPeriodTicker
     {
-        GameplayEffectSpec _spec;
-        private float period => _spec.GameplayEffect.Period;
-        float periodRemaining;
+        private float _periodRemaining;
+        private readonly GameplayEffectSpec _spec;
+
+        public GameplayEffectPeriodTicker(GameplayEffectSpec spec)
+        {
+            _spec = spec;
+            _periodRemaining = Period;
+        }
+
+        private float Period => _spec.GameplayEffect.Period;
 
         public void Tick()
         {
+            if (_periodRemaining <= 0)
+            {
+                _periodRemaining = Period;
+                _spec.GameplayEffect.TriggerOnExecute();
+            }
+            else
+            {
+                _periodRemaining -= Time.deltaTime;
+            }
 
+            if (_spec.DurationRemaining() <= 0) _spec.Deactivate();
         }
     }
 }

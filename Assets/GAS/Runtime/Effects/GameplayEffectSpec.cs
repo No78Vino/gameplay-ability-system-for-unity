@@ -15,7 +15,7 @@ namespace GAS.Runtime.Effects
             Level = level;
 
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
-                PeriodTicker = new GameplayEffectPeriodTicker();
+                PeriodTicker = new GameplayEffectPeriodTicker(this);
         }
 
         public GameplayEffect GameplayEffect { get; }
@@ -65,6 +65,9 @@ namespace GAS.Runtime.Effects
             ActivationTime = GASTimer.Timestamp();
             
             GameplayEffect.TriggerOnActivation();
+
+            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
+                GameplayEffect.TriggerOnExecute();
         }
 
         public void Deactivate()
@@ -81,7 +84,7 @@ namespace GAS.Runtime.Effects
 
         public void Tick()
         {
-            PeriodTicker.Tick();
+            PeriodTicker?.Tick();
         }
     }
 }
