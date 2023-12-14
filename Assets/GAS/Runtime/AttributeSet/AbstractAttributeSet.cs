@@ -63,11 +63,24 @@ namespace GAS.Runtime.AttributeSet
             {
                 PreGameplayEffectExecute(gameplayEffect, attribute, value);
 
-                var oldValue = attribute.BaseValue;
-                attribute.Value.SetBaseValue(value);
+                var oldValue = attribute.CurrentValue;
+                attribute.Value.SetCurrentValue(value);
 
                 PostGameplayEffectExecute(gameplayEffect, attribute, oldValue, value);
             }
         }
+        
+        // public void ChangeAttributeBaseByGameplayEffect(GameplayEffect gameplayEffect, string attributeName, float value)
+        // {
+        //     if (_attributes.TryGetValue(attributeName, out var attribute))
+        //     {
+        //         PreGameplayEffectExecute(gameplayEffect, attribute, value);
+        //
+        //         var oldValue = attribute.BaseValue;
+        //         attribute.Value.SetBaseValue(value);
+        //
+        //         PostGameplayEffectExecute(gameplayEffect, attribute, oldValue, value);
+        //     }
+        // }
     }
 }
