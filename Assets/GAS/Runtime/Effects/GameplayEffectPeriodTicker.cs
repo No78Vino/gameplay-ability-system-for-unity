@@ -2,10 +2,13 @@
 {
     public class GameplayEffectPeriodTicker
     {
-        public bool ExecuteOnActivation;
-        
-        public float Period;
-        
-        public GameplayEffect GameplayEffect;
+        GameplayEffectSpec _spec;
+        private float period => _spec.GameplayEffect.Period;
+        float periodRemaining;
+
+        public void Tick()
+        {
+
+        }
     }
 }

@@ -44,29 +44,15 @@ namespace GAS.Runtime.Effects
 
         public void AddTarget(AbilitySystemComponent.AbilitySystemComponent target)
         {
+            if (!CanApplyToTarget(target)) return;
             if (Targets.Contains(target)) return;
             Targets.Add(target);
         }
-        
+
         public bool RemoveTarget(AbilitySystemComponent.AbilitySystemComponent target)
         {
             return Targets.Remove(target);
         }
-
-        // public GameplayEffectSpec TickPeriodic(float deltaTime, out bool executePeriodicTick)
-        // {
-        //     this.TimeUntilPeriodTick -= deltaTime;
-        //     executePeriodicTick = false;
-        //     if (this.TimeUntilPeriodTick <= 0)
-        //     {
-        //         this.TimeUntilPeriodTick = GameplayEffect.GetPeriod().Period;
-        //
-        //         // Check to make sure period is valid, otherwise we'd just end up executing every frame
-        //         if (GameplayEffect.GetPeriod().Period > 0) executePeriodicTick = true;
-        //     }
-        //
-        //     return this;
-        // }
 
         public void SetLevel(float level)
         {
@@ -77,17 +63,25 @@ namespace GAS.Runtime.Effects
         {
             IsActive = true;
             ActivationTime = GASTimer.Timestamp();
+            
+            GameplayEffect.TriggerOnActivation();
         }
 
         public void Deactivate()
         {
             IsActive = false;
+            GameplayEffect.TriggerOnDeactivation();
         }
         
         public bool CanApplyToTarget(AbilitySystemComponent.AbilitySystemComponent target )
         {
             return target.HasAllTags(GameplayEffect.NecessaryTags) &&
                    !target.HasAnyTags(GameplayEffect.RejectionTags);
+        }
+
+        public void Tick()
+        {
+            PeriodTicker.Tick();
         }
     }
 }
