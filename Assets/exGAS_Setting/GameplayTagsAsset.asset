@@ -16,19 +16,52 @@ MonoBehaviour:
   - _id: 1
     _name: Root
     _depth: -1
-  - _id: 6
-    _name: DDD
+  - _id: 19
+    _name: Role
     _depth: 0
-  - _id: 12
-    _name: QWD
+  - _id: 20
+    _name: Player
     _depth: 1
-  - _id: 13
-    _name: sDC
+  - _id: 22
+    _name: Friend
+    _depth: 1
+  - _id: 21
+    _name: Enemy
+    _depth: 1
+  - _id: 14
+    _name: Ability
+    _depth: 0
+  - _id: 15
+    _name: Skill
+    _depth: 1
+  - _id: 18
+    _name: IceFreeze
     _depth: 2
-  - _id: 11
-    _name: DSFGV
+  - _id: 17
+    _name: FireBall
+    _depth: 2
+  - _id: 23
+    _name: State
+    _depth: 0
+  - _id: 25
+    _name: Buff
     _depth: 1
-  - _id: 5
-    _name: A
+  - _id: 26
+    _name: Debuff
+    _depth: 1
+  - _id: 27
+    _name: Stun
+    _depth: 2
+  - _id: 24
+    _name: Attribute
+    _depth: 0
+  - _id: 29
+    _name: MP
+    _depth: 1
+  - _id: 28
+    _name: HP
+    _depth: 1
+  - _id: 16
+    _name: Event
     _depth: 0
   Tags: []
