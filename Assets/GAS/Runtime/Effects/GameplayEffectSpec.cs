@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
 using GAS.General;
+using GAS.Runtime.Attribute;
+using GAS.Runtime.Effects.Modifier;
 using Unity.Mathematics;
 
 namespace GAS.Runtime.Effects
 {
     public class GameplayEffectSpec
     {
-        private GameplayEffectSpec(GameplayEffect gameplayEffect, AbilitySystemComponent.AbilitySystemComponent source,
+        private List<GameplayEffectModifier> _modifierStack;
+        public GameplayEffectSpec(GameplayEffect gameplayEffect, AbilitySystemComponent.AbilitySystemComponent source,
             float level = 1)
         {
             GameplayEffect = gameplayEffect;
             Source = source;
             Targets = new List<AbilitySystemComponent.AbilitySystemComponent>();
             Level = level;
-
+            
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
         }
@@ -33,6 +36,11 @@ namespace GAS.Runtime.Effects
         public bool IsActive { get; private set; }
 
         public GameplayEffectPeriodTicker PeriodTicker { get; private set; }
+        
+        /// <summary>
+        /// Snapshotting of Attributes when the GameplayEffect is activated
+        /// </summary>
+        public List<AttributeBase> SnapshottingAttributes{ get; private set; }
 
         public float DurationRemaining()
         {
@@ -78,10 +86,14 @@ namespace GAS.Runtime.Effects
         
         public bool CanApplyToTarget(AbilitySystemComponent.AbilitySystemComponent target )
         {
-            return target.HasAllTags(GameplayEffect.NecessaryTags) &&
-                   !target.HasAnyTags(GameplayEffect.RejectionTags);
+            return target.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags);
         }
 
+        public void RefreshModifierStack()
+        {
+            //_modifierStack = 
+        }
+        
         public void Tick()
         {
             PeriodTicker?.Tick();

@@ -1,47 +1,64 @@
-﻿using GAS.Runtime.Attribute;
+﻿using System.Collections.Generic;
+using GAS.Runtime.Attribute;
+using GAS.Runtime.Tags;
 
 namespace GAS.Runtime.Effects.Modifier
 {
-    public enum GEModifierType
+    public enum GEOperation
     {
-        None,
-        AddBase,
-        AddAbsolute,
-        MultiplyBase,
-        MultiplyBaseWithAdditive,
+        Add,
+        Multiply,
         Override
     }
 
-    public enum GEAttributeCombineTiming
+    public enum GEModifierType
     {
-        Sequence,
-        Pre,
-        Post
+        ScalableFloat,
+        AttributeBased, 
+        CustomCalculationClass,
+        SetByCaller
     }
-
-    public enum GEAttributeCombineType
+    
+    public enum GECalculationType
     {
         Single,
-        Combine
+        Combine,
     }
 
     public struct GameplayEffectModifier
     {
-        public AttributeBase Attribute { get; private set; }
+        public string AttributeName { get; private set; }
         public float Value { get; private set; }
+        public GEOperation Operation { get; private set; }
         public GEModifierType Type { get; private set; }
-        public GEAttributeCombineTiming Timing { get; private set; }
-        public GEAttributeCombineType CombineType { get; private set; }
+        public GECalculationType CalculationType { get; private set; }
 
-
-        public GameplayEffectModifier(AttributeBase attribute, float value, GEModifierType type,
-            GEAttributeCombineTiming timing, GEAttributeCombineType combineType)
+        public List<GameplayTag> Tags{ get; private set; }
+        
+        public GameplayEffectModifier(string attributeName, float value, GEOperation operation,
+            GEModifierType type, GECalculationType calculationType)
         {
-            Attribute = attribute;
+            AttributeName = attributeName;
             Value = value;
+            Operation = operation;
             Type = type;
-            Timing = timing;
-            CombineType = combineType;
+            CalculationType = calculationType;
+            Tags = new List<GameplayTag>();
+        }
+        
+        public GameplayEffectModifier(GameplayEffectModifier modifier)
+        {
+            AttributeName = modifier.AttributeName;
+            Value = modifier.Value;
+            Operation = modifier.Operation;
+            Type = modifier.Type;
+            CalculationType = modifier.CalculationType;
+            Tags = modifier.Tags;
+        }
+        
+        public bool CombinableWith(GameplayEffectModifier other)
+        {
+            return AttributeName == other.AttributeName && Operation == other.Operation && CalculationType == other.CalculationType;
         }
     }
 }

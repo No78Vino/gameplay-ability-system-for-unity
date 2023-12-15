@@ -20,7 +20,7 @@ namespace GAS.Runtime.Effects
         EffectsDurationPolicy _durationPolicy;
         public EffectsDurationPolicy DurationPolicy => _durationPolicy;
 
-        List<GameplayEffectModifier> _modifiers;
+        public List<GameplayEffectModifier> Modifiers { get; private set; }
 
         List<GameplayEffectExecution> _executions;
 
@@ -31,8 +31,8 @@ namespace GAS.Runtime.Effects
         private float _period;
         public float Period => _period;
 
-        public List<GameplayTag> NecessaryTags;
-        public List<GameplayTag> RejectionTags;
+        public GameplayEffectTagContainer TagContainer { get; private set; }
+        
         private List<GameplayCue> GameplayCues;
 
         public delegate void GameplayEffectEventHandler(GameplayEffectSpec sender);
@@ -67,5 +67,7 @@ namespace GAS.Runtime.Effects
         {
             OnDeactivation?.Invoke(_spec);
         }
+
+        public bool Empty => _spec == null;
     }
 }
