@@ -31,6 +31,12 @@ MonoBehaviour:
   - _id: 14
     _name: Ability
     _depth: 0
+  - _id: 31
+    _name: Attack
+    _depth: 1
+  - _id: 30
+    _name: Move
+    _depth: 1
   - _id: 15
     _name: Skill
     _depth: 1
