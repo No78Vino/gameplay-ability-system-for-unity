@@ -13,5 +13,7 @@ namespace GAS.Runtime.AbilitySystemComponent
         void ApplyGameplayEffectToSelf(GameplayEffectSpec spec);
         
         void RemoveActiveGameplayEffect(GameplayEffectSpec spec);
+        
+        void Tick();
     }
 }

@@ -1,23 +1,18 @@
 ﻿using System;
+using GAS.Core;
 using UnityEngine;
 
 namespace GAS
 {
     public class GasHost : MonoBehaviour
     {
+        private GameplayAbilitySystem _gas => GameplayAbilitySystem.GAS;
         private void Update()
         {
-            
-        }
-
-        private void LateUpdate()
-        {
-            
-        }
-
-        private void FixedUpdate()
-        {
-            
+            foreach ( var abilitySystemComponent in _gas.AbilitySystemComponents)
+            {
+                abilitySystemComponent.Tick();
+            }
         }
     }
 }
