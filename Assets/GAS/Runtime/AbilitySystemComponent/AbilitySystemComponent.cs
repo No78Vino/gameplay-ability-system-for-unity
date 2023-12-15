@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GAS.Core;
 using GAS.Runtime.Effects;
@@ -7,18 +6,17 @@ using UnityEngine;
 
 namespace GAS.Runtime.AbilitySystemComponent
 {
-    public class AbilitySystemComponent: MonoBehaviour,IAbilitySystemComponent
+    public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        public float Level{ get; private set; }
-
         private List<GameplayTag> _tags;
+        public float Level { get; private set; }
 
 
         private void OnEnable()
         {
             GameplayAbilitySystem.GAS.Register(this);
         }
-        
+
         private void OnDisable()
         {
             GameplayAbilitySystem.GAS.Unregister(this);
@@ -59,13 +57,13 @@ namespace GAS.Runtime.AbilitySystemComponent
             Level = level;
             return new GameplayEffectSpec(gameplayEffect, this, level);
         }
-        
+
         public void AddTag(GameplayTag tag)
         {
-            if(_tags.Contains(tag)) return;
+            if (_tags.Contains(tag)) return;
             _tags.Add(tag);
         }
-        
+
         public bool RemoveTag(GameplayTag tag)
         {
             return _tags.Remove(tag);

@@ -5,12 +5,18 @@ using UnityEngine;
 
 namespace GAS.Core
 {
-
     public class GameplayAbilitySystem
     {
+        private static GameplayAbilitySystem _gas;
         private GasHost _gasHost;
-        private List<AbilitySystemComponent> _abilitySystemComponents;
-        public List<AbilitySystemComponent> AbilitySystemComponents => _abilitySystemComponents;
+
+        private GameplayAbilitySystem()
+        {
+            AbilitySystemComponents = new List<AbilitySystemComponent>();
+            GasHost.gameObject.SetActive(true);
+        }
+
+        public List<AbilitySystemComponent> AbilitySystemComponents { get; }
 
         private GasHost GasHost
         {
@@ -22,22 +28,18 @@ namespace GAS.Core
             }
         }
 
-        private static GameplayAbilitySystem _gas;
         public static GameplayAbilitySystem GAS
         {
             get
             {
-                _gas ??= new GameplayAbilitySystem();;
+                _gas ??= new GameplayAbilitySystem();
+                ;
                 return _gas;
             }
         }
 
-        private GameplayAbilitySystem()
-        {
-            _abilitySystemComponents = new List<AbilitySystemComponent>();
-            GasHost.gameObject.SetActive(true);
-        }
-        
+        public bool IsPaused => !GasHost.enabled;
+
         public void Register(AbilitySystemComponent abilitySystemComponent)
         {
             if (!GasHost.enabled)
@@ -45,10 +47,11 @@ namespace GAS.Core
                 EXLog.Warning("GAS is paused, can't register new ASC!");
                 return;
             }
-            if(_abilitySystemComponents.Contains(abilitySystemComponent)) return;
-            _abilitySystemComponents.Add(abilitySystemComponent);
+
+            if (AbilitySystemComponents.Contains(abilitySystemComponent)) return;
+            AbilitySystemComponents.Add(abilitySystemComponent);
         }
-        
+
         public bool Unregister(AbilitySystemComponent abilitySystemComponent)
         {
             if (!GasHost.enabled)
@@ -56,19 +59,23 @@ namespace GAS.Core
                 EXLog.Warning("GAS is paused, can't unregister ASC!");
                 return false;
             }
-            return _abilitySystemComponents.Remove(abilitySystemComponent);
+
+            return AbilitySystemComponents.Remove(abilitySystemComponent);
         }
-        
+
         public void Pause()
         {
             GasHost.enabled = false;
         }
-        
+
         public void Unpause()
         {
             GasHost.enabled = true;
         }
-
-        public bool IsPaused => !GasHost.enabled;
+        
+        public void Reset()
+        {
+            AbilitySystemComponents.Clear();
+        }
     }
 }
