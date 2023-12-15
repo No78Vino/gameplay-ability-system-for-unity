@@ -22,7 +22,7 @@ namespace GAS.Core
         {
             get
             {
-                if (_gasHost == null) _gasHost = new GameObject("GasHost").AddComponent<GasHost>();
+                if (_gasHost == null) _gasHost = new GameObject("GAS Host").AddComponent<GasHost>();
 
                 return _gasHost;
             }
