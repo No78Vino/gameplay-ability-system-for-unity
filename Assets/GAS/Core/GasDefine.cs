@@ -1,4 +1,4 @@
-﻿using EXTool;
+﻿using EXMaid;
 using UnityEditor;
 
 namespace GAS.Core

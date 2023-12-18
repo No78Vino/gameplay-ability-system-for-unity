@@ -1,11 +1,25 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5cc97c7f0085624b6ef57853d70b404440060cef"
+    },
     "com.exhard.exbasekit": {
       "version": "https://github.com/No78Vino/ExBaseKit.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "85a7dce40d6edb1347d9ebf2edbe8da9ba25bba7"
+      "hash": "21689eaefb2e77132bd4c8e8b69147e2e407d6b6"
+    },
+    "com.exhard.exmaidforui": {
+      "version": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7badbd202fe283f6a1ed8bcb9d5fe5533f7e2b6b"
     },
     "com.unity.collab-proxy": {
       "version": "2.2.0",
@@ -148,6 +162,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.vovgou.loxodon-framework": {
+      "version": "https://github.com/vovgou/loxodon-framework.git?path=Loxodon.Framework/Assets/LoxodonFramework",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2fab55f00cfd8b95e575c9403fc09c7bf2ae1134"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 
@@ -15,6 +16,8 @@ namespace GAS.Runtime.Ability
         public GameplayEffect Cooldown;
 
         public GameplayEffect Cost;
+        
+        public List<GameplayEffect> AppliedEffects = new();
 
         public abstract void ActivateAbility();
 
