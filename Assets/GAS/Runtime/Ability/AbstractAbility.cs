@@ -9,8 +9,8 @@ namespace GAS.Runtime.Ability
     {
         public string Name { get;protected set; }
 
-        public List<OngoingAbilityTask> OngoingAbilityTasks;
-        public List<AsyncAbilityTask> AsyncAbilityTasks;
+        public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
+        public List<AsyncAbilityTask> AsyncAbilityTasks = new List<AsyncAbilityTask>();
 
         public List<GameplayEffect> AppliedEffects = new();
 

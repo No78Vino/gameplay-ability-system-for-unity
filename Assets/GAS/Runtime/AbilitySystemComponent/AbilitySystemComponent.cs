@@ -9,7 +9,7 @@ namespace GAS.Runtime.AbilitySystemComponent
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        private List<GameplayTag> _tags;
+        private GameplayTagContainer _tags;
         public float Level { get; private set; }
 
         List<GameplayEffectSpec> _activeGameplayEffects = new();
@@ -27,6 +27,10 @@ namespace GAS.Runtime.AbilitySystemComponent
             GameplayAbilitySystem.GAS.Unregister(this);
         }
 
+        public void Init(AbstractAbility ability)
+        {
+            _abilities.Add(ability.Name, ability.CreateSpec(this));
+        }
         public bool HasAllTags(List<GameplayTag> tags)
         {
             if (tags.Count == 0) return true;
@@ -79,13 +83,12 @@ namespace GAS.Runtime.AbilitySystemComponent
 
         public void AddTag(GameplayTag tag)
         {
-            if (_tags.Contains(tag)) return;
-            _tags.Add(tag);
+            _tags.AddTag(tag);
         }
 
-        public bool RemoveTag(GameplayTag tag)
+        public void RemoveTag(GameplayTag tag)
         {
-            return _tags.Remove(tag);
+            _tags.RemoveTag(tag);
         }
         
         public bool TryActivateAbility(string abilityName,params object[] args)

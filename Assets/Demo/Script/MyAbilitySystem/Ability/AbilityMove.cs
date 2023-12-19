@@ -1,23 +1,31 @@
-﻿using GAS.Runtime.Ability;
+﻿using Demo.Script.MyAbilitySystem.AbilityTask;
+using GAS.Runtime.Ability;
+using GAS.Runtime.Ability.AbilityTask;
 using GAS.Runtime.AbilitySystemComponent;
 
 namespace Demo.Script.MyAbilitySystem.Ability
 {
     public class AbilityMove:AbstractAbility
     {
+        public AbilityMove()
+        {
+            Name = "Move";
+            OngoingAbilityTasks.Add(new OgATMove());
+        }
+        
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
         {
-            throw new System.NotImplementedException();
+            return new AbilitySpecMove(this, owner);
         }
 
         public override void ActivateAbility()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void EndAbility()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
     

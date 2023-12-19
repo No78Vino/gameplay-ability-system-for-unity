@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Cysharp.Threading.Tasks.Triggers;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using UnityEngine;
@@ -25,6 +26,9 @@ namespace Demo.Script
 
             XUI.Launch(LoadResource);
             XUI.M.OpenWindow<MainUI>();
+
+            yield return new WaitForSeconds(1f);
+            RegisterInputAction();
         }
 
         private object LoadResource(string path, Type type)
@@ -39,11 +43,11 @@ namespace Demo.Script
             _inputListener = FindObjectOfType<InputListener>();
 
             _inputListener.RegisterOnMove(_player.OnMove);
-            _inputListener.RegisterOnPressQ(_player.OnPressQ);
-            _inputListener.RegisterOnPressE(_player.OnPressE);
-            _inputListener.RegisterOnPressR(_player.OnPressR);
-            _inputListener.RegisterOnPressMouseLeft(_player.OnPressMouseLeft);
-            _inputListener.RegisterOnMousePosition(_player.OnMousePosition);
+            // _inputListener.RegisterOnPressQ(_player.OnPressQ);
+            // _inputListener.RegisterOnPressE(_player.OnPressE);
+            // _inputListener.RegisterOnPressR(_player.OnPressR);
+            // _inputListener.RegisterOnPressMouseLeft(_player.OnPressMouseLeft);
+            // _inputListener.RegisterOnMousePosition(_player.OnMousePosition);
         }
     }
 }
