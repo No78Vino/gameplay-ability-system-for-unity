@@ -1,4 +1,5 @@
 using GAS.Core;
+using GAS.Runtime.Tags;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,8 +7,9 @@ namespace GAS.Editor.Tags
 {
     public class GameplayTagsManager
     {
+        private static GameplayTagsAsset _asset;
         private static UnityEditor.Editor _editor;
-
+        
         [SettingsProvider]
         private static SettingsProvider GameplayTagsManagerSetting()
         {
@@ -22,10 +24,13 @@ namespace GAS.Editor.Tags
         private static void SettingGUI()
         {
             if (_editor == null) Load();
-
+            
             EditorGUILayout.BeginVertical(GUI.skin.box,GUILayout.Width(500));
+            _asset.GameplayTagSumCollectionGenPath = 
+                EditorGUILayout.TextField("Code Gen Path", _asset.GameplayTagSumCollectionGenPath);
+            EditorGUILayout.Space();
             _editor.OnInspectorGUI();
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
 
         private static void Load()
@@ -42,6 +47,7 @@ namespace GAS.Editor.Tags
                 asset = ScriptableObject.CreateInstance<GameplayTagsAsset>();
             }
 
+            _asset = asset;
             _editor = UnityEditor.Editor.CreateEditor(asset);
         }
     }

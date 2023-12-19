@@ -12,62 +12,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13981b66f67204744891820795ef4230, type: 3}
   m_Name: GameplayTagsAsset
   m_EditorClassIdentifier: 
-  _gameplayTagTreeElements:
+  gameplayTagTreeElements:
   - _id: 1
     _name: Root
     _depth: -1
-  - _id: 19
-    _name: Role
-    _depth: 0
-  - _id: 20
-    _name: Player
-    _depth: 1
-  - _id: 22
-    _name: Friend
-    _depth: 1
-  - _id: 21
-    _name: Enemy
-    _depth: 1
-  - _id: 14
+  - _id: 2
     _name: Ability
     _depth: 0
-  - _id: 31
+  - _id: 4
     _name: Attack
     _depth: 1
-  - _id: 30
+  - _id: 3
     _name: Move
     _depth: 1
-  - _id: 15
-    _name: Skill
-    _depth: 1
-  - _id: 32
-    _name: FreezeBeam
-    _depth: 2
-  - _id: 17
-    _name: FireBall
-    _depth: 2
-  - _id: 23
+  - _id: 5
     _name: State
     _depth: 0
-  - _id: 25
-    _name: Buff
+  - _id: 7
+    _name: Freeze
     _depth: 1
-  - _id: 26
-    _name: Debuff
+  - _id: 6
+    _name: Burning
     _depth: 1
-  - _id: 27
-    _name: Stun
-    _depth: 2
-  - _id: 24
-    _name: Attribute
-    _depth: 0
-  - _id: 29
-    _name: MP
-    _depth: 1
-  - _id: 28
-    _name: HP
-    _depth: 1
-  - _id: 16
-    _name: Event
-    _depth: 0
-  Tags: []
+  Tags:
+  - _name: Ability
+    _hashCode: -523153736
+    _shortName: Ability
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: Ability.Attack
+    _hashCode: 115429334
+    _shortName: Attack
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  - _name: Ability.Move
+    _hashCode: -1903949459
+    _shortName: Move
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  - _name: State
+    _hashCode: 1695958603
+    _shortName: State
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: State.Freeze
+    _hashCode: -328363608
+    _shortName: Freeze
+    _ancestorHashCodes: 4b461665
+    _ancestorNames:
+    - State
+  - _name: State.Burning
+    _hashCode: 519175330
+    _shortName: Burning
+    _ancestorHashCodes: 4b461665
+    _ancestorNames:
+    - State
+  GameplayTagSumCollectionGenPath: Demo/Script/Gen/GameplayTagSumCollection.cs

@@ -15,8 +15,6 @@ namespace GAS.Runtime.Tags
         [SerializeField] private int[] _ancestorHashCodes;
         [SerializeField] private string[] _ancestorNames;
 
-        [SerializeField] private List<int> _descendants;
-
         public GameplayTag(string name)
         {
             _name = name;
@@ -24,9 +22,9 @@ namespace GAS.Runtime.Tags
 
 
             var tags = name.Split('.');
-            if (tags.Length > GasDefine.GAS_TAG_MAX_GENERATIONS)
-                throw new Exception(
-                    $"GameplayTag {name} has more than {GasDefine.GAS_TAG_MAX_GENERATIONS} generations");
+            // if (tags.Length > GasDefine.GAS_TAG_MAX_GENERATIONS)
+            //     throw new Exception(
+            //         $"GameplayTag {name} has more than {GasDefine.GAS_TAG_MAX_GENERATIONS} generations");
 
             _ancestorNames = new string[tags.Length - 1];
             _ancestorHashCodes = new int[tags.Length - 1];
@@ -40,8 +38,7 @@ namespace GAS.Runtime.Tags
                 ancestorTag += ".";
                 i++;
             }
-
-            _descendants = new List<int>();
+            
             _shortName = tags.Last();
         }
 
@@ -65,21 +62,7 @@ namespace GAS.Runtime.Tags
         public bool Root => _ancestorHashCodes.Length == 0;
 
         public int[] AncestorHashCodes => _ancestorHashCodes;
-
-        /// <summary>
-        ///     Cache for quick searching.
-        /// </summary>
-        /// <param name="descendant"></param>
-        public void AddDescendant(GameplayTag descendant)
-        {
-            _descendants.Add(descendant.HashCode);
-        }
-
-        public void ClearDescendants()
-        {
-            _descendants.Clear();
-        }
-
+        
         public bool IsDescendantOf(GameplayTag other)
         {
             return other._ancestorHashCodes.Contains(HashCode);

@@ -15,6 +15,7 @@ namespace GAS.Core
 
         public static string GAS_ASSET_PATH => $"Assets/{GAS_ASSET_FOLDER_NAME}";
         public static string GAS_TAG_ASSET_PATH => $"{GAS_ASSET_PATH}/GameplayTagsAsset.asset";
+        public static string GAS_SYSTEM_ASSET_PATH => $"{GAS_ASSET_PATH}/GASSystemAsset.asset";
 
         public static void CheckGasAssetFolder()
         {

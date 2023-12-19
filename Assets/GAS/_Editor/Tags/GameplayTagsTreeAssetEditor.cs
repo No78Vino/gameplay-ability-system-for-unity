@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
-using GAS.Editor.Tags;
+using GAS.Runtime.Tags;
 using GAS.Tags;
-using UnityEditor.IMGUI.Controls;
-using UnityEngine;
-using UnityEditor.TreeDataModel;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+using UnityEditor.TreeDataModel;
+using UnityEngine;
 
 namespace GAS.Editor.Tags
 {
@@ -17,7 +16,7 @@ namespace GAS.Editor.Tags
         private GameplayTagTreeView m_TreeView;
 
         private GameplayTagsAsset asset => (GameplayTagsAsset)target;
-        
+
         private void OnEnable()
         {
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
@@ -26,18 +25,15 @@ namespace GAS.Editor.Tags
             var jsonState = SessionState.GetString(kSessionStateKeyPrefix + asset.GetInstanceID(), "");
             if (!string.IsNullOrEmpty(jsonState))
                 JsonUtility.FromJsonOverwrite(jsonState, treeViewState);
-            var treeModel = new TreeModel<GameplayTagTreeElement>(asset.TreeElements);
-            m_TreeView = new GameplayTagTreeView(treeViewState, treeModel,asset);
+            var treeModel = new TreeModel<GameplayTagTreeElement>(asset.GameplayTagTreeElements);
+            m_TreeView = new GameplayTagTreeView(treeViewState, treeModel, asset);
             m_TreeView.beforeDroppingDraggedItems += OnBeforeDroppingDraggedItems;
             m_TreeView.Reload();
-            
+
             m_SearchField = new SearchField();
             m_SearchField.downOrUpArrowKeyPressed += m_TreeView.SetFocusAndEnsureSelectedItem;
-            
-            if (!m_TreeView.treeModel.Root.HasChildren)
-            {
-                CreateFirstTag();
-            }
+
+            if (!m_TreeView.treeModel.Root.HasChildren) CreateFirstTag();
         }
 
         private void OnDisable()
@@ -52,7 +48,7 @@ namespace GAS.Editor.Tags
         {
             if (m_TreeView != null)
             {
-                m_TreeView.treeModel.SetData(asset.TreeElements);
+                m_TreeView.treeModel.SetData(asset.GameplayTagTreeElements);
                 m_TreeView.Reload();
             }
         }
@@ -104,10 +100,12 @@ namespace GAS.Editor.Tags
                 if (GUILayout.Button("Create Tag", style)) CreateTag();
 
                 if (GUILayout.Button("Remove Tags", style)) RemoveTags();
+                
+                if (GUILayout.Button("Generate TagSum Code", style)) GameplayTagSumCollectionGenerator.Gen();
             }
         }
 
-        void AddTag(string tagName)
+        private void AddTag(string tagName)
         {
             Undo.RecordObject(asset, "Add Item To Asset");
             var selection = m_TreeView.GetSelection();
@@ -122,7 +120,7 @@ namespace GAS.Editor.Tags
             m_TreeView.SetSelection(new[] { id }, TreeViewSelectionOptions.RevealAndFrame);
             SaveAsset();
         }
-        
+
         public void CreateTag()
         {
             Undo.RecordObject(asset, "Add Item To Asset");
@@ -143,21 +141,24 @@ namespace GAS.Editor.Tags
             }
         }
 
-        void CreateFirstTag()
+        private void CreateFirstTag()
         {
             AddTag("Ability");
         }
-        
-        void SaveAsset()
+
+        private void SaveAsset()
         {
+            asset.CacheTags();
             EditorUtility.SetDirty(asset);
             AssetDatabase.SaveAssets();
         }
-        
+
         private class GameplayTagTreeView : TreeViewWithTreeModel<GameplayTagTreeElement>
         {
-            private GameplayTagsAsset _asset;
-            public GameplayTagTreeView(TreeViewState state, TreeModel<GameplayTagTreeElement> model,GameplayTagsAsset asset)
+            private readonly GameplayTagsAsset _asset;
+
+            public GameplayTagTreeView(TreeViewState state, TreeModel<GameplayTagTreeElement> model,
+                GameplayTagsAsset asset)
                 : base(state, model)
             {
                 showBorder = true;
@@ -165,9 +166,11 @@ namespace GAS.Editor.Tags
                 _asset = asset;
             }
 
-            public override void OnDropDraggedElementsAtIndex(List<TreeViewItem> draggedRows, GameplayTagTreeElement parent, int insertIndex)
+            public override void OnDropDraggedElementsAtIndex(List<TreeViewItem> draggedRows,
+                GameplayTagTreeElement parent, int insertIndex)
             {
                 base.OnDropDraggedElementsAtIndex(draggedRows, parent, insertIndex);
+                _asset.CacheTags();
                 EditorUtility.SetDirty(_asset);
                 AssetDatabase.SaveAssets();
             }

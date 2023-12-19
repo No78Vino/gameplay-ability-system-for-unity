@@ -86,7 +86,9 @@ namespace GAS.Runtime.Effects
         
         public bool CanApplyToTarget(AbilitySystemComponent.AbilitySystemComponent target )
         {
-            return target.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags);
+            // TODO
+            return false;
+            //return target.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags.Tags);
         }
 
         public void RefreshModifierStack()
