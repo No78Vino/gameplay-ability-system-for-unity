@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GAS.Runtime.Tags
+﻿namespace GAS.Runtime.Tags
 {
     public class GameplayEffectTagContainer
     {
@@ -23,7 +21,7 @@ namespace GAS.Runtime.Tags
         /// <summary>
         /// For the Requirement of Keeping Running 
         /// </summary>
-        public GameplayTagSet KeepRunningRequiredTags;
+        public GameplayTagSet RunningRequiredTags;
         
         /// <summary>
         /// When the GameplayEffect is active, the ASC will lose these tags
