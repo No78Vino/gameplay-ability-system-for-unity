@@ -20,4 +20,27 @@ namespace Demo.Script.MyAbilitySystem.Ability
             throw new System.NotImplementedException();
         }
     }
+    
+    public class AbilitySpecMove:AbilitySpec
+    {
+
+        public override bool StepAbility()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool CheckGameplayTags()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void EndAbility()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AbilitySpecMove(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
+        {
+        }
+    }
 }
