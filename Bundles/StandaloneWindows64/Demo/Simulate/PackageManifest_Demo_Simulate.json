@@ -1,0 +1,55 @@
+{
+    "FileVersion": "2.0.0",
+    "EnableAddressable": false,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildPipeline": "BuiltinBuildPipeline",
+    "PackageName": "Demo",
+    "PackageVersion": "Simulate",
+    "AssetList": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Demo/FairyGUI/Demo/Demo_fui.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Demo/Material/mat_Environment.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Demo/Material/mat_Player.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "assets_demo_fairygui_demo.bundle",
+            "UnityCRC": 0,
+            "FileHash": "d414f7d6dbad8d61dd26ab3b67314840",
+            "FileCRC": "00000000",
+            "FileSize": 0,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        },
+        {
+            "BundleName": "assets_demo_material.bundle",
+            "UnityCRC": 0,
+            "FileHash": "eec524a1009c6bf139222e4f8edee3c5",
+            "FileCRC": "00000000",
+            "FileSize": 0,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        }
+    ]
+}

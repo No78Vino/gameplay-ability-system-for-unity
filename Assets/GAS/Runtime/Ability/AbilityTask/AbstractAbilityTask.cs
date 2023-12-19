@@ -1,6 +1,7 @@
 ﻿namespace GAS.Runtime.Ability.AbilityTask
 {
-    public class AbstractAbilityTask
+    public abstract class AbstractAbilityTask
     {
+        public abstract void Execute(params object[] args);
     }
 }

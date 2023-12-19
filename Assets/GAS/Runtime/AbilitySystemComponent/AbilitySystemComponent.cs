@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GAS.Core;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 using UnityEngine;
@@ -11,7 +12,11 @@ namespace GAS.Runtime.AbilitySystemComponent
         private List<GameplayTag> _tags;
         public float Level { get; private set; }
 
+        List<GameplayEffectSpec> _activeGameplayEffects = new();
+        Dictionary<string,AbilitySpec> _abilities = new();
 
+        public List<GameplayEffectSpec> GetActiveGameplayEffects() => _activeGameplayEffects;
+        
         private void OnEnable()
         {
             GameplayAbilitySystem.GAS.Register(this);
@@ -47,9 +52,23 @@ namespace GAS.Runtime.AbilitySystemComponent
             // TODO
         }
 
+        public void AddAbility(string abilityName, AbstractAbility ability)
+        {
+            if (_abilities.ContainsKey(abilityName)) return;
+            _abilities.Add(abilityName, ability.CreateSpec(this));
+        }
+        
         public void Tick()
         {
-            // TODO
+            foreach (var ge in _activeGameplayEffects)
+            {
+                ge.Tick();
+            }
+
+            foreach (var kv in _abilities)
+            {
+                kv.Value.Tick();
+            }
         }
 
         public GameplayEffectSpec CreateGameplayEffectSpec(GameplayEffect gameplayEffect, float level = 1f)
@@ -67,6 +86,13 @@ namespace GAS.Runtime.AbilitySystemComponent
         public bool RemoveTag(GameplayTag tag)
         {
             return _tags.Remove(tag);
+        }
+        
+        public bool TryActivateAbility(string abilityName,params object[] args)
+        {
+            if (!_abilities.ContainsKey(abilityName)) return false;
+            _abilities[abilityName].ActivateAbility(args);
+            return true;
         }
     }
 }

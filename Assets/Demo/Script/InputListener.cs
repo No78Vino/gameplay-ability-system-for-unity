@@ -5,7 +5,7 @@ namespace Demo.Script
 {
     public class InputListener : MonoBehaviour
     {
-        private Action<Vector2> _onMove;
+        private Action<Vector3> _onMove;
         private Action _onPressQ;
         private Action _onPressE;
         private Action _onPressR;
@@ -57,32 +57,32 @@ namespace Demo.Script
             _onMousePosition?.Invoke(Input.mousePosition);
         }
         
-        void RegisterOnMove(Action<Vector2> onMove)
+        public void RegisterOnMove(Action<Vector3> onMove)
         {
             _onMove = onMove;
         }
         
-        void RegisterOnPressQ(Action onPressQ)
+        public void RegisterOnPressQ(Action onPressQ)
         {
             _onPressQ = onPressQ;
         }
         
-        void RegisterOnPressE(Action onPressE)
+        public void RegisterOnPressE(Action onPressE)
         {
             _onPressE = onPressE;
         }
         
-        void RegisterOnPressR(Action onPressR)
+        public void RegisterOnPressR(Action onPressR)
         {
             _onPressR = onPressR;
         }
         
-        void RegisterOnPressMouseLeft(Action onPressMouseLeft)
+        public void RegisterOnPressMouseLeft(Action onPressMouseLeft)
         {
             _onPressMouseLeft = onPressMouseLeft;
         }
         
-        void RegisterOnMousePosition(Action<Vector3> onMousePosition)
+        public void RegisterOnMousePosition(Action<Vector3> onMousePosition)
         {
             _onMousePosition = onMousePosition;
         }

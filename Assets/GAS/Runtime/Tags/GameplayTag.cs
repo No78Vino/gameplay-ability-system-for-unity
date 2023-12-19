@@ -104,5 +104,15 @@ namespace GAS.Runtime.Tags
         {
             return x.HashCode != y.HashCode;
         }
+
+        public bool HasTag(GameplayTag tag)
+        {
+            foreach (var ancestorHashCode in _ancestorHashCodes)
+            {
+                if (ancestorHashCode == tag.HashCode) return true;
+            }
+
+            return this == tag;
+        }
     }
 }

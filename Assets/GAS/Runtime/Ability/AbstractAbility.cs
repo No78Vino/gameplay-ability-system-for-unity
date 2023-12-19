@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GAS.Runtime.Ability.AbilityTask;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 
@@ -6,7 +7,12 @@ namespace GAS.Runtime.Ability
 {
     public abstract class AbstractAbility
     {
-        private string _name;
+        public string Name { get;protected set; }
+
+        public List<OngoingAbilityTask> OngoingAbilityTasks;
+        public List<AsyncAbilityTask> AsyncAbilityTasks;
+
+        public List<GameplayEffect> AppliedEffects = new();
 
         /// <summary>
         ///     For the description of the ability
@@ -17,13 +23,11 @@ namespace GAS.Runtime.Ability
 
         public GameplayEffect Cost;
         
-        public List<GameplayEffect> AppliedEffects = new();
-
+        public abstract AbilitySpec CreateSpec(AbilitySystemComponent.AbilitySystemComponent owner);
+        
         public abstract void ActivateAbility();
 
         public abstract void EndAbility();
-
-        //public abstract AbstractAbilitySpec CreateSpec(AbilitySystemCharacter owner);
 
         private GameplayEffectSpec ApplyTo(AbilitySystemComponent.AbilitySystemComponent asc,
             GameplayEffect gameplayEffect)

@@ -40,8 +40,8 @@ MonoBehaviour:
   - _id: 15
     _name: Skill
     _depth: 1
-  - _id: 18
-    _name: IceFreeze
+  - _id: 32
+    _name: FreezeBeam
     _depth: 2
   - _id: 17
     _name: FireBall
