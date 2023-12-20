@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GAS.Editor.General;
 using GAS.Runtime.Tags;
 using GAS.Tags;
 using UnityEditor;
@@ -11,52 +12,52 @@ namespace GAS.Editor.Tags
     [CustomEditor(typeof(GameplayTagsAsset))]
     public class GameplayTagsTreeAssetEditor : UnityEditor.Editor
     {
-        private const string kSessionStateKeyPrefix = "TVS";
-        private SearchField m_SearchField;
-        private GameplayTagTreeView m_TreeView;
+        private const string KSessionStateKeyPrefix = "TVS";
+        private SearchField _searchField;
+        private GameplayTagTreeView _treeView;
 
-        private GameplayTagsAsset asset => (GameplayTagsAsset)target;
+        private GameplayTagsAsset Asset => (GameplayTagsAsset)target;
 
         private void OnEnable()
         {
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
             var treeViewState = new TreeViewState();
-            var jsonState = SessionState.GetString(kSessionStateKeyPrefix + asset.GetInstanceID(), "");
+            var jsonState = SessionState.GetString(KSessionStateKeyPrefix + Asset.GetInstanceID(), "");
             if (!string.IsNullOrEmpty(jsonState))
                 JsonUtility.FromJsonOverwrite(jsonState, treeViewState);
-            var treeModel = new TreeModel<GameplayTagTreeElement>(asset.GameplayTagTreeElements);
-            m_TreeView = new GameplayTagTreeView(treeViewState, treeModel, asset);
-            m_TreeView.beforeDroppingDraggedItems += OnBeforeDroppingDraggedItems;
-            m_TreeView.Reload();
+            var treeModel = new TreeModel<GameplayTagTreeElement>(Asset.GameplayTagTreeElements);
+            _treeView = new GameplayTagTreeView(treeViewState, treeModel, Asset);
+            _treeView.beforeDroppingDraggedItems += OnBeforeDroppingDraggedItems;
+            _treeView.Reload();
 
-            m_SearchField = new SearchField();
-            m_SearchField.downOrUpArrowKeyPressed += m_TreeView.SetFocusAndEnsureSelectedItem;
+            _searchField = new SearchField();
+            _searchField.downOrUpArrowKeyPressed += _treeView.SetFocusAndEnsureSelectedItem;
 
-            if (!m_TreeView.treeModel.Root.HasChildren) CreateFirstTag();
+            if (!_treeView.treeModel.Root.HasChildren) CreateFirstTag();
         }
 
         private void OnDisable()
         {
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
-            SessionState.SetString(kSessionStateKeyPrefix + asset.GetInstanceID(),
-                JsonUtility.ToJson(m_TreeView.state));
+            SessionState.SetString(KSessionStateKeyPrefix + Asset.GetInstanceID(),
+                JsonUtility.ToJson(_treeView.state));
         }
 
         private void OnUndoRedoPerformed()
         {
-            if (m_TreeView != null)
+            if (_treeView != null)
             {
-                m_TreeView.treeModel.SetData(asset.GameplayTagTreeElements);
-                m_TreeView.Reload();
+                _treeView.treeModel.SetData(Asset.GameplayTagTreeElements);
+                _treeView.Reload();
             }
         }
 
         private void OnBeforeDroppingDraggedItems(IList<TreeViewItem> draggedRows)
         {
-            Undo.RecordObject(asset,
-                string.Format("Moving {0} Tag{1}", draggedRows.Count, draggedRows.Count > 1 ? "s" : ""));
+            Undo.RecordObject(Asset,
+                $"Moving {draggedRows.Count} Tag{(draggedRows.Count > 1 ? "s" : "")}");
         }
 
         public override void OnInspectorGUI()
@@ -67,7 +68,7 @@ namespace GAS.Editor.Tags
 
             const float topToolbarHeight = 20f;
             const float spacing = 2f;
-            var totalHeight = m_TreeView.totalHeight + topToolbarHeight + 2 * spacing;
+            var totalHeight = _treeView.totalHeight + topToolbarHeight + 2 * spacing;
             var rect = GUILayoutUtility.GetRect(0, 10000, 0, totalHeight);
             var toolbarRect = new Rect(rect.x, rect.y, rect.width, topToolbarHeight);
             var multiColumnTreeViewRect = new Rect(rect.x, rect.y + topToolbarHeight + spacing, rect.width,
@@ -78,12 +79,12 @@ namespace GAS.Editor.Tags
 
         private void SearchBar(Rect rect)
         {
-            m_TreeView.searchString = m_SearchField.OnGUI(rect, m_TreeView.searchString);
+            _treeView.searchString = _searchField.OnGUI(rect, _treeView.searchString);
         }
 
         private void DoTreeView(Rect rect)
         {
-            m_TreeView.OnGUI(rect);
+            _treeView.OnGUI(rect);
         }
 
         private void ToolBar()
@@ -91,9 +92,9 @@ namespace GAS.Editor.Tags
             using (new EditorGUILayout.HorizontalScope())
             {
                 var style = "miniButton";
-                if (GUILayout.Button("Expand All", style)) m_TreeView.ExpandAll();
+                if (GUILayout.Button("Expand All", style)) _treeView.ExpandAll();
 
-                if (GUILayout.Button("Collapse All", style)) m_TreeView.CollapseAll();
+                if (GUILayout.Button("Collapse All", style)) _treeView.CollapseAll();
 
                 GUILayout.FlexibleSpace();
 
@@ -101,30 +102,30 @@ namespace GAS.Editor.Tags
 
                 if (GUILayout.Button("Remove Tags", style)) RemoveTags();
                 
-                if (GUILayout.Button("Generate TagSum Code", style)) GameplayTagSumCollectionGenerator.Gen();
+                if (GUILayout.Button("Generate TagSum Code", style)) GenCode();
             }
         }
 
         private void AddTag(string tagName)
         {
-            Undo.RecordObject(asset, "Add Item To Asset");
-            var selection = m_TreeView.GetSelection();
-            TreeElement parent = (selection.Count == 1 ? m_TreeView.treeModel.Find(selection[0]) : null) ??
-                                 m_TreeView.treeModel.Root;
+            Undo.RecordObject(Asset, "Add Item To Asset");
+            var selection = _treeView.GetSelection();
+            TreeElement parent = (selection.Count == 1 ? _treeView.treeModel.Find(selection[0]) : null) ??
+                                 _treeView.treeModel.Root;
             var depth = parent != null ? parent.Depth + 1 : 0;
-            var id = m_TreeView.treeModel.GenerateUniqueID();
+            var id = _treeView.treeModel.GenerateUniqueID();
             var element = new GameplayTagTreeElement(tagName, depth, id);
-            m_TreeView.treeModel.AddElement(element, parent, 0);
+            _treeView.treeModel.AddElement(element, parent, 0);
 
             // Select newly created element
-            m_TreeView.SetSelection(new[] { id }, TreeViewSelectionOptions.RevealAndFrame);
+            _treeView.SetSelection(new[] { id }, TreeViewSelectionOptions.RevealAndFrame);
             SaveAsset();
         }
 
         public void CreateTag()
         {
-            Undo.RecordObject(asset, "Add Item To Asset");
-            CreateTagWindow.OpenWindow(AddTag);
+            Undo.RecordObject(Asset, "Add Item To Asset");
+            InputStringWindow.OpenWindow("Create Tag",AddTag);
         }
 
         public void RemoveTags()
@@ -134,9 +135,9 @@ namespace GAS.Editor.Tags
 
             if (result)
             {
-                Undo.RecordObject(asset, "Remove Tag From Asset");
-                var selection = m_TreeView.GetSelection();
-                m_TreeView.treeModel.RemoveElements(selection);
+                Undo.RecordObject(Asset, "Remove Tag From Asset");
+                var selection = _treeView.GetSelection();
+                _treeView.treeModel.RemoveElements(selection);
                 SaveAsset();
             }
         }
@@ -148,11 +149,17 @@ namespace GAS.Editor.Tags
 
         private void SaveAsset()
         {
-            asset.CacheTags();
-            EditorUtility.SetDirty(asset);
+            Asset.CacheTags();
+            EditorUtility.SetDirty(Asset);
             AssetDatabase.SaveAssets();
         }
 
+        void GenCode()
+        {
+            GameplayTagSumCollectionGenerator.Gen();
+            AssetDatabase.Refresh();
+        }
+        
         private class GameplayTagTreeView : TreeViewWithTreeModel<GameplayTagTreeElement>
         {
             private readonly GameplayTagsAsset _asset;

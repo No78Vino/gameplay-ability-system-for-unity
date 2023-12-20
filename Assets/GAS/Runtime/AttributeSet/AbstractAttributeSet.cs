@@ -15,21 +15,6 @@ namespace GAS.Runtime.AttributeSet
         protected abstract void PreGameplayEffectExecute(GameplayEffect gameplayEffect, AttributeBase attribute, float newValue);
         protected abstract void PostGameplayEffectExecute(GameplayEffect gameplayEffect, AttributeBase attribute, float oldValue,
             float newValue);
-
-        public AbstractAttributeSet()
-        {
-            _attributes = new Dictionary<string, AttributeBase>();
-        }
-
-        public void AddAttribute(AttributeBase attribute)
-        {
-            _attributes.Add(attribute.Name, attribute);
-        }
-        
-        public bool RemoveAttribute(string attributeName)
-        {
-            return _attributes.Remove(attributeName);
-        }
         
         internal void ChangeAttributeBase(string attributeName, float value)
         {

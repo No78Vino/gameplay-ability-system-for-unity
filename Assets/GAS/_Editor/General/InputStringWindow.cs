@@ -5,19 +5,19 @@ using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
 
-namespace GAS.Editor.Tags
+namespace GAS.Editor.General
 {
-    public class CreateTagWindow : OdinEditorWindow
+    public class InputStringWindow : OdinEditorWindow
     {
-        [LabelText("Tag:")] [LabelWidth(100)] public string _tagName = "";
-
+        [LabelText("Input:")] [LabelWidth(100)] public string content = "";
+        
         private Action<string> _confirmCallback;
 
-        public static void OpenWindow(Action<string> confirmCallback)
+        public static void OpenWindow(string title,Action<string> confirmCallback)
         {
-            var window = GetWindow<CreateTagWindow>();
+            var window = GetWindow<InputStringWindow>();
             window.position = GUIHelper.GetEditorWindowRect().AlignCenter(300, 30);
-            window.titleContent = new GUIContent("Create Tag");
+            window.titleContent = new GUIContent(title);
             window.ShowPopup();
             window.SetConfirmCallback(confirmCallback);
         }
@@ -31,7 +31,7 @@ namespace GAS.Editor.Tags
         [Button("Create")]
         private void Create()
         {
-            _confirmCallback?.Invoke(_tagName);
+            _confirmCallback?.Invoke(content);
             Close();
         }
 

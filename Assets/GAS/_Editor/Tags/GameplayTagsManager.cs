@@ -16,7 +16,7 @@ namespace GAS.Editor.Tags
             var provider = new SettingsProvider("Project/EX Gameplay Ability System/Tag Manager", SettingsScope.Project)
             {
                 guiHandler = key => { SettingGUI(); },
-                keywords = new string[] { }
+                keywords = new string[] { "GAS","Tag" }
             };
             return provider;
         }

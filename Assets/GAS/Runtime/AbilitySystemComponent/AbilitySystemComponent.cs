@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GAS.Core;
 using GAS.Runtime.Ability;
+using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace GAS.Runtime.AbilitySystemComponent
 
         List<GameplayEffectSpec> _activeGameplayEffects = new();
         Dictionary<string,AbilitySpec> _abilities = new();
+        GeneralAttrSet _attributeSet = new();
 
         public List<GameplayEffectSpec> GetActiveGameplayEffects() => _activeGameplayEffects;
         

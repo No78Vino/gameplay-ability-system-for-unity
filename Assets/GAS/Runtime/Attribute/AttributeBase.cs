@@ -4,7 +4,7 @@ namespace GAS.Runtime.Attribute
 {
     public class AttributeBase
     {
-        public string Name { get; private set; }
+        public string Name { get; }
         private AttributeValue _value;
 
         public AttributeBase(string name,float value)

@@ -13,9 +13,14 @@ namespace GAS.Core
         
         public const string GAS_ASSET_FOLDER_NAME = "exGAS_Setting";
 
+        public const string GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME = "AttributeCollection.gen.cs";
+        public const string GAS_ATTRIBUTESET_COLLECTION_CSHARP_SCRIPT_NAME = "AttributeSetCollection.gen.cs";
+        
         public static string GAS_ASSET_PATH => $"Assets/{GAS_ASSET_FOLDER_NAME}";
-        public static string GAS_TAG_ASSET_PATH => $"{GAS_ASSET_PATH}/GameplayTagsAsset.asset";
         public static string GAS_SYSTEM_ASSET_PATH => $"{GAS_ASSET_PATH}/GASSystemAsset.asset";
+        public static string GAS_TAG_ASSET_PATH => $"{GAS_ASSET_PATH}/GameplayTagsAsset.asset";
+        public static string GAS_ATTRIBUTE_ASSET_PATH => $"{GAS_ASSET_PATH}/AttributeAsset.asset";
+        public static string GAS_ATTRIBUTESET_ASSET_PATH => $"{GAS_ASSET_PATH}/AttributeSetAsset.asset";
 
         public static void CheckGasAssetFolder()
         {
