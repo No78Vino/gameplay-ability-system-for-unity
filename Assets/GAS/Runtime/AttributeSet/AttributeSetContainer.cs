@@ -36,13 +36,13 @@ namespace GAS.Runtime.AttributeSet
         
         public void ApplyModFromGameplayEffectSpec(GameplayEffectSpec spec)
         {
-            foreach (var modifier in spec.Modifiers)
-            {
-                if (TryGetAttributeSet<AttributeSet>(out var attributeSet))
-                {
-                    attributeSet.ApplyMod(modifier);
-                }
-            }
+            // foreach (var modifier in spec.Modifiers)
+            // {
+            //     if (TryGetAttributeSet<AttributeSet>(out var attributeSet))
+            //     {
+            //         attributeSet.ApplyMod(modifier);
+            //     }
+            // }
         }
     }
 }

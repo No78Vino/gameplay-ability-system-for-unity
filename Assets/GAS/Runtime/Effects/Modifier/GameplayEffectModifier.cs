@@ -25,40 +25,46 @@ namespace GAS.Runtime.Effects.Modifier
         Combine,
     }
 
-    public enum AttributeTrackType
+    public enum GEAttributeReplicationType
     {
-        
+        SnapShot,
+        Track,
     }
 
     public struct GameplayEffectModifier
     {
         public AttributeBase Attribute { get; private set; }
-        public string AttributeName { get; private set; }
-        public float Value { get; private set; }
+        public string AttributeName => Attribute.Name;
+        private float _value;
         public GEOperation Operation { get; private set; }
-        public GEModifierType Type { get; private set; }
+        public GEModifierType ModifierType { get; private set; }
         public GECalculationType CalculationType { get; private set; }
-
+        public GEAttributeReplicationType ReplicationType { get; private set; }
         public List<GameplayTag> Tags{ get; private set; }
-        
-        public GameplayEffectModifier(string attributeName, float value, GEOperation operation,
-            GEModifierType type, GECalculationType calculationType)
+        public float Value => ReplicationType == GEAttributeReplicationType.SnapShot ? _value : Attribute.CurrentValue;
+        public GameplayEffectModifier(AttributeBase attribute, 
+            GEOperation operation,
+            GEModifierType modifierType, 
+            GECalculationType calculationType,
+            GEAttributeReplicationType replicationType)
         {
-            AttributeName = attributeName;
-            Value = value;
+            Attribute = attribute;
+            _value = Attribute.CurrentValue;
             Operation = operation;
-            Type = type;
+            ModifierType = modifierType;
             CalculationType = calculationType;
+            ReplicationType = replicationType;
             Tags = new List<GameplayTag>();
         }
         
         public GameplayEffectModifier(GameplayEffectModifier modifier)
         {
-            AttributeName = modifier.AttributeName;
-            Value = modifier.Value;
+            Attribute = modifier.Attribute;
+            _value = modifier.Value;
             Operation = modifier.Operation;
-            Type = modifier.Type;
+            ModifierType = modifier.ModifierType;
             CalculationType = modifier.CalculationType;
+            ReplicationType = modifier.ReplicationType;
             Tags = modifier.Tags;
         }
         
@@ -67,29 +73,29 @@ namespace GAS.Runtime.Effects.Modifier
             return AttributeName == other.AttributeName && Operation == other.Operation && CalculationType == other.CalculationType;
         }
         
-        public bool CombineWith(GameplayEffectModifier other,out GameplayEffectModifier result)
-        {
-            if (!CombinableWith(other))
-            {
-                result = this;
-                return false;
-            }
-            
-            switch (Operation)
-            {
-                case GEOperation.Add:
-                    Value += other.Value;
-                    break;
-                case GEOperation.Multiply:
-                    Value *= other.Value;
-                    break;
-                case GEOperation.Override:
-                    Value = other.Value;
-                    break;
-            }
-            
-            result = this;
-            return true;
-        }
+        // public bool CombineWith(GameplayEffectModifier other,out GameplayEffectModifier result)
+        // {
+        //     if (!CombinableWith(other))
+        //     {
+        //         result = this;
+        //         return false;
+        //     }
+        //     
+        //     switch (Operation)
+        //     {
+        //         case GEOperation.Add:
+        //             Value += other.Value;
+        //             break;
+        //         case GEOperation.Multiply:
+        //             Value *= other.Value;
+        //             break;
+        //         case GEOperation.Override:
+        //             Value = other.Value;
+        //             break;
+        //     }
+        //     
+        //     result = this;
+        //     return true;
+        // }
     }
 }
