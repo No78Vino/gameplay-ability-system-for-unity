@@ -8,6 +8,16 @@ namespace GAS.Runtime.AttributeSet
     {
         public string Name;
         public string[] AttributeNames;
+        
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+        
+        public void SetAttributeNames(string[] attributeNames)
+        {
+            AttributeNames = attributeNames;
+        }
     }
     
     public class AttributeSetAsset:ScriptableObject
@@ -17,6 +27,6 @@ namespace GAS.Runtime.AttributeSet
         [LabelWidth(200)]
         public string AttributeSetCollectionGenPath = "Script/Gen/";
 
-        public List<AttributeSetConfig> AttributeSet = new();
+        public List<AttributeSetConfig> AttributeSets = new();
     }
 }

@@ -1,22 +1,23 @@
 ﻿using GAS.Core;
 using GAS.Runtime.Attribute;
+using GAS.Runtime.AttributeSet;
 using UnityEditor;
 using UnityEngine;
 
-namespace GAS.Editor.Attributes
+namespace GAS.Editor.AttributeSet
 {
-    public class AttributesManager
+    public class AttributeSetManager
     {
-        private static AttributeAsset _asset;
+        private static AttributeSetAsset _asset;
         private static UnityEditor.Editor _editor;
         
         [SettingsProvider]
-        private static SettingsProvider AttributeManagerSetting()
+        private static SettingsProvider AttributeSetManagerSetting()
         {
-            var provider = new SettingsProvider("Project/EX Gameplay Ability System/Attribute Manager", SettingsScope.Project)
+            var provider = new SettingsProvider("Project/EX Gameplay Ability System/AttributeSet Manager", SettingsScope.Project)
             {
                 guiHandler = key => { SettingGUI(); },
-                keywords = new string[] { "GAS","Attribute" }
+                keywords = new string[] { "GAS","Attribute","AttributeSet" }
             };
             return provider;
         }
@@ -32,16 +33,16 @@ namespace GAS.Editor.Attributes
 
         private static void Load()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GasDefine.GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GasDefine.GAS_ATTRIBUTESET_ASSET_PATH);
             if (asset == null)
             {
                 GasDefine.CheckGasAssetFolder();
 
-                var a = ScriptableObject.CreateInstance<AttributeAsset>();
-                AssetDatabase.CreateAsset(a, GasDefine.GAS_ATTRIBUTE_ASSET_PATH);
+                var a = ScriptableObject.CreateInstance<AttributeSetAsset>();
+                AssetDatabase.CreateAsset(a, GasDefine.GAS_ATTRIBUTESET_ASSET_PATH);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                asset = ScriptableObject.CreateInstance<AttributeAsset>();
+                asset = ScriptableObject.CreateInstance<AttributeSetAsset>();
             }
 
             _asset = asset;
