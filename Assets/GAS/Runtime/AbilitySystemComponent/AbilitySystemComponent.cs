@@ -97,5 +97,11 @@ namespace GAS.Runtime.AbilitySystemComponent
             _abilities[abilityName].ActivateAbility(args);
             return true;
         }
+        
+        public void TryEndAbility(string abilityName)
+        {
+            if (!_abilities.ContainsKey(abilityName)) return;
+            _abilities[abilityName].EndAbility();
+        }
     }
 }

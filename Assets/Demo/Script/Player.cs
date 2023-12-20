@@ -7,10 +7,13 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private AbilitySystemComponent _asc;
+    private Rigidbody _rigidbody;
+    private float speed = 0.5f;
     public Action<Vector3> onMove { get; private set; }
     
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody>();
         _asc = GetComponent<AbilitySystemComponent>();
         var ability = new AbilityMove();
         _asc.Init(ability);
@@ -20,9 +23,13 @@ public class Player : MonoBehaviour
 
     public void OnMove(Vector3 direction)
     {
-        _asc.TryActivateAbility("Move", direction);
+        _asc.TryActivateAbility("Move", direction,_rigidbody,speed);
     }
 
+    public void OnMoveEnd()
+    {
+        _asc.TryEndAbility("Move");
+    }
     public void OnPressQ()
     {
         //_asc.TryActivateAbility("Q");

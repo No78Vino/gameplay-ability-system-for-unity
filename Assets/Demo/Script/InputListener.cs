@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Demo.Script
@@ -6,33 +7,26 @@ namespace Demo.Script
     public class InputListener : MonoBehaviour
     {
         private Action<Vector3> _onMove;
+        private Action _onMoveEnd;
         private Action _onPressQ;
         private Action _onPressE;
         private Action _onPressR;
         private Action _onPressMouseLeft;
         private Action<Vector3> _onMousePosition;
+
+        private bool isMoveKeysDown;
+        private Vector3 moveDirection = Vector3.zero;
+        Dictionary<KeyCode,Vector3> _keyDirectionMap = new Dictionary<KeyCode, Vector3>()
+        {
+            {KeyCode.A,Vector3.left},
+            {KeyCode.D,Vector3.right},
+            {KeyCode.W,Vector3.forward},
+            {KeyCode.S,Vector3.back},
+        };
         
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                _onMove?.Invoke(Vector2.left);
-            }
-            
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                _onMove?.Invoke(Vector2.right);
-            }
-            
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                _onMove?.Invoke(Vector2.up);
-            }
-            
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                _onMove?.Invoke(Vector2.down);
-            }
+            CheckMotion();
             
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -56,10 +50,37 @@ namespace Demo.Script
             
             _onMousePosition?.Invoke(Input.mousePosition);
         }
+
+        void CheckMotion()
+        {
+            moveDirection = Vector3.zero;
+            isMoveKeysDown = false;
+            foreach (var kv in _keyDirectionMap)
+            {
+                bool isPressed = Input.GetKey(kv.Key);
+                isMoveKeysDown = isMoveKeysDown || isPressed;
+                if (isPressed) moveDirection += kv.Value;
+            }
+            Debug.Log($"isMoveKeysDown = {isMoveKeysDown}");
+            
+            if (isMoveKeysDown)
+            {
+                _onMove?.Invoke(moveDirection);
+            }
+            else
+            {
+                _onMoveEnd?.Invoke();
+            }
+        }
         
         public void RegisterOnMove(Action<Vector3> onMove)
         {
             _onMove = onMove;
+        }
+        
+        public void RegisterOnMoveEnd(Action onMoveEnd)
+        {
+            _onMoveEnd = onMoveEnd;
         }
         
         public void RegisterOnPressQ(Action onPressQ)
