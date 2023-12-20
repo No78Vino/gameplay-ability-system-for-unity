@@ -25,8 +25,14 @@ namespace GAS.Runtime.Effects.Modifier
         Combine,
     }
 
+    public enum AttributeTrackType
+    {
+        
+    }
+
     public struct GameplayEffectModifier
     {
+        public AttributeBase Attribute { get; private set; }
         public string AttributeName { get; private set; }
         public float Value { get; private set; }
         public GEOperation Operation { get; private set; }
@@ -59,6 +65,31 @@ namespace GAS.Runtime.Effects.Modifier
         public bool CombinableWith(GameplayEffectModifier other)
         {
             return AttributeName == other.AttributeName && Operation == other.Operation && CalculationType == other.CalculationType;
+        }
+        
+        public bool CombineWith(GameplayEffectModifier other,out GameplayEffectModifier result)
+        {
+            if (!CombinableWith(other))
+            {
+                result = this;
+                return false;
+            }
+            
+            switch (Operation)
+            {
+                case GEOperation.Add:
+                    Value += other.Value;
+                    break;
+                case GEOperation.Multiply:
+                    Value *= other.Value;
+                    break;
+                case GEOperation.Override:
+                    Value = other.Value;
+                    break;
+            }
+            
+            result = this;
+            return true;
         }
     }
 }

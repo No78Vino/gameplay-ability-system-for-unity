@@ -15,7 +15,7 @@ namespace GAS.Runtime.AbilitySystemComponent
 
         List<GameplayEffectSpec> _activeGameplayEffects = new();
         Dictionary<string,AbilitySpec> _abilities = new();
-        GeneralAttrSet _attributeSet = new();
+        CustomAttrSet _attributeSet = new();
 
         public List<GameplayEffectSpec> GetActiveGameplayEffects() => _activeGameplayEffects;
         
@@ -33,6 +33,7 @@ namespace GAS.Runtime.AbilitySystemComponent
         {
             _abilities.Add(ability.Name, ability.CreateSpec(this));
         }
+        
         public bool HasAllTags(List<GameplayTag> tags)
         {
             if (tags.Count == 0) return true;
