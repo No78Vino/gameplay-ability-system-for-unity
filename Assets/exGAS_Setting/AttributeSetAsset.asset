@@ -20,3 +20,6 @@ MonoBehaviour:
     - MP
     - SPEED
     - BUFF_TIME
+  - Name: Enemy
+    AttributeNames:
+    - MP

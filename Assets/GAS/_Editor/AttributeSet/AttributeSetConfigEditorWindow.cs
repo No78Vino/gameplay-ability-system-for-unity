@@ -21,6 +21,8 @@ namespace GAS.Editor.AttributeSet
 
         private List<int> _selectedAttributeIndexs;
 
+        private GUIStyle BigFontLabelStyle;
+        
         private static List<string> AttributeOptions
         {
             get
@@ -35,19 +37,40 @@ namespace GAS.Editor.AttributeSet
             }
         }
 
+        public static void OpenWindow(string initialString, List<string> attributeNames,
+            Action<string, List<string>> callback, Func<AttributeSetConfig, bool> checkAttributeSetValid)
+        {
+            var window = GetWindow<AttributeSetConfigEditorWindow>();
+            window.Init(initialString, attributeNames, callback, checkAttributeSetValid);
+            window.Show();
+        }
+        
+        Vector2 scrollPosition = Vector2.zero;
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("Edit", EditorStyles.boldLabel);
-
-            editedName = EditorGUILayout.TextField("AttributeSet:", editedName);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("AttributeSet:",GUILayout.Width(80));
+            editedName = EditorGUILayout.TextField("", editedName);
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
+            
+            if (GUILayout.Button("Add Attribute", GUILayout.Width(100)))
+            {
+                attributeNames.Add("");
+                _selectedAttributeIndexs.Add(-1);
+            }
 
+            EditorGUILayout.Space();
+            
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition,GUI.skin.box);
+            
             for (var i = 0; i < attributeNames.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
 
-                _selectedAttributeIndexs[i] = EditorGUILayout.Popup("     Attribute:", _selectedAttributeIndexs[i],
+                EditorGUILayout.LabelField("Attribute:", GUILayout.Width(80));
+                _selectedAttributeIndexs[i] = EditorGUILayout.Popup("", _selectedAttributeIndexs[i], 
                     AttributeOptions.ToArray());
 
                 // 更新选中的字符串
@@ -63,17 +86,12 @@ namespace GAS.Editor.AttributeSet
 
                 EditorGUILayout.EndHorizontal();
             }
-
+            
+            EditorGUILayout.EndScrollView();
+            
             EditorGUILayout.Space();
-
-            if (GUILayout.Button("Add Attribute", GUILayout.Width(100)))
-            {
-                attributeNames.Add("");
-                _selectedAttributeIndexs.Add(-1);
-            }
-
-            EditorGUILayout.Space();
-
+            
+            GUILayout.FlexibleSpace();
             if (GUILayout.Button("Save")) Save();
         }
 
@@ -87,6 +105,10 @@ namespace GAS.Editor.AttributeSet
             _selectedAttributeIndexs = new List<int>();
             foreach (var attributeName in attributeNames)
                 _selectedAttributeIndexs.Add(AttributeOptions.IndexOf(attributeName));
+            
+            
+            BigFontLabelStyle = new GUIStyle(EditorStyles.label);
+            BigFontLabelStyle.fontSize = 20; // 设置字体大小为 16
         }
 
         private void Save()
@@ -102,6 +124,11 @@ namespace GAS.Editor.AttributeSet
                 _callback?.Invoke(editedName, attributeNames);
                 Close();
             }
+        }
+
+        private void OnDisable()
+        {
+            Save();
         }
     }
 }

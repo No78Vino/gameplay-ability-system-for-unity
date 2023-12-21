@@ -25,7 +25,7 @@ namespace GAS.Editor.Tags
         {
             if (_editor == null) Load();
             
-            EditorGUILayout.BeginVertical(GUI.skin.box,GUILayout.Width(500));
+            EditorGUILayout.BeginVertical(GUI.skin.box);
             _asset.GameplayTagSumCollectionGenPath = 
                 EditorGUILayout.TextField("Code Gen Path", _asset.GameplayTagSumCollectionGenPath);
             EditorGUILayout.Space();

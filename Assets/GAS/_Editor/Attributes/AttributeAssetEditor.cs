@@ -13,10 +13,14 @@ namespace GAS.Editor.Attributes
         private Action<string> callback;
         private string editedString = "";
 
+        public static void OpenWindow(string initialString, Action<string> callback)
+        {
+            var window = GetWindow<StringEditWindow>();
+            window.Init(initialString, callback);
+            window.Show();
+        }
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("Edit", EditorStyles.boldLabel);
-
             // Display the input field to edit the string
             editedString = EditorGUILayout.TextField("Attribute:", editedString);
 
@@ -139,9 +143,7 @@ namespace GAS.Editor.Attributes
          private void OpenEditPopup()
          {
              if (_selectedIndex < 0 || _selectedIndex >= AttributeList.Count) return;
-             var window = CreateInstance<StringEditWindow>();
-             window.Init(AttributeList[_selectedIndex], UpdateAttribute);
-             window.ShowUtility();
+             StringEditWindow.OpenWindow(AttributeList[_selectedIndex], UpdateAttribute);
          }
 
          private void UpdateAttribute(string updatedAttribute)

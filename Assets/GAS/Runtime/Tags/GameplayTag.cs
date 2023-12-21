@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using GAS.Core;
 using UnityEngine;
 
 namespace GAS.Runtime.Tags
@@ -20,7 +18,6 @@ namespace GAS.Runtime.Tags
             _name = name;
             _hashCode = name.GetHashCode();
 
-
             var tags = name.Split('.');
             // if (tags.Length > GasDefine.GAS_TAG_MAX_GENERATIONS)
             //     throw new Exception(
@@ -38,7 +35,7 @@ namespace GAS.Runtime.Tags
                 ancestorTag += ".";
                 i++;
             }
-            
+
             _shortName = tags.Last();
         }
 
@@ -62,7 +59,7 @@ namespace GAS.Runtime.Tags
         public bool Root => _ancestorHashCodes.Length == 0;
 
         public int[] AncestorHashCodes => _ancestorHashCodes;
-        
+
         public bool IsDescendantOf(GameplayTag other)
         {
             return other._ancestorHashCodes.Contains(HashCode);
@@ -91,9 +88,8 @@ namespace GAS.Runtime.Tags
         public bool HasTag(GameplayTag tag)
         {
             foreach (var ancestorHashCode in _ancestorHashCodes)
-            {
-                if (ancestorHashCode == tag.HashCode) return true;
-            }
+                if (ancestorHashCode == tag.HashCode)
+                    return true;
 
             return this == tag;
         }

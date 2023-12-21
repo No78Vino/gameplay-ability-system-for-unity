@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GAS.Runtime.AttributeSet;
+using Sirenix.Utilities;
+using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,6 +14,14 @@ namespace GAS.Editor.AttributeSet
     {
         private int _selectedIndex = -1;
         private AttributeSetAsset Asset => (AttributeSetAsset)target;
+        private GUIStyle BigFontLabelStyle;
+
+        private void Awake()
+        {
+            BigFontLabelStyle = new GUIStyle(EditorStyles.label);
+            BigFontLabelStyle.fontSize = 16; 
+            BigFontLabelStyle.fontStyle = FontStyle.Bold;
+        }
 
         public override void OnInspectorGUI()
         {
@@ -25,7 +36,7 @@ namespace GAS.Editor.AttributeSet
                 EditorGUILayout.BeginVertical(GUI.skin.box);
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"No.{i} : {Asset.AttributeSetConfigs[i].Name}");
+                EditorGUILayout.LabelField($"No.{i} : {Asset.AttributeSetConfigs[i].Name}",BigFontLabelStyle);
 
                 if (GUILayout.Button("Edit", GUILayout.Width(50)))
                 {
@@ -67,12 +78,7 @@ namespace GAS.Editor.AttributeSet
 
         private void Add()
         {
-            var window = CreateInstance<AttributeSetConfigEditorWindow>();
-            window.Init("",
-                new List<string>(),
-                UpdateAttribute,
-                CheckAttributeSetValid);
-            window.ShowUtility();
+            AttributeSetConfigEditorWindow.OpenWindow("", new List<string>(), UpdateAttribute, CheckAttributeSetValid);
         }
 
         private void Remove(int index)
@@ -134,13 +140,10 @@ namespace GAS.Editor.AttributeSet
         private void OpenEditPopup()
         {
             if (_selectedIndex < 0 || _selectedIndex >= Asset.AttributeSetConfigs.Count) return;
-            var window = CreateInstance<AttributeSetConfigEditorWindow>();
             
             var setName = Asset.AttributeSetConfigs[_selectedIndex].Name;
             List<string> attributeNames = Asset.AttributeSetConfigs[_selectedIndex].AttributeNames;
-            
-            window.Init(setName, attributeNames, UpdateAttribute, CheckAttributeSetValid);
-            window.ShowUtility();
+            AttributeSetConfigEditorWindow.OpenWindow(setName, attributeNames, UpdateAttribute, CheckAttributeSetValid);
         }
 
         private void UpdateAttribute(string updatedAttributeSet, List<string> updatedAttributeNames)
