@@ -88,4 +88,35 @@ public class AttrSet_PlayerA:AttributeSet
           }
       }
 }
+public class AttrSet_Enemy:AttributeSet
+{
+    private AttributeBase MP = new AttributeBase("MP");
+    public AttributeBase GetMP => MP;
+    public void InitMP(float value)
+    {
+        MP.SetBaseValue(value);
+        MP.SetCurrentValue(value);
+    }
+      public void SetCurrentMP(float value)
+    {
+        MP.SetCurrentValue(value);
+    }
+      public void SetBaseMP(float value)
+    {
+        MP.SetBaseValue(value);
+    }
+
+      public override AttributeBase this[string key]
+      {
+          get
+          {
+              switch (key)
+              {
+                 case "MP":
+                    return MP;
+              }
+              return null;
+          }
+      }
+}
 }

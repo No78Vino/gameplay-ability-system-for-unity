@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttributeSetClassGenPath: Demo/Script/Gen/
   _attributeSetConfigs:
-  - Name: PlayerA
+  - Name: Player
     AttributeNames:
     - SKILL_CD
     - MP
