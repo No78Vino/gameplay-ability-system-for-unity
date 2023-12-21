@@ -6,22 +6,22 @@
 using GAS.Runtime.Attribute;
 namespace GAS.Runtime.AttributeSet
 {
-public class AttrSet_PlayerA:AttributeSet
+public class AttrSet_Player:AttributeSet
 {
-    private AttributeBase SKILL_CD = new AttributeBase("SKILL_CD");
-    public AttributeBase GetSKILL_CD => SKILL_CD;
-    public void InitSKILL_CD(float value)
+    private AttributeBase HP = new AttributeBase("HP");
+    public AttributeBase GetHP => HP;
+    public void InitHP(float value)
     {
-        SKILL_CD.SetBaseValue(value);
-        SKILL_CD.SetCurrentValue(value);
+        HP.SetBaseValue(value);
+        HP.SetCurrentValue(value);
     }
-      public void SetCurrentSKILL_CD(float value)
+      public void SetCurrentHP(float value)
     {
-        SKILL_CD.SetCurrentValue(value);
+        HP.SetCurrentValue(value);
     }
-      public void SetBaseSKILL_CD(float value)
+      public void SetBaseHP(float value)
     {
-        SKILL_CD.SetBaseValue(value);
+        HP.SetBaseValue(value);
     }
     private AttributeBase MP = new AttributeBase("MP");
     public AttributeBase GetMP => MP;
@@ -53,20 +53,20 @@ public class AttrSet_PlayerA:AttributeSet
     {
         SPEED.SetBaseValue(value);
     }
-    private AttributeBase BUFF_TIME = new AttributeBase("BUFF_TIME");
-    public AttributeBase GetBUFF_TIME => BUFF_TIME;
-    public void InitBUFF_TIME(float value)
+    private AttributeBase ATK = new AttributeBase("ATK");
+    public AttributeBase GetATK => ATK;
+    public void InitATK(float value)
     {
-        BUFF_TIME.SetBaseValue(value);
-        BUFF_TIME.SetCurrentValue(value);
+        ATK.SetBaseValue(value);
+        ATK.SetCurrentValue(value);
     }
-      public void SetCurrentBUFF_TIME(float value)
+      public void SetCurrentATK(float value)
     {
-        BUFF_TIME.SetCurrentValue(value);
+        ATK.SetCurrentValue(value);
     }
-      public void SetBaseBUFF_TIME(float value)
+      public void SetBaseATK(float value)
     {
-        BUFF_TIME.SetBaseValue(value);
+        ATK.SetBaseValue(value);
     }
 
       public override AttributeBase this[string key]
@@ -75,14 +75,14 @@ public class AttrSet_PlayerA:AttributeSet
           {
               switch (key)
               {
-                 case "SKILL_CD":
-                    return SKILL_CD;
+                 case "HP":
+                    return HP;
                  case "MP":
                     return MP;
                  case "SPEED":
                     return SPEED;
-                 case "BUFF_TIME":
-                    return BUFF_TIME;
+                 case "ATK":
+                    return ATK;
               }
               return null;
           }

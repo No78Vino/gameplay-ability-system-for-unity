@@ -32,7 +32,7 @@ namespace GAS.Runtime.Ability
         private GameplayEffectSpec ApplyTo(AbilitySystemComponent.AbilitySystemComponent asc,
             GameplayEffect gameplayEffect)
         {
-            if (!gameplayEffect.Empty)
+            if (!gameplayEffect.NULL)
             {
                 var cdSpec = asc.CreateGameplayEffectSpec(Cooldown);
                 asc.ApplyGameplayEffectToSelf(cdSpec);

@@ -68,6 +68,6 @@ namespace GAS.Runtime.Effects
             OnDeactivation?.Invoke(_spec);
         }
 
-        public bool Empty => _spec == null;
+        public bool NULL => _spec == null;
     }
 }

@@ -44,7 +44,7 @@ namespace GAS.Runtime.Ability
         
         public virtual AbilityCooldownTime CheckCooldown()
         {
-            if (Ability.Cooldown.Empty) return new AbilityCooldownTime();
+            if (Ability.Cooldown.NULL) return new AbilityCooldownTime();
             // var cooldownTags = Ability.Cooldown.GetGameplayEffectTags().GrantedTags;
 
             //return Owner.CheckCooldownForTags(cooldownTags);
@@ -85,7 +85,7 @@ namespace GAS.Runtime.Ability
 
         public virtual bool CheckCost()
         {
-            if (Ability.Cost.Empty) return true;
+            if (Ability.Cost.NULL) return true;
             var costGe = TryGetCostSpec();
             if (costGe == null) return false;
             

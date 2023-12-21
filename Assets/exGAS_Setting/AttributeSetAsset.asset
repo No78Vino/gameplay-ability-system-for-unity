@@ -16,10 +16,10 @@ MonoBehaviour:
   _attributeSetConfigs:
   - Name: Player
     AttributeNames:
-    - SKILL_CD
+    - HP
     - MP
     - SPEED
-    - BUFF_TIME
+    - ATK
   - Name: Enemy
     AttributeNames:
     - MP
