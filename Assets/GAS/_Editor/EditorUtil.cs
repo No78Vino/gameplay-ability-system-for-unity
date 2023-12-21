@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace GAS.Editor
@@ -31,6 +32,28 @@ namespace GAS.Editor
                         ' ', '-', '.', ':', ',', '!', '?', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '{', '}',
                         '/', '\\', '|'
                     }, StringSplitOptions.RemoveEmptyEntries));
+        }
+        
+        /// <summary>
+        /// Keep the string list unique.
+        /// </summary>
+        /// <param name="inputList"></param>
+        /// <returns></returns>
+        public static List<string> RemoveDuplicates(List<string> inputList)
+        {
+            HashSet<string> seen = new HashSet<string>();
+            List<string> uniqueList = new List<string>();
+
+            foreach (string value in inputList)
+            {
+                if (!seen.Contains(value))
+                {
+                    seen.Add(value);
+                    uniqueList.Add(value);
+                }
+            }
+
+            return uniqueList;
         }
     }
 }

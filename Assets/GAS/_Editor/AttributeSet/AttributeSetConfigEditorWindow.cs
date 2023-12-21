@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GAS.Core;
 using GAS.Runtime.Attribute;
+using GAS.Runtime.AttributeSet;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace GAS.Editor.AttributeSet
         public List<string> attributeNames;
 
         private Action<string, List<string>> _callback;
-        private Func<string, bool> _checkAttributeSetValid;
+        private Func<AttributeSetConfig, bool> _checkAttributeSetValid;
 
         private List<int> _selectedAttributeIndexs;
 
@@ -51,7 +52,7 @@ namespace GAS.Editor.AttributeSet
 
                 // 更新选中的字符串
                 attributeNames[i] = _selectedAttributeIndexs[i] < 0
-                    ? "ERROR_INVALID_ATTRIBUTE"
+                    ? ""
                     : AttributeOptions[_selectedAttributeIndexs[i]];
 
                 if (GUILayout.Button("Remove", GUILayout.Width(100)))
@@ -77,7 +78,7 @@ namespace GAS.Editor.AttributeSet
         }
 
         public void Init(string initialString, List<string> attributeNames, Action<string, List<string>> callback,
-            Func<string, bool> checkAttributeSetValid)
+            Func<AttributeSetConfig, bool> checkAttributeSetValid)
         {
             editedName = initialString;
             _callback = callback;
@@ -90,7 +91,12 @@ namespace GAS.Editor.AttributeSet
 
         private void Save()
         {
-            var valid = _checkAttributeSetValid?.Invoke(editedName) ?? true;
+            AttributeSetConfig attributeSetConfig = new AttributeSetConfig()
+            {
+                Name = editedName,
+                AttributeNames = attributeNames
+            };
+            var valid = _checkAttributeSetValid?.Invoke(attributeSetConfig) ?? true;
             if (valid)
             {
                 _callback?.Invoke(editedName, attributeNames);

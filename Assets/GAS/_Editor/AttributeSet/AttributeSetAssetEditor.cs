@@ -37,6 +37,7 @@ namespace GAS.Editor.AttributeSet
                 {
                     _selectedIndex = i;
                     Remove(_selectedIndex);
+                    return;
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -70,7 +71,7 @@ namespace GAS.Editor.AttributeSet
             window.Init("",
                 new List<string>(),
                 UpdateAttribute,
-                CheckAttributeName);
+                CheckAttributeSetValid);
             window.ShowUtility();
         }
 
@@ -99,21 +100,34 @@ namespace GAS.Editor.AttributeSet
             AssetDatabase.Refresh();
         }
 
-        private bool CheckAttributeName(string attributeSetName)
+        private bool CheckAttributeSetValid(AttributeSetConfig attributeSet)
         {
-            if (Asset.AttributeSetConfigs.Any(a => a.Name == attributeSetName))
+            // Check AttributeSet name
+            if (Asset.AttributeSetConfigs.Any(a => a.Name == attributeSet.Name))
             {
                 EditorUtility.DisplayDialog("Warning", "AttributeSet name already exists!", "OK");
                 return false;
             }
 
-            if (!EditorUtil.IsValidClassName(attributeSetName))
+            if (!EditorUtil.IsValidClassName(attributeSet.Name))
             {
                 EditorUtility.DisplayDialog("Warning", "Invalid AttributeSet name!Please check the naming rules.",
                     "OK");
                 return false;
             }
+            
+            // Check Attributes
+            if (attributeSet.AttributeNames.Count == 0)
+            {
+                EditorUtility.DisplayDialog("Warning", "AttributeSet must have at least one attribute!", "OK");
+                return false;
+            }
 
+            if (attributeSet.AttributeNames.Any(string.IsNullOrEmpty))
+            {
+                EditorUtility.DisplayDialog("Warning", "Attribute name cannot be empty!", "OK");
+                return false;
+            }
             return true;
         }
 
@@ -125,12 +139,14 @@ namespace GAS.Editor.AttributeSet
             var setName = Asset.AttributeSetConfigs[_selectedIndex].Name;
             List<string> attributeNames = Asset.AttributeSetConfigs[_selectedIndex].AttributeNames;
             
-            window.Init(setName, attributeNames, UpdateAttribute, CheckAttributeName);
+            window.Init(setName, attributeNames, UpdateAttribute, CheckAttributeSetValid);
             window.ShowUtility();
         }
 
         private void UpdateAttribute(string updatedAttributeSet, List<string> updatedAttributeNames)
         {
+            updatedAttributeNames = EditorUtil.RemoveDuplicates(updatedAttributeNames);
+            
             if (_selectedIndex >= 0 && _selectedIndex < Asset.AttributeSetConfigs.Count)
             {
                 Asset.AttributeSetConfigs[_selectedIndex].Name = updatedAttributeSet;
