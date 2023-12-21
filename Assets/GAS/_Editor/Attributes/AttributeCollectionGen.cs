@@ -30,10 +30,10 @@ namespace GAS.Editor.Attributes
             writer.WriteLine("public static class AttributeCollection");
             writer.WriteLine("{");
 
-            // Generate members for each tag
+            // Generate members for each ATTRIBUTE
             foreach (var attr in attributes)
             {
-                var validName = MakeValidIdentifier(attr);
+                var validName = EditorUtil.MakeValidIdentifier(attr);
                 writer.WriteLine(
                     $"    public const string {validName} = \"{attr}\";");
             }
@@ -42,24 +42,6 @@ namespace GAS.Editor.Attributes
             writer.WriteLine("}");
 
             Console.WriteLine($"Generated GameplayTagSumCollection at path: {filePath}");
-        }
-
-        private static string MakeValidIdentifier(string name)
-        {
-            // Replace '.' with '_'
-            name = name.Replace('.', '_');
-
-            // If starts with a digit, add '_' at the beginning
-            if (char.IsDigit(name[0])) name = "_" + name;
-
-            // Ensure the identifier is valid
-            return string.Join("",
-                name.Split(
-                    new[]
-                    {
-                        ' ', '-', '.', ':', ',', '!', '?', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '{', '}',
-                        '/', '\\', '|'
-                    }, StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

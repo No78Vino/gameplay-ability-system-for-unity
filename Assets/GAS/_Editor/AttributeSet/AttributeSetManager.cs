@@ -1,4 +1,5 @@
-﻿using GAS.Core;
+﻿using System.Collections.Generic;
+using GAS.Core;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using UnityEditor;

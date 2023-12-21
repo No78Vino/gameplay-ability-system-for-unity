@@ -19,3 +19,5 @@ MonoBehaviour:
   - ATK
   - SPEED
   - DAMAGE
+  - SKILL_CD
+  - BUFF_TIME

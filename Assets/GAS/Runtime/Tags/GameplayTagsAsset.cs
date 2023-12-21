@@ -9,14 +9,15 @@ namespace GAS.Runtime.Tags
 	[CreateAssetMenu (fileName = "GameplayTagsAsset", menuName = "GAS/GameplayTagsAsset ", order = 1)]
 	public class GameplayTagsAsset : ScriptableObject
 	{
+		[SerializeField] public string GameplayTagSumCollectionGenPath = "Script/Gen/GameplayTagSumCollection.cs";
+		
 		[SerializeField] List<GameplayTagTreeElement> gameplayTagTreeElements = new();
 
 		internal List<GameplayTagTreeElement> GameplayTagTreeElements => gameplayTagTreeElements;
 		
 		[SerializeField] public List<GameplayTag> Tags = new();
 
-		[SerializeField] public string GameplayTagSumCollectionGenPath = "Script/Gen/GameplayTagSumCollection.cs";
-		
+
 		public void CacheTags()
 		{
 			Tags.Clear();

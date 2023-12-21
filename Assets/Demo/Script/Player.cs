@@ -1,6 +1,8 @@
 using System;
 using Demo.Script.MyAbilitySystem.Ability;
 using GAS.Runtime.AbilitySystemComponent;
+using GAS.Runtime.Attribute;
+using GAS.Runtime.AttributeSet;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,7 +19,7 @@ public class Player : MonoBehaviour
         _asc = GetComponent<AbilitySystemComponent>();
         var ability = new AbilityMove();
         _asc.Init(ability);
-        
+        //AttrSet_Fight attrSet = new AttrSet_Fight();
         onMove = OnMove;
     }
 

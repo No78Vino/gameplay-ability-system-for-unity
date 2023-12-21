@@ -54,7 +54,7 @@ namespace GAS.Editor.Attributes
                 EditorGUILayout.BeginHorizontal();
 
                 // Show the string
-                EditorGUILayout.LabelField($"Attribute {i}: {AttributeList[i]}");
+                EditorGUILayout.LabelField($"No.{i} : {AttributeList[i]}");
 
                 // Edit button to modify the selected string
                 if (GUILayout.Button("Edit", GUILayout.Width(50)))
@@ -124,23 +124,13 @@ namespace GAS.Editor.Attributes
                  return;
              }
 
-             if (!IsValidClassName(attributeName))
+             if (!EditorUtil.IsValidClassName(attributeName))
              {
                  EditorUtility.DisplayDialog("Warning","Invalid attribute name!Please check the naming rules.","OK");
                  return;
              }
              Asset.AttributeNames.Add(attributeName);
              Save();
-         }
-         
-         public static bool IsValidClassName(string input)
-         {
-             // 使用正则表达式匹配规则
-             // 类名必须以字母、下划线或@开头，并且后续可以是字母、下划线、@或数字
-             string pattern = @"^[a-zA-Z_@][a-zA-Z_@0-9]*$";
-
-             // 使用 Regex.IsMatch 方法进行匹配
-             return Regex.IsMatch(input, pattern);
          }
          
          private int _selectedIndex = -1;

@@ -58,17 +58,17 @@ namespace GAS.Runtime.Effects.Execution
         //     return a;
         // }
         
-        public static AttributeValue operator +(AttributeValue a, GameplayEffectExecution b)
-        {
-            float currentValue;
-            if (b.IsOverride)
-                currentValue = b.Override;
-            else
-                currentValue =
-                    (a.BaseValue * (1 + b.MultiplyBase) + b.AddBase) * (1 + b.MultiplyBaseWithAdditive) + b.AddAbsolute;
-        
-            a.SetCurrentValue(currentValue);
-            return a;
-        }
+        // public static AttributeValue operator +(AttributeValue a, GameplayEffectExecution b)
+        // {
+        //     float currentValue;
+        //     if (b.IsOverride)
+        //         currentValue = b.Override;
+        //     else
+        //         currentValue =
+        //             (a.BaseValue * (1 + b.MultiplyBase) + b.AddBase) * (1 + b.MultiplyBaseWithAdditive) + b.AddAbsolute;
+        //
+        //     a.SetCurrentValue(currentValue);
+        //     return a;
+        // }
     }
 }

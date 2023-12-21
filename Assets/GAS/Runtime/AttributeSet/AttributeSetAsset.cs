@@ -1,32 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime.AttributeSet
 {
-    public struct AttributeSetConfig
+    public class AttributeSetConfig
     {
         public string Name;
-        public string[] AttributeNames;
-        
-        public void SetName(string name)
-        {
-            Name = name;
-        }
-        
-        public void SetAttributeNames(string[] attributeNames)
-        {
-            AttributeNames = attributeNames;
-        }
+        public List<string> AttributeNames;
     }
     
     public class AttributeSetAsset:ScriptableObject
     {
-        [SerializeField] 
-        [LabelText("AttributeSet Collection Gen Path")]
-        [LabelWidth(200)]
-        public string AttributeSetCollectionGenPath = "Script/Gen/";
+        public string AttributeSetClassGenPath = "Script/Gen/";
 
-        public List<AttributeSetConfig> AttributeSets = new();
+        [SerializeField] private List<AttributeSetConfig> _attributeSetData = new List<AttributeSetConfig>();
+        
+        public List<AttributeSetConfig> AttributeSetConfigs=new List<AttributeSetConfig>();
+
+        public void OnEnable()
+        {
+            AttributeSetConfigs.Clear();
+            AttributeSetConfigs.AddRange(_attributeSetData);
+        }
+
+        private void OnValidate()
+        {
+            Save();
+        }
+
+        public void Save()
+        {
+            _attributeSetData.Clear();
+            _attributeSetData.AddRange(AttributeSetConfigs);
+        }
     }
 }

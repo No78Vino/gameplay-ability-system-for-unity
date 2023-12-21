@@ -4,22 +4,24 @@
     {
         public AttributeValue(float baseValue)
         {
-            BaseValue = baseValue;
-            CurrentValue = baseValue;
+            _baseValue = baseValue;
+            _currentValue = baseValue;
         }
 
-        public float BaseValue { get; private set; }
+        float _baseValue;
+        public float BaseValue => _baseValue;
 
-        public float CurrentValue { get; private set; }
+        float _currentValue;
+        public float CurrentValue => _currentValue;
 
         public void SetCurrentValue(float value)
         {
-            CurrentValue = value;
+            _currentValue = value;
         }
 
         public void SetBaseValue(float value)
         {
-            BaseValue = value;
+            _baseValue = value;
         }
     }
 }
