@@ -85,10 +85,15 @@ namespace GAS.Runtime.Component
             // TODO
         }
 
-        public void AddAbility(string abilityName, AbstractAbility ability)
+        public void GrantAbility(string abilityName, AbstractAbility ability)
         {
             if (_abilities.ContainsKey(abilityName)) return;
             _abilities.Add(abilityName, ability.CreateSpec(this));
+        }
+        
+        public void RemoveAbility(string abilityName)
+        {
+            _abilities.Remove(abilityName);
         }
         
         public void Tick()
