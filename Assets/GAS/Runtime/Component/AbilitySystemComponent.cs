@@ -18,7 +18,6 @@ namespace GAS.Runtime.Component
         AttributeSetContainer _attributeSetContainer = new();
         GameplayEffectContainer _gameplayEffectContainer;
         public GameplayEffectContainer GameplayEffectContainer => _gameplayEffectContainer;
-        public GameplayTagContainer Tags => _tags;
 
         private void Awake()
         {
@@ -50,6 +49,18 @@ namespace GAS.Runtime.Component
             return _tags.HasAnyTags(tags);
         }
 
+        public void AddTags(GameplayTagSet tags)
+        {
+            _tags.AddTag(tags);
+            if(!tags.Empty) GameplayEffectContainer.CheckGameplayEffectState();
+        }
+
+        public void RemoveTags(GameplayTagSet tags)
+        {
+            _tags.RemoveTag(tags);
+            if(!tags.Empty) GameplayEffectContainer.CheckGameplayEffectState();
+        }
+
         public GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
         {
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
@@ -78,7 +89,7 @@ namespace GAS.Runtime.Component
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
-        
+
 
         public void RemoveGameplayEffect(GameplayEffectSpec spec)
         {
@@ -129,12 +140,6 @@ namespace GAS.Runtime.Component
             _abilities[abilityName].EndAbility();
         }
         
-        
-        
-        
-        
-        
-        
         /// <summary>
         /// Instant GameplayEffect can only trigger the method 'TriggerOnExecute' once.
         /// Instant GameplayEffect can only change the BASE VALUE.
@@ -142,36 +147,8 @@ namespace GAS.Runtime.Component
         /// <param name="spec"></param>
         void ApplyInstantGameplayEffect(GameplayEffectSpec spec)
         {
-            // TODO
-            
             _attributeSetContainer.ApplyModFromGameplayEffectSpec(spec);
             spec.TriggerOnExecute();
-            
-            // for (var i = 0; i < spec.GameplayEffect.Modifiers.Length; i++)
-            // {
-            //     var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
-            //     var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec, modifier.Multiplier)).GetValueOrDefault();
-            //     var attribute = modifier.Attribute;
-            //
-            //     // If attribute doesn't exist on this character, continue to next attribute
-            //     if (attribute == null) continue;
-            //     this.AttributeSystem.GetAttributeValue(attribute, out var attributeValue);
-            //
-            //     switch (modifier.ModifierOperator)
-            //     {
-            //         case EAttributeModifier.Add:
-            //             attributeValue.BaseValue += magnitude;
-            //             break;
-            //         case EAttributeModifier.Multiply:
-            //             attributeValue.BaseValue *= magnitude;
-            //             break;
-            //         case EAttributeModifier.Override:
-            //             attributeValue.BaseValue = magnitude;
-            //             break;
-            //     }
-            //     _attributeSetContainer.(attribute, attributeValue.BaseValue);
-            // }
-            // spec.GameplayEffect.TriggerOnExecute();
         }
 
         /// <summary>
@@ -180,34 +157,17 @@ namespace GAS.Runtime.Component
         /// <param name="spec"></param>
         void ApplyDurationalGameplayEffect(GameplayEffectSpec spec)
         {
-            // TODO
-            
             GameplayEffectContainer.AddGameplayEffectSpec(spec);
-            
-            // GameplayEffectSpec.ModifierContainer[] modifiersToApply = new GameplayEffectSpec.ModifierContainer[spec.GameplayEffect.gameplayEffect.Modifiers.Length];
-            // for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
-            // {
-            //     var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
-            //     var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec, modifier.Multiplier)).GetValueOrDefault();
-            //     var attributeModifier = new AttributeModifier();
-            //     switch (modifier.ModifierOperator)
-            //     {
-            //         case EAttributeModifier.Add:
-            //             attributeModifier.Add = magnitude;
-            //             break;
-            //         case EAttributeModifier.Multiply:
-            //             attributeModifier.Multiply = magnitude;
-            //             break;
-            //         case EAttributeModifier.Override:
-            //             attributeModifier.Override = magnitude;
-            //             break;
-            //     }
-            //     modifiersToApply[i] = new() { Attribute = modifier.Attribute, Modifier = attributeModifier };
-            // }
-            // spec.modifiers = modifiersToApply;
-            // spec.RaiseOnApplyEvent();
-            // HandleRemoveGameplayEffectsWithTag(spec);
-            // AppliedGameplayEffects.Add(spec);
+        }
+        
+        public void ApplyModFromDurationalGameplayEffect(GameplayEffectSpec spec)
+        {
+            _attributeSetContainer.ApplyModFromGameplayEffectSpec(spec);
+        }
+        
+        public void RemoveModFromDurationalGameplayEffect(GameplayEffectSpec spec)
+        {
+            _attributeSetContainer.RemoveModFromGameplayEffectSpec(spec);
         }
     }
 }

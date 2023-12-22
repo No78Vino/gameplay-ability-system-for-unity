@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GAS.Runtime.Effects;
+﻿using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 
 namespace GAS.Runtime.Component
@@ -9,6 +8,10 @@ namespace GAS.Runtime.Component
         bool HasAllTags(GameplayTagSet tags);
         
         bool HasAnyTags(GameplayTagSet tags);
+        
+        void AddTags(GameplayTagSet tags);
+        
+        void RemoveTags(GameplayTagSet tags);
 
         GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect,AbilitySystemComponent target);
         

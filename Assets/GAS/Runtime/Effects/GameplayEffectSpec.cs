@@ -32,7 +32,13 @@ namespace GAS.Runtime.Effects
         public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration => GameplayEffect.Duration;
 
-
+        /// <summary>
+        /// If the gameplay effect has a period and the execution is not null,
+        /// this is the execution that will be triggered every period.
+        /// </summary>
+        public GameplayEffectSpec PeriodExecution;
+        
+        
         //public List<AttributeBase> SnapshotAttributes { get; }
 
         public float DurationRemaining()
@@ -100,22 +106,30 @@ namespace GAS.Runtime.Effects
         }
 
         public void TriggerOnActivation()
-        {
+        {            
             OnActivation?.Invoke(this);
-            Owner.Tags.AddTag(GameplayEffect.TagContainer.GrantedTags);
-            Owner.Tags.RemoveTag(GameplayEffect.TagContainer.BannedTags);
+            Owner.AddTags(GameplayEffect.TagContainer.GrantedTags);
+            Owner.RemoveTags(GameplayEffect.TagContainer.BannedTags);
+            
+            Owner.ApplyModFromDurationalGameplayEffect(this);
         }
 
         public void TriggerOnDeactivation()
         {
             OnDeactivation?.Invoke(this);
-            Owner.Tags.RemoveTag(GameplayEffect.TagContainer.GrantedTags);
-            Owner.Tags.AddTag(GameplayEffect.TagContainer.BannedTags);
+            Owner.RemoveTags(GameplayEffect.TagContainer.GrantedTags);
+            Owner.AddTags(GameplayEffect.TagContainer.BannedTags);
+            
+            Owner.RemoveModFromDurationalGameplayEffect(this);
         }
 
         public void TriggerOnTick()
         {
-            OnTick?.Invoke(this);
+            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Duration||
+                GameplayEffect.DurationPolicy == EffectsDurationPolicy.Infinite)
+            {
+                OnTick?.Invoke(this);
+            }
         }
 
         public void RemoveSelf()

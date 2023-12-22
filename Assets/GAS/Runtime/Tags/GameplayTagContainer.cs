@@ -8,12 +8,12 @@ namespace GAS.Runtime.Tags
     /// </summary>
     public class GameplayTagContainer
     {
+        public List<GameplayTag> Tags { get; }
+        
         public GameplayTagContainer(params GameplayTag[] tags)
         {
             Tags = new List<GameplayTag>(tags);
         }
-
-        public List<GameplayTag> Tags { get; }
 
         public void AddTag(GameplayTag tag)
         {
@@ -28,11 +28,13 @@ namespace GAS.Runtime.Tags
 
         public void AddTag(GameplayTagSet tagSet)
         {
+            if(tagSet.Empty) return;
             foreach (var tag in tagSet.Tags) AddTag(tag);
         }
 
         public void RemoveTag(GameplayTagSet tagSet)
         {
+            if(tagSet.Empty) return;
             foreach (var tag in tagSet.Tags) RemoveTag(tag);
         }
 
@@ -43,7 +45,7 @@ namespace GAS.Runtime.Tags
 
         public bool HasAllTags(GameplayTagSet other)
         {
-            return other.Tags.All(HasTag);
+            return other.Empty || other.Tags.All(HasTag);
         }
 
         public bool HasAllTags(params GameplayTag[] tags)
@@ -53,7 +55,7 @@ namespace GAS.Runtime.Tags
 
         public bool HasAnyTags(GameplayTagSet other)
         {
-            return other.Tags.Any(HasTag);
+            return other.Empty || other.Tags.Any(HasTag);
         }
 
         public bool HasAnyTags(params GameplayTag[] tags)
@@ -63,7 +65,7 @@ namespace GAS.Runtime.Tags
 
         public bool HasNoneTags(GameplayTagSet other)
         {
-            return !other.Tags.Any(HasTag);
+            return other.Empty || !other.Tags.Any(HasTag);
         }
 
         public bool HasNoneTags(params GameplayTag[] tags)

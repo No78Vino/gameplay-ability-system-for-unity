@@ -22,7 +22,7 @@ namespace GAS.Runtime.Effects
             if (_periodRemaining <= 0)
             {
                 _periodRemaining = Period;
-                _spec.TriggerOnExecute();
+                _spec.PeriodExecution?.TriggerOnExecute();
             }
             else
             {

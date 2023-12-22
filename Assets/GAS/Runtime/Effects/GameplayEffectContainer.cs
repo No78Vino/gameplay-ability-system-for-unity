@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GAS.Runtime.Component;
-using Unity.VisualScripting;
 
 namespace GAS.Runtime.Effects
 {

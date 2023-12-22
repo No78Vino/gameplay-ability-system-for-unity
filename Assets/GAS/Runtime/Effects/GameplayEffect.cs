@@ -27,9 +27,9 @@ namespace GAS.Runtime.Effects
         readonly List<GameplayCue> CueOnRemove;
         readonly List<GameplayCue> CueOnAdd;
 
-        public readonly List<GameplayEffectModifier> Modifiers;
+        public readonly GameplayEffectModifier[] Modifiers;
         public readonly List<GameplayEffectExecution> _executions;
-
+        
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator, 
             AbilitySystemComponent owner,

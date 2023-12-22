@@ -7,7 +7,9 @@ namespace GAS.Runtime.Tags
     /// </summary>
     public struct GameplayTagSet
     {
-        public GameplayTag[] Tags { get;private set; }
+        public readonly GameplayTag[] Tags;
+        
+        public bool Empty => Tags.Length == 0;
         
         public GameplayTagSet(params GameplayTag[] tags)
         {
