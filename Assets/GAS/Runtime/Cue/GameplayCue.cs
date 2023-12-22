@@ -2,6 +2,9 @@
 {
     public class GameplayCue
     {
-        
+        public void Trigger()
+        {
+            // TODO   
+        }
     }
 }

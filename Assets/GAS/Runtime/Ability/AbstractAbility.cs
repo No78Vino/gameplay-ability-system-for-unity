@@ -23,31 +23,28 @@ namespace GAS.Runtime.Ability
 
         public GameplayEffect Cost;
         
-        public abstract AbilitySpec CreateSpec(AbilitySystemComponent.AbilitySystemComponent owner);
+        public abstract AbilitySpec CreateSpec(Component.AbilitySystemComponent owner);
         
         public abstract void ActivateAbility();
 
         public abstract void EndAbility();
 
-        private GameplayEffectSpec ApplyTo(AbilitySystemComponent.AbilitySystemComponent asc,
-            GameplayEffect gameplayEffect)
+        private GameplayEffectSpec ApplyTo(Component.AbilitySystemComponent asc, GameplayEffect gameplayEffect)
         {
             if (!gameplayEffect.NULL)
             {
-                var cdSpec = asc.CreateGameplayEffectSpec(Cooldown);
-                asc.ApplyGameplayEffectToSelf(cdSpec);
-                return cdSpec;
+                return asc.ApplyGameplayEffectToSelf(Cooldown);
             }
 
             return null;
         }
 
-        public GameplayEffectSpec ApplyCooldownTo(AbilitySystemComponent.AbilitySystemComponent asc)
+        public GameplayEffectSpec ApplyCooldownTo(Component.AbilitySystemComponent asc)
         {
             return ApplyTo(asc, Cooldown);
         }
 
-        public GameplayEffectSpec ApplyCostTo(AbilitySystemComponent.AbilitySystemComponent asc)
+        public GameplayEffectSpec ApplyCostTo(Component.AbilitySystemComponent asc)
         {
             return ApplyTo(asc, Cost);
         }

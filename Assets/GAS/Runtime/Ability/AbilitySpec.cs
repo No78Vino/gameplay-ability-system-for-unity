@@ -15,7 +15,7 @@ namespace GAS.Runtime.Ability
     {
         public AbstractAbility Ability;
         
-        public AbilitySystemComponent.AbilitySystemComponent Owner { get; protected set; }
+        public Component.AbilitySystemComponent Owner { get; protected set; }
 
         public float Level { get; private set; }
 
@@ -24,7 +24,7 @@ namespace GAS.Runtime.Ability
         public int ActiveCount { get;private set; }
 
         private object[] _abilityArguments;
-        public AbilitySpec(AbstractAbility ability, AbilitySystemComponent.AbilitySystemComponent owner)
+        public AbilitySpec(AbstractAbility ability, Component.AbilitySystemComponent owner)
         {
             this.Ability = ability;
             this.Owner = owner;
@@ -44,7 +44,8 @@ namespace GAS.Runtime.Ability
         
         public virtual AbilityCooldownTime CheckCooldown()
         {
-            if (Ability.Cooldown.NULL) return new AbilityCooldownTime();
+            // TODO
+            // if (Ability.Cooldown.NULL) return new AbilityCooldownTime();
             // var cooldownTags = Ability.Cooldown.GetGameplayEffectTags().GrantedTags;
 
             //return Owner.CheckCooldownForTags(cooldownTags);
@@ -77,7 +78,7 @@ namespace GAS.Runtime.Ability
         {
             if (_CostCache == null || _CostCache.Level != Level)
             {
-                _CostCache = Owner.CreateGameplayEffectSpec(Ability.Cost, Level);
+                _CostCache = Owner.ApplyGameplayEffectToSelf(Ability.Cost);
             }
             return _CostCache;
         }
@@ -85,11 +86,12 @@ namespace GAS.Runtime.Ability
 
         public virtual bool CheckCost()
         {
-            if (Ability.Cost.NULL) return true;
-            var costGe = TryGetCostSpec();
-            if (costGe == null) return false;
-            
-            if (costGe.GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant) return true;
+            // TODO
+            // if (Ability.Cost.NULL) return true;
+            // var costGe = TryGetCostSpec();
+            // if (costGe == null) return false;
+            //
+            // if (costGe.GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant) return true;
 
             // for (var i = 0; i < costGe.GameplayEffect.Modifiers.Count; i++)
             // {

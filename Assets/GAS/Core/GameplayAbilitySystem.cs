@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using EXMaid;
-using GAS.Runtime.AbilitySystemComponent;
+using GAS.Runtime.Component;
 using UnityEngine;
 
 namespace GAS.Core

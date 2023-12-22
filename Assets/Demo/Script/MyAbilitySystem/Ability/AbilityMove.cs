@@ -1,7 +1,7 @@
 ﻿using Demo.Script.MyAbilitySystem.AbilityTask;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTask;
-using GAS.Runtime.AbilitySystemComponent;
+using GAS.Runtime.Component;
 
 namespace Demo.Script.MyAbilitySystem.Ability
 {

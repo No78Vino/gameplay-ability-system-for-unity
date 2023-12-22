@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GAS.Runtime.AttributeSet;
-using Sirenix.Utilities;
-using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,13 +10,13 @@ namespace GAS.Editor.AttributeSet
     public class AttributeSetAssetEditor : UnityEditor.Editor
     {
         private int _selectedIndex = -1;
-        private AttributeSetAsset Asset => (AttributeSetAsset)target;
         private GUIStyle BigFontLabelStyle;
+        private AttributeSetAsset Asset => (AttributeSetAsset)target;
 
         private void Awake()
         {
             BigFontLabelStyle = new GUIStyle(EditorStyles.label);
-            BigFontLabelStyle.fontSize = 16; 
+            BigFontLabelStyle.fontSize = 16;
             BigFontLabelStyle.fontStyle = FontStyle.Bold;
         }
 
@@ -36,7 +33,7 @@ namespace GAS.Editor.AttributeSet
                 EditorGUILayout.BeginVertical(GUI.skin.box);
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"No.{i} : {Asset.AttributeSetConfigs[i].Name}",BigFontLabelStyle);
+                EditorGUILayout.LabelField($"No.{i} : {Asset.AttributeSetConfigs[i].Name}", BigFontLabelStyle);
 
                 if (GUILayout.Button("Edit", GUILayout.Width(50)))
                 {
@@ -53,10 +50,8 @@ namespace GAS.Editor.AttributeSet
 
                 EditorGUILayout.EndHorizontal();
 
-                for (int j = 0; j < Asset.AttributeSetConfigs[i].AttributeNames.Count; j++)
-                {
+                for (var j = 0; j < Asset.AttributeSetConfigs[i].AttributeNames.Count; j++)
                     EditorGUILayout.LabelField($"       ||--> {Asset.AttributeSetConfigs[i].AttributeNames[j]}");
-                }
                 EditorGUILayout.EndVertical();
             }
         }
@@ -121,7 +116,7 @@ namespace GAS.Editor.AttributeSet
                     "OK");
                 return false;
             }
-            
+
             // Check Attributes
             if (attributeSet.AttributeNames.Count == 0)
             {
@@ -134,30 +129,31 @@ namespace GAS.Editor.AttributeSet
                 EditorUtility.DisplayDialog("Warning", "Attribute name cannot be empty!", "OK");
                 return false;
             }
+
             return true;
         }
 
         private void OpenEditPopup()
         {
             if (_selectedIndex < 0 || _selectedIndex >= Asset.AttributeSetConfigs.Count) return;
-            
+
             var setName = Asset.AttributeSetConfigs[_selectedIndex].Name;
-            List<string> attributeNames = Asset.AttributeSetConfigs[_selectedIndex].AttributeNames;
+            var attributeNames = Asset.AttributeSetConfigs[_selectedIndex].AttributeNames;
             AttributeSetConfigEditorWindow.OpenWindow(setName, attributeNames, UpdateAttribute, CheckAttributeSetValid);
         }
 
         private void UpdateAttribute(string updatedAttributeSet, List<string> updatedAttributeNames)
         {
             updatedAttributeNames = EditorUtil.RemoveDuplicates(updatedAttributeNames);
-            
+
             if (_selectedIndex >= 0 && _selectedIndex < Asset.AttributeSetConfigs.Count)
             {
                 Asset.AttributeSetConfigs[_selectedIndex].Name = updatedAttributeSet;
-                Asset.AttributeSetConfigs[_selectedIndex].AttributeNames=(updatedAttributeNames);
+                Asset.AttributeSetConfigs[_selectedIndex].AttributeNames = updatedAttributeNames;
             }
             else
             {
-                Asset.AttributeSetConfigs.Add(new AttributeSetConfig()
+                Asset.AttributeSetConfigs.Add(new AttributeSetConfig
                 {
                     Name = updatedAttributeSet,
                     AttributeNames = updatedAttributeNames

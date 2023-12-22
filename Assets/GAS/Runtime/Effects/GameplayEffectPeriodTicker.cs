@@ -17,17 +17,22 @@ namespace GAS.Runtime.Effects
 
         public void Tick()
         {
+            _spec.TriggerOnTick();
+            
             if (_periodRemaining <= 0)
             {
                 _periodRemaining = Period;
-                _spec.GameplayEffect.TriggerOnExecute();
+                _spec.TriggerOnExecute();
             }
             else
             {
                 _periodRemaining -= Time.deltaTime;
             }
 
-            if (_spec.DurationRemaining() <= 0) _spec.Deactivate();
+            if (_spec.DurationRemaining() <= 0)
+            {
+                _spec.RemoveSelf();
+            }
         }
     }
 }

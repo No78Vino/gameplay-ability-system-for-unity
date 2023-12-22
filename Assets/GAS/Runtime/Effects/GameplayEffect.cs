@@ -1,73 +1,66 @@
 ﻿using System.Collections.Generic;
-using GAS.Runtime.Cue;
 using GAS.Runtime.Effects.Execution;
 using GAS.Runtime.Effects.Modifier;
-using GAS.Runtime.Tags;
+using GAS.Runtime.Component;
+using GAS.Runtime.Cue;
 
 namespace GAS.Runtime.Effects
 {
     public enum EffectsDurationPolicy
     {
+        None,
         Instant,
         Infinite,
         Duration
     }
 
-    public struct GameplayEffect
+    
+    public readonly struct GameplayEffect
     {
-        GameplayEffectSpec _spec;
-
-        EffectsDurationPolicy _durationPolicy;
-        public EffectsDurationPolicy DurationPolicy => _durationPolicy;
-
-        public List<GameplayEffectModifier> Modifiers { get; private set; }
-
-        List<GameplayEffectExecution> _executions;
-
-        // -1 represents infinite duration
-        float _duration;
-        public float Duration => _duration;
-
-        private float _period;
-        public float Period => _period;
-
-        public GameplayEffectTagContainer TagContainer { get; private set; }
+        public readonly EffectsDurationPolicy DurationPolicy;
+        public readonly float Duration; // -1 represents infinite duration
+        public readonly float Period;
+        public readonly GameplayEffectTagContainer TagContainer;
         
-        private List<GameplayCue> GameplayCues;
+        // Cues
+        readonly List<GameplayCue> CueOnExecute;
+        readonly List<GameplayCue> CueOnRemove;
+        readonly List<GameplayCue> CueOnAdd;
 
-        public delegate void GameplayEffectEventHandler(GameplayEffectSpec sender);
+        public readonly List<GameplayEffectModifier> Modifiers;
+        public readonly List<GameplayEffectExecution> _executions;
 
-        public event GameplayEffectEventHandler OnRemove;
-        public event GameplayEffectEventHandler OnExecute;
-        public event GameplayEffectEventHandler OnAdd;
-        public event GameplayEffectEventHandler OnActivation;
-        public event GameplayEffectEventHandler OnDeactivation;
-
-        public void TriggerOnAdd()
+        public GameplayEffectSpec CreateSpec(
+            AbilitySystemComponent creator, 
+            AbilitySystemComponent owner,
+            float level = 1)
         {
-            OnAdd?.Invoke(_spec);
-        }
-
-        public void TriggerOnExecute()
-        {
-            OnExecute?.Invoke(_spec);
-        }
-
-        public void TriggerOnRemove()
-        {
-            OnRemove?.Invoke(_spec);
-        }
-
-        public void TriggerOnActivation()
-        {
-            OnActivation?.Invoke(_spec);
+            return new GameplayEffectSpec(this, creator, owner, level);
         }
         
-        public void TriggerOnDeactivation()
+        public void TriggerCueOnAdd()
         {
-            OnDeactivation?.Invoke(_spec);
+            if (CueOnAdd.Count > 0)
+                CueOnAdd.ForEach(cue => cue.Trigger());
         }
 
-        public bool NULL => _spec == null;
+        public void TriggerCueOnExecute()
+        {
+            if (CueOnExecute.Count > 0)
+                CueOnExecute.ForEach(cue => cue.Trigger());
+        }
+
+        public void TriggerCueOnRemove()
+        {
+            if (CueOnRemove.Count > 0)
+                CueOnRemove.ForEach(cue => cue.Trigger());
+        }
+
+        public bool CanApplyTo(AbilitySystemComponent target)
+        {
+            return target.HasAllTags(TagContainer.RequiredApplicationTags);
+        }
+        
+        public bool NULL => DurationPolicy == EffectsDurationPolicy.None;
     }
 }

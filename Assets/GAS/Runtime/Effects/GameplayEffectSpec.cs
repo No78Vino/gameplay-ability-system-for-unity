@@ -1,46 +1,39 @@
-﻿using System.Collections.Generic;
-using GAS.General;
-using GAS.Runtime.Attribute;
-using GAS.Runtime.Effects.Modifier;
+﻿using GAS.General;
+using GAS.Runtime.Component;
 using Unity.Mathematics;
 
 namespace GAS.Runtime.Effects
 {
     public class GameplayEffectSpec
     {
-        private List<GameplayEffectModifier> _modifierStack;
-        public GameplayEffectSpec(GameplayEffect gameplayEffect, AbilitySystemComponent.AbilitySystemComponent source,
+        public delegate void GameplayEffectEventHandler(GameplayEffectSpec sender);
+
+        public GameplayEffectSpec(
+            GameplayEffect gameplayEffect,
+            AbilitySystemComponent creator,
+            AbilitySystemComponent owner,
             float level = 1)
         {
             GameplayEffect = gameplayEffect;
-            Source = source;
-            Targets = new List<AbilitySystemComponent.AbilitySystemComponent>();
+            Creator = creator;
+            Owner = owner;
             Level = level;
-            
+
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
         }
 
         public GameplayEffect GameplayEffect { get; }
-
         public long ActivationTime { get; private set; }
-
+        public float Level { get; private set; }
+        public AbilitySystemComponent Creator { get; private set; }
+        public AbilitySystemComponent Owner { get; }
+        public bool IsActive { get; private set; }
+        public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration => GameplayEffect.Duration;
 
-        public float Level { get; private set; }
 
-        public AbilitySystemComponent.AbilitySystemComponent Source { get; private set; }
-
-        public List<AbilitySystemComponent.AbilitySystemComponent> Targets { get; private set; }
-
-        public bool IsActive { get; private set; }
-
-        public GameplayEffectPeriodTicker PeriodTicker { get; private set; }
-        
-        /// <summary>
-        /// Snapshotting of Attributes when the GameplayEffect is activated
-        /// </summary>
-        public List<AttributeBase> SnapshottingAttributes{ get; private set; }
+        //public List<AttributeBase> SnapshotAttributes { get; }
 
         public float DurationRemaining()
         {
@@ -50,18 +43,6 @@ namespace GAS.Runtime.Effects
             return math.max(0, Duration - (GASTimer.Timestamp() - ActivationTime) / 1000f);
         }
 
-        public void AddTarget(AbilitySystemComponent.AbilitySystemComponent target)
-        {
-            if (!CanApplyToTarget(target)) return;
-            if (Targets.Contains(target)) return;
-            Targets.Add(target);
-        }
-
-        public bool RemoveTarget(AbilitySystemComponent.AbilitySystemComponent target)
-        {
-            return Targets.Remove(target);
-        }
-
         public void SetLevel(float level)
         {
             Level = level;
@@ -69,36 +50,77 @@ namespace GAS.Runtime.Effects
 
         public void Activate()
         {
+            if (IsActive) return;
             IsActive = true;
             ActivationTime = GASTimer.Timestamp();
-            
-            GameplayEffect.TriggerOnActivation();
-
-            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
-                GameplayEffect.TriggerOnExecute();
+            TriggerOnActivation();
         }
 
         public void Deactivate()
         {
+            if (!IsActive) return;
             IsActive = false;
-            GameplayEffect.TriggerOnDeactivation();
-        }
-        
-        public bool CanApplyToTarget(AbilitySystemComponent.AbilitySystemComponent target )
-        {
-            // TODO
-            return false;
-            //return target.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags.Tags);
+            TriggerOnDeactivation();
         }
 
-        public void RefreshModifierStack()
+        public bool CanRunning()
         {
-            //_modifierStack = 
+            var canRunning = Owner.HasAllTags(GameplayEffect.TagContainer.RequiredOngoingTags);
+            return canRunning;
         }
-        
+
         public void Tick()
         {
             PeriodTicker?.Tick();
+        }
+
+        public event GameplayEffectEventHandler OnExecute;
+        public event GameplayEffectEventHandler OnAdd;
+        public event GameplayEffectEventHandler OnRemove;
+        public event GameplayEffectEventHandler OnActivation;
+        public event GameplayEffectEventHandler OnDeactivation;
+        public event GameplayEffectEventHandler OnTick;
+
+        public void TriggerOnExecute()
+        {
+            OnExecute?.Invoke(this);
+            GameplayEffect.TriggerCueOnExecute();
+        }
+        
+        public void TriggerOnAdd()
+        {
+            OnAdd?.Invoke(this);
+            GameplayEffect.TriggerCueOnAdd();
+        }
+
+        public void TriggerOnRemove()
+        {
+            OnRemove?.Invoke(this);
+            GameplayEffect.TriggerCueOnRemove();
+        }
+
+        public void TriggerOnActivation()
+        {
+            OnActivation?.Invoke(this);
+            Owner.Tags.AddTag(GameplayEffect.TagContainer.GrantedTags);
+            Owner.Tags.RemoveTag(GameplayEffect.TagContainer.BannedTags);
+        }
+
+        public void TriggerOnDeactivation()
+        {
+            OnDeactivation?.Invoke(this);
+            Owner.Tags.RemoveTag(GameplayEffect.TagContainer.GrantedTags);
+            Owner.Tags.AddTag(GameplayEffect.TagContainer.BannedTags);
+        }
+
+        public void TriggerOnTick()
+        {
+            OnTick?.Invoke(this);
+        }
+
+        public void RemoveSelf()
+        {
+            Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
         }
     }
 }

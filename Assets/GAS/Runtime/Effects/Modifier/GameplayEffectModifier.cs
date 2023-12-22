@@ -35,14 +35,17 @@ namespace GAS.Runtime.Effects.Modifier
     {
         public AttributeBase Attribute { get; private set; }
         public string AttributeName => Attribute.Name;
+        
         private float _value;
+        
         public GEOperation Operation { get; private set; }
         public GEModifierType ModifierType { get; private set; }
         public GECalculationType CalculationType { get; private set; }
         public GEAttributeReplicationType ReplicationType { get; private set; }
-        public List<GameplayTag> Tags{ get; private set; }
         public float Value => ReplicationType == GEAttributeReplicationType.SnapShot ? _value : Attribute.CurrentValue;
-        public GameplayEffectModifier(AttributeBase attribute, 
+        
+        public GameplayEffectModifier(
+            AttributeBase attribute, 
             GEOperation operation,
             GEModifierType modifierType, 
             GECalculationType calculationType,
@@ -54,7 +57,6 @@ namespace GAS.Runtime.Effects.Modifier
             ModifierType = modifierType;
             CalculationType = calculationType;
             ReplicationType = replicationType;
-            Tags = new List<GameplayTag>();
         }
         
         public GameplayEffectModifier(GameplayEffectModifier modifier)
@@ -65,7 +67,6 @@ namespace GAS.Runtime.Effects.Modifier
             ModifierType = modifier.ModifierType;
             CalculationType = modifier.CalculationType;
             ReplicationType = modifier.ReplicationType;
-            Tags = modifier.Tags;
         }
         
         public bool CombinableWith(GameplayEffectModifier other)

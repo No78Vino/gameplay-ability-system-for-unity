@@ -5,7 +5,7 @@ namespace GAS.Runtime.Tags
     /// <summary>
     /// If the collection of tags is stable and unchangable, use this class to improve performance.
     /// </summary>
-    public class GameplayTagSet
+    public struct GameplayTagSet
     {
         public GameplayTag[] Tags { get;private set; }
         

@@ -1,4 +1,6 @@
-﻿namespace GAS.Runtime.Tags
+﻿using GAS.Runtime.Tags;
+
+namespace GAS.Runtime.Effects
 {
     public class GameplayEffectTagContainer
     {
@@ -8,25 +10,26 @@
         public GameplayTagSet AssetTags;
         
         /// <summary>
-        /// For attachments to the ASC
-        /// And the ACS will lose these tags when the GameplayEffect is removed
+        /// For attachments to the ASC, if GameplayEffect is active
+        /// And the ACS will lose these tags when the GameplayEffect is deactive
         /// </summary>
         public GameplayTagSet GrantedTags;
         
         /// <summary>
+        /// For banning tags to the ASC, if GameplayEffect is active
+        /// And the ACS will grant these tags when the GameplayEffect is deactive
+        /// </summary>
+        public GameplayTagSet BannedTags;
+        
+        /// <summary>
         /// For the Application Requirement
         /// </summary>
-        public GameplayTagSet ApplicationRequiredTags;
+        public GameplayTagSet RequiredApplicationTags;
         
         /// <summary>
         /// For the Requirement of Keeping Running 
         /// </summary>
-        public GameplayTagSet RunningRequiredTags;
-        
-        /// <summary>
-        /// When the GameplayEffect is active, the ASC will lose these tags
-        /// </summary>
-        public GameplayTagSet RemoveGameplayEffectWithTags;
+        public GameplayTagSet RequiredOngoingTags;
         
         /// <summary>
         /// the GameplayEffectSpec grants to the Target in addition to the GameplayTags that the GameplayEffect grants.
