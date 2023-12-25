@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GAS.Core;
 using GAS.Runtime.Ability;
@@ -18,7 +17,7 @@ namespace GAS.Runtime.Component
         AttributeSetContainer _attributeSetContainer = new();
         GameplayEffectContainer _gameplayEffectContainer;
         public GameplayEffectContainer GameplayEffectContainer => _gameplayEffectContainer;
-        public AttributeSetContainer AttributeSetContainer => _attributeSetContainer;
+        //public AttributeSetContainer AttributeSetContainer => _attributeSetContainer;
 
         private void Awake()
         {
@@ -100,12 +99,19 @@ namespace GAS.Runtime.Component
         public void GrantAbility(string abilityName, AbstractAbility ability)
         {
             if (_abilities.ContainsKey(abilityName)) return;
-            _abilities.Add(abilityName, ability.CreateSpec(this));
+            var abilitySpec = ability.CreateSpec(this);
+            _abilities.Add(abilityName, abilitySpec);
+            _tags.AddTag(abilitySpec.Ability.tag.GrantedTag);
         }
         
         public void RemoveAbility(string abilityName)
         {
+            var abilitySpec = _abilities[abilityName];
+            if(abilitySpec==null) return;
+            
+            _tags.RemoveTag(abilitySpec.Ability.tag.GrantedTag);
             _abilities.Remove(abilityName);
+            
         }
         
         public void Tick()
@@ -116,16 +122,6 @@ namespace GAS.Runtime.Component
             {
                 kv.Value.Tick();
             }
-        }
-
-        public void AddTag(GameplayTag tag)
-        {
-            _tags.AddTag(tag);
-        }
-
-        public void RemoveTag(GameplayTag tag)
-        {
-            _tags.RemoveTag(tag);
         }
         
         public bool TryActivateAbility(string abilityName,params object[] args)

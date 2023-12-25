@@ -17,7 +17,7 @@ namespace GAS.Runtime.Ability
         /// <summary>
         ///     For the description of the ability
         /// </summary>
-        public GameplayTag AssetTag;
+        public AbilityTagContainer tag;
 
         public GameplayEffect Cooldown;
 
@@ -31,12 +31,7 @@ namespace GAS.Runtime.Ability
 
         private GameplayEffectSpec ApplyTo(Component.AbilitySystemComponent asc, GameplayEffect gameplayEffect)
         {
-            if (!gameplayEffect.NULL)
-            {
-                return asc.ApplyGameplayEffectToSelf(Cooldown);
-            }
-
-            return null;
+            return !gameplayEffect.NULL ? asc.ApplyGameplayEffectToSelf(gameplayEffect) : null;
         }
 
         public GameplayEffectSpec ApplyCooldownTo(Component.AbilitySystemComponent asc)

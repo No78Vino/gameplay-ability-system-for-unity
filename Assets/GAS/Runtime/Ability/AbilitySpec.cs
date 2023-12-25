@@ -13,8 +13,8 @@ namespace GAS.Runtime.Ability
 
     public abstract class AbilitySpec
     {
-        public AbstractAbility Ability;
-        
+        public AbstractAbility Ability { get; }
+
         public Component.AbilitySystemComponent Owner { get; protected set; }
 
         public float Level { get; private set; }
@@ -29,8 +29,6 @@ namespace GAS.Runtime.Ability
             this.Ability = ability;
             this.Owner = owner;
         }
-        
-        public abstract bool StepAbility();
         
         public virtual bool CanActivateAbility()
         {
@@ -72,15 +70,15 @@ namespace GAS.Runtime.Ability
             Ability.EndAbility();
         }
 
-        private GameplayEffectSpec _CostCache;
+        private GameplayEffectSpec _costCache;
 
         private GameplayEffectSpec TryGetCostSpec()
         {
-            if (_CostCache == null || _CostCache.Level != Level)
+            if (_costCache == null || _costCache.Level != Level)
             {
-                _CostCache = Owner.ApplyGameplayEffectToSelf(Ability.Cost);
+                _costCache = Owner.ApplyGameplayEffectToSelf(Ability.Cost);
             }
-            return _CostCache;
+            return _costCache;
         }
 
 
@@ -112,59 +110,11 @@ namespace GAS.Runtime.Ability
 
         public void Tick()
         {
-            if (IsActive)
+            if (!IsActive) return;
+            foreach (var task in Ability.OngoingAbilityTasks)
             {
-                foreach (var task in Ability.OngoingAbilityTasks)
-                {
-                    task.Execute(_abilityArguments);
-                }
+                task.Execute(_abilityArguments);
             }
         }
-        // protected virtual bool AscHasAllTags(AbilitySystemComponent.AbilitySystemComponent asc, List<GameplayTag> tags)
-        // {
-        //     if (!asc) return true;
-        //
-        //     for (var iAbilityTag = 0; iAbilityTag < tags.Count; iAbilityTag++)
-        //     {
-        //         var abilityTag = tags[iAbilityTag];
-        //
-        //         bool requirementPassed = false;
-        //         for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
-        //         {
-        //             if (asc.AppliedTags[iAscTag].TagData == abilityTag)
-        //             {
-        //                 requirementPassed = true;
-        //                 continue;
-        //             }
-        //         }
-        //         // If any ability tag wasn't found, requirements failed
-        //         if (!requirementPassed) return false;
-        //     }
-        //     return true;
-        // }
-        //
-        // protected virtual bool AscHasNoneTags(AbilitySystemCharacter asc, GameplayTagScriptableObject.GameplayTag[] tags)
-        // {
-        //     // If the input ASC is not valid, assume check passed
-        //     if (!asc) return true;
-        //
-        //     for (var iAbilityTag = 0; iAbilityTag < tags.Length; iAbilityTag++)
-        //     {
-        //         var abilityTag = tags[iAbilityTag];
-        //
-        //         bool requirementPassed = true;
-        //         for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
-        //         {
-        //             if (asc.AppliedTags[iAscTag].TagData == abilityTag)
-        //             {
-        //                 requirementPassed = false;
-        //             }
-        //         }
-        //         // If any ability tag wasn't found, requirements failed
-        //         if (!requirementPassed) return false;
-        //     }
-        //     return true;
-        // }
     }
-
 }

@@ -36,11 +36,6 @@ namespace Demo.Script.MyAbilitySystem.Ability
         {
         }
 
-        public override bool StepAbility()
-        {
-            return true;
-        }
-
         public override bool CheckGameplayTags()
         {
             throw new System.NotImplementedException();
