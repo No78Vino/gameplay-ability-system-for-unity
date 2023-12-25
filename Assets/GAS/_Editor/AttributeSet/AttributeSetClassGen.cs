@@ -38,7 +38,7 @@ namespace GAS.Editor.AttributeSet
                 foreach (var attributeName in attributeSet.AttributeNames)
                 {
                     string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
-                    writer.WriteLine($"    private AttributeBase {validAttrName} = new AttributeBase(\"{attributeName}\");");
+                    writer.WriteLine($"    private AttributeBase {validAttrName} = new AttributeBase(\"AttrSet_{validName}\",\"{attributeName}\");");
                     writer.WriteLine($"    public AttributeBase Get{validAttrName} => {validAttrName};");
                     writer.WriteLine($"    public void Init{validAttrName}(float value)");
                     writer.WriteLine("    {");

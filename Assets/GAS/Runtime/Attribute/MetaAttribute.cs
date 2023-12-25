@@ -2,7 +2,7 @@
 {
     public class MetaAttribute: AttributeBase
     {
-        public MetaAttribute(string name,float value) : base(name,value)
+        public MetaAttribute(string attrSetName, string attrName, float value) : base(attrSetName, attrName, value)
         {
         }
     }

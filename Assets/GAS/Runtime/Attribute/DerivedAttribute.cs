@@ -2,7 +2,7 @@
 {
     public class DerivedAttribute:AttributeBase
     {
-        public DerivedAttribute(string name, float value) : base(name, value)
+        public DerivedAttribute(string attrSetName, string attrName, float value) : base(attrSetName, attrName, value)
         {
         }
     }

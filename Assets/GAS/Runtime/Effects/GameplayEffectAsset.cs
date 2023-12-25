@@ -20,7 +20,7 @@ namespace GAS.Runtime.Effects
         public List<GameplayCue> CueOnAdd;
 
         public  List<GameplayEffectModifier> Modifiers;
-        public  List<GameplayEffectExecution> _executions;
+        public  List<ExecutionCalculation> _executions;
         
         public GameplayEffectAsset PeriodExecution;
     }

@@ -1,4 +1,6 @@
-﻿using GAS.General;
+﻿using System.Collections.Generic;
+using GAS.General;
+using GAS.Runtime.Attribute;
 using GAS.Runtime.Component;
 using Unity.Mathematics;
 
@@ -39,7 +41,7 @@ namespace GAS.Runtime.Effects
         public GameplayEffectSpec PeriodExecution;
         
         
-        //public List<AttributeBase> SnapshotAttributes { get; }
+        public List<AttributeBase> SnapshotAttributes { get; }
 
         public float DurationRemaining()
         {
@@ -135,6 +137,17 @@ namespace GAS.Runtime.Effects
         public void RemoveSelf()
         {
             Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
+        }
+        
+        public void CaptureAttributeSnapshotFromSource()
+        {
+            // TODO
+            SnapshotAttributes.Clear();
+            // SnapshotAttributes  Owner.AttributeSetContainer
+            // foreach (var attribute in Owner.AttributeSetContainer)
+            // {
+            //     SnapshotAttributes.Add(attribute.Clone());
+            // }
         }
     }
 }

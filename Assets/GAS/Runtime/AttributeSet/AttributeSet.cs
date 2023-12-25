@@ -65,7 +65,7 @@ namespace GAS.Runtime.AttributeSet
             _onPreAttributeBaseChange?.Invoke(attribute, value);
 
             var oldValue = attribute.BaseValue;
-            attribute.Value.SetBaseValue(value);
+            attribute.SetBaseValue(value);
 
             _onPostAttributeBaseChange?.Invoke(attribute, oldValue, value);
         }
@@ -75,11 +75,9 @@ namespace GAS.Runtime.AttributeSet
             _onPreAttributeChange?.Invoke(attribute, value);
 
             var oldValue = attribute.CurrentValue;
-            attribute.Value.SetCurrentValue(value);
+            attribute.SetCurrentValue(value);
 
             _onPostAttributeChange?.Invoke(attribute, oldValue, value);
         }
-        
-        
     }
 }

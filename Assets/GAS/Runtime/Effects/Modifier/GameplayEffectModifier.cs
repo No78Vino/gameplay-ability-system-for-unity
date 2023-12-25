@@ -25,7 +25,7 @@ namespace GAS.Runtime.Effects.Modifier
         Combine,
     }
 
-    public enum GEAttributeReplicationType
+    public enum GEAttributeCaptureType
     {
         SnapShot,
         Track,
@@ -33,70 +33,77 @@ namespace GAS.Runtime.Effects.Modifier
 
     public struct GameplayEffectModifier
     {
-        public AttributeBase Attribute { get; private set; }
-        public string AttributeName => Attribute.Name;
+        public readonly string AttributeName;
+        public readonly string AttributeSetName;
+        public readonly string AttributeShortName;
+        public readonly float Coefficient;
         
-        private float _value;
-        
-        public GEOperation Operation { get; private set; }
-        public GEModifierType ModifierType { get; private set; }
-        public GECalculationType CalculationType { get; private set; }
-        public GEAttributeReplicationType ReplicationType { get; private set; }
-        public float Value => ReplicationType == GEAttributeReplicationType.SnapShot ? _value : Attribute.CurrentValue;
+        public readonly GEOperation Operation;
+        public readonly GEModifierType ModifierType;
+        public readonly GECalculationType CalculationType;
+        public readonly GEAttributeCaptureType CaptureType;
+        public readonly ModifierMagnitudeCalculation ModifierMagnitude;
         
         public GameplayEffectModifier(
-            AttributeBase attribute, 
+            string attributeName, 
+            float coefficient,
             GEOperation operation,
             GEModifierType modifierType, 
             GECalculationType calculationType,
-            GEAttributeReplicationType replicationType)
+            GEAttributeCaptureType captureType)
         {
-            Attribute = attribute;
-            _value = Attribute.CurrentValue;
+            AttributeName = attributeName;
+            var splits = attributeName.Split('.');
+            AttributeSetName = splits[0];
+            AttributeShortName = splits[1];
+            
+            Coefficient = coefficient;
+                
             Operation = operation;
             ModifierType = modifierType;
             CalculationType = calculationType;
-            ReplicationType = replicationType;
+            CaptureType = captureType;
+            
+            // TODO
+            ModifierMagnitude = null;
         }
         
         public GameplayEffectModifier(GameplayEffectModifier modifier)
         {
-            Attribute = modifier.Attribute;
-            _value = modifier.Value;
+            AttributeName = modifier.AttributeName;
+            AttributeSetName = modifier.AttributeSetName;
+            AttributeShortName = modifier.AttributeShortName;
+            Coefficient = modifier.Coefficient;
             Operation = modifier.Operation;
             ModifierType = modifier.ModifierType;
             CalculationType = modifier.CalculationType;
-            ReplicationType = modifier.ReplicationType;
+            CaptureType = modifier.CaptureType;
+            ModifierMagnitude = modifier.ModifierMagnitude;
         }
         
-        public bool CombinableWith(GameplayEffectModifier other)
-        {
-            return AttributeName == other.AttributeName && Operation == other.Operation && CalculationType == other.CalculationType;
-        }
-        
-        // public bool CombineWith(GameplayEffectModifier other,out GameplayEffectModifier result)
+        // public float Value()
         // {
-        //     if (!CombinableWith(other))
+        //     if (ModifierType == GEModifierType.ScalableFloat)
         //     {
-        //         result = this;
-        //         return false;
+        //         return ModifierMagnitude.CalculateMagnitude(s);
+        //     }
+        //
+        //     if (ModifierType == GEModifierType.AttributeBased)
+        //     {
+        //         
         //     }
         //     
-        //     switch (Operation)
+        //     if(ModifierType == GEModifierType.SetByCaller)
         //     {
-        //         case GEOperation.Add:
-        //             Value += other.Value;
-        //             break;
-        //         case GEOperation.Multiply:
-        //             Value *= other.Value;
-        //             break;
-        //         case GEOperation.Override:
-        //             Value = other.Value;
-        //             break;
+        //         
         //     }
         //     
-        //     result = this;
-        //     return true;
+        //     if( ModifierType == GEModifierType.CustomCalculationClass)
+        //     {
+        //         
+        //     }
+        //
+        //     return 1;
         // }
     }
 }

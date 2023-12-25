@@ -13,7 +13,6 @@ namespace GAS.Runtime.Effects
         Infinite,
         Duration
     }
-
     
     public readonly struct GameplayEffect
     {
@@ -28,7 +27,7 @@ namespace GAS.Runtime.Effects
         readonly List<GameplayCue> CueOnAdd;
 
         public readonly GameplayEffectModifier[] Modifiers;
-        public readonly List<GameplayEffectExecution> _executions;
+        public readonly List<ExecutionCalculation> _executions;
         
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator, 

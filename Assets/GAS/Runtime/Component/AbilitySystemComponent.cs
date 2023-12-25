@@ -18,6 +18,7 @@ namespace GAS.Runtime.Component
         AttributeSetContainer _attributeSetContainer = new();
         GameplayEffectContainer _gameplayEffectContainer;
         public GameplayEffectContainer GameplayEffectContainer => _gameplayEffectContainer;
+        public AttributeSetContainer AttributeSetContainer => _attributeSetContainer;
 
         private void Awake()
         {
