@@ -11,7 +11,7 @@ namespace GAS.Core
         
         public const int GAS_TAG_MAX_GENERATIONS = 5;
         
-        public const string GAS_ASSET_FOLDER_NAME = "exGAS_Setting";
+        public const string GAS_ASSET_FOLDER_NAME = "GAS_Setting";
 
         public const string GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME = "AttributeCollection.gen.cs";
         

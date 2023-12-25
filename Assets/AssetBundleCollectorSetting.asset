@@ -9,53 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Script: {fileID: 0}
   m_Name: AssetBundleCollectorSetting
-  m_EditorClassIdentifier: 
-  ShowPackageView: 1
+  m_EditorClassIdentifier: YooAsset.Editor:YooAsset.Editor:AssetBundleCollectorSetting
+  ShowPackageView: 0
   EnableAddressable: 0
   LocationToLower: 0
   IncludeAssetGUID: 0
   UniqueBundleName: 0
   ShowEditorAlias: 0
-  Packages:
-  - PackageName: DefaultPackage
-    PackageDesc: 
-    Groups:
-    - GroupName: DemoGroup
-      GroupDesc: Demo
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Demo/FairyGUI
-        CollectorGUID: 1ec4439cd7a68e44ba5d381b2a052be9
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Demo/Material
-        CollectorGUID: 8b780e7cb4d0b40438178db06a01ad58
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Demo/Prefab
-        CollectorGUID: d9e8f351bfc03c245a91a6b2a088a5d1
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/EXMaid
-        CollectorGUID: ce35b83f7d070164eb29b7da20c020ef
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
+  Packages: []
