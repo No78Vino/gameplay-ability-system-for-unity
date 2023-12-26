@@ -5,7 +5,7 @@ namespace GAS.Runtime.AttributeSet
 {
     public class CustomAttrSet:AttributeSet
     {
-        Dictionary<string,AttributeBase> _attributes = new();
+        Dictionary<string,AttributeBase> _attributes = new Dictionary<string,AttributeBase>();
 
         public void AddAttribute(AttributeBase attribute)
         {

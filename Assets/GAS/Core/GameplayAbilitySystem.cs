@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using EXMaid;
 using GAS.Runtime.Component;
 using UnityEngine;
 
@@ -44,7 +43,7 @@ namespace GAS.Core
         {
             if (!GasHost.enabled)
             {
-                EXLog.Warning("GAS is paused, can't register new ASC!");
+                Debug.LogWarning("[EX] GAS is paused, can't register new ASC!");
                 return;
             }
 
@@ -56,7 +55,7 @@ namespace GAS.Core
         {
             if (!GasHost.enabled)
             {
-                EXLog.Warning("GAS is paused, can't unregister ASC!");
+                Debug.LogWarning("[EX] GAS is paused, can't unregister ASC!");
                 return false;
             }
 

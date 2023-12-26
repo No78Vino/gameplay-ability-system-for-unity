@@ -12,23 +12,25 @@ namespace GAS.Runtime.Effects
 
         public GameplayEffectSpec(
             GameplayEffect gameplayEffect,
-            AbilitySystemComponent creator,
+            AbilitySystemComponent source,
             AbilitySystemComponent owner,
             float level = 1)
         {
             GameplayEffect = gameplayEffect;
-            Creator = creator;
+            Source = source;
             Owner = owner;
             Level = level;
 
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
+
+            CaptureDataFromSource();
         }
 
         public GameplayEffect GameplayEffect { get; }
         public long ActivationTime { get; private set; }
         public float Level { get; private set; }
-        public AbilitySystemComponent Creator { get; private set; }
+        public AbilitySystemComponent Source { get; private set; }
         public AbilitySystemComponent Owner { get; }
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
@@ -40,8 +42,7 @@ namespace GAS.Runtime.Effects
         /// </summary>
         public GameplayEffectSpec PeriodExecution;
         
-        
-        public List<AttributeBase> SnapshotAttributes { get; }
+        public Dictionary<string,float> SnapshotAttributes { get;private set; }
 
         public float DurationRemaining()
         {
@@ -93,6 +94,9 @@ namespace GAS.Runtime.Effects
         {
             OnExecute?.Invoke(this);
             GameplayEffect.TriggerCueOnExecute();
+            
+            // CalculateModifierMagnitudes();
+            // GetModifierMagnitude();
         }
         
         public void TriggerOnAdd()
@@ -112,7 +116,10 @@ namespace GAS.Runtime.Effects
             OnActivation?.Invoke(this);
             Owner.AddTags(GameplayEffect.TagContainer.GrantedTags);
             Owner.RemoveTags(GameplayEffect.TagContainer.BannedTags);
-            
+
+            // CalculateModifierMagnitudes();
+            // GetModifierMagnitude();
+            //
             Owner.ApplyModFromDurationalGameplayEffect(this);
         }
 
@@ -138,16 +145,48 @@ namespace GAS.Runtime.Effects
         {
             Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
         }
-        
-        public void CaptureAttributeSnapshotFromSource()
+
+        private void CaptureDataFromSource()
+        {
+            SnapshotAttributes = Source.DataSnapshot();
+        }
+
+        void CalculateModifierMagnitudes()
         {
             // TODO
-            SnapshotAttributes.Clear();
-            // SnapshotAttributes  Owner.AttributeSetContainer
-            // foreach (var attribute in Owner.AttributeSetContainer)
+            
+            // 获取所有的 ModifierMagnitudes
+            // var modifiers = GameplayEffect.Modifiers;
+            //
+            // // 遍历每个 ModifierMagnitude，并计算其数值
+            // foreach (var modifier in modifiers)
             // {
-            //     SnapshotAttributes.Add(attribute.Clone());
+            //     var calculation = modifier.GetMagnitudeCalculation();
+            //
+            //     // 如果计算逻辑存在
+            //     if (calculation != null)
+            //     {
+            //         // 获取输入参数
+            //         List<float> inputValues = modifier.GetInputValues();
+            //
+            //         // 调用计算逻辑的方法来计算数值
+            //         float magnitude = calculation.CalculateBaseMagnitude(inputValues, target);
+            //
+            //         // 设置 ModifierMagnitude 的值
+            //         modifier.SetMagnitude(magnitude);
+            //     }
             // }
         }
+        
+        public float GetModifierMagnitude()
+        {
+            // TODO
+            // 获取指定 ModifierMagnitude 的数值
+            // return modifier.GetMagnitude();
+            return 0;
+        }
+        
+        
+
     }
 }

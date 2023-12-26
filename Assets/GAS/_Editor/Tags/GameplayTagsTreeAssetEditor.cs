@@ -125,7 +125,7 @@ namespace GAS.Editor.Tags
         public void CreateTag()
         {
             Undo.RecordObject(Asset, "Add Item To Asset");
-            InputStringWindow.OpenWindow("Create Tag",AddTag);
+            StringEditWindow.OpenWindow("",AddTag,"Tag");
         }
 
         public void RemoveTags()

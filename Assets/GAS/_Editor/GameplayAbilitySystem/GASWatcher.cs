@@ -1,8 +1,6 @@
-﻿using Sirenix.OdinInspector.Editor;
-
-namespace GAS._Editor.GameplayAbilitySystem
+﻿namespace GAS._Editor.GameplayAbilitySystem
 {
-    public class GASWatcher:OdinEditorWindow
+    public class GASWatcher
     {
         // TODO: Implement this
     }

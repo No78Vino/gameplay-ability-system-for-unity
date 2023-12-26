@@ -8,39 +8,6 @@ using UnityEngine;
 
 namespace GAS.Editor.Attributes
 {
-    public class StringEditWindow : EditorWindow
-    {
-        private Action<string> callback;
-        private string editedString = "";
-
-        public static void OpenWindow(string initialString, Action<string> callback)
-        {
-            var window = GetWindow<StringEditWindow>();
-            window.Init(initialString, callback);
-            window.Show();
-        }
-        private void OnGUI()
-        {
-            // Display the input field to edit the string
-            editedString = EditorGUILayout.TextField("Attribute:", editedString);
-
-            EditorGUILayout.Space();
-
-            // Save button to apply changes
-            if (GUILayout.Button("Save"))
-            {
-                callback?.Invoke(editedString);
-                Close();
-            }
-        }
-
-        public void Init(string initialString, Action<string> callback)
-        {
-            editedString = initialString;
-            this.callback = callback;
-        }
-    }
-    
     [CustomEditor(typeof(AttributeAsset))]
     public class AttributeAssetEditor:UnityEditor.Editor
     {
@@ -94,7 +61,7 @@ namespace GAS.Editor.Attributes
 
         void Add()
         {
-            InputStringWindow.OpenWindow("Add Attribute",AddAttribute);
+            StringEditWindow.OpenWindow("",AddAttribute,"Attribute");
         }
         
         void Remove(string attributeName)
@@ -143,7 +110,7 @@ namespace GAS.Editor.Attributes
          private void OpenEditPopup()
          {
              if (_selectedIndex < 0 || _selectedIndex >= AttributeList.Count) return;
-             StringEditWindow.OpenWindow(AttributeList[_selectedIndex], UpdateAttribute);
+             StringEditWindow.OpenWindow(AttributeList[_selectedIndex], UpdateAttribute,"Attribute");
          }
 
          private void UpdateAttribute(string updatedAttribute)

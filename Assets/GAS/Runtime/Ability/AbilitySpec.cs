@@ -1,120 +1,111 @@
-﻿using System.Collections.Generic;
-using GAS.Runtime.Ability.AbilityTask;
+﻿using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
-using GAS.Runtime.Tags;
+using GAS.Runtime.Effects.Modifier;
 
 namespace GAS.Runtime.Ability
 {
-    public struct AbilityCooldownTime
-    {
-        public float TimeRemaining;
-        public float TotalDuration;
-    }
-
     public abstract class AbilitySpec
     {
+        private object[] _abilityArguments;
+
+        private GameplayEffectSpec _costSpec;
+
+        public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
+        {
+            Ability = ability;
+            Owner = owner;
+        }
+
         public AbstractAbility Ability { get; }
 
-        public Component.AbilitySystemComponent Owner { get; protected set; }
+        public AbilitySystemComponent Owner { get; protected set; }
 
-        public float Level { get; private set; }
+        public float Level { get; }
 
-        public bool IsActive { get;private set; }
-        
-        public int ActiveCount { get;private set; }
+        public bool IsActive { get; private set; }
 
-        private object[] _abilityArguments;
-        public AbilitySpec(AbstractAbility ability, Component.AbilitySystemComponent owner)
-        {
-            this.Ability = ability;
-            this.Owner = owner;
-        }
-        
-        public virtual bool CanActivateAbility()
+        public int ActiveCount { get; private set; }
+
+        public virtual bool CanActivate()
         {
             return !IsActive
-                    && CheckGameplayTags()
-                    && CheckCost()
-                    && CheckCooldown().TimeRemaining <= 0;
+                   && CheckGameplayTags()
+                   && CheckCost()
+                   && CheckCooldown().TimeRemaining <= 0;
         }
-        
-        public abstract bool CheckGameplayTags();
-        
-        public virtual AbilityCooldownTime CheckCooldown()
-        {
-            // TODO
-            // if (Ability.Cooldown.NULL) return new AbilityCooldownTime();
-            // var cooldownTags = Ability.Cooldown.GetGameplayEffectTags().GrantedTags;
 
-            //return Owner.CheckCooldownForTags(cooldownTags);
-            // TODO
-            return new AbilityCooldownTime();
+        private bool CheckGameplayTags()
+        {
+            return Owner.HasAllTags(Ability.tag.SourceTags);
         }
-        
-        public virtual void ActivateAbility(params object[] args)
+
+        protected virtual CooldownTimer CheckCooldown()
+        {
+            return Ability.Cooldown.NULL
+                ? new CooldownTimer()
+                : Owner.CheckCooldownFromTags(Ability.Cooldown.TagContainer.GrantedTags);
+        }
+
+        public virtual void TryActivateAbility(params object[] args)
         {
             _abilityArguments = args;
-            
-            if(IsActive) return;
+
+            if (!CanActivate()) return;
             IsActive = true;
             ActiveCount++;
-            Ability.ActivateAbility();
             
+            ActivateAbility(_abilityArguments);
             Ability.AsyncAbilityTasks.ForEach(task => task.Execute(_abilityArguments));
         }
-        
-        public virtual void EndAbility()
+
+        public virtual void TryEndAbility()
         {
-            if(!IsActive) return;
+            if (!IsActive) return;
             IsActive = false;
-            Ability.EndAbility();
+            EndAbility();
         }
 
-        private GameplayEffectSpec _costCache;
-
-        private GameplayEffectSpec TryGetCostSpec()
+        private GameplayEffectSpec CostSpec()
         {
-            if (_costCache == null || _costCache.Level != Level)
-            {
-                _costCache = Owner.ApplyGameplayEffectToSelf(Ability.Cost);
-            }
-            return _costCache;
+            if (_costSpec == null || _costSpec.Level != Level)
+                _costSpec = Owner.ApplyGameplayEffectToSelf(Ability.Cost);
+            return _costSpec;
         }
 
 
         public virtual bool CheckCost()
         {
-            // TODO
-            // if (Ability.Cost.NULL) return true;
-            // var costGe = TryGetCostSpec();
-            // if (costGe == null) return false;
-            //
-            // if (costGe.GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant) return true;
+            if (Ability.Cost.NULL) return true;
+            var costSpec = CostSpec();
+            if (costSpec == null) return false;
 
-            // for (var i = 0; i < costGe.GameplayEffect.Modifiers.Count; i++)
-            // {
-            //     var modifier = costGe.GameplayEffect.Modifiers[i];
-            //
-            //     // Only worry about additive.  Anything else passes.
-            //     if (modifier.ModifierOperator != EAttributeModifier.Add) continue;
-            //     var costValue = (modifier.ModifierMagnitude.CalculateMagnitude(costGe, modifier.Multiplier)).GetValueOrDefault();
-            //
-            //     this.Owner.AttributeSystem.GetAttributeValue(modifier.Attribute, out var attributeValue);
-            //
-            //     // The total attribute after accounting for cost should be >= 0 for the cost check to succeed
-            //     if (attributeValue.CurrentValue + costValue < 0) return false;
-            //
-            // }
+            if (costSpec.GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant) return true;
+
+            foreach (var modifier in costSpec.GameplayEffect.Modifiers)
+            {
+                // Cost can't be multiply or override ,so only care about additive.
+                if (modifier.Operation != GEOperation.Add) continue;
+
+                var costValue = modifier.ModifierMagnitude.CalculateMagnitude(modifier.Coefficient);
+                var attribute = Owner.GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
+
+                // The total attribute after accounting for cost should be >= 0 for the cost check to succeed
+                if (attribute.CurrentValue + costValue < 0) return false;
+            }
+
             return true;
         }
 
         public void Tick()
         {
             if (!IsActive) return;
-            foreach (var task in Ability.OngoingAbilityTasks)
-            {
-                task.Execute(_abilityArguments);
-            }
+            foreach (var task in Ability.OngoingAbilityTasks) task.Execute(_abilityArguments);
         }
+        
+        public abstract void ActivateAbility(params object[] args);
+        
+        public abstract void CancelAbility();
+
+        public abstract void EndAbility();
     }
 }

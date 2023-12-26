@@ -11,11 +11,11 @@ namespace GAS.Runtime.Tags
 	{
 		[SerializeField] public string GameplayTagSumCollectionGenPath = "Script/Gen/GameplayTagSumCollection.cs";
 		
-		[SerializeField] List<GameplayTagTreeElement> gameplayTagTreeElements = new();
+		[SerializeField] List<GameplayTagTreeElement> gameplayTagTreeElements = new List<GameplayTagTreeElement>();
 
 		internal List<GameplayTagTreeElement> GameplayTagTreeElements => gameplayTagTreeElements;
 		
-		[SerializeField] public List<GameplayTag> Tags = new();
+		[SerializeField] public List<GameplayTag> Tags = new List<GameplayTag>();
 
 
 		public void CacheTags()

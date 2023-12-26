@@ -1,4 +1,7 @@
-﻿using GAS.Runtime.Effects;
+﻿using System.Collections.Generic;
+using GAS.Runtime.Ability;
+using GAS.Runtime.Attribute;
+using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 
 namespace GAS.Runtime.Component
@@ -20,5 +23,13 @@ namespace GAS.Runtime.Component
         void RemoveGameplayEffect(GameplayEffectSpec spec);
         
         void Tick();
+        
+        Dictionary<string,float> DataSnapshot();
+        
+        void GrantAbility(AbstractAbility ability);
+        
+        void RemoveAbility(string abilityName);
+        
+        AttributeBase GetAttribute(string setName,string attributeShortName);
     }
 }

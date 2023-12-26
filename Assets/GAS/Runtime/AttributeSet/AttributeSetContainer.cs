@@ -9,9 +9,9 @@ namespace GAS.Runtime.AttributeSet
 {
     public class AttributeSetContainer
     {
-        Dictionary<string,AttributeSet> _attributeSets = new();
+        Dictionary<string,AttributeSet> _attributeSets = new Dictionary<string,AttributeSet>();
         
-        List<GameplayEffectSpec> _appliedGameplayEffectSpecs = new();
+        List<GameplayEffectSpec> _appliedGameplayEffectSpecs = new List<GameplayEffectSpec>();
         
         public void AddAttributeSet<T>() where T : AttributeSet
         {
@@ -41,7 +41,7 @@ namespace GAS.Runtime.AttributeSet
             return false;
         }
         
-        AttributeBase GetAttribute(string attrSetName,string attrShortName)
+        public AttributeBase GetAttribute(string attrSetName,string attrShortName)
         {
             return _attributeSets.TryGetValue(attrSetName, out var set) ? set[attrShortName] : null;
         }
@@ -112,6 +112,23 @@ namespace GAS.Runtime.AttributeSet
         public void RemoveModFromGameplayEffectSpec(GameplayEffectSpec spec)
         {
             // TODO
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, float> Snapshot()
+        {
+            Dictionary<string, float> snapshot = new Dictionary<string, float>();
+            foreach (var attributeSet in _attributeSets)
+            {
+                foreach (var name in attributeSet.Value.AttributeNames)
+                {
+                    snapshot.Add(name, attributeSet.Value[name].CurrentValue);
+                }
+            }
+            return snapshot;
         }
     }
 }

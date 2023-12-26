@@ -4,7 +4,11 @@
     {
         public override void Execute(params object[] args)
         {
-            throw new System.NotImplementedException();
+            
+        }
+
+        public OngoingAbilityTask(AbilitySpec spec) : base(spec)
+        {
         }
     }
 }

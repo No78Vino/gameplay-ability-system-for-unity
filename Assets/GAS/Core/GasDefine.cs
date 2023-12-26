@@ -1,5 +1,5 @@
-﻿using EXMaid;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace GAS.Core
 {
@@ -28,7 +28,7 @@ namespace GAS.Core
             if (!AssetDatabase.IsValidFolder(GAS_ASSET_PATH))
             {
                 AssetDatabase.CreateFolder("Assets", GAS_ASSET_FOLDER_NAME);
-                EXLog.Log($"{GAS_ASSET_FOLDER_NAME} folder created!");
+                Debug.Log($"[EX] {GAS_ASSET_FOLDER_NAME} folder created!");
             }
         }
     }
