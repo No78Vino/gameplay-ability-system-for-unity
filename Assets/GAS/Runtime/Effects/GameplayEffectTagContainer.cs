@@ -2,43 +2,18 @@
 
 namespace GAS.Runtime.Effects
 {
+    /// <summary>
+    /// https://github.com/BillEliot/GASDocumentation_Chinese?tab=readme-ov-file#457-gameplayeffect%E6%A0%87%E7%AD%BE
+    /// </summary>
     public class GameplayEffectTagContainer
     {
-        /// <summary>
-        /// For the description of the GameplayEffect
-        /// </summary>
         public GameplayTagSet AssetTags;
         
-        /// <summary>
-        /// For attachments to the ASC, if GameplayEffect is active
-        /// And the ACS will lose these tags when the GameplayEffect is deactive
-        /// </summary>
         public GameplayTagSet GrantedTags;
         
-        /// <summary>
-        /// For banning tags to the ASC, if GameplayEffect is active
-        /// And the ACS will grant these tags when the GameplayEffect is deactive
-        /// </summary>
-        public GameplayTagSet BannedTags;
+        public GameplayTagSet ApplicationRequiredTags;
+        public GameplayTagSet OngoingRequiredTags;
         
-        /// <summary>
-        /// For the Application Requirement
-        /// </summary>
-        public GameplayTagSet RequiredApplicationTags;
-        
-        /// <summary>
-        /// For the Requirement of Keeping Running 
-        /// </summary>
-        public GameplayTagSet RequiredOngoingTags;
-        
-        /// <summary>
-        /// the GameplayEffectSpec grants to the Target in addition to the GameplayTags that the GameplayEffect grants.
-        /// </summary>
-        public GameplayTagSet DynamicGrantedTags;
-        
-        /// <summary>
-        /// the GameplayEffectSpec has in addition to the AssetTags that the GameplayEffect has.
-        /// </summary>
-        public GameplayTagSet DynamicAssetTags;
+        public GameplayTagSet RemoveGameplayEffectsWithTags;
     }
 }

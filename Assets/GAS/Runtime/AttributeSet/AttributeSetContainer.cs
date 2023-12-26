@@ -11,8 +11,7 @@ namespace GAS.Runtime.AttributeSet
     {
         Dictionary<string,AttributeSet> _attributeSets = new Dictionary<string,AttributeSet>();
         
-        List<GameplayEffectSpec> _appliedGameplayEffectSpecs = new List<GameplayEffectSpec>();
-        
+        public Dictionary<string,AttributeSet> Sets => _attributeSets;
         public void AddAttributeSet<T>() where T : AttributeSet
         {
             if (TryGetAttributeSet<T>(out _)) return;
@@ -46,78 +45,6 @@ namespace GAS.Runtime.AttributeSet
             return _attributeSets.TryGetValue(attrSetName, out var set) ? set[attrShortName] : null;
         }
         
-        void ApplyModFromInstantEffect(GameplayEffectSpec spec)
-        {
-            foreach (var modifier in spec.GameplayEffect.Modifiers)
-            {
-                var attribute = GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
-                if (attribute == null) continue;
-                var magnitude = modifier.ModifierMagnitude.CalculateMagnitude(modifier.Coefficient);
-                var baseValue = attribute.BaseValue;
-                switch (modifier.Operation)
-                {
-                    case GEOperation.Add:
-                        baseValue += magnitude;
-                        break;
-                    case GEOperation.Multiply:
-                        baseValue *= magnitude;
-                        break;
-                    case GEOperation.Override:
-                        baseValue = magnitude;
-                        break;
-                }
-
-                _attributeSets[modifier.AttributeSetName].ChangeAttributeBase(attribute, baseValue);
-            }
-        }
-        
-        void ApplyModFromDurationalEffect(GameplayEffectSpec spec)
-        {
-            foreach (var modifier in spec.GameplayEffect.Modifiers)
-            {
-                var attribute = GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
-                if (attribute == null) continue;
-                var magnitude = modifier.ModifierMagnitude.CalculateMagnitude(modifier.Coefficient);
-                var currentValue = attribute.CurrentValue;
-                switch (modifier.Operation)
-                {
-                    case GEOperation.Add:
-                        currentValue += magnitude;
-                        break;
-                    case GEOperation.Multiply:
-                        currentValue *= magnitude;
-                        break;
-                    case GEOperation.Override:
-                        currentValue = magnitude;
-                        break;
-                }
-                _attributeSets[modifier.AttributeSetName].ChangeAttribute(attribute, currentValue);
-            }
-
-            _appliedGameplayEffectSpecs.Add(spec);
-        }
-        
-        public void ApplyModFromGameplayEffectSpec(GameplayEffectSpec spec)
-        {
-            if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
-            {
-                ApplyModFromInstantEffect(spec);
-            }
-            else
-            {
-                ApplyModFromDurationalEffect(spec);
-            }
-        }
-        
-        public void RemoveModFromGameplayEffectSpec(GameplayEffectSpec spec)
-        {
-            // TODO
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public Dictionary<string, float> Snapshot()
         {
             Dictionary<string, float> snapshot = new Dictionary<string, float>();
@@ -129,6 +56,12 @@ namespace GAS.Runtime.AttributeSet
                 }
             }
             return snapshot;
+        }
+        
+        public void RemoveModFromGameplayEffectSpec(GameplayEffectSpec spec)
+        {
+            // TODO
+            // OnDirty();
         }
     }
 }

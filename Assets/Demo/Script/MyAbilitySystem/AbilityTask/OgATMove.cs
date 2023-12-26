@@ -1,4 +1,5 @@
-﻿using GAS.Runtime.Ability.AbilityTask;
+﻿using GAS.Runtime.Ability;
+using GAS.Runtime.Ability.AbilityTask;
 using UnityEngine;
 
 namespace Demo.Script.MyAbilitySystem.AbilityTask
@@ -13,6 +14,10 @@ namespace Demo.Script.MyAbilitySystem.AbilityTask
 
             var basePos = rigidbody.position;
             rigidbody.MovePosition(basePos + direction * speed * Time.deltaTime);
+        }
+
+        public OgATMove(AbilitySpec spec) : base(spec)
+        {
         }
     }
 }

@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _asc = GetComponent<AbilitySystemComponent>();
         var ability = new AbilityMove();
-        _asc.Init(ability);
+        _asc.Init();
         //AttrSet_Fight attrSet = new AttrSet_Fight();
         onMove = OnMove;
     }
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
 
     public void OnMoveEnd()
     {
-        _asc.TryEndAbility("Move");
+        _asc.EndAbility("Move");
     }
     public void OnPressQ()
     {

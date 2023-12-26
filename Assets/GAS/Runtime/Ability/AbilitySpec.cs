@@ -36,7 +36,7 @@ namespace GAS.Runtime.Ability
 
         private bool CheckGameplayTags()
         {
-            return Owner.HasAllTags(Ability.tag.SourceTags);
+            return Owner.HasAllTags(Ability.tag.SourceRequiredTags);
         }
 
         protected virtual CooldownTimer CheckCooldown()
@@ -86,7 +86,7 @@ namespace GAS.Runtime.Ability
                 // Cost can't be multiply or override ,so only care about additive.
                 if (modifier.Operation != GEOperation.Add) continue;
 
-                var costValue = modifier.ModifierMagnitude.CalculateMagnitude(modifier.Coefficient);
+                var costValue = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
                 var attribute = Owner.GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
 
                 // The total attribute after accounting for cost should be >= 0 for the cost check to succeed

@@ -10,22 +10,12 @@ namespace Demo.Script.MyAbilitySystem.Ability
         public AbilityMove()
         {
             Name = "Move";
-            OngoingAbilityTasks.Add(new OgATMove());
+            //OngoingAbilityTasks.Add(new OgATMove());
         }
         
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
         {
             return new AbilitySpecMove(this, owner);
-        }
-
-        public override void ActivateAbility()
-        {
-            
-        }
-
-        public override void EndAbility()
-        {
-            
         }
     }
     
@@ -36,7 +26,17 @@ namespace Demo.Script.MyAbilitySystem.Ability
         {
         }
 
-        public override bool CheckGameplayTags()
+        public override void ActivateAbility(params object[] args)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void CancelAbility()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void EndAbility()
         {
             throw new System.NotImplementedException();
         }

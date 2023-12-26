@@ -36,17 +36,17 @@ namespace GAS.Runtime.Effects.Modifier
         public readonly string AttributeName;
         public readonly string AttributeSetName;
         public readonly string AttributeShortName;
-        public readonly float Coefficient;
+        public readonly float ModiferMagnitude;
         
         public readonly GEOperation Operation;
         public readonly GEModifierType ModifierType;
         public readonly GECalculationType CalculationType;
         public readonly GEAttributeCaptureType CaptureType;
-        public readonly ModifierMagnitudeCalculation ModifierMagnitude;
+        public readonly ModifierMagnitudeCalculation MMC;
         
         public GameplayEffectModifier(
             string attributeName, 
-            float coefficient,
+            float modiferMagnitude,
             GEOperation operation,
             GEModifierType modifierType, 
             GECalculationType calculationType,
@@ -57,7 +57,7 @@ namespace GAS.Runtime.Effects.Modifier
             AttributeSetName = splits[0];
             AttributeShortName = splits[1];
             
-            Coefficient = coefficient;
+            ModiferMagnitude = modiferMagnitude;
                 
             Operation = operation;
             ModifierType = modifierType;
@@ -65,7 +65,7 @@ namespace GAS.Runtime.Effects.Modifier
             CaptureType = captureType;
             
             // TODO
-            ModifierMagnitude = null;
+            MMC = null;
         }
         
         public GameplayEffectModifier(GameplayEffectModifier modifier)
@@ -73,12 +73,12 @@ namespace GAS.Runtime.Effects.Modifier
             AttributeName = modifier.AttributeName;
             AttributeSetName = modifier.AttributeSetName;
             AttributeShortName = modifier.AttributeShortName;
-            Coefficient = modifier.Coefficient;
+            ModiferMagnitude = modifier.ModiferMagnitude;
             Operation = modifier.Operation;
             ModifierType = modifier.ModifierType;
             CalculationType = modifier.CalculationType;
             CaptureType = modifier.CaptureType;
-            ModifierMagnitude = modifier.ModifierMagnitude;
+            MMC = modifier.MMC;
         }
         
         // public float Value()

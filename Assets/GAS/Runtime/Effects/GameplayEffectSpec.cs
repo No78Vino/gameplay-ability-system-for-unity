@@ -74,7 +74,7 @@ namespace GAS.Runtime.Effects
 
         public bool CanRunning()
         {
-            var canRunning = Owner.HasAllTags(GameplayEffect.TagContainer.RequiredOngoingTags);
+            var canRunning = Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);
             return canRunning;
         }
 
@@ -95,8 +95,7 @@ namespace GAS.Runtime.Effects
             OnExecute?.Invoke(this);
             GameplayEffect.TriggerCueOnExecute();
             
-            // CalculateModifierMagnitudes();
-            // GetModifierMagnitude();
+            Owner.ApplyModFromInstantGameplayEffect(this);
         }
         
         public void TriggerOnAdd()
@@ -115,7 +114,6 @@ namespace GAS.Runtime.Effects
         {            
             OnActivation?.Invoke(this);
             Owner.AddTags(GameplayEffect.TagContainer.GrantedTags);
-            Owner.RemoveTags(GameplayEffect.TagContainer.BannedTags);
 
             // CalculateModifierMagnitudes();
             // GetModifierMagnitude();
@@ -127,7 +125,6 @@ namespace GAS.Runtime.Effects
         {
             OnDeactivation?.Invoke(this);
             Owner.RemoveTags(GameplayEffect.TagContainer.GrantedTags);
-            Owner.AddTags(GameplayEffect.TagContainer.BannedTags);
             
             Owner.RemoveModFromDurationalGameplayEffect(this);
         }

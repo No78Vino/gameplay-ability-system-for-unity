@@ -57,7 +57,7 @@ namespace GAS.Runtime.Effects
 
         public bool CanApplyTo(AbilitySystemComponent target)
         {
-            return target.HasAllTags(TagContainer.RequiredApplicationTags);
+            return target.HasAllTags(TagContainer.ApplicationRequiredTags);
         }
         
         public bool NULL => DurationPolicy == EffectsDurationPolicy.None;

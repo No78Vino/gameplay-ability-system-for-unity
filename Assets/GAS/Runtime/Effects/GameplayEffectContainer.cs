@@ -90,6 +90,7 @@ namespace GAS.Runtime.Effects
         void SetAttributeBaseValue()
         {
             // TODO
+            _owner.GetAttribute("Health", "Health").SetBaseValue(100);
         }
 
         public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)

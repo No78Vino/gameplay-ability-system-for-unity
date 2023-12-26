@@ -4,6 +4,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Effects;
+using GAS.Runtime.Effects.Modifier;
 using GAS.Runtime.Tags;
 using UnityEngine;
 
@@ -113,7 +114,7 @@ namespace GAS.Runtime.Component
             if (_abilities.ContainsKey(ability.Name)) return;
             var abilitySpec = ability.CreateSpec(this);
             _abilities.Add(ability.Name, abilitySpec);
-            _tags.AddTag(abilitySpec.Ability.tag.GrantedTag);
+            _tags.AddTag(abilitySpec.Ability.tag.ActivationOwnedTag);
         }
 
         public void RemoveAbility(string abilityName)
@@ -121,7 +122,7 @@ namespace GAS.Runtime.Component
             var abilitySpec = _abilities[abilityName];
             if(abilitySpec==null) return;
             
-            _tags.RemoveTag(abilitySpec.Ability.tag.GrantedTag);
+            _tags.RemoveTag(abilitySpec.Ability.tag.ActivationOwnedTag);
             _abilities.Remove(abilityName);
             
         }
@@ -161,8 +162,57 @@ namespace GAS.Runtime.Component
 
         public void ApplyModFromDurationalGameplayEffect(GameplayEffectSpec spec)
         {
-            _attributeSetContainer.ApplyModFromGameplayEffectSpec(spec);
+            // TODO
+            // foreach (var modifier in spec.GameplayEffect.Modifiers)
+            // {
+            //     var attribute = GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
+            //     if (attribute == null) continue;
+            //     var magnitude = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
+            //     var currentValue = attribute.CurrentValue;
+            //     switch (modifier.Operation)
+            //     {
+            //         case GEOperation.Add:
+            //             currentValue += magnitude;
+            //             break;
+            //         case GEOperation.Multiply:
+            //             currentValue *= magnitude;
+            //             break;
+            //         case GEOperation.Override:
+            //             currentValue = magnitude;
+            //             break;
+            //     }
+            //     _attributeSets[modifier.AttributeSetName].ChangeAttribute(attribute, currentValue);
+            // }
+            
+            //_appliedGameplayEffectSpecs.Add(spec);
         }
+        
+        public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
+        {
+            foreach (var modifier in spec.GameplayEffect.Modifiers)
+            {
+                var attribute = GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
+                if (attribute == null) continue;
+                var magnitude = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
+                var baseValue = attribute.BaseValue;
+                switch (modifier.Operation)
+                {
+                    case GEOperation.Add:
+                        baseValue += magnitude;
+                        break;
+                    case GEOperation.Multiply:
+                        baseValue *= magnitude;
+                        break;
+                    case GEOperation.Override:
+                        baseValue = magnitude;
+                        break;
+                }
+
+                _attributeSetContainer.GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
+                _attributeSetContainer.Sets[modifier.AttributeSetName].ChangeAttributeBase(attribute, baseValue);
+            }
+        }
+        
         
         public void RemoveModFromDurationalGameplayEffect(GameplayEffectSpec spec)
         {
