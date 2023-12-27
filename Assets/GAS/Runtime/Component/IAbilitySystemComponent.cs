@@ -19,6 +19,8 @@ namespace GAS.Runtime.Component
         GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect,AbilitySystemComponent target);
         
         GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect);
+
+        void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec);
         
         void RemoveGameplayEffect(GameplayEffectSpec spec);
         
@@ -30,6 +32,7 @@ namespace GAS.Runtime.Component
         
         void RemoveAbility(string abilityName);
         
-        AttributeBase GetAttribute(string setName,string attributeShortName);
+        float? GetAttributeCurrentValue(string setName,string attributeShortName);
+        float? GetAttributeBaseValue(string setName,string attributeShortName);
     }
 }

@@ -11,18 +11,6 @@ namespace GAS.Runtime.Effects.Modifier
             _spec = spec;
         }
 
-        public abstract float CalculateMagnitude(float modifierValue);
-        
-        float GetSetByCallerMagnitudeByName(string MagnitudeName)
-        {
-            // TODO
-            return 0;
-        }
-        
-        float GetSetByCallerMagnitudeByTag(GameplayTagSet tagSet)
-        {
-            // TODO
-            return 0;
-        }
+        public abstract float CalculateMagnitude(params float[] modifierValue);
     }
 }

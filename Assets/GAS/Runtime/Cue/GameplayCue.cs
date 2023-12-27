@@ -1,10 +1,7 @@
 ﻿namespace GAS.Runtime.Cue
 {
-    public class GameplayCue
+    public abstract class GameplayCue
     {
-        public void Trigger()
-        {
-            // TODO   
-        }
+        public abstract void Trigger();
     }
 }

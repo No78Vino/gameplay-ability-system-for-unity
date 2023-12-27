@@ -6,10 +6,9 @@
         {
         }
 
-        public override float CalculateMagnitude(float modifierValue)
+        public override float CalculateMagnitude(params float[] input)
         {
-            // TODO
-            return 1;
+            return input[0];
         }
     }
 }

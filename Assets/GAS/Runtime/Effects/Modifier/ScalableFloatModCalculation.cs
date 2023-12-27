@@ -2,15 +2,18 @@
 {
     public class ScalableFloatModCalculation:ModifierMagnitudeCalculation
     {
+        private float _k;
+        private float _b;
         
-        public ScalableFloatModCalculation(GameplayEffectSpec spec) : base(spec)
+        public ScalableFloatModCalculation(GameplayEffectSpec spec,float k,float b) : base(spec)
         {
+            _k = k;
+            _b = b;
         }
 
-        public override float CalculateMagnitude(float modifierValue)
+        public override float CalculateMagnitude(params float[] input)
         {
-            // TODO
-            return 1;
+            return input[0] * _k + _b;
         }
     }
 }

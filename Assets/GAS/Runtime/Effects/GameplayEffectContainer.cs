@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
 
@@ -11,10 +12,15 @@ namespace GAS.Runtime.Effects
         private List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private List<GameplayEffectSpec> _activeGameplayEffects = new List<GameplayEffectSpec>();
         
-        
+        Action _onGameplayEffectContainerIsDirty;
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
+        }
+        
+        public List<GameplayEffectSpec> GetActiveGameplayEffects()
+        {
+            return _activeGameplayEffects;
         }
         
         public void Tick()
@@ -25,26 +31,47 @@ namespace GAS.Runtime.Effects
             }
         }
 
-        public void AddGameplayEffectSpec(GameplayEffectSpec spec)
+        public void RegisterOnGameplayEffectContainerIsDirty(Action action)
+        {
+            _onGameplayEffectContainerIsDirty += action;
+        }
+        
+        public void UnregisterOnGameplayEffectContainerIsDirty(Action action)
+        {
+            _onGameplayEffectContainerIsDirty -= action;
+        }
+        
+        /// <summary>
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns>
+        /// If the added effect is an instant effect,return false.
+        /// If the added effect is a duration effect and activate successfully ,return true.
+        /// </returns>
+        public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
         {
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
                 spec.TriggerOnExecute();
+                return false;
+            }
+
+            _gameplayEffectSpecs.Add(spec);
+            
+            var canRunning = spec.CanRunning();
+            if (canRunning)
+            {
+                spec.Activate();
             }
             else
             {
-                if (spec.CanRunning())
-                {
-                    spec.Activate();
-                }
-                else
-                {
-                    spec.Deactivate();
-                }
-
-                _gameplayEffectSpecs.Add(spec);
-                spec.TriggerOnAdd();
+                spec.Deactivate();
             }
+            
+            spec.TriggerOnAdd();
+            _onGameplayEffectContainerIsDirty?.Invoke();
+            
+            return canRunning;
         }
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
@@ -54,6 +81,8 @@ namespace GAS.Runtime.Effects
             
             _activeGameplayEffects.Remove(spec);
             _gameplayEffectSpecs.Remove(spec);
+            
+            _onGameplayEffectContainerIsDirty?.Invoke();
         }
 
         public void RefreshGameplayEffectState()
@@ -75,22 +104,8 @@ namespace GAS.Runtime.Effects
                 gameplayEffectSpec.Deactivate();
                 _activeGameplayEffects.Remove(gameplayEffectSpec);
             }
-        }
-
-        void InternalExecuteMod()
-        {
-            // TODO
-        }
-
-        void ApplyModToAttribute()
-        {
-            // TODO
-        }
-        
-        void SetAttributeBaseValue()
-        {
-            // TODO
-            _owner.GetAttribute("Health", "Health").SetBaseValue(100);
+            
+            _onGameplayEffectContainerIsDirty?.Invoke();
         }
 
         public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)

@@ -27,7 +27,7 @@ namespace GAS.Runtime.Effects
         readonly List<GameplayCue> CueOnAdd;
 
         public readonly GameplayEffectModifier[] Modifiers;
-        public readonly List<ExecutionCalculation> _executions;
+        public readonly ExecutionCalculation[] Executions;
         
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator, 

@@ -87,10 +87,10 @@ namespace GAS.Runtime.Ability
                 if (modifier.Operation != GEOperation.Add) continue;
 
                 var costValue = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
-                var attribute = Owner.GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
+                var attributeCurrentValue = Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
 
                 // The total attribute after accounting for cost should be >= 0 for the cost check to succeed
-                if (attribute.CurrentValue + costValue < 0) return false;
+                if (attributeCurrentValue + costValue < 0) return false;
             }
 
             return true;

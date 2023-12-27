@@ -12,189 +12,135 @@ namespace GAS.Runtime.Component
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        GameplayTagContainer _tags;
-        public float Level { get; private set; }
-        
-        Dictionary<string,AbilitySpec> _abilities = new Dictionary<string,AbilitySpec>();
-        AttributeSetContainer _attributeSetContainer = new AttributeSetContainer();
-        GameplayEffectContainer _gameplayEffectContainer;
-        public GameplayEffectContainer GameplayEffectContainer => _gameplayEffectContainer;
-        //public AttributeSetContainer AttributeSetContainer => _attributeSetContainer;
+        private AbilityContainer _abilityContainer;
+        private AttributeSetContainer _attributeSetContainer;
+        private GameplayTagCollection _tagCollection;
 
-        delegate void TagIsDirty();
-        event TagIsDirty OnTagIsDirty;
+        public float Level { get; }
         
+        public GameplayEffectContainer GameplayEffectContainer { get; private set; }
+
         private void Awake()
         {
-            _gameplayEffectContainer = new GameplayEffectContainer(this);
+            _abilityContainer = new AbilityContainer(this);
+            GameplayEffectContainer = new GameplayEffectContainer(this);
+            _attributeSetContainer = new AttributeSetContainer(this);
+            _tagCollection = new GameplayTagCollection(this);
         }
 
         private void OnEnable()
         {
             GameplayAbilitySystem.GAS.Register(this);
-            OnTagIsDirty+=_gameplayEffectContainer.RefreshGameplayEffectState;
+            _tagCollection.OnEnable();
         }
 
         private void OnDisable()
         {
             GameplayAbilitySystem.GAS.Unregister(this);
-            OnTagIsDirty-=_gameplayEffectContainer.RefreshGameplayEffectState;
+            _tagCollection.OnDisable();
         }
 
         public void Init()
         {
-            // _abilities.Add(ability.Name, ability.CreateSpec(this));
         }
         
         public bool HasAllTags(GameplayTagSet tags)
         {
-            return _tags.HasAllTags(tags);
+            return _tagCollection.HasAllTags(tags);
         }
 
         public bool HasAnyTags(GameplayTagSet tags)
         {
-            return _tags.HasAnyTags(tags);
+            return _tagCollection.HasAnyTags(tags);
         }
 
         public void AddTags(GameplayTagSet tags)
         {
-            _tags.AddTag(tags);
-            if(!tags.Empty)
-            {
-                OnTagIsDirty?.Invoke();
-            }
+            _tagCollection.AddTags(tags);
         }
 
         public void RemoveTags(GameplayTagSet tags)
         {
-            _tags.RemoveTag(tags);
-            if(!tags.Empty)
-            {
-                OnTagIsDirty?.Invoke();
-            }
+            _tagCollection.RemoveTags(tags);
         }
 
         private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
         {
-            // if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
-            // {
-            //     ApplyInstantGameplayEffect(spec);
-            // }
-            // else
-            // {
-            //     ApplyDurationalGameplayEffect(spec);
-            // }
-            GameplayEffectContainer.AddGameplayEffectSpec(spec);
-            return spec;
+            bool success = GameplayEffectContainer.AddGameplayEffectSpec(spec);
+            return success ? spec : null;
         }
         
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect,AbilitySystemComponent target)
+        public void RemoveGameplayEffect(GameplayEffectSpec spec)
         {
-            if (gameplayEffect.CanApplyTo(target))
-            {
-                return target.AddGameplayEffect(gameplayEffect.CreateSpec(this,target,Level));
-            }
-
-            return null;
+            GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
-        
+
+
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
+        {
+            return gameplayEffect.CanApplyTo(target)
+                ? target.AddGameplayEffect(gameplayEffect.CreateSpec(this, target, Level))
+                : null;
+        }
+
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
 
 
-        public void RemoveGameplayEffect(GameplayEffectSpec spec)
-        {
-            // TODO
-        }
-
         public void GrantAbility(AbstractAbility ability)
         {
-            if (_abilities.ContainsKey(ability.Name)) return;
-            var abilitySpec = ability.CreateSpec(this);
-            _abilities.Add(ability.Name, abilitySpec);
-            _tags.AddTag(abilitySpec.Ability.tag.ActivationOwnedTag);
+            _abilityContainer.GrantAbility(ability);
         }
 
         public void RemoveAbility(string abilityName)
         {
-            var abilitySpec = _abilities[abilityName];
-            if(abilitySpec==null) return;
-            
-            _tags.RemoveTag(abilitySpec.Ability.tag.ActivationOwnedTag);
-            _abilities.Remove(abilityName);
-            
+            _abilityContainer.RemoveAbility(abilityName);
         }
 
-        public AttributeBase GetAttribute(string setName,string attributeName)
+        public float? GetAttributeCurrentValue(string setName, string attributeShortName)
         {
-            return _attributeSetContainer.GetAttribute(setName, attributeName);
+            var value = _attributeSetContainer.GetAttributeCurrentValue(setName, attributeShortName);
+            return value;
+        }
+
+        public float? GetAttributeBaseValue(string setName, string attributeShortName)
+        {
+            var value = _attributeSetContainer.GetAttributeBaseValue(setName, attributeShortName);
+            return value;
         }
 
         public void Tick()
         {
-            _gameplayEffectContainer.Tick();
-
-            foreach (var kv in _abilities)
-            {
-                kv.Value.Tick();
-            }
+            GameplayEffectContainer.Tick();
+            _abilityContainer.Tick();
         }
 
         public Dictionary<string, float> DataSnapshot()
         {
             return _attributeSetContainer.Snapshot();
         }
-
-        public bool TryActivateAbility(string abilityName,params object[] args)
-        {
-            if (!_abilities.ContainsKey(abilityName)) return false;
-            _abilities[abilityName].TryActivateAbility(args);
-            return true;
-        }
         
+        public bool TryActivateAbility(string abilityName, params object[] args)
+        {
+            return _abilityContainer.TryActivateAbility(abilityName, args);
+        }
+
         public void EndAbility(string abilityName)
         {
-            if (!_abilities.ContainsKey(abilityName)) return;
-            _abilities[abilityName].EndAbility();
+            _abilityContainer.EndAbility(abilityName);
         }
 
-        public void ApplyModFromDurationalGameplayEffect(GameplayEffectSpec spec)
-        {
-            // TODO
-            // foreach (var modifier in spec.GameplayEffect.Modifiers)
-            // {
-            //     var attribute = GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
-            //     if (attribute == null) continue;
-            //     var magnitude = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
-            //     var currentValue = attribute.CurrentValue;
-            //     switch (modifier.Operation)
-            //     {
-            //         case GEOperation.Add:
-            //             currentValue += magnitude;
-            //             break;
-            //         case GEOperation.Multiply:
-            //             currentValue *= magnitude;
-            //             break;
-            //         case GEOperation.Override:
-            //             currentValue = magnitude;
-            //             break;
-            //     }
-            //     _attributeSets[modifier.AttributeSetName].ChangeAttribute(attribute, currentValue);
-            // }
-            
-            //_appliedGameplayEffectSpecs.Add(spec);
-        }
-        
+
         public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
         {
             foreach (var modifier in spec.GameplayEffect.Modifiers)
             {
-                var attribute = GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
-                if (attribute == null) continue;
+                var attributeBaseValue = GetAttributeBaseValue(modifier.AttributeSetName, modifier.AttributeShortName);
+                if (attributeBaseValue == null) continue;
                 var magnitude = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
-                var baseValue = attribute.BaseValue;
+                var baseValue = attributeBaseValue.Value;
                 switch (modifier.Operation)
                 {
                     case GEOperation.Add:
@@ -207,21 +153,15 @@ namespace GAS.Runtime.Component
                         baseValue = magnitude;
                         break;
                 }
-
-                _attributeSetContainer.GetAttribute(modifier.AttributeSetName, modifier.AttributeShortName);
-                _attributeSetContainer.Sets[modifier.AttributeSetName].ChangeAttributeBase(attribute, baseValue);
+                
+                _attributeSetContainer.Sets[modifier.AttributeSetName]
+                    .ChangeAttributeBase(modifier.AttributeName, baseValue);
             }
         }
-        
-        
-        public void RemoveModFromDurationalGameplayEffect(GameplayEffectSpec spec)
-        {
-            _attributeSetContainer.RemoveModFromGameplayEffectSpec(spec);
-        }
-        
+
         public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
         {
-            return _gameplayEffectContainer.CheckCooldownFromTags(tags);
+            return GameplayEffectContainer.CheckCooldownFromTags(tags);
         }
     }
 }

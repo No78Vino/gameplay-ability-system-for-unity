@@ -1,22 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.Runtime.Attribute;
-using GAS.Runtime.Effects;
-using GAS.Runtime.Effects.Execution;
-using GAS.Runtime.Effects.Modifier;
+using GAS.Runtime.Component;
 
 namespace GAS.Runtime.AttributeSet
 {
     public class AttributeSetContainer
     {
+        AbilitySystemComponent _owner;
         Dictionary<string,AttributeSet> _attributeSets = new Dictionary<string,AttributeSet>();
+        Dictionary<AttributeBase,AttributeAggregator> _attributeAggregators = new Dictionary<AttributeBase, AttributeAggregator>();
         
         public Dictionary<string,AttributeSet> Sets => _attributeSets;
+        
+        public AttributeSetContainer(AbilitySystemComponent owner)
+        {
+            _owner = owner;
+        }
+        
         public void AddAttributeSet<T>() where T : AttributeSet
         {
             if (TryGetAttributeSet<T>(out _)) return;
             
             _attributeSets.Add(nameof(T),Activator.CreateInstance<T>());
+            
+            var attrSet = _attributeSets[nameof(T)];
+            foreach (var attr in attrSet.AttributeNames)
+            {
+                if (!_attributeAggregators.ContainsKey(attrSet[attr]))
+                {
+                    _attributeAggregators.Add(attrSet[attr],new AttributeAggregator(attrSet[attr],_owner));
+                }
+            }
         }
         
         /// <summary>
@@ -25,6 +40,12 @@ namespace GAS.Runtime.AttributeSet
         /// <typeparam name="T"></typeparam>
         public void RemoveAttributeSet<T>()where T : AttributeSet
         {
+            var attrSet = _attributeSets[nameof(T)];
+            foreach (var attr in attrSet.AttributeNames)
+            {
+                _attributeAggregators.Remove(attrSet[attr]);
+            }
+
             _attributeSets.Remove(nameof(T));
         }
         
@@ -40,9 +61,14 @@ namespace GAS.Runtime.AttributeSet
             return false;
         }
         
-        public AttributeBase GetAttribute(string attrSetName,string attrShortName)
+        public float? GetAttributeBaseValue(string attrSetName,string attrShortName)
         {
-            return _attributeSets.TryGetValue(attrSetName, out var set) ? set[attrShortName] : null;
+            return _attributeSets.TryGetValue(attrSetName, out var set) ? set[attrShortName].BaseValue : (float?)null;
+        }
+        
+        public float? GetAttributeCurrentValue(string attrSetName,string attrShortName)
+        {
+            return _attributeSets.TryGetValue(attrSetName, out var set) ? set[attrShortName].CurrentValue : (float?)null;
         }
         
         public Dictionary<string, float> Snapshot()
@@ -56,12 +82,6 @@ namespace GAS.Runtime.AttributeSet
                 }
             }
             return snapshot;
-        }
-        
-        public void RemoveModFromGameplayEffectSpec(GameplayEffectSpec spec)
-        {
-            // TODO
-            // OnDirty();
         }
     }
 }
