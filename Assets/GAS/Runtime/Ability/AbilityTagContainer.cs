@@ -9,7 +9,7 @@ namespace GAS.Runtime.Ability
     /// goto 4.6.9 Ability Tag
     /// </summary>
     [Serializable]
-    public class AbilityTagContainer
+    public struct AbilityTagContainer
     {
         public GameplayTagSet AssetTag;
 

@@ -22,9 +22,9 @@ namespace GAS.Runtime.Effects
         public readonly GameplayEffectTagContainer TagContainer;
         
         // Cues
-        readonly List<GameplayCue> CueOnExecute;
-        readonly List<GameplayCue> CueOnRemove;
-        readonly List<GameplayCue> CueOnAdd;
+        readonly GameplayCue[] CueOnExecute;
+        readonly GameplayCue[] CueOnRemove;
+        readonly GameplayCue[] CueOnAdd;
 
         public readonly GameplayEffectModifier[] Modifiers;
         public readonly ExecutionCalculation[] Executions;
@@ -37,22 +37,59 @@ namespace GAS.Runtime.Effects
             return new GameplayEffectSpec(this, creator, owner, level);
         }
         
+        public  GameplayEffect(
+            EffectsDurationPolicy durationPolicy,
+            float duration,
+            float period,
+            GameplayEffectTagContainer tagContainer,
+            GameplayCue[] cueOnExecute,
+            GameplayCue[] cueOnRemove,
+            GameplayCue[] cueOnAdd,
+            GameplayEffectModifier[] modifiers,
+            ExecutionCalculation[] executions)
+        {
+            DurationPolicy = durationPolicy;
+            Duration = duration;
+            Period = period;
+            TagContainer = tagContainer;
+            CueOnExecute = cueOnExecute;
+            CueOnRemove = cueOnRemove;
+            CueOnAdd = cueOnAdd;
+            Modifiers = modifiers;
+            Executions = executions;
+        }
+            
         public void TriggerCueOnAdd()
         {
-            if (CueOnAdd.Count > 0)
-                CueOnAdd.ForEach(cue => cue.Trigger());
+            if (CueOnAdd.Length > 0)
+            {
+                foreach (var cue in CueOnAdd)
+                {
+                    cue.Trigger();
+                }
+            }
         }
 
         public void TriggerCueOnExecute()
         {
-            if (CueOnExecute.Count > 0)
-                CueOnExecute.ForEach(cue => cue.Trigger());
+            if (CueOnExecute.Length > 0)
+            {
+                foreach (var cue in CueOnExecute)
+                {
+                    cue.Trigger();
+                }
+            }
         }
 
         public void TriggerCueOnRemove()
         {
-            if (CueOnRemove.Count > 0)
-                CueOnRemove.ForEach(cue => cue.Trigger());
+            if (CueOnRemove.Length > 0)
+            {
+                foreach (var cue in CueOnRemove)
+                {
+                    cue.Trigger();
+                }
+            }
         }
 
         public bool CanApplyTo(AbilitySystemComponent target)
