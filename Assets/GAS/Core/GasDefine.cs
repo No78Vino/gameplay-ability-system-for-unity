@@ -18,7 +18,7 @@ namespace GAS.Core
         public const string GAS_ATTRIBUTESET_CLASS_CSHARP_SCRIPT_NAME = "AttributeSetClass.gen.cs";
         
         public static string GAS_ASSET_PATH => $"Assets/{GAS_ASSET_FOLDER_NAME}";
-        public static string GAS_SYSTEM_ASSET_PATH => $"{GAS_ASSET_PATH}/GASSystemAsset.asset";
+        public static string GAS_SYSTEM_ASSET_PATH => $"{GAS_ASSET_PATH}/GASSettingAsset.asset";
         public static string GAS_TAG_ASSET_PATH => $"{GAS_ASSET_PATH}/GameplayTagsAsset.asset";
         public static string GAS_ATTRIBUTE_ASSET_PATH => $"{GAS_ASSET_PATH}/AttributeAsset.asset";
         public static string GAS_ATTRIBUTESET_ASSET_PATH => $"{GAS_ASSET_PATH}/AttributeSetAsset.asset";

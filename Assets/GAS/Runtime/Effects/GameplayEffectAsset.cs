@@ -6,12 +6,16 @@ using UnityEngine;
 
 namespace GAS.Runtime.Effects
 {
+    [CreateAssetMenu(fileName = "GameplayEffect", menuName = "GAS/GameplayEffect")]
     public class GameplayEffectAsset:ScriptableObject
     {
         public string Name;
+        public string Description;
         public EffectsDurationPolicy DurationPolicy;
         public float Duration;
         public float Period;
+        public GameplayEffectAsset PeriodExecution;
+        
         public GameplayEffectTagContainer TagContainer;
         
         // Cues
@@ -22,6 +26,6 @@ namespace GAS.Runtime.Effects
         public  List<GameplayEffectModifier> Modifiers;
         public  List<ExecutionCalculation> _executions;
         
-        public GameplayEffectAsset PeriodExecution;
+
     }
 }
