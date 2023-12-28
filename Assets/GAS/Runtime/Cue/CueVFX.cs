@@ -3,20 +3,21 @@ using UnityEngine;
 
 namespace GAS.Runtime.Cue
 {
-    public class CuePlayAnimation : GameplayCue
+    public class CueVFX: GameplayCue
     {
-        [SerializeField] private string _animationName;
-        private Animator _animator;
-
+        [SerializeField] GameObject _vfx;
+        
         public override void Init(AbilitySystemComponent source)
         {
             base.Init(source);
-            _animator = source.GetComponent<Animator>();
         }
-
+        
         public override void Trigger()
         {
-            _animator.Play(_animationName);
+            if (_vfx != null)
+            {
+                Instantiate(_vfx, _source.transform);
+            }
         }
     }
 }

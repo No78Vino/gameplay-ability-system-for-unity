@@ -50,8 +50,9 @@ namespace GAS.Editor.AttributeSet
 
                 EditorGUILayout.EndHorizontal();
 
-                for (var j = 0; j < Asset.AttributeSetConfigs[i].AttributeNames.Count; j++)
-                    EditorGUILayout.LabelField($"       ||--> {Asset.AttributeSetConfigs[i].AttributeNames[j]}");
+                foreach (var t in Asset.AttributeSetConfigs[i].AttributeNames)
+                    EditorGUILayout.LabelField($"       ||--> {t}");
+
                 EditorGUILayout.EndVertical();
             }
         }

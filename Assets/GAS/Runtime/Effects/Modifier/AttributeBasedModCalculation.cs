@@ -1,63 +1,52 @@
-﻿namespace GAS.Runtime.Effects.Modifier
+﻿using UnityEngine;
+namespace GAS.Runtime.Effects.Modifier
 {
-    public class AttributeBasedModCalculation:ModifierMagnitudeCalculation
+    [CreateAssetMenu(fileName = "AttributeBasedModCalculation", menuName = "GAS/MMC/AttributeBasedModCalculation")]
+    public class AttributeBasedModCalculation : ModifierMagnitudeCalculation
     {
         public enum AttributeFrom
         {
             Source,
             Target
         }
-        
+
         public enum GEAttributeCaptureType
         {
             SnapShot,
-            Track,
-        }
-        
-        public readonly string AttributeName;
-        public readonly string AttributeSetName;
-        public readonly string AttributeShortName;
-        public AttributeFrom AttributeFromType;
-        public readonly GEAttributeCaptureType CaptureType;
-        
-        public AttributeBasedModCalculation(GameplayEffectSpec spec,string attributeName, AttributeFrom attributeFromType,GEAttributeCaptureType captureType) : base(spec)
-        {
-            AttributeName = attributeName;
-            var split = attributeName.Split('.');
-            AttributeSetName = split[0];
-            AttributeShortName = split[1];
-            AttributeFromType = attributeFromType;
-            CaptureType = captureType;
+            Track
         }
 
+        [SerializeField] public string attributeName;
+        [SerializeField] public string attributeSetName;
+        [SerializeField] public string attributeShortName;
+        [SerializeField] public AttributeFrom attributeFromType;
+        [SerializeField] public GEAttributeCaptureType captureType;
 
         public override float CalculateMagnitude(params float[] modifierValue)
         {
-            if(AttributeFromType == AttributeFrom.Source)
+            if (attributeFromType == AttributeFrom.Source)
             {
-                if(CaptureType == GEAttributeCaptureType.SnapShot)
+                if (captureType == GEAttributeCaptureType.SnapShot)
                 {
-                    var attribute = _spec.Source.DataSnapshot()[AttributeName];
+                    var attribute = _spec.Source.DataSnapshot()[attributeName];
                     return attribute;
                 }
                 else
                 {
-                    var attribute = _spec.Source.GetAttributeCurrentValue(AttributeSetName, AttributeShortName);
+                    var attribute = _spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
                     return attribute ?? 1;
                 }
             }
+
+            if (captureType == GEAttributeCaptureType.SnapShot)
+            {
+                var attribute = _spec.Owner.DataSnapshot()[attributeName];
+                return attribute;
+            }
             else
             {
-                if(CaptureType == GEAttributeCaptureType.SnapShot)
-                {
-                    var attribute = _spec.Owner.DataSnapshot()[AttributeName];
-                    return attribute;
-                }
-                else
-                {
-                    var attribute = _spec.Owner.GetAttributeCurrentValue(AttributeSetName, AttributeShortName);
-                    return attribute ?? 1;
-                }
+                var attribute = _spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                return attribute ?? 1;
             }
         }
     }

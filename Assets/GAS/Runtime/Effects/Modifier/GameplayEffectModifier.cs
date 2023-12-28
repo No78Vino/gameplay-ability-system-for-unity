@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.Tags;
 
@@ -11,15 +12,16 @@ namespace GAS.Runtime.Effects.Modifier
         Override
     }
 
+    [Serializable]
     public struct GameplayEffectModifier
     {
-        public readonly string AttributeName;
-        public readonly string AttributeSetName;
-        public readonly string AttributeShortName;
-        public readonly float ModiferMagnitude;
+        public string AttributeName;
+        public string AttributeSetName;
+        public string AttributeShortName;
+        public float ModiferMagnitude;
         
-        public readonly GEOperation Operation;
-        public readonly ModifierMagnitudeCalculation MMC;
+        public  GEOperation Operation;
+        public  ModifierMagnitudeCalculation MMC;
         
         // TODO
         // public readonly GameplayTagSet SourceTag;
@@ -30,7 +32,8 @@ namespace GAS.Runtime.Effects.Modifier
         public GameplayEffectModifier(
             string attributeName, 
             float modiferMagnitude,
-            GEOperation operation)
+            GEOperation operation,
+            ModifierMagnitudeCalculation mmc)
         {
             AttributeName = attributeName;
             var splits = attributeName.Split('.');
@@ -38,9 +41,7 @@ namespace GAS.Runtime.Effects.Modifier
             AttributeShortName = splits[1];
             ModiferMagnitude = modiferMagnitude;
             Operation = operation;
-            
-            // TODO
-            MMC = null;
+            MMC = mmc;
         }
         
         public GameplayEffectModifier(GameplayEffectModifier modifier)

@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _asc = GetComponent<AbilitySystemComponent>();
-        var ability = new AbilityMove();
+        //var ability = new AbilityMove();
         _asc.Init();
         //AttrSet_Fight attrSet = new AttrSet_Fight();
         onMove = OnMove;

@@ -25,6 +25,7 @@ namespace GAS.Editor.Tags
             writer.WriteLine("//// This is a generated file. ////");
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("namespace GAS.Runtime.Tags");
             writer.WriteLine("{");
             writer.WriteLine("public static class GameplayTagSumCollection");
@@ -36,7 +37,18 @@ namespace GAS.Editor.Tags
                 var validName = MakeValidIdentifier(tag.Name);
                 writer.WriteLine($"    public static GameplayTag {validName} {{ get;}} = new GameplayTag(\"{tag.Name}\");");
             }
-
+            
+            writer.WriteLine("");
+            
+            writer.WriteLine("      public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>");
+            writer.WriteLine("      {");
+            foreach (var tag in tags)
+            {
+                var validName = MakeValidIdentifier(tag.Name);
+                writer.WriteLine($"         [\"{tag.Name}\"] = {validName},");   
+            }
+            writer.WriteLine("      };");
+            
             writer.WriteLine("}");
             writer.WriteLine("}");
 

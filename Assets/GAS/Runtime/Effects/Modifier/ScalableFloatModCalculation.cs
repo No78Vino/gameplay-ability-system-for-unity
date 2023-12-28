@@ -1,19 +1,18 @@
-﻿namespace GAS.Runtime.Effects.Modifier
+﻿using System;
+using UnityEngine;
+using UnityEngine.Serialization;
+
+namespace GAS.Runtime.Effects.Modifier
 {
+    [CreateAssetMenu(fileName = "ScalableFloatModCalculation", menuName = "GAS/MMC/ScalableFloatModCalculation")]
     public class ScalableFloatModCalculation:ModifierMagnitudeCalculation
     {
-        private float _k;
-        private float _b;
+        [SerializeField] private float k;
+        [SerializeField] private float b;
         
-        public ScalableFloatModCalculation(GameplayEffectSpec spec,float k,float b) : base(spec)
-        {
-            _k = k;
-            _b = b;
-        }
-
         public override float CalculateMagnitude(params float[] input)
         {
-            return input[0] * _k + _b;
+            return input[0] * k + b;
         }
     }
 }

@@ -38,19 +38,13 @@ namespace GAS.Editor.GameplayAbilitySystem
             EditorGUILayout.BeginVertical(GUI.skin.box);
             EditorGUILayout.LabelField("Gameplay Local Lib",EditorStyles.boldLabel);
             GUILayout.Space(3f);
-            
-            Asset.GameplayAbilityLibPath =
-                EditorGUILayout.TextField("Gameplay Ability Lib Path", Asset.GameplayAbilityLibPath);
-            
+            EditorGUILayout.LabelField("Gameplay Ability Lib Path:  "+ GASSettingAsset.GameplayAbilityLibPath);
             GUILayout.Space(3f);
-            
-            Asset.GameplayEffectLibPath =
-                EditorGUILayout.TextField("Gameplay Effect Lib Path", Asset.GameplayEffectLibPath);
-            
+            EditorGUILayout.LabelField("Gameplay Effect Lib Path:  "+ GASSettingAsset.GameplayEffectLibPath);
             GUILayout.Space(3f);
-            
-            Asset.GameplayCueLibPath =
-                EditorGUILayout.TextField("Gameplay Cue Lib Path", Asset.GameplayCueLibPath);
+            EditorGUILayout.LabelField("Gameplay Cue Lib Path:"  + GASSettingAsset.GameplayCueLibPath);
+            GUILayout.Space(3f);
+            EditorGUILayout.LabelField("MMC Lib Path:  "+GASSettingAsset.MMCLibPath);
             
             EditorGUILayout.EndVertical();
             
@@ -63,9 +57,46 @@ namespace GAS.Editor.GameplayAbilitySystem
 
         private void Save()
         {
+            CheckAllPathFolderExist();
             EditorUtility.SetDirty(Asset);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        void CheckPathFolderExist(string folderPath)
+        {
+            var folders = folderPath.Split('/');
+            if (folders[0] != "Assets")
+            {
+                EditorUtility.DisplayDialog("Error!","'Config Asset Path/Code Gen Path' must start with Assets!","OK");
+                return;
+            }
+            
+            string parentFolderPath = folders[0]; 
+            for (var i = 1; i < folders.Length; i++)
+            {
+                string newFolderName = folders[i]; 
+                if(newFolderName == "") continue;
+                
+                string newFolderPath = parentFolderPath + "/" + newFolderName;
+                if (!AssetDatabase.IsValidFolder(newFolderPath))
+                {
+                    AssetDatabase.CreateFolder(parentFolderPath, newFolderName);
+                    Debug.Log("[EX] Folder created at path: " + newFolderPath);
+                }
+                parentFolderPath += "/" + newFolderName;
+            }
+        }
+        
+        void CheckAllPathFolderExist()
+        {
+            GasDefine.CheckGasAssetFolder();
+            CheckPathFolderExist(Asset.GASConfigAssetPath);
+            CheckPathFolderExist(Asset.CodeGeneratePath);
+            CheckPathFolderExist(GASSettingAsset.GameplayAbilityLibPath);
+            CheckPathFolderExist(GASSettingAsset.GameplayEffectLibPath);
+            CheckPathFolderExist(GASSettingAsset.GameplayCueLibPath);
+            CheckPathFolderExist(GASSettingAsset.MMCLibPath);
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace GAS.Runtime.Effects.Modifier
+﻿using UnityEngine;
+
+namespace GAS.Runtime.Effects.Modifier
 {
+    [CreateAssetMenu(fileName = "SetByCallerModCalculation", menuName = "GAS/MMC/SetByCallerModCalculation")]
     public class SetByCallerModCalculation:ModifierMagnitudeCalculation
     {
-        public SetByCallerModCalculation(GameplayEffectSpec spec) : base(spec)
-        {
-        }
-
         public override float CalculateMagnitude(params float[] input)
         {
             return input[0];

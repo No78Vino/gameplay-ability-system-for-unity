@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects.Execution;
 using GAS.Runtime.Effects.Modifier;
@@ -16,7 +17,12 @@ namespace GAS.Runtime.Effects
         public float Period;
         public GameplayEffectAsset PeriodExecution;
         
-        public GameplayEffectTagContainer TagContainer;
+        // Tag Container
+        public string[] AssetTags;
+        public string[] GrantedTags;
+        public string[] ApplicationRequiredTags;
+        public string[] OngoingRequiredTags;
+        public string[] RemoveGameplayEffectsWithTags;
         
         // Cues
         public List<GameplayCue> CueOnExecute;
@@ -25,7 +31,5 @@ namespace GAS.Runtime.Effects
 
         public  List<GameplayEffectModifier> Modifiers;
         public  List<ExecutionCalculation> _executions;
-        
-
     }
 }

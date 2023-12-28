@@ -7,15 +7,14 @@ namespace Demo.Script.MyAbilitySystem.Ability
 {
     public class AbilityMove:AbstractAbility
     {
-        public AbilityMove()
-        {
-            Name = "Move";
-            //OngoingAbilityTasks.Add(new OgATMove());
-        }
         
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
         {
             return new AbilitySpecMove(this, owner);
+        }
+
+        public AbilityMove(AbilityAsset abilityAsset) : base(abilityAsset)
+        {
         }
     }
     

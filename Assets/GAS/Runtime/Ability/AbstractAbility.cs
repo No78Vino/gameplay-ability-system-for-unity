@@ -9,7 +9,7 @@ namespace GAS.Runtime.Ability
     public abstract class AbstractAbility
     {
         public virtual string Name { get;protected set; }
-
+        protected AbilityAsset _dataReference;
         public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
         public List<AsyncAbilityTask> AsyncAbilityTasks = new List<AsyncAbilityTask>();
 
@@ -23,6 +23,11 @@ namespace GAS.Runtime.Ability
         public GameplayEffect Cooldown;
 
         public GameplayEffect Cost;
+
+        public AbstractAbility(AbilityAsset abilityAsset)
+        {
+            _dataReference = abilityAsset;
+        }
         
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
     }

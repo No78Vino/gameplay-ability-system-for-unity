@@ -1,89 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
-namespace _Test
+public struct MyStruct
 {
-    public class StringListEditorWindow : EditorWindow
+    public string name;
+    public int value;
+}
+
+public class MyStructEditor : EditorWindow
+{
+    private List<MyStruct> myStructList = new List<MyStruct>();
+    private ReorderableList reorderableList;
+
+    private void OnEnable()
     {
-        private int selectedStringIndex = -1;
-        private readonly List<string> stringList = new() { "String 1", "String 2", "String 3" };
+        reorderableList = new ReorderableList(myStructList, typeof(MyStruct), true, true, true, true);
+        reorderableList.drawElementCallback += DrawListElement;
+        reorderableList.drawHeaderCallback += DrawListHeader;
+        reorderableList.elementHeightCallback += GetElementHeight;
+        reorderableList.onAddCallback += AddListItem;
+    }
 
-        private void OnGUI()
+    private void OnGUI()
+    {
+        reorderableList.DoLayoutList();
+    }
+
+    private void DrawListHeader(Rect rect)
+    {
+        EditorGUI.LabelField(rect, "MyStruct List");
+    }
+
+    private void DrawListElement(Rect rect, int index, bool isActive, bool isFocused)
+    {
+        var element = myStructList[index];
+
+        rect.y += 2;
+        rect.height = EditorGUIUtility.singleLineHeight;
+
+        EditorGUI.LabelField(new Rect(rect.x, rect.y, 50, EditorGUIUtility.singleLineHeight), "Name:");
+        element.name = EditorGUI.TextField(new Rect(rect.x + 60, rect.y, 120, EditorGUIUtility.singleLineHeight), element.name);
+
+        if (isActive)
         {
-            GUILayout.Label("String List Editor", EditorStyles.boldLabel);
-
-            // Display the list of strings
-            for (var i = 0; i < stringList.Count; i++)
-            {
-                EditorGUILayout.BeginHorizontal();
-
-                // Show the string
-                EditorGUILayout.LabelField($"String {i + 1}: {stringList[i]}");
-
-                // Edit button to modify the selected string
-                if (GUILayout.Button("Edit", GUILayout.Width(50)))
-                {
-                    selectedStringIndex = i;
-                    OpenEditStringPopup();
-                }
-
-                EditorGUILayout.EndHorizontal();
-            }
+            EditorGUI.LabelField(new Rect(rect.x, rect.y + EditorGUIUtility.singleLineHeight + 5, 50, EditorGUIUtility.singleLineHeight), "Value:");
+            element.value = EditorGUI.IntField(new Rect(rect.x + 60, rect.y + EditorGUIUtility.singleLineHeight + 5, 120, EditorGUIUtility.singleLineHeight), element.value);
         }
 
-        [MenuItem("Test/String List Editor")]
-        public static void ShowWindow()
+        myStructList[index] = element;
+
+        // 删除按钮
+        if (GUI.Button(new Rect(rect.x + rect.width - 60, rect.y, 30, EditorGUIUtility.singleLineHeight), "X"))
         {
-            GetWindow(typeof(StringListEditorWindow));
+            myStructList.RemoveAt(index);
         }
 
-        private void OpenEditStringPopup()
+        // 编辑按钮
+        if (GUI.Button(new Rect(rect.x + rect.width - 25, rect.y, 20, EditorGUIUtility.singleLineHeight), "E"))
         {
-            if (selectedStringIndex >= 0 && selectedStringIndex < stringList.Count)
-            {
-                // Open a custom editor window to edit the selected string
-                var window = CreateInstance<StringEditWindow>();
-                window.Init(stringList[selectedStringIndex], UpdateString);
-                window.ShowUtility();
-            }
-        }
-
-        private void UpdateString(string updatedString)
-        {
-            if (selectedStringIndex >= 0 && selectedStringIndex < stringList.Count)
-                stringList[selectedStringIndex] = updatedString;
+            ShowEditWindow(index);
         }
     }
 
-// Custom editor window to edit strings
-    public class StringEditWindow : EditorWindow
+    private float GetElementHeight(int index)
     {
-        private Action<string> callback;
-        private string editedString = "";
+        return reorderableList.index == index ? EditorGUIUtility.singleLineHeight * 2 + 5 : EditorGUIUtility.singleLineHeight;
+    }
 
-        private void OnGUI()
-        {
-            EditorGUILayout.LabelField("Edit String", EditorStyles.boldLabel);
+    private void AddListItem(ReorderableList list)
+    {
+        myStructList.Add(new MyStruct());
+    }
 
-            // Display the input field to edit the string
-            editedString = EditorGUILayout.TextField("String Value:", editedString);
+    private void ShowEditWindow(int index)
+    {
+        // 实现弹出窗口的编辑功能
+        Debug.Log("Editing item at index: " + index);
+    }
 
-            EditorGUILayout.Space();
-
-            // Save button to apply changes
-            if (GUILayout.Button("Save"))
-            {
-                callback?.Invoke(editedString);
-                Close();
-            }
-        }
-
-        public void Init(string initialString, Action<string> callback)
-        {
-            editedString = initialString;
-            this.callback = callback;
-        }
+    [MenuItem("Test Window/MyStruct Editor")]
+    public static void ShowWindow()
+    {
+        GetWindow<MyStructEditor>("MyStruct Editor");
     }
 }

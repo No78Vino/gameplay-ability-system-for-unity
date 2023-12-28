@@ -1,12 +1,13 @@
 ﻿using GAS.Runtime.Tags;
+using UnityEngine;
 
 namespace GAS.Runtime.Effects.Modifier
 {
-    public abstract class ModifierMagnitudeCalculation
+    public abstract class ModifierMagnitudeCalculation:ScriptableObject
     {
         protected GameplayEffectSpec _spec;
         
-        public ModifierMagnitudeCalculation(GameplayEffectSpec spec)
+        public void Init(GameplayEffectSpec spec)
         {
             _spec = spec;
         }
