@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -11,16 +12,33 @@ namespace GAS.Editor.General
         private List<T> _itemList = new List<T>();
         private ReorderableList reorderableList;
         private Action<int, T> _onEdit;
-        private Action<Rect,T> _itemGUIDraw;
+        private Action<Rect,T,int> _itemGUIDraw;
         private ReorderableList.ElementHeightCallbackDelegate _getElementHeight;
         
         public CustomReorderableList(
             List<T> itemList ,
             Action<int,T> onEdit,
-            Action<Rect,T> itemGUIDraw,
+            Action<Rect,T,int> itemGUIDraw,
             ReorderableList.ElementHeightCallbackDelegate getElementHeight)
         {
             _itemList = itemList;
+            _onEdit = onEdit;
+            _itemGUIDraw = itemGUIDraw;
+            _getElementHeight = getElementHeight;
+            OnEnable();
+        }
+        
+        public CustomReorderableList(
+            T[] itemList ,
+            Action<int,T> onEdit,
+            Action<Rect,T,int> itemGUIDraw,
+            ReorderableList.ElementHeightCallbackDelegate getElementHeight)
+        {
+            _itemList = new List<T>();
+            foreach (var t in itemList)
+            {
+                _itemList.Add(t);
+            }
             _onEdit = onEdit;
             _itemGUIDraw = itemGUIDraw;
             _getElementHeight = getElementHeight;
@@ -55,7 +73,7 @@ namespace GAS.Editor.General
             EditorGUILayout.BeginHorizontal();
             
             EditorGUILayout.BeginVertical(GUILayout.Width(300));
-            _itemGUIDraw?.Invoke(rect,element);
+            _itemGUIDraw?.Invoke(rect,element,index);
             EditorGUILayout.EndVertical();
 
             if (_onEdit != null)
@@ -81,7 +99,16 @@ namespace GAS.Editor.General
         public static CustomReorderableList<T> Create(
             List<T> itemList ,
             Action<int,T> onEdit,
-            Action<Rect,T> itemGUIDraw,
+            Action<Rect,T,int> itemGUIDraw,
+            ReorderableList.ElementHeightCallbackDelegate getElementHeight = null)
+        {
+            return new CustomReorderableList<T>(itemList,onEdit,itemGUIDraw,getElementHeight);
+        }
+        
+        public static CustomReorderableList<T> Create(
+            T[] itemList ,
+            Action<int,T> onEdit,
+            Action<Rect,T,int> itemGUIDraw,
             ReorderableList.ElementHeightCallbackDelegate getElementHeight = null)
         {
             return new CustomReorderableList<T>(itemList,onEdit,itemGUIDraw,getElementHeight);

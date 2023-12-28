@@ -341,7 +341,7 @@ namespace GAS.Editor.Effect
             return EditorGUIUtility.singleLineHeight * 2 + 10;
         }
         
-        void OnModifierDrawGUI(Rect rect,GameplayEffectModifier mod)
+        void OnModifierDrawGUI(Rect rect,GameplayEffectModifier mod,int index)
         {
             string attributeName = string.IsNullOrEmpty(mod.AttributeName)? "None":mod.AttributeName;
             string operation = mod.Operation.ToString();
