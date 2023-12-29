@@ -12,6 +12,15 @@ namespace GAS.Runtime.Tags
         
         public bool Empty => Tags.Length == 0;
         
+        public GameplayTagSet(string[] tagNames)
+        {
+            Tags = new GameplayTag[tagNames.Length];
+            for (var i = 0; i < tagNames.Length; i++)
+            {
+                Tags[i] = new GameplayTag(tagNames[i]);
+            }
+        }
+        
         public GameplayTagSet(params GameplayTag[] tags)
         {
             Tags = tags;

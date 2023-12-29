@@ -38,6 +38,8 @@ namespace GAS.Editor.GameplayAbilitySystem
             EditorGUILayout.BeginVertical(GUI.skin.box);
             EditorGUILayout.LabelField("Gameplay Local Lib",EditorStyles.boldLabel);
             GUILayout.Space(3f);
+            EditorGUILayout.LabelField("AbilitySystemComponent Lib Path:  "+ GASSettingAsset.ASCLibPath);
+            GUILayout.Space(3f);
             EditorGUILayout.LabelField("Gameplay Ability Lib Path:  "+ GASSettingAsset.GameplayAbilityLibPath);
             GUILayout.Space(3f);
             EditorGUILayout.LabelField("Gameplay Effect Lib Path:  "+ GASSettingAsset.GameplayEffectLibPath);
@@ -93,6 +95,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             GasDefine.CheckGasAssetFolder();
             CheckPathFolderExist(Asset.GASConfigAssetPath);
             CheckPathFolderExist(Asset.CodeGeneratePath);
+            CheckPathFolderExist(GASSettingAsset.ASCLibPath);
             CheckPathFolderExist(GASSettingAsset.GameplayAbilityLibPath);
             CheckPathFolderExist(GASSettingAsset.GameplayEffectLibPath);
             CheckPathFolderExist(GASSettingAsset.GameplayCueLibPath);

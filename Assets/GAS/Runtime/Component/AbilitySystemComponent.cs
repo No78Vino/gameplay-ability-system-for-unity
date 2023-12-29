@@ -12,11 +12,12 @@ namespace GAS.Runtime.Component
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
+        public AbilitySystemComponentPreset Preset;
         private AbilityContainer _abilityContainer;
         private AttributeSetContainer _attributeSetContainer;
         private GameplayTagCollection _tagCollection;
 
-        public float Level { get; }
+        public float Level { get; private set; }
         
         public GameplayEffectContainer GameplayEffectContainer { get; private set; }
 
@@ -42,6 +43,10 @@ namespace GAS.Runtime.Component
 
         public void Init()
         {
+            if (Preset != null)
+            {
+                
+            }
         }
         
         public bool HasAllTags(GameplayTagSet tags)
@@ -87,7 +92,6 @@ namespace GAS.Runtime.Component
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
-
 
         public void GrantAbility(AbstractAbility ability)
         {

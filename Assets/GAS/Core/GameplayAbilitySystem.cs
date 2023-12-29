@@ -11,11 +11,11 @@ namespace GAS.Core
 
         private GameplayAbilitySystem()
         {
-            AbilitySystemComponents = new List<AbilitySystemComponent>();
+            AbilitySystemComponents = new List<IAbilitySystemComponent>();
             GasHost.gameObject.SetActive(true);
         }
 
-        public List<AbilitySystemComponent> AbilitySystemComponents { get; }
+        public List<IAbilitySystemComponent> AbilitySystemComponents { get; }
 
         private GasHost GasHost
         {
@@ -39,7 +39,7 @@ namespace GAS.Core
 
         public bool IsPaused => !GasHost.enabled;
 
-        public void Register(AbilitySystemComponent abilitySystemComponent)
+        public void Register(IAbilitySystemComponent abilitySystemComponent)
         {
             if (!GasHost.enabled)
             {
@@ -51,7 +51,7 @@ namespace GAS.Core
             AbilitySystemComponents.Add(abilitySystemComponent);
         }
 
-        public bool Unregister(AbilitySystemComponent abilitySystemComponent)
+        public bool Unregister(IAbilitySystemComponent abilitySystemComponent)
         {
             if (!GasHost.enabled)
             {

@@ -22,6 +22,7 @@ namespace GAS.Core
         public const string GAS_GAMEPLAYABILITY_CLASS_CSHARP_SCRIPT_NAME = "GameplayAbilityClass.gen.cs";
         
         
+        public const string GAS_ASC_LIBRARY_FOLDER = "AbilitySystemComponentLib";
         
         public const string GAS_EFFECT_LIBRARY_FOLDER = "GameplayEffectLib";
         

@@ -27,7 +27,7 @@ namespace GAS.Runtime.Ability
             var abilitySpec = ability.CreateSpec(_owner);
             _abilities.Add(ability.Name, abilitySpec);
             
-            _owner.AddTags(abilitySpec.Ability.tag.ActivationOwnedTag);
+            _owner.AddTags(abilitySpec.Ability.Tag.ActivationOwnedTag);
         }
         
         public void RemoveAbility(AbstractAbility ability)
@@ -40,7 +40,7 @@ namespace GAS.Runtime.Ability
             if (!_abilities.ContainsKey(abilityName)) return;
             
             EndAbility(abilityName);
-            _owner.RemoveTags(_abilities[abilityName].Ability.tag.ActivationOwnedTag);
+            _owner.RemoveTags(_abilities[abilityName].Ability.Tag.ActivationOwnedTag);
             _abilities.Remove(abilityName);
         }
         

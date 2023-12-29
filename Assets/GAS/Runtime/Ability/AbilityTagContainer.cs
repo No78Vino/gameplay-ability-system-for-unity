@@ -26,5 +26,30 @@ namespace GAS.Runtime.Ability
         
         public GameplayTagSet TargetRequiredTags;
         public GameplayTagSet TargetBlockedTags;
+
+        public AbilityTagContainer(
+            GameplayTag[] assetTags, 
+            GameplayTag[] cancelAbilityTags,
+            GameplayTag[] blockAbilityTags, 
+            GameplayTag[] activationOwnedTag, 
+            GameplayTag[] activationRequiredTags,
+            GameplayTag[] activationBlockedTags, 
+            GameplayTag[] sourceRequiredTags, 
+            GameplayTag[] sourceBlockedTags,
+            GameplayTag[] targetRequiredTags, 
+            GameplayTag[] targetBlockedTags)
+        {
+            AssetTag = new GameplayTagSet(assetTags);
+            CancelAbilityTags = new GameplayTagSet(cancelAbilityTags);
+            BlockAbilityTags = new GameplayTagSet(blockAbilityTags);
+            ActivationOwnedTag = new GameplayTagSet(activationOwnedTag);
+            ActivationRequiredTags = new GameplayTagSet(activationRequiredTags);
+            ActivationBlockedTags = new GameplayTagSet(activationBlockedTags);
+            SourceRequiredTags = new GameplayTagSet(sourceRequiredTags);
+            SourceBlockedTags = new GameplayTagSet(sourceBlockedTags);
+            TargetRequiredTags = new GameplayTagSet(targetRequiredTags);
+            TargetBlockedTags = new GameplayTagSet(targetBlockedTags);
+        }
+
     }
 }

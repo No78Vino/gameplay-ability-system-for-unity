@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using GAS.Editor.General;
+using GAS.Editor.Tags;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Effects;
+using GAS.Runtime.Tags;
 using UnityEditor;
 using UnityEngine;
 
 namespace GAS.Editor.Ability
 {
     [CustomEditor(typeof(AbilityAsset))]
-    public class AbilityAssetEditor:UnityEditor.Editor
+    public class AbilityAssetEditor : UnityEditor.Editor
     {
-        AbilityAsset Asset  => (AbilityAsset)target;
-        
-        CustomReorderableList<GameplayEffectAsset> _usedGameplayEffects;
-        
-        CustomReorderableList<string>[] _tagGroup = new CustomReorderableList<string>[10];
-        bool[] _tagGroupFoldout = new bool[10];
-        string[] _tagGroupTitle = new string[10]
+        private readonly bool[] _tagGroupFoldout = new bool[10];
+
+        private readonly string[] _tagGroupTitle = new string[10]
         {
             "AssetTag",
             "CancelAbilityTags",
@@ -28,27 +26,49 @@ namespace GAS.Editor.Ability
             "SourceRequiredTags",
             "SourceBlockedTags",
             "TargetRequiredTags",
-            "TargetBlockedTags",
+            "TargetBlockedTags"
         };
-        
-        
 
+        private readonly ArraySetFromChoicesAsset<GameplayTag>[] _tagGroupAsset =
+            new ArraySetFromChoicesAsset<GameplayTag>[10];
+
+        private ScriptableObjectReorderableList<GameplayEffectAsset> _usedGameplayEffects;
+
+        private List<GameplayTag> tagChoices = new List<GameplayTag>();
+        private AbilityAsset Asset => (AbilityAsset)target;
 
         private void OnEnable()
         {
-            _usedGameplayEffects =
-                CustomReorderableList<GameplayEffectAsset>.Create(Asset.UsedGameplayEffects, null, OnGEGUIDraw);
-            
-            _tagGroup[0] = CustomReorderableList<string>.Create(Asset.AssetTag, null, OnTagGUIDraw);
-            _tagGroup[1] = CustomReorderableList<string>.Create(Asset.CancelAbilityTags, null, OnTagGUIDraw);
-            _tagGroup[2] = CustomReorderableList<string>.Create(Asset.BlockAbilityTags, null, OnTagGUIDraw);
-            _tagGroup[3] = CustomReorderableList<string>.Create(Asset.ActivationOwnedTag, null, OnTagGUIDraw);
-            _tagGroup[4] = CustomReorderableList<string>.Create(Asset.ActivationRequiredTags, null, OnTagGUIDraw);
-            _tagGroup[5] = CustomReorderableList<string>.Create(Asset.ActivationBlockedTags, null, OnTagGUIDraw);
-            _tagGroup[6] = CustomReorderableList<string>.Create(Asset.SourceRequiredTags, null, OnTagGUIDraw);
-            _tagGroup[7] = CustomReorderableList<string>.Create(Asset.SourceBlockedTags, null, OnTagGUIDraw);
-            _tagGroup[8] = CustomReorderableList<string>.Create(Asset.TargetRequiredTags, null, OnTagGUIDraw);
-            _tagGroup[9] = CustomReorderableList<string>.Create(Asset.TargetBlockedTags, null, OnTagGUIDraw);
+            tagChoices = TagEditorUntil.GetTagChoice();
+
+            _usedGameplayEffects = new ScriptableObjectReorderableList<GameplayEffectAsset>(
+                Asset.UsedGameplayEffects, "UsedGameplayEffects");
+
+            for (var i = 0; i < _tagGroupAsset.Length; i++)
+            {
+                var initTags = i switch
+                {
+                    0 => Asset.AssetTag,
+                    1 => Asset.CancelAbilityTags,
+                    2 => Asset.BlockAbilityTags,
+                    3 => Asset.ActivationOwnedTag,
+                    4 => Asset.ActivationRequiredTags,
+                    5 => Asset.ActivationBlockedTags,
+                    6 => Asset.SourceRequiredTags,
+                    7 => Asset.SourceBlockedTags,
+                    8 => Asset.TargetRequiredTags,
+                    9 => Asset.TargetBlockedTags,
+                    _ => Array.Empty<GameplayTag>()
+                };
+
+                _tagGroupAsset[i] =
+                    new ArraySetFromChoicesAsset<GameplayTag>(initTags, tagChoices, _tagGroupTitle[i], null);
+            }
+        }
+
+        private void OnValidate()
+        {
+            Save();
         }
 
         public override void OnInspectorGUI()
@@ -61,7 +81,7 @@ namespace GAS.Editor.Ability
                 Asset.Name = EditorGUILayout.TextField("", Asset.Name);
             }
 
-            using (new EditorGUILayout.FadeGroupScope(0.5f))
+            using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.LabelField("Description", GUILayout.Width(70f));
                 Asset.Description = EditorGUILayout.TextField("", Asset.Description);
@@ -70,25 +90,25 @@ namespace GAS.Editor.Ability
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
                 EditorGUILayout.LabelField("GameplayEffect", EditorStyles.boldLabel);
-                
+
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Cost", GUILayout.Width(70f));
                 Asset.Cost =
                     (GameplayEffectAsset)EditorGUILayout.ObjectField("", Asset.Cost, typeof(GameplayEffectAsset),
                         false);
                 EditorGUILayout.EndHorizontal();
-                
+
                 EditorGUILayout.Space(5);
-                
+
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Cooldown", GUILayout.Width(70f));
                 Asset.Cooldown =
                     (GameplayEffectAsset)EditorGUILayout.ObjectField("", Asset.Cooldown, typeof(GameplayEffectAsset),
                         false);
                 EditorGUILayout.EndHorizontal();
-                
+
                 EditorGUILayout.Space(5);
-                
+
                 EditorGUILayout.LabelField("UsedGameplayEffect:");
                 _usedGameplayEffects.OnGUI();
             }
@@ -99,64 +119,71 @@ namespace GAS.Editor.Ability
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(" ", GUILayout.Width(20f));
-                
+
                 EditorGUILayout.BeginVertical();
-                for (int i = 0; i < _tagGroup.Length; i++)
+                for (var i = 0; i < _tagGroupAsset.Length; i++)
                 {
                     _tagGroupFoldout[i] = EditorGUILayout.Foldout(_tagGroupFoldout[i], _tagGroupTitle[i]);
-                    if (_tagGroupFoldout[i])
-                    {
-                        _tagGroup[i].OnGUI();
-                    }
+                    if (_tagGroupFoldout[i]) _tagGroupAsset[i].OnGUI();
                 }
+
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.EndHorizontal();
             }
 
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Save")) Save();
+
             EditorGUILayout.EndVertical();
-            // GUILayout.Space(5f);
-            // ToolBar();
-            // GUILayout.Space(3f);
-            //
-            // for (var i = 0; i < Asset.UsedGameplayEffects.Length; i++)
-            // {
-            //     EditorGUILayout.BeginHorizontal();
-            //
-            //     // Show the string
-            //     EditorGUILayout.LabelField($"No.{i} : {Asset.UsedGameplayEffects[i].name}");
-            //
-            //     // Edit button to modify the selected string
-            //     if (GUILayout.Button("Edit", GUILayout.Width(50)))
-            //     {
-            //         _selectedIndex = i;
-            //         OpenEditPopup();
-            //     }
-            //
-            //     if (GUILayout.Button("Remove", GUILayout.Width(100)))
-            //     {
-            //         _selectedIndex = i;
-            //         Remove(Asset.UsedGameplayEffects[i]);
-            //     }
-            //     
-            //     EditorGUILayout.EndHorizontal();
-            // }
         }
 
-        void OnGEGUIDraw(Rect rect, GameplayEffectAsset item,int index)
+        private void Save()
         {
-            item = EditorGUI.ObjectField(new Rect(rect.x, rect.y,
-                    300, EditorGUIUtility.singleLineHeight), item, typeof(GameplayEffectAsset),
-                false) as GameplayEffectAsset;
-            
-            _usedGameplayEffects.UpdateItem(index,item);
-        }
-        
-        void OnTagGUIDraw(Rect rect, string item,int index)
-        {
-            item = EditorGUI.TextField(new Rect(rect.x, rect.y,
-                    300, EditorGUIUtility.singleLineHeight), item);
-            
-            _tagGroup[index].UpdateItem(index,item);
+            // Check Tags
+            for (var i = 0; i < _tagGroupAsset.Length; i++)
+            {
+                var data = _tagGroupAsset[i].GetItemList();
+                switch (i)
+                {
+                    case 0:
+                        Asset.AssetTag = data.ToArray();
+                        break;
+                    case 1:
+                        Asset.CancelAbilityTags = data.ToArray();
+                        break;
+                    case 2:
+                        Asset.BlockAbilityTags = data.ToArray();
+                        break;
+                    case 3:
+                        Asset.ActivationOwnedTag = data.ToArray();
+                        break;
+                    case 4:
+                        Asset.ActivationRequiredTags = data.ToArray();
+                        break;
+                    case 5:
+                        Asset.ActivationBlockedTags = data.ToArray();
+                        break;
+                    case 6:
+                        Asset.SourceRequiredTags = data.ToArray();
+                        break;
+                    case 7:
+                        Asset.SourceBlockedTags = data.ToArray();
+                        break;
+                    case 8:
+                        Asset.TargetRequiredTags = data.ToArray();
+                        break;
+                    case 9:
+                        Asset.TargetBlockedTags = data.ToArray();
+                        break;
+                }
+            }
+
+            // Check UsedGameplayEffects
+            var usedGeData = _usedGameplayEffects.GetItemList();
+            Asset.UsedGameplayEffects = usedGeData.ToArray();
+
+            EditorUtility.SetDirty(Asset);
+            AssetDatabase.SaveAssets();
         }
     }
 }

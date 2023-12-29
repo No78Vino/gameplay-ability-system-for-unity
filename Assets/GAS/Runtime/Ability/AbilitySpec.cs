@@ -1,4 +1,5 @@
-﻿using GAS.Runtime.Component;
+﻿using System.Collections.Generic;
+using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Effects.Modifier;
 
@@ -7,8 +8,6 @@ namespace GAS.Runtime.Ability
     public abstract class AbilitySpec
     {
         private object[] _abilityArguments;
-
-        private GameplayEffectSpec _costSpec;
 
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
@@ -20,7 +19,7 @@ namespace GAS.Runtime.Ability
 
         public AbilitySystemComponent Owner { get; protected set; }
 
-        public float Level { get; }
+        public float Level { get; private set;}
 
         public bool IsActive { get; private set; }
 
@@ -36,7 +35,7 @@ namespace GAS.Runtime.Ability
 
         private bool CheckGameplayTags()
         {
-            return Owner.HasAllTags(Ability.tag.SourceRequiredTags);
+            return Owner.HasAllTags(Ability.Tag.SourceRequiredTags);
         }
 
         protected virtual CooldownTimer CheckCooldown()
@@ -55,7 +54,6 @@ namespace GAS.Runtime.Ability
             ActiveCount++;
             
             ActivateAbility(_abilityArguments);
-            Ability.AsyncAbilityTasks.ForEach(task => task.Execute(_abilityArguments));
         }
 
         public virtual void TryEndAbility()
@@ -67,9 +65,7 @@ namespace GAS.Runtime.Ability
 
         private GameplayEffectSpec CostSpec()
         {
-            if (_costSpec == null || _costSpec.Level != Level)
-                _costSpec = Owner.ApplyGameplayEffectToSelf(Ability.Cost);
-            return _costSpec;
+            return Owner.ApplyGameplayEffectToSelf(Ability.Cost);
         }
 
 
@@ -99,7 +95,7 @@ namespace GAS.Runtime.Ability
         public void Tick()
         {
             if (!IsActive) return;
-            foreach (var task in Ability.OngoingAbilityTasks) task.Execute(_abilityArguments);
+            //foreach (var task in Ability.OngoingAbilityTasks) task.Execute(_abilityArguments);
         }
         
         public abstract void ActivateAbility(params object[] args);

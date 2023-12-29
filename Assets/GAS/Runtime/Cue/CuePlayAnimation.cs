@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace GAS.Runtime.Cue
 {
+    [CreateAssetMenu(fileName = "CuePlayAnimation", menuName = "GAS/Cue/CuePlayAnimation")]
     public class CuePlayAnimation : GameplayCue
     {
         [SerializeField] private string _animationName;
