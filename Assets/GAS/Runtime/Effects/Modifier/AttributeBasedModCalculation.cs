@@ -21,6 +21,8 @@ namespace GAS.Runtime.Effects.Modifier
         [SerializeField] public string attributeShortName;
         [SerializeField] public AttributeFrom attributeFromType;
         [SerializeField] public GEAttributeCaptureType captureType;
+        [SerializeField] private float k = 1;
+        [SerializeField] private float b = 0;
 
         public override float CalculateMagnitude(params float[] modifierValue)
         {
@@ -29,24 +31,24 @@ namespace GAS.Runtime.Effects.Modifier
                 if (captureType == GEAttributeCaptureType.SnapShot)
                 {
                     var attribute = _spec.Source.DataSnapshot()[attributeName];
-                    return attribute;
+                    return attribute * k + b;
                 }
                 else
                 {
                     var attribute = _spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                    return attribute ?? 1;
+                    return (attribute ?? 1) * k + b;
                 }
             }
 
             if (captureType == GEAttributeCaptureType.SnapShot)
             {
                 var attribute = _spec.Owner.DataSnapshot()[attributeName];
-                return attribute;
+                return attribute * k + b;
             }
             else
             {
                 var attribute = _spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                return attribute ?? 1;
+                return (attribute ?? 1) * k + b;
             }
         }
     }

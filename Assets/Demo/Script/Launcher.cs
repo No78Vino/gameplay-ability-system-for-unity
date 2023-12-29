@@ -15,15 +15,6 @@ namespace Demo.Script
 
         private IEnumerator Start()
         {
-            YooAssets.Initialize();
-            var packageName = "DefaultPackage";
-            var package = YooAssets.CreatePackage(packageName);
-            YooAssets.SetDefaultPackage(package);
-
-            var initParameters = new EditorSimulateModeParameters();
-            initParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(packageName);
-            yield return package.InitializeAsync(initParameters);
-
             XUI.Launch(LoadResource);
             XUI.M.OpenWindow<MainUI>();
 
@@ -33,7 +24,18 @@ namespace Demo.Script
 
         private object LoadResource(string path, Type type)
         {
-            var obj = YooAssets.LoadAssetSync(path, type).AssetObject;
+            var split = path.Split('/');
+            int indexOfResources = Array.IndexOf(split, "Resources");
+            string resourcePath = "";
+            for (int i = indexOfResources + 1; i < split.Length; i++)
+            {
+                resourcePath += split[i];
+                if (i != split.Length - 1)
+                {
+                    resourcePath += "/";
+                }
+            }
+            var obj = Resources.Load(resourcePath, type);
             return obj;
         }
 

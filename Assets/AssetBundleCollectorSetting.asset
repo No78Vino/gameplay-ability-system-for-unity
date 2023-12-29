@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
-  m_EditorClassIdentifier: YooAsset.Editor:YooAsset.Editor:AssetBundleCollectorSetting
+  m_EditorClassIdentifier: 
   ShowPackageView: 0
   EnableAddressable: 0
   LocationToLower: 0

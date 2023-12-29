@@ -1,9 +1,8 @@
 using System;
 using UnityEditor.TreeDataModel;
 
-namespace GAS.Editor.Tags
+namespace GAS.Runtime.Tags
 {
-
 	[Serializable]
 	internal class GameplayTagTreeElement : TreeElement
 	{
