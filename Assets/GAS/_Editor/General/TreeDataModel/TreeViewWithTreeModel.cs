@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEditor.IMGUI.Controls;
-using UnityEditor.TreeDataModel;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace GAS.Tags
+namespace UnityEditor.TreeDataModel
 {
     internal class TreeViewItem<T> : TreeViewItem where T : TreeElement
     {
@@ -25,7 +23,7 @@ namespace GAS.Tags
         //-----------
 
         private const string k_GenericDragID = "GenericDragColumnDragging";
-        private readonly List<TreeViewItem> m_Rows = new List<TreeViewItem>(100);
+        private readonly List<TreeViewItem> m_Rows = new(100);
 
 
         public TreeViewWithTreeModel(TreeViewState state, TreeModel<T> model) : base(state)
