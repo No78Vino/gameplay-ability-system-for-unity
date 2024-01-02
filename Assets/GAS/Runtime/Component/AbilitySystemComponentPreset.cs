@@ -11,7 +11,8 @@ namespace GAS.Runtime.Component
         public string Name;
         public string Description;
 
+        public string[] AttributeSets;
         public GameplayTag[] BaseTags;
-        [FormerlySerializedAs("Abilities")] public AbilityAsset[] BaseAbilities;
+        public AbilityAsset[] BaseAbilities;
     }
 }
