@@ -32,7 +32,7 @@ namespace GAS.Editor.General
             }
         }
 
-        public void Init(string initialString, Action<string> callback,string tip)
+        private void Init(string initialString, Action<string> callback,string tip)
         {
             editedString = initialString;
             this.callback = callback;

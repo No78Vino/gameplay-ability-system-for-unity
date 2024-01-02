@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace GAS.Editor
 {
@@ -54,6 +56,34 @@ namespace GAS.Editor
             }
 
             return uniqueList;
+        }
+        
+        public static List<Type> GetScriptableObjectTypes(Type baseType)
+        {
+            List<Type> scriptableObjectTypes = new List<Type>();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (var assembly in assemblies)
+            {
+                try
+                {
+                    var types = assembly.GetTypes();
+
+                    foreach (var type in types)
+                    {
+                        if (type.IsSubclassOf(baseType) && type.IsDefined(typeof(CreateAssetMenuAttribute), false))
+                        {
+                            scriptableObjectTypes.Add(type);
+                        }
+                    }
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    continue;
+                }
+            }
+
+            return scriptableObjectTypes;
         }
     }
 }

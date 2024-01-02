@@ -23,7 +23,7 @@ namespace UnityEditor.TreeDataModel
         //-----------
 
         private const string k_GenericDragID = "GenericDragColumnDragging";
-        private readonly List<TreeViewItem> m_Rows = new(100);
+        private readonly List<TreeViewItem> m_Rows = new List<TreeViewItem>(100);
 
 
         public TreeViewWithTreeModel(TreeViewState state, TreeModel<T> model) : base(state)

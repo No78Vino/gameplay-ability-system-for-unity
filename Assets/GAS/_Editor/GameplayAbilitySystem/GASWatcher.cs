@@ -1,7 +1,7 @@
-﻿namespace GAS._Editor.GameplayAbilitySystem
+﻿namespace GAS.Editor.GameplayAbilitySystem
 {
     public class GASWatcher
     {
-        // TODO: Implement this
+        // TODO
     }
 }
