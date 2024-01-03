@@ -49,6 +49,6 @@ namespace GAS.Core
             }
         }
         
-        public const string GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX = "GAS.Runtime.AttributeSet.AttrSet_";
+        public const string GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX = "GAS.Runtime.AttributeSet.AS_";
     }
 }

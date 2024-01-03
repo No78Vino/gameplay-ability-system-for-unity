@@ -65,7 +65,7 @@ namespace GAS.Runtime.AttributeSet
             _attributeSets.Remove(nameof(T));
         }
         
-        bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet
+        public bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet
         {
             if(_attributeSets.TryGetValue(nameof(T), out var set))
             {

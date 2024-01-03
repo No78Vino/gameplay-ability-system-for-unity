@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GAS.Runtime.Component;
+using GAS.Runtime.Effects;
 
 namespace GAS.Runtime.Tags
 {
@@ -8,13 +9,15 @@ namespace GAS.Runtime.Tags
     {
         AbilitySystemComponent  _owner;
         private GameplayTagAggregator _gameplayTagAggregator;
-        
-        public List<GameplayTag> Tags { get; }
+
+        private List<GameplayTag> FixedTags { get; }
+        private Dictionary<GameplayTag, List<object>> DynamicAddedTags = new Dictionary<GameplayTag, List<object>>();
+        private Dictionary<GameplayTag, List<object>> DynamicRemovedTags = new Dictionary<GameplayTag, List<object>>();
         
         public GameplayTagCollection(AbilitySystemComponent owner,params GameplayTag[] tags)
         {
             _owner = owner;
-            Tags = new List<GameplayTag>(tags);
+            FixedTags = new List<GameplayTag>(tags);
             _gameplayTagAggregator = new GameplayTagAggregator(_owner);
         }
         
@@ -28,36 +31,49 @@ namespace GAS.Runtime.Tags
             _gameplayTagAggregator.UnregisterOnTagIsDirty(_owner.GameplayEffectContainer.RefreshGameplayEffectState);
         }
 
-        public void AddTag(GameplayTag tag)
+        public void AddFixedTag(GameplayTag tag)
         {
             if (HasTag(tag)) return;
-            Tags.Add(tag);
+            FixedTags.Add(tag);
         }
 
-        private void RemoveTag(GameplayTag tag)
+        public void RemoveFixedTag(GameplayTag tag)
         {
-            Tags.Remove(tag);
+            FixedTags.Remove(tag);
         }
 
-        public void AddTags(GameplayTagSet tagSet)
+        public void AddFixedTags(GameplayTagSet tagSet)
         {
             if(tagSet.Empty) return;
-            foreach (var tag in tagSet.Tags) AddTag(tag);
+            foreach (var tag in tagSet.Tags) AddFixedTag(tag);
             
             _gameplayTagAggregator.TagIsDirty(tagSet);
         }
 
-        public void RemoveTags(GameplayTagSet tagSet)
+        public void RemoveFixedTags(GameplayTagSet tagSet)
         {
             if(tagSet.Empty) return;
-            foreach (var tag in tagSet.Tags) RemoveTag(tag);
+            foreach (var tag in tagSet.Tags) RemoveFixedTag(tag);
             
             _gameplayTagAggregator.TagIsDirty(tagSet);
         }
 
+        
+        // public void AddDynamicTag(GameplayTag tag, object source)
+        // {
+        //     if (HasTag(tag)) return;
+        //     if (!DynamicAddedTags.ContainsKey(tag))
+        //     {
+        //         DynamicAddedTags.Add(tag,new List<object>());
+        //     }
+        //     DynamicAddedTags[tag].Add(source);
+        //     
+        //     _gameplayTagAggregator.TagIsDirty(new GameplayTagSet(tag));
+        // }
+        
         public bool HasTag(GameplayTag tag)
         {
-            return Tags.Any(t => t.HasTag(tag));
+            return FixedTags.Any(t => t.HasTag(tag));
         }
 
         public bool HasAllTags(GameplayTagSet other)

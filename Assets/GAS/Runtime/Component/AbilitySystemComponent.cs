@@ -17,7 +17,7 @@ namespace GAS.Runtime.Component
         private AttributeSetContainer _attributeSetContainer;
         private GameplayTagCollection _tagCollection;
 
-        public float Level { get; private set; }
+        public int Level { get; private set; }
         
         public GameplayEffectContainer GameplayEffectContainer { get; private set; }
 
@@ -55,7 +55,7 @@ namespace GAS.Runtime.Component
                 {
                     foreach (var gameplayTag in ascPreset.BaseTags)
                     {
-                        _tagCollection.AddTag(gameplayTag);
+                        _tagCollection.AddFixedTag(gameplayTag);
                     }
                 }
 
@@ -96,12 +96,12 @@ namespace GAS.Runtime.Component
 
         public void AddTags(GameplayTagSet tags)
         {
-            _tagCollection.AddTags(tags);
+            _tagCollection.AddFixedTags(tags);
         }
 
         public void RemoveTags(GameplayTagSet tags)
         {
-            _tagCollection.RemoveTags(tags);
+            _tagCollection.RemoveFixedTags(tags);
         }
 
         private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
@@ -201,6 +201,12 @@ namespace GAS.Runtime.Component
         public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
         {
             return GameplayEffectContainer.CheckCooldownFromTags(tags);
+        }
+
+        public T AttrSet<T>() where T : AttributeSet.AttributeSet
+        {
+            _attributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
+            return attrSet;
         }
     }
 }

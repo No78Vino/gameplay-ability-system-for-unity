@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GAS.Runtime.Component;
 
@@ -7,21 +8,19 @@ namespace GAS.Runtime.Tags
     {
         AbilitySystemComponent _owner;
 
-        public delegate void tagIsDirty();
-
-        private event tagIsDirty OnTagIsDirty;
+        private event Action OnTagIsDirty;
 
         public GameplayTagAggregator(AbilitySystemComponent owner)
         {
             _owner = owner;
         }
 
-        public void RegisterOnTagIsDirty(tagIsDirty tagIsDirty)
+        public void RegisterOnTagIsDirty(Action tagIsDirty)
         {
             OnTagIsDirty += tagIsDirty;
         }
         
-        public void UnregisterOnTagIsDirty(tagIsDirty tagIsDirty)
+        public void UnregisterOnTagIsDirty(Action tagIsDirty)
         {
             OnTagIsDirty -= tagIsDirty;
         }

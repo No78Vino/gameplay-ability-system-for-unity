@@ -37,26 +37,26 @@ namespace GAS.Editor.AttributeSet
             foreach (var attributeSet in attributeSetConfigs)
             {
                 var validName = EditorUtil.MakeValidIdentifier(attributeSet.Name);
-                writer.WriteLine($"public class AttrSet_{validName}:AttributeSet");
+                writer.WriteLine($"public class AS_{validName}:AttributeSet");
                 writer.WriteLine("{");
 
                 foreach (var attributeName in attributeSet.AttributeNames)
                 {
                     string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
-                    writer.WriteLine($"    private AttributeBase {validAttrName} = new AttributeBase(\"AttrSet_{validName}\",\"{attributeName}\");");
-                    writer.WriteLine($"    public AttributeBase Get{validAttrName} => {validAttrName};");
+                    writer.WriteLine($"    private AttributeBase _{validAttrName} = new AttributeBase(\"AS_{validName}\",\"{attributeName}\");");
+                    writer.WriteLine($"    public AttributeBase {validAttrName} => _{validAttrName};");
                     writer.WriteLine($"    public void Init{validAttrName}(float value)");
                     writer.WriteLine("    {");
-                    writer.WriteLine($"        {validAttrName}.SetBaseValue(value);");
-                    writer.WriteLine($"        {validAttrName}.SetCurrentValue(value);");
+                    writer.WriteLine($"        _{validAttrName}.SetBaseValue(value);");
+                    writer.WriteLine($"        _{validAttrName}.SetCurrentValue(value);");
                     writer.WriteLine("    }");
                     writer.WriteLine($"      public void SetCurrent{validAttrName}(float value)");
                     writer.WriteLine("    {");
-                    writer.WriteLine($"        {validAttrName}.SetCurrentValue(value);");
+                    writer.WriteLine($"        _{validAttrName}.SetCurrentValue(value);");
                     writer.WriteLine("    }");
                     writer.WriteLine($"      public void SetBase{validAttrName}(float value)");
                     writer.WriteLine("    {");
-                    writer.WriteLine($"        {validAttrName}.SetBaseValue(value);");
+                    writer.WriteLine($"        _{validAttrName}.SetBaseValue(value);");
                     writer.WriteLine("    }");
                 }
                 
@@ -72,7 +72,7 @@ namespace GAS.Editor.AttributeSet
                 {
                     string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
                     writer.WriteLine($"                 case \"{validAttrName}\":");
-                    writer.WriteLine($"                    return {validAttrName};");
+                    writer.WriteLine($"                    return _{validAttrName};");
                 }
                 writer.WriteLine("              }");
                 writer.WriteLine("              return null;");
@@ -82,14 +82,14 @@ namespace GAS.Editor.AttributeSet
                 writer.WriteLine("}");
             }
             
-            writer.WriteLine($"public static class AttributeSetCollection");
+            writer.WriteLine($"public static class AttrSetUtil");
             writer.WriteLine("{");
-            writer.WriteLine("    public static readonly Dictionary<string,Type> AttributeSetDict = new Dictionary<string, Type>()");
+            writer.WriteLine("    public static readonly Dictionary<string,Type> AttrSetTypeDict = new Dictionary<string, Type>()");
             writer.WriteLine("    {");
             foreach (var attributeSet in attributeSetConfigs)
             {
                 var validName = EditorUtil.MakeValidIdentifier(attributeSet.Name);
-                writer.WriteLine($"        {{\"{attributeSet.Name}\",typeof(AttrSet_{validName})}},");
+                writer.WriteLine($"        {{\"{attributeSet.Name}\",typeof(AS_{validName})}},");
             }
             writer.WriteLine("    };");
             writer.WriteLine("}");

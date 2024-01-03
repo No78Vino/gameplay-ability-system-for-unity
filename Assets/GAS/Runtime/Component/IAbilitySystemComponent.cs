@@ -35,5 +35,10 @@ namespace GAS.Runtime.Component
         
         float? GetAttributeCurrentValue(string setName,string attributeShortName);
         float? GetAttributeBaseValue(string setName,string attributeShortName);
+
+        bool TryActivateAbility(string abilityName, params object[] args);
+        void EndAbility(string abilityName);
+
+        CooldownTimer CheckCooldownFromTags(GameplayTagSet tags);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GAS.Runtime.Component;
+﻿using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Effects.Modifier;
 
@@ -19,7 +18,7 @@ namespace GAS.Runtime.Ability
 
         public AbilitySystemComponent Owner { get; protected set; }
 
-        public float Level { get; private set;}
+        public float Level { get; }
 
         public bool IsActive { get; private set; }
 
@@ -47,12 +46,12 @@ namespace GAS.Runtime.Ability
 
         public virtual void TryActivateAbility(params object[] args)
         {
-            _abilityArguments = args;
-
             if (!CanActivate()) return;
+
+            _abilityArguments = args;
             IsActive = true;
             ActiveCount++;
-            
+
             ActivateAbility(_abilityArguments);
         }
 
@@ -63,11 +62,17 @@ namespace GAS.Runtime.Ability
             EndAbility();
         }
 
+        public virtual void TryCancelAbility()
+        {
+            if (!IsActive) return;
+            IsActive = false;
+            CancelAbility();
+        }
+
         private GameplayEffectSpec CostSpec()
         {
             return Owner.ApplyGameplayEffectToSelf(Ability.Cost);
         }
-
 
         public virtual bool CheckCost()
         {
@@ -83,7 +88,8 @@ namespace GAS.Runtime.Ability
                 if (modifier.Operation != GEOperation.Add) continue;
 
                 var costValue = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
-                var attributeCurrentValue = Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
+                var attributeCurrentValue =
+                    Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
 
                 // The total attribute after accounting for cost should be >= 0 for the cost check to succeed
                 if (attributeCurrentValue + costValue < 0) return false;
@@ -94,12 +100,13 @@ namespace GAS.Runtime.Ability
 
         public void Tick()
         {
+            // TODO
             if (!IsActive) return;
             //foreach (var task in Ability.OngoingAbilityTasks) task.Execute(_abilityArguments);
         }
-        
+
         public abstract void ActivateAbility(params object[] args);
-        
+
         public abstract void CancelAbility();
 
         public abstract void EndAbility();
