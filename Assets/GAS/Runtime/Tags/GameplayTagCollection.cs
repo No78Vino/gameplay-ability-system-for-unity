@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 
@@ -21,6 +22,11 @@ namespace GAS.Runtime.Tags
             _gameplayTagAggregator = new GameplayTagAggregator(_owner);
         }
         
+        public void Init(GameplayTag[] tags)
+        {
+            FixedTags.AddRange(tags);
+        }
+        
         public void OnEnable()
         {
             _gameplayTagAggregator.RegisterOnTagIsDirty(_owner.GameplayEffectContainer.RefreshGameplayEffectState);
@@ -31,13 +37,13 @@ namespace GAS.Runtime.Tags
             _gameplayTagAggregator.UnregisterOnTagIsDirty(_owner.GameplayEffectContainer.RefreshGameplayEffectState);
         }
 
-        public void AddFixedTag(GameplayTag tag)
+        private void AddFixedTag(GameplayTag tag)
         {
             if (HasTag(tag)) return;
             FixedTags.Add(tag);
         }
 
-        public void RemoveFixedTag(GameplayTag tag)
+        private void RemoveFixedTag(GameplayTag tag)
         {
             FixedTags.Remove(tag);
         }
@@ -58,18 +64,41 @@ namespace GAS.Runtime.Tags
             _gameplayTagAggregator.TagIsDirty(tagSet);
         }
 
+        public void ApplyGameplayEffectDynamicTag(GameplayEffectSpec source)
+        {
+            bool tagIsDirty = false;
+            var grantedTagSet = source.GameplayEffect.TagContainer.GrantedTags;
+            foreach (var tag in grantedTagSet.Tags)
+            {
+                // TODO
+                // if (HasTag(tag)) return;
+                // if (!DynamicAddedTags.ContainsKey(tag))
+                // {
+                //     DynamicAddedTags.Add(tag,new List<object>());
+                //     tagIsDirty = true;
+                // }
+                // DynamicAddedTags[tag].Add(source);
+            }
+
+            if (tagIsDirty)
+            {
+                _gameplayTagAggregator.TagIsDirty(grantedTagSet);
+            }
+        }
         
-        // public void AddDynamicTag(GameplayTag tag, object source)
-        // {
-        //     if (HasTag(tag)) return;
-        //     if (!DynamicAddedTags.ContainsKey(tag))
-        //     {
-        //         DynamicAddedTags.Add(tag,new List<object>());
-        //     }
-        //     DynamicAddedTags[tag].Add(source);
-        //     
-        //     _gameplayTagAggregator.TagIsDirty(new GameplayTagSet(tag));
-        // }
+        public void ApplyGameplayAbilityDynamicTag(AbilitySpec source, GameplayTag tag)
+        {
+            // TODO
+        }
+        public void RestoreDynamicAddedTags()
+        {
+            // TODO
+        }
+        
+        public void RestoreDynamicRemovedTags()
+        {
+            // TODO
+        }
         
         public bool HasTag(GameplayTag tag)
         {

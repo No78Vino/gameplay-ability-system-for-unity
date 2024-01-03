@@ -53,10 +53,7 @@ namespace GAS.Runtime.Component
                 // Tag
                 if (ascPreset.BaseTags != null)
                 {
-                    foreach (var gameplayTag in ascPreset.BaseTags)
-                    {
-                        _tagCollection.AddFixedTag(gameplayTag);
-                    }
+                    _tagCollection.Init(ascPreset.BaseTags);
                 }
 
                 // AttributeSet
