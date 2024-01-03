@@ -48,5 +48,7 @@ namespace GAS.Core
                 Debug.Log($"[EX] {GAS_ASSET_FOLDER_NAME} folder created!");
             }
         }
+        
+        public const string GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX = "GAS.Runtime.AttributeSet.AttrSet_";
     }
 }

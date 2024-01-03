@@ -95,7 +95,7 @@ namespace GAS.Runtime.Effects
             foreach (var cue in CueOnRemove) cue.Trigger();
         }
 
-        public bool CanApplyTo(AbilitySystemComponent target)
+        public bool CanApplyTo(IAbilitySystemComponent target)
         {
             return target.HasAllTags(TagContainer.ApplicationRequiredTags);
         }

@@ -7,6 +7,8 @@ namespace GAS.Runtime.Component
 {
     public interface IAbilitySystemComponent
     {
+        void Init(AbilitySystemComponentPreset ascPreset);
+        
         bool HasAllTags(GameplayTagSet tags);
         
         bool HasAnyTags(GameplayTagSet tags);

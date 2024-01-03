@@ -22,9 +22,6 @@ namespace GAS.Editor.AttributeSet
 
         public override void OnInspectorGUI()
         {
-            Asset.AttributeSetClassGenPath =
-                EditorGUILayout.TextField("Code Gen Path", Asset.AttributeSetClassGenPath);
-            GUILayout.Space(5f);
             ToolBar();
             GUILayout.Space(3f);
 

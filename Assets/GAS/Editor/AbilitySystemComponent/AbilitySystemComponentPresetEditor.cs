@@ -1,21 +1,28 @@
-using System.Collections.Generic;
-using System.Linq;
-using GAS.Editor.General;
-using GAS.Editor.Tags;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Component;
-using GAS.Runtime.Tags;
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.AbilitySystemComponent
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AttributeSet;
+    using General;
+    using Tags;
+    using GAS.Runtime.Ability;
+    using Runtime.Component;
+    using GAS.Runtime.Tags;
+    using UnityEditor;
+    using UnityEngine;
+
     [CustomEditor(typeof(AbilitySystemComponentPreset))]
     public class AbilitySystemComponentPresetEditor : UnityEditor.Editor
     {
         private ScriptableObjectReorderableList<AbilityAsset> _baseAbilities;
+        
         private ArraySetFromChoicesAsset<GameplayTag> _baseTags;
         private List<GameplayTag> tagChoices = new List<GameplayTag>();
+        
+        private ArraySetFromChoicesAsset<string> _baseAttributeSets;
+        private List<string> _attributeSetChoices = new List<string>();
+        
         private AbilitySystemComponentPreset Asset => (AbilitySystemComponentPreset)target;
 
         private void OnEnable()
@@ -24,6 +31,10 @@ namespace GAS.Editor.AbilitySystemComponent
             _baseTags = new ArraySetFromChoicesAsset<GameplayTag>(
                 Asset.BaseTags, tagChoices, "BaseTags", null);
 
+            _attributeSetChoices = AttributeSetEditorUtil.GetAttributeSetChoice();
+            _baseAttributeSets = new ArraySetFromChoicesAsset<string>(
+                Asset.AttributeSets, _attributeSetChoices, "AttributeSets", null);
+                
             _baseAbilities = new ScriptableObjectReorderableList<AbilityAsset>(
                 Asset.BaseAbilities,
                 "BaseAbilities");
@@ -51,6 +62,8 @@ namespace GAS.Editor.AbilitySystemComponent
             _baseTags.OnGUI();
             GUILayout.Space(3f);
             _baseAbilities.OnGUI();
+            GUILayout.Space(3f);
+            _baseAttributeSets.OnGUI();
 
             GUILayout.FlexibleSpace();
 
@@ -67,6 +80,9 @@ namespace GAS.Editor.AbilitySystemComponent
             // Save BaseAbilities
             Asset.BaseAbilities = _baseAbilities.GetItemList().ToArray();
 
+            // Save BaseAttributeSets
+            Asset.AttributeSets = _baseAttributeSets.GetItemList().ToArray();
+            
             EditorUtility.SetDirty(Asset);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -96,3 +112,4 @@ namespace GAS.Editor.AbilitySystemComponent
         }
     }
 }
+#endif

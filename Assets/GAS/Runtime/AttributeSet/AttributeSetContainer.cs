@@ -34,6 +34,22 @@ namespace GAS.Runtime.AttributeSet
             }
         }
         
+        public void AddAttributeSet(Type attrSetType)
+        {
+            if (TryGetAttributeSet(attrSetType,out _)) return;
+            
+            _attributeSets.Add(attrSetType.Name,Activator.CreateInstance(attrSetType) as AttributeSet);
+            
+            var attrSet = _attributeSets[attrSetType.Name];
+            foreach (var attr in attrSet.AttributeNames)
+            {
+                if (!_attributeAggregators.ContainsKey(attrSet[attr]))
+                {
+                    _attributeAggregators.Add(attrSet[attr],new AttributeAggregator(attrSet[attr],_owner));
+                }
+            }
+        }
+        
         /// <summary>
         /// Be careful when using this method, it may cause unexpected errors(when using network sync).
         /// </summary>
@@ -54,6 +70,18 @@ namespace GAS.Runtime.AttributeSet
             if(_attributeSets.TryGetValue(nameof(T), out var set))
             {
                 attributeSet = (T)set;
+                return true;
+            }
+            
+            attributeSet = null;
+            return false;
+        }        
+        
+        bool TryGetAttributeSet(Type attrSetType,out AttributeSet attributeSet)
+        {
+            if(_attributeSets.TryGetValue(attrSetType.Name, out var set))
+            {
+                attributeSet = set;
                 return true;
             }
             

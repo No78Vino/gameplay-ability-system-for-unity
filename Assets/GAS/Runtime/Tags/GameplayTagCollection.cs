@@ -28,7 +28,7 @@ namespace GAS.Runtime.Tags
             _gameplayTagAggregator.UnregisterOnTagIsDirty(_owner.GameplayEffectContainer.RefreshGameplayEffectState);
         }
 
-        private void AddTag(GameplayTag tag)
+        public void AddTag(GameplayTag tag)
         {
             if (HasTag(tag)) return;
             Tags.Add(tag);

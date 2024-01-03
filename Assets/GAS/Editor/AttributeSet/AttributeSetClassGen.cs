@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using GAS.Core;
-using GAS.Runtime.AttributeSet;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.AttributeSet
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using GAS.Core;
+    using GAS.Runtime.AttributeSet;
+    using UnityEditor;
+    using UnityEngine;
+
+    
     public static class AttributeSetClassGen
     {
         public static void Gen()
         {
             var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GasDefine.GAS_ATTRIBUTESET_ASSET_PATH);
-            var filePath = $"{Application.dataPath}/{asset.AttributeSetClassGenPath}/{GasDefine.GAS_ATTRIBUTESET_CLASS_CSHARP_SCRIPT_NAME}";
+            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_CLASS_CSHARP_SCRIPT_NAME}";
             GenerateAttributeCollection(asset.AttributeSetConfigs, filePath);
         }
 
@@ -26,6 +29,8 @@ namespace GAS.Editor.AttributeSet
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("");
             writer.WriteLine("using GAS.Runtime.Attribute;");
+            writer.WriteLine("using System;");
+            writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("namespace GAS.Runtime.AttributeSet");
             writer.WriteLine("{");
 
@@ -77,9 +82,23 @@ namespace GAS.Editor.AttributeSet
                 writer.WriteLine("}");
             }
             
+            writer.WriteLine($"public static class AttributeSetCollection");
+            writer.WriteLine("{");
+            writer.WriteLine("    public static readonly Dictionary<string,Type> AttributeSetDict = new Dictionary<string, Type>()");
+            writer.WriteLine("    {");
+            foreach (var attributeSet in attributeSetConfigs)
+            {
+                var validName = EditorUtil.MakeValidIdentifier(attributeSet.Name);
+                writer.WriteLine($"        {{\"{attributeSet.Name}\",typeof(AttrSet_{validName})}},");
+            }
+            writer.WriteLine("    };");
+            writer.WriteLine("}");
+            
+            
             writer.WriteLine("}");
 
             Console.WriteLine($"Generated Code Script at path: {filePath}");
         }
     }
 }
+#endif

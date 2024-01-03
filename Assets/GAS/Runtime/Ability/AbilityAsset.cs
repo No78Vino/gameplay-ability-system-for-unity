@@ -9,10 +9,11 @@ namespace GAS.Runtime.Ability
     {
         public string Name;
         public string Description;
-
+        
+        public string InstanceAbilityClassFullName; 
+        
         public GameplayEffectAsset Cost;
         public GameplayEffectAsset Cooldown;
-
         public GameplayEffectAsset[] UsedGameplayEffects = new GameplayEffectAsset[0];
 
         // Tags

@@ -15,8 +15,6 @@ namespace GAS.Editor.Attributes
         
         public override void OnInspectorGUI()
         {
-            Asset.AttributeCollectionGenPath = EditorGUILayout.TextField("Code Gen Path", Asset.AttributeCollectionGenPath);
-            GUILayout.Space(5f);
             ToolBar();
             GUILayout.Space(3f);
             

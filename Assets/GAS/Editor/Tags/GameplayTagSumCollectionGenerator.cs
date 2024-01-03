@@ -13,7 +13,8 @@ namespace GAS.Editor.Tags
         public static void Gen()
         {
             var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GasDefine.GAS_TAG_ASSET_PATH);
-            var filePath = $"{Application.dataPath}/{asset.GameplayTagSumCollectionGenPath}";
+            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_COLLECTION_CSHARP_SCRIPT_NAME}";
             var tags = asset.Tags;
             GenerateGameplayTagSumCollection(tags, filePath);
         }

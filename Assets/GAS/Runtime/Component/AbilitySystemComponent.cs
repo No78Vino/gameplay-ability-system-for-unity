@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using GAS.Core;
 using GAS.Runtime.Ability;
-using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Effects.Modifier;
@@ -12,7 +12,7 @@ namespace GAS.Runtime.Component
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        public AbilitySystemComponentPreset Preset;
+        [SerializeField] private AbilitySystemComponentPreset preset;
         private AbilityContainer _abilityContainer;
         private AttributeSetContainer _attributeSetContainer;
         private GameplayTagCollection _tagCollection;
@@ -29,6 +29,11 @@ namespace GAS.Runtime.Component
             _tagCollection = new GameplayTagCollection(this);
         }
 
+        private void Start()
+        {
+            Init(preset);
+        }
+
         private void OnEnable()
         {
             GameplayAbilitySystem.GAS.Register(this);
@@ -41,11 +46,41 @@ namespace GAS.Runtime.Component
             _tagCollection.OnDisable();
         }
 
-        public void Init()
+        public void Init(AbilitySystemComponentPreset ascPreset)
         {
-            if (Preset != null)
+            if (ascPreset != null)
             {
+                // Tag
+                if (ascPreset.BaseTags != null)
+                {
+                    foreach (var gameplayTag in ascPreset.BaseTags)
+                    {
+                        _tagCollection.AddTag(gameplayTag);
+                    }
+                }
+
+                // AttributeSet
+                if(ascPreset.AttributeSets!=null)
+                {foreach (var attributeSet in ascPreset.AttributeSets)
+                {
+                    string attrSetTypeName = GasDefine.GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX + attributeSet;
+                    var attrSetType = Type.GetType(attrSetTypeName);
+                    if (attrSetType != null)
+                    {
+                        _attributeSetContainer.AddAttributeSet(attrSetType);
+                    }
+                }}
                 
+                // Ability
+                if (ascPreset.BaseAbilities != null)
+                {
+                    foreach (var abilityAsset in ascPreset.BaseAbilities)
+                    {
+                        if (!(Type.GetType(abilityAsset.InstanceAbilityClassFullName) is { } abilityType)) continue;
+                        var ability = Activator.CreateInstance(abilityType) as AbstractAbility;
+                        _abilityContainer.GrantAbility(ability);
+                    }
+                }
             }
         }
         

@@ -13,8 +13,6 @@ namespace GAS.Runtime.AttributeSet
 
     public class AttributeSetAsset : ScriptableObject
     {
-        public string AttributeSetClassGenPath = "Script/Gen/";
-        
         [SerializeField] private List<AttributeSetConfig> _attributeSetConfigs;
 
         public List<AttributeSetConfig> AttributeSetConfigs => _attributeSetConfigs;

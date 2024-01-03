@@ -34,6 +34,8 @@ namespace GAS.Editor.Ability
 
         private ScriptableObjectReorderableList<GameplayEffectAsset> _usedGameplayEffects;
 
+        private List<string> abilityChoices = new List<string>();
+        
         private List<GameplayTag> tagChoices = new List<GameplayTag>();
         private AbilityAsset Asset => (AbilityAsset)target;
 
@@ -64,6 +66,8 @@ namespace GAS.Editor.Ability
                 _tagGroupAsset[i] =
                     new ArraySetFromChoicesAsset<GameplayTag>(initTags, tagChoices, _tagGroupTitle[i], null);
             }
+
+            abilityChoices = AbilityEditorUtil.GetAbilityClassNames();
         }
 
         private void OnValidate()
@@ -86,7 +90,25 @@ namespace GAS.Editor.Ability
                 EditorGUILayout.LabelField("Description", GUILayout.Width(70f));
                 Asset.Description = EditorGUILayout.TextField("", Asset.Description);
             }
-
+            
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (abilityChoices.Count == 0)
+                {
+                    EditorGUILayout.LabelField(
+                        "<size=16><b><color=yellow>No Abilities Found!  Please,Create an ability first!</color></b></size>",
+                        new GUIStyle(GUI.skin.label) { richText = true });
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("Ability Class", GUILayout.Width(100));
+                    var index = abilityChoices.IndexOf(Asset.InstanceAbilityClassFullName);
+                    index = Mathf.Clamp(index, 0, abilityChoices.Count - 1);
+                    index = EditorGUILayout.Popup(index, abilityChoices.ToArray());
+                    Asset.InstanceAbilityClassFullName = abilityChoices[index];
+                }
+            }
+            
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
                 EditorGUILayout.LabelField("GameplayEffect", EditorStyles.boldLabel);

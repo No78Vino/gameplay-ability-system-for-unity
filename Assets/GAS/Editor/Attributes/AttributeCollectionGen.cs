@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using GAS.Core;
-using GAS.Runtime.Attribute;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Attributes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using GAS.Core;
+    using GAS.Runtime.Attribute;
+    using UnityEditor;
+    using UnityEngine;
+    
     public static class AttributeCollectionGen
     {
         public static void Gen()
         {
             var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GasDefine.GAS_ATTRIBUTE_ASSET_PATH);
-            var filePath = $"{Application.dataPath}/{asset.AttributeCollectionGenPath}/{GasDefine.GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME}";
+            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME}";
             var attributeNames = asset.AttributeNames;
             GenerateAttributeCollection(attributeNames, filePath);
         }
@@ -45,3 +47,4 @@ namespace GAS.Editor.Attributes
         }
     }
 }
+#endif

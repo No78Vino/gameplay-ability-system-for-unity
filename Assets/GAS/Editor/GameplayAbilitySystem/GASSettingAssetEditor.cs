@@ -12,16 +12,12 @@ namespace GAS.Editor.GameplayAbilitySystem
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(200));
-            
-            EditorGUILayout.LabelField("Version:",EditorStyles.boldLabel);
-            EditorGUILayout.LabelField(GasDefine.GAS_VERSION);
-            
+            EditorGUILayout.LabelField($"Version: {GasDefine.GAS_VERSION}",EditorStyles.boldLabel);
             EditorGUILayout.EndVertical();
             
-            EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(500));
+            EditorGUILayout.BeginVertical(GUI.skin.box);
 
             EditorGUILayout.BeginVertical(GUI.skin.box);
-            
             Asset.GASConfigAssetPath =
                 EditorGUILayout.TextField("Config Asset Path", Asset.GASConfigAssetPath);
             
@@ -29,7 +25,6 @@ namespace GAS.Editor.GameplayAbilitySystem
 
             Asset.CodeGeneratePath =
                 EditorGUILayout.TextField("Code Gen Path", Asset.CodeGeneratePath);
-            
             EditorGUILayout.EndVertical();
             
             GUILayout.Space(10f);
