@@ -8,10 +8,10 @@ namespace GAS.Runtime.Attribute
         public readonly string Name;
         public readonly string SetName;
         public readonly string ShortName;
-        protected Action<AttributeBase, float, float> _onPostAttributeChange;
-        protected Action<AttributeBase, float, float> _onPostGameplayEffectExecute;
-        protected Action<AttributeBase, float> _onPreAttributeChange;
-        protected Action<AttributeBase, float> _onPreGameplayEffectExecute;
+        protected event Action<AttributeBase, float, float> _onPostAttributeChange;
+        protected event Action<AttributeBase, float, float> _onPostGameplayEffectExecute;
+        protected event Action<AttributeBase, float> _onPreAttributeChange;
+        protected event Action<AttributeBase, float> _onPreGameplayEffectExecute;
         private AttributeValue _value;
 
         public AttributeBase(string attrSetName, string attrName, float value)
@@ -74,22 +74,22 @@ namespace GAS.Runtime.Attribute
             _onPostAttributeChange += action;
         }
 
-        public void UnRegisterPreGameplayEffectExecute(Action<AttributeBase, float> action)
+        public void UnregisterPreGameplayEffectExecute(Action<AttributeBase, float> action)
         {
             _onPreGameplayEffectExecute -= action;
         }
 
-        public void UnRegisterPostGameplayEffectExecute(Action<AttributeBase, float, float> action)
+        public void UnregisterPostGameplayEffectExecute(Action<AttributeBase, float, float> action)
         {
             _onPostGameplayEffectExecute -= action;
         }
 
-        public void UnRegisterPreAttributeChange(Action<AttributeBase, float> action)
+        public void UnregisterPreAttributeChange(Action<AttributeBase, float> action)
         {
             _onPreAttributeChange -= action;
         }
 
-        public void UnRegisterPostAttributeChange(Action<AttributeBase, float, float> action)
+        public void UnregisterPostAttributeChange(Action<AttributeBase, float, float> action)
         {
             _onPostAttributeChange -= action;
         }

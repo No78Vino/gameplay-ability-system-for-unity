@@ -9,13 +9,17 @@ namespace GAS.Runtime.Component
     {
         void Init(AbilitySystemComponentPreset ascPreset);
         
+        void DefaultInit();
+        
+        bool HasTag(GameplayTag tag);
+        
         bool HasAllTags(GameplayTagSet tags);
         
         bool HasAnyTags(GameplayTagSet tags);
         
-        void AddTags(GameplayTagSet tags);
+        void AddFixedTags(GameplayTagSet tags);
         
-        void RemoveTags(GameplayTagSet tags);
+        void RemoveFixedTags(GameplayTagSet tags);
 
         GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect,AbilitySystemComponent target);
         
@@ -37,8 +41,12 @@ namespace GAS.Runtime.Component
         float? GetAttributeBaseValue(string setName,string attributeShortName);
 
         bool TryActivateAbility(string abilityName, params object[] args);
-        void EndAbility(string abilityName);
+        void TryEndAbility(string abilityName);
 
         CooldownTimer CheckCooldownFromTags(GameplayTagSet tags);
+        
+        T AttrSet<T>() where T : AttributeSet.AttributeSet;
+
+        void ResetToPreset();
     }
 }

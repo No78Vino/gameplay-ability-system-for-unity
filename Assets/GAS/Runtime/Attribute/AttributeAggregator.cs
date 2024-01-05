@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using GAS.Runtime.Component;
+using GAS.Runtime.Effects;
 using GAS.Runtime.Effects.Modifier;
 
 namespace GAS.Runtime.Attribute
@@ -8,11 +10,12 @@ namespace GAS.Runtime.Attribute
     {
         AttributeBase _processedAttribute;
         AbilitySystemComponent _owner;
-        
+
         /// <summary>
         ///  the order of the modifiers is important.
         /// </summary>
-        List<GameplayEffectModifier> _modifierCahce = new List<GameplayEffectModifier>();
+        private List<Tuple<GameplayEffectSpec, GameplayEffectModifier>> _modifierCahce =
+            new List<Tuple<GameplayEffectSpec, GameplayEffectModifier>>();
         
         public AttributeAggregator(AttributeBase attribute , AbilitySystemComponent owner)
         {
@@ -30,7 +33,7 @@ namespace GAS.Runtime.Attribute
         
         void OnDispose()
         {
-            _processedAttribute.UnRegisterPostGameplayEffectExecute(UpdateCurrentValueWhenBaseValueIsDirty);
+            _processedAttribute.UnregisterPostGameplayEffectExecute(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
         
@@ -47,7 +50,7 @@ namespace GAS.Runtime.Attribute
                 {
                     if (modifier.AttributeName == _processedAttribute.Name)
                     {
-                        _modifierCahce.Add(modifier);
+                        _modifierCahce.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec,modifier));
                     }
                 }
             }
@@ -64,9 +67,11 @@ namespace GAS.Runtime.Attribute
         float CalculateNewValue()
         {
             float newValue = _processedAttribute.BaseValue;
-            foreach (var modifier in _modifierCahce)
+            foreach (var tuple in _modifierCahce)
             {
-                var magnitude = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
+                var spec = tuple.Item1;
+                var modifier = tuple.Item2;
+                var magnitude = modifier.MMC.CalculateMagnitude(spec,modifier.ModiferMagnitude);
                 switch (modifier.Operation)
                 {
                     case GEOperation.Add:

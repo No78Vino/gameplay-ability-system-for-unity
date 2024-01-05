@@ -21,10 +21,10 @@ namespace GAS.Runtime.Effects.Modifier
         [SerializeField] public string attributeShortName;
         [SerializeField] public AttributeFrom attributeFromType;
         [SerializeField] public GEAttributeCaptureType captureType;
-        [SerializeField] private float k = 1;
-        [SerializeField] private float b = 0;
+        [SerializeField] public float k = 1;
+        [SerializeField] public float b = 0;
 
-        public override float CalculateMagnitude(params float[] modifierValue)
+        protected override float CalculateMagnitude(params float[] modifierValue)
         {
             if (attributeFromType == AttributeFrom.Source)
             {

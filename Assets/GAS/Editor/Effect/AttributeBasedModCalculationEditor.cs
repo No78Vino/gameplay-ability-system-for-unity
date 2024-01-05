@@ -26,7 +26,7 @@ namespace GAS.Editor.Effect
                     {
                         var config = attributeSetConfig;
                         foreach (var fullName in attributeSetConfig.AttributeNames.Select(shortName =>
-                                     $"{config.Name}.{shortName}"))
+                                     $"AS_{config.Name}.{shortName}"))
                             _attributeOptions.Add(fullName);
                     }
                 }
@@ -69,6 +69,16 @@ namespace GAS.Editor.Effect
             EditorGUILayout.LabelField("Capture Type:", GUILayout.Width(100));
             Asset.captureType =
                 (AttributeBasedModCalculation.GEAttributeCaptureType)EditorGUILayout.EnumPopup(Asset.captureType);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("K:", GUILayout.Width(30));
+            Asset.k = EditorGUILayout.FloatField(Asset.k,GUILayout.Width(70));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("B:", GUILayout.Width(30));
+            Asset.b = EditorGUILayout.FloatField(Asset.b,GUILayout.Width(70));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndVertical();

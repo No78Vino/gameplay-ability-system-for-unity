@@ -79,6 +79,16 @@ namespace GAS.Editor.AttributeSet
                 writer.WriteLine("          }");
                 writer.WriteLine("      }");
                 
+                writer.WriteLine("");
+                writer.WriteLine("      public override string[] AttributeNames { get; } =");
+                writer.WriteLine("      {");
+                foreach (var attributeName in attributeSet.AttributeNames)
+                {
+                    string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
+                    writer.WriteLine($"          \"{validAttrName}\",");
+                }
+                writer.WriteLine("      };");
+        
                 writer.WriteLine("}");
             }
             

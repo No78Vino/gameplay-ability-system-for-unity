@@ -27,14 +27,15 @@ namespace GAS.Runtime.Ability
         public virtual bool CanActivate()
         {
             return !IsActive
-                   && CheckGameplayTags()
+                   && CheckGameplayTagsValidTpActivate()
                    && CheckCost()
                    && CheckCooldown().TimeRemaining <= 0;
         }
 
-        private bool CheckGameplayTags()
+        private bool CheckGameplayTagsValidTpActivate()
         {
-            return Owner.HasAllTags(Ability.Tag.SourceRequiredTags);
+            return Owner.HasAllTags(Ability.Tag.ActivationRequiredTags) &&
+                   Owner.HasAllTags(Ability.Tag.SourceRequiredTags);
         }
 
         protected virtual CooldownTimer CheckCooldown()
@@ -44,21 +45,25 @@ namespace GAS.Runtime.Ability
                 : Owner.CheckCooldownFromTags(Ability.Cooldown.TagContainer.GrantedTags);
         }
 
-        public virtual void TryActivateAbility(params object[] args)
+        public virtual bool TryActivateAbility(params object[] args)
         {
-            if (!CanActivate()) return;
+            if (!CanActivate()) return false;
 
             _abilityArguments = args;
             IsActive = true;
             ActiveCount++;
-
+            // Cancel Other Ability
+            Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
             ActivateAbility(_abilityArguments);
+            return true;
         }
 
         public virtual void TryEndAbility()
         {
             if (!IsActive) return;
             IsActive = false;
+
+            Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             EndAbility();
         }
 
@@ -87,7 +92,7 @@ namespace GAS.Runtime.Ability
                 // Cost can't be multiply or override ,so only care about additive.
                 if (modifier.Operation != GEOperation.Add) continue;
 
-                var costValue = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
+                var costValue = modifier.MMC.CalculateMagnitude(costSpec,modifier.ModiferMagnitude);
                 var attributeCurrentValue =
                     Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
 
@@ -102,9 +107,13 @@ namespace GAS.Runtime.Ability
         {
             // TODO
             if (!IsActive) return;
-            //foreach (var task in Ability.OngoingAbilityTasks) task.Execute(_abilityArguments);
+            AbilityTick();
         }
 
+        protected virtual void AbilityTick()
+        {
+        }
+        
         public abstract void ActivateAbility(params object[] args);
 
         public abstract void CancelAbility();

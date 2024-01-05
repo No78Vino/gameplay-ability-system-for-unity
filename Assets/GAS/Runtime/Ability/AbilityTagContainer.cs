@@ -13,8 +13,8 @@ namespace GAS.Runtime.Ability
     {
         public GameplayTagSet AssetTag;
 
-        public GameplayTagSet CancelAbilityTags;
-        public GameplayTagSet BlockAbilityTags;
+        public GameplayTagSet CancelAbilitiesWithTags;
+        public GameplayTagSet BlockAbilitiesWithTags;
 
         public GameplayTagSet ActivationOwnedTag;
         
@@ -40,8 +40,8 @@ namespace GAS.Runtime.Ability
             GameplayTag[] targetBlockedTags)
         {
             AssetTag = new GameplayTagSet(assetTags);
-            CancelAbilityTags = new GameplayTagSet(cancelAbilityTags);
-            BlockAbilityTags = new GameplayTagSet(blockAbilityTags);
+            CancelAbilitiesWithTags = new GameplayTagSet(cancelAbilityTags);
+            BlockAbilitiesWithTags = new GameplayTagSet(blockAbilityTags);
             ActivationOwnedTag = new GameplayTagSet(activationOwnedTag);
             ActivationRequiredTags = new GameplayTagSet(activationRequiredTags);
             ActivationBlockedTags = new GameplayTagSet(activationBlockedTags);

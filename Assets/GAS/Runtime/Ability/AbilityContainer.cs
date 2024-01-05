@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using GAS.Runtime.Component;
+using GAS.Runtime.Tags;
 
 namespace GAS.Runtime.Ability
 {
@@ -8,14 +10,15 @@ namespace GAS.Runtime.Ability
         AbilitySystemComponent _owner;
         private readonly Dictionary<string, AbilitySpec> _abilities = new Dictionary<string, AbilitySpec>();
         
-        public AbilityContainer(AbilitySystemComponent owner)
+        public void SetOwner(AbilitySystemComponent owner)
         {
             _owner = owner;
         }
         
         public void Tick()
         {
-            foreach (var abilitySpec in _abilities.Values)
+            var enumerable = _abilities.Values.ToArray();
+            foreach (var abilitySpec in enumerable)
             {
                 abilitySpec.Tick();
             }
@@ -26,8 +29,6 @@ namespace GAS.Runtime.Ability
             if (_abilities.ContainsKey(ability.Name)) return;
             var abilitySpec = ability.CreateSpec(_owner);
             _abilities.Add(ability.Name, abilitySpec);
-            
-            _owner.AddTags(abilitySpec.Ability.Tag.ActivationOwnedTag);
         }
         
         public void RemoveAbility(AbstractAbility ability)
@@ -40,21 +41,34 @@ namespace GAS.Runtime.Ability
             if (!_abilities.ContainsKey(abilityName)) return;
             
             EndAbility(abilityName);
-            _owner.RemoveTags(_abilities[abilityName].Ability.Tag.ActivationOwnedTag);
             _abilities.Remove(abilityName);
         }
         
         public bool TryActivateAbility(string abilityName, params object[] args)
         {
             if (!_abilities.ContainsKey(abilityName)) return false;
-            _abilities[abilityName].TryActivateAbility(args);
+            if (!_abilities[abilityName].TryActivateAbility(args)) return false;
+            CancelAbilitiesByTag(_abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags);
             return true;
+
         }
         
         public void EndAbility(string abilityName)
         {
             if (!_abilities.ContainsKey(abilityName)) return;
-            _abilities[abilityName].EndAbility();
+            _abilities[abilityName].TryEndAbility();
+        }
+        
+        void CancelAbilitiesByTag(GameplayTagSet tags)
+        {
+            foreach (var kv in _abilities)
+            {
+                var abilityTag = kv.Value.Ability.Tag;
+                if (abilityTag.AssetTag.HasAnyTags(tags))
+                {
+                    _abilities[kv.Key].TryCancelAbility();
+                }
+            }
         }
     }
 }

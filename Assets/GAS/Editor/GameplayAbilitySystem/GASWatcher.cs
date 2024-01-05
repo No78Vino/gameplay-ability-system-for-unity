@@ -34,15 +34,20 @@ namespace GAS.Editor.GameplayAbilitySystem
             "<size=16><b><color=yellow>This monitor is only available when the game is running.</color></b></size>";
 
         [BoxGroup(BOXGROUP_ASC, true, true)]
-        [TableList(AlwaysExpanded = true, HideToolbar = true, IsReadOnly = true)]
+        //[TableList(AlwaysExpanded = true, HideToolbar = true, IsReadOnly = true)]
         [ShowIf("IsPlaying")]
-        public List<IAbilitySystemComponent> AbilitySystemComponents = new List<IAbilitySystemComponent>();
-
+        [ShowInInspector]
+        public List<AbilitySystemComponent> ASC => Core.GameplayAbilitySystem.GAS.AbilitySystemComponents.ConvertAll( asc => asc as AbilitySystemComponent);
+        
         private void OnInspectorUpdate()
         {
-            if (Application.isPlaying) AbilitySystemComponents = Core.GameplayAbilitySystem.GAS.AbilitySystemComponents;
+            if (Application.isPlaying)
+            {
+                //ASC.Clear();
+                //ASC = Core.GameplayAbilitySystem.GAS.AbilitySystemComponents.ConvertAll( asc => asc as AbilitySystemComponent);
+            }
         }
-
+        
         [MenuItem("EX-GAS/Runtime GAS Watcher", priority = 3)]
         private static void OpenWindow()
         {

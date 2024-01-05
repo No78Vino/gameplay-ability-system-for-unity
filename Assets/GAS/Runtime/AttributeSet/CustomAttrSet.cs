@@ -21,6 +21,7 @@ namespace GAS.Runtime.AttributeSet
 
         public override AttributeBase this[string key] =>
             _attributes.TryGetValue(key, value: out var attribute) ? attribute : null;
-            
+
+        public override string[] AttributeNames { get; }
     }
 }

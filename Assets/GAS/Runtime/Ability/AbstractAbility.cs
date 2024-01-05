@@ -32,8 +32,8 @@ namespace GAS.Runtime.Ability
                 _dataReference.ActivationOwnedTag,_dataReference.ActivationRequiredTags,_dataReference.ActivationBlockedTags,
                 _dataReference.SourceRequiredTags,_dataReference.SourceBlockedTags,_dataReference.TargetRequiredTags,
                 _dataReference.TargetBlockedTags);
-            Cooldown = new GameplayEffect(_dataReference.Cooldown);
-            Cost = new GameplayEffect(_dataReference.Cost);
+            Cooldown = _dataReference.Cooldown?new GameplayEffect(_dataReference.Cooldown):default;
+            Cost = _dataReference.Cost?new GameplayEffect(_dataReference.Cost):default;
         }
         
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);

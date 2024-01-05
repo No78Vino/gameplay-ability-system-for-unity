@@ -15,15 +15,16 @@ namespace GAS.Runtime.Effects
 
     public readonly struct GameplayEffect
     {
+        public readonly GameplayEffectAsset Asset;
         public readonly EffectsDurationPolicy DurationPolicy;
         public readonly float Duration; // -1 represents infinite duration
         public readonly float Period;
         public readonly GameplayEffectTagContainer TagContainer;
 
         // Cues
-        private readonly GameplayCue[] CueOnExecute;
-        private readonly GameplayCue[] CueOnRemove;
-        private readonly GameplayCue[] CueOnAdd;
+        public readonly GameplayCue[] CueOnExecute;
+        public readonly GameplayCue[] CueOnRemove;
+        public readonly GameplayCue[] CueOnAdd;
 
         public readonly GameplayEffectModifier[] Modifiers;
         public readonly ExecutionCalculation[] Executions;
@@ -38,6 +39,7 @@ namespace GAS.Runtime.Effects
 
         public GameplayEffect(GameplayEffectAsset asset)
         {
+            Asset = asset;
             DurationPolicy = asset.DurationPolicy;
             Duration = asset.Duration;
             Period = asset.Period;
@@ -66,6 +68,7 @@ namespace GAS.Runtime.Effects
             GameplayEffectModifier[] modifiers,
             ExecutionCalculation[] executions)
         {
+            Asset = null;
             DurationPolicy = durationPolicy;
             Duration = duration;
             Period = period;
@@ -75,24 +78,6 @@ namespace GAS.Runtime.Effects
             CueOnAdd = cueOnAdd;
             Modifiers = modifiers;
             Executions = executions;
-        }
-
-        public void TriggerCueOnAdd()
-        {
-            if (CueOnAdd.Length <= 0) return;
-            foreach (var cue in CueOnAdd) cue.Trigger();
-        }
-
-        public void TriggerCueOnExecute()
-        {
-            if (CueOnExecute.Length <= 0) return;
-            foreach (var cue in CueOnExecute) cue.Trigger();
-        }
-
-        public void TriggerCueOnRemove()
-        {
-            if (CueOnRemove.Length <= 0) return;
-            foreach (var cue in CueOnRemove) cue.Trigger();
         }
 
         public bool CanApplyTo(IAbilitySystemComponent target)

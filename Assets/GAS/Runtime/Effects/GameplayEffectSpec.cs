@@ -90,36 +90,58 @@ namespace GAS.Runtime.Effects
         public event GameplayEffectEventHandler OnDeactivation;
         public event GameplayEffectEventHandler OnTick;
 
+        private void TriggerCueOnAdd()
+        {
+            if (GameplayEffect.CueOnAdd.Length <= 0) return;
+            foreach (var cue in GameplayEffect.CueOnAdd) cue.Trigger(Owner);
+        }
+
+        private void TriggerCueOnExecute()
+        {
+            if (GameplayEffect.CueOnExecute.Length <= 0) return;
+            foreach (var cue in GameplayEffect.CueOnExecute) cue.Trigger(Owner);
+        }
+
+        private void TriggerCueOnRemove()
+        {
+            if (GameplayEffect.CueOnRemove.Length <= 0) return;
+            foreach (var cue in GameplayEffect.CueOnRemove) cue.Trigger(Owner);
+        }
+        
         public void TriggerOnExecute()
         {
             OnExecute?.Invoke(this);
-            GameplayEffect.TriggerCueOnExecute();
-            
+            TriggerCueOnExecute();
+
+            Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
+                .RemoveGameplayEffectsWithTags);
             Owner.ApplyModFromInstantGameplayEffect(this);
         }
-        
+
         public void TriggerOnAdd()
         {
             OnAdd?.Invoke(this);
-            GameplayEffect.TriggerCueOnAdd();
+            TriggerCueOnAdd();
         }
 
         public void TriggerOnRemove()
         {
             OnRemove?.Invoke(this);
-            GameplayEffect.TriggerCueOnRemove();
+            TriggerCueOnRemove();
         }
 
         public void TriggerOnActivation()
         {            
             OnActivation?.Invoke(this);
-            Owner.AddTags(GameplayEffect.TagContainer.GrantedTags);
+            Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
+            Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
+                .RemoveGameplayEffectsWithTags);
         }
 
         public void TriggerOnDeactivation()
         {
             OnDeactivation?.Invoke(this);
-            Owner.RemoveTags(GameplayEffect.TagContainer.GrantedTags);
+            Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
         }
 
         public void TriggerOnTick()

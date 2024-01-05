@@ -9,14 +9,15 @@ namespace GAS.Runtime.Cue
         [SerializeField] private string _animationName;
         private Animator _animator;
 
-        public override void Init(AbilitySystemComponent source)
+        protected override void Init(AbilitySystemComponent source)
         {
             base.Init(source);
             _animator = source.GetComponent<Animator>();
         }
 
-        public override void Trigger()
+        public override void Trigger(AbilitySystemComponent source)
         {
+            base.Trigger(source);
             _animator.Play(_animationName);
         }
     }

@@ -15,7 +15,7 @@ namespace GAS.Editor.Attributes
             foreach (var attributeSetConfig in asset.AttributeSetConfigs)
             {
                 var config = attributeSetConfig;
-                names.AddRange(attributeSetConfig.AttributeNames.Select(shortName => $"{config.Name}.{shortName}"));
+                names.AddRange(attributeSetConfig.AttributeNames.Select(shortName => $"AS_{config.Name}.{shortName}"));
             }
             return names;
         }

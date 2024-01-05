@@ -5,13 +5,13 @@ namespace GAS.Runtime.AttributeSet
     public abstract class AttributeSet
     {
         public abstract AttributeBase this[string key] { get; }
-        public readonly string[] AttributeNames;
+        public abstract string[] AttributeNames { get; }
 
-        public void ChangeAttributeBase(string attributeFullName, float value)
+        public void ChangeAttributeBase(string attributeShortName, float value)
         {
-            if (this[attributeFullName] != null)
+            if (this[attributeShortName] != null)
             {
-                this[attributeFullName].SetBaseValue(value);
+                this[attributeShortName].SetBaseValue(value);
             }
         }
     }

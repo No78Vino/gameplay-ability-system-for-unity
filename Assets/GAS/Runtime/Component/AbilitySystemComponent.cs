@@ -13,39 +13,40 @@ namespace GAS.Runtime.Component
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
         [SerializeField] private AbilitySystemComponentPreset preset;
-        private AbilityContainer _abilityContainer;
-        private AttributeSetContainer _attributeSetContainer;
-        private GameplayTagCollection _tagCollection;
+        private AbilityContainer _abilityContainer = new AbilityContainer();
+        private AttributeSetContainer _attributeSetContainer = new AttributeSetContainer();
+        private GameplayTagAggregator tagAggregator = new GameplayTagAggregator();
 
         public int Level { get; private set; }
-        
-        public GameplayEffectContainer GameplayEffectContainer { get; private set; }
+
+        public GameplayEffectContainer GameplayEffectContainer { get; private set; } = new GameplayEffectContainer();
 
         private void Awake()
         {
-            _abilityContainer = new AbilityContainer(this);
-            GameplayEffectContainer = new GameplayEffectContainer(this);
-            _attributeSetContainer = new AttributeSetContainer(this);
-            _tagCollection = new GameplayTagCollection(this);
-        }
-
-        private void Start()
-        {
+            _abilityContainer.SetOwner(this);
+            GameplayEffectContainer.SetOwner(this);
+            _attributeSetContainer.SetOwner(this);
+            tagAggregator.SetOwner(this);
             Init(preset);
         }
 
         private void OnEnable()
         {
             GameplayAbilitySystem.GAS.Register(this);
-            _tagCollection.OnEnable();
+            tagAggregator.OnEnable();
         }
 
         private void OnDisable()
         {
             GameplayAbilitySystem.GAS.Unregister(this);
-            _tagCollection.OnDisable();
+            tagAggregator.OnDisable();
         }
 
+        public void DefaultInit()
+        {
+            Init(preset);
+        }
+        
         public void Init(AbilitySystemComponentPreset ascPreset)
         {
             if (ascPreset != null)
@@ -53,52 +54,62 @@ namespace GAS.Runtime.Component
                 // Tag
                 if (ascPreset.BaseTags != null)
                 {
-                    _tagCollection.Init(ascPreset.BaseTags);
+                    tagAggregator.Init(ascPreset.BaseTags);
                 }
 
                 // AttributeSet
-                if(ascPreset.AttributeSets!=null)
-                {foreach (var attributeSet in ascPreset.AttributeSets)
+                if (ascPreset.AttributeSets != null)
                 {
-                    string attrSetTypeName = GasDefine.GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX + attributeSet;
-                    var attrSetType = Type.GetType(attrSetTypeName);
-                    if (attrSetType != null)
+                    foreach (var attributeSet in ascPreset.AttributeSets)
                     {
-                        _attributeSetContainer.AddAttributeSet(attrSetType);
+                        string attrSetTypeName = GasDefine.GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX + attributeSet;
+                        var attrSetType = Type.GetType($"{attrSetTypeName}, Assembly-CSharp");
+                        if (attrSetType != null)
+                        {
+                            _attributeSetContainer.AddAttributeSet(attrSetType);
+                        }
                     }
-                }}
-                
+                }
+
                 // Ability
                 if (ascPreset.BaseAbilities != null)
                 {
                     foreach (var abilityAsset in ascPreset.BaseAbilities)
                     {
-                        if (!(Type.GetType(abilityAsset.InstanceAbilityClassFullName) is { } abilityType)) continue;
-                        var ability = Activator.CreateInstance(abilityType) as AbstractAbility;
-                        _abilityContainer.GrantAbility(ability);
+                        var abilityType = Type.GetType($"{abilityAsset.InstanceAbilityClassFullName}, Assembly-CSharp");
+                        if (abilityType != null)
+                        {
+                            var ability = Activator.CreateInstance(abilityType, args: abilityAsset) as AbstractAbility;
+                            _abilityContainer.GrantAbility(ability);
+                        }
                     }
                 }
             }
         }
         
+        public bool HasTag(GameplayTag gameplayTag)
+        {
+            return tagAggregator.HasTag(gameplayTag);
+        }
+        
         public bool HasAllTags(GameplayTagSet tags)
         {
-            return _tagCollection.HasAllTags(tags);
+            return tagAggregator.HasAllTags(tags);
         }
 
         public bool HasAnyTags(GameplayTagSet tags)
         {
-            return _tagCollection.HasAnyTags(tags);
+            return tagAggregator.HasAnyTags(tags);
         }
 
-        public void AddTags(GameplayTagSet tags)
+        public void AddFixedTags(GameplayTagSet tags)
         {
-            _tagCollection.AddFixedTags(tags);
+            tagAggregator.AddFixedTag(tags);
         }
 
-        public void RemoveTags(GameplayTagSet tags)
+        public void RemoveFixedTags(GameplayTagSet tags)
         {
-            _tagCollection.RemoveFixedTags(tags);
+            tagAggregator.RemoveFixedTag(tags);
         }
 
         private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
@@ -149,8 +160,8 @@ namespace GAS.Runtime.Component
 
         public void Tick()
         {
-            GameplayEffectContainer.Tick();
             _abilityContainer.Tick();
+            GameplayEffectContainer.Tick();
         }
 
         public Dictionary<string, float> DataSnapshot()
@@ -163,11 +174,10 @@ namespace GAS.Runtime.Component
             return _abilityContainer.TryActivateAbility(abilityName, args);
         }
 
-        public void EndAbility(string abilityName)
+        public void TryEndAbility(string abilityName)
         {
             _abilityContainer.EndAbility(abilityName);
         }
-
 
         public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
         {
@@ -175,7 +185,7 @@ namespace GAS.Runtime.Component
             {
                 var attributeBaseValue = GetAttributeBaseValue(modifier.AttributeSetName, modifier.AttributeShortName);
                 if (attributeBaseValue == null) continue;
-                var magnitude = modifier.MMC.CalculateMagnitude(modifier.ModiferMagnitude);
+                var magnitude = modifier.MMC.CalculateMagnitude(spec,modifier.ModiferMagnitude);
                 var baseValue = attributeBaseValue.Value;
                 switch (modifier.Operation)
                 {
@@ -191,7 +201,7 @@ namespace GAS.Runtime.Component
                 }
                 
                 _attributeSetContainer.Sets[modifier.AttributeSetName]
-                    .ChangeAttributeBase(modifier.AttributeName, baseValue);
+                    .ChangeAttributeBase(modifier.AttributeShortName, baseValue);
             }
         }
 
@@ -205,5 +215,21 @@ namespace GAS.Runtime.Component
             _attributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
             return attrSet;
         }
+
+        public void ResetToPreset()
+        {
+            // TODO
+            // _abilityContainer = new AbilityContainer(this);
+            // GameplayEffectContainer = new GameplayEffectContainer(this);
+            // _attributeSetContainer = new AttributeSetContainer(this);
+            // tagAggregator = new GameplayTagAggregator(this);
+            // Init(preset);
+        }
+        
+        #if UNITY_EDITOR
+        public GameplayTagAggregator GameplayTagAggregator => tagAggregator;
+        public AbilityContainer AbilityContainer => _abilityContainer;
+        public AttributeSetContainer AttributeSetContainer => _attributeSetContainer;
+        #endif
     }
 }

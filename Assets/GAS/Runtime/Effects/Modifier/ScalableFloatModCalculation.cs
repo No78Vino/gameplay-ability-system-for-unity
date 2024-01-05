@@ -9,8 +9,8 @@ namespace GAS.Runtime.Effects.Modifier
     {
         [SerializeField] private float k;
         [SerializeField] private float b;
-        
-        public override float CalculateMagnitude(params float[] input)
+
+        protected override float CalculateMagnitude(params float[] input)
         {
             return input[0] * k + b;
         }

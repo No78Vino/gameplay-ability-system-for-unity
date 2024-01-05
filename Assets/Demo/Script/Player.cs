@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
 
     public void OnMoveEnd()
     {
-        _asc.EndAbility("Move");
+        //_asc.EndAbility("Move");
     }
     public void OnPressQ()
     {

@@ -29,7 +29,7 @@ namespace GAS.Runtime.Effects
                 _periodRemaining -= Time.deltaTime;
             }
 
-            if (_spec.DurationRemaining() <= 0)
+            if (_spec.GameplayEffect.DurationPolicy== EffectsDurationPolicy.Duration && _spec.DurationRemaining() <= 0)
             {
                 _spec.RemoveSelf();
             }

@@ -13,7 +13,7 @@ namespace GAS.Runtime.AttributeSet
         
         public Dictionary<string,AttributeSet> Sets => _attributeSets;
         
-        public AttributeSetContainer(AbilitySystemComponent owner)
+        public void SetOwner(AbilitySystemComponent owner)
         {
             _owner = owner;
         }
@@ -67,7 +67,7 @@ namespace GAS.Runtime.AttributeSet
         
         public bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet
         {
-            if(_attributeSets.TryGetValue(nameof(T), out var set))
+            if(_attributeSets.TryGetValue(typeof(T).Name, out var set))
             {
                 attributeSet = (T)set;
                 return true;

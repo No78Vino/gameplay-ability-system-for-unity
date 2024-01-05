@@ -53,5 +53,21 @@ namespace GAS.Runtime.Effects.Modifier
             Operation = modifier.Operation;
             MMC = modifier.MMC;
         }
+
+        public void SetModiferMagnitude(float value)
+        {
+            if (MMC is SetByCallerModCalculation)
+            {
+                ModiferMagnitude = value;
+            }
+            else
+            {
+                #if UNITY_EDITOR
+                UnityEngine.Debug.LogError("[EX] this MMC is not SetByCallerModCalculation, can't set ModiferMagnitude!");
+                #else
+                UnityEngine.Debug.LogWarning("[EX] this MMC is not SetByCallerModCalculation, can't set ModiferMagnitude!");
+                #endif
+            }
+        }
     }
 }

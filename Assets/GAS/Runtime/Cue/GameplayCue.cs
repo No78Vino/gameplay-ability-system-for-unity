@@ -6,11 +6,15 @@ namespace GAS.Runtime.Cue
     public abstract class GameplayCue:ScriptableObject
     {
         protected  AbilitySystemComponent _source;
-        public virtual void Init(AbilitySystemComponent source)
+
+        protected virtual void Init(AbilitySystemComponent source)
         {
             _source = source;
         }
-        
-        public abstract void Trigger();
+
+        public virtual void Trigger(AbilitySystemComponent source)
+        {
+            Init(source);
+        }
     }
 }

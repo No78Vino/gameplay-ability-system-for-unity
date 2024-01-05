@@ -12,8 +12,8 @@ namespace GAS.Runtime.Effects
         private List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private List<GameplayEffectSpec> _activeGameplayEffects = new List<GameplayEffectSpec>();
         
-        Action _onGameplayEffectContainerIsDirty;
-        public GameplayEffectContainer(AbilitySystemComponent owner)
+        private event Action _onGameplayEffectContainerIsDirty;
+        public void SetOwner(AbilitySystemComponent owner)
         {
             _owner = owner;
         }
@@ -25,7 +25,8 @@ namespace GAS.Runtime.Effects
         
         public void Tick()
         {
-            foreach (var gameplayEffectSpec in _activeGameplayEffects)
+            var enumerable = _activeGameplayEffects.ToArray();
+            foreach (var gameplayEffectSpec in enumerable)
             {
                 gameplayEffectSpec.Tick();
             }
@@ -39,6 +40,33 @@ namespace GAS.Runtime.Effects
         public void UnregisterOnGameplayEffectContainerIsDirty(Action action)
         {
             _onGameplayEffectContainerIsDirty -= action;
+        }
+        
+        public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
+        {
+            if(tags.Empty) return;
+            
+            var removeList = new List<GameplayEffectSpec>();
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+            {
+                var assetTags = gameplayEffectSpec.GameplayEffect.TagContainer.AssetTags;
+                if (!assetTags.Empty && assetTags.HasAnyTags(tags))
+                {
+                    removeList.Add(gameplayEffectSpec);
+                    continue;
+                }
+
+                var grantedTags = gameplayEffectSpec.GameplayEffect.TagContainer.GrantedTags;
+                if (!grantedTags.Empty && grantedTags.HasAnyTags(tags))
+                {
+                    removeList.Add(gameplayEffectSpec);
+                }
+            }
+
+            foreach (var gameplayEffectSpec in removeList)
+            {
+                RemoveGameplayEffectSpec(gameplayEffectSpec);
+            }
         }
         
         /// <summary>
@@ -61,6 +89,7 @@ namespace GAS.Runtime.Effects
             var canRunning = spec.CanRunning();
             if (canRunning)
             {
+                _activeGameplayEffects.Add(spec);
                 spec.Activate();
             }
             else
@@ -141,5 +170,10 @@ namespace GAS.Runtime.Effects
 
             return new CooldownTimer { TimeRemaining = longestCooldown, Duration = maxDuration };
         }
+
+#if UNITY_EDITOR
+        public List<GameplayEffectSpec> GameplayEffectSpecs => _gameplayEffectSpecs;
+        public List<GameplayEffectSpec> ActiveGameplayEffects => _activeGameplayEffects;
+#endif
     }
 }

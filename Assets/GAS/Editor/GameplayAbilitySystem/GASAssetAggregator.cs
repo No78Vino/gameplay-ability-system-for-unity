@@ -31,6 +31,14 @@ namespace GAS.Editor.GameplayAbilitySystem
         };
 
         private static string[] _libPaths;
+        static string[] LibPaths
+        {
+            get
+            {
+                if (_libPaths == null) CheckLibPaths();
+                return _libPaths;
+            }
+        }
 
         private static readonly DirectoryInfo[] _directoryInfos = new DirectoryInfo[5];
         private static readonly List<DirectoryInfo> _subDirectoryInfos = new List<DirectoryInfo>();
@@ -81,7 +89,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             for (var i = 0; i < MenuNames.Length; i++)
             {
                 var menuName = MenuNames[i];
-                var libPath = _libPaths[i];
+                var libPath = LibPaths[i];
                 var type = _types[i];
                 tree.Add(menuName, _directoryInfos[i]);
                 tree.AddAllAssetsAtPath(menuName, libPath, type, true)

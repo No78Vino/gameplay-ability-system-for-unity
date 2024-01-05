@@ -76,5 +76,12 @@ namespace GAS.Core
         {
             AbilitySystemComponents.Clear();
         }
+        
+        #if UNITY_EDITOR
+        public GasHost GetGasHost()
+        {
+            return GasHost;
+        }
+        #endif
     }
 }
