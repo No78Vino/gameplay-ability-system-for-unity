@@ -48,7 +48,17 @@ namespace GAS.Runtime.Ability
         {
             if (!_abilities.ContainsKey(abilityName)) return false;
             if (!_abilities[abilityName].TryActivateAbility(args)) return false;
-            CancelAbilitiesByTag(_abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags);
+
+            var tags = _abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags;
+            foreach (var kv in _abilities)
+            {
+                var abilityTag = kv.Value.Ability.Tag;
+                if (abilityTag.AssetTag.HasAllTags(tags))
+                {
+                    _abilities[kv.Key].TryCancelAbility();
+                }
+            }
+            
             return true;
 
         }

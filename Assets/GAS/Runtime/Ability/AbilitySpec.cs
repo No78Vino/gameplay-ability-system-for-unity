@@ -34,8 +34,25 @@ namespace GAS.Runtime.Ability
 
         private bool CheckGameplayTagsValidTpActivate()
         {
-            return Owner.HasAllTags(Ability.Tag.ActivationRequiredTags) &&
-                   Owner.HasAllTags(Ability.Tag.SourceRequiredTags);
+            bool hasAllTags = Owner.HasAllTags(Ability.Tag.ActivationRequiredTags);
+            bool notHasAnyTags = !Owner.HasAnyTags(Ability.Tag.ActivationBlockedTags);
+            bool notBlockedByOtherAbility = true;
+           
+            foreach (var kv in Owner.AbilityContainer.AbilitySpecs())
+            {
+                var abilitySpec = kv.Value;
+                if (abilitySpec.IsActive)
+                {
+                    if (Ability.Tag.AssetTag.HasAllTags(abilitySpec.Ability.Tag.BlockAbilitiesWithTags))
+                    {
+                        notBlockedByOtherAbility = false;
+                        break;
+                    }
+                }
+                
+            }
+            return hasAllTags && notHasAnyTags && notBlockedByOtherAbility;
+                    // && Owner.HasAllTags(Ability.Tag.SourceRequiredTags);
         }
 
         protected virtual CooldownTimer CheckCooldown()

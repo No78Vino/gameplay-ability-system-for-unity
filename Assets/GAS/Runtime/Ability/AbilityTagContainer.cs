@@ -21,9 +21,11 @@ namespace GAS.Runtime.Ability
         public GameplayTagSet ActivationRequiredTags;
         public GameplayTagSet ActivationBlockedTags;
 
+        // TODO
         public GameplayTagSet SourceRequiredTags;
         public GameplayTagSet SourceBlockedTags;
         
+        // TODO
         public GameplayTagSet TargetRequiredTags;
         public GameplayTagSet TargetBlockedTags;
 
