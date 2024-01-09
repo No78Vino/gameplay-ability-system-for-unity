@@ -21,7 +21,12 @@ namespace GAS.Core
         {
             get
             {
-                if (_gasHost == null) _gasHost = new GameObject("GAS Host").AddComponent<GasHost>();
+                if (_gasHost == null)
+                {
+                    _gasHost = new GameObject("GAS Host").AddComponent<GasHost>();
+                    _gasHost.hideFlags = HideFlags.HideAndDontSave;
+                    Object.DontDestroyOnLoad(_gasHost.gameObject);
+                }
 
                 return _gasHost;
             }
@@ -76,12 +81,5 @@ namespace GAS.Core
         {
             AbilitySystemComponents.Clear();
         }
-        
-        #if UNITY_EDITOR
-        public GasHost GetGasHost()
-        {
-            return GasHost;
-        }
-        #endif
     }
 }

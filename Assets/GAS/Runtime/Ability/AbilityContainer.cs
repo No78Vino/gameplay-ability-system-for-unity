@@ -70,5 +70,7 @@ namespace GAS.Runtime.Ability
                 }
             }
         }
+        
+        public Dictionary<string, AbilitySpec> AbilitySpecs() => _abilities;
     }
 }

@@ -171,8 +171,21 @@ namespace GAS.Runtime.Effects
             return new CooldownTimer { TimeRemaining = longestCooldown, Duration = maxDuration };
         }
 
+        public void ClearGameplayEffect()
+        {
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+            {
+                gameplayEffectSpec.Deactivate();
+                gameplayEffectSpec.TriggerOnRemove();
+            }
+            
+            _activeGameplayEffects.Clear();
+            _gameplayEffectSpecs.Clear();
+            
+            _onGameplayEffectContainerIsDirty?.Invoke();
+        }
+        
 #if UNITY_EDITOR
-        public List<GameplayEffectSpec> GameplayEffectSpecs => _gameplayEffectSpecs;
         public List<GameplayEffectSpec> ActiveGameplayEffects => _activeGameplayEffects;
 #endif
     }

@@ -216,14 +216,14 @@ namespace GAS.Runtime.Component
             return attrSet;
         }
 
-        public void ResetToPreset()
+        public void ClearGameplayEffect()
         {
-            // TODO
             // _abilityContainer = new AbilityContainer(this);
             // GameplayEffectContainer = new GameplayEffectContainer(this);
             // _attributeSetContainer = new AttributeSetContainer(this);
             // tagAggregator = new GameplayTagAggregator(this);
-            // Init(preset);
+
+            GameplayEffectContainer.ClearGameplayEffect();
         }
         
         #if UNITY_EDITOR
