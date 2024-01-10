@@ -38,6 +38,12 @@
 ### 2. GAS Asset Aggregator (GAS配置资源聚合器)
 
 ### 3. GAS Runtime Watcher (GAS运行时监视器)
+![UA_XISRD_ F9_W}7}JKII9M](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d1a689a2-5c72-42ec-8d2d-60f005eab899)
+通过在菜单栏EX-GAS -> GAS Runtime Watcher 可以打开监视器。监视器只能在Editor下游戏运行时使用，监视器会显示GAS下正在运行的所有ASC（Ability System Component）的基础信息。
+
+__*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在明显的性能问题。监视器只是为了方便调试，所以建议不要一直后台挂着监视器，有需要时再打开。*__
+
+```目前监视器较为简陋，以后可能会优化监视器。```
 
 ## 快速开始
 ### 1.安装
