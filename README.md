@@ -30,12 +30,14 @@
 │   │ 
 │   └───Other(Setting,Plugins, ........) 
 ```
-## 功能
-### 1. Gameplay Tag Manager
+## 基础功能
 
-### 2. Attribute Manager
+## 拓展功能
+### 1. GAS Base Manager (GAS基础配置管理器)
 
-### 3. AttributeSet Manager
+### 2. GAS Asset Aggregator (GAS配置资源聚合器)
+
+### 3. GAS Runtime Watcher (GAS运行时监视器)
 
 ## 快速开始
 ### 1.安装
@@ -48,5 +50,9 @@
 
 
 ## 后续计划
+### 1. 修复bug
+### 2. 补全遗漏的功能
+### 3. 支持网络同步
+### 4. 将GAS移交DOTS或采用ECS结构来运行
 
 ## 特别感谢
