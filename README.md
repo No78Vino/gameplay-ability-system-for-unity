@@ -36,6 +36,12 @@
 ### 1. GAS Base Manager (GAS基础配置管理器)
 
 ### 2. GAS Asset Aggregator (GAS配置资源聚合器)
+#### a.ASC预设管理
+![_MX$4_XP`OZP{NC}A%OI 7N](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/24c97754-c788-4409-96aa-81a6f50176e6)
+#### b.能力配置管理
+![B4B{UAPNCOA 7CE6MQF7878](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/c29c6cf9-6c8b-4ae7-8c24-4e8d445e3d46)
+#### c.游戏效果管理
+
 
 ### 3. GAS Runtime Watcher (GAS运行时监视器)
 ![UA_XISRD_ F9_W}7}JKII9M](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d1a689a2-5c72-42ec-8d2d-60f005eab899)
