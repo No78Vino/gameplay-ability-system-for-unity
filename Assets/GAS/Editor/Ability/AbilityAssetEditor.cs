@@ -1,36 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using GAS.Editor.General;
-using GAS.Editor.Tags;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Effects;
-using GAS.Runtime.Tags;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using System;
+    using System.Collections.Generic;
+    using General;
+    using Tags;
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Effects;
+    using GAS.Runtime.Tags;
+    using UnityEditor;
+    using UnityEngine;
+    
     [CustomEditor(typeof(AbilityAsset))]
-    public class AbilityAssetEditor : UnityEditor.Editor
+    public class AbilityAssetEditor : Editor
     {
-        private readonly bool[] _tagGroupFoldout = new bool[10];
+        private readonly bool[] _tagGroupFoldout = new bool[6];
 
-        private readonly string[] _tagGroupTitle = new string[10]
+        private readonly string[] _tagGroupTitle = new string[6]
         {
             "AssetTag",
             "CancelAbilityTags",
             "BlockAbilityTags",
             "ActivationOwnedTag",
             "ActivationRequiredTags",
-            "ActivationBlockedTags",
-            "SourceRequiredTags",
-            "SourceBlockedTags",
-            "TargetRequiredTags",
-            "TargetBlockedTags"
+            "ActivationBlockedTags"
         };
 
         private readonly ArraySetFromChoicesAsset<GameplayTag>[] _tagGroupAsset =
-            new ArraySetFromChoicesAsset<GameplayTag>[10];
+            new ArraySetFromChoicesAsset<GameplayTag>[6];
 
         private ScriptableObjectReorderableList<GameplayEffectAsset> _usedGameplayEffects;
 
@@ -39,6 +36,22 @@ namespace GAS.Editor.Ability
         private List<GameplayTag> tagChoices = new List<GameplayTag>();
         private AbilityAsset Asset => (AbilityAsset)target;
 
+        private GUIStyle greenButtonStyle;
+        private Vector2 scrollPos;
+
+        private void Awake()
+        {
+            greenButtonStyle = new GUIStyle(GUI.skin.button)
+            {
+                fontSize = 24,
+                normal =
+                {
+                    textColor = Color.green
+                },
+                fontStyle = FontStyle.Bold
+            };
+        }
+        
         private void OnEnable()
         {
             tagChoices = TagEditorUntil.GetTagChoice();
@@ -56,10 +69,6 @@ namespace GAS.Editor.Ability
                     3 => Asset.ActivationOwnedTag,
                     4 => Asset.ActivationRequiredTags,
                     5 => Asset.ActivationBlockedTags,
-                    6 => Asset.SourceRequiredTags,
-                    7 => Asset.SourceBlockedTags,
-                    8 => Asset.TargetRequiredTags,
-                    9 => Asset.TargetBlockedTags,
                     _ => Array.Empty<GameplayTag>()
                 };
 
@@ -79,83 +88,112 @@ namespace GAS.Editor.Ability
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
-            using (new EditorGUILayout.HorizontalScope())
             {
-                EditorGUILayout.LabelField("Name", GUILayout.Width(70f));
-                Asset.Name = EditorGUILayout.TextField("", Asset.Name);
-            }
+                EditorGUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Width(450));
 
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Description", GUILayout.Width(70f));
-                Asset.Description = EditorGUILayout.TextField("", Asset.Description);
-            }
-            
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                if (abilityChoices.Count == 0)
+                EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(300f));
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField(
-                        "<size=16><b><color=yellow>No Abilities Found!  Please,Create an ability first!</color></b></size>",
-                        new GUIStyle(GUI.skin.label) { richText = true });
+                    EditorGUILayout.LabelField("Name", GUILayout.Width(100));
+                    Asset.Name = EditorGUILayout.TextField("", Asset.Name, GUILayout.Width(200f));
                 }
-                else
+
+                EditorGUILayout.Space(10);
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.LabelField("Ability Class", GUILayout.Width(100));
-                    var index = abilityChoices.IndexOf(Asset.InstanceAbilityClassFullName);
-                    index = Mathf.Clamp(index, 0, abilityChoices.Count - 1);
-                    index = EditorGUILayout.Popup(index, abilityChoices.ToArray());
-                    Asset.InstanceAbilityClassFullName = abilityChoices[index];
-                }
-            }
-            
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
-            {
-                EditorGUILayout.LabelField("GameplayEffect", EditorStyles.boldLabel);
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Cost", GUILayout.Width(70f));
-                Asset.Cost =
-                    (GameplayEffectAsset)EditorGUILayout.ObjectField("", Asset.Cost, typeof(GameplayEffectAsset),
-                        false);
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space(5);
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Cooldown", GUILayout.Width(70f));
-                Asset.Cooldown =
-                    (GameplayEffectAsset)EditorGUILayout.ObjectField("", Asset.Cooldown, typeof(GameplayEffectAsset),
-                        false);
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space(5);
-
-                EditorGUILayout.LabelField("UsedGameplayEffect:");
-                _usedGameplayEffects.OnGUI();
-            }
-
-            using (new EditorGUILayout.VerticalScope(GUI.skin.box))
-            {
-                EditorGUILayout.LabelField("Tags", EditorStyles.boldLabel);
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(" ", GUILayout.Width(20f));
-
-                EditorGUILayout.BeginVertical();
-                for (var i = 0; i < _tagGroupAsset.Length; i++)
-                {
-                    _tagGroupFoldout[i] = EditorGUILayout.Foldout(_tagGroupFoldout[i], _tagGroupTitle[i]);
-                    if (_tagGroupFoldout[i]) _tagGroupAsset[i].OnGUI();
+                    EditorGUILayout.LabelField("Description", GUILayout.Width(100));
+                    Asset.Description = EditorGUILayout.TextField("", Asset.Description, GUILayout.Width(200f));
                 }
 
                 EditorGUILayout.EndVertical();
+
+                EditorGUILayout.Space(10);
+
+                if (GUILayout.Button("Save", greenButtonStyle)) Save();
+
                 EditorGUILayout.EndHorizontal();
             }
 
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Save")) Save();
+            
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
+            {
+                {
+                    EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(300f));
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Width(300f)))
+                    {
+                        if (abilityChoices.Count == 0)
+                        {
+                            EditorGUILayout.LabelField(
+                                "<size=16><b><color=yellow>No Abilities Found!  Please,Create an ability first!</color></b></size>",
+                                new GUIStyle(GUI.skin.label) { richText = true }, GUILayout.Width(300));
+                        }
+                        else
+                        {
+                            EditorGUILayout.LabelField("Ability Class", GUILayout.Width(100));
+                            var index = abilityChoices.IndexOf(Asset.InstanceAbilityClassFullName);
+                            index = Mathf.Clamp(index, 0, abilityChoices.Count - 1);
+                            index = EditorGUILayout.Popup(index, abilityChoices.ToArray(), GUILayout.Width(200));
+                            Asset.InstanceAbilityClassFullName = abilityChoices[index];
+                        }
+                    }
 
+                    EditorGUILayout.Space(5);
+
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Cost", GUILayout.Width(100));
+                    Asset.Cost =
+                        (GameplayEffectAsset)EditorGUILayout.ObjectField("", Asset.Cost, typeof(GameplayEffectAsset),
+                            false, GUILayout.Width(200));
+                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.Space(5);
+
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Cooldown", GUILayout.Width(100));
+                    Asset.Cooldown =
+                        (GameplayEffectAsset)EditorGUILayout.ObjectField("", Asset.Cooldown,
+                            typeof(GameplayEffectAsset),
+                            false, GUILayout.Width(200));
+                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.EndVertical();
+                }
+
+                _usedGameplayEffects.OnGUI();
+            }
+
+            EditorGUILayout.Space(15);
+            
+            EditorGUILayout.LabelField("<size=16><b><color=white>Tags</color></b></size>",
+                new GUIStyle() { alignment = TextAnchor.MiddleCenter,richText = true});
+            
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
+            {
+                for (var i = 0; i < 3; i++)
+                {
+                    var t = _tagGroupAsset[i];
+                    EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(250));
+                    t.OnGUI();
+                    EditorGUILayout.EndVertical();
+                }
+                EditorGUILayout.Space(5);
+            }
+            EditorGUILayout.Space(5);
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
+            {
+                for (var i = 3; i < 6; i++)
+                {
+                    var t = _tagGroupAsset[i];
+                    EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(250));
+                    t.OnGUI();
+                    EditorGUILayout.EndVertical();
+                }
+                EditorGUILayout.Space(5);
+            }
+            
+            EditorGUILayout.EndScrollView();
+            
             EditorGUILayout.EndVertical();
         }
 
@@ -185,18 +223,6 @@ namespace GAS.Editor.Ability
                     case 5:
                         Asset.ActivationBlockedTags = data.ToArray();
                         break;
-                    case 6:
-                        Asset.SourceRequiredTags = data.ToArray();
-                        break;
-                    case 7:
-                        Asset.SourceBlockedTags = data.ToArray();
-                        break;
-                    case 8:
-                        Asset.TargetRequiredTags = data.ToArray();
-                        break;
-                    case 9:
-                        Asset.TargetBlockedTags = data.ToArray();
-                        break;
                 }
             }
 
@@ -209,3 +235,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

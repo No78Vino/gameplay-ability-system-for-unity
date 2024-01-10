@@ -43,7 +43,7 @@ namespace GAS.Runtime.Ability
                 var abilitySpec = kv.Value;
                 if (abilitySpec.IsActive)
                 {
-                    if (Ability.Tag.AssetTag.HasAllTags(abilitySpec.Ability.Tag.BlockAbilitiesWithTags))
+                    if (Ability.Tag.AssetTag.HasAnyTags(abilitySpec.Ability.Tag.BlockAbilitiesWithTags))
                     {
                         notBlockedByOtherAbility = false;
                         break;

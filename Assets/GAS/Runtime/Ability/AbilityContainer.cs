@@ -53,7 +53,7 @@ namespace GAS.Runtime.Ability
             foreach (var kv in _abilities)
             {
                 var abilityTag = kv.Value.Ability.Tag;
-                if (abilityTag.AssetTag.HasAllTags(tags))
+                if (abilityTag.AssetTag.HasAnyTags(tags))
                 {
                     _abilities[kv.Key].TryCancelAbility();
                 }

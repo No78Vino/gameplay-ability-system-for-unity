@@ -38,6 +38,7 @@ namespace GAS.Runtime.Tags
 
         public void Init(GameplayTag[] tags)
         {
+            _fixedTags.Clear();
             _fixedTags.AddRange(tags);
         }
 
@@ -109,9 +110,18 @@ namespace GAS.Runtime.Tags
             if (_fixedTags.Contains(tag)) return dirty;
 
             if (_dynamicAddedTags.TryGetValue(tag, out var addedTag))
+            {
+                if (addedTag.Contains(source))
+                {
+                    return false;
+                }
+
                 addedTag.Add(source);
+            }
             else
+            {
                 _dynamicAddedTags.Add(tag, new List<object> { source });
+            }
             return true;
         }
 
@@ -221,7 +231,7 @@ namespace GAS.Runtime.Tags
 
         public bool HasAnyTags(GameplayTagSet other)
         {
-            return other.Empty || other.Tags.Any(HasTag);
+            return !other.Empty || other.Tags.Any(HasTag);
         }
 
         public bool HasAnyTags(params GameplayTag[] tags)

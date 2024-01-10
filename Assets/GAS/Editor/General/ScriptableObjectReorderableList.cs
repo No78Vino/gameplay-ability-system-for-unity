@@ -42,7 +42,7 @@ namespace GAS.Editor.General
         void ItemGUIDraw(Rect rect, T item, int index)
         {
             item = EditorGUI.ObjectField(new Rect(rect.x, rect.y,
-                    300, EditorGUIUtility.singleLineHeight), item, typeof(T),
+                    200, EditorGUIUtility.singleLineHeight), item, typeof(T),
                 false) as T;
 
             _reorderableList.UpdateItem(index, item);

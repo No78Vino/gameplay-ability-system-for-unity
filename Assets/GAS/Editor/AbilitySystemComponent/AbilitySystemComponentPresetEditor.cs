@@ -1,3 +1,5 @@
+using System;
+
 #if UNITY_EDITOR
 namespace GAS.Editor.AbilitySystemComponent
 {
@@ -25,6 +27,21 @@ namespace GAS.Editor.AbilitySystemComponent
         
         private AbilitySystemComponentPreset Asset => (AbilitySystemComponentPreset)target;
 
+        private GUIStyle greenButtonStyle;
+
+        private void Awake()
+        {
+            greenButtonStyle = new GUIStyle(GUI.skin.button)
+            {
+                fontSize = 24,
+                normal =
+                {
+                    textColor = Color.green
+                },
+                fontStyle = FontStyle.Bold
+            };
+        }
+
         private void OnEnable()
         {
             tagChoices = TagEditorUntil.GetTagChoice();
@@ -43,31 +60,49 @@ namespace GAS.Editor.AbilitySystemComponent
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
-
+            ConfigErrorTip();
+            
+            EditorGUILayout.BeginHorizontal(GUI.skin.box);
+            
+            EditorGUILayout.BeginVertical(GUILayout.Width(300f));
             using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.LabelField("Name", GUILayout.Width(100f));
-                Asset.Name = EditorGUILayout.TextField("", Asset.Name);
+                Asset.Name = EditorGUILayout.TextField("", Asset.Name, GUILayout.Width(200f));
             }
-
+            EditorGUILayout.Space(5);
             using (new EditorGUILayout.HorizontalScope())
             {
                 EditorGUILayout.LabelField("Description", GUILayout.Width(100f));
-                Asset.Description = EditorGUILayout.TextField("", Asset.Description);
+                Asset.Description = EditorGUILayout.TextField("", Asset.Description,GUILayout.Width(200f));
             }
+            EditorGUILayout.EndVertical();
 
-            ConfigErrorTip();
-
-            GUILayout.Space(5f);
-            _baseTags.OnGUI();
-            GUILayout.Space(3f);
-            _baseAbilities.OnGUI();
-            GUILayout.Space(3f);
+            GUILayout.Space(10);
+            EditorGUILayout.BeginVertical(GUILayout.Width(300));
             _baseAttributeSets.OnGUI();
+
+            EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+            
+            EditorGUILayout.BeginHorizontal(GUI.skin.box);
+            using (new EditorGUILayout.VerticalScope(GUILayout.Width(300)))
+            {
+                _baseTags.OnGUI();  
+            }
+            GUILayout.Space(10);
+            using (new EditorGUILayout.VerticalScope(GUILayout.Width(300)))
+            {
+                 _baseAbilities.OnGUI();
+            }
+            EditorGUILayout.EndHorizontal();
 
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Save")) Save();
+            if (GUILayout.Button("Save",greenButtonStyle)) Save();
 
             EditorGUILayout.EndVertical();
         }

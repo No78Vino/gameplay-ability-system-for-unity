@@ -32,6 +32,7 @@ namespace GAS.Runtime.Effects
         public float Level { get; private set; }
         public AbilitySystemComponent Source { get; private set; }
         public AbilitySystemComponent Owner { get; }
+        public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration => GameplayEffect.Duration;
@@ -57,6 +58,20 @@ namespace GAS.Runtime.Effects
             Level = level;
         }
 
+        public void Apply()
+        {
+            if (IsApplied) return;
+            IsApplied = true;
+            Activate();
+        }
+        
+        public void DisApply()
+        {
+            if (!IsApplied) return;
+            IsApplied = false;
+            Deactivate();
+        }
+        
         public void Activate()
         {
             if (IsActive) return;
@@ -130,7 +145,7 @@ namespace GAS.Runtime.Effects
             TriggerCueOnRemove();
         }
 
-        public void TriggerOnActivation()
+        private void TriggerOnActivation()
         {            
             OnActivation?.Invoke(this);
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
@@ -138,7 +153,7 @@ namespace GAS.Runtime.Effects
                 .RemoveGameplayEffectsWithTags);
         }
 
-        public void TriggerOnDeactivation()
+        private void TriggerOnDeactivation()
         {
             OnDeactivation?.Invoke(this);
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);

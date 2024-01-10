@@ -83,7 +83,7 @@ namespace GAS.Editor.General
             var indexOfItem = choices.IndexOf(item);
             indexOfItem = Mathf.Clamp(indexOfItem, 0, choices.Count - 1);
             indexOfItem = EditorGUI.Popup(
-                new Rect(rect.x, rect.y, 300, EditorGUIUtility.singleLineHeight),
+                new Rect(rect.x, rect.y, 180, EditorGUIUtility.singleLineHeight),
                 indexOfItem,
                 choiceNames);
             T newItem = choices[indexOfItem];

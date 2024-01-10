@@ -90,11 +90,11 @@ namespace GAS.Runtime.Effects
             if (canRunning)
             {
                 _activeGameplayEffects.Add(spec);
-                spec.Activate();
+                spec.Apply();
             }
             else
             {
-                spec.Deactivate();
+                spec.DisApply();
             }
             
             spec.TriggerOnAdd();
@@ -105,12 +105,11 @@ namespace GAS.Runtime.Effects
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
         {
-            spec.Deactivate();
-            spec.TriggerOnRemove();
-            
+            spec.DisApply(); 
+            spec.TriggerOnRemove();  
             _activeGameplayEffects.Remove(spec);
             _gameplayEffectSpecs.Remove(spec);
-            
+
             _onGameplayEffectContainerIsDirty?.Invoke();
         }
 
@@ -119,6 +118,7 @@ namespace GAS.Runtime.Effects
             // new active gameplay effects
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
             {
+                if(!gameplayEffectSpec.IsApplied) continue;
                 if(gameplayEffectSpec.IsActive) continue;
                 if (!gameplayEffectSpec.CanRunning()) continue;
                 gameplayEffectSpec.Activate();
@@ -175,7 +175,7 @@ namespace GAS.Runtime.Effects
         {
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
             {
-                gameplayEffectSpec.Deactivate();
+                gameplayEffectSpec.DisApply();
                 gameplayEffectSpec.TriggerOnRemove();
             }
             
