@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dedd22311c464ec481949f2e5c4f11d1, type: 3}
   m_Name: EXMaidUIAsset
   m_EditorClassIdentifier: 
-  fguiPackagePath: Demo/FairyGUI/
+  fguiPackagePath: FairyGUI/
   fguiGenUIDefinePath: /Demo/Script/Gen/
