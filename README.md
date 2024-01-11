@@ -1,6 +1,10 @@
 # EX Gameplay Ability System For Unity
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
+## 提醒
+__*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
+
+```若没有方法解决，可以加文末的使用反馈qq群，群内提供帮助 ```
 ## 项目结构
 ```
 ├───Assets
@@ -93,3 +97,7 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 ### 4. 将GAS移交DOTS或采用ECS结构来运行
 
 ## 特别感谢
+## 插件反馈渠道
+QQ群号:616570103
+
+
