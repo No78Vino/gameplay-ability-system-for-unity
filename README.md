@@ -11,15 +11,28 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 在Unity Package Manager中添加git地址：
 
 #### 1.2.使用git clone
+
 ---
 ### 2.使用
 GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移植，所以实现逻辑基本一致。建议先粗略了解一下UE版本的GAS整体逻辑，参考项目文档：https://github.com/BillEliot/GASDocumentation_Chinese
 
 `参考使用案例：`
 
-## 基础功能
+#### *非编程部分*
+2. 1 基础设置
+在ProjectSetting中（或者Edit Menu栏入口：EX-GAS -> Setting），找到EX Gameplay Ability System的基本设置界面：
 
-## 拓展功能
+![O`~ CLEHDMFE9O@M$5~`$1H](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/200ddd3c-e28c-4630-884b-e8fa165e7b5d)
+
+设置好以下两个路径
+- Config Asset Path: 这是该项目有关GAS的配置的路径。
+- Code Gen Path: 这是GAS的生成脚本路径。GAS的基础配置（Tag，Attribute，AttributeSet）都会有对应的脚本生成。
+-  __**（特别要注意的是不要对Code Gen Path路径或其父路径进行程序集定义，目前默认AttributeSet和Ability生成类的程序集为Assembly-CSharp。之后如有需求，会添加程序集参数）**__
+
+设置完路径后，点击保存（Save）按钮。
+
+---
+## 可视化功能
 ### 1. GAS Base Manager (GAS基础配置管理器)
 ![$5C1@A0}R89 %WS33OY6UP0](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/85f4b1e2-ab3b-4735-8d71-b6623557bf02)
 
