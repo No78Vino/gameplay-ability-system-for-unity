@@ -71,11 +71,12 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 ### 4. 将GAS移交DOTS或采用ECS结构来运行
 
 ## 特别感谢
-本插件全面参考了[UE的GAS解析](https://github.com/tranek/GASDocumentation)，来自github --[@tranek] (https://github.com/tranek)
+本插件全面参考了[UE的GAS解析](https://github.com/tranek/GASDocumentation)，来自github --[@tranek](https://github.com/tranek)
 
 同时还有[中译版本](https://github.com/BillEliot/GASDocumentation_Chinese)，来自github --[@BillEliot](https://github.com/BillEliot)
 
 没有上述二位的文章，本项目的开发会非常痛苦。
+
 ---
 另外还要感谢开源项目：[UnityToolchainsTrick](https://github.com/XINCGer/UnityToolchainsTrick)
 
