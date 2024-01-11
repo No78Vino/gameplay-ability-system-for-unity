@@ -34,13 +34,30 @@
 
 ## 拓展功能
 ### 1. GAS Base Manager (GAS基础配置管理器)
+![$5C1@A0}R89 %WS33OY6UP0](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/85f4b1e2-ab3b-4735-8d71-b6623557bf02)
+
+基础配置是与项目工程唯一对应的，所以入口放在了ProjectSetting，另外还有Edit Menu栏入口：EX-GAS -> Setting
+
+#### a.GameplayTag 管理器
+![{)7T)P@{U}GWY7T%@ 5$@@W](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d5306afc-82a0-4c3e-a263-280c0088f1ae)
+
+我模仿了UE GAS的Tag管理视图，做了树结构管理。
+
+#### b.Attribute 管理器
+
+项目内可操作的属性只可从已配置的Attribute中选取。
+
+#### c.AttributeSet 管理器
+![HBDG` 0 {{9 G6@AS_I0YF](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/bc227c91-1dc1-408b-93e6-c93b5936b232)
+
+属性集可以预设生成，也支持运行时自定义（CustomAttributeSet）。
 
 ### 2. GAS Asset Aggregator (GAS配置资源聚合器)
 ![N~~1W5_AQQ42XY6T`9D)G3F](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/8f3ab649-fc80-426a-aa44-3a52a9df19c4)
 
 因为GAS使用过程需要大量的配置（各类预设：ASC，游戏能力，游戏效果/buff，游戏提示，MMC），为了方便集中管理，我制作了一个配置资源聚合器。
 
-通过在菜单栏EX-GAS -> Asset Aggregato 可以打开配置资源聚合器。
+通过在菜单栏EX-GAS -> Asset Aggregator 可以打开配置资源聚合器。
 
 聚合器支持：分类管理，文件夹树结构显示，搜索栏快速查找，快速创建/删除配置文件（右上角的快捷按钮）
 #### a.ASC预设管理
