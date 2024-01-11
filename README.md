@@ -36,12 +36,20 @@
 ### 1. GAS Base Manager (GAS基础配置管理器)
 
 ### 2. GAS Asset Aggregator (GAS配置资源聚合器)
-#### a.ASC预设管理
-![_MX$4_XP`OZP{NC}A%OI 7N](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/24c97754-c788-4409-96aa-81a6f50176e6)
-#### b.能力配置管理
-![B4B{UAPNCOA 7CE6MQF7878](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/c29c6cf9-6c8b-4ae7-8c24-4e8d445e3d46)
-#### c.游戏效果管理
+![N~~1W5_AQQ42XY6T`9D)G3F](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/8f3ab649-fc80-426a-aa44-3a52a9df19c4)
 
+因为GAS使用过程需要大量的配置（各类预设：ASC，游戏能力，游戏效果/buff，游戏提示，MMC），为了方便集中管理，我制作了一个配置资源聚合器。
+
+通过在菜单栏EX-GAS -> Asset Aggregato 可以打开配置资源聚合器。
+
+聚合器支持：分类管理，文件夹树结构显示，搜索栏快速查找，快速创建/删除配置文件（右上角的快捷按钮）
+#### a.ASC预设管理
+![)@6J1G3%FESLFG$1R0E$WNL](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/0cb0b5a9-cfde-44ad-b121-e0077330a02e)
+#### b.能力配置管理
+![RY_~6~7BSVSOA0`C 4F8FD](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/acd53826-d032-49f3-a878-a649f98311a1)
+#### c.游戏效果管理
+![X8L)UXB@ ARMV8}{P$04JAY](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/3442e5f8-fce4-4784-b393-064c15998401)
+#### d.游戏提示 & MMC 管理
 
 ### 3. GAS Runtime Watcher (GAS运行时监视器)
 ![UA_XISRD_ F9_W}7}JKII9M](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d1a689a2-5c72-42ec-8d2d-60f005eab899)
