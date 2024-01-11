@@ -6,20 +6,19 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 
 ```若没有方法解决，可以加文末的使用反馈qq群，群内提供帮助 ```
 ## 快速开始
-### 1.安装
-#### 1.1.使用Unity Package Manager安装
+### 安装
+1. 使用Unity Package Manager安装
 在Unity Package Manager中添加git地址：
-
-#### 1.2.使用git clone
+2. 使用git clone
 
 ---
-### 2.使用
+### 使用
 GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移植，所以实现逻辑基本一致。建议先粗略了解一下UE版本的GAS整体逻辑，参考项目文档：https://github.com/BillEliot/GASDocumentation_Chinese
 
 `参考使用案例：`
 
 #### *非编程部分*
-2. 1 基础设置
+1. 基础设置
 在ProjectSetting中（或者Edit Menu栏入口：EX-GAS -> Setting），找到EX Gameplay Ability System的基本设置界面：
 
 ![O`~ CLEHDMFE9O@M$5~`$1H](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/200ddd3c-e28c-4630-884b-e8fa165e7b5d)
@@ -30,6 +29,24 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 -  __**（特别要注意的是不要对Code Gen Path路径或其父路径进行程序集定义，目前默认AttributeSet和Ability生成类的程序集为Assembly-CSharp。之后如有需求，会添加程序集参数）**__
 
 设置完路径后，点击保存（Save）按钮。
+
+2. 配置Tag
+
+3. 配置Attribute
+
+4. 配置AttributeSet
+
+5. 设计MMC,Cue
+
+6. 设计Gameplay Effect
+
+7. 设计Ability
+
+8. 设计ASC预设（可选）
+
+
+#### *编程部分*
+
 
 ---
 ## 可视化功能
