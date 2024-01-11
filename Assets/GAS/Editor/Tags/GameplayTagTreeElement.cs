@@ -1,8 +1,9 @@
-using System;
-using UnityEditor.TreeDataModel;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Tags
 {
+	using System;
+	using UnityEditor.TreeDataModel;
+	
 	[Serializable]
 	public class GameplayTagTreeElement : TreeElement
 	{
@@ -11,3 +12,4 @@ namespace GAS.Editor.Tags
 		}
 	}
 }
+#endif

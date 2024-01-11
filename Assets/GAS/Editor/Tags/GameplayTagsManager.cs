@@ -1,10 +1,13 @@
-using GAS.Core;
-using GAS.Runtime.Tags;
-using UnityEditor;
-using UnityEngine;
 
+#if UNITY_EDITOR
 namespace GAS.Editor.Tags
 {
+    using Core;
+    using GAS.Runtime.Tags;
+    using UnityEditor;
+    using UnityEngine;
+    using GameplayAbilitySystem;
+
     public class GameplayTagsManager
     {
         private static GameplayTagsAsset _asset;
@@ -34,13 +37,13 @@ namespace GAS.Editor.Tags
 
         private static void Load()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GasDefine.GAS_TAG_ASSET_PATH);
+            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
             if (asset == null)
             {
                 GasDefine.CheckGasAssetFolder();
 
                 var a = ScriptableObject.CreateInstance<GameplayTagsAsset>();
-                AssetDatabase.CreateAsset(a, GasDefine.GAS_TAG_ASSET_PATH);
+                AssetDatabase.CreateAsset(a, GASSettingAsset.GAS_TAG_ASSET_PATH);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 asset = ScriptableObject.CreateInstance<GameplayTagsAsset>();
@@ -51,3 +54,4 @@ namespace GAS.Editor.Tags
         }
     }
 }
+#endif

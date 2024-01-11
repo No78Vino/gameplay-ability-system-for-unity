@@ -1,13 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
-using GAS.Core;
-using GAS.Runtime.AttributeSet;
-using GAS.Runtime.Effects.Modifier;
-using UnityEditor;
-using UnityEngine;
 
+#if UNITY_EDITOR
 namespace GAS.Editor.Effect
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.Core;
+    using GAS.Runtime.AttributeSet;
+    using GAS.Runtime.Effects.Modifier;
+    using UnityEditor;
+    using UnityEngine;
+    using GAS.Editor.GameplayAbilitySystem;
+
     [CustomEditor(typeof(AttributeBasedModCalculation))]
     public class AttributeBasedModCalculationEditor : UnityEditor.Editor
     {
@@ -21,7 +24,7 @@ namespace GAS.Editor.Effect
                 if (_attributeOptions == null)
                 {
                     _attributeOptions = new List<string>();
-                    var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GasDefine.GAS_ATTRIBUTESET_ASSET_PATH);
+                    var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
                     foreach (var attributeSetConfig in asset.AttributeSetConfigs)
                     {
                         var config = attributeSetConfig;
@@ -91,3 +94,4 @@ namespace GAS.Editor.Effect
         }
     }
 }
+#endif

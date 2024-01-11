@@ -14,8 +14,6 @@ namespace GAS.Editor.Ability
     [CustomEditor(typeof(AbilityAsset))]
     public class AbilityAssetEditor : Editor
     {
-        private readonly bool[] _tagGroupFoldout = new bool[6];
-
         private readonly string[] _tagGroupTitle = new string[6]
         {
             "AssetTag",
@@ -89,7 +87,7 @@ namespace GAS.Editor.Ability
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
             {
-                EditorGUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Width(450));
+                EditorGUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Width(600));
 
                 EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(300f));
                 using (new EditorGUILayout.HorizontalScope())
@@ -109,15 +107,6 @@ namespace GAS.Editor.Ability
 
                 EditorGUILayout.Space(10);
 
-                if (GUILayout.Button("Save", greenButtonStyle)) Save();
-
-                EditorGUILayout.EndHorizontal();
-            }
-
-            
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
-            {
                 {
                     EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(300f));
                     using (new EditorGUILayout.HorizontalScope(GUILayout.Width(300f)))
@@ -160,15 +149,23 @@ namespace GAS.Editor.Ability
                     EditorGUILayout.EndVertical();
                 }
 
+                EditorGUILayout.EndHorizontal();
+            }
+
+            EditorUtil.Separator();
+            
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos,GUI.skin.box);
+            using (new EditorGUILayout.VerticalScope(GUILayout.Width(400)))
+            {
                 _usedGameplayEffects.OnGUI();
             }
 
-            EditorGUILayout.Space(15);
+            EditorUtil.Separator();
             
             EditorGUILayout.LabelField("<size=16><b><color=white>Tags</color></b></size>",
-                new GUIStyle() { alignment = TextAnchor.MiddleCenter,richText = true});
-            
-            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
+                new GUIStyle() { alignment = TextAnchor.MiddleCenter,richText = true}, GUILayout.Width(600));
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box, GUILayout.Width(600)))
+
             {
                 for (var i = 0; i < 3; i++)
                 {
@@ -180,7 +177,7 @@ namespace GAS.Editor.Ability
                 EditorGUILayout.Space(5);
             }
             EditorGUILayout.Space(5);
-            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box,GUILayout.Width(600)))
             {
                 for (var i = 3; i < 6; i++)
                 {
@@ -193,6 +190,8 @@ namespace GAS.Editor.Ability
             }
             
             EditorGUILayout.EndScrollView();
+            
+            if (GUILayout.Button("SAVE", greenButtonStyle,GUILayout.Height(60))) Save();
             
             EditorGUILayout.EndVertical();
         }

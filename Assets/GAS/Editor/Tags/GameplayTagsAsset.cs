@@ -1,10 +1,11 @@
-using System.Collections.Generic;
-using GAS.Editor.Tags;
-using UnityEditor.TreeDataModel;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Runtime.Tags
 {
+	using System.Collections.Generic;
+	using GAS.Editor.Tags;
+	using UnityEditor.TreeDataModel;
+	using UnityEngine;
+	
 	[CreateAssetMenu (fileName = "GameplayTagsAsset", menuName = "GAS/GameplayTagsAsset ", order = 1)]
 	public class GameplayTagsAsset : ScriptableObject
 	{
@@ -36,3 +37,4 @@ namespace GAS.Runtime.Tags
 		}
 	}
 }
+#endif

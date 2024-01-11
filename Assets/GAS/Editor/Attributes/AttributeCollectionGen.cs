@@ -1,4 +1,5 @@
-﻿#if UNITY_EDITOR
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Attributes
 {
     using System;
@@ -8,12 +9,13 @@ namespace GAS.Editor.Attributes
     using GAS.Runtime.Attribute;
     using UnityEditor;
     using UnityEngine;
+    using GAS.Editor.GameplayAbilitySystem;
     
     public static class AttributeCollectionGen
     {
         public static void Gen()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GasDefine.GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME}";
             var attributeNames = asset.AttributeNames;

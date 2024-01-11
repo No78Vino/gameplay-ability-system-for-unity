@@ -1,9 +1,10 @@
-﻿using GAS.Core;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
+    using GAS.Core;
+    using UnityEditor;
+    using UnityEngine;
+    
     public class GASSetting
     {
         private static GASSettingAsset _asset;
@@ -48,3 +49,4 @@ namespace GAS.Editor.GameplayAbilitySystem
         }
     }
 }
+#endif

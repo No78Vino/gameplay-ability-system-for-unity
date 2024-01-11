@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GAS.Editor.General;
-using GAS.Editor.Tags;
-using GAS.Runtime.Cue;
-using GAS.Runtime.Effects;
-using GAS.Runtime.Effects.Modifier;
-using GAS.Runtime.Tags;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Effect
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.Editor.General;
+    using GAS.Editor.Tags;
+    using GAS.Runtime.Cue;
+    using GAS.Runtime.Effects;
+    using GAS.Runtime.Effects.Modifier;
+    using GAS.Runtime.Tags;
+    using UnityEditor;
+    using UnityEngine;
+
     [CustomEditor(typeof(GameplayEffectAsset))]
     public class GameplayEffectAssetEditor : UnityEditor.Editor
     {
@@ -39,6 +40,21 @@ namespace GAS.Editor.Effect
 
         private GameplayEffectAsset Asset => (GameplayEffectAsset)target;
 
+        private GUIStyle greenButtonStyle;
+
+        private void Awake()
+        {
+            greenButtonStyle = new GUIStyle(GUI.skin.button)
+            {
+                fontSize = 24,
+                normal =
+                {
+                    textColor = Color.green
+                },
+                fontStyle = FontStyle.Bold
+            };
+        }
+
         private void OnEnable()
         {
             tagChoices = TagEditorUntil.GetTagChoice();
@@ -59,7 +75,7 @@ namespace GAS.Editor.Effect
             }
 
             modifierList = CustomReorderableList<GameplayEffectModifier>.Create(Asset.Modifiers,
-                rect => { EditorGUI.LabelField(rect, "Modifiers", EditorStyles.boldLabel); }, 
+                rect => { EditorGUI.LabelField(rect, "Modifiers", EditorStyles.boldLabel); },
                 OnEditModifier,
                 OnModifierDrawGUI, GetModifierElementHeight, null);
 
@@ -71,35 +87,50 @@ namespace GAS.Editor.Effect
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Name", GUILayout.Width(100));
-                Asset.Name = EditorGUILayout.TextField("", Asset.Name);
-            }
-
-            EditorGUILayout.Space(5f);
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Description", GUILayout.Width(100));
-                Asset.Description = EditorGUILayout.TextField("", Asset.Description);
-            }
-
             ConfigErrorTip();
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            DurationPolicyGroup();
-            EditorGUILayout.Space(5f);
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(600)))
+            {
+                using (new EditorGUILayout.VerticalScope(GUI.skin.box, GUILayout.Width(320)))
+                {
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Width(300)))
+                    {
+                        EditorGUILayout.LabelField("Name", GUILayout.Width(100));
+                        Asset.Name = EditorGUILayout.TextField("", Asset.Name, GUILayout.Width(200f));
+                    }
+
+                    EditorGUILayout.Space(5f);
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Width(300)))
+                    {
+                        EditorGUILayout.LabelField("Description", GUILayout.Width(100));
+                        Asset.Description = EditorGUILayout.TextField("", Asset.Description, GUILayout.Width(200f));
+                    }
+                }
+
+                DurationPolicyGroup();
+            }
+            EditorUtil.Separator();
+            
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUI.skin.box);
             TagContainerGroup();
-            EditorGUILayout.Space(5f);
-            ModifierGroup();
-            EditorGUILayout.Space(5f);
-            CueGroup();
+            EditorUtil.Separator();
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box, GUILayout.Width(500)))
+            {
+                EditorGUILayout.BeginHorizontal(GUILayout.Width(400));
+                ModifierGroup();
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.Space(5f);
+
+                EditorGUILayout.BeginHorizontal(GUILayout.Width(300));
+                CueGroup();
+                EditorGUILayout.EndHorizontal();
+            }
+
             EditorGUILayout.EndScrollView();
 
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Save")) Save();
+            if (GUILayout.Button("Save", greenButtonStyle,GUILayout.Height(60))) Save();
 
             EditorGUILayout.EndVertical();
         }
@@ -152,20 +183,29 @@ namespace GAS.Editor.Effect
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
-            EditorGUILayout.LabelField("GameplayEffect Tags", EditorStyles.boldLabel);
-
-            using (new EditorGUILayout.HorizontalScope())
+            EditorGUILayout.LabelField("GameplayEffect Tags", EditorStyles.boldLabel, GUILayout.Width(500));
+            EditorGUILayout.Space(5);
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(500)))
             {
-                EditorGUILayout.LabelField("  ", GUILayout.Width(10));
-
-                EditorGUILayout.BeginVertical();
-                foreach (var t in tagGroupAssets)
+                for (var i = 0; i < 3; i++)
                 {
-                    t.OnGUI();
+                    EditorGUILayout.BeginHorizontal(GUILayout.Width(250));
+                    tagGroupAssets[i].OnGUI();
+                    EditorGUILayout.EndHorizontal();
                     EditorGUILayout.Space(5);
                 }
+            }
 
-                EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(10);
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Width(500)))
+            {
+                for (var i = 3; i < tagGroupAssets.Length; i++)
+                {
+                    EditorGUILayout.BeginHorizontal(GUILayout.Width(250));
+                    tagGroupAssets[i].OnGUI();
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.Space(5);
+                }
             }
 
             EditorGUILayout.EndVertical();
@@ -175,7 +215,7 @@ namespace GAS.Editor.Effect
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
-            EditorGUILayout.LabelField("Gameplay Cues", EditorStyles.boldLabel);
+            //EditorGUILayout.LabelField("Gameplay Cues", EditorStyles.boldLabel);
 
             if (Asset.DurationPolicy == EffectsDurationPolicy.Instant)
             {
@@ -243,6 +283,7 @@ namespace GAS.Editor.Effect
                 var path = AssetDatabase.GetAssetPath(mod.MMC);
                 mmcType = path.Split('/').Last();
             }
+
             var mmcInfo = $"MMC:{mmcType}";
 
             EditorGUI.LabelField(new Rect(rect.x, rect.y + EditorGUIUtility.singleLineHeight + 5,
@@ -289,3 +330,4 @@ namespace GAS.Editor.Effect
         }
     }
 }
+#endif

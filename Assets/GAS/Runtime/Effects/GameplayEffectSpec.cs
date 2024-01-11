@@ -108,19 +108,19 @@ namespace GAS.Runtime.Effects
         private void TriggerCueOnAdd()
         {
             if (GameplayEffect.CueOnAdd.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnAdd) cue.Trigger(Owner);
+            foreach (var cue in GameplayEffect.CueOnAdd) cue.Trigger(this);
         }
 
         private void TriggerCueOnExecute()
         {
             if (GameplayEffect.CueOnExecute.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnExecute) cue.Trigger(Owner);
+            foreach (var cue in GameplayEffect.CueOnExecute) cue.Trigger(this);
         }
 
         private void TriggerCueOnRemove()
         {
             if (GameplayEffect.CueOnRemove.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnRemove) cue.Trigger(Owner);
+            foreach (var cue in GameplayEffect.CueOnRemove) cue.Trigger(this);
         }
         
         public void TriggerOnExecute()

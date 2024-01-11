@@ -1,17 +1,20 @@
-using System.Collections.Generic;
-using System.Linq;
-using GAS.Core;
-using GAS.Runtime.AttributeSet;
-using UnityEditor;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Attributes
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.Core;
+    using GAS.Runtime.AttributeSet;
+    using UnityEditor;
+    using GAS.Editor.GameplayAbilitySystem;
+
+    
     public static class AttributeEditorUtil
     {
         public static List<string> GetAttributeNameChoices()
         {
             var names = new List<string>();
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GasDefine.GAS_ATTRIBUTESET_ASSET_PATH);
+            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
             foreach (var attributeSetConfig in asset.AttributeSetConfigs)
             {
                 var config = attributeSetConfig;
@@ -21,3 +24,4 @@ namespace GAS.Editor.Attributes
         }
     }
 }
+#endif

@@ -1,14 +1,17 @@
-﻿using GAS.Core;
-using GAS.Runtime.Attribute;
-using UnityEditor;
-using UnityEngine;
-
+﻿
+#if  UNITY_EDITOR
 namespace GAS.Editor.Attributes
 {
+    using GAS.Core;
+    using GAS.Runtime.Attribute;
+    using UnityEditor;
+    using UnityEngine;
+    using GAS.Editor.GameplayAbilitySystem;
+
     public class AttributesManager
     {
         private static AttributeAsset _asset;
-        private static UnityEditor.Editor _editor;
+        private static Editor _editor;
         
         [SettingsProvider]
         private static SettingsProvider AttributeManagerSetting()
@@ -32,13 +35,13 @@ namespace GAS.Editor.Attributes
 
         private static void Load()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GasDefine.GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
             if (asset == null)
             {
                 GasDefine.CheckGasAssetFolder();
 
                 var a = ScriptableObject.CreateInstance<AttributeAsset>();
-                AssetDatabase.CreateAsset(a, GasDefine.GAS_ATTRIBUTE_ASSET_PATH);
+                AssetDatabase.CreateAsset(a, GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 asset = ScriptableObject.CreateInstance<AttributeAsset>();
@@ -49,3 +52,4 @@ namespace GAS.Editor.Attributes
         }
     }
 }
+#endif

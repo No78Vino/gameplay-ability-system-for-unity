@@ -1,8 +1,11 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace GAS.Core
+﻿#if UNITY_EDITOR
+namespace GAS.Editor.GameplayAbilitySystem
 {
+    using GAS.Core;
+    using UnityEditor;
+    using UnityEngine;
+
+    
     public class GASSettingAsset : ScriptableObject
     {
         public string CodeGeneratePath = "Assets/Scripts/Gen";
@@ -58,3 +61,4 @@ namespace GAS.Core
         public static string GAS_ATTRIBUTESET_ASSET_PATH => $"{Setting.GASConfigAssetPath}/AttributeSetAsset.asset";
     }
 }
+#endif

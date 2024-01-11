@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GAS.Runtime.AttributeSet;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.AttributeSet
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.Runtime.AttributeSet;
+    using UnityEditor;
+    using UnityEngine;
+    
     [CustomEditor(typeof(AttributeSetAsset))]
     public class AttributeSetAssetEditor : UnityEditor.Editor
     {
@@ -162,3 +163,4 @@ namespace GAS.Editor.AttributeSet
         }
     }
 }
+#endif

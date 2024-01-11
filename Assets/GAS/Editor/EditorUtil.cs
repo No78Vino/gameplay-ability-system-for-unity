@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+    using UnityEngine;
+    
     public static class EditorUtil
     {
         public static bool IsValidClassName(string input)
@@ -85,5 +86,13 @@ namespace GAS.Editor
 
             return scriptableObjectTypes;
         }
+        
+        public static void Separator()
+        {
+            GUILayout.Space(5);
+            GUILayout.Box("------------------------------------------------------------------------------------------------------------");
+            GUILayout.Space(5);
+        }
     }
 }
+#endif

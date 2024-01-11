@@ -1,14 +1,15 @@
-using System.Collections.Generic;
-using GAS.Editor.General;
-using GAS.Runtime.Tags;
-using GAS.Editor.Tags;
-using UnityEditor;
-using UnityEditor.IMGUI.Controls;
-using UnityEditor.TreeDataModel;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Tags
 {
+    using System.Collections.Generic;
+    using GAS.Editor.General;
+    using GAS.Runtime.Tags;
+    using GAS.Editor.Tags;
+    using UnityEditor;
+    using UnityEditor.IMGUI.Controls;
+    using UnityEditor.TreeDataModel;
+    using UnityEngine;
+    
     [CustomEditor(typeof(GameplayTagsAsset))]
     public class GameplayTagsTreeAssetEditor : UnityEditor.Editor
     {
@@ -184,3 +185,4 @@ namespace GAS.Editor.Tags
         }
     }
 }
+#endif

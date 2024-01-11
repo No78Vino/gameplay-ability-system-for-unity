@@ -1,9 +1,10 @@
-using System;
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
+    using System;
+    using UnityEditor;
+    using UnityEngine;
+    
     public class StringEditWindow : EditorWindow
     {
         private Action<string> callback;
@@ -40,3 +41,4 @@ namespace GAS.Editor.General
         }
     }
 }
+#endif

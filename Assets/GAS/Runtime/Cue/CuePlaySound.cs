@@ -1,14 +1,15 @@
-using GAS.Runtime.Component;
+using System;
+using GAS.Runtime.Effects;
 
 namespace GAS.Runtime.Cue
 {
-    public class CuePlaySound: GameplayCue
+    public class CuePlaySound : GameplayCue
     {
         // TODO
-        
-        public override void Trigger(AbilitySystemComponent source)
+
+        public override void Trigger(GameplayEffectSpec source)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

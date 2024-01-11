@@ -1,4 +1,5 @@
 using GAS.Runtime.Component;
+using GAS.Runtime.Effects;
 using UnityEngine;
 
 namespace GAS.Runtime.Cue
@@ -9,13 +10,13 @@ namespace GAS.Runtime.Cue
         [SerializeField] private string _animationName;
         private Animator _animator;
 
-        protected override void Init(AbilitySystemComponent source)
+        protected override void Init(GameplayEffectSpec source)
         {
             base.Init(source);
-            _animator = source.GetComponent<Animator>();
+            _animator = gameplayEffectSpec.Owner.GetComponent<Animator>();
         }
 
-        public override void Trigger(AbilitySystemComponent source)
+        public override void Trigger(GameplayEffectSpec source)
         {
             base.Trigger(source);
             _animator.Play(_animationName);

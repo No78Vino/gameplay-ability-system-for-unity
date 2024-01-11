@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
+    using System.Collections.Generic;
+    using UnityEditor;
+    using UnityEngine;
+    
     public class ScriptableObjectReorderableList<T> where T : ScriptableObject
     {
         private CustomReorderableList<T> _reorderableList;
@@ -59,3 +59,4 @@ namespace GAS.Editor.General
         }
     }
 }
+#endif

@@ -1,20 +1,21 @@
 ﻿using GAS.Runtime.Component;
+using GAS.Runtime.Effects;
 using UnityEngine;
 
 namespace GAS.Runtime.Cue
 {
     public abstract class GameplayCue:ScriptableObject
     {
-        protected  AbilitySystemComponent _source;
+        protected GameplayEffectSpec gameplayEffectSpec;
 
-        protected virtual void Init(AbilitySystemComponent source)
+        protected virtual void Init(GameplayEffectSpec sourceGameplayEffectSpec)
         {
-            _source = source;
+            gameplayEffectSpec = sourceGameplayEffectSpec;
         }
 
-        public virtual void Trigger(AbilitySystemComponent source)
+        public virtual void Trigger(GameplayEffectSpec sourceGameplayEffectSpec)
         {
-            Init(source);
+            Init(sourceGameplayEffectSpec);
         }
     }
 }

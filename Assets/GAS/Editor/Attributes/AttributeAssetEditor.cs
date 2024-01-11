@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using GAS.Editor.General;
-using GAS.Runtime.Attribute;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Attributes
 {
+    using System.Collections.Generic;
+    using General;
+    using Runtime.Attribute;
+    using UnityEditor;
+    using UnityEngine;
+    
     [CustomEditor(typeof(AttributeAsset))]
-    public class AttributeAssetEditor:UnityEditor.Editor
+    public class AttributeAssetEditor:Editor
     {
         private AttributeAsset Asset => (AttributeAsset)target;
         
@@ -118,3 +117,4 @@ namespace GAS.Editor.Attributes
          }
     }
 }
+#endif

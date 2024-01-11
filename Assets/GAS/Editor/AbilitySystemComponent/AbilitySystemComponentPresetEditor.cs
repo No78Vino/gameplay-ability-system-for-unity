@@ -1,5 +1,3 @@
-using System;
-
 #if UNITY_EDITOR
 namespace GAS.Editor.AbilitySystemComponent
 {
@@ -15,7 +13,7 @@ namespace GAS.Editor.AbilitySystemComponent
     using UnityEngine;
 
     [CustomEditor(typeof(AbilitySystemComponentPreset))]
-    public class AbilitySystemComponentPresetEditor : UnityEditor.Editor
+    public class AbilitySystemComponentPresetEditor : Editor
     {
         private ScriptableObjectReorderableList<AbilityAsset> _baseAbilities;
         
@@ -28,7 +26,7 @@ namespace GAS.Editor.AbilitySystemComponent
         private AbilitySystemComponentPreset Asset => (AbilitySystemComponentPreset)target;
 
         private GUIStyle greenButtonStyle;
-
+        private Vector2 scrollPos;
         private void Awake()
         {
             greenButtonStyle = new GUIStyle(GUI.skin.button)
@@ -61,48 +59,53 @@ namespace GAS.Editor.AbilitySystemComponent
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
             ConfigErrorTip();
+
+            using (new EditorGUILayout.HorizontalScope(GUI.skin.box))
+            {
+                EditorGUILayout.BeginVertical(GUILayout.Width(300f));
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField("Name", GUILayout.Width(100f));
+                    Asset.Name = EditorGUILayout.TextField("", Asset.Name, GUILayout.Width(200f));
+                }
+
+                EditorGUILayout.Space(5);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField("Description", GUILayout.Width(100f));
+                    Asset.Description = EditorGUILayout.TextField("", Asset.Description, GUILayout.Width(200f));
+                }
+
+                EditorGUILayout.EndVertical();
+
+                GUILayout.Space(10);
+                EditorGUILayout.BeginVertical(GUILayout.Width(300));
+                _baseAttributeSets.OnGUI();
+                EditorGUILayout.EndVertical();
+            }
+
+            EditorUtil.Separator();
             
-            EditorGUILayout.BeginHorizontal(GUI.skin.box);
-            
-            EditorGUILayout.BeginVertical(GUILayout.Width(300f));
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos,GUI.skin.box);
             using (new EditorGUILayout.HorizontalScope())
             {
-                EditorGUILayout.LabelField("Name", GUILayout.Width(100f));
-                Asset.Name = EditorGUILayout.TextField("", Asset.Name, GUILayout.Width(200f));
-            }
-            EditorGUILayout.Space(5);
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Description", GUILayout.Width(100f));
-                Asset.Description = EditorGUILayout.TextField("", Asset.Description,GUILayout.Width(200f));
-            }
-            EditorGUILayout.EndVertical();
+                using (new EditorGUILayout.VerticalScope(GUILayout.Width(300)))
+                {
+                    _baseTags.OnGUI();
+                }
 
-            GUILayout.Space(10);
-            EditorGUILayout.BeginVertical(GUILayout.Width(300));
-            _baseAttributeSets.OnGUI();
+                GUILayout.Space(10);
+                using (new EditorGUILayout.VerticalScope(GUILayout.Width(300)))
+                {
+                    _baseAbilities.OnGUI();
+                }
+            }
 
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.EndHorizontal();
-            
-            GUILayout.Space(10);
-            
-            EditorGUILayout.BeginHorizontal(GUI.skin.box);
-            using (new EditorGUILayout.VerticalScope(GUILayout.Width(300)))
-            {
-                _baseTags.OnGUI();  
-            }
-            GUILayout.Space(10);
-            using (new EditorGUILayout.VerticalScope(GUILayout.Width(300)))
-            {
-                 _baseAbilities.OnGUI();
-            }
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndScrollView();
 
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Save",greenButtonStyle)) Save();
+            if (GUILayout.Button("Save",greenButtonStyle,GUILayout.Height(60))) Save();
 
             EditorGUILayout.EndVertical();
         }

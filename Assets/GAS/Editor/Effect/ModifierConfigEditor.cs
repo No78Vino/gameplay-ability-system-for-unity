@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using GAS.Editor.Attributes;
-using GAS.Runtime.Effects.Modifier;
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Effect
 {
+    using System;
+    using System.Collections.Generic;
+    using GAS.Editor.Attributes;
+    using GAS.Runtime.Effects.Modifier;
+    using UnityEditor;
+    using UnityEngine;
+
     public class ModifierConfigEditor : EditorWindow
     {
         private List<string> _attributeOptions;
@@ -87,3 +88,4 @@ namespace GAS.Editor.Effect
         }
     }
 }
+#endif

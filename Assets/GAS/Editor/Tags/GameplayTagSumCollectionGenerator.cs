@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using GAS.Core;
-using GAS.Runtime.Tags;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Tags
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using GAS.Core;
+    using GAS.Runtime.Tags;
+    using UnityEditor;
+    using UnityEngine;
+    using GAS.Editor.GameplayAbilitySystem;
     public static class GameplayTagSumCollectionGenerator
     {
         public static void Gen()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GasDefine.GAS_TAG_ASSET_PATH);
+            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_COLLECTION_CSHARP_SCRIPT_NAME}";
             var tags = asset.Tags;
@@ -75,3 +76,4 @@ namespace GAS.Editor.Tags
         }
     }
 }
+#endif

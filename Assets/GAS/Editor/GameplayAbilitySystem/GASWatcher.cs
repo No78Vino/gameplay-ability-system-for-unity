@@ -63,7 +63,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             if (IsPlaying) Repaint();
         }
 
-        [MenuItem("EX-GAS/Runtime GAS Watcher", priority = 3)]
+        [MenuItem("EX-GAS/GAS Runtime Watcher", priority = 3)]
         private static void OpenWindow()
         {
             var window = GetWindow<GASWatcher>();

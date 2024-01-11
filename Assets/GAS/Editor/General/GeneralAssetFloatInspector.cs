@@ -1,8 +1,8 @@
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
+    using UnityEditor;
+    using UnityEngine;
     public class GeneralAssetFloatInspector : EditorWindow
     {
         private Object _asset;
@@ -41,5 +41,5 @@ namespace GAS.Editor.General
             }
         }
     }
-
 }
+#endif
