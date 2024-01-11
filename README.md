@@ -76,12 +76,19 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 
 ```目前监视器较为简陋，以后可能会优化监视器。```
 
+---
+## 暂不支持的功能（可能有遗漏）
+1. GameplayEffect Stack， 同一游戏效果堆叠（如燃烧效果堆叠，伤害提升）
+2. RPC相关的GE复制广播
+3. GameplayEffect Execution，目前只有Modifier，没有Execution
+4. Ability的触发判断用的Source/Target Tag目前不生效
 
 ## 后续计划
-### 1. 修复bug
-### 2. 补全遗漏的功能
-### 3. 支持网络同步
-### 4. 将GAS移交DOTS或采用ECS结构来运行
+1. 修复bug
+2. 补全遗漏的功能
+3. 支持RPC的GE复制广播，网络同步
+4. Ability编辑器（可视化编辑，自动生成Ability类脚本）
+5. 将GAS移交DOTS或采用ECS结构来运行
 
 ## 特别感谢
 本插件全面参考了[UE的GAS解析](https://github.com/tranek/GASDocumentation)，来自github --[@tranek](https://github.com/tranek)
