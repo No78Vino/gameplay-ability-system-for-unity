@@ -52,7 +52,6 @@ namespace GAS.Runtime.Ability
                 
             }
             return hasAllTags && notHasAnyTags && notBlockedByOtherAbility;
-                    // && Owner.HasAllTags(Ability.Tag.SourceRequiredTags);
         }
 
         protected virtual CooldownTimer CheckCooldown()
@@ -69,7 +68,7 @@ namespace GAS.Runtime.Ability
             _abilityArguments = args;
             IsActive = true;
             ActiveCount++;
-            // Cancel Other Ability
+            
             Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
             ActivateAbility(_abilityArguments);
             return true;

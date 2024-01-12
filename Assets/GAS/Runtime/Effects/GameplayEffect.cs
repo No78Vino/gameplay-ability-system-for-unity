@@ -73,7 +73,7 @@ namespace GAS.Runtime.Effects
             GameplayCueInstant[] cueOnRemove,
             GameplayCueInstant[] cueOnActivate,
             GameplayCueInstant[] cueOnDeactivate,
-            GameplayCueDurational[] cueDurationals,
+            GameplayCueDurational[] cueDurational,
             GameplayEffectModifier[] modifiers,
             ExecutionCalculation[] executions)
         {
@@ -87,7 +87,7 @@ namespace GAS.Runtime.Effects
             CueOnAdd = cueOnAdd;
             CueOnActivate = cueOnActivate;
             CueOnDeactivate = cueOnDeactivate;
-            CueDurational = cueDurationals;
+            CueDurational = cueDurational;
             Modifiers = modifiers;
             Executions = executions;
         }
