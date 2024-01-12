@@ -24,9 +24,12 @@ namespace GAS.Runtime.Effects
         public GameplayTag[] RemoveGameplayEffectsWithTags;
 
         // Cues
-        public GameplayCue[] CueOnExecute;
-        public GameplayCue[] CueOnRemove;
-        public GameplayCue[] CueOnAdd;
+        public GameplayCueInstant[] CueOnExecute;
+        public GameplayCueInstant[] CueOnRemove;
+        public GameplayCueInstant[] CueOnAdd;
+        public GameplayCueInstant[] CueOnActivate;
+        public GameplayCueInstant[] CueOnDeactivate;
+        public GameplayCueDurational[] CueDurational;
 
         public GameplayEffectModifier[] Modifiers;
 

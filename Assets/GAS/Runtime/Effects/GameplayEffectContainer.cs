@@ -9,10 +9,10 @@ namespace GAS.Runtime.Effects
     {
         private AbilitySystemComponent _owner;
 
-        private List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
-        private List<GameplayEffectSpec> _activeGameplayEffects = new List<GameplayEffectSpec>();
+        private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
+        private readonly List<GameplayEffectSpec> _activeGameplayEffects = new List<GameplayEffectSpec>();
         
-        private event Action _onGameplayEffectContainerIsDirty;
+        private event Action onGameplayEffectContainerIsDirty;
         public void SetOwner(AbilitySystemComponent owner)
         {
             _owner = owner;
@@ -34,12 +34,12 @@ namespace GAS.Runtime.Effects
 
         public void RegisterOnGameplayEffectContainerIsDirty(Action action)
         {
-            _onGameplayEffectContainerIsDirty += action;
+            onGameplayEffectContainerIsDirty += action;
         }
         
         public void UnregisterOnGameplayEffectContainerIsDirty(Action action)
         {
-            _onGameplayEffectContainerIsDirty -= action;
+            onGameplayEffectContainerIsDirty -= action;
         }
         
         public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
@@ -85,6 +85,7 @@ namespace GAS.Runtime.Effects
             }
 
             _gameplayEffectSpecs.Add(spec);
+            spec.TriggerOnAdd();
             
             var canRunning = spec.CanRunning();
             if (canRunning)
@@ -97,8 +98,7 @@ namespace GAS.Runtime.Effects
                 spec.DisApply();
             }
             
-            spec.TriggerOnAdd();
-            _onGameplayEffectContainerIsDirty?.Invoke();
+            onGameplayEffectContainerIsDirty?.Invoke();
             
             return canRunning;
         }
@@ -110,7 +110,7 @@ namespace GAS.Runtime.Effects
             _activeGameplayEffects.Remove(spec);
             _gameplayEffectSpecs.Remove(spec);
 
-            _onGameplayEffectContainerIsDirty?.Invoke();
+            onGameplayEffectContainerIsDirty?.Invoke();
         }
 
         public void RefreshGameplayEffectState()
@@ -134,7 +134,7 @@ namespace GAS.Runtime.Effects
                 _activeGameplayEffects.Remove(gameplayEffectSpec);
             }
             
-            _onGameplayEffectContainerIsDirty?.Invoke();
+            onGameplayEffectContainerIsDirty?.Invoke();
         }
 
         public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
@@ -182,11 +182,7 @@ namespace GAS.Runtime.Effects
             _activeGameplayEffects.Clear();
             _gameplayEffectSpecs.Clear();
             
-            _onGameplayEffectContainerIsDirty?.Invoke();
+            onGameplayEffectContainerIsDirty?.Invoke();
         }
-        
-#if UNITY_EDITOR
-        public List<GameplayEffectSpec> ActiveGameplayEffects => _activeGameplayEffects;
-#endif
     }
 }

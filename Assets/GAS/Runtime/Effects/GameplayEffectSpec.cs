@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
 using GAS.General;
-using GAS.Runtime.Attribute;
 using GAS.Runtime.Component;
+using GAS.Runtime.Cue;
 using Unity.Mathematics;
 
 namespace GAS.Runtime.Effects
 {
     public class GameplayEffectSpec
     {
-        public delegate void GameplayEffectEventHandler(GameplayEffectSpec sender);
+        private GameplayCueDurationalSpec[] _cueDurationalSpecs;
+
+        /// <summary>
+        ///     If the gameplay effect has a period and the execution is not null,
+        ///     this is the execution that will be triggered every period.
+        /// </summary>
+        public GameplayEffectSpec PeriodExecution;
 
         public GameplayEffectSpec(
             GameplayEffect gameplayEffect,
@@ -30,20 +36,14 @@ namespace GAS.Runtime.Effects
         public GameplayEffect GameplayEffect { get; }
         public long ActivationTime { get; private set; }
         public float Level { get; private set; }
-        public AbilitySystemComponent Source { get; private set; }
+        public AbilitySystemComponent Source { get; }
         public AbilitySystemComponent Owner { get; }
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration => GameplayEffect.Duration;
 
-        /// <summary>
-        /// If the gameplay effect has a period and the execution is not null,
-        /// this is the execution that will be triggered every period.
-        /// </summary>
-        public GameplayEffectSpec PeriodExecution;
-        
-        public Dictionary<string,float> SnapshotAttributes { get;private set; }
+        public Dictionary<string, float> SnapshotAttributes { get; private set; }
 
         public float DurationRemaining()
         {
@@ -64,14 +64,14 @@ namespace GAS.Runtime.Effects
             IsApplied = true;
             Activate();
         }
-        
+
         public void DisApply()
         {
             if (!IsApplied) return;
             IsApplied = false;
             Deactivate();
         }
-        
+
         public void Activate()
         {
             if (IsActive) return;
@@ -98,34 +98,91 @@ namespace GAS.Runtime.Effects
             PeriodTicker?.Tick();
         }
 
-        public event GameplayEffectEventHandler OnExecute;
-        public event GameplayEffectEventHandler OnAdd;
-        public event GameplayEffectEventHandler OnRemove;
-        public event GameplayEffectEventHandler OnActivation;
-        public event GameplayEffectEventHandler OnDeactivation;
-        public event GameplayEffectEventHandler OnTick;
-
-        private void TriggerCueOnAdd()
-        {
-            if (GameplayEffect.CueOnAdd.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnAdd) cue.Trigger(this);
-        }
-
         private void TriggerCueOnExecute()
         {
             if (GameplayEffect.CueOnExecute.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnExecute) cue.Trigger(this);
+            foreach (var cue in GameplayEffect.CueOnExecute)
+            {
+                var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                instantCue?.Trigger();
+            }
+        }
+
+        private void TriggerCueOnAdd()
+        {
+            if (GameplayEffect.CueOnAdd.Length > 0)
+                foreach (var cue in GameplayEffect.CueOnAdd)
+                {
+                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    instantCue?.Trigger();
+                }
+
+            if (GameplayEffect.CueDurational.Length > 0)
+            {
+                _cueDurationalSpecs = new GameplayCueDurationalSpec[GameplayEffect.CueDurational.Length];
+                for (var i = 0; i < GameplayEffect.CueDurational.Length; i++)
+                {
+                    var cueDurational = GameplayEffect.CueDurational[i];
+                    _cueDurationalSpecs[i] = cueDurational.CreateSpec(this) as GameplayCueDurationalSpec;
+                }
+
+                foreach (var cue in _cueDurationalSpecs) cue.OnGameplayEffectAdd();
+            }
         }
 
         private void TriggerCueOnRemove()
         {
-            if (GameplayEffect.CueOnRemove.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnRemove) cue.Trigger(this);
+            if (GameplayEffect.CueOnRemove.Length > 0)
+                foreach (var cue in GameplayEffect.CueOnRemove)
+                {
+                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    instantCue?.Trigger();
+                }
+
+            if (GameplayEffect.CueDurational.Length > 0)
+            {
+                foreach (var cue in _cueDurationalSpecs) cue.OnGameplayEffectRemove();
+
+                _cueDurationalSpecs = null;
+            }
         }
-        
+
+        private void TriggerCueOnActivation()
+        {
+            if (GameplayEffect.CueOnActivate.Length > 0)
+                foreach (var cue in GameplayEffect.CueOnActivate)
+                {
+                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    instantCue?.Trigger();
+                }
+
+            if (GameplayEffect.CueDurational.Length > 0)
+                foreach (var cue in _cueDurationalSpecs)
+                    cue.OnGameplayEffectActivate();
+        }
+
+        private void TriggerCueOnDeactivation()
+        {
+            if (GameplayEffect.CueOnDeactivate.Length > 0)
+                foreach (var cue in GameplayEffect.CueOnDeactivate)
+                {
+                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    instantCue?.Trigger();
+                }
+
+            if (GameplayEffect.CueDurational.Length > 0)
+                foreach (var cue in _cueDurationalSpecs)
+                    cue.OnGameplayEffectDeactivate();
+        }
+
+        private void CueOnTick()
+        {
+            if (GameplayEffect.CueDurational.Length <= 0) return;
+            foreach (var cue in _cueDurationalSpecs) cue.OnTick();
+        }
+
         public void TriggerOnExecute()
         {
-            OnExecute?.Invoke(this);
             TriggerCueOnExecute();
 
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
@@ -135,19 +192,17 @@ namespace GAS.Runtime.Effects
 
         public void TriggerOnAdd()
         {
-            OnAdd?.Invoke(this);
             TriggerCueOnAdd();
         }
 
         public void TriggerOnRemove()
         {
-            OnRemove?.Invoke(this);
             TriggerCueOnRemove();
         }
 
         private void TriggerOnActivation()
-        {            
-            OnActivation?.Invoke(this);
+        {
+            TriggerCueOnActivation();
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
@@ -155,17 +210,15 @@ namespace GAS.Runtime.Effects
 
         private void TriggerOnDeactivation()
         {
-            OnDeactivation?.Invoke(this);
+            TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
         }
 
         public void TriggerOnTick()
         {
-            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Duration||
+            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Duration ||
                 GameplayEffect.DurationPolicy == EffectsDurationPolicy.Infinite)
-            {
-                OnTick?.Invoke(this);
-            }
+                CueOnTick();
         }
 
         public void RemoveSelf()

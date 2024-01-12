@@ -3,19 +3,49 @@ using UnityEngine;
 
 namespace GAS.Runtime.Cue
 {
-    public class CueVFX : GameplayCue
+    public class CueVFX : GameplayCueDurational
     {
-        [SerializeField] private GameObject _vfx;
+        [SerializeField] public GameObject VfxPrefab;
 
-        protected override void Init(GameplayEffectSpec source)
+        public override GameplayCueSpec CreateSpec(GameplayEffectSpec sourceGameplayEffectSpec)
         {
-            base.Init(source);
+            return new CueVFXSpec(this, sourceGameplayEffectSpec);
+        }
+    }
+
+    public class CueVFXSpec : GameplayCueDurationalSpec
+    {
+        private GameObject _vfxInstance;
+
+        public CueVFXSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
+            sourceGameplayEffectSpec)
+        {
         }
 
-        public override void Trigger(GameplayEffectSpec source)
+        private CueVFX cue => _cue as CueVFX;
+
+        public override void OnGameplayEffectAdd()
         {
-            base.Trigger(source);
-            if (_vfx != null) Instantiate(_vfx, gameplayEffectSpec.Owner.transform);
+            _vfxInstance = Object.Instantiate(cue.VfxPrefab, _targetASC.transform);
+        }
+
+        public override void OnGameplayEffectRemove()
+        {
+            Object.Destroy(_vfxInstance);
+        }
+
+        public override void OnGameplayEffectActivate()
+        {
+            _vfxInstance.SetActive(true);
+        }
+
+        public override void OnGameplayEffectDeactivate()
+        {
+            _vfxInstance.SetActive(false);
+        }
+
+        public override void OnTick()
+        {
         }
     }
 }

@@ -16,9 +16,12 @@ namespace GAS.Editor.Effect
     [CustomEditor(typeof(GameplayEffectAsset))]
     public class GameplayEffectAssetEditor : UnityEditor.Editor
     {
-        private ScriptableObjectReorderableList<GameplayCue> cueOnAddList;
-        private ScriptableObjectReorderableList<GameplayCue> cueOnExecuteList;
-        private ScriptableObjectReorderableList<GameplayCue> cueOnRemoveList;
+        private ScriptableObjectReorderableList<GameplayCueInstant> cueOnExecuteList;
+        private ScriptableObjectReorderableList<GameplayCueInstant> cueOnAddList;
+        private ScriptableObjectReorderableList<GameplayCueInstant> cueOnRemoveList;
+        private ScriptableObjectReorderableList<GameplayCueInstant> cueOnActivateList;
+        private ScriptableObjectReorderableList<GameplayCueInstant> cueOnDeactivateList;
+        private ScriptableObjectReorderableList<GameplayCueDurational> cueDurationalList;
 
         private CustomReorderableList<GameplayEffectModifier> modifierList;
 
@@ -79,9 +82,12 @@ namespace GAS.Editor.Effect
                 OnEditModifier,
                 OnModifierDrawGUI, GetModifierElementHeight, null);
 
-            cueOnExecuteList = new ScriptableObjectReorderableList<GameplayCue>(Asset.CueOnExecute, "Cue On Execute");
-            cueOnAddList = new ScriptableObjectReorderableList<GameplayCue>(Asset.CueOnAdd, "Cue On Add");
-            cueOnRemoveList = new ScriptableObjectReorderableList<GameplayCue>(Asset.CueOnRemove, "Cue On Remove");
+            cueOnExecuteList = new ScriptableObjectReorderableList<GameplayCueInstant>(Asset.CueOnExecute, "Cue On Execute");
+            cueOnAddList = new ScriptableObjectReorderableList<GameplayCueInstant>(Asset.CueOnAdd, "Cue On Add");
+            cueOnRemoveList = new ScriptableObjectReorderableList<GameplayCueInstant>(Asset.CueOnRemove, "Cue On Remove");
+            cueOnActivateList = new ScriptableObjectReorderableList<GameplayCueInstant>(Asset.CueOnActivate, "Cue On Activate");
+            cueOnDeactivateList = new ScriptableObjectReorderableList<GameplayCueInstant>(Asset.CueOnDeactivate, "Cue On Deactivate");
+            cueDurationalList = new ScriptableObjectReorderableList<GameplayCueDurational>(Asset.CueDurational, "Cue For Durational");
         }
 
         public override void OnInspectorGUI()
@@ -226,6 +232,12 @@ namespace GAS.Editor.Effect
                 cueOnAddList.OnGUI();
                 EditorGUILayout.Space(5);
                 cueOnRemoveList.OnGUI();
+                EditorGUILayout.Space(5);
+                cueOnActivateList.OnGUI();
+                EditorGUILayout.Space(5);
+                cueOnDeactivateList.OnGUI();
+                EditorGUILayout.Space(5);
+                cueDurationalList.OnGUI();
             }
 
             EditorGUILayout.EndVertical();
@@ -252,6 +264,9 @@ namespace GAS.Editor.Effect
             Asset.CueOnExecute = cueOnExecuteList.GetItemList().ToArray();
             Asset.CueOnAdd = cueOnAddList.GetItemList().ToArray();
             Asset.CueOnRemove = cueOnRemoveList.GetItemList().ToArray();
+            Asset.CueOnActivate = cueOnActivateList.GetItemList().ToArray();
+            Asset.CueOnDeactivate = cueOnDeactivateList.GetItemList().ToArray();
+            Asset.CueDurational = cueDurationalList.GetItemList().ToArray();
 
             EditorUtility.SetDirty(Asset);
             AssetDatabase.SaveAssets();

@@ -278,11 +278,13 @@ namespace GAS.Editor.GameplayAbilitySystem
         private void DrawGameplayEffect(Runtime.Component.AbilitySystemComponent asc)
         {
             EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
-            if (asc.GameplayEffectContainer.ActiveGameplayEffects.Count == 0)
+            var activeGE = asc.GameplayEffectContainer.GetActiveGameplayEffects();
+            if (activeGE.Count == 0)
             {
                 EditorGUILayout.LabelField(" ", GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
             }
-            foreach (var ge in asc.GameplayEffectContainer.ActiveGameplayEffects)
+
+            foreach (var ge in activeGE)
                 EditorGUILayout.LabelField($"{ge.GameplayEffect.Asset.Name}", GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
 
             EditorGUILayout.EndVertical();

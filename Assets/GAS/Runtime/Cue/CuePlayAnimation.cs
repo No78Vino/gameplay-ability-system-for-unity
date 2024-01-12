@@ -5,21 +5,30 @@ using UnityEngine;
 namespace GAS.Runtime.Cue
 {
     [CreateAssetMenu(fileName = "CuePlayAnimation", menuName = "GAS/Cue/CuePlayAnimation")]
-    public class CuePlayAnimation : GameplayCue
+    public class CuePlayAnimation : GameplayCueInstant
     {
         [SerializeField] private string _animationName;
-        private Animator _animator;
-
-        protected override void Init(GameplayEffectSpec source)
+        public string AnimationName => _animationName;
+        public override GameplayCueSpec CreateSpec(GameplayEffectSpec sourceGameplayEffectSpec)
         {
-            base.Init(source);
-            _animator = gameplayEffectSpec.Owner.GetComponent<Animator>();
+            return new CuePlayAnimationSpec(this, sourceGameplayEffectSpec);
+        }
+    }
+    
+    public class CuePlayAnimationSpec : GameplayCueInstantSpec
+    {
+        private CuePlayAnimation cue => _cue as CuePlayAnimation;
+        private readonly Animator _animator;
+        
+        public CuePlayAnimationSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
+            sourceGameplayEffectSpec)
+        {
+            _animator = _targetASC.GetComponent<Animator>();
         }
 
-        public override void Trigger(GameplayEffectSpec source)
+        public override void Trigger()
         {
-            base.Trigger(source);
-            _animator.Play(_animationName);
+            _animator.Play(cue.AnimationName);
         }
     }
 }

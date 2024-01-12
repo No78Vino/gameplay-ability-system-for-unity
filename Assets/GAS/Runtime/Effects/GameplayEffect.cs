@@ -22,9 +22,12 @@ namespace GAS.Runtime.Effects
         public readonly GameplayEffectTagContainer TagContainer;
 
         // Cues
-        public readonly GameplayCue[] CueOnExecute;
-        public readonly GameplayCue[] CueOnRemove;
-        public readonly GameplayCue[] CueOnAdd;
+        public readonly GameplayCueInstant[] CueOnExecute;
+        public readonly GameplayCueInstant[] CueOnRemove;
+        public readonly GameplayCueInstant[] CueOnAdd;
+        public readonly GameplayCueInstant[] CueOnActivate;
+        public readonly GameplayCueInstant[] CueOnDeactivate;
+        public readonly GameplayCueDurational[] CueDurational;
 
         public readonly GameplayEffectModifier[] Modifiers;
         public readonly ExecutionCalculation[] Executions;
@@ -53,6 +56,9 @@ namespace GAS.Runtime.Effects
             CueOnExecute = asset.CueOnExecute;
             CueOnRemove = asset.CueOnRemove;
             CueOnAdd = asset.CueOnAdd;
+            CueOnActivate = asset.CueOnActivate;
+            CueOnDeactivate = asset.CueOnDeactivate;
+            CueDurational = asset.CueDurational;
             Modifiers = asset.Modifiers;
             Executions = asset.Executions;
         }
@@ -62,9 +68,12 @@ namespace GAS.Runtime.Effects
             float duration,
             float period,
             GameplayEffectTagContainer tagContainer,
-            GameplayCue[] cueOnExecute,
-            GameplayCue[] cueOnRemove,
-            GameplayCue[] cueOnAdd,
+            GameplayCueInstant[] cueOnExecute,
+            GameplayCueInstant[] cueOnAdd,
+            GameplayCueInstant[] cueOnRemove,
+            GameplayCueInstant[] cueOnActivate,
+            GameplayCueInstant[] cueOnDeactivate,
+            GameplayCueDurational[] cueDurationals,
             GameplayEffectModifier[] modifiers,
             ExecutionCalculation[] executions)
         {
@@ -76,6 +85,9 @@ namespace GAS.Runtime.Effects
             CueOnExecute = cueOnExecute;
             CueOnRemove = cueOnRemove;
             CueOnAdd = cueOnAdd;
+            CueOnActivate = cueOnActivate;
+            CueOnDeactivate = cueOnDeactivate;
+            CueDurational = cueDurationals;
             Modifiers = modifiers;
             Executions = executions;
         }
