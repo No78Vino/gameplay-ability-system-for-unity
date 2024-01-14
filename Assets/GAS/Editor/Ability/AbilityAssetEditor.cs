@@ -109,6 +109,21 @@ namespace GAS.Editor.Ability
 
                 {
                     EditorGUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(300f));
+
+                    EditorGUILayout.LabelField(
+                        "<size=13><b><color=green>Unique Name is very important!" +
+                        "GAS will use the unique name as a UID for the ability." +
+                        "Therefore,you must keep this name unique." +
+                        "Don't worry.When generating the code, the tool will check this.</color></b></size>",
+                        new GUIStyle(GUI.skin.box) { richText = true ,alignment = TextAnchor.MiddleLeft}, 
+                        GUILayout.Width(300));
+                    
+                    using (new EditorGUILayout.HorizontalScope(GUILayout.Width(300f)))
+                    {
+                        EditorGUILayout.LabelField("<size=14><b><color=white>UniqueName</color></b></size>", new GUIStyle(GUI.skin.label) { richText = true },GUILayout.Width(100));
+                        Asset.UniqueName = EditorGUILayout.TextField("", Asset.UniqueName, GUILayout.Width(200f));
+                    }
+
                     using (new EditorGUILayout.HorizontalScope(GUILayout.Width(300f)))
                     {
                         if (abilityChoices.Count == 0)

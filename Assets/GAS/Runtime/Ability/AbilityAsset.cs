@@ -9,7 +9,8 @@ namespace GAS.Runtime.Ability
     {
         public string Name;
         public string Description;
-        
+
+        public string UniqueName;
         public string InstanceAbilityClassFullName; 
         
         public GameplayEffectAsset Cost;

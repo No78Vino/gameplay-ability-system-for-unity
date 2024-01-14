@@ -14,6 +14,10 @@ namespace GAS.Core
         public const string GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME = "AttributeCollection.gen.cs";
 
         public const string GAS_ATTRIBUTESET_CLASS_CSHARP_SCRIPT_NAME = "AttributeSetClass.gen.cs";
+        
+        public const string GAS_ABILITY_COLLECTION_CSHARP_SCRIPT_NAME = "AbilityCollection.gen.cs";
+        
+        
 
         /// <summary>
         /// TODO

@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using UnityEditor;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -92,6 +94,26 @@ namespace GAS.Editor
             GUILayout.Space(5);
             GUILayout.Box("------------------------------------------------------------------------------------------------------------");
             GUILayout.Space(5);
+        }
+        
+        public static List<T> FindAssetsByType<T>(string folderPath) where T : ScriptableObject
+        {
+            List<T> assets = new List<T>();
+
+            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name, new string[] { folderPath });
+
+            foreach (string guid in guids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                T asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+
+                if (asset != null)
+                {
+                    assets.Add(asset);
+                }
+            }
+
+            return assets;
         }
     }
 }
