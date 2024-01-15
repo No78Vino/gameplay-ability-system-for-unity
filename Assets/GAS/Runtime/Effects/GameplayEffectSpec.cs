@@ -26,7 +26,7 @@ namespace GAS.Runtime.Effects
             Source = source;
             Owner = owner;
             Level = level;
-
+            Duration = GameplayEffect.Duration;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
 
@@ -41,7 +41,7 @@ namespace GAS.Runtime.Effects
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
-        public float Duration => GameplayEffect.Duration;
+        public float Duration { get; private set; } 
 
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
 
@@ -58,6 +58,11 @@ namespace GAS.Runtime.Effects
             Level = level;
         }
 
+        public void SetDuration(float duration)
+        {
+            Duration = duration;
+        }
+        
         public void Apply()
         {
             if (IsApplied) return;

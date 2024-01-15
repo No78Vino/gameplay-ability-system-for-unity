@@ -34,31 +34,63 @@ namespace GAS.Runtime.Ability
 
         private bool CheckGameplayTagsValidTpActivate()
         {
-            bool hasAllTags = Owner.HasAllTags(Ability.Tag.ActivationRequiredTags);
-            bool notHasAnyTags = !Owner.HasAnyTags(Ability.Tag.ActivationBlockedTags);
-            bool notBlockedByOtherAbility = true;
-           
+            var hasAllTags = Owner.HasAllTags(Ability.Tag.ActivationRequiredTags);
+            var notHasAnyTags = !Owner.HasAnyTags(Ability.Tag.ActivationBlockedTags);
+            var notBlockedByOtherAbility = true;
+
             foreach (var kv in Owner.AbilityContainer.AbilitySpecs())
             {
                 var abilitySpec = kv.Value;
                 if (abilitySpec.IsActive)
-                {
                     if (Ability.Tag.AssetTag.HasAnyTags(abilitySpec.Ability.Tag.BlockAbilitiesWithTags))
                     {
                         notBlockedByOtherAbility = false;
                         break;
                     }
-                }
-                
             }
+
             return hasAllTags && notHasAnyTags && notBlockedByOtherAbility;
+        }
+
+        protected virtual bool CheckCost()
+        {
+            if (Ability.Cost.NULL) return true;
+            var costSpec = Ability.Cost.CreateSpec(Owner, Owner, Level);
+            if (costSpec == null) return false;
+
+            if (Ability.Cost.DurationPolicy != EffectsDurationPolicy.Instant) return true;
+
+            foreach (var modifier in Ability.Cost.Modifiers)
+            {
+                if (modifier.Operation != GEOperation.Add) continue;
+
+                var costValue = modifier.MMC.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
+                var attributeCurrentValue =
+                    Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
+
+                if (attributeCurrentValue + costValue < 0) return false;
+            }
+
+            return true;
         }
 
         protected virtual CooldownTimer CheckCooldown()
         {
             return Ability.Cooldown.NULL
-                ? new CooldownTimer()
+                ? new CooldownTimer { TimeRemaining = 0, Duration = Ability.Cooldown.Duration }
                 : Owner.CheckCooldownFromTags(Ability.Cooldown.TagContainer.GrantedTags);
+        }
+
+        /// <summary>
+        /// Some skills include wind-up and follow-through, where the wind-up may be interrupted, causing the skill not to be successfully released.
+        /// Therefore, the actual timing and logic of skill release (triggering costs and initiating cooldown) should be determined by developers within the AbilitySpec,
+        /// rather than being systematically standardized.
+        /// </summary>
+        public void DoCost()
+        {
+            if (!Ability.Cost.NULL) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
+
+            if (!Ability.Cooldown.NULL) Owner.ApplyGameplayEffectToSelf(Ability.Cooldown);
         }
 
         public virtual bool TryActivateAbility(params object[] args)
@@ -68,7 +100,7 @@ namespace GAS.Runtime.Ability
             _abilityArguments = args;
             IsActive = true;
             ActiveCount++;
-            
+
             Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
             ActivateAbility(_abilityArguments);
             return true;
@@ -90,35 +122,6 @@ namespace GAS.Runtime.Ability
             CancelAbility();
         }
 
-        private GameplayEffectSpec CostSpec()
-        {
-            return Owner.ApplyGameplayEffectToSelf(Ability.Cost);
-        }
-
-        public virtual bool CheckCost()
-        {
-            if (Ability.Cost.NULL) return true;
-            var costSpec = CostSpec();
-            if (costSpec == null) return false;
-
-            if (costSpec.GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant) return true;
-
-            foreach (var modifier in costSpec.GameplayEffect.Modifiers)
-            {
-                // Cost can't be multiply or override ,so only care about additive.
-                if (modifier.Operation != GEOperation.Add) continue;
-
-                var costValue = modifier.MMC.CalculateMagnitude(costSpec,modifier.ModiferMagnitude);
-                var attributeCurrentValue =
-                    Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
-
-                // The total attribute after accounting for cost should be >= 0 for the cost check to succeed
-                if (attributeCurrentValue + costValue < 0) return false;
-            }
-
-            return true;
-        }
-
         public void Tick()
         {
             // TODO
@@ -129,7 +132,7 @@ namespace GAS.Runtime.Ability
         protected virtual void AbilityTick()
         {
         }
-        
+
         public abstract void ActivateAbility(params object[] args);
 
         public abstract void CancelAbility();
