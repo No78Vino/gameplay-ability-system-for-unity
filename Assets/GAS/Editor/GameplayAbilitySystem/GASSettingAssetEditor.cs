@@ -26,8 +26,21 @@ namespace GAS.Editor.GameplayAbilitySystem
 
             Asset.CodeGeneratePath =
                 EditorGUILayout.TextField("Code Gen Path", Asset.CodeGeneratePath);
+            
+            GUILayout.Space(5f);
+            
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+            GUILayout.Label("<size=12><color=white>This is the Code Of Method:LoadAbilityAsset. \n" +
+                            "For the convenience to access the abilities,you need a static class for the ability assets.\n" +
+                            "<color=orange>Therefore,you should determine a method for load ability assets.\n" +
+                            "Confirm the method valid<b>(full namespace, '{0}' for the replacement of the path of the ability asset)</b></color></color></size>"
+               ,new GUIStyle(){richText = true});
             EditorGUILayout.EndVertical();
-
+            
+            Asset.StringCodeOfLoadAbilityAsset =
+                EditorGUILayout.TextField("String Code Of Method:LoadAbilityAsset ", Asset.StringCodeOfLoadAbilityAsset);
+            EditorGUILayout.EndVertical();
+            
             GUILayout.Space(10f);
 
 

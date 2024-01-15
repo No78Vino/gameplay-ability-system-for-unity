@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
+    using System;
+    using System.Collections.Generic;
+    
     public class DirectoryInfo
     {
         public string RootDirectory { get; }
@@ -43,3 +44,4 @@ namespace GAS.Editor.General
         }
     }
 }
+#endif

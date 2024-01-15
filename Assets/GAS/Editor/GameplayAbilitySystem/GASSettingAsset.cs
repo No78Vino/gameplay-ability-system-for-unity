@@ -10,6 +10,8 @@ namespace GAS.Editor.GameplayAbilitySystem
     {
         public string CodeGeneratePath = "Assets/Scripts/Gen";
         public string GASConfigAssetPath = "Assets/GAS_Setting/Config";
+        public string StringCodeOfLoadAbilityAsset = "UnityEngine.Resources.Load<AbilityAsset>(\"{0}\")";
+        //"Framework.Utilities.AssetUtil.LoadAsset<AbilityAsset>({0})";
 
 
 

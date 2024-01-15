@@ -5,7 +5,7 @@ namespace GAS.Editor.GameplayAbilitySystem
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Core;
+    using GAS.Editor.Ability;
     using General;
     using GAS.Runtime.Ability;
     using Runtime.Component;
@@ -92,6 +92,10 @@ namespace GAS.Editor.GameplayAbilitySystem
                 var libPath = LibPaths[i];
                 var type = _types[i];
                 tree.Add(menuName, _directoryInfos[i]);
+                if (menuName == MenuNames[3])
+                {
+                    tree.Add(menuName,new AbilityOverview());
+                }
                 tree.AddAllAssetsAtPath(menuName, libPath, type, true)
                     .AddThumbnailIcons();
             }
@@ -117,8 +121,12 @@ namespace GAS.Editor.GameplayAbilitySystem
             {
                 if (selected != null) GUILayout.Label(selected.Name);
 
-                if (selected is { Value: DirectoryInfo directoryInfo })
+                if (selected != null && (selected.Value is DirectoryInfo  || selected.Value is  AbilityOverview))
                 {
+                    DirectoryInfo directoryInfo = selected.Value is AbilityOverview
+                        ? _directoryInfos[3]
+                        : selected.Value as DirectoryInfo;
+                    
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
                         OpenDirectoryInExplorer(directoryInfo);
 

@@ -8,7 +8,7 @@ namespace GAS.Runtime.Ability
 {
     public abstract class AbstractAbility
     {
-        public virtual string Name { get;protected set; }
+        public readonly string Name;
         protected AbilityAsset _dataReference;
         
         // public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
@@ -17,16 +17,17 @@ namespace GAS.Runtime.Ability
         /// <summary>
         ///     For the description of the ability
         /// </summary>
-        public AbilityTagContainer Tag{ get; private set; }
+        public readonly AbilityTagContainer Tag;
 
-        public GameplayEffect Cooldown { get; private set; }
+        public readonly GameplayEffect Cooldown;
 
-        public GameplayEffect Cost{ get; private set; }
+        public readonly GameplayEffect Cost;
 
         public AbstractAbility(AbilityAsset abilityAsset)
         {
             _dataReference = abilityAsset;
-            
+
+            Name = _dataReference.UniqueName;
             Tag = new AbilityTagContainer(
                 _dataReference.AssetTag,_dataReference.CancelAbilityTags,_dataReference.BlockAbilityTags,
                 _dataReference.ActivationOwnedTag,_dataReference.ActivationRequiredTags,_dataReference.ActivationBlockedTags,
