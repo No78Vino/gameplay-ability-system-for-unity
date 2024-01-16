@@ -55,6 +55,15 @@ MonoBehaviour:
   - _id: 6
     _name: Burning
     _depth: 2
+  - _id: 15
+    _name: Event
+    _depth: 0
+  - _id: 17
+    _name: Attacking
+    _depth: 1
+  - _id: 16
+    _name: Moving
+    _depth: 1
   Tags:
   - _name: Ability
     _hashCode: -523153736
@@ -135,3 +144,20 @@ MonoBehaviour:
     _ancestorNames:
     - State
     - State.Debuff
+  - _name: Event
+    _hashCode: 667645442
+    _shortName: Event
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: Event.Attacking
+    _hashCode: 1440924632
+    _shortName: Attacking
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
+  - _name: Event.Moving
+    _hashCode: 798883614
+    _shortName: Moving
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event

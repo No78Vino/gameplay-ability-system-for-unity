@@ -20,6 +20,9 @@ public static class GameplayTagSumCollection
     public static GameplayTag State_Debuff { get;} = new GameplayTag("State.Debuff");
     public static GameplayTag State_Debuff_Freeze { get;} = new GameplayTag("State.Debuff.Freeze");
     public static GameplayTag State_Debuff_Burning { get;} = new GameplayTag("State.Debuff.Burning");
+    public static GameplayTag Event { get;} = new GameplayTag("Event");
+    public static GameplayTag Event_Attacking { get;} = new GameplayTag("Event.Attacking");
+    public static GameplayTag Event_Moving { get;} = new GameplayTag("Event.Moving");
 
       public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
       {
@@ -36,6 +39,9 @@ public static class GameplayTagSumCollection
          ["State.Debuff"] = State_Debuff,
          ["State.Debuff.Freeze"] = State_Debuff_Freeze,
          ["State.Debuff.Burning"] = State_Debuff_Burning,
+         ["Event"] = Event,
+         ["Event.Attacking"] = Event_Attacking,
+         ["Event.Moving"] = Event_Moving,
       };
 }
 }
