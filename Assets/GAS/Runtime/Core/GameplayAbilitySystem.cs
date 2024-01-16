@@ -37,7 +37,6 @@ namespace GAS.Core
             get
             {
                 _gas ??= new GameplayAbilitySystem();
-                ;
                 return _gas;
             }
         }

@@ -25,12 +25,12 @@ public class Player : MonoBehaviour
 
     public void OnMove(Vector3 direction)
     {
-        _asc.TryActivateAbility("Move", direction,_rigidbody,speed);
+        //_asc.TryActivateAbility("Move", direction,_rigidbody,speed);
     }
 
     public void OnMoveEnd()
     {
-        //_asc.EndAbility("Move");
+        //_asc.TryEndAbility("Move");
     }
     public void OnPressQ()
     {

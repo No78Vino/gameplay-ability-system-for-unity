@@ -2,6 +2,7 @@
   "dependencies": {
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.exhard.exbasekit": "https://github.com/No78Vino/ExBaseKit.git",
+    "com.exhard.exmaidforui": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git",
     "com.tuyoogame.yooasset": "1.5.7",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.feature.development": "1.0.1",

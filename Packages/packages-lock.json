@@ -14,6 +14,13 @@
       "dependencies": {},
       "hash": "21689eaefb2e77132bd4c8e8b69147e2e407d6b6"
     },
+    "com.exhard.exmaidforui": {
+      "version": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d790fec103b59aaecbf959fae0ed9bb96976d124"
+    },
     "com.tuyoogame.yooasset": {
       "version": "1.5.7",
       "depth": 0,
