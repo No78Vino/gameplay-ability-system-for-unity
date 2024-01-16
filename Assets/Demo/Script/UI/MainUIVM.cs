@@ -22,7 +22,8 @@ namespace Demo.Script.UI
 
         public MainUIVM()
         {
-            
+            playerHpMax.Value = 100;
+            playerHp.Value = 75;
         }
     }
 }

@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks.Triggers;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using UnityEngine;
+using UnityEngine.Serialization;
 using YooAsset;
 
 namespace Demo.Script
@@ -12,10 +13,11 @@ namespace Demo.Script
     {
         private InputListener _inputListener;
         private Player _player;
-
+        [SerializeField] string prefixOfFguiPackagePath = "Assets/Game/FairyGUI/";
+        
         private IEnumerator Start()
         {
-            XUI.Launch(LoadResource);
+            XUI.Launch(prefixOfFguiPackagePath,LoadResource);
             XUI.M.OpenWindow<MainUI>();
 
             yield return new WaitForSeconds(1f);
@@ -35,6 +37,7 @@ namespace Demo.Script
                     resourcePath += "/";
                 }
             }
+            resourcePath = resourcePath.Substring( 0, resourcePath.LastIndexOf('.'));
             var obj = Resources.Load(resourcePath, type);
             return obj;
         }
