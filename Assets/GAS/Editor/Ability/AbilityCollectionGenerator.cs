@@ -34,7 +34,12 @@ namespace GAS.Editor.Ability
             writer.WriteLine("      public struct AbilityInfo");
             writer.WriteLine("      {");
             writer.WriteLine("          public string Name;");
-            writer.WriteLine("          public AbilityAsset Asset;");
+            writer.WriteLine("          public string AssetPath;");
+            // writer.WriteLine("          public AbilityAsset Asset()");
+            // writer.WriteLine("          {");
+            // string loadAbilityAssetCode = string.Format(loadMethodCodeString, "AssetPath");
+            // writer.WriteLine($"              return {loadAbilityAssetCode};");
+            // writer.WriteLine("          }");
             writer.WriteLine("      }");
             writer.WriteLine("");
             
@@ -42,14 +47,16 @@ namespace GAS.Editor.Ability
             
             foreach (var ability in abilityAssets)
             {
-                // public static AbilityInfo Attack_Info = new AbilityInfo { Name = "Attack", Asset = Framework.Utilities.AssetUtil.LoadAsset<AbilityAsset>("ssss") };
-                // public static GAS.Ability.Attack Attack = new GAS.Ability.Attack(Attack_Info.Asset);
                 var validName = ability.UniqueName;
                 var path = AssetDatabase.GetAssetPath(ability);
-                string loadAbilityAssetCode = string.Format(loadMethodCodeString, path);
                 writer.WriteLine(
-                    $"    public static AbilityInfo {validName}_Info = new AbilityInfo {{ Name = \"{validName}\", Asset = {loadAbilityAssetCode}}};");
-                writer.WriteLine($"    public static {ability.InstanceAbilityClassFullName} {validName} = new {ability.InstanceAbilityClassFullName}({validName}_Info.Asset);");
+                    $"    public static AbilityInfo {validName}_Info = new AbilityInfo {{ Name = \"{validName}\", AssetPath = \"{path}\"}};");
+                // writer.WriteLine($"    private static {ability.InstanceAbilityClassFullName} _{validName};");
+                // writer.WriteLine($"    public static {ability.InstanceAbilityClassFullName} {validName}()");
+                // writer.WriteLine("    {");
+                // writer.WriteLine($"        if (_{validName} == null) _{validName} = new {ability.InstanceAbilityClassFullName}({validName}_Info.Asset());");
+                // writer.WriteLine($"        return _{validName};");
+                // writer.WriteLine("    }");
                 writer.WriteLine("");
             }
             
