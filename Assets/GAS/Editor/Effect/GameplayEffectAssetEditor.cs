@@ -13,7 +13,7 @@ namespace GAS.Editor.Effect
     using UnityEditor;
     using UnityEngine;
 
-    [CustomEditor(typeof(GameplayEffectAsset))]
+    //[CustomEditor(typeof(GameplayEffectAsset))]
     public class GameplayEffectAssetEditor : UnityEditor.Editor
     {
         private ScriptableObjectReorderableList<GameplayCueInstant> cueOnExecuteList;
