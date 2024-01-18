@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
+  UniqueName: Test
+  InstanceAbilityClassFullName: Demo.Script.MyAbilitySystem.Ability.AbilityMove
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   UsedGameplayEffects: []

@@ -85,7 +85,7 @@ namespace GAS.Editor.GameplayAbilitySystem
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
-
+            tree.Selection.SelectionChanged += OnMenuSelectionChange; //x => Debug.Log(x);
             for (var i = 0; i < MenuNames.Length; i++)
             {
                 var menuName = MenuNames[i];
@@ -232,6 +232,16 @@ namespace GAS.Editor.GameplayAbilitySystem
             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(asset));
             Refresh();
             Debug.Log($"[EX] {asset.name} asset deleted!");
+        }
+
+        void OnMenuSelectionChange(SelectionChangedType selectionChangedType)
+        {
+            var selected = MenuTree.Selection.FirstOrDefault();
+            if (selected is { Value: AbilityOverview })
+            {
+                var abilityOverview = selected.Value as AbilityOverview;
+                abilityOverview.Refresh();
+            }
         }
     }
 }
