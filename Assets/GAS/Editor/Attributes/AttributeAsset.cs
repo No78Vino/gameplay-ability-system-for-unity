@@ -29,6 +29,7 @@ namespace GAS.Editor.Attribute
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex",
             CustomAddFunction = "OnAddAttribute")]
+        [Searchable]
         [OnValueChanged("Save")]
         public List<AttributeAccessor> attributes = new();
         
@@ -93,7 +94,7 @@ namespace GAS.Editor.Attribute
 
         private int OnAddAttribute()
         {
-            //attributes.Add(new AttributeAccessor("", this));
+            attributes.Add(new AttributeAccessor(""));
             Save();
             Debug.Log("[EX] Attribute Asset add element!");
             return attributes.Count;

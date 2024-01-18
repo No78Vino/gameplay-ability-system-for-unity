@@ -16,7 +16,7 @@ MonoBehaviour:
 
     <color=white>
     ->  Enemy</color></color></b></size>'
-  _attributeSetConfigs:
+  AttributeSetConfigs:
   - Name: Player
     AttributeNames:
     - HP

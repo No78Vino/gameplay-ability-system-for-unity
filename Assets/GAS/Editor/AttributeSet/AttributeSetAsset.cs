@@ -34,10 +34,11 @@ namespace GAS.Editor.AttributeSet
         [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
         [ValueDropdown("AttributeChoices")]
         [LabelText("Attributes")]
+        [Searchable]
         public List<string> AttributeNames;
 
-        [HorizontalGroup("A", Width = 50)]
-        [Button("Edit",ButtonSizes.Medium,ButtonStyle.Box,Expanded = true)]
+        [HorizontalGroup("A", Width = 100)]
+        [Button("Edit Name",ButtonSizes.Medium,ButtonStyle.Box,Expanded = true)]
         public void EditName()
         {
             StringEditWindow.OpenWindow(Name, OnEditNameSuccess, "AttributeSet Name");
@@ -92,12 +93,11 @@ namespace GAS.Editor.AttributeSet
         public string ERROR_DuplicatedAttributeSet = "";
         
         [VerticalGroup("AttributeSetConfigs",order:1)]
-        [ListDrawerSettings( Expanded = true,ShowIndexLabels = false,ShowItemCount = false,
+        [ListDrawerSettings( Expanded = true,
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex")]
-        public List<AttributeSetConfig> _attributeSetConfigs;
-
-        public List<AttributeSetConfig> AttributeSetConfigs => _attributeSetConfigs;
+        [Searchable]
+        public List<AttributeSetConfig> AttributeSetConfigs;
 
         private void OnEnable()
         {
@@ -132,7 +132,7 @@ namespace GAS.Editor.AttributeSet
 
         bool ErrorInElements()
         {
-            return _attributeSetConfigs.Any(attribute =>
+            return AttributeSetConfigs.Any(attribute =>
                 attribute.EmptyAttribute() || 
                 attribute.ExistDuplicatedAttribute() ||
                 attribute.EmptyAttributeSetName());
@@ -140,7 +140,7 @@ namespace GAS.Editor.AttributeSet
 
         bool ExistDuplicatedAttributeSetName()
         {
-            var duplicates = _attributeSetConfigs
+            var duplicates = AttributeSetConfigs
                 .Where(a => !string.IsNullOrEmpty(a.Name))
                 .GroupBy(a => a.Name)
                 .Where(group => group.Count() > 1)
@@ -166,19 +166,19 @@ namespace GAS.Editor.AttributeSet
 
             Debug.Log($"[EX] AttributeSet Asset remove element:{attributeSet.Name} !");
             Save();
-            return _attributeSetConfigs.IndexOf(attributeSet);
+            return AttributeSetConfigs.IndexOf(attributeSet);
         }
 
         private int OnRemoveIndex(int index)
         {
-            var attributeSet = _attributeSetConfigs[index];
+            var attributeSet = AttributeSetConfigs[index];
             var result = EditorUtility.DisplayDialog("Confirmation",
                 $"Are you sure you want to REMOVE AttributeSet:{attributeSet.Name}?",
                 "Yes", "No");
 
             if (!result) return -1;
 
-            _attributeSetConfigs.RemoveAt(index);
+            AttributeSetConfigs.RemoveAt(index);
             Debug.Log($"[EX] Attribute Asset remove element:{attributeSet.Name} !");
             Save();
             return index;

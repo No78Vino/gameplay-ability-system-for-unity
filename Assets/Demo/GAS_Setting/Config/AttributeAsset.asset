@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2112111feb463caf561bfc7cfe18ab, type: 3}
   m_Name: AttributeAsset
   m_EditorClassIdentifier: 
-  Warning_EmptyAttribute: <size=13><color=yellow>The <color=orange>Name of the Attribute
-    </color> must not be <color=red><b>EMPTY</b></color>! Please check!</color></size>
   Warning_DuplicatedAttribute: "<size=13><color=yellow>The <color=orange>Name of
     the Attribute</color> must not be <color=red><b>DUPLICATED</b></color>!The duplicated
     Attributes are as follows: \n <size=15><b><color=white> SPEED </color></b></size>.</color></size>"

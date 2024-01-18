@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AttributeSetAsset
   m_EditorClassIdentifier: 
   AttributeSetClassGenPath: Demo/Script/Gen/
-  _attributeSetConfigs:
+  AttributeSetConfigs:
   - Name: Player
     AttributeNames:
     - HP
