@@ -13,11 +13,7 @@ namespace GAS.Editor.Attribute
     
     public class AttributeAsset : ScriptableObject
     {
-        [BoxGroup("Warning", order: -1)]
-        [HideLabel]
-        [ShowIf("ExistEmptyAttribute")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        public string Warning_EmptyAttribute =
+        private const string Warning_EmptyAttribute =
             "<size=13><color=yellow>The <color=orange>Name of the Attribute </color> must not be <color=red><b>EMPTY</b></color>! " +
             "Please check!</color></size>";
 
@@ -38,9 +34,15 @@ namespace GAS.Editor.Attribute
         
         public List<string> AttributeNames => (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
 
+        private void OnEnable()
+        {
+            AttributeAccessor.ParentAsset = this;
+        }
+
         [VerticalGroup("Gen Code", order: 0)]
         [Button("Generate Attribute Collection Code",
             ButtonSizes.Large, ButtonStyle.Box, Expanded = true)]
+        [InfoBox(Warning_EmptyAttribute,InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
         void GenCode()
         {
             if (ExistEmptyAttribute() || ExistDuplicatedAttribute())
@@ -91,7 +93,7 @@ namespace GAS.Editor.Attribute
 
         private int OnAddAttribute()
         {
-            attributes.Add(new AttributeAccessor("", this));
+            //attributes.Add(new AttributeAccessor("", this));
             Save();
             Debug.Log("[EX] Attribute Asset add element!");
             return attributes.Count;
@@ -126,15 +128,14 @@ namespace GAS.Editor.Attribute
         [Serializable]
         public class AttributeAccessor
         {
+            public static AttributeAsset ParentAsset;
+            
             [HorizontalGroup("A", MarginRight = 0.4f)] [DisplayAsString] [HideLabel]
             public string Name;
 
-            private AttributeAsset _asset;
-
-            public AttributeAccessor(string attributeName, AttributeAsset asset)
+            public AttributeAccessor(string attributeName)
             {
                 Name = attributeName;
-                _asset = asset;
             }
 
             [HorizontalGroup("A", Width = 50)]
@@ -147,7 +148,7 @@ namespace GAS.Editor.Attribute
             private void OnEditSuccess(string newName)
             {
                 Name = newName;
-                _asset.Save();
+                ParentAsset?.Save();
             }
         }
     }

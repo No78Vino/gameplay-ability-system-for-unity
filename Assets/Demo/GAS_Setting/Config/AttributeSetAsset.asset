@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c4e9ba159c4e7d8da87897fb20cb56, type: 3}
   m_Name: AttributeSetAsset
   m_EditorClassIdentifier: 
-  AttributeSetClassGenPath: Demo/Script/Gen/
+  ERROR_DuplicatedAttributeSet: '<size=16><b><color=orange>Exist Duplicated AttributeSet!
+
+    <color=white>
+    ->  Enemy</color></color></b></size>'
   _attributeSetConfigs:
   - Name: Player
     AttributeNames:
     - HP
-    - MP
+    - SKILL_CD
     - SPEED
     - ATK
   - Name: Enemy
     AttributeNames:
-    - MP
+    - ATK

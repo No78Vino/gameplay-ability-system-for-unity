@@ -7,7 +7,7 @@ namespace GAS.Editor.AttributeSet
     using UnityEditor;
     using UnityEngine;
     
-    [CustomEditor(typeof(AttributeSetAsset))]
+    //[CustomEditor(typeof(AttributeSetAsset))]
     public class AttributeSetAssetEditor : UnityEditor.Editor
     {
         private int _selectedIndex = -1;

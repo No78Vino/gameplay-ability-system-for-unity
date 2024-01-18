@@ -1,11 +1,10 @@
-
 #if UNITY_EDITOR
 namespace GAS.Editor.Effect
 {
     using System.Collections.Generic;
     using System.Linq;
     using GAS.Core;
-    using GAS.Runtime.AttributeSet;
+    using GAS.Editor.AttributeSet;
     using GAS.Runtime.Effects.Modifier;
     using UnityEditor;
     using UnityEngine;

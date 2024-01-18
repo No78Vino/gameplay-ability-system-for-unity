@@ -4,7 +4,7 @@ namespace GAS.Editor.Attributes
     using System.Collections.Generic;
     using System.Linq;
     using GAS.Core;
-    using GAS.Runtime.AttributeSet;
+    using GAS.Editor.AttributeSet;
     using UnityEditor;
     using GAS.Editor.GameplayAbilitySystem;
 
