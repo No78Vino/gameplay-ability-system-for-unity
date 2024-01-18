@@ -826,6 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ddf38f9d084259b63fa37c05bfe917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefixOfFguiPackagePath: FairyGUI/
 --- !u!4 &1431028661
 Transform:
   m_ObjectHideFlags: 0
@@ -1000,6 +1001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 183fdb9275244e99bf882bd2e9cb85d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  preset: {fileID: 0}
 --- !u!1 &1514840269
 GameObject:
   m_ObjectHideFlags: 0
