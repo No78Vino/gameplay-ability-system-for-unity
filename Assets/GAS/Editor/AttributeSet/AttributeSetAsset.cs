@@ -22,7 +22,8 @@ namespace GAS.Editor.AttributeSet
         private const string ERROR_Empty = "<size=16><b>It's Empty!</b></size>";
         private const string ERROR_EmptyName = "<size=16><b>AttributeSet'name can't Empty!</b></size>";
         
-        [HorizontalGroup("A",MarginRight = 0.1f)]
+        [HorizontalGroup("A")]
+        [HorizontalGroup("A/R", order:1)]
         [DisplayAsString(TextAlignment.Left,FontSize = 18)]
         [HideLabel]
         [InfoBox(ERROR_DuplicatedAttribute,InfoMessageType.Error,VisibleIf = "ExistDuplicatedAttribute")]
@@ -37,8 +38,9 @@ namespace GAS.Editor.AttributeSet
         [Searchable]
         public List<string> AttributeNames;
 
-        [HorizontalGroup("A", Width = 100)]
-        [Button("Edit Name",ButtonSizes.Medium,ButtonStyle.Box,Expanded = true)]
+        [HorizontalGroup("A", Width = 50)]
+        [HorizontalGroup("A/L", order:0,Width = 50)]
+        [Button(SdfIconType.Brush,"",ButtonHeight = 25)]
         public void EditName()
         {
             StringEditWindow.OpenWindow(Name, OnEditNameSuccess, "AttributeSet Name");
@@ -114,7 +116,8 @@ namespace GAS.Editor.AttributeSet
         }
         
         [VerticalGroup("Generate AttributeSet Code",order:0)]
-        [Button("Generate AttributeSet Code",ButtonSizes.Large,ButtonStyle.Box,Expanded = true)]
+        [GUIColor(0,0.9f,0)]
+        [Button(SdfIconType.Upload,"Generate AttributeSet Code",ButtonHeight = 30, Expanded = true)]
         [InfoBox(ERROR_InElements,InfoMessageType.Error,VisibleIf = "ErrorInElements")]
         private void GenCode()
         {

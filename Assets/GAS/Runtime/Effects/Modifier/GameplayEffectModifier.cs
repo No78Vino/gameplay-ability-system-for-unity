@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.Tags;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace GAS.Runtime.Effects.Modifier
 {
@@ -15,12 +20,29 @@ namespace GAS.Runtime.Effects.Modifier
     [Serializable]
     public struct GameplayEffectModifier
     {
+        private static IEnumerable AttributeChoices = new ValueDropdownList<string>();
+        
+        [LabelText("Attribute")]
+        [LabelWidth(100)]
+        [OnValueChanged("OnAttributeChanged")]
+        [ValueDropdown("AttributeChoices")]
         public string AttributeName;
+        
+        [HideInInspector]
         public string AttributeSetName;
+        
+        [HideInInspector]
         public string AttributeShortName;
+        
+        [LabelText("Magnitude")]
+        [LabelWidth(100)]
         public float ModiferMagnitude;
         
+        [LabelWidth(100)]
         public  GEOperation Operation;
+        
+        [LabelWidth(100)]
+        [InlineEditor]
         public  ModifierMagnitudeCalculation MMC;
         
         // TODO
@@ -43,16 +65,6 @@ namespace GAS.Runtime.Effects.Modifier
             Operation = operation;
             MMC = mmc;
         }
-        
-        public GameplayEffectModifier(GameplayEffectModifier modifier)
-        {
-            AttributeName = modifier.AttributeName;
-            AttributeSetName = modifier.AttributeSetName;
-            AttributeShortName = modifier.AttributeShortName;
-            ModiferMagnitude = modifier.ModiferMagnitude;
-            Operation = modifier.Operation;
-            MMC = modifier.MMC;
-        }
 
         public void SetModiferMagnitude(float value)
         {
@@ -67,6 +79,37 @@ namespace GAS.Runtime.Effects.Modifier
                 #else
                 UnityEngine.Debug.LogWarning("[EX] this MMC is not SetByCallerModCalculation, can't set ModiferMagnitude!");
                 #endif
+            }
+        }
+
+        void OnAttributeChanged()
+        {
+            var split = AttributeName.Split('.');
+            AttributeSetName =  split[0];
+            AttributeShortName = split[1];
+        }
+        
+        public static void SetAttributeChoices()
+        {
+            Type attributeSetUtil = Type.GetType($"GAS.Runtime.AttributeSet.AttrSetUtil, Assembly-CSharp");
+            if(attributeSetUtil == null)
+            {
+                Debug.LogError("[EX] Type 'AttrSetUtil' not found. Please generate the AttributeSet CODE first!");
+                AttributeChoices = new ValueDropdownList<string>();
+                return;
+            }
+            FieldInfo attrFullNamesField = attributeSetUtil.GetField("AttributeFullNames", BindingFlags.Public | BindingFlags.Static);
+            
+            if (attrFullNamesField != null)
+            {
+                List<string> attrFullNamesValue = (List<string>)attrFullNamesField.GetValue(null);
+                var choices = new ValueDropdownList<string>();
+                foreach (var tag in attrFullNamesValue) choices.Add(tag,tag);
+                AttributeChoices = choices;
+            }
+            else
+            {
+                AttributeChoices = new ValueDropdownList<string>();
             }
         }
     }

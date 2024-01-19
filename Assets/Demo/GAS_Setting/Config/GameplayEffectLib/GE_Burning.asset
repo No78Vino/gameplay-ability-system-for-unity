@@ -13,20 +13,45 @@ MonoBehaviour:
   m_Name: GE_Burning
   m_EditorClassIdentifier: 
   Name: 
-  Description: 
-  DurationPolicy: 0
-  Duration: 0
-  Period: 0
+  Description: "\u71C3\u70E7Buff\u7684\u6E38\u620F\u6548\u679C\u3002\n\u6301\u7EED\u6027\u7684\u5B9A\u65F6\u95F4\u9694\u9020\u6210\u4F24\u5BB3\u3002\n\u6548\u679C\u751F\u6548\u671F\u95F4\u59CB\u7EC8\u6302\u6709\u71C3\u70E7\u7279\u6548\u3002"
+  DurationPolicy: 3
+  Duration: 0.68
+  Period: 0.6
   PeriodExecution: {fileID: 0}
-  AssetTags: []
+  Modifiers:
+  - AttributeName: AS_Player.SPEED
+    AttributeSetName: AS_Player
+    AttributeShortName: SPEED
+    ModiferMagnitude: 0
+    Operation: 0
+    MMC: {fileID: 11400000, guid: ffeed5204acbcf84493c55e1d94aa085, type: 2}
+  AssetTags:
+  - _name: Ability
+    _hashCode: -523153736
+    _shortName: Ability
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: State.Debuff.Freeze
+    _hashCode: 910960482
+    _shortName: Freeze
+    _ancestorHashCodes: 4b461665e315d1b6
+    _ancestorNames:
+    - State
+    - State.Debuff
   GrantedTags: []
   ApplicationRequiredTags: []
-  OngoingRequiredTags: []
+  OngoingRequiredTags:
+  - _name: Ability
+    _hashCode: -523153736
+    _shortName: Ability
+    _ancestorHashCodes: 
+    _ancestorNames: []
   RemoveGameplayEffectsWithTags: []
-  CueOnExecute: []
+  CueOnExecute:
+  - {fileID: 0}
+  CueDurational: []
+  CueOnAdd:
+  - {fileID: 11400000, guid: 04520fc1ebc859941a81109a92c69162, type: 2}
   CueOnRemove: []
-  CueOnAdd: []
   CueOnActivate: []
   CueOnDeactivate: []
-  CueDurational: []
-  Modifiers: []

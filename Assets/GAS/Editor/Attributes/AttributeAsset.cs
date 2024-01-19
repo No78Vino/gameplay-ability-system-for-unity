@@ -41,8 +41,8 @@ namespace GAS.Editor.Attribute
         }
 
         [VerticalGroup("Gen Code", order: 0)]
-        [Button("Generate Attribute Collection Code",
-            ButtonSizes.Large, ButtonStyle.Box, Expanded = true)]
+        [GUIColor(0,0.9f,0)]
+        [Button(SdfIconType.Upload,"Generate Attribute Collection Code",ButtonHeight = 30, Expanded = true)]
         [InfoBox(Warning_EmptyAttribute,InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
         void GenCode()
         {
@@ -131,7 +131,9 @@ namespace GAS.Editor.Attribute
         {
             public static AttributeAsset ParentAsset;
             
-            [HorizontalGroup("A", MarginRight = 0.4f)] [DisplayAsString] [HideLabel]
+            [HorizontalGroup("A")]
+            [HorizontalGroup("A/R", order:1)]
+            [DisplayAsString] [HideLabel]
             public string Name;
 
             public AttributeAccessor(string attributeName)
@@ -140,7 +142,8 @@ namespace GAS.Editor.Attribute
             }
 
             [HorizontalGroup("A", Width = 50)]
-            [Button("Edit")]
+            [HorizontalGroup("A/L", order:0,Width = 50)]
+            [Button(SdfIconType.Brush,"",ButtonHeight = 25)]
             public void Edit()
             {
                 StringEditWindow.OpenWindow(Name, OnEditSuccess, "Attribute");

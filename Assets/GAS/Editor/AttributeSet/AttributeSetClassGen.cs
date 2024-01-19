@@ -104,9 +104,23 @@ namespace GAS.Editor.AttributeSet
                 writer.WriteLine($"        {{\"{attributeSet.Name}\",typeof(AS_{validName})}},");
             }
             writer.WriteLine("    };");
+            
+            writer.WriteLine("    public static List<string> AttributeFullNames=new List<string>()");
+            writer.WriteLine("    {");
+            foreach (var attributeSet in attributeSetConfigs)
+            {
+                var validName = EditorUtil.MakeValidIdentifier(attributeSet.Name);
+                foreach (var attributeName in attributeSet.AttributeNames)
+                {
+                    string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
+                    writer.WriteLine($"        \"AS_{validName}.{validAttrName}\",");
+                }
+            }
+            writer.WriteLine("      };");
+            
             writer.WriteLine("}");
             
-            
+        
             writer.WriteLine("}");
 
             Console.WriteLine($"Generated Code Script at path: {filePath}");

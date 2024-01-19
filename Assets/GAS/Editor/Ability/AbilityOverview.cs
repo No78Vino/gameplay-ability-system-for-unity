@@ -38,10 +38,9 @@ namespace GAS.Editor.Ability
             Refresh();
         }
         
-        [HorizontalGroup("Buttons",order:0)]
-        [HorizontalGroup("Buttons/GenCode",order:0)]
-        [Button("Generate Ability Collection",
-            ButtonSizes.Large,ButtonStyle.Box,Expanded = true)]
+        [HorizontalGroup("Buttons",order:0,MarginRight = 0.2f)]
+        [GUIColor(0,0.9f,0.1f,1)]
+        [Button("Generate Ability Collection", ButtonSizes.Large,ButtonStyle.Box,Expanded = true)]
         void GenerateAbilityCollection()
         {
             if (ExistAbilityWithEmptyUniqueName() || ExistAbilityWithDuplicatedUniqueName())
@@ -55,9 +54,10 @@ namespace GAS.Editor.Ability
             AbilityCollectionGenerator.Gen();
         }
         
-        [HorizontalGroup("Buttons/Refresh",order:1,width:100)]
-        [Button("Refresh",
-            ButtonSizes.Large,ButtonStyle.Box,Expanded = true)]
+        [HorizontalGroup("Buttons",width:50)]
+        [GUIColor(1,1f,0)]
+        [Button(SdfIconType.ArrowRepeat,"",ButtonHeight = 30)]
+        [HideLabel]
         public void Refresh()
         {
             Abilities.Clear();

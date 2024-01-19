@@ -25,4 +25,5 @@ MonoBehaviour:
     - ATK
   - Name: Enemy
     AttributeNames:
+    - HP
     - ATK
