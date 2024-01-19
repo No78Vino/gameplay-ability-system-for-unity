@@ -237,9 +237,8 @@ namespace GAS.Editor.GameplayAbilitySystem
         void OnMenuSelectionChange(SelectionChangedType selectionChangedType)
         {
             var selected = MenuTree.Selection.FirstOrDefault();
-            if (selected is { Value: AbilityOverview })
+            if (selected is { Value: AbilityOverview abilityOverview })
             {
-                var abilityOverview = selected.Value as AbilityOverview;
                 abilityOverview.Refresh();
             }
         }
