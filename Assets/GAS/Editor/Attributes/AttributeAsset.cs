@@ -31,7 +31,7 @@ namespace GAS.Editor.Attribute
             CustomAddFunction = "OnAddAttribute")]
         [Searchable]
         [OnValueChanged("Save")]
-        public List<AttributeAccessor> attributes = new();
+        public List<AttributeAccessor> attributes = new List<AttributeAccessor>();
         
         public List<string> AttributeNames => (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
 
