@@ -36,6 +36,7 @@ namespace GAS.Runtime.Effects
 
         private const string ERROR_POLICY = "Policy CAN NOT be NONE!";
         private const string ERROR_NONE_CUE = "Cue CAN NOT be NONE!";
+        private const string ERROR_PERIODGE_NONE = "Period GameplayEffect CAN NOT be NONE!";
         
         
         
@@ -62,6 +63,7 @@ namespace GAS.Runtime.Effects
         //[HorizontalGroup(GRP_BASE_H_RIGHT_POLICY)]
         [LabelWidth(WIDTH_LABLE)]
         [InfoBox(ERROR_POLICY,InfoMessageType.Error, VisibleIf = "IsDurationPolicyNone")]
+        [InfoBox(ERROR_PERIODGE_NONE,InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
         public EffectsDurationPolicy DurationPolicy;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
@@ -131,6 +133,7 @@ namespace GAS.Runtime.Effects
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsInstantPolicy")]
         [InfoBox(ERROR_NONE_CUE,InfoMessageType.Error, VisibleIf = "IsCueExecuteNone")]
+        [AssetSelector]
         public GameplayCueInstant[] CueOnExecute;
         
         [Title("Cue",bold:true)]
@@ -138,30 +141,35 @@ namespace GAS.Runtime.Effects
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [InfoBox(ERROR_NONE_CUE,InfoMessageType.Error, VisibleIf = "IsCueDurationalNone")]
+        [AssetSelector]
         public GameplayCueDurational[] CueDurational;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_CUE)]
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
+        [AssetSelector]
         public GameplayCueInstant[] CueOnAdd;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_CUE)]
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
+        [AssetSelector]
         public GameplayCueInstant[] CueOnRemove;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_CUE)]
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
+        [AssetSelector]
         public GameplayCueInstant[] CueOnActivate;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_CUE)]
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
+        [AssetSelector]
         public GameplayCueInstant[] CueOnDeactivate;
 
 
@@ -205,6 +213,11 @@ namespace GAS.Runtime.Effects
                    CueOnDeactivate.Any(cue => cue == null);
         }
 
+        bool IsPeriodGameplayEffectNone()
+        {
+            return IsPeriodic() && PeriodExecution == null;
+        }
+        
         private static void SetTagChoices()
         {
             Type gameplayTagSumCollectionType = Type.GetType($"GAS.Runtime.Tags.GameplayTagSumCollection, Assembly-CSharp");

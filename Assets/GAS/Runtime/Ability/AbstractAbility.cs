@@ -30,9 +30,7 @@ namespace GAS.Runtime.Ability
             Name = _dataReference.UniqueName;
             Tag = new AbilityTagContainer(
                 _dataReference.AssetTag,_dataReference.CancelAbilityTags,_dataReference.BlockAbilityTags,
-                _dataReference.ActivationOwnedTag,_dataReference.ActivationRequiredTags,_dataReference.ActivationBlockedTags,
-                _dataReference.SourceRequiredTags,_dataReference.SourceBlockedTags,_dataReference.TargetRequiredTags,
-                _dataReference.TargetBlockedTags);
+                _dataReference.ActivationOwnedTag,_dataReference.ActivationRequiredTags,_dataReference.ActivationBlockedTags);
             Cooldown = _dataReference.Cooldown?new GameplayEffect(_dataReference.Cooldown):default;
             Cost = _dataReference.Cost?new GameplayEffect(_dataReference.Cost):default;
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   ERROR_DuplicatedAttributeSet: '<size=16><b><color=orange>Exist Duplicated AttributeSet!
 
     <color=white>
-    ->  Enemy</color></color></b></size>'
+    ->  Player</color></color></b></size>'
   AttributeSetConfigs:
   - Name: Player
     AttributeNames:

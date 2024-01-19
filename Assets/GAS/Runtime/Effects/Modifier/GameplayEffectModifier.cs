@@ -42,7 +42,7 @@ namespace GAS.Runtime.Effects.Modifier
         public  GEOperation Operation;
         
         [LabelWidth(100)]
-        [InlineEditor]
+        [AssetSelector]
         public  ModifierMagnitudeCalculation MMC;
         
         // TODO

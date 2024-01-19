@@ -21,13 +21,13 @@ namespace GAS.Runtime.Ability
         public GameplayTagSet ActivationRequiredTags;
         public GameplayTagSet ActivationBlockedTags;
 
-        // TODO
-        public GameplayTagSet SourceRequiredTags;
-        public GameplayTagSet SourceBlockedTags;
-        
-        // TODO
-        public GameplayTagSet TargetRequiredTags;
-        public GameplayTagSet TargetBlockedTags;
+        // // TODO
+        // public GameplayTagSet SourceRequiredTags;
+        // public GameplayTagSet SourceBlockedTags;
+        //
+        // // TODO
+        // public GameplayTagSet TargetRequiredTags;
+        // public GameplayTagSet TargetBlockedTags;
 
         public AbilityTagContainer(
             GameplayTag[] assetTags, 
@@ -35,11 +35,7 @@ namespace GAS.Runtime.Ability
             GameplayTag[] blockAbilityTags, 
             GameplayTag[] activationOwnedTag, 
             GameplayTag[] activationRequiredTags,
-            GameplayTag[] activationBlockedTags, 
-            GameplayTag[] sourceRequiredTags, 
-            GameplayTag[] sourceBlockedTags,
-            GameplayTag[] targetRequiredTags, 
-            GameplayTag[] targetBlockedTags)
+            GameplayTag[] activationBlockedTags)
         {
             AssetTag = new GameplayTagSet(assetTags);
             CancelAbilitiesWithTags = new GameplayTagSet(cancelAbilityTags);
@@ -47,10 +43,10 @@ namespace GAS.Runtime.Ability
             ActivationOwnedTag = new GameplayTagSet(activationOwnedTag);
             ActivationRequiredTags = new GameplayTagSet(activationRequiredTags);
             ActivationBlockedTags = new GameplayTagSet(activationBlockedTags);
-            SourceRequiredTags = new GameplayTagSet(sourceRequiredTags);
-            SourceBlockedTags = new GameplayTagSet(sourceBlockedTags);
-            TargetRequiredTags = new GameplayTagSet(targetRequiredTags);
-            TargetBlockedTags = new GameplayTagSet(targetBlockedTags);
+            // SourceRequiredTags = new GameplayTagSet(sourceRequiredTags);
+            // SourceBlockedTags = new GameplayTagSet(sourceBlockedTags);
+            // TargetRequiredTags = new GameplayTagSet(targetRequiredTags);
+            // TargetBlockedTags = new GameplayTagSet(targetBlockedTags);
         }
 
     }
