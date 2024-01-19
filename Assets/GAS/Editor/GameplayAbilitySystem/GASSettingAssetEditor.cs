@@ -5,7 +5,7 @@ namespace GAS.Editor.GameplayAbilitySystem
     using UnityEditor;
     using UnityEngine;
 
-    [CustomEditor(typeof(GASSettingAsset))]
+    //[CustomEditor(typeof(GASSettingAsset))]
     public class GASSettingAssetEditor : UnityEditor.Editor
     {
         private GASSettingAsset Asset => (GASSettingAsset)target;
