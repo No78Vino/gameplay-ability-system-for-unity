@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 using Sirenix.OdinInspector;
@@ -21,7 +22,11 @@ namespace GAS.Runtime.Ability
         private const string GRP_DATA = "DATA";
         private const string GRP_DATA_H = "DATA/H";
         private const string GRP_DATA_PARAMETER = "DATA/H/Parameter";
+        private const string GRP_DATA_SUMMON = "DATA/H/Summon";
         private const string GRP_DATA_TAG = "DATA/H/Tags";
+        private const string GRP_CUE = "CUE";
+        private const string GRP_CUE_INSTANT = "CUE/Instant";
+        private const string GRP_CUE_DURATIONAL = "CUE/Durational";
         
         
         private const int WIDTH_LABLE = 100;
@@ -73,6 +78,12 @@ namespace GAS.Runtime.Ability
         public GameplayEffectAsset Cooldown;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
+        [LabelWidth(WIDTH_LABLE)]
+        [LabelText(SdfIconType.ClockFill,Text = "CD Time")]
+        [ShowIf("CooldownExist")]
+        public float CooldownTime;
+        
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [LabelText("Extras")]
         [Space(10)]
@@ -82,15 +93,43 @@ namespace GAS.Runtime.Ability
 
         
         
+        [Title("Instant Cue",bold:true)]
+        [Space(10)]
+        [BoxGroup(GRP_CUE,false)]
+        [HorizontalGroup(GRP_CUE_INSTANT)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        [AssetSelector]
+        public GameplayCueInstant[] instantCues =new GameplayCueInstant[0]; 
+        
+        [Title("Durational Cue",bold:true)]
+        [Space(10)]
+        [HorizontalGroup(GRP_CUE_INSTANT)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        [AssetSelector]
+        public GameplayCueDurational[] durationalCues =new GameplayCueDurational[0]; 
+        
+        
+        
         [Title("Parameter",bold:true)]
+        [Space(10)]
         [BoxGroup(GRP_DATA,false)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_PARAMETER)]
         [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
         public float[] parameter;
         
+        [Title("Summon",bold:true)]
+        [Space(10)]
+        [BoxGroup(GRP_DATA,false)]
+        [HorizontalGroup(GRP_DATA_H)]
+        [VerticalGroup(GRP_DATA_SUMMON)]
+        [AssetSelector]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        public GameObject[] Summon;
+        
         // Tags
         [Title("Tags",bold:true)]
+        [Space(10)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
@@ -191,5 +230,7 @@ namespace GAS.Runtime.Ability
                 TagChoices = new ValueDropdownList<GameplayTag>();
             }
         }
+        
+        bool CooldownExist() => Cooldown != null;
     }
 }

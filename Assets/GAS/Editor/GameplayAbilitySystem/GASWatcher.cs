@@ -285,7 +285,10 @@ namespace GAS.Editor.GameplayAbilitySystem
             }
 
             foreach (var ge in activeGE)
-                EditorGUILayout.LabelField($"{ge.GameplayEffect.Asset.Name}", GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
+            {
+                string geState = $"{ge.GameplayEffect.Asset.Name};Duration:{ge.DurationRemaining()}/{ge.Duration}(s)";
+                EditorGUILayout.LabelField(geState, GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
+            }
 
             EditorGUILayout.EndVertical();
         }

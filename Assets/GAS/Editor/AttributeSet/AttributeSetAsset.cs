@@ -32,7 +32,7 @@ namespace GAS.Editor.AttributeSet
         public string Name;
         
         [Space]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,ShowPaging = false)]
         [ValueDropdown("AttributeChoices")]
         [LabelText("Attributes")]
         [Searchable]

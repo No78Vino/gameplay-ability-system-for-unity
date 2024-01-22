@@ -108,7 +108,7 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
             foreach (var cue in GameplayEffect.CueOnExecute)
             {
-                var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                var instantCue = cue.CreateSpec(new GameplayCueParameters() { sourceGameplayEffectSpec = this });
                 instantCue?.Trigger();
             }
         }
@@ -118,7 +118,7 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnAdd!=null&&GameplayEffect.CueOnAdd.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnAdd)
                 {
-                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
                     instantCue?.Trigger();
                 }
 
@@ -128,10 +128,10 @@ namespace GAS.Runtime.Effects
                 for (var i = 0; i < GameplayEffect.CueDurational.Length; i++)
                 {
                     var cueDurational = GameplayEffect.CueDurational[i];
-                    _cueDurationalSpecs[i] = cueDurational.CreateSpec(this) as GameplayCueDurationalSpec;
+                    _cueDurationalSpecs[i] = cueDurational.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
                 }
 
-                foreach (var cue in _cueDurationalSpecs) cue.OnGameplayEffectAdd();
+                foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
             }
         }
 
@@ -140,13 +140,13 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnRemove!=null && GameplayEffect.CueOnRemove.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnRemove)
                 {
-                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
                     instantCue?.Trigger();
                 }
 
             if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
             {
-                foreach (var cue in _cueDurationalSpecs) cue.OnGameplayEffectRemove();
+                foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
 
                 _cueDurationalSpecs = null;
             }
@@ -157,7 +157,7 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnActivate!=null && GameplayEffect.CueOnActivate.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnActivate)
                 {
-                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
                     instantCue?.Trigger();
                 }
 
@@ -171,7 +171,7 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnDeactivate!=null && GameplayEffect.CueOnDeactivate.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnDeactivate)
                 {
-                    var instantCue = cue.CreateSpec(this) as GameplayCueInstantSpec;
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
                     instantCue?.Trigger();
                 }
 

@@ -28,7 +28,8 @@ namespace GAS.Editor.Attribute
             Expanded = true,
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex",
-            CustomAddFunction = "OnAddAttribute")]
+            CustomAddFunction = "OnAddAttribute",
+            ShowPaging = false)]
         [Searchable]
         [OnValueChanged("Save")]
         public List<AttributeAccessor> attributes = new List<AttributeAccessor>();

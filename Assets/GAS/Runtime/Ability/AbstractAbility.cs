@@ -9,30 +9,35 @@ namespace GAS.Runtime.Ability
     public abstract class AbstractAbility
     {
         public readonly string Name;
-        protected AbilityAsset _dataReference;
+        protected readonly AbilityAsset DataReference;
         
         // public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
         // public List<AsyncAbilityTask> AsyncAbilityTasks = new List<AsyncAbilityTask>();
 
-        /// <summary>
-        ///     For the description of the ability
-        /// </summary>
-        public readonly AbilityTagContainer Tag;
+        public AbilityTagContainer Tag { get; protected set; }
 
-        public readonly GameplayEffect Cooldown;
+        public GameplayEffect Cooldown{ get; protected set; }
 
-        public readonly GameplayEffect Cost;
+        public  float CooldownTime{ get; protected set; }
+
+        public  GameplayEffect Cost{ get; protected set; }
 
         public AbstractAbility(AbilityAsset abilityAsset)
         {
-            _dataReference = abilityAsset;
+            DataReference = abilityAsset;
 
-            Name = _dataReference.UniqueName;
+            Name = DataReference.UniqueName;
             Tag = new AbilityTagContainer(
-                _dataReference.AssetTag,_dataReference.CancelAbilityTags,_dataReference.BlockAbilityTags,
-                _dataReference.ActivationOwnedTag,_dataReference.ActivationRequiredTags,_dataReference.ActivationBlockedTags);
-            Cooldown = _dataReference.Cooldown?new GameplayEffect(_dataReference.Cooldown):default;
-            Cost = _dataReference.Cost?new GameplayEffect(_dataReference.Cost):default;
+                DataReference.AssetTag,DataReference.CancelAbilityTags,DataReference.BlockAbilityTags,
+                DataReference.ActivationOwnedTag,DataReference.ActivationRequiredTags,DataReference.ActivationBlockedTags);
+            Cooldown = DataReference.Cooldown?new GameplayEffect(DataReference.Cooldown):default;
+            Cost = DataReference.Cost?new GameplayEffect(DataReference.Cost):default;
+            
+            CooldownTime = DataReference.CooldownTime;
+        }
+        
+        public AbstractAbility()
+        {
         }
         
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);

@@ -3,7 +3,7 @@ using GAS.Runtime.Effects;
 
 namespace GAS.Runtime.Cue
 {
-    public abstract class GameplayCueDurational : GameplayCue
+    public abstract class GameplayCueDurational : GameplayCue<GameplayCueDurationalSpec>
     {
     }
 
@@ -11,14 +11,22 @@ namespace GAS.Runtime.Cue
     {
         protected AbilitySystemComponent _targetASC;
 
-        protected GameplayCueDurationalSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
-            sourceGameplayEffectSpec)
+        protected GameplayCueDurationalSpec(GameplayCueDurational cue, GameplayCueParameters parameters) : 
+            base(cue, parameters)
         {
-            _targetASC = _gameplayEffectSpec.Owner;
+            
+            if (_parameters.sourceGameplayEffectSpec != null)
+            {
+                _targetASC = _parameters.sourceGameplayEffectSpec.Owner;
+            }
+            else if (_parameters.sourceAbilitySpec != null)
+            {
+                _targetASC = _parameters.sourceAbilitySpec.Owner;
+            }
         }
 
-        public abstract void OnGameplayEffectAdd();
-        public abstract void OnGameplayEffectRemove();
+        public abstract void OnAdd();
+        public abstract void OnRemove();
         public abstract void OnGameplayEffectActivate();
         public abstract void OnGameplayEffectDeactivate();
         public abstract void OnTick();

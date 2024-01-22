@@ -77,7 +77,7 @@ namespace GAS.Runtime.Ability
         protected virtual CooldownTimer CheckCooldown()
         {
             return Ability.Cooldown.NULL
-                ? new CooldownTimer { TimeRemaining = 0, Duration = Ability.Cooldown.Duration }
+                ? new CooldownTimer { TimeRemaining = 0, Duration = Ability.CooldownTime }
                 : Owner.CheckCooldownFromTags(Ability.Cooldown.TagContainer.GrantedTags);
         }
 
@@ -90,7 +90,11 @@ namespace GAS.Runtime.Ability
         {
             if (!Ability.Cost.NULL) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
 
-            if (!Ability.Cooldown.NULL) Owner.ApplyGameplayEffectToSelf(Ability.Cooldown);
+            if (!Ability.Cooldown.NULL)
+            {
+                var cdSpec = Owner.ApplyGameplayEffectToSelf(Ability.Cooldown);
+                cdSpec.SetDuration(Ability.CooldownTime); // Actually, it should be set by the ability's cooldown time.
+            }
         }
 
         public virtual bool TryActivateAbility(params object[] args)

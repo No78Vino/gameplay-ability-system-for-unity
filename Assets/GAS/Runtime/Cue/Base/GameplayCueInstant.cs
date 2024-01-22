@@ -9,30 +9,33 @@ namespace GAS.Runtime.Cue
         Source
     }
 
-    public abstract class GameplayCueInstant : GameplayCue
+    public abstract class GameplayCueInstant : GameplayCue<GameplayCueInstantSpec>
     {
         public InstantCueApplyTarget applyTarget;
-        // public override GameplayCueSpec CreateSpec(GameplayEffectSpec sourceGameplayEffectSpec)
-        // {
-        //     return new GameplayCueInstantSpec(this,)
-        // }
     }
 
     public abstract class GameplayCueInstantSpec : GameplayCueSpec
     {
         protected AbilitySystemComponent _targetASC;
 
-        public GameplayCueInstantSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
-            sourceGameplayEffectSpec)
+        public GameplayCueInstantSpec(GameplayCueInstant cue, GameplayCueParameters parameters) : base(cue,
+            parameters)
         {
-            _targetASC = instantCue.applyTarget == InstantCueApplyTarget.Owner
-                ? _gameplayEffectSpec.Owner
-                : _gameplayEffectSpec.Source;
+            if (_parameters.sourceGameplayEffectSpec != null)
+            {
+                _targetASC = instantCue.applyTarget == InstantCueApplyTarget.Owner
+                    ? _parameters.sourceGameplayEffectSpec.Owner
+                    : _parameters.sourceGameplayEffectSpec.Source;
+            }
+            else if (_parameters.sourceAbilitySpec != null)
+            {
+                _targetASC = _parameters.sourceAbilitySpec.Owner;
+            }
         }
 
-        public GameplayCueInstantSpec(GameplayCue cue) : base(cue, null)
-        {
-        }
+        // public GameplayCueInstantSpec(GameplayCue cue) : base(cue, null)
+        // {
+        // }
         
         private GameplayCueInstant instantCue => _cue as GameplayCueInstant;
 

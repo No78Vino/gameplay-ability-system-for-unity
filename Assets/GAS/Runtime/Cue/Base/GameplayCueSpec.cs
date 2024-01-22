@@ -5,12 +5,12 @@ namespace GAS.Runtime.Cue
     public abstract class GameplayCueSpec
     {
         protected readonly GameplayCue _cue;
-        protected readonly GameplayEffectSpec _gameplayEffectSpec;
+        protected readonly GameplayCueParameters _parameters;
 
-        public GameplayCueSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec)
+        public GameplayCueSpec(GameplayCue cue, GameplayCueParameters cueParameters)
         {
             _cue = cue;
-            _gameplayEffectSpec = sourceGameplayEffectSpec;
+            _parameters = cueParameters;
         }
     }
 }

@@ -6,10 +6,11 @@ namespace GAS.Runtime.Cue
     public class CueVFX : GameplayCueDurational
     {
         [SerializeField] public GameObject VfxPrefab;
+        [SerializeField] public bool IsAttachToTarget = true;
 
-        public override GameplayCueSpec CreateSpec(GameplayEffectSpec sourceGameplayEffectSpec)
+        public override GameplayCueDurationalSpec CreateSpec(GameplayCueParameters parameters)
         {
-            return new CueVFXSpec(this, sourceGameplayEffectSpec);
+            return new CueVFXSpec(this, parameters);
         }
     }
 
@@ -17,19 +18,21 @@ namespace GAS.Runtime.Cue
     {
         private GameObject _vfxInstance;
 
-        public CueVFXSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
-            sourceGameplayEffectSpec)
+        public CueVFXSpec(CueVFX cue, GameplayCueParameters parameters) : base(cue,
+            parameters)
         {
         }
 
         private CueVFX cue => _cue as CueVFX;
 
-        public override void OnGameplayEffectAdd()
+        public override void OnAdd()
         {
-            _vfxInstance = Object.Instantiate(cue.VfxPrefab, _targetASC.transform);
+            _vfxInstance = cue.IsAttachToTarget ? 
+                Object.Instantiate(cue.VfxPrefab, _targetASC.transform) : 
+                Object.Instantiate(cue.VfxPrefab, _targetASC.transform.position, Quaternion.identity);
         }
 
-        public override void OnGameplayEffectRemove()
+        public override void OnRemove()
         {
             Object.Destroy(_vfxInstance);
         }
@@ -46,6 +49,11 @@ namespace GAS.Runtime.Cue
 
         public override void OnTick()
         {
+        }
+        
+        public void SetVisible(bool visible)
+        {
+            _vfxInstance?.SetActive(visible);
         }
     }
 }

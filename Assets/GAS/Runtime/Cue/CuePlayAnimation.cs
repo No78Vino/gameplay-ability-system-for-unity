@@ -9,9 +9,9 @@ namespace GAS.Runtime.Cue
     {
         [SerializeField] private string _animationName;
         public string AnimationName => _animationName;
-        public override GameplayCueSpec CreateSpec(GameplayEffectSpec sourceGameplayEffectSpec)
+        public override GameplayCueInstantSpec CreateSpec(GameplayCueParameters parameters)
         {
-            return new CuePlayAnimationSpec(this, sourceGameplayEffectSpec);
+            return new CuePlayAnimationSpec(this, parameters);
         }
     }
     
@@ -20,8 +20,8 @@ namespace GAS.Runtime.Cue
         private CuePlayAnimation cue => _cue as CuePlayAnimation;
         private readonly Animator _animator;
         
-        public CuePlayAnimationSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
-            sourceGameplayEffectSpec)
+        public CuePlayAnimationSpec(CuePlayAnimation cue, GameplayCueParameters parameters) : base(cue,
+            parameters)
         {
             _animator = _targetASC.GetComponent<Animator>();
         }

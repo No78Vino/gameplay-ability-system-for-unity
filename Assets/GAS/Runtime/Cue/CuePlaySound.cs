@@ -7,9 +7,9 @@ namespace GAS.Runtime.Cue
     {
         // TODO
 
-        public override GameplayCueSpec CreateSpec(GameplayEffectSpec sourceGameplayEffectSpec)
+        public override GameplayCueInstantSpec CreateSpec(GameplayCueParameters parameters)
         {
-            return new CuePlaySoundSpec(this, sourceGameplayEffectSpec);
+            return new CuePlaySoundSpec(this, parameters);
         }
     }
     
@@ -17,8 +17,8 @@ namespace GAS.Runtime.Cue
     {
         // TODO
 
-        public CuePlaySoundSpec(GameplayCue cue, GameplayEffectSpec sourceGameplayEffectSpec) : base(cue,
-            sourceGameplayEffectSpec)
+        public CuePlaySoundSpec(CuePlaySound cue, GameplayCueParameters parameters) : base(cue,
+            parameters)
         {
             throw new NotImplementedException();
         }
