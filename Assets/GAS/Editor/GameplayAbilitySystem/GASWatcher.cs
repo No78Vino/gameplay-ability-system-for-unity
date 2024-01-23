@@ -286,7 +286,7 @@ namespace GAS.Editor.GameplayAbilitySystem
 
             foreach (var ge in activeGE)
             {
-                string geState = $"{ge.GameplayEffect.Asset.Name};Duration:{ge.DurationRemaining()}/{ge.Duration}(s)";
+                string geState = $"{ge.GameplayEffect.Asset.Name};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
                 EditorGUILayout.LabelField(geState, GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
             }
 

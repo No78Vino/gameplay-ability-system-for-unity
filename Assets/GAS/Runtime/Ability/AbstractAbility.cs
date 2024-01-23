@@ -11,6 +11,7 @@ namespace GAS.Runtime.Ability
         public readonly string Name;
         protected readonly AbilityAsset DataReference;
         
+        // TODO : AbilityTask
         // public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
         // public List<AsyncAbilityTask> AsyncAbilityTasks = new List<AsyncAbilityTask>();
 
@@ -41,5 +42,33 @@ namespace GAS.Runtime.Ability
         }
         
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
+
+        public void SetCooldown(GameplayEffect coolDown)
+        {
+            if (coolDown.DurationPolicy == EffectsDurationPolicy.Duration)
+            {
+                Cooldown = coolDown;
+            }
+            #if UNITY_EDITOR
+            else
+            {
+                UnityEngine.Debug.LogError("[EX] Cooldown must be duration policy!");
+            }
+            #endif
+        }
+        
+        public void SetCost(GameplayEffect cost)
+        {
+            if (cost.DurationPolicy == EffectsDurationPolicy.Instant)
+            {
+                Cost = cost;
+            }
+            #if UNITY_EDITOR
+            else
+            {
+                UnityEngine.Debug.LogError("[EX] Cost must be instant policy!");
+            }
+            #endif
+        }
     }
 }

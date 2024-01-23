@@ -28,7 +28,12 @@ namespace GAS.Runtime.Effects
             Level = level;
             Duration = GameplayEffect.Duration;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
+            {
+                PeriodExecution = GameplayEffect.Asset.PeriodExecution != null
+                    ? new GameplayEffect(GameplayEffect.Asset.PeriodExecution).CreateSpec(source, owner)
+                    : null;
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
+            }
 
             CaptureDataFromSource();
         }
@@ -41,7 +46,7 @@ namespace GAS.Runtime.Effects
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
-        public float Duration { get; private set; } 
+        public float Duration { get; private set; }
 
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
 
@@ -62,7 +67,7 @@ namespace GAS.Runtime.Effects
         {
             Duration = duration;
         }
-        
+
         public void Apply()
         {
             if (IsApplied) return;
@@ -108,27 +113,28 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
             foreach (var cue in GameplayEffect.CueOnExecute)
             {
-                var instantCue = cue.CreateSpec(new GameplayCueParameters() { sourceGameplayEffectSpec = this });
+                var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
                 instantCue?.Trigger();
             }
         }
 
         private void TriggerCueOnAdd()
         {
-            if (GameplayEffect.CueOnAdd!=null&&GameplayEffect.CueOnAdd.Length > 0)
+            if (GameplayEffect.CueOnAdd != null && GameplayEffect.CueOnAdd.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnAdd)
                 {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
                     instantCue?.Trigger();
                 }
 
-            if (GameplayEffect.CueDurational!=null && GameplayEffect.CueDurational.Length > 0)
+            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
             {
                 _cueDurationalSpecs = new GameplayCueDurationalSpec[GameplayEffect.CueDurational.Length];
                 for (var i = 0; i < GameplayEffect.CueDurational.Length; i++)
                 {
                     var cueDurational = GameplayEffect.CueDurational[i];
-                    _cueDurationalSpecs[i] = cueDurational.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
+                    _cueDurationalSpecs[i] = cueDurational.CreateSpec(new GameplayCueParameters
+                        { sourceGameplayEffectSpec = this });
                 }
 
                 foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
@@ -137,10 +143,10 @@ namespace GAS.Runtime.Effects
 
         private void TriggerCueOnRemove()
         {
-            if (GameplayEffect.CueOnRemove!=null && GameplayEffect.CueOnRemove.Length > 0)
+            if (GameplayEffect.CueOnRemove != null && GameplayEffect.CueOnRemove.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnRemove)
                 {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
                     instantCue?.Trigger();
                 }
 
@@ -154,35 +160,35 @@ namespace GAS.Runtime.Effects
 
         private void TriggerCueOnActivation()
         {
-            if (GameplayEffect.CueOnActivate!=null && GameplayEffect.CueOnActivate.Length > 0)
+            if (GameplayEffect.CueOnActivate != null && GameplayEffect.CueOnActivate.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnActivate)
                 {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
                     instantCue?.Trigger();
                 }
 
-            if (GameplayEffect.CueDurational!=null && GameplayEffect.CueDurational.Length > 0)
+            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
                 foreach (var cue in _cueDurationalSpecs)
                     cue.OnGameplayEffectActivate();
         }
 
         private void TriggerCueOnDeactivation()
         {
-            if (GameplayEffect.CueOnDeactivate!=null && GameplayEffect.CueOnDeactivate.Length > 0)
+            if (GameplayEffect.CueOnDeactivate != null && GameplayEffect.CueOnDeactivate.Length > 0)
                 foreach (var cue in GameplayEffect.CueOnDeactivate)
                 {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters(){sourceGameplayEffectSpec = this} );
+                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
                     instantCue?.Trigger();
                 }
 
-            if (GameplayEffect.CueDurational!=null && GameplayEffect.CueDurational.Length > 0)
+            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
                 foreach (var cue in _cueDurationalSpecs)
                     cue.OnGameplayEffectDeactivate();
         }
 
         private void CueOnTick()
         {
-            if (GameplayEffect.CueDurational==null || GameplayEffect.CueDurational.Length <= 0) return;
+            if (GameplayEffect.CueDurational == null || GameplayEffect.CueDurational.Length <= 0) return;
             foreach (var cue in _cueDurationalSpecs) cue.OnTick();
         }
 

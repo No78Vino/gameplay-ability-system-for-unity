@@ -18,10 +18,7 @@ namespace GAS.Runtime.Ability
         public void Tick()
         {
             var enumerable = _abilities.Values.ToArray();
-            foreach (var abilitySpec in enumerable)
-            {
-                abilitySpec.Tick();
-            }
+            foreach (var abilitySpec in enumerable) abilitySpec.Tick();
         }
         
         public void GrantAbility(AbstractAbility ability)

@@ -80,7 +80,6 @@ namespace GAS.Runtime.Ability
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelWidth(WIDTH_LABLE)]
         [LabelText(SdfIconType.ClockFill,Text = "CD Time")]
-        [ShowIf("CooldownExist")]
         public float CooldownTime;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
@@ -230,7 +229,5 @@ namespace GAS.Runtime.Ability
                 TagChoices = new ValueDropdownList<GameplayTag>();
             }
         }
-        
-        bool CooldownExist() => Cooldown != null;
     }
 }

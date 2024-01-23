@@ -1,5 +1,3 @@
-using GAS.Runtime.Component;
-using GAS.Runtime.Effects;
 using UnityEngine;
 
 namespace GAS.Runtime.Cue
@@ -23,7 +21,7 @@ namespace GAS.Runtime.Cue
         public CuePlayAnimationSpec(CuePlayAnimation cue, GameplayCueParameters parameters) : base(cue,
             parameters)
         {
-            _animator = _targetASC.GetComponent<Animator>();
+            _animator = Owner.GetComponent<Animator>();
         }
 
         public override void Trigger()

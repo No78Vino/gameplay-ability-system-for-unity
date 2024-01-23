@@ -128,7 +128,6 @@ namespace GAS.Runtime.Ability
 
         public void Tick()
         {
-            // TODO
             if (!IsActive) return;
             AbilityTick();
         }

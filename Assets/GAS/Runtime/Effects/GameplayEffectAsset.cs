@@ -84,6 +84,7 @@ namespace GAS.Runtime.Effects
         [LabelText(" execute")]
         [LabelWidth(50)]
         [ShowIf("IsPeriodic")]
+        [AssetSelector]
         public GameplayEffectAsset PeriodExecution;
 
         // Mod

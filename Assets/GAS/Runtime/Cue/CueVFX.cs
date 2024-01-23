@@ -28,8 +28,8 @@ namespace GAS.Runtime.Cue
         public override void OnAdd()
         {
             _vfxInstance = cue.IsAttachToTarget ? 
-                Object.Instantiate(cue.VfxPrefab, _targetASC.transform) : 
-                Object.Instantiate(cue.VfxPrefab, _targetASC.transform.position, Quaternion.identity);
+                Object.Instantiate(cue.VfxPrefab, Owner.transform) : 
+                Object.Instantiate(cue.VfxPrefab, Owner.transform.position, Quaternion.identity);
         }
 
         public override void OnRemove()
