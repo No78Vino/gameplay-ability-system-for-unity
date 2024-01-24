@@ -13,7 +13,8 @@ namespace GAS.Runtime.Component
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
         [SerializeField] private AbilitySystemComponentPreset preset;
-
+        public AbilitySystemComponentPreset Preset => preset;
+        
         public int Level { get; }
 
         public GameplayEffectContainer GameplayEffectContainer { get; } = new GameplayEffectContainer();
@@ -30,7 +31,6 @@ namespace GAS.Runtime.Component
             GameplayEffectContainer.SetOwner(this);
             AttributeSetContainer.SetOwner(this);
             GameplayTagAggregator.SetOwner(this);
-            Init(preset);
         }
 
         private void OnEnable()
@@ -45,39 +45,26 @@ namespace GAS.Runtime.Component
             GameplayTagAggregator.OnDisable();
         }
 
-        public void DefaultInit()
+        public void SetPreset( AbilitySystemComponentPreset ascPreset)
         {
-            Init(preset);
+            preset = ascPreset;
         }
-
-        public void Init(AbilitySystemComponentPreset ascPreset)
+        
+        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityInstanceInfo[] baseAbilities)
         {
-            if (ascPreset != null)
-            {
-                // Tag
-                if (ascPreset.BaseTags != null) GameplayTagAggregator.Init(ascPreset.BaseTags);
-
-                // AttributeSet
-                if (ascPreset.AttributeSets != null)
-                    foreach (var attributeSet in ascPreset.AttributeSets)
+            if (baseTags != null) GameplayTagAggregator.Init(baseTags);
+            
+            if (attrSetTypes != null)
+                foreach (var attrSetType in attrSetTypes)
+                    AttributeSetContainer.AddAttributeSet(attrSetType);
+            
+            if (baseAbilities != null)
+                foreach (var info in baseAbilities)
+                    if (info.abilityType != null)
                     {
-                        var attrSetTypeName = GasDefine.GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX + attributeSet;
-                        var attrSetType = Type.GetType($"{attrSetTypeName}, Assembly-CSharp");
-                        if (attrSetType != null) AttributeSetContainer.AddAttributeSet(attrSetType);
+                        var ability = Activator.CreateInstance(info.abilityType, args: info.abilityAsset) as AbstractAbility;
+                        AbilityContainer.GrantAbility(ability);
                     }
-
-                // Ability
-                if (ascPreset.BaseAbilities != null)
-                    foreach (var abilityAsset in ascPreset.BaseAbilities)
-                    {
-                        var abilityType = Type.GetType($"{abilityAsset.InstanceAbilityClassFullName}, Assembly-CSharp");
-                        if (abilityType != null)
-                        {
-                            var ability = Activator.CreateInstance(abilityType, args: abilityAsset) as AbstractAbility;
-                            AbilityContainer.GrantAbility(ability);
-                        }
-                    }
-            }
         }
 
         public bool HasTag(GameplayTag gameplayTag)

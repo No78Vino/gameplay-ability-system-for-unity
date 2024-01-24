@@ -175,6 +175,17 @@ namespace GAS.Editor.GameplayAbilitySystem
             CheckPathFolderExist(GameplayCueLibPath);
             CheckPathFolderExist(MMCLibPath);
         }
+
+        [BoxGroup("A")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(0.8f, 0.8f, 0)]
+        [PropertySpace(10)]
+        //[InfoBox(TIP_CREATE_FOLDERS)]
+        [Button(SdfIconType.Upload, "Generate AbilitySystemComponentUtil Code", ButtonHeight = 38)]
+        void GenerateAscUtilCode()
+        {
+            AbilitySystemComponentUtilGenerator.Gen();
+        }
     }
 }
 #endif

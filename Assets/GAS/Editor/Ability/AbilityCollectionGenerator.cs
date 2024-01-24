@@ -26,6 +26,9 @@ namespace GAS.Editor.Ability
             writer.WriteLine("//// This is a generated file. ////");
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("using System;");
+            writer.WriteLine("using System.Collections.Generic;");
+            writer.WriteLine("");
             writer.WriteLine("namespace GAS.Runtime.Ability");
             writer.WriteLine("{");
             writer.WriteLine("  public static class AbilityCollection");
@@ -35,6 +38,7 @@ namespace GAS.Editor.Ability
             writer.WriteLine("      {");
             writer.WriteLine("          public string Name;");
             writer.WriteLine("          public string AssetPath;");
+            writer.WriteLine("          public Type AbilityClassType;");
             // writer.WriteLine("          public AbilityAsset Asset()");
             // writer.WriteLine("          {");
             // string loadAbilityAssetCode = string.Format(loadMethodCodeString, "AssetPath");
@@ -47,10 +51,13 @@ namespace GAS.Editor.Ability
             
             foreach (var ability in abilityAssets)
             {
-                var validName = ability.UniqueName;
                 var path = AssetDatabase.GetAssetPath(ability);
                 writer.WriteLine(
-                    $"    public static AbilityInfo {validName}_Info = new AbilityInfo {{ Name = \"{validName}\", AssetPath = \"{path}\"}};");
+                    $"    public static AbilityInfo {ability.UniqueName}_Info = " +
+                    $"new AbilityInfo {{ " +
+                    $"Name = \"{ability.UniqueName}\", " +
+                    $"AssetPath = \"{path}\"," +
+                    $"AbilityClassType = typeof({ability.InstanceAbilityClassFullName}) }};");
                 // writer.WriteLine($"    private static {ability.InstanceAbilityClassFullName} _{validName};");
                 // writer.WriteLine($"    public static {ability.InstanceAbilityClassFullName} {validName}()");
                 // writer.WriteLine("    {");
@@ -59,7 +66,14 @@ namespace GAS.Editor.Ability
                 // writer.WriteLine("    }");
                 writer.WriteLine("");
             }
-            
+        
+            writer.WriteLine("  public static Dictionary<string, AbilityInfo> AbilityMap = new Dictionary<string, AbilityInfo>");
+            writer.WriteLine("  {");
+            foreach (var ability in abilityAssets)
+            {
+                writer.WriteLine($"      [\"{ability.UniqueName}\"] = {ability.UniqueName}_Info,");
+            }
+            writer.WriteLine("  };");
             writer.WriteLine("  }");
             writer.WriteLine("}");
             

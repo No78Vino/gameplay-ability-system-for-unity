@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
@@ -7,9 +8,9 @@ namespace GAS.Runtime.Component
 {
     public interface IAbilitySystemComponent
     {
-        void Init(AbilitySystemComponentPreset ascPreset);
+        void SetPreset(AbilitySystemComponentPreset ascPreset);
         
-        void DefaultInit();
+        void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityInstanceInfo[] baseAbilities);
         
         bool HasTag(GameplayTag tag);
         

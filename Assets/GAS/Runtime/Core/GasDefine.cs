@@ -17,7 +17,7 @@ namespace GAS.Core
         
         public const string GAS_ABILITY_COLLECTION_CSHARP_SCRIPT_NAME = "AbilityCollection.gen.cs";
         
-        
+        public const string GAS_ASCUTIL_CSHARP_SCRIPT_NAME = "AbilitySystemComponentUtil.gen.cs";
 
         /// <summary>
         /// TODO

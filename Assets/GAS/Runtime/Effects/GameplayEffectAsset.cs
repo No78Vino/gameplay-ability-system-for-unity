@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects.Execution;
 using GAS.Runtime.Effects.Modifier;
@@ -87,6 +88,13 @@ namespace GAS.Runtime.Effects
         [AssetSelector]
         public GameplayEffectAsset PeriodExecution;
 
+        [Space]
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
+        [Title("Granted Abilities",Bold = true)]
+        [AssetSelector]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        public AbilityAsset[] GrantedAbilities;
+        
         // Mod
         [Title("Modifier",bold:true)]
         [BoxGroup(GRP_DATA,false)]
