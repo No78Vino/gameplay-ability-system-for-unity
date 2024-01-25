@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &542813144813098697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 560568688188839340}
+  m_Layer: 0
+  m_Name: Blade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &560568688188839340
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542813144813098697}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.2406004, w: 0.97062427}
+  m_LocalPosition: {x: -0.55, y: 0.42, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2889629657063112205}
+  m_Father: {fileID: 8917648173360937336}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 27.844}
 --- !u!1 &3395167240217341397
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,13 +57,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3395167240217341397}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.22636653, w: 0.9740422}
-  m_LocalPosition: {x: -0.13, y: 0.576, z: 0}
-  m_LocalScale: {x: 2.025, y: 0.1875, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.9792372, y: 0.178632, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8917648173360937336}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -26.166}
+  m_Father: {fileID: 560568688188839340}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2745978902849056848
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -316,7 +348,7 @@ Transform:
   m_Children:
   - {fileID: 5264918429363863749}
   - {fileID: 8045861162342822437}
-  - {fileID: 2889629657063112205}
+  - {fileID: 560568688188839340}
   m_Father: {fileID: 694419890840365810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &681957179147256543
