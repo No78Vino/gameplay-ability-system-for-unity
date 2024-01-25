@@ -14,6 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   Description: 
-  AttributeSets: []
-  BaseTags: []
-  BaseAbilities: []
+  AttributeSets:
+  - Player
+  BaseTags:
+  - _name: Ability.Dodge
+    _hashCode: 1796722389
+    _shortName: Dodge
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  BaseAbilities:
+  - {fileID: 11400000, guid: 2e9ad888fe6908b42b99743380f54cdf, type: 2}
+  - {fileID: 11400000, guid: a1049b0bed996d4498455a24457b5cb4, type: 2}
