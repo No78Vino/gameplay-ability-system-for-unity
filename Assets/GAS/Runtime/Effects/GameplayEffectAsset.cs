@@ -92,6 +92,7 @@ namespace GAS.Runtime.Effects
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [Title("Granted Abilities",Bold = true)]
         [AssetSelector]
+        [ShowIf("IsDurationalPolicy")]
         [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
         public AbilityAsset[] GrantedAbilities;
         
