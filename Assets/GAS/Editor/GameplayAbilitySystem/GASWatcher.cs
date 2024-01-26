@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Runtime.Component;
+
+#if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
     using System;
@@ -15,20 +17,17 @@ namespace GAS.Editor.GameplayAbilitySystem
         private const string BOXGROUP_TIPS = "Tips";
         private const string BOXGROUP_TIPS_RUNNINGTIP = "Tips/Running tip";
         private const string BOXGROUP_ASC = "Ability System Components";
-
-        private const int WIDTH_SELECTOR_MENU = 125;
-        private const int WIDTH_SEPARATOR = 5;
-
-        private const int WIDTH_IID = 100;
-        private const int WIDTH_ATTRIBUTE = 250;
-        private const int WIDTH_ATTRIBUTE_NAME = 150;
-        private const int WIDTH_ATTRIBUTE_VALUE = 100;
-        private const int WIDTH_ABILITY = 100;
-        private const int WIDTH_GAMEPLAYEFFECT = 200;
-        private const int WIDTH_FIXED_TAG = 200;
-        private const int WIDTH_DYNAMIC_TAG = 200;
+        private const string BOXGROUP_ASC_H = "Ability System Components/H";
+        private const string BOXGROUP_ASC_H_L = "Ability System Components/H/L";
+        private const string BOXGROUP_ASC_H_R = "Ability System Components/H/R";
+        private const string BOXGROUP_ASC_H_R_A = "Ability System Components/H/R/A";
+        private const string BOXGROUP_ASC_H_R_A_V = "Ability System Components/H/R/A/V1";
+        private const string BOXGROUP_ASC_H_R_A_VB = "Ability System Components/H/R/A/VB";
+        private const string BOXGROUP_ASC_H_R_A_VC = "Ability System Components/H/R/A/VC";
 
 
+        private AbilitySystemComponent _selected;
+        
         [HideLabel] [DisplayAsString(TextAlignment.Center, true)]
         public string windowTitle = "<size=18><b>EX Gameplay Ability System Watcher</b></size>";
 
@@ -41,256 +40,195 @@ namespace GAS.Editor.GameplayAbilitySystem
         [DisplayAsString(TextAlignment.Center, true)]
         [HideIf("IsPlaying")]
         public string onlyForGameRunning =
-            "<size=16><b><color=yellow>This monitor is only available when the game is running.</color></b></size>";
+            "<size=20><b><color=yellow>This monitor is only available when the game is running.</color></b></size>";
 
-        [ShowIf("IsPlaying")] [OnInspectorGUI("OnDrawGasHostGUI")] [DisplayAsString(TextAlignment.Center)] [HideLabel]
-        public string GASHost = "";
+        [BoxGroup(BOXGROUP_ASC)]
+        [HorizontalGroup(BOXGROUP_ASC_H, 200)]
+        [BoxGroup(BOXGROUP_ASC_H_L, false)]
+        [OnInspectorGUI("OnDrawNavi")] [DisplayAsString(TextAlignment.Center)] [HideLabel]
+        [ShowIf("IsPlaying")]
+        public string Navis = "NAVI";
+        
+        [HorizontalGroup(BOXGROUP_ASC_H)]
+        [BoxGroup(BOXGROUP_ASC_H_R,false)]
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A,PaddingRight = 0.01f)]
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
+        [Title("ID Mark",bold:true)]
+        [DisplayAsString]
+        [LabelWidth(75)]
+        [ShowIf("IsPlaying")]
+        public int IID;
+        
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
+        [ReadOnly]
+        [LabelWidth(75)]
+        [ShowIf("IsPlaying")]
+        public GameObject instance;
+        
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
+        [DisplayAsString]
+        [LabelWidth(75)]
+        [ShowIf("IsPlaying")]
+        public int Level;
+        
+        [Space]
+        [Title("Abilities",bold:true)]
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [DisplayAsString][LabelText(" ")]
+        [ShowIf("IsPlaying")]
+        public List<string> Abilities = new List<string>();
+        
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A,PaddingRight = 0.01f)]
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_VB)]
+        [Title("Attributes",bold:true)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [DisplayAsString][LabelText(" ")]
+        [ShowIf("IsPlaying")]
+        public List<string> Attributes = new List<string>();
+        
+        
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A,PaddingRight = 0.01f)]
+        [Title("GameplayEffects",bold:true)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [DisplayAsString][LabelText(" ")]
+        [ShowIf("IsPlaying")]
+        public List<string> Effects = new List<string>();
+        
+        
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A)]
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_VC)]
+        [Title("Tags",bold:true)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [DisplayAsString]
+        [ShowIf("IsPlaying")]
+        public List<string> FixedTag = new List<string>();
+        
+        [Title("  ",bold:true)]
+        [VerticalGroup(BOXGROUP_ASC_H_R_A_VC)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [DisplayAsString]
+        [ShowIf("IsPlaying")]
+        public List<string> DynamicTag = new List<string>();
 
-        private Vector2 ascScrollPos;
+        
+        
+        
+        
         private Vector2 menuScrollPos;
-        private GUIStyle propertyTitleStyle;
-        private List<Rect> ascScrollPosList = new List<Rect>();
 
         private bool IsPlaying => Application.isPlaying;
 
-        private void Awake()
-        {
-            propertyTitleStyle = new GUIStyle { richText = true, alignment = TextAnchor.MiddleCenter };
-        }
-
         private void Update()
         {
-            if (IsPlaying) Repaint();
+            if (IsPlaying)
+            {
+                if (_selected == null || _selected.gameObject == null)
+                {
+                    _selected = Core.GameplayAbilitySystem.GAS.AbilitySystemComponents.Count > 0
+                        ? Core.GameplayAbilitySystem.GAS.AbilitySystemComponents[0] as AbilitySystemComponent
+                        : null;
+                }
+                RefreshAscInfo();
+                Repaint();
+            }
         }
 
-        [MenuItem("EX-GAS/GAS Runtime Watcher", priority = 3)]
+        [MenuItem("EX-GAS/Runtime Watcher", priority = 3)]
         private static void OpenWindow()
         {
             var window = GetWindow<GASWatcher>();
+            window.titleContent = new GUIContent("EX Gameplay Ability System Watcher");
             window.Show();
         }
-
-        [Obsolete("Obsolete")]
-        private void OnDrawGasHostGUI()
+        
+        void OnDrawNavi()
         {
             if (!IsPlaying) return;
-            ascScrollPosList.Clear();
             
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.BeginVertical();
-            PropertyBar();
-
-            ascScrollPos = EditorGUILayout.BeginScrollView(ascScrollPos, GUI.skin.box);
+            menuScrollPos = EditorGUILayout.BeginScrollView(menuScrollPos, GUI.skin.box);
             foreach (var iasc in Core.GameplayAbilitySystem.GAS.AbilitySystemComponents)
             {
-                var asc = (Runtime.Component.AbilitySystemComponent)iasc;
-
-                using (new EditorGUILayout.VerticalScope())
+                var asc = (AbilitySystemComponent)iasc;
+                if (GUILayout.Button($"{asc.GetInstanceID()}"))
                 {
-                    EditorGUILayout.BeginHorizontal(
-                        GUILayout.Width(
-                            WIDTH_IID + WIDTH_ATTRIBUTE + WIDTH_FIXED_TAG + WIDTH_DYNAMIC_TAG +
-                            WIDTH_ABILITY + WIDTH_GAMEPLAYEFFECT + WIDTH_SEPARATOR * 6));
-                    // IID & GameObject
-                    DrawIidAndGameObject(asc);
-                    EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-                    // Attributes
-                    DrawAttribute(asc);
-                    EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-                    // FixedTags
-                    DrawFixedTags(asc);
-                    EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-                    // DynamicAddedTags
-                    DrawDynamicTags(asc);
-                    EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-                    // Abilities
-                    DrawAbility(asc);
-                    EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-                    // ActiveGameplayEffect
-                    DrawGameplayEffect(asc);
-
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Separator();
-                    EditorGUILayout.LabelField(
-                        "//////////////////////////////////////////////////////////////////////////" +
-                        "//////////////////////////////////////////////////////////////////////////" +
-                        "//////////////////////////////////////////////////////////////////////////" +
-                        "//////////////////////////////////////////////////////////////////////////" +
-                        "//////////////////////////////////////////////////////////////////////////",
-                        GUILayout.Width(WIDTH_IID + WIDTH_ATTRIBUTE + WIDTH_FIXED_TAG + WIDTH_DYNAMIC_TAG +
-                                        WIDTH_ABILITY + WIDTH_GAMEPLAYEFFECT + WIDTH_SEPARATOR * 6));
+                    _selected = asc;
+                    RefreshAscInfo();
                 }
-
-                ascScrollPosList.Add(GUILayoutUtility.GetLastRect());
             }
 
             EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
+        }
+
+        private void RefreshAscInfo()
+        {
+            if (_selected == null)
+            {
+                IID = 0;
+                instance = null;
+                Level = 0;
+                Abilities.Clear();
+                Attributes.Clear();
+                Effects.Clear();
+                FixedTag.Clear();
+                DynamicTag.Clear();
+                return;
+            }
             
-            AscMenuBar();
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void PropertyBar()
-        {
-            EditorGUILayout.BeginHorizontal(GUI.skin.box);
-            // IID & GameObject
-            EditorGUILayout.LabelField(
-                "<color=white><size=13><b>IID</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_IID));
-            EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-            // Attributes
-            EditorGUILayout.LabelField("<color=white><size=13><b>Attributes</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_ATTRIBUTE));
-            EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-            // FixedTags
-            EditorGUILayout.LabelField("<color=white><size=13><b>FixedTags</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_FIXED_TAG));
-            EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-            // DynamicAddedTags
-            EditorGUILayout.LabelField("<color=white><size=13><b>DynamicAddedTags</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_DYNAMIC_TAG));
-            EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-            // Abilities
-            EditorGUILayout.LabelField("<color=white><size=13><b>Abilities</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_ABILITY));
-            EditorGUILayout.LabelField("|", GUILayout.Width(WIDTH_SEPARATOR));
-            // ActiveGameplayEffect
-            EditorGUILayout.LabelField("<color=white><size=13><b>ActiveGameplayEffect</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
-            EditorGUILayout.EndHorizontal();
-        }
-
-        void AscMenuBar()
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_SELECTOR_MENU));
-            menuScrollPos = EditorGUILayout.BeginScrollView(menuScrollPos, GUI.skin.box);
-            EditorGUILayout.LabelField("<color=white><size=13><b>NAVI</b></size></color>",
-                propertyTitleStyle, GUILayout.Width(WIDTH_SELECTOR_MENU - 10));
-
-            for (var i = 0; i < Core.GameplayAbilitySystem.GAS.AbilitySystemComponents.Count; i++)
+            IID = _selected.GetInstanceID();
+            instance = _selected.gameObject;
+            Level = _selected.Level;
+            Abilities.Clear();
+            foreach (var ability in _selected.AbilityContainer.AbilitySpecs())
             {
-                var iasc = Core.GameplayAbilitySystem.GAS.AbilitySystemComponents[i];
-                var asc = (Runtime.Component.AbilitySystemComponent)iasc;
-                if (GUILayout.Button($"{asc.GetInstanceID()}", GUILayout.Width(WIDTH_SELECTOR_MENU - 10)))
-                {
-                    var secondComponentRect = ascScrollPosList[i] ;
-                    var screenPos =
-                        GUIUtility.GUIToScreenPoint(new Vector2(secondComponentRect.x, secondComponentRect.y));
-                    ascScrollPos = GUIUtility.ScreenToGUIPoint(screenPos);
-                }
+                Abilities.Add($"{ability.Key} | Lv.{ability.Value.Level}");
             }
-
-            EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
-        }
-        
-        [Obsolete("Obsolete")]
-        private void DrawIidAndGameObject(Runtime.Component.AbilitySystemComponent asc)
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_IID));
-            EditorGUILayout.LabelField(asc.GetInstanceID().ToString(), GUILayout.Width(WIDTH_IID));
-            EditorGUILayout.ObjectField(asc.gameObject, typeof(GameObject), GUILayout.Width(WIDTH_IID));
-            EditorGUILayout.EndVertical();
-        }
-
-        private void DrawAttribute(Runtime.Component.AbilitySystemComponent asc)
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_ATTRIBUTE));
-            if (asc.AttributeSetContainer.Sets.Count == 0)
-            {
-                EditorGUILayout.LabelField(" ", GUILayout.Width(WIDTH_ATTRIBUTE));
-            }
-            foreach (var kv in asc.AttributeSetContainer.Sets)
+            
+            Attributes.Clear();
+            foreach (var kv in _selected.AttributeSetContainer.Sets)
             {
                 var setName = kv.Key;
-                EditorGUILayout.LabelField($"Set:{setName} ↓", GUILayout.Width(WIDTH_ATTRIBUTE));
+                Attributes.Add($"Set:{setName} ↓");
                 foreach (var attributeName in kv.Value.AttributeNames)
                 {
                     var attr = kv.Value[attributeName];
-                    EditorGUILayout.BeginHorizontal(GUILayout.Width(WIDTH_ATTRIBUTE));
-                    EditorGUILayout.LabelField($"--{attributeName}", GUILayout.Width(WIDTH_ATTRIBUTE_NAME));
-                    EditorGUILayout.LabelField(
-                        $"= {attr.CurrentValue}({attr.BaseValue} + {attr.CurrentValue - attr.BaseValue})",
-                        GUILayout.Width(WIDTH_ATTRIBUTE_VALUE));
-                    EditorGUILayout.EndHorizontal();
+                    Attributes.Add($"--{attributeName} = {attr.CurrentValue}({attr.BaseValue} + {attr.CurrentValue - attr.BaseValue})");
                 }
             }
-
-            EditorGUILayout.EndVertical();
-        }
-
-        private void DrawFixedTags(Runtime.Component.AbilitySystemComponent asc)
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_FIXED_TAG));
-            if (asc.GameplayTagAggregator.FixedTags.Count == 0)
+            
+            Effects.Clear();
+            var activeGE = _selected.GameplayEffectContainer.GetActiveGameplayEffects();
+            foreach (var ge in activeGE)
             {
-                EditorGUILayout.LabelField(" ", GUILayout.Width(WIDTH_FIXED_TAG));
+                string geState = $"{ge.GameplayEffect.Asset.Name};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
+                Effects.Add(geState);
             }
-            foreach (var tag in asc.GameplayTagAggregator.FixedTags)
-                EditorGUILayout.LabelField(tag.Name, GUILayout.Width(WIDTH_FIXED_TAG));
-            EditorGUILayout.EndVertical();
-        }
-
-        private void DrawDynamicTags(Runtime.Component.AbilitySystemComponent asc)
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_DYNAMIC_TAG));
-            if (asc.GameplayTagAggregator.DynamicAddedTags.Count == 0)
+            
+            FixedTag.Clear();
+            foreach (var tag in _selected.GameplayTagAggregator.FixedTags)
             {
-                EditorGUILayout.LabelField(" ", GUILayout.Width(WIDTH_DYNAMIC_TAG));
+                FixedTag.Add(tag.Name);
             }
-            foreach (var kv in asc.GameplayTagAggregator.DynamicAddedTags)
+            
+            DynamicTag.Clear();
+            foreach (var kv in _selected.GameplayTagAggregator.DynamicAddedTags)
             {
                 var tagName = kv.Key.Name;
-                EditorGUILayout.LabelField($"{tagName} ↓ ", GUILayout.Width(WIDTH_DYNAMIC_TAG));
+                DynamicTag.Add($"{tagName} ↓ ");
                 foreach (var obj in kv.Value)
+                {
                     if (obj is GameplayEffectSpec spec)
                     {
                         var owner = spec.Owner;
-                        EditorGUILayout.LabelField($"--From:{owner.GetInstanceID()}-GE",
-                            GUILayout.Width(WIDTH_DYNAMIC_TAG));
+                        DynamicTag.Add($"--From:{owner.GetInstanceID()}-GE:{spec.GameplayEffect.Asset.Name}"); 
                     }
                     else if (obj is AbilitySpec ability)
                     {
                         var owner = ability.Owner;
-                        EditorGUILayout.LabelField($"--From:{owner.GetInstanceID()}-Ability",
-                            GUILayout.Width(WIDTH_DYNAMIC_TAG));
+                        DynamicTag.Add($"--From:{owner.GetInstanceID()}-Ability:{ability.Ability.Name}");
                     }
+                }
             }
-
-            EditorGUILayout.EndVertical();
-        }
-
-        private void DrawAbility(Runtime.Component.AbilitySystemComponent asc)
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_ABILITY));
-            if (asc.AbilityContainer.AbilitySpecs().Count == 0)
-            {
-                EditorGUILayout.LabelField(" ", GUILayout.Width(WIDTH_ABILITY));
-            }
-            foreach (var ability in asc.AbilityContainer.AbilitySpecs())
-                EditorGUILayout.LabelField($"{ability.Key}", GUILayout.Width(WIDTH_ABILITY));
-            EditorGUILayout.EndVertical();
-        }
-
-        private void DrawGameplayEffect(Runtime.Component.AbilitySystemComponent asc)
-        {
-            EditorGUILayout.BeginVertical(GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
-            var activeGE = asc.GameplayEffectContainer.GetActiveGameplayEffects();
-            if (activeGE.Count == 0)
-            {
-                EditorGUILayout.LabelField(" ", GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
-            }
-
-            foreach (var ge in activeGE)
-            {
-                string geState = $"{ge.GameplayEffect.Asset.Name};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
-                EditorGUILayout.LabelField(geState, GUILayout.Width(WIDTH_GAMEPLAYEFFECT));
-            }
-
-            EditorGUILayout.EndVertical();
         }
     }
 }

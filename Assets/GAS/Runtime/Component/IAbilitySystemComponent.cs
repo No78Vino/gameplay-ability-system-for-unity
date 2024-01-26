@@ -12,6 +12,8 @@ namespace GAS.Runtime.Component
         
         void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityInstanceInfo[] baseAbilities);
         
+        void SetLevel(int level);
+        
         bool HasTag(GameplayTag tag);
         
         bool HasAllTags(GameplayTagSet tags);

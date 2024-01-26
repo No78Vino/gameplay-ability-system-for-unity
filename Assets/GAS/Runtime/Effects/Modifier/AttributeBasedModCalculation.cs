@@ -24,30 +24,30 @@ namespace GAS.Runtime.Effects.Modifier
         [SerializeField] public float k = 1;
         [SerializeField] public float b = 0;
 
-        protected override float CalculateMagnitude(params float[] modifierValue)
+        public override float CalculateMagnitude(GameplayEffectSpec spec,float modifierMagnitude)
         {
             if (attributeFromType == AttributeFrom.Source)
             {
                 if (captureType == GEAttributeCaptureType.SnapShot)
                 {
-                    var attribute = _spec.Source.DataSnapshot()[attributeName];
+                    var attribute = spec.Source.DataSnapshot()[attributeName];
                     return attribute * k + b;
                 }
                 else
                 {
-                    var attribute = _spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                    var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
                     return (attribute ?? 1) * k + b;
                 }
             }
 
             if (captureType == GEAttributeCaptureType.SnapShot)
             {
-                var attribute = _spec.Owner.DataSnapshot()[attributeName];
+                var attribute = spec.Owner.DataSnapshot()[attributeName];
                 return attribute * k + b;
             }
             else
             {
-                var attribute = _spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
                 return (attribute ?? 1) * k + b;
             }
         }

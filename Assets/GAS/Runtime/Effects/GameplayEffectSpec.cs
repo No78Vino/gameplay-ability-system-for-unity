@@ -2,12 +2,15 @@
 using GAS.General;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
+using GAS.Runtime.Tags;
 using Unity.Mathematics;
 
 namespace GAS.Runtime.Effects
 {
     public class GameplayEffectSpec
     {
+        private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
+        private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
         private GameplayCueDurationalSpec[] _cueDurationalSpecs;
 
         /// <summary>
@@ -240,6 +243,36 @@ namespace GAS.Runtime.Effects
         private void CaptureDataFromSource()
         {
             SnapshotAttributes = Source.DataSnapshot();
+        }
+
+        public void RegisterValue(GameplayTag tag, float value)
+        {
+            _valueMapWithTag[tag] = value;
+        }
+        
+        public void RegisterValue(string name, float value)
+        {
+            _valueMapWithName[name] = value;
+        }
+        
+        public bool UnregisterValue(GameplayTag tag)
+        {
+            return _valueMapWithTag.Remove(tag);
+        }
+        
+        public bool UnregisterValue(string name)
+        {
+            return _valueMapWithName.Remove(name);
+        }
+        
+        public float? GetMapValue(GameplayTag tag)
+        {
+            return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?) null;
+        }
+        
+        public float? GetMapValue(string name)
+        {
+            return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?) null;
         }
     }
 }

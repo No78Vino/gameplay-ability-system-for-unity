@@ -60,15 +60,16 @@ namespace GAS.Editor.GameplayAbilitySystem
             writer.WriteLine("              if (asc.Preset == null) return null;");
             writer.WriteLine("              return asc.Preset.BaseTags;");
             writer.WriteLine("          }");
-            writer.WriteLine("          public static void InitWithPreset(this AbilitySystemComponent asc, AbilitySystemComponentPreset preset = null)");
+            writer.WriteLine("          public static void InitWithPreset(this AbilitySystemComponent asc,int level, AbilitySystemComponentPreset preset = null)");
             writer.WriteLine("          {");
+            writer.WriteLine("              asc.SetLevel(level);");
             writer.WriteLine("              if (preset != null) asc.SetPreset(preset);");
             writer.WriteLine("              if (asc.Preset == null) return;");
             writer.WriteLine("              asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.PresetAbilityInstanceInfos());");
             writer.WriteLine("          }");
             writer.WriteLine("      }");
             writer.WriteLine("}");
-
+            
             Console.WriteLine($"Generated AbilitySystemComponentExtension at path: {filePath}");
         }
     }

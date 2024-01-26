@@ -10,9 +10,9 @@ namespace GAS.Runtime.Effects.Modifier
         [SerializeField] private float k;
         [SerializeField] private float b;
 
-        protected override float CalculateMagnitude(params float[] input)
+        public override float CalculateMagnitude(GameplayEffectSpec spec,float input)
         {
-            return input[0] * k + b;
+            return input * k + b;
         }
     }
 }

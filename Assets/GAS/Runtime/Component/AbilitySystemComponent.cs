@@ -15,7 +15,7 @@ namespace GAS.Runtime.Component
         [SerializeField] private AbilitySystemComponentPreset preset;
         public AbilitySystemComponentPreset Preset => preset;
         
-        public int Level { get; }
+        public int Level { get; protected set; }
 
         public GameplayEffectContainer GameplayEffectContainer { get; } = new GameplayEffectContainer();
 
@@ -67,6 +67,11 @@ namespace GAS.Runtime.Component
                     }
         }
 
+        public void SetLevel(int level)
+        {
+            Level = level;
+        }
+        
         public bool HasTag(GameplayTag gameplayTag)
         {
             return GameplayTagAggregator.HasTag(gameplayTag);

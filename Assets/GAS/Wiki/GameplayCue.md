@@ -24,12 +24,12 @@ Cue是需要程序开发人员大量实现的，毕竟游戏不同导致游戏�
 
 ### 关于Cue的子类实现
 Cue的完整组成为GameplayCue和GameplayCueSpec：
-- GameplayCue<T>（抽象基类,T为对应的Spec类）：Cue的数据实类，是一个可编辑类，开发人员可以在编辑器中设置Cue的各种参数。该类只可以被视作数据类。
+- GameplayCue< T >（抽象基类,T为对应的Spec类）：Cue的数据实类，是一个可编辑类，开发人员可以在编辑器中设置Cue的各种参数。该类只可以被视作数据类。
   - 必须实现CreateSpec方法：用于创建对应的Spec类
 - GameplayCueSpec（抽象基类）：Cue的规格类，是Runtime下Cue的真正实例，Cue的具体逻辑在该类中实现。
   - GameplayCueInstantSpec：瞬时性Cue的规格类
     - Trigger(): 必须实现的方法，用于触发Cue
-  - GameplayCueDurational：持续性Cue的规格类
+  - GameplayCueDurationalSpec：持续性Cue的规格类
     - OnAdd(): 必须实现的方法，用于Cue被添加时的逻辑
     - OnRemove(): 必须实现的方法，用于Cue被移除时的逻辑
     - OnGameplayEffectActivated(): 必须实现的方法，用于Cue所属的GameplayEffect被激活时的逻辑
@@ -63,5 +63,5 @@ GameplayEffect中使用Cue会根据GameplayEffect执行策略产生变化。
 ### 在Ability中使用Cue
 AbilityAsset中提供了Instant和Durational两个选项的Cue参数。
 但是Cue的使用完全依赖于Ability自身的业务逻辑，因此程序开发者在AbilitySpec中实现Cue逻辑时一定要保证合理性。
-特别是对于Durational类型的Cue，一定要保证Cue的生命周期的合理性，切记不要出现忘记销毁Cue的情况。
+特别是对于Durational类型的Cue，一定要保证Cue生命周期的合理性，切记不要出现遗漏销毁Cue的情况。
 
