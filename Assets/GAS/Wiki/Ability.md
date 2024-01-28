@@ -11,7 +11,7 @@ Ability作为EX-GAS的核心类之一，他起到了Do（做）的功能。
 
 Ability的业务逻辑取决于游戏类型和玩法。所以不存在一个通用的Ability模板，当然可以针对游戏类型制作一些通用的ability。
 Ability的逻辑并非自由，如果胡乱的实现Ability逻辑，可能会导致游戏逻辑混乱，所以需要遵循一些规则。
----
+
 Ability的具体实现需要策划和程序配合。
 这并不是废话，而是在EX-GAS的Ability制作流程中，确确实实的把策划和程序的工作分开了：
 - 程序的工作：编写Ability（Ability，AbilitySpec）类
@@ -19,7 +19,9 @@ Ability的具体实现需要策划和程序配合。
 ---
 为了更好的理解，首先我来介绍Ability的Runtime运行逻辑。
 ## Ability运行逻辑
-
+1. ASC( AbilitySystemComponent ):AbilitySystemComponent是Ability的持有者。有且仅有ASC可以调用Ability。
+2. ASC尝试触发Ability。
+3. Ability的触发
 ## Ability子类的编写流程
 这一部分是针对程序开发人员的，策划人员可以粗略一览这一部分。
 

@@ -45,15 +45,6 @@ namespace Demo.Script
         private void RegisterInputAction()
         {
             _player = FindObjectOfType<Player>();
-            _inputListener = FindObjectOfType<InputListener>();
-
-            _inputListener.RegisterOnMove(_player.OnMove);
-            _inputListener.RegisterOnMoveEnd(_player.OnMoveEnd);
-            _inputListener.RegisterOnPressQ(_player.OnPressQ);
-            _inputListener.RegisterOnPressE(_player.OnPressE);
-            _inputListener.RegisterOnPressR(_player.OnPressR);
-            _inputListener.RegisterOnPressMouseLeft(_player.OnPressMouseLeft);
-            _inputListener.RegisterOnMousePosition(_player.OnMousePosition);
         }
     }
 }
