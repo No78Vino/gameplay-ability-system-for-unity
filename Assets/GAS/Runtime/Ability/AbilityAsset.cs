@@ -115,7 +115,14 @@ namespace GAS.Runtime.Ability
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_PARAMETER)]
         [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        [LabelText("float")]
         public float[] parameter;
+        
+        [Space]
+        [VerticalGroup(GRP_DATA_PARAMETER)]
+        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
+        [LabelText("string")]
+        public string[] stringParameter;
         
         [Title("Summon",bold:true)]
         [Space(10)]

@@ -11,5 +11,10 @@ namespace GAS.Runtime.Cue
     public abstract class GameplayCue<T> : GameplayCue where T : GameplayCueSpec
     {
         public abstract T CreateSpec(GameplayCueParameters parameters);
+        
+        public GameplayCueSpec CreateSpecReturnBase(GameplayCueParameters parameters)
+        {
+            return CreateSpec(parameters);
+        }
     }
 }

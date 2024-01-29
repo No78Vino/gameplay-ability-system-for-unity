@@ -37,10 +37,6 @@ namespace GAS.Runtime.Ability
             CooldownTime = DataReference.CooldownTime;
         }
         
-        public AbstractAbility()
-        {
-        }
-        
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
 
         public void SetCooldown(GameplayEffect coolDown)
