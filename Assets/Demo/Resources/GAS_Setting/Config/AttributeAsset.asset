@@ -16,11 +16,9 @@ MonoBehaviour:
     the Attribute</color> must not be <color=red><b>DUPLICATED</b></color>!The duplicated
     Attributes are as follows: \n <size=15><b><color=white> SPEED </color></b></size>.</color></size>"
   attributes:
-  - Name: MP
   - Name: HP
+  - Name: MP
+  - Name: STAMINA
+  - Name: POSTURE
   - Name: ATK
   - Name: SPEED
-  - Name: DAMAGE
-  - Name: SKILL_CD
-  - Name: BUFF_TIME
-  - Name: DEF

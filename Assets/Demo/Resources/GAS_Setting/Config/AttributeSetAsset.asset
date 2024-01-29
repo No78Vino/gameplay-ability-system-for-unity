@@ -17,13 +17,11 @@ MonoBehaviour:
     <color=white>
     ->  Player</color></color></b></size>'
   AttributeSetConfigs:
-  - Name: Player
+  - Name: Fight
     AttributeNames:
     - HP
-    - SKILL_CD
+    - MP
+    - STAMINA
+    - POSTURE
+    - ATK
     - SPEED
-    - ATK
-  - Name: Enemy
-    AttributeNames:
-    - HP
-    - ATK
