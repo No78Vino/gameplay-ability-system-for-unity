@@ -22,15 +22,6 @@ MonoBehaviour:
   - _id: 11
     _name: Dodge
     _depth: 1
-  - _id: 10
-    _name: Dash
-    _depth: 1
-  - _id: 9
-    _name: IceBeam
-    _depth: 1
-  - _id: 8
-    _name: Fireball
-    _depth: 1
   - _id: 4
     _name: Attack
     _depth: 1
@@ -73,24 +64,6 @@ MonoBehaviour:
   - _name: Ability.Dodge
     _hashCode: 1796722389
     _shortName: Dodge
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
-  - _name: Ability.Dash
-    _hashCode: 1866515682
-    _shortName: Dash
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
-  - _name: Ability.IceBeam
-    _hashCode: -2006297106
-    _shortName: IceBeam
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
-  - _name: Ability.Fireball
-    _hashCode: -1928601385
-    _shortName: Fireball
     _ancestorHashCodes: b84ed1e0
     _ancestorNames:
     - Ability

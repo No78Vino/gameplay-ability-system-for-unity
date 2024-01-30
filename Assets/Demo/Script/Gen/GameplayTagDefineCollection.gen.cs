@@ -9,9 +9,6 @@ public static class GameplayTagSumCollection
 {
     public static GameplayTag Ability { get;} = new GameplayTag("Ability");
     public static GameplayTag Ability_Dodge { get;} = new GameplayTag("Ability.Dodge");
-    public static GameplayTag Ability_Dash { get;} = new GameplayTag("Ability.Dash");
-    public static GameplayTag Ability_IceBeam { get;} = new GameplayTag("Ability.IceBeam");
-    public static GameplayTag Ability_Fireball { get;} = new GameplayTag("Ability.Fireball");
     public static GameplayTag Ability_Attack { get;} = new GameplayTag("Ability.Attack");
     public static GameplayTag Ability_Move { get;} = new GameplayTag("Ability.Move");
     public static GameplayTag State { get;} = new GameplayTag("State");
@@ -28,9 +25,6 @@ public static class GameplayTagSumCollection
       {
          ["Ability"] = Ability,
          ["Ability.Dodge"] = Ability_Dodge,
-         ["Ability.Dash"] = Ability_Dash,
-         ["Ability.IceBeam"] = Ability_IceBeam,
-         ["Ability.Fireball"] = Ability_Fireball,
          ["Ability.Attack"] = Ability_Attack,
          ["Ability.Move"] = Ability_Move,
          ["State"] = State,
