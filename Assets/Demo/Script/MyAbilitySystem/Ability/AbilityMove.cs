@@ -3,7 +3,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTask;
 using GAS.Runtime.Component;
 
-namespace Demo.Script.MyAbilitySystem.Ability
+namespace GAS.Runtime.Ability
 {
     public class AbilityMove:AbstractAbility
     {

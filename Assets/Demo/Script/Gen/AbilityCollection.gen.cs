@@ -16,9 +16,13 @@ namespace GAS.Runtime.Ability
           public Type AbilityClassType;
       }
 
-    public static AbilityInfo Attack_Info = new AbilityInfo { Name = "Attack", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Player/Attack.asset",AbilityClassType = typeof(Demo.Script.MyAbilitySystem.Ability.AbilityMove) };
+    public static AbilityInfo Attack_Info = new AbilityInfo
+    {
+        Name = "Attack", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Player/Attack.asset",
+        AbilityClassType = typeof(AbilityMove)
+    };
 
-    public static AbilityInfo Test_Info = new AbilityInfo { Name = "Test", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Test.asset",AbilityClassType = typeof(Demo.Script.MyAbilitySystem.Ability.AbilityMove) };
+    public static AbilityInfo Test_Info = new AbilityInfo { Name = "Test", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Test.asset",AbilityClassType = typeof(AbilityMove) };
 
   public static Dictionary<string, AbilityInfo> AbilityMap = new Dictionary<string, AbilityInfo>
   {

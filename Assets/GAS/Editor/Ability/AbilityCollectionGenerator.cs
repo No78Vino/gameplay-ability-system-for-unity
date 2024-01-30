@@ -15,11 +15,10 @@ namespace GAS.Editor.Ability
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ABILITY_COLLECTION_CSHARP_SCRIPT_NAME}";
-            string loadMethodCodeString = GASSettingAsset.Setting.StringCodeOfLoadAbilityAsset;
-            GenerateAbilityCollection(loadMethodCodeString,filePath);
+            GenerateAbilityCollection(filePath);
         }
 
-        private static void GenerateAbilityCollection(string loadMethodCodeString,string filePath)
+        private static void GenerateAbilityCollection(string filePath)
         {
             using var writer = new StreamWriter(filePath);
             writer.WriteLine("///////////////////////////////////");

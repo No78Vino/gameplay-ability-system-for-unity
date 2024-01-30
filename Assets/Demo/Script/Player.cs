@@ -1,5 +1,4 @@
 using System;
-using Demo.Script.MyAbilitySystem.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
