@@ -30,7 +30,8 @@ namespace GAS.Runtime.Effects.Modifier
             {
                 if (captureType == GEAttributeCaptureType.SnapShot)
                 {
-                    var attribute = spec.Source.DataSnapshot()[attributeName];
+                    var snapShot = spec.Source.DataSnapshot();
+                    var attribute = snapShot[attributeName];
                     return attribute * k + b;
                 }
                 else

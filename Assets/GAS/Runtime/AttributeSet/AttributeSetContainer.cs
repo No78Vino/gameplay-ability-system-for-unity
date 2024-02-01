@@ -106,7 +106,8 @@ namespace GAS.Runtime.AttributeSet
             {
                 foreach (var name in attributeSet.Value.AttributeNames)
                 {
-                    snapshot.Add(name, attributeSet.Value[name].CurrentValue);
+                    var attr = attributeSet.Value[name];
+                    snapshot.Add(attr.Name, attr.CurrentValue);
                 }
             }
             return snapshot;
