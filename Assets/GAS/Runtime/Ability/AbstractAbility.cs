@@ -67,4 +67,13 @@ namespace GAS.Runtime.Ability
             #endif
         }
     }
+    
+    public abstract class AbstractAbility<T> :AbstractAbility where T : AbilityAsset
+    {
+        protected readonly T AbilityAsset;
+        protected AbstractAbility(AbilityAsset abilityAsset) : base(abilityAsset)
+        {
+            AbilityAsset = abilityAsset as T;
+        }
+    }
 }

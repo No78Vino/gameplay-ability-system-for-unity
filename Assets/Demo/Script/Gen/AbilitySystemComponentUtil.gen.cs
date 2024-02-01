@@ -43,7 +43,7 @@ namespace GAS.Runtime.Component
               asc.SetLevel(level);
               if (preset != null) asc.SetPreset(preset);
               if (asc.Preset == null) return;
-              asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.PresetAbilityInstanceInfos());
+              asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.Preset.BaseAbilities);
           }
       }
 }

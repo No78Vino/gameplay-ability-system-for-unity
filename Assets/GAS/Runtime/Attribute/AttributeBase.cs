@@ -8,10 +8,11 @@ namespace GAS.Runtime.Attribute
         public readonly string Name;
         public readonly string SetName;
         public readonly string ShortName;
-        protected event Action<AttributeBase, float, float> _onPostAttributeChange;
-        protected event Action<AttributeBase, float, float> _onPostGameplayEffectExecute;
-        protected event Action<AttributeBase, float> _onPreAttributeChange;
-        protected event Action<AttributeBase, float> _onPreGameplayEffectExecute;
+        protected event Action<AttributeBase, float, float> _onPostCurrentValueChange;
+        protected event Action<AttributeBase, float, float> _onPostBaseValueChange;
+        protected event Func<AttributeBase, float, float> _onPreCurrentValueChange;
+        protected event Func<AttributeBase, float, float> _onPreBaseValueChange;
+        
         private AttributeValue _value;
 
         public AttributeBase(string attrSetName, string attrName, float value)
@@ -36,70 +37,86 @@ namespace GAS.Runtime.Attribute
 
         public void SetCurrentValue(float value)
         {
-            _onPreAttributeChange?.Invoke(this, value);
+            if (_onPreCurrentValueChange != null)
+            {
+                value = _onPreCurrentValueChange.Invoke(this, value);
+            }
 
             var oldValue = CurrentValue;
             _value.SetCurrentValue(value);
 
-            _onPostAttributeChange?.Invoke(this, oldValue, value);
+            _onPostCurrentValueChange?.Invoke(this, oldValue, value);
         }
 
         public void SetBaseValue(float value)
         {
-            _onPreGameplayEffectExecute?.Invoke(this, value);
+            if (_onPreBaseValueChange != null)
+            {
+                value = _onPreBaseValueChange.Invoke(this, value);
+            }
 
             var oldValue = _value.BaseValue;
             _value.SetBaseValue(value);
 
-            _onPostGameplayEffectExecute?.Invoke(this, oldValue, value);
+            _onPostBaseValueChange?.Invoke(this, oldValue, value);
+        }
+        
+        public void SetCurrentValueWithoutEvent(float value)
+        {
+            _value.SetCurrentValue(value);
+        }
+        
+        public void SetBaseValueWithoutEvent(float value)
+        {
+            _value.SetBaseValue(value);
         }
 
-        public void RegisterPreGameplayEffectExecute(Action<AttributeBase, float> action)
+        public void RegisterPreBaseValueChange(Func<AttributeBase, float,float> func)
         {
-            _onPreGameplayEffectExecute += action;
+            _onPreBaseValueChange += func;
         }
 
-        public void RegisterPostGameplayEffectExecute(Action<AttributeBase, float, float> action)
+        public void RegisterPostBaseValueChange(Action<AttributeBase, float, float> action)
         {
-            _onPostGameplayEffectExecute += action;
+            _onPostBaseValueChange += action;
         }
 
-        public void RegisterPreAttributeChange(Action<AttributeBase, float> action)
+        public void RegisterPreCurrentValueChange(Func<AttributeBase, float,float> func)
         {
-            _onPreAttributeChange += action;
+            _onPreCurrentValueChange += func;
         }
 
-        public void RegisterPostAttributeChange(Action<AttributeBase, float, float> action)
+        public void RegisterPostCurrentValueChange(Action<AttributeBase, float, float> action)
         {
-            _onPostAttributeChange += action;
+            _onPostCurrentValueChange += action;
         }
 
-        public void UnregisterPreGameplayEffectExecute(Action<AttributeBase, float> action)
+        public void UnregisterPreBaseValueChange(Func<AttributeBase, float,float> func)
         {
-            _onPreGameplayEffectExecute -= action;
+            _onPreBaseValueChange -= func;
         }
 
-        public void UnregisterPostGameplayEffectExecute(Action<AttributeBase, float, float> action)
+        public void UnregisterPostBaseValueChange(Action<AttributeBase, float, float> action)
         {
-            _onPostGameplayEffectExecute -= action;
+            _onPostBaseValueChange -= action;
         }
 
-        public void UnregisterPreAttributeChange(Action<AttributeBase, float> action)
+        public void UnregisterPreCurrentValueChange(Func<AttributeBase, float,float> func)
         {
-            _onPreAttributeChange -= action;
+            _onPreCurrentValueChange -= func;
         }
 
-        public void UnregisterPostAttributeChange(Action<AttributeBase, float, float> action)
+        public void UnregisterPostCurrentValueChange(Action<AttributeBase, float, float> action)
         {
-            _onPostAttributeChange -= action;
+            _onPostCurrentValueChange -= action;
         }
 
         public virtual void Dispose()
         {
-            _onPreGameplayEffectExecute = null;
-            _onPostGameplayEffectExecute = null;
-            _onPreAttributeChange = null;
-            _onPostAttributeChange = null;
+            _onPreBaseValueChange = null;
+            _onPostBaseValueChange = null;
+            _onPreCurrentValueChange = null;
+            _onPostCurrentValueChange = null;
         }
     }
 }

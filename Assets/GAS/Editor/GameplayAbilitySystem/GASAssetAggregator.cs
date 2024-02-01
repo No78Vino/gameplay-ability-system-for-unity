@@ -45,11 +45,11 @@ namespace GAS.Editor.GameplayAbilitySystem
 
         private static readonly string[] MenuNames = new string[5]
         {
-            "Mod Magnitude Calculation",
-            "Gameplay Cue",
-            "Gameplay Effect",
-            "Gameplay Ability",
-            "Ability System Component"
+            "A- Mod Magnitude Calculation",
+            "A- Gameplay Cue",
+            "B- Gameplay Effect",
+            "C- Gameplay Ability",
+            "D- Ability System Component"
         };
 
         [MenuItem("EX-GAS/Asset Aggregator", priority = 1)]
@@ -107,6 +107,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             tree.Config.AutoScrollOnSelectionChanged = true;
             tree.Config.DrawScrollView = true;
             tree.Config.AutoHandleKeyboardNavigation = true;
+            tree.SortMenuItemsByName(true);
             
             return tree;
         }

@@ -50,7 +50,7 @@ namespace GAS.Runtime.Component
             preset = ascPreset;
         }
         
-        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityInstanceInfo[] baseAbilities)
+        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities)
         {
             if (baseTags != null) GameplayTagAggregator.Init(baseTags);
             
@@ -60,9 +60,9 @@ namespace GAS.Runtime.Component
             
             if (baseAbilities != null)
                 foreach (var info in baseAbilities)
-                    if (info.abilityType != null)
+                    if (info != null)
                     {
-                        var ability = Activator.CreateInstance(info.abilityType, args: info.abilityAsset) as AbstractAbility;
+                        var ability = Activator.CreateInstance(info.AbilityType, args: info) as AbstractAbility;
                         AbilityContainer.GrantAbility(ability);
                     }
         }

@@ -27,13 +27,13 @@ namespace GAS.Runtime.Attribute
 
         void OnCreated()
         {
-            _processedAttribute.RegisterPostGameplayEffectExecute(UpdateCurrentValueWhenBaseValueIsDirty);
+            _processedAttribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.RegisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
         
         void OnDispose()
         {
-            _processedAttribute.UnregisterPostGameplayEffectExecute(UpdateCurrentValueWhenBaseValueIsDirty);
+            _processedAttribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
         

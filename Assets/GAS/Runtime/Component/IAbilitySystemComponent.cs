@@ -10,7 +10,7 @@ namespace GAS.Runtime.Component
     {
         void SetPreset(AbilitySystemComponentPreset ascPreset);
         
-        void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityInstanceInfo[] baseAbilities);
+        void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities);
         
         void SetLevel(int level);
         
