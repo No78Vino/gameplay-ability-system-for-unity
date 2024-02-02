@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GAS.General;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
@@ -12,6 +13,11 @@ namespace GAS.Runtime.Effects
         private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
         private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
         private GameplayCueDurationalSpec[] _cueDurationalSpecs;
+        
+        /// <summary>
+        /// The execution type of onImmunity is one shot.
+        /// </summary>
+        public event Action<AbilitySystemComponent,GameplayEffectSpec> onImmunity; 
 
         /// <summary>
         ///     If the gameplay effect has a period and the execution is not null,
@@ -235,6 +241,12 @@ namespace GAS.Runtime.Effects
                 CueOnTick();
         }
 
+        public void TriggerOnImmunity()
+        {
+            onImmunity?.Invoke(Owner, this);
+            onImmunity = null;
+        }
+        
         public void RemoveSelf()
         {
             Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);

@@ -1,10 +1,20 @@
 ﻿using GAS.Runtime.Tags;
+using UnityEditor;
 using UnityEngine;
 
 namespace GAS.Runtime.Effects.Modifier
 {
-    public abstract class ModifierMagnitudeCalculation:ScriptableObject
+    public abstract class ModifierMagnitudeCalculation : ScriptableObject
     {
-        public abstract float CalculateMagnitude(GameplayEffectSpec spec,float modifierMagnitude);
+        public abstract float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude);
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+#endif
     }
 }

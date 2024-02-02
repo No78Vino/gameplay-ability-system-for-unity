@@ -97,6 +97,16 @@ namespace GAS.Runtime.Component
             GameplayTagAggregator.RemoveFixedTag(tags);
         }
 
+        public void AddFixedTag(GameplayTag tag)
+        {
+            GameplayTagAggregator.AddFixedTag(tag);
+        }
+
+        public void RemoveFixedTag(GameplayTag tag)
+        {
+            GameplayTagAggregator.RemoveFixedTag(tag);
+        }
+        
         public void RemoveGameplayEffect(GameplayEffectSpec spec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
@@ -105,6 +115,13 @@ namespace GAS.Runtime.Component
 
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
+#if UNITY_EDITOR
+            if (gameplayEffect.NULL)
+            {
+                Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
+                return null;
+            }
+#endif
             return gameplayEffect.CanApplyTo(target)
                 ? target.AddGameplayEffect(gameplayEffect.CreateSpec(this, target, Level))
                 : null;

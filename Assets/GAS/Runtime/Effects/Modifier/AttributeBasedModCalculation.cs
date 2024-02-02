@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 namespace GAS.Runtime.Effects.Modifier
 {
     [CreateAssetMenu(fileName = "AttributeBasedModCalculation", menuName = "GAS/MMC/AttributeBasedModCalculation")]
@@ -16,15 +17,15 @@ namespace GAS.Runtime.Effects.Modifier
             Track
         }
 
-        [SerializeField] public string attributeName;
-        [SerializeField] public string attributeSetName;
-        [SerializeField] public string attributeShortName;
-        [SerializeField] public AttributeFrom attributeFromType;
-        [SerializeField] public GEAttributeCaptureType captureType;
-        [SerializeField] public float k = 1;
-        [SerializeField] public float b = 0;
+        public string attributeName;
+        public string attributeSetName;
+        public string attributeShortName;
+        public AttributeFrom attributeFromType;
+        public GEAttributeCaptureType captureType;
+        public float k = 1;
+        public float b = 0;
 
-        public override float CalculateMagnitude(GameplayEffectSpec spec,float modifierMagnitude)
+        public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
         {
             if (attributeFromType == AttributeFrom.Source)
             {

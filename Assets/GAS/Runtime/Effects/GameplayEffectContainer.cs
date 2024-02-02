@@ -78,6 +78,13 @@ namespace GAS.Runtime.Effects
         /// </returns>
         public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
         {
+            // Check Immunity Tags
+            if(_owner.HasAnyTags(spec.GameplayEffect.TagContainer.ApplicationImmunityTags))
+            {
+                spec.TriggerOnImmunity();
+                return false;
+            }
+            
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
                 spec.TriggerOnExecute();

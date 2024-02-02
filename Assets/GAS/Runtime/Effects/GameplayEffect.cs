@@ -51,7 +51,8 @@ namespace GAS.Runtime.Effects
                 asset.GrantedTags,
                 asset.ApplicationRequiredTags,
                 asset.OngoingRequiredTags,
-                asset.RemoveGameplayEffectsWithTags);
+                asset.RemoveGameplayEffectsWithTags,
+                asset.ApplicationImmunityTags);
 
             CueOnExecute = asset.CueOnExecute;
             CueOnRemove = asset.CueOnRemove;

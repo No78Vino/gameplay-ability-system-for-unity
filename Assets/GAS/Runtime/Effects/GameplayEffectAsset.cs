@@ -135,7 +135,14 @@ namespace GAS.Runtime.Effects
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         public GameplayTag[] RemoveGameplayEffectsWithTags;
-
+        
+        [Title("")]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        public GameplayTag[] ApplicationImmunityTags;
+        
+        
         // Cues
         [Title("Cue",bold:true)]
         [HorizontalGroup(GRP_DATA_H)]

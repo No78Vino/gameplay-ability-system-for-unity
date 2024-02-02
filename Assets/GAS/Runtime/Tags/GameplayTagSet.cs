@@ -23,7 +23,7 @@ namespace GAS.Runtime.Tags
         
         public GameplayTagSet(params GameplayTag[] tags)
         {
-            Tags = tags;
+            Tags = tags?? Array.Empty<GameplayTag>();
         }
         
         public bool HasTag(GameplayTag tag)

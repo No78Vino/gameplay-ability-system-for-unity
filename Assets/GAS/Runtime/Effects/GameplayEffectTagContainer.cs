@@ -16,19 +16,23 @@ namespace GAS.Runtime.Effects
         public GameplayTagSet OngoingRequiredTags;
         
         public GameplayTagSet RemoveGameplayEffectsWithTags;
+        
+        public GameplayTagSet ApplicationImmunityTags;
 
         public GameplayEffectTagContainer(
             GameplayTag[] assetTags, 
             GameplayTag[] grantedTags,
             GameplayTag[] applicationRequiredTags,
             GameplayTag[] ongoingRequiredTags,
-            GameplayTag[] removeGameplayEffectsWithTags)
+            GameplayTag[] removeGameplayEffectsWithTags,
+            GameplayTag[] applicationImmunityTags)
         {
             AssetTags = new GameplayTagSet(assetTags);
             GrantedTags = new GameplayTagSet(grantedTags);
             ApplicationRequiredTags = new GameplayTagSet(applicationRequiredTags);
             OngoingRequiredTags = new GameplayTagSet(ongoingRequiredTags);
             RemoveGameplayEffectsWithTags = new GameplayTagSet(removeGameplayEffectsWithTags);
+            ApplicationImmunityTags = new GameplayTagSet(applicationImmunityTags);
         }
     }
 }
