@@ -18,6 +18,7 @@ MonoBehaviour:
   Duration: 0.68
   Period: 0.6
   PeriodExecution: {fileID: 0}
+  GrantedAbilities: []
   Modifiers:
   - AttributeName: AS_Player.SPEED
     AttributeSetName: AS_Player
@@ -47,6 +48,7 @@ MonoBehaviour:
     _ancestorHashCodes: 
     _ancestorNames: []
   RemoveGameplayEffectsWithTags: []
+  ApplicationImmunityTags: []
   CueOnExecute:
   - {fileID: 0}
   CueDurational: []

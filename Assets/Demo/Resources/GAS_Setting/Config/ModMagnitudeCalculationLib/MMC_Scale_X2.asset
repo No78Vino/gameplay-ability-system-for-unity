@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b127451ee4eb4575be21eb8e5744a5da, type: 3}
   m_Name: MMC_Scale_X2
   m_EditorClassIdentifier: 
-  k: 2
+  k: 1
   b: 0

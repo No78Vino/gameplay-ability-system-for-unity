@@ -4,7 +4,7 @@ namespace GAS.Editor.Tags
     using System.Collections.Generic;
     using GAS.Editor.General;
     using GAS.Runtime.Tags;
-    using GAS.Editor.Tags;
+    using GAS.General;
     using UnityEditor;
     using UnityEditor.IMGUI.Controls;
     using UnityEditor.TreeDataModel;
@@ -93,17 +93,17 @@ namespace GAS.Editor.Tags
             using (new EditorGUILayout.HorizontalScope())
             {
                 var style = "miniButton";
-                if (GUILayout.Button("Expand All", style)) _treeView.ExpandAll();
+                if (GUILayout.Button(GASTextDefine.BUTTON_ExpandAllTag, style)) _treeView.ExpandAll();
 
-                if (GUILayout.Button("Collapse All", style)) _treeView.CollapseAll();
+                if (GUILayout.Button(GASTextDefine.BUTTON_CollapseAllTag, style)) _treeView.CollapseAll();
 
                 GUILayout.FlexibleSpace();
 
-                if (GUILayout.Button("Create Tag", style)) CreateTag();
+                if (GUILayout.Button(GASTextDefine.BUTTON_AddTag, style)) CreateTag();
 
-                if (GUILayout.Button("Remove Tags", style)) RemoveTags();
+                if (GUILayout.Button(GASTextDefine.BUTTON_RemoveTag, style)) RemoveTags();
                 
-                if (GUILayout.Button("Generate TagSum Code", style)) GenCode();
+                if (GUILayout.Button(GASTextDefine.BUTTON_GenTagCode, style)) GenCode();
             }
         }
 

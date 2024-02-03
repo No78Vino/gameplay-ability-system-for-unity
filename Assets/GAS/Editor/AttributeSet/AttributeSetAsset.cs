@@ -7,6 +7,7 @@ namespace GAS.Editor.AttributeSet
     using System.Linq;
     using GAS.Editor.Attribute;
     using GAS.Editor.GameplayAbilitySystem;
+    using GAS.General;
     using GAS.Editor.General;
     using Sirenix.OdinInspector;
     using UnityEditor;
@@ -18,17 +19,14 @@ namespace GAS.Editor.AttributeSet
         public static AttributeSetAsset ParentAsset;
 
         private static IEnumerable AttributeChoices = new ValueDropdownList<string>();
-        private const string ERROR_DuplicatedAttribute = "<size=16><b>Exist Duplicated Attribute!</b></size>";
-        private const string ERROR_Empty = "<size=16><b>It's Empty!</b></size>";
-        private const string ERROR_EmptyName = "<size=16><b>AttributeSet'name can't Empty!</b></size>";
         
         [HorizontalGroup("A")]
         [HorizontalGroup("A/R", order:1)]
         [DisplayAsString(TextAlignment.Left,FontSize = 18)]
         [HideLabel]
-        [InfoBox(ERROR_DuplicatedAttribute,InfoMessageType.Error,VisibleIf = "ExistDuplicatedAttribute")]
-        [InfoBox(ERROR_Empty,InfoMessageType.Error,VisibleIf = "EmptyAttribute")]
-        [InfoBox(ERROR_EmptyName,InfoMessageType.Error,VisibleIf = "EmptyAttributeSetName")]
+        [InfoBox(GASTextDefine.ERROR_DuplicatedAttribute,InfoMessageType.Error,VisibleIf = "ExistDuplicatedAttribute")]
+        [InfoBox(GASTextDefine.ERROR_Empty,InfoMessageType.Error,VisibleIf = "EmptyAttribute")]
+        [InfoBox(GASTextDefine.ERROR_EmptyName,InfoMessageType.Error,VisibleIf = "EmptyAttributeSetName")]
         public string Name;
         
         [Space]
@@ -86,8 +84,6 @@ namespace GAS.Editor.AttributeSet
 
     public class AttributeSetAsset : ScriptableObject
     {
-        private const string ERROR_InElements = "<size=16><b><color=orange>Please fix the errors in the AttributeSet!</color></b></size>";
-        
         [BoxGroup("Warning", order: -1)]
         [HideLabel]
         [ShowIf("ExistDuplicatedAttributeSetName")]
@@ -117,8 +113,8 @@ namespace GAS.Editor.AttributeSet
         
         [VerticalGroup("Generate AttributeSet Code",order:0)]
         [GUIColor(0,0.9f,0)]
-        [Button(SdfIconType.Upload,"Generate AttributeSet Code",ButtonHeight = 30, Expanded = true)]
-        [InfoBox(ERROR_InElements,InfoMessageType.Error,VisibleIf = "ErrorInElements")]
+        [Button(SdfIconType.Upload,GASTextDefine.BUTTON_GenerateAttributeSetCode,ButtonHeight = 30, Expanded = true)]
+        [InfoBox(GASTextDefine.ERROR_InElements,InfoMessageType.Error,VisibleIf = "ErrorInElements")]
         private void GenCode()
         {
             if(ExistDuplicatedAttributeSetName() || ErrorInElements())
@@ -153,8 +149,8 @@ namespace GAS.Editor.AttributeSet
             {
                 var duplicatedAttributeSets = duplicates.Aggregate("", (current, d) => current + d + ",");
                 duplicatedAttributeSets = duplicatedAttributeSets.Remove(duplicatedAttributeSets.Length - 1, 1);
-                ERROR_DuplicatedAttributeSet = $"<size=16><b><color=orange>Exist Duplicated AttributeSet!\n" +
-                                               $"<color=white> ->  {duplicatedAttributeSets}</color></color></b></size>";
+                ERROR_DuplicatedAttributeSet = 
+                    string.Format(GASTextDefine.ERROR_DuplicatedAttributeSet, duplicatedAttributeSets);
             }
             return duplicates.Count > 0;
         }

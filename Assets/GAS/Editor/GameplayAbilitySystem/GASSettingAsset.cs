@@ -1,32 +1,31 @@
-﻿using System;
-using GAS.Core;
-using Sirenix.OdinInspector;
-using UnityEditor;
-using UnityEngine;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
+    using System;
+    using GAS.Core;
+    using GAS.Editor.General;
+    using GAS.General;
+    using Sirenix.OdinInspector;
+    using UnityEditor;
+    using UnityEngine;
+    
     public class GASSettingAsset : ScriptableObject
     {
         private const int LABLE_WIDTH = 200;
         private const int SHORT_LABLE_WIDTH = 200;
-
-        private const string TIP_CREATE_FOLDERS = 
-            "<color=white><size=15>If you change the path of GAS Asset,please click this button to make sure that all son folders created.</size></color>";
-        
-        private const string TIP_CREATE_GEN_AscUtilCode = 
-            "<color=white><size=15>生成ASC拓展类之前，一定要保证Ability，AttributeSet的集合工具类已经生成。因为ASC拓展类依赖于此</size></color>";
-
         private static GASSettingAsset _setting;
         
         
-        [Title("Setting",Bold = true)]
-        [BoxGroup("A", false,order:1)] [LabelText("Code Generate Path")] [LabelWidth(LABLE_WIDTH)]
+        [Title(GASTextDefine.TITLE_SETTING,Bold = true)]
+        [BoxGroup("A", false,order:1)] 
+        [LabelText(GASTextDefine.LABLE_OF_CodeGeneratePath)]
+        [LabelWidth(LABLE_WIDTH)]
         [FolderPath]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
 
-        [BoxGroup("A")] [LabelText("GAS Asset Path")] [LabelWidth(LABLE_WIDTH)]
+        [BoxGroup("A")] 
+        [LabelText(GASTextDefine.LABLE_OF_GASConfigAssetPath)] 
+        [LabelWidth(LABLE_WIDTH)]
         [FolderPath]
         public string GASConfigAssetPath = "Assets/GAS_Setting/Config";
         
@@ -48,7 +47,7 @@ namespace GAS.Editor.GameplayAbilitySystem
         public static string CodeGenPath => Setting.CodeGeneratePath;
 
 
-        [Title("Paths")]
+        [Title(GASTextDefine.TITLE_PATHS,Bold = true)]
         [PropertySpace(10)]
         [ShowInInspector]
         [BoxGroup("A")]
@@ -152,8 +151,8 @@ namespace GAS.Editor.GameplayAbilitySystem
         [DisplayAsString(TextAlignment.Left,true)]
         [GUIColor(0,0.8f,0)]
         [PropertySpace(10)]
-        [InfoBox(TIP_CREATE_FOLDERS)]
-        [Button(SdfIconType.FolderCheck,"Create Folders",ButtonHeight = 38)]
+        [InfoBox(GASTextDefine.TIP_CREATE_FOLDERS)]
+        [Button(SdfIconType.FolderCheck,GASTextDefine.BUTTON_CheckAllPathFolderExist,ButtonHeight = 38)]
         void CheckAllPathFolderExist()
         {
             GasDefine.CheckGasAssetFolder();
@@ -170,9 +169,9 @@ namespace GAS.Editor.GameplayAbilitySystem
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
         [PropertySpace(10)]
-        [InfoBox(TIP_CREATE_GEN_AscUtilCode)]
-        [Button(SdfIconType.Upload, "Generate AbilitySystemComponentUtil Code", ButtonHeight = 38)]
-        void GenerateAscUtilCode()
+        [InfoBox(GASTextDefine.TIP_CREATE_GEN_AscUtilCode)]
+        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAscExtensionCode, ButtonHeight = 38)]
+        void GenerateAscExtensionCode()
         {
             AbilitySystemComponentUtilGenerator.Gen();
         }

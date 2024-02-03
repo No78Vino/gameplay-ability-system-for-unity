@@ -19,6 +19,12 @@ MonoBehaviour:
   - _id: 2
     _name: Ability
     _depth: 0
+  - _id: 19
+    _name: Jump
+    _depth: 1
+  - _id: 18
+    _name: Defend
+    _depth: 1
   - _id: 11
     _name: Dodge
     _depth: 1
@@ -34,21 +40,27 @@ MonoBehaviour:
   - _id: 13
     _name: Buff
     _depth: 1
-  - _id: 14
-    _name: Healing
+  - _id: 22
+    _name: BulkUp
     _depth: 2
   - _id: 12
     _name: Debuff
     _depth: 1
-  - _id: 7
-    _name: Freeze
+  - _id: 21
+    _name: Stun
     _depth: 2
-  - _id: 6
-    _name: Burning
+  - _id: 20
+    _name: LoseBalance
     _depth: 2
   - _id: 15
     _name: Event
     _depth: 0
+  - _id: 24
+    _name: Dodging
+    _depth: 1
+  - _id: 23
+    _name: InAir
+    _depth: 1
   - _id: 17
     _name: Attacking
     _depth: 1
@@ -61,6 +73,18 @@ MonoBehaviour:
     _shortName: Ability
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: Ability.Jump
+    _hashCode: -183664866
+    _shortName: Jump
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  - _name: Ability.Defend
+    _hashCode: 465592122
+    _shortName: Defend
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   - _name: Ability.Dodge
     _hashCode: 1796722389
     _shortName: Dodge
@@ -90,9 +114,9 @@ MonoBehaviour:
     _ancestorHashCodes: 4b461665
     _ancestorNames:
     - State
-  - _name: State.Buff.Healing
-    _hashCode: -1964822118
-    _shortName: Healing
+  - _name: State.Buff.BulkUp
+    _hashCode: 8988933
+    _shortName: BulkUp
     _ancestorHashCodes: 4b461665ce984a2c
     _ancestorNames:
     - State
@@ -103,16 +127,16 @@ MonoBehaviour:
     _ancestorHashCodes: 4b461665
     _ancestorNames:
     - State
-  - _name: State.Debuff.Freeze
-    _hashCode: 910960482
-    _shortName: Freeze
+  - _name: State.Debuff.Stun
+    _hashCode: -1559194643
+    _shortName: Stun
     _ancestorHashCodes: 4b461665e315d1b6
     _ancestorNames:
     - State
     - State.Debuff
-  - _name: State.Debuff.Burning
-    _hashCode: -357927080
-    _shortName: Burning
+  - _name: State.Debuff.LoseBalance
+    _hashCode: -639020104
+    _shortName: LoseBalance
     _ancestorHashCodes: 4b461665e315d1b6
     _ancestorNames:
     - State
@@ -122,6 +146,18 @@ MonoBehaviour:
     _shortName: Event
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: Event.Dodging
+    _hashCode: 1531892232
+    _shortName: Dodging
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
+  - _name: Event.InAir
+    _hashCode: -487023025
+    _shortName: InAir
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
   - _name: Event.Attacking
     _hashCode: 1440924632
     _shortName: Attacking

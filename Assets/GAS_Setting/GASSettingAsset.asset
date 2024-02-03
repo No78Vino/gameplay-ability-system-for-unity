@@ -14,4 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CodeGeneratePath: Assets/Demo/Script/Gen
   GASConfigAssetPath: Assets/Demo/Resources/GAS_Setting/Config
-  StringCodeOfLoadAbilityAsset: UnityEngine.Resources.Load<AbilityAsset>({0})

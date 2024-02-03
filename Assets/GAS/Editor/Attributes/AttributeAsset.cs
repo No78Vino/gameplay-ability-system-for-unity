@@ -8,15 +8,11 @@ namespace GAS.Editor.Attribute
     using Sirenix.OdinInspector;
     using UnityEditor;
     using UnityEngine;
-    using UnityEngine.Serialization;
+    using GAS.General;
     using GAS.Editor.Attributes;
     
     public class AttributeAsset : ScriptableObject
     {
-        private const string Warning_EmptyAttribute =
-            "<size=13><color=yellow>The <color=orange>Name of the Attribute </color> must not be <color=red><b>EMPTY</b></color>! " +
-            "Please check!</color></size>";
-
         [BoxGroup("Warning", order: -1)]
         [HideLabel]
         [ShowIf("ExistDuplicatedAttribute")]
@@ -43,8 +39,8 @@ namespace GAS.Editor.Attribute
 
         [VerticalGroup("Gen Code", order: 0)]
         [GUIColor(0,0.9f,0)]
-        [Button(SdfIconType.Upload,"Generate Attribute Collection Code",ButtonHeight = 30, Expanded = true)]
-        [InfoBox(Warning_EmptyAttribute,InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
+        [Button(SdfIconType.Upload,GASTextDefine.BUTTON_GenerateAttributeCollection,ButtonHeight = 30, Expanded = true)]
+        [InfoBox(GASTextDefine.TIP_Warning_EmptyAttribute,InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
         void GenCode()
         {
             if (ExistEmptyAttribute() || ExistDuplicatedAttribute())
@@ -119,9 +115,7 @@ namespace GAS.Editor.Attribute
             {
                 var duplicatedAttributes = duplicates.Aggregate("", (current, d) => current + d + ",");
                 duplicatedAttributes = duplicatedAttributes.Remove(duplicatedAttributes.Length - 1, 1);
-                Warning_DuplicatedAttribute =
-                    "<size=13><color=yellow>The <color=orange>Name of the Attribute</color> must not be <color=red><b>DUPLICATED</b></color>!" +
-                    $"The duplicated Attributes are as follows: \n <size=15><b><color=white> {duplicatedAttributes} </color></b></size>.</color></size>";
+                Warning_DuplicatedAttribute = string.Format(GASTextDefine.TIP_Warning_DuplicatedAttribute, duplicatedAttributes);
             }
 
             return duplicates.Count > 0;

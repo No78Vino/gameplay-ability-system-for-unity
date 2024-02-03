@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NewMove
   m_EditorClassIdentifier: 
   UniqueName: 
-  InstanceAbilityClassFullName: 
+  InstanceAbilityClassFullName: GAS.Runtime.Ability.AbilityMove
   Description: 
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}

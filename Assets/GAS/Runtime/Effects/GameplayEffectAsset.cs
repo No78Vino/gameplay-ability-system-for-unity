@@ -8,6 +8,7 @@ using GAS.Runtime.Cue;
 using GAS.Runtime.Effects.Execution;
 using GAS.Runtime.Effects.Modifier;
 using GAS.Runtime.Tags;
+using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -46,43 +47,47 @@ namespace GAS.Runtime.Effects
         private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
         
         [BoxGroup(GRP_BASE,false)]
-        [Title("Base Information", bold: true)]
+        [InfoBox(GASTextDefine.TIP_BASEINFO)]
+        [Title(GASTextDefine.TITLE_BASEINFO, bold: true)]
         [HorizontalGroup(GRP_BASE_H,Width = WIDTH_GRP_BASE_H_LEFT)]
         [VerticalGroup(GRP_BASE_H_LEFT)]
+        [LabelText(GASTextDefine.LABLE_GE_NAME)]
         public string Name;
         
         [VerticalGroup(GRP_BASE_H_LEFT)]
-        [Title("Description", bold: false)]
+        [Title(GASTextDefine.TITLE_DESCRIPTION, bold: false)]
         [HideLabel]
         [MultiLineProperty(5)]
         public string Description;
         
         
-        [Title("Gameplay Effect Policy", bold: true)]
+        [Title(GASTextDefine.TITLE_GE_POLICY, bold: true)]
         [HorizontalGroup(GRP_BASE_H,PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        //[HorizontalGroup(GRP_BASE_H_RIGHT_POLICY)]
+        [LabelText(GASTextDefine.LABLE_GE_POLICY)]
         [LabelWidth(WIDTH_LABLE)]
         [InfoBox(ERROR_POLICY,InfoMessageType.Error, VisibleIf = "IsDurationPolicyNone")]
         [InfoBox(ERROR_PERIODGE_NONE,InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
+        [InfoBox(GASTextDefine.TIP_GE_POLICY)]
         public EffectsDurationPolicy DurationPolicy;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelWidth(WIDTH_LABLE)]
         [ShowIf("DurationPolicy",EffectsDurationPolicy.Duration)]
         [Unit(Units.Second)]
+        [LabelText(GASTextDefine.LABLE_GE_DURATION)]
         public float Duration;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [HorizontalGroup(GRP_BASE_H_RIGHT_PERIOD,width:100)]
-        [LabelText("Every")]
-        [LabelWidth(50)]
+        [LabelText(GASTextDefine.LABLE_GE_PER)]
+        [LabelWidth(25)]
         [ShowIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
         public float Period;
         
         [HorizontalGroup(GRP_BASE_H_RIGHT_PERIOD)]
-        [LabelText(" execute")]
+        [LabelText(GASTextDefine.LABLE_GE_EXEC)]
         [LabelWidth(50)]
         [ShowIf("IsPeriodic")]
         [AssetSelector]
@@ -90,14 +95,14 @@ namespace GAS.Runtime.Effects
 
         [Space]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [Title("Granted Abilities",Bold = true)]
+        [Title(GASTextDefine.TITLE_GE_GrantedAbilities,Bold = true)]
         [AssetSelector]
         [ShowIf("IsDurationalPolicy")]
         [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
         public AbilityAsset[] GrantedAbilities;
         
         // Mod
-        [Title("Modifier",bold:true)]
+        [Title(GASTextDefine.TITLE_GE_MOD,bold:true)]
         [BoxGroup(GRP_DATA,false)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_MOD)]
@@ -105,7 +110,7 @@ namespace GAS.Runtime.Effects
         public GameplayEffectModifier[] Modifiers;
         
         // Tag Container
-        [Title("Tags",bold:true)]
+        [Title(GASTextDefine.TITLE_GE_TAG,bold:true)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
@@ -144,7 +149,7 @@ namespace GAS.Runtime.Effects
         
         
         // Cues
-        [Title("Cue",bold:true)]
+        [Title(GASTextDefine.TITLE_GE_CUE,bold:true)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_CUE)]
         [ListDrawerSettings(Expanded = true)]
@@ -153,7 +158,7 @@ namespace GAS.Runtime.Effects
         [AssetSelector]
         public GameplayCueInstant[] CueOnExecute;
         
-        [Title("Cue",bold:true)]
+        [Title(GASTextDefine.TITLE_GE_CUE,bold:true)]
         [VerticalGroup(GRP_DATA_CUE)]
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2112111feb463caf561bfc7cfe18ab, type: 3}
   m_Name: AttributeAsset
   m_EditorClassIdentifier: 
-  Warning_DuplicatedAttribute: "<size=13><color=yellow>The <color=orange>Name of
-    the Attribute</color> must not be <color=red><b>DUPLICATED</b></color>!The duplicated
-    Attributes are as follows: \n <size=15><b><color=white> SPEED </color></b></size>.</color></size>"
+  Warning_DuplicatedAttribute: "<size=13><color=yellow>The <color=orange>Attribute\u540D</color>
+    \u7981\u6B62 <color=red><b>\u91CD\u590D</b></color>!\n\u91CD\u590D\u7684Attributes\u540D:<size=15><b><color=white>
+    HP </color></b></size>.</color></size>"
   attributes:
   - Name: HP
   - Name: MP
