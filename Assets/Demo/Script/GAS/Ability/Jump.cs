@@ -18,22 +18,23 @@ namespace GAS.Runtime.Ability
     
     public class JumpSpec: AbilitySpec
     {
+        Jump _jump;
         public JumpSpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
+            _jump = ability as Jump;
         }
 
         public override void ActivateAbility(params object[] args)
         {
-            // var velocity = _rb.velocity;
-            // velocity.y = jumpVelocity;
-            // _rb.velocity = velocity;
-            //     
+            var rb = args[0] as UnityEngine.Rigidbody;
+            var velocity = rb.velocity;
+            velocity.y = _jump.JumpPower;
+            rb.velocity = velocity;
             TryEndAbility();
         }
 
         public override void CancelAbility()
         {
-            
         }
 
         public override void EndAbility()

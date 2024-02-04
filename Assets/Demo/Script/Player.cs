@@ -1,4 +1,5 @@
 using System;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
@@ -30,6 +31,8 @@ public class Player : MonoBehaviour
         _inputActionReference.Enable();
         _inputActionReference.Player.Move.performed += OnMove;
         _inputActionReference.Player.Jump.performed += OnJump;
+        
+        _asc.InitWithPreset(1);
     }
 
     private void FixedUpdate()
@@ -61,12 +64,8 @@ public class Player : MonoBehaviour
     
     public void OnJump(InputAction.CallbackContext context)
     {
-        var velocity = _rb.velocity;
         if (IsGrounded()||DoubleJumpValid())
-        {
-            velocity.y = jumpVelocity;
-            _rb.velocity = velocity;
-        }
+            _asc.TryActivateAbility(AbilityCollection.Jump_Info.Name, _rb);
     }
 
     bool DoubleJumpValid()
