@@ -9,21 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 544108d1f0e34b7fb2a77be04ed89be6, type: 3}
+  m_Script: {fileID: 11500000, guid: b52d2c0ea13d4e93aefede892079b965, type: 3}
   m_Name: Move
   m_EditorClassIdentifier: 
   UniqueName: 
-  InstanceAbilityClassFullName: 
   Description: 
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  UsedGameplayEffects: []
-  instantCues: []
-  durationalCues: []
-  parameter: []
-  stringParameter: []
-  Summon: []
   AssetTag: []
   CancelAbilityTags: []
   BlockAbilityTags: []

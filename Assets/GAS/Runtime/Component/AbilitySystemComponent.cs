@@ -62,7 +62,7 @@ namespace GAS.Runtime.Component
                 foreach (var info in baseAbilities)
                     if (info != null)
                     {
-                        var ability = Activator.CreateInstance(info.AbilityType, args: info) as AbstractAbility;
+                        var ability = Activator.CreateInstance(info.AbilityType(), args: info) as AbstractAbility;
                         AbilityContainer.GrantAbility(ability);
                     }
         }

@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     {
         return _rb.velocity.y==0 && _accY >= 0; // && !LockMotion();
     }
+    
     public void OnMove(InputAction.CallbackContext context)
     {
         var value = context.ReadValue<Vector2>();

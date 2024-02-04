@@ -11,14 +11,13 @@ using UnityEngine;
 
 namespace GAS.Runtime.Ability
 {
-    [CreateAssetMenu(fileName = "AbilityAsset", menuName = "GAS/AbilityAsset", order = 0)]
     public abstract class AbilityAsset : ScriptableObject
     {
         private const string GRP_BASE = "Base Info";
         private const string GRP_BASE_H = "Base Info/H";
         protected const string GRP_BASE_H_LEFT = "Base Info/H/Left";
         private const string GRP_BASE_H_RIGHT = "Base Info/H/Right";
-        
+
         private const string GRP_DATA = "DATA";
         private const string GRP_DATA_H = "DATA/H";
         private const string GRP_DATA_PARAMETER = "DATA/H/Parameter";
@@ -27,34 +26,42 @@ namespace GAS.Runtime.Ability
         private const string GRP_CUE = "CUE";
         private const string GRP_CUE_INSTANT = "CUE/Instant";
         private const string GRP_CUE_DURATIONAL = "CUE/Durational";
-        
-        
+
+
         protected const int WIDTH_LABLE = 100;
         private const int WIDTH_GRP_BASE_H_LEFT = 350;
 
-        private const string TIP_UNAME = "<size=12><b><color=white><color=orange>Unique Name is very important!</color>" +
-                                         "GAS will use the unique name as a UID for the ability." +
-                                         "Therefore,you must keep this name unique." +
-                                         "Don't worry.When generating the code, the tool will check this.</color></b></size>";
+        private const string TIP_UNAME =
+            "<size=12><b><color=white><color=orange>Unique Name is very important!</color>" +
+            "GAS will use the unique name as a UID for the ability." +
+            "Therefore,you must keep this name unique." +
+            "Don't worry.When generating the code, the tool will check this.</color></b></size>";
 
 
         private static IEnumerable AbilityClassChoice = new ValueDropdownList<string>();
         private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
-        
-        
-        
-        public virtual Type AbilityType => typeof(AbstractAbility); 
-        
-        public string InstanceAbilityClassFullName => AbilityType.FullName;
+
+
+
+        public abstract Type AbilityType();
+
+        public string InstanceAbilityClassFullName => AbilityType() != null ? AbilityType().FullName : null;
 
 #if UNITY_EDITOR
-        [BoxGroup("Class",false,order:-1)]
+        [BoxGroup("Class", false, order: -1)]
         [HideLabel]
         [LabelWidth(WIDTH_LABLE)]
         [ShowInInspector]
-        [DisplayAsString(TextAlignment.Left,true)]
-        [GUIColor(1,1,1,1)]
-        private string AbilityTypeFoShow => $"<size=15><color=white><b>Ability Class : {InstanceAbilityClassFullName}</b></color></size>";
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(1, 1, 1, 1)]
+        private string
+            AbilityTypeFoShow {
+            get
+            {
+                if(InstanceAbilityClassFullName==null) return "<size=18><color=red><b>Ability Class is NULL!!! Please check.</b></color></size>";
+                return $"<size=15><color=white><b>Ability Class : {InstanceAbilityClassFullName}</b></color></size>";
+            }
+        }
 #endif
         
         [BoxGroup(GRP_BASE, false)]
