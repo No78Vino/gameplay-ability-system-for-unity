@@ -44,6 +44,24 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlayerFacingLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""3df840da-90ff-4f56-84ee-9322f0b3b123"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlayerFacingRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b0f55a9-319c-451c-acea-b5978df97f4c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +130,28 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85e128b4-e179-4167-be7a-34a105926f07"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlayerFacingLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a180164a-e31d-459c-bb08-4a8e569a8686"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlayerFacingRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +162,8 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_PlayerFacingLeft = m_Player.FindAction("PlayerFacingLeft", throwIfNotFound: true);
+        m_Player_PlayerFacingRight = m_Player.FindAction("PlayerFacingRight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +227,16 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_PlayerFacingLeft;
+    private readonly InputAction m_Player_PlayerFacingRight;
     public struct PlayerActions
     {
         private @DemoController m_Wrapper;
         public PlayerActions(@DemoController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @PlayerFacingLeft => m_Wrapper.m_Player_PlayerFacingLeft;
+        public InputAction @PlayerFacingRight => m_Wrapper.m_Player_PlayerFacingRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +252,12 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @PlayerFacingLeft.started += instance.OnPlayerFacingLeft;
+            @PlayerFacingLeft.performed += instance.OnPlayerFacingLeft;
+            @PlayerFacingLeft.canceled += instance.OnPlayerFacingLeft;
+            @PlayerFacingRight.started += instance.OnPlayerFacingRight;
+            @PlayerFacingRight.performed += instance.OnPlayerFacingRight;
+            @PlayerFacingRight.canceled += instance.OnPlayerFacingRight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -216,6 +268,12 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @PlayerFacingLeft.started -= instance.OnPlayerFacingLeft;
+            @PlayerFacingLeft.performed -= instance.OnPlayerFacingLeft;
+            @PlayerFacingLeft.canceled -= instance.OnPlayerFacingLeft;
+            @PlayerFacingRight.started -= instance.OnPlayerFacingRight;
+            @PlayerFacingRight.performed -= instance.OnPlayerFacingRight;
+            @PlayerFacingRight.canceled -= instance.OnPlayerFacingRight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -237,5 +295,7 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnPlayerFacingLeft(InputAction.CallbackContext context);
+        void OnPlayerFacingRight(InputAction.CallbackContext context);
     }
 }

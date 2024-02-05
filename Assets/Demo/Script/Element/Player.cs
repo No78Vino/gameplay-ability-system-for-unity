@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     private float _velocityX;
     private float _accY;
     private float _lastVelocityY;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private Transform _renderer;
     
     private void Awake()
     {
@@ -31,6 +33,8 @@ public class Player : MonoBehaviour
         _inputActionReference.Enable();
         _inputActionReference.Player.Move.performed += OnMove;
         _inputActionReference.Player.Jump.performed += OnJump;
+        _inputActionReference.Player.PlayerFacingLeft.performed += _ => _renderer.localScale = new Vector3(-1, 1, 1);
+        _inputActionReference.Player.PlayerFacingRight.performed += _ => _renderer.localScale = Vector3.one;
         
         _asc.InitWithPreset(1);
     }
@@ -57,6 +61,10 @@ public class Player : MonoBehaviour
         }
 
         _lastVelocityY = _rb.velocity.y;
+        
+        // 设置动画机参数
+        _animator.SetFloat("IsInAir", IsGrounded() ? 0 : 1);
+        _animator.SetFloat("UpOrDown", 0.5f * (1 - Mathf.Clamp(_lastVelocityY, -1, 1)));
     }
 
     bool IsGrounded()

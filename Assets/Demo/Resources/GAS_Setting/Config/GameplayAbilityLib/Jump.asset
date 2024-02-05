@@ -23,4 +23,4 @@ MonoBehaviour:
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  JumpPower: 29
+  JumpPower: 15

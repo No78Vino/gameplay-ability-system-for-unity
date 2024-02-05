@@ -11,6 +11,7 @@ namespace GAS.Runtime.Effects.Modifier
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if(Application.isPlaying) return;
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
