@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private Transform _renderer;
     
+    bool _grounded;
+    
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -53,7 +55,7 @@ public class Player : MonoBehaviour
     {
         _accY = (_rb.velocity.y - _lastVelocityY) / Time.fixedDeltaTime;
 
-        if (IsGrounded() || !(_accY != 0 && !_inputActionReference.Player.Move.IsPressed()))
+        if (_grounded || !(_accY != 0 && !_inputActionReference.Player.Move.IsPressed()))
         {
             var velocity = _rb.velocity;
             velocity.x = _velocityX * speed;
@@ -63,13 +65,13 @@ public class Player : MonoBehaviour
         _lastVelocityY = _rb.velocity.y;
         
         // 设置动画机参数
-        _animator.SetFloat("IsInAir", IsGrounded() ? 0 : 1);
+        _animator.SetFloat("IsInAir", _grounded ? 0 : 1);
         _animator.SetFloat("UpOrDown", 0.5f * (1 - Mathf.Clamp(_lastVelocityY, -1, 1)));
     }
 
-    bool IsGrounded()
+    public void SetIsGrounded(bool grounded)
     {
-        return _rb.velocity.y==0 && _accY >= 0; // && !LockMotion();
+        _grounded = grounded;
     }
     
     public void OnMove(InputAction.CallbackContext context)
@@ -82,7 +84,7 @@ public class Player : MonoBehaviour
     
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (IsGrounded()||DoubleJumpValid())
+        if (_grounded||DoubleJumpValid())
             _asc.TryActivateAbility(AbilityCollection.Jump_Info.Name, _rb);
     }
 

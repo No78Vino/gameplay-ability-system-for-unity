@@ -40,10 +40,9 @@ namespace GAS.Runtime.Component
           }
           public static void InitWithPreset(this AbilitySystemComponent asc,int level, AbilitySystemComponentPreset preset = null)
           {
-              asc.SetLevel(level);
               if (preset != null) asc.SetPreset(preset);
               if (asc.Preset == null) return;
-              asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.Preset.BaseAbilities);
+              asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.Preset.BaseAbilities,level);
           }
       }
 }

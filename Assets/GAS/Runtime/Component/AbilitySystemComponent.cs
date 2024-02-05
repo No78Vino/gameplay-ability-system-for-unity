@@ -59,8 +59,10 @@ namespace GAS.Runtime.Component
             preset = ascPreset;
         }
         
-        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities)
+        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities,int level)
         {
+            Prepare();
+            SetLevel(level);
             if (baseTags != null) GameplayTagAggregator.Init(baseTags);
             
             if (attrSetTypes != null)
