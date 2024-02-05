@@ -26,7 +26,7 @@ namespace GAS.Runtime.Ability
 
         public override void ActivateAbility(params object[] args)
         {
-            var rb = args[0] as UnityEngine.Rigidbody;
+            var rb = args[0] as UnityEngine.Rigidbody2D;
             var velocity = rb.velocity;
             velocity.y = _jump.JumpPower;
             rb.velocity = velocity;

@@ -19,7 +19,7 @@ namespace GAS.Runtime.Tags
 
         private readonly List<GameplayTag> _fixedTags = new List<GameplayTag>();
 
-        public void SetOwner(AbilitySystemComponent owner)
+        public GameplayTagAggregator(AbilitySystemComponent owner)
         {
             _owner = owner;
         }

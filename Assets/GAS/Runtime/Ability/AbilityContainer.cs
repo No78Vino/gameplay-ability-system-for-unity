@@ -7,10 +7,10 @@ namespace GAS.Runtime.Ability
 {
     public class AbilityContainer
     {
-        AbilitySystemComponent _owner;
+        private readonly AbilitySystemComponent _owner;
         private readonly Dictionary<string, AbilitySpec> _abilities = new Dictionary<string, AbilitySpec>();
         
-        public void SetOwner(AbilitySystemComponent owner)
+        public AbilityContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
         }

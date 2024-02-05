@@ -35,6 +35,16 @@ public class Player : MonoBehaviour
         _asc.InitWithPreset(1);
     }
 
+    private void OnEnable()
+    {
+        _asc.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChange);
+    }
+    
+    private void OnDisable()
+    {
+        _asc.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChange);
+    }
+
     private void FixedUpdate()
     {
         _accY = (_rb.velocity.y - _lastVelocityY) / Time.fixedDeltaTime;
@@ -100,5 +110,10 @@ public class Player : MonoBehaviour
     public void OnMousePosition(Vector3 position)
     {
         //_asc.TryActivateAbility("MousePosition", position);
+    }
+    
+    public void OnHpChange(AttributeBase attr,float oldValue, float newValue)
+    {
+        Debug.Log($"HP changed from {oldValue} to {newValue}");
     }
 }

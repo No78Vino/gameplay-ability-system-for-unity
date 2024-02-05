@@ -14,7 +14,7 @@ namespace GAS.Runtime.Ability
         [BoxGroup]
         [LabelText("跳跃力")]
         [LabelWidth(100)]
-        [Range(1,10000)]
+        [Range(1,500)]
         public float JumpPower;
     }
 }

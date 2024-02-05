@@ -7,13 +7,13 @@ namespace GAS.Runtime.AttributeSet
 {
     public class AttributeSetContainer
     {
-        AbilitySystemComponent _owner;
-        Dictionary<string,AttributeSet> _attributeSets = new Dictionary<string,AttributeSet>();
-        Dictionary<AttributeBase,AttributeAggregator> _attributeAggregators = new Dictionary<AttributeBase, AttributeAggregator>();
+        private readonly AbilitySystemComponent _owner;
+        private readonly Dictionary<string,AttributeSet> _attributeSets = new Dictionary<string,AttributeSet>();
+        private readonly Dictionary<AttributeBase,AttributeAggregator> _attributeAggregators = new Dictionary<AttributeBase, AttributeAggregator>();
         
         public Dictionary<string,AttributeSet> Sets => _attributeSets;
         
-        public void SetOwner(AbilitySystemComponent owner)
+        public AttributeSetContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
         }

@@ -17,32 +17,41 @@ namespace GAS.Runtime.Component
         
         public int Level { get; protected set; }
 
-        public GameplayEffectContainer GameplayEffectContainer { get; } = new GameplayEffectContainer();
+        public GameplayEffectContainer GameplayEffectContainer { get; private set; } 
 
-        public GameplayTagAggregator GameplayTagAggregator { get; } = new GameplayTagAggregator();
+        public GameplayTagAggregator GameplayTagAggregator { get; private set;} 
 
-        public AbilityContainer AbilityContainer { get; } = new AbilityContainer();
+        public AbilityContainer AbilityContainer { get; private set;}
 
-        public AttributeSetContainer AttributeSetContainer { get; } = new AttributeSetContainer();
+        public AttributeSetContainer AttributeSetContainer { get; private set;}
+
+        private bool _ready;
+        private void Prepare()
+        {
+            if(_ready) return;
+            AbilityContainer = new AbilityContainer(this);
+            GameplayEffectContainer = new GameplayEffectContainer(this);
+            AttributeSetContainer = new AttributeSetContainer(this);
+            GameplayTagAggregator = new GameplayTagAggregator(this);
+            _ready = true;
+        }
 
         private void Awake()
         {
-            AbilityContainer.SetOwner(this);
-            GameplayEffectContainer.SetOwner(this);
-            AttributeSetContainer.SetOwner(this);
-            GameplayTagAggregator.SetOwner(this);
+            Prepare();
         }
 
         private void OnEnable()
         {
+            Prepare();
             GameplayAbilitySystem.GAS.Register(this);
-            GameplayTagAggregator.OnEnable();
+            GameplayTagAggregator?.OnEnable();
         }
 
         private void OnDisable()
         {
             GameplayAbilitySystem.GAS.Unregister(this);
-            GameplayTagAggregator.OnDisable();
+            GameplayTagAggregator?.OnDisable();
         }
 
         public void SetPreset( AbilitySystemComponentPreset ascPreset)
@@ -218,7 +227,6 @@ namespace GAS.Runtime.Component
             // GameplayEffectContainer = new GameplayEffectContainer(this);
             // _attributeSetContainer = new AttributeSetContainer(this);
             // tagAggregator = new GameplayTagAggregator(this);
-
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
