@@ -3,6 +3,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
+using GAS.Runtime.Tags;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,8 +36,20 @@ public class Player : MonoBehaviour
         _inputActionReference.Enable();
         _inputActionReference.Player.Move.performed += OnMove;
         _inputActionReference.Player.Jump.performed += OnJump;
-        _inputActionReference.Player.PlayerFacingLeft.performed += _ => _renderer.localScale = new Vector3(-1, 1, 1);
-        _inputActionReference.Player.PlayerFacingRight.performed += _ => _renderer.localScale = Vector3.one;
+        _inputActionReference.Player.PlayerFacingLeft.performed += _ =>
+        {
+            _asc.AddFixedTag(GameplayTagSumCollection.Event_Moving);
+            _renderer.localScale = new Vector3(-1, 1, 1);
+        };
+        _inputActionReference.Player.PlayerFacingRight.performed += _ =>
+        {
+            _asc.AddFixedTag(GameplayTagSumCollection.Event_Moving);
+            _renderer.localScale = Vector3.one;
+        };
+        _inputActionReference.Player.PlayerFacingLeft.canceled +=
+            _ => _asc.RemoveFixedTag(GameplayTagSumCollection.Event_Moving);
+        _inputActionReference.Player.PlayerFacingRight.canceled +=
+            _ => _asc.RemoveFixedTag(GameplayTagSumCollection.Event_Moving);
         
         _asc.InitWithPreset(1);
     }
@@ -67,6 +80,7 @@ public class Player : MonoBehaviour
         // 设置动画机参数
         _animator.SetFloat("IsInAir", _grounded ? 0 : 1);
         _animator.SetFloat("UpOrDown", 0.5f * (1 - Mathf.Clamp(_lastVelocityY, -1, 1)));
+        _animator.SetFloat("Moving", Moving?1:0);
     }
 
     public void SetIsGrounded(bool grounded)
@@ -88,38 +102,12 @@ public class Player : MonoBehaviour
             _asc.TryActivateAbility(AbilityCollection.Jump_Info.Name, _rb);
     }
 
+
+    private bool Moving => _asc.HasTag(GameplayTagSumCollection.Event_Moving);
+    
     bool DoubleJumpValid()
     {
         return false;
-    }
-
-    public void OnMoveEnd()
-    {
-        //_asc.TryEndAbility("Move");
-    }
-    public void OnPressQ()
-    {
-        //_asc.TryActivateAbility("Q");
-    }
-
-    public void OnPressE()
-    {
-        //_asc.TryActivateAbility("E");
-    }
-
-    public void OnPressR()
-    {
-        //_asc.TryActivateAbility("R");
-    }
-
-    public void OnPressMouseLeft()
-    {
-        //_asc.TryActivateAbility("MouseLeft");
-    }
-
-    public void OnMousePosition(Vector3 position)
-    {
-        //_asc.TryActivateAbility("MousePosition", position);
     }
     
     public void OnHpChange(AttributeBase attr,float oldValue, float newValue)
