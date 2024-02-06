@@ -70,4 +70,4 @@ MonoBehaviour:
   prepareTime: 0.05
   motionTime: 0.1
   endTime: 0.1
-  motionDistance: 7.5
+  motionDistance: 6

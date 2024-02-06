@@ -1,4 +1,7 @@
+using Demo.Script.UI;
+using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime.Ability;
+using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -31,6 +34,26 @@ public class Player : FightUnit
         InitAttribute();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        ASC.AttrSet<AS_Fight>().STAMINA.RegisterPreBaseValueChange(OnStaminaChangePre);
+        ASC.AttrSet<AS_Fight>().STAMINA.RegisterPostBaseValueChange(OnStaminaChangePost);
+
+        ASC.AttrSet<AS_Fight>().HP.RegisterPreBaseValueChange(OnHpChangePre);
+        ASC.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChangePost);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        ASC.AttrSet<AS_Fight>().STAMINA.UnregisterPostBaseValueChange(OnStaminaChangePost);
+        ASC.AttrSet<AS_Fight>().STAMINA.UnregisterPreBaseValueChange(OnStaminaChangePre);
+        
+        ASC.AttrSet<AS_Fight>().HP.UnregisterPreBaseValueChange(OnHpChangePre);
+        ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChangePost);
+    }
+    
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -100,5 +123,27 @@ public class Player : FightUnit
     void Dodge()
     {
         ASC.TryActivateAbility(AbilityCollection.PlayerDodge_Info.Name);
+    }
+    
+    private float OnStaminaChangePre(AttributeBase attr, float newValue)
+    {
+        return  Mathf.Clamp(newValue,0,StaminaMax);
+    }
+    
+    private void OnStaminaChangePost(AttributeBase attr, float oldValue, float newValue)
+    {
+        Debug.Log($"Stamina changed from {oldValue} to {newValue}");
+        XUI.M.VM<MainUIVM>().UpdateStamina(newValue);
+    }
+    
+    private float OnHpChangePre(AttributeBase attr, float newValue)
+    {
+        return  Mathf.Clamp(newValue,0,HpMax);
+    }
+    
+    private void OnHpChangePost(AttributeBase attr, float oldValue, float newValue)
+    {
+        Debug.Log($"HP changed from {oldValue} to {newValue}");
+        XUI.M.VM<MainUIVM>().UpdateHp(newValue);
     }
 }

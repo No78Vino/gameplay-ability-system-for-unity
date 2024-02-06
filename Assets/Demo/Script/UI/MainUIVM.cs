@@ -43,6 +43,19 @@ namespace Demo.Script.UI
             BossPosture.Value = 100;
         }
         
+        public void UpdateStamina(float value)
+        {
+            playerStamina.Value = value;
+        }
         
+        public void UpdatePosture(float value)
+        {
+            playerPosture.Value = value;
+        }
+        
+        public void UpdateHp(float value)
+        {
+            playerHp.Value = value;
+        }
     }
 }
