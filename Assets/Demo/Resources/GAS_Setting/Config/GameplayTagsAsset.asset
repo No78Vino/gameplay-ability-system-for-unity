@@ -16,6 +16,15 @@ MonoBehaviour:
   - _id: 1
     _name: Root
     _depth: -1
+  - _id: 31
+    _name: Faction
+    _depth: 0
+  - _id: 33
+    _name: Enemy
+    _depth: 1
+  - _id: 32
+    _name: Player
+    _depth: 1
   - _id: 2
     _name: Ability
     _depth: 0
@@ -86,6 +95,23 @@ MonoBehaviour:
     _name: Motion
     _depth: 1
   Tags:
+  - _name: Faction
+    _hashCode: -168968830
+    _shortName: Faction
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: Faction.Enemy
+    _hashCode: -1091112840
+    _shortName: Enemy
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
+  - _name: Faction.Player
+    _hashCode: 1030057057
+    _shortName: Player
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
   - _name: Ability
     _hashCode: -523153736
     _shortName: Ability

@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 681957179147256543}
   _renderer: {fileID: 3182258008151415995}
-  _playerInput: {fileID: 2899910684522074209}
+  GEBuffStaminaRecover: {fileID: 11400000, guid: c4184d08ecb21db4282674b16419f7c8, type: 2}
 --- !u!114 &4574284699450854141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +223,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b8495c28-7325-49c4-8d17-aa6a16d9e9a2
     m_ActionName: Player/Defend[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eeaaad60-64b1-4871-8e6e-1b74f961990a
+    m_ActionName: Player/Dodge[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

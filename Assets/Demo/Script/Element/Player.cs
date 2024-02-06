@@ -3,6 +3,7 @@ using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
+using GAS.Runtime.Effects;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,7 +16,8 @@ public class Player : FightUnit
     private const int PostureMax = 10;
     private const int ATK = 10;
     private const int Speed = 5;
-    
+
+    [SerializeField]private GameplayEffectAsset GEBuffStaminaRecover;
     
     protected override void Awake()
     {
@@ -32,6 +34,7 @@ public class Player : FightUnit
         _inputActionReference.Player.Dodge.performed += OnDodge;
 
         InitAttribute();
+        ASC.ApplyGameplayEffectToSelf(new GameplayEffect(GEBuffStaminaRecover));
     }
 
     protected override void OnEnable()

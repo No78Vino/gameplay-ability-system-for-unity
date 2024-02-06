@@ -16,7 +16,13 @@ MonoBehaviour:
   Description: 
   AttributeSets:
   - Fight
-  BaseTags: []
+  BaseTags:
+  - _name: Faction.Player
+    _hashCode: 1030057057
+    _shortName: Player
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
   BaseAbilities:
   - {fileID: 11400000, guid: 7e336de72122257479d22f5a6e8701da, type: 2}
   - {fileID: 11400000, guid: 417d3d3616f1b0c43819f77707844fc3, type: 2}
