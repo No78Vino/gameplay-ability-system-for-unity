@@ -24,6 +24,12 @@ public static class GameplayTagSumCollection
     public static GameplayTag Event_InAir { get;} = new GameplayTag("Event.InAir");
     public static GameplayTag Event_Attacking { get;} = new GameplayTag("Event.Attacking");
     public static GameplayTag Event_Moving { get;} = new GameplayTag("Event.Moving");
+    public static GameplayTag CD { get;} = new GameplayTag("CD");
+    public static GameplayTag CD_Skill0 { get;} = new GameplayTag("CD.Skill0");
+    public static GameplayTag CD_Skill1 { get;} = new GameplayTag("CD.Skill1");
+    public static GameplayTag CD_Dodge { get;} = new GameplayTag("CD.Dodge");
+    public static GameplayTag Ban { get;} = new GameplayTag("Ban");
+    public static GameplayTag Ban_Motion { get;} = new GameplayTag("Ban.Motion");
 
       public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
       {
@@ -44,6 +50,12 @@ public static class GameplayTagSumCollection
          ["Event.InAir"] = Event_InAir,
          ["Event.Attacking"] = Event_Attacking,
          ["Event.Moving"] = Event_Moving,
+         ["CD"] = CD,
+         ["CD.Skill0"] = CD_Skill0,
+         ["CD.Skill1"] = CD_Skill1,
+         ["CD.Dodge"] = CD_Dodge,
+         ["Ban"] = Ban,
+         ["Ban.Motion"] = Ban_Motion,
       };
 }
 }

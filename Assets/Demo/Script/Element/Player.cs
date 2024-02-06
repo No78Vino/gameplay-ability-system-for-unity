@@ -1,3 +1,4 @@
+using GAS.Runtime.Ability;
 using GAS.Runtime.AttributeSet;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,6 +26,7 @@ public class Player : FightUnit
         _inputActionReference.Player.Attack.performed += OnAttack;
         _inputActionReference.Player.Defend.performed += OnActivateDefend;
         _inputActionReference.Player.Defend.canceled += OnDeactivateDefend;
+        _inputActionReference.Player.Dodge.performed += OnDodge;
 
         InitAttribute();
     }
@@ -32,6 +34,12 @@ public class Player : FightUnit
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        
+        if (_inputActionReference.Player.Move.IsPressed())
+        {
+            ActivateMove(_inputActionReference.Player.Move.ReadValue<Vector2>().x);
+        }
+        
         if (!Grounded && LastVelocityY<=0 && _inputActionReference.Player.Jump.IsPressed())
         {
             _rb.gravityScale = HalfGravity;
@@ -84,8 +92,13 @@ public class Player : FightUnit
         DeactivateDefend();
     }
 
+    public void OnDodge(InputAction.CallbackContext context)
+    {
+        Dodge();
+    }
+
     void Dodge()
     {
-        // TODO
+        ASC.TryActivateAbility(AbilityCollection.PlayerDodge_Info.Name);
     }
 }

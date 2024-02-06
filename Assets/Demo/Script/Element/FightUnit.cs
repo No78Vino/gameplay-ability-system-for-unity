@@ -5,7 +5,7 @@ using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
 using UnityEngine;
 
-public class FightUnit : MonoBehaviour
+public abstract class FightUnit : MonoBehaviour
 {
     protected const float Gravity = 3f;
     protected const float HalfGravity = 1.5f;
@@ -26,8 +26,10 @@ public class FightUnit : MonoBehaviour
     public AbilitySystemComponent ASC { get; private set; }
 
     public Transform Renderer => _renderer;
+    public Rigidbody2D Rb => _rb;
     public float VelocityX => _velocityX;
     private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
+    public Animator Animator => _animator;
     private bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
 
     protected virtual void Awake()
@@ -40,14 +42,16 @@ public class FightUnit : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (Grounded || IsMoving)
+        if (!ASC.HasTag(GameplayTagSumCollection.Ban_Motion))
         {
-            var velocity = _rb.velocity;
-            velocity.x = _velocityX * ASC.AttrSet<AS_Fight>().SPEED.CurrentValue;
-            _rb.velocity = velocity;
+            if (Grounded || IsMoving)
+            {
+                var velocity = _rb.velocity;
+                velocity.x = _velocityX * ASC.AttrSet<AS_Fight>().SPEED.CurrentValue;
+                _rb.velocity = velocity;
+            }
+            LastVelocityY = _rb.velocity.y;
         }
-
-        LastVelocityY = _rb.velocity.y;
 
         // 设置动画机参数
         _animator.SetFloat(IsInAir, Grounded ? 0 : 1);
@@ -67,7 +71,6 @@ public class FightUnit : MonoBehaviour
 
     public virtual void InitAttribute()
     {
-        
     }
     
     public void SetIsGrounded(bool grounded)
@@ -109,6 +112,7 @@ public class FightUnit : MonoBehaviour
     }
 
 
+    
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");

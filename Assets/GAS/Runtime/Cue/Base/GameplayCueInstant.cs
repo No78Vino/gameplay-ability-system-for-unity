@@ -20,10 +20,6 @@ namespace GAS.Runtime.Cue
             parameters)
         {
         }
-
-        // public GameplayCueInstantSpec(GameplayCue cue) : base(cue, null)
-        // {
-        // }
         
         private GameplayCueInstant instantCue => _cue as GameplayCueInstant;
 

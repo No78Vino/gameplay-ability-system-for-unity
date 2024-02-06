@@ -67,6 +67,24 @@ MonoBehaviour:
   - _id: 16
     _name: Moving
     _depth: 1
+  - _id: 25
+    _name: CD
+    _depth: 0
+  - _id: 27
+    _name: Skill0
+    _depth: 1
+  - _id: 28
+    _name: Skill1
+    _depth: 1
+  - _id: 26
+    _name: Dodge
+    _depth: 1
+  - _id: 29
+    _name: Ban
+    _depth: 0
+  - _id: 30
+    _name: Motion
+    _depth: 1
   Tags:
   - _name: Ability
     _hashCode: -523153736
@@ -170,3 +188,37 @@ MonoBehaviour:
     _ancestorHashCodes: 0276cb27
     _ancestorNames:
     - Event
+  - _name: CD
+    _hashCode: -1137859925
+    _shortName: CD
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: CD.Skill0
+    _hashCode: -4094734
+    _shortName: Skill0
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
+  - _name: CD.Skill1
+    _hashCode: -4094735
+    _shortName: Skill1
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
+  - _name: CD.Dodge
+    _hashCode: 2094525428
+    _shortName: Dodge
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
+  - _name: Ban
+    _hashCode: 696030461
+    _shortName: Ban
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  - _name: Ban.Motion
+    _hashCode: 1305984585
+    _shortName: Motion
+    _ancestorHashCodes: fd947c29
+    _ancestorNames:
+    - Ban

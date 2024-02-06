@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0831f70ea054910b7c7a907e5121590, type: 3}
-  m_Name: PlayAnim
+  m_Script: {fileID: 11500000, guid: 1261c2b342e03224ebc341132b01bf92, type: 3}
+  m_Name: Trail_Dodge
   m_EditorClassIdentifier: 
-  applyTarget: 0
-  _animationName: 
+  VfxPrefab: {fileID: 8310686058999953525, guid: 6736d8d9375045b40bbb5c91a7a01d8f, type: 3}
+  IsAttachToTarget: 1
