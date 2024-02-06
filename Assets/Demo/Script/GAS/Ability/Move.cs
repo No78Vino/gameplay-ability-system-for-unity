@@ -1,4 +1,5 @@
 ﻿using GAS.Runtime.Component;
+using UnityEngine;
 
 namespace GAS.Runtime.Ability
 {
@@ -16,23 +17,34 @@ namespace GAS.Runtime.Ability
     
     public class MoveSpec: AbilitySpec
     {
+        private FightUnit _unit;
         public MoveSpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
+            _unit = owner.GetComponent<FightUnit>();
         }
 
         public override void ActivateAbility(params object[] args)
         {
-            throw new System.NotImplementedException();
+            float direction = (float) args[0];
+            if (Mathf.Abs(direction) > 0)
+            {
+                _unit.SetVelocityX(direction > 0 ? 1 : -1);
+                _unit.Renderer.localScale = new Vector3(_unit.VelocityX, 1, 1);
+            }
+            else
+            {
+                _unit.SetVelocityX(0);
+            }
         }
 
         public override void CancelAbility()
         {
-            throw new System.NotImplementedException();
+            _unit.SetVelocityX(0);
         }
 
         public override void EndAbility()
         {
-            throw new System.NotImplementedException();
+            CancelAbility();
         }
     }
 }

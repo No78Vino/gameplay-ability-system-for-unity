@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="201,10" extention="ProgressBar">
-  <controller name="type" exported="true" pages="0,hp,1,mp" selected="1"/>
+  <controller name="type" exported="true" pages="0,hp,1,mp,2,stamina,3,posture" selected="3"/>
   <displayList>
     <graph id="n0_jair" name="n0" xy="0,0" size="201,10" type="rect" lineColor="#ffa0a0a0" fillColor="#fff0f0f0">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <graph id="n1_jair" name="bar" xy="0,3" size="201,4" type="rect" lineSize="0" fillColor="#ff0066ff">
-      <gearColor controller="type" pages="1" values="#0066ff" default="#00ff00"/>
+    <graph id="n1_jair" name="bar" xy="0,3" size="201,4" type="rect" lineSize="0" fillColor="#ffff9900">
+      <gearColor controller="type" pages="0,1,3" values="#ff0000|#0066ff|#ff9900" default="#00ff00"/>
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <text id="n3_jair" name="title" xy="-30,-16" size="262,42" fontSize="30" color="#cccccc" align="center" autoSize="none" strokeColor="#000000" text="0/100">
+    <text id="n3_jair" name="title" xy="-30,-16" size="262,42" fontSize="30" color="#cccccc" align="center" autoSize="none" bold="true" strokeColor="#000000" text="0/100">
       <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
+    </text>
+    <text id="n4_rfg0" name="AttrText" xy="-88,-16" size="57,42" fontSize="30" color="#ffffff" bold="true" strokeColor="#000000" text="HP:">
+      <relation target="" sidePair="middle-middle,right-left"/>
     </text>
   </displayList>
   <ProgressBar titleType="valueAndmax"/>

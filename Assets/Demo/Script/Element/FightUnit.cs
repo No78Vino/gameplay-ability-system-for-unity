@@ -4,88 +4,91 @@ using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 
 public class FightUnit : MonoBehaviour
 {
-    public const float Gravity = 3f;
-    public const float HalfGravity = 1.5f;
-    protected AbilitySystemComponent _asc;
-    protected Rigidbody2D _rb;
-    private float speed = 5;
-    private float jumpVelocity = 10;
-    
-    private int _velocityX;
-    protected float _lastVelocityY;
+    protected const float Gravity = 3f;
+    protected const float HalfGravity = 1.5f;
+    private static readonly int IsInAir = Animator.StringToHash("IsInAir");
+    private static readonly int UpOrDown = Animator.StringToHash("UpOrDown");
+    private static readonly int Moving = Animator.StringToHash("Moving");
     [SerializeField] protected Animator _animator;
     [SerializeField] protected Transform _renderer;
 
-    protected bool _grounded;
-    protected bool Moving => _asc.HasTag(GameplayTagSumCollection.Event_Moving);
-    protected bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
+    protected Rigidbody2D _rb;
+
+    private int _velocityX;
+    
+    protected bool Grounded;
+    private float jumpVelocity = 10;
+    protected float LastVelocityY;
+
+    public AbilitySystemComponent ASC { get; private set; }
+
+    public Transform Renderer => _renderer;
+    public float VelocityX => _velocityX;
+    private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
+    private bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
 
     protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = Gravity;
-        _asc = GetComponent<AbilitySystemComponent>();
-        _asc.InitWithPreset(1);
-    }
-
-    protected virtual void OnEnable()
-    {
-        _asc.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChange);
-    }
-
-    protected virtual void OnDisable()
-    {
-        _asc.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChange);
+        ASC = GetComponent<AbilitySystemComponent>();
+        ASC.InitWithPreset(1);
     }
 
     protected virtual void FixedUpdate()
     {
-        if (_grounded || Moving)
+        if (Grounded || IsMoving)
         {
             var velocity = _rb.velocity;
-            velocity.x = _velocityX * speed;
+            velocity.x = _velocityX * ASC.AttrSet<AS_Fight>().SPEED.CurrentValue;
             _rb.velocity = velocity;
         }
 
-        _lastVelocityY = _rb.velocity.y;
+        LastVelocityY = _rb.velocity.y;
 
         // 设置动画机参数
-        _animator.SetFloat("IsInAir", _grounded ? 0 : 1);
-        _animator.SetFloat("UpOrDown", 0.5f * (1 - Mathf.Clamp(_lastVelocityY, -1, 1)));
-        _animator.SetFloat("Moving", Moving ? 1 : 0);
+        _animator.SetFloat(IsInAir, Grounded ? 0 : 1);
+        _animator.SetFloat(UpOrDown, 0.5f * (1 - Mathf.Clamp(LastVelocityY, -1, 1)));
+        _animator.SetFloat(Moving, IsMoving ? 1 : 0);
     }
 
+    protected virtual void OnEnable()
+    {
+        ASC.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChange);
+    }
+
+    protected virtual void OnDisable()
+    {
+        ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChange);
+    }
+
+    public virtual void InitAttribute()
+    {
+        
+    }
+    
     public void SetIsGrounded(bool grounded)
     {
-        _grounded = grounded;
+        Grounded = grounded;
     }
 
     public void ActivateMove(float direction)
     {
-        if (Mathf.Abs(direction) > 0)
-        {
-            _velocityX = direction > 0 ? 1 : -1;
-            _asc.AddFixedTag(GameplayTagSumCollection.Event_Moving);
-            _renderer.localScale = new Vector3(_velocityX, 1, 1);
-        }
-        else _velocityX = 0;
+        ASC.TryActivateAbility(AbilityCollection.Move_Info.Name, direction);
     }
 
     public void DeactivateMove()
     {
-        _velocityX = 0;
-        _asc.RemoveFixedTag(GameplayTagSumCollection.Event_Moving);
+        ASC.TryEndAbility(AbilityCollection.Move_Info.Name);
     }
 
-    protected void Jump()
+    public void Jump()
     {
-        if (_grounded || DoubleJumpValid)
-            _asc.TryActivateAbility(AbilityCollection.Jump_Info.Name, _rb);
+        if (Grounded || DoubleJumpValid)
+            ASC.TryActivateAbility(AbilityCollection.Jump_Info.Name, _rb);
     }
 
     public void Attack()
@@ -106,9 +109,13 @@ public class FightUnit : MonoBehaviour
     }
 
 
-
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
+    }
+    
+    public void SetVelocityX(int velocityX)
+    {
+        _velocityX = velocityX;
     }
 }

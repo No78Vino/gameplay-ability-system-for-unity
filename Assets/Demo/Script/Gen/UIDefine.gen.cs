@@ -26,6 +26,38 @@ namespace UIGen
             internal static BuffButton_Proxy GetUIDefine(this I_BuffButton @this) => new BuffButton_Proxy((GButton)U.G(@this));
         }
 
+        internal interface I_ButtonA { }
+        internal struct ButtonA_Proxy
+        {
+            internal readonly GButton Target { get; }
+            internal ButtonA_Proxy(GButton o) => Target = o;
+            
+            
+        }
+        internal static class ButtonA_Extensions
+        {
+            internal static string GetUIPackageName(this I_ButtonA _) => "Demo";
+            internal static string GetUIPackageItemName(this I_ButtonA _) => "ButtonA";
+            internal static ButtonA_Proxy GetUIDefine(this I_ButtonA @this) => new ButtonA_Proxy((GButton)U.G(@this));
+        }
+
+        internal interface I_ControllerKey { }
+        internal struct ControllerKey_Proxy
+        {
+            internal readonly GComponent Target { get; }
+            internal ControllerKey_Proxy(GComponent o) => Target = o;
+            
+            
+            internal readonly GTextField action => (GTextField)U.G(Target, "action");
+            internal readonly GTextField key => (GTextField)U.G(Target, "key");
+        }
+        internal static class ControllerKey_Extensions
+        {
+            internal static string GetUIPackageName(this I_ControllerKey _) => "Demo";
+            internal static string GetUIPackageItemName(this I_ControllerKey _) => "ControllerKey";
+            internal static ControllerKey_Proxy GetUIDefine(this I_ControllerKey @this) => new ControllerKey_Proxy((GComponent)U.G(@this));
+        }
+
         internal interface I_EnemyHp { }
         internal struct EnemyHp_Proxy
         {
@@ -49,15 +81,25 @@ namespace UIGen
             internal readonly GProgressBar Target { get; }
             internal HpBar_Proxy(GProgressBar o) => Target = o;
             
+            internal readonly Controller Controller_type => U.G(Target).GetController("type");
             
             internal readonly GGraph bar => (GGraph)U.G(Target, "bar");
             internal readonly GTextField title => (GTextField)U.G(Target, "title");
+            internal readonly GTextField AttrText => (GTextField)U.G(Target, "AttrText");
         }
         internal static class HpBar_Extensions
         {
             internal static string GetUIPackageName(this I_HpBar _) => "Demo";
             internal static string GetUIPackageItemName(this I_HpBar _) => "HpBar";
             internal static HpBar_Proxy GetUIDefine(this I_HpBar @this) => new HpBar_Proxy((GProgressBar)U.G(@this));
+        }
+        internal static class HpBar_Pages
+        {
+            
+            internal static readonly string type_hp = "hp";
+            internal static readonly string type_mp = "mp";
+            internal static readonly string type_stamina = "stamina";
+            internal static readonly string type_posture = "posture";
         }
 
         internal interface I_Main { }
@@ -67,18 +109,37 @@ namespace UIGen
             internal Main_Proxy(GComponent o) => Target = o;
             
             
-            internal readonly GTextField Control_Intro => (GTextField)U.G(Target, "Control Intro");
+            internal readonly GList buffList => (GList)U.G(Target, "buffList");
+            internal readonly GTextField BossName => (GTextField)U.G(Target, "BossName");
+            internal readonly HpBar_Proxy BossHp => new HpBar_Proxy((GProgressBar)U.G(Target, "BossHp"));
+            internal readonly HpBar_Proxy BossPosture => new HpBar_Proxy((GProgressBar)U.G(Target, "BossPosture"));
             internal readonly HpBar_Proxy Hp => new HpBar_Proxy((GProgressBar)U.G(Target, "Hp"));
-            internal readonly GTextField HPText => (GTextField)U.G(Target, "HPText");
-            internal readonly SkillCDBar_Proxy Fireball => new SkillCDBar_Proxy((GProgressBar)U.G(Target, "Fireball"));
-            internal readonly SkillCDBar_Proxy FreezeBeam => new SkillCDBar_Proxy((GProgressBar)U.G(Target, "FreezeBeam"));
-            internal readonly BuffButton_Proxy HealingBuff => new BuffButton_Proxy((GButton)U.G(Target, "HealingBuff"));
+            internal readonly HpBar_Proxy Mp => new HpBar_Proxy((GProgressBar)U.G(Target, "Mp"));
+            internal readonly HpBar_Proxy Stamina => new HpBar_Proxy((GProgressBar)U.G(Target, "Stamina"));
+            internal readonly HpBar_Proxy Posture => new HpBar_Proxy((GProgressBar)U.G(Target, "Posture"));
         }
         internal static class Main_Extensions
         {
             internal static string GetUIPackageName(this I_Main _) => "Demo";
             internal static string GetUIPackageItemName(this I_Main _) => "Main";
             internal static Main_Proxy GetUIDefine(this I_Main @this) => new Main_Proxy((GComponent)U.G(@this));
+        }
+
+        internal interface I_Setting { }
+        internal struct Setting_Proxy
+        {
+            internal readonly GComponent Target { get; }
+            internal Setting_Proxy(GComponent o) => Target = o;
+            
+            
+            internal readonly GList intro => (GList)U.G(Target, "intro");
+            internal readonly ButtonA_Proxy btnReturn => new ButtonA_Proxy((GButton)U.G(Target, "btnReturn"));
+        }
+        internal static class Setting_Extensions
+        {
+            internal static string GetUIPackageName(this I_Setting _) => "Demo";
+            internal static string GetUIPackageItemName(this I_Setting _) => "Setting";
+            internal static Setting_Proxy GetUIDefine(this I_Setting @this) => new Setting_Proxy((GComponent)U.G(@this));
         }
 
         internal interface I_SkillCDBar { }

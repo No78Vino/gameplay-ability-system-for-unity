@@ -9,23 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 544108d1f0e34b7fb2a77be04ed89be6, type: 3}
-  m_Name: Attack
+  m_Script: {fileID: 11500000, guid: 2e76a5a1ce744655a1f78e76c7058a1e, type: 3}
+  m_Name: PlayerAttack
   m_EditorClassIdentifier: 
-  Name: 
-  Description: 
-  UniqueName: Attack
-  InstanceAbilityClassFullName: Demo.Script.MyAbilitySystem.Ability.AbilityMove
+  UniqueName: PlayerAttack
+  Description: "\u73A9\u5BB6\u653B\u51FB"
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
-  UsedGameplayEffects: []
+  CooldownTime: 0
   AssetTag: []
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  SourceRequiredTags: []
-  SourceBlockedTags: []
-  TargetRequiredTags: []
-  TargetBlockedTags: []

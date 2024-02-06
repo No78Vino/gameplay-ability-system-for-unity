@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0_rfg0" name="n0" xy="0,0" size="1920,1080" type="rect" fillColor="#89000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <list id="n2_rfg0" name="intro" xy="651,181" size="618,717" defaultItem="ui://vw8ofc6lrfg08" align="center" vAlign="middle">
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <component id="n3_rfg0" name="btnReturn" src="rfg09" fileName="Components/ButtonA.xml" xy="770,971" size="380,76" visible="false">
+      <Button title="返回"/>
+    </component>
+  </displayList>
+  <transition name="t0">
+    <item time="0" type="Alpha" target="n0_rfg0" tween="true" startValue="0" endValue="1" duration="12"/>
+    <item time="0" type="Alpha" target="n2_rfg0" tween="true" startValue="0" endValue="1" duration="12"/>
+    <item time="0" type="Alpha" target="n3_rfg0" tween="true" startValue="0" endValue="1" duration="12"/>
+  </transition>
+  <transition name="t1">
+    <item time="0" type="Alpha" target="n0_rfg0" tween="true" startValue="1" endValue="0" duration="12"/>
+    <item time="0" type="Alpha" target="n2_rfg0" tween="true" startValue="1" endValue="0" duration="12"/>
+    <item time="0" type="Alpha" target="n3_rfg0" tween="true" startValue="1" endValue="0" duration="12"/>
+  </transition>
+</component>

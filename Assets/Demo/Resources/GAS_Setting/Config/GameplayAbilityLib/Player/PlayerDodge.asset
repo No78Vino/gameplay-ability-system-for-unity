@@ -9,29 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b52d2c0ea13d4e93aefede892079b965, type: 3}
-  m_Name: Move
+  m_Script: {fileID: 11500000, guid: aa6980fa348a4712abe7e048c5ce087c, type: 3}
+  m_Name: PlayerDodge
   m_EditorClassIdentifier: 
-  UniqueName: Move
-  Description: 
+  UniqueName: PlayerDodge
+  Description: "\u73A9\u5BB6\u95EA\u907F"
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  AssetTag:
-  - _name: Ability.Move
-    _hashCode: -1903949459
-    _shortName: Move
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
+  AssetTag: []
   CancelAbilityTags: []
   BlockAbilityTags: []
-  ActivationOwnedTag:
-  - _name: Event.Moving
-    _hashCode: 798883614
-    _shortName: Moving
-    _ancestorHashCodes: 0276cb27
-    _ancestorNames:
-    - Event
+  ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []

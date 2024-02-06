@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1920,1080">
   <displayList>
-    <text id="n0_jair" name="Control Intro" xy="26,37" size="417,205" fontSize="30" color="#ffffff" autoSize="none" strokeColor="#000000" text="Move: W,A,S,D&#xA;Attack: Mouse Left Click&#xA;Fireball: Q&#xA;FreezeBeam: E&#xA;Turn On/Off Healing Buff: R ">
-      <relation target="" sidePair="left-left,top-top"/>
-    </text>
-    <component id="n1_jair" name="Hp" src="jair1" fileName="Components/HpBar.xml" xy="30,926" size="603,30">
-      <ProgressBar value="59" max="100"/>
-    </component>
-    <text id="n2_jair" name="HPText" xy="32,881" size="54,42" fontSize="30" color="#ffffff" strokeColor="#000000" text="HP:"/>
-    <component id="n3_jair" name="Fireball" src="jair3" fileName="Components/SkillCDBar.xml" xy="30,1003" size="250,26">
-      <ProgressBar value="50" max="100"/>
-    </component>
-    <component id="n4_jair" name="FreezeBeam" src="jair3" fileName="Components/SkillCDBar.xml" xy="332,1003" size="250,26">
-      <ProgressBar value="50" max="100"/>
-    </component>
-    <component id="n5_jair" name="HealingBuff" src="jair4" fileName="Components/BuffButton.xml" xy="706,923" size="210,42" touchable="false"/>
-    <list id="n6_jair" name="n6" xy="1292,47" size="612,967" overflow="scroll" defaultItem="ui://vw8ofc6ljair6" autoClearItems="true">
-      <relation target="" sidePair="right-right,top-top"/>
+    <list id="n10_rfg0" name="buffList" xy="44,336" size="258,513" lineGap="53" defaultItem="ui://vw8ofc6ljair3" autoClearItems="true">
+      <item/>
       <item/>
       <item/>
       <item/>
     </list>
+    <text id="n15_rfg0" name="BossName" xy="744,946" size="432,42" group="n14_rfg0" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" strokeColor="#000000" strokeSize="2" text="Boss名"/>
+    <component id="n12_rfg0" name="BossHp" src="jair1" fileName="Components/HpBar.xml" xy="356,1001" size="1208,26" group="n14_rfg0">
+      <relation target="" sidePair="left-left,top-top"/>
+      <ProgressBar value="59" max="100"/>
+    </component>
+    <component id="n13_rfg0" name="BossPosture" src="jair1" fileName="Components/HpBar.xml" xy="534,1052" size="851,20" group="n14_rfg0" controller="type,3">
+      <relation target="" sidePair="left-left,top-top"/>
+      <ProgressBar value="59" max="100"/>
+    </component>
+    <group id="n14_rfg0" name="Boss" xy="356,946" size="1208,125"/>
+    <component id="n1_jair" name="Hp" src="jair1" fileName="Components/HpBar.xml" xy="125,43" size="707,26" group="n11_rfg0">
+      <relation target="" sidePair="left-left,top-top"/>
+      <ProgressBar value="59" max="100"/>
+    </component>
+    <component id="n7_rfg0" name="Mp" src="jair1" fileName="Components/HpBar.xml" xy="125,79" size="707,26" group="n11_rfg0" controller="type,1">
+      <relation target="" sidePair="left-left,top-top"/>
+      <ProgressBar value="59" max="100"/>
+    </component>
+    <component id="n8_rfg0" name="Stamina" src="jair1" fileName="Components/HpBar.xml" xy="125,128" size="603,13" group="n11_rfg0" controller="type,2">
+      <relation target="" sidePair="left-left,top-top"/>
+      <ProgressBar value="59" max="100"/>
+    </component>
+    <component id="n9_rfg0" name="Posture" src="jair1" fileName="Components/HpBar.xml" xy="125,182" size="485,12" group="n11_rfg0" controller="type,3">
+      <relation target="" sidePair="left-left,top-top"/>
+      <ProgressBar value="59" max="100"/>
+    </component>
+    <group id="n11_rfg0" name="Player" xy="125,43" size="707,151"/>
   </displayList>
 </component>

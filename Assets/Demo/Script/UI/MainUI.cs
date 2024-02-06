@@ -20,17 +20,20 @@ namespace Demo.Script.UI
             bindingSet.Bind(ui.Hp.Target).For(v => v.value).To(vm => vm.playerHp.Value);
             bindingSet.Bind(ui.Hp.Target).For(v => v.max).To(vm => vm.playerHpMax.Value);
             
-            bindingSet.Bind(ui.HealingBuff.Target).For(v => v.selected).To(vm => vm.healingBuff.Value);
+            bindingSet.Bind(ui.Mp.Target).For(v => v.value).To(vm => vm.playerMp.Value);
+            bindingSet.Bind(ui.Mp.Target).For(v => v.max).To(vm => vm.playerMpMax.Value);
             
-            bindingSet.Bind(ui.Fireball.Target).For(v => v.value).To(vm => vm.fireballCd.Value);
-            bindingSet.Bind(ui.Fireball.Target).For(v => v.max).To(vm => vm.fireballCdMax.Value);
-            bindingSet.Bind(ui.Fireball.skillName).For(v => v.text).To(vm => vm.fireballSkillName.Value);
-            bindingSet.Bind(ui.Fireball.cd).For(v => v.text).To(vm => vm.fireballCdCount.Value);
+            bindingSet.Bind(ui.Stamina.Target).For(v => v.value).To(vm => vm.playerStamina.Value);
+            bindingSet.Bind(ui.Stamina.Target).For(v => v.max).To(vm => vm.playerStaminaMax.Value);
             
-            bindingSet.Bind(ui.FreezeBeam.Target).For(v => v.value).To(vm => vm.freezebeamCd.Value);
-            bindingSet.Bind(ui.FreezeBeam.Target).For(v => v.max).To(vm => vm.freezebeamCdMax.Value);
-            bindingSet.Bind(ui.FreezeBeam.skillName).For(v => v.text).To(vm => vm.freezebeamSkillName.Value);
-            bindingSet.Bind(ui.FreezeBeam.cd).For(v => v.text).To(vm => vm.freezebeamCdCount.Value);
+            bindingSet.Bind(ui.Posture.Target).For(v => v.value).To(vm => vm.playerPosture.Value);
+            bindingSet.Bind(ui.Posture.Target).For(v => v.max).To(vm => vm.playerPostureMax.Value);
+            
+            bindingSet.Bind(ui.BossName).For(v => v.text).To(vm => vm.BossName.Value);
+            bindingSet.Bind(ui.BossHp.Target).For(v => v.value).To(vm => vm.BossHp.Value);
+            bindingSet.Bind(ui.BossHp.Target).For(v => v.max).To(vm => vm.BossHpMax.Value);
+            bindingSet.Bind(ui.BossPosture.Target).For(v => v.value).To(vm => vm.BossPosture.Value);
+            bindingSet.Bind(ui.BossPosture.Target).For(v => v.max).To(vm => vm.BossPostureMax.Value);
             
             bindingSet.Build();
         }

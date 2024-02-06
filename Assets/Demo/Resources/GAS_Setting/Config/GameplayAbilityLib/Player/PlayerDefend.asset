@@ -9,29 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b52d2c0ea13d4e93aefede892079b965, type: 3}
-  m_Name: Move
+  m_Script: {fileID: 11500000, guid: 697a3f0cd4ec4e2e99332580612fc782, type: 3}
+  m_Name: PlayerDefend
   m_EditorClassIdentifier: 
-  UniqueName: Move
+  UniqueName: PlayerDefend
   Description: 
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  AssetTag:
-  - _name: Ability.Move
-    _hashCode: -1903949459
-    _shortName: Move
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
+  AssetTag: []
   CancelAbilityTags: []
   BlockAbilityTags: []
-  ActivationOwnedTag:
-  - _name: Event.Moving
-    _hashCode: 798883614
-    _shortName: Moving
-    _ancestorHashCodes: 0276cb27
-    _ancestorNames:
-    - Event
+  ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []

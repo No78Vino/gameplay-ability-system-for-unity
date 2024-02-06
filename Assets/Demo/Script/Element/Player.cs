@@ -1,15 +1,17 @@
-using GAS.Runtime.Ability;
-using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
-using GAS.Runtime.Component;
-using GAS.Runtime.Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : FightUnit
 {
-    [SerializeField] private PlayerInput _playerInput;
     private DemoController _inputActionReference;
+    private const int HpMax = 100;
+    private const int MpMax = 100;
+    private const int StaminaMax = 100;
+    private const int PostureMax = 10;
+    private const int ATK = 10;
+    private const int Speed = 5;
+    
     
     protected override void Awake()
     {
@@ -23,12 +25,14 @@ public class Player : FightUnit
         _inputActionReference.Player.Attack.performed += OnAttack;
         _inputActionReference.Player.Defend.performed += OnActivateDefend;
         _inputActionReference.Player.Defend.canceled += OnDeactivateDefend;
+
+        InitAttribute();
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (!_grounded && _lastVelocityY<=0 && _inputActionReference.Player.Jump.IsPressed())
+        if (!Grounded && LastVelocityY<=0 && _inputActionReference.Player.Jump.IsPressed())
         {
             _rb.gravityScale = HalfGravity;
         }
@@ -36,6 +40,16 @@ public class Player : FightUnit
         {
             _rb.gravityScale = Gravity;
         }
+    }
+
+    public override void InitAttribute()
+    {
+        ASC.AttrSet<AS_Fight>().InitHP(HpMax);
+        ASC.AttrSet<AS_Fight>().InitMP(MpMax);
+        ASC.AttrSet<AS_Fight>().InitSTAMINA(StaminaMax);
+        ASC.AttrSet<AS_Fight>().InitPOSTURE(PostureMax);
+        ASC.AttrSet<AS_Fight>().InitATK(ATK);
+        ASC.AttrSet<AS_Fight>().InitSPEED(Speed);
     }
 
     private void OnActivateMove(InputAction.CallbackContext context)
@@ -68,5 +82,10 @@ public class Player : FightUnit
     private void OnDeactivateDefend(InputAction.CallbackContext context)
     {
         DeactivateDefend();
+    }
+
+    void Dodge()
+    {
+        // TODO
     }
 }
