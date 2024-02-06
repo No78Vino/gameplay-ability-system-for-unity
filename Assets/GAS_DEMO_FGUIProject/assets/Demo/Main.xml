@@ -7,6 +7,7 @@
       <item/>
       <item/>
     </list>
+    <graph id="n17_11ay3" name="n17" xy="201,933" size="1518,150" group="n14_rfg0" type="rect" lineSize="0" lineColor="#ffffffff" fillColor="#4c000000" corner="10"/>
     <text id="n15_rfg0" name="BossName" xy="744,946" size="432,42" group="n14_rfg0" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" strokeColor="#000000" strokeSize="2" text="Boss名"/>
     <component id="n12_rfg0" name="BossHp" src="jair1" fileName="Components/HpBar.xml" xy="356,1001" size="1208,26" group="n14_rfg0">
       <relation target="" sidePair="left-left,top-top"/>
@@ -16,7 +17,8 @@
       <relation target="" sidePair="left-left,top-top"/>
       <ProgressBar value="59" max="100"/>
     </component>
-    <group id="n14_rfg0" name="Boss" xy="356,946" size="1208,125"/>
+    <group id="n14_rfg0" name="Boss" xy="201,933" size="1518,150"/>
+    <graph id="n16_11ay3" name="n16" xy="17,26" size="836,185" group="n11_rfg0" type="rect" lineSize="0" lineColor="#ffffffff" fillColor="#4c000000" corner="10"/>
     <component id="n1_jair" name="Hp" src="jair1" fileName="Components/HpBar.xml" xy="125,43" size="707,26" group="n11_rfg0">
       <relation target="" sidePair="left-left,top-top"/>
       <ProgressBar value="59" max="100"/>
@@ -33,6 +35,6 @@
       <relation target="" sidePair="left-left,top-top"/>
       <ProgressBar value="59" max="100"/>
     </component>
-    <group id="n11_rfg0" name="Player" xy="125,43" size="707,151"/>
+    <group id="n11_rfg0" name="Player" xy="17,26" size="836,185"/>
   </displayList>
 </component>

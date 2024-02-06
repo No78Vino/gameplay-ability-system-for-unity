@@ -68,13 +68,17 @@ namespace GAS.Runtime.Ability
             
             var dodgeSpeed = _dodge.MotionDistance/_dodge.MotionTime;
             var timer = _dodge.MotionTime;
+            var start = _unit.transform.position;
+            var endPos = start + new Vector3(_unit.Renderer.localScale.x, 0, 0) * _dodge.MotionDistance;
             while (timer > 0)
             {
-                _unit.Rb.MovePosition(_unit.transform.position + new Vector3(_unit.Renderer.localScale.x,0,0) * dodgeSpeed * Time.deltaTime);
-                timer -= Time.deltaTime;
+                float t = 1 - timer / _dodge.MotionTime;
+                _unit.Rb.MovePosition(Vector3.Lerp(start, endPos, t));
+                timer -= Time.fixedDeltaTime;
+                timer = Mathf.Max(0, timer);
                 await UniTask.Yield();
             }
-
+            await UniTask.Delay((int)(_dodge.MotionTime * 1000));
             cueTrialSpec.OnRemove();
             await UniTask.Delay((int)(_dodge.EndTime * 1000));
             TryEndAbility();
