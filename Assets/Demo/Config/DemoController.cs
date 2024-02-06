@@ -31,7 +31,7 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""f1507eac-c185-4ec7-901c-466bbc619b39"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -46,18 +46,18 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PlayerFacingLeft"",
+                    ""name"": ""Attack"",
                     ""type"": ""Button"",
-                    ""id"": ""3df840da-90ff-4f56-84ee-9322f0b3b123"",
+                    ""id"": ""79ffe04b-30dd-4807-9359-bcd82ba96223"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PlayerFacingRight"",
+                    ""name"": ""Defend"",
                     ""type"": ""Button"",
-                    ""id"": ""5b0f55a9-319c-451c-acea-b5978df97f4c"",
+                    ""id"": ""b8495c28-7325-49c4-8d17-aa6a16d9e9a2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -66,7 +66,7 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""WASD"",
+                    ""name"": ""AD"",
                     ""id"": ""8beed5ed-5348-4e51-9bf1-7d0ceb4367dd"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -75,28 +75,6 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""9f5e5c31-1588-4367-b32f-de23dd82bed9"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""2345160a-e596-43de-a31d-c6fa44e80d44"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
@@ -133,23 +111,23 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""85e128b4-e179-4167-be7a-34a105926f07"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""id"": ""682139b0-9333-4157-a210-9cf1cef11b30"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PlayerFacingLeft"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a180164a-e31d-459c-bb08-4a8e569a8686"",
-                    ""path"": ""<Keyboard>/d"",
+                    ""id"": ""9e1a96f7-2a8a-49fe-aaee-3d35f99fc2c0"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PlayerFacingRight"",
+                    ""action"": ""Defend"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -162,8 +140,8 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_PlayerFacingLeft = m_Player.FindAction("PlayerFacingLeft", throwIfNotFound: true);
-        m_Player_PlayerFacingRight = m_Player.FindAction("PlayerFacingRight", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_Defend = m_Player.FindAction("Defend", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -227,16 +205,16 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_PlayerFacingLeft;
-    private readonly InputAction m_Player_PlayerFacingRight;
+    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_Defend;
     public struct PlayerActions
     {
         private @DemoController m_Wrapper;
         public PlayerActions(@DemoController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @PlayerFacingLeft => m_Wrapper.m_Player_PlayerFacingLeft;
-        public InputAction @PlayerFacingRight => m_Wrapper.m_Player_PlayerFacingRight;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @Defend => m_Wrapper.m_Player_Defend;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -252,12 +230,12 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @PlayerFacingLeft.started += instance.OnPlayerFacingLeft;
-            @PlayerFacingLeft.performed += instance.OnPlayerFacingLeft;
-            @PlayerFacingLeft.canceled += instance.OnPlayerFacingLeft;
-            @PlayerFacingRight.started += instance.OnPlayerFacingRight;
-            @PlayerFacingRight.performed += instance.OnPlayerFacingRight;
-            @PlayerFacingRight.canceled += instance.OnPlayerFacingRight;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
+            @Defend.started += instance.OnDefend;
+            @Defend.performed += instance.OnDefend;
+            @Defend.canceled += instance.OnDefend;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -268,12 +246,12 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @PlayerFacingLeft.started -= instance.OnPlayerFacingLeft;
-            @PlayerFacingLeft.performed -= instance.OnPlayerFacingLeft;
-            @PlayerFacingLeft.canceled -= instance.OnPlayerFacingLeft;
-            @PlayerFacingRight.started -= instance.OnPlayerFacingRight;
-            @PlayerFacingRight.performed -= instance.OnPlayerFacingRight;
-            @PlayerFacingRight.canceled -= instance.OnPlayerFacingRight;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
+            @Defend.started -= instance.OnDefend;
+            @Defend.performed -= instance.OnDefend;
+            @Defend.canceled -= instance.OnDefend;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -295,7 +273,7 @@ public partial class @DemoController: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnPlayerFacingLeft(InputAction.CallbackContext context);
-        void OnPlayerFacingRight(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnDefend(InputAction.CallbackContext context);
     }
 }

@@ -166,9 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0197102102ace489840b4b19cd2e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerInput: {fileID: 2899910684522074209}
   _animator: {fileID: 681957179147256543}
   _renderer: {fileID: 3182258008151415995}
+  _playerInput: {fileID: 2899910684522074209}
 --- !u!114 &4574284699450854141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,19 +208,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8962994496256881039}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: OnMove
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: f1507eac-c185-4ec7-901c-466bbc619b39
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
@@ -229,12 +217,12 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 3df840da-90ff-4f56-84ee-9322f0b3b123
-    m_ActionName: Player/PlayerFacingLeft[/Keyboard/a]
+    m_ActionId: 79ffe04b-30dd-4807-9359-bcd82ba96223
+    m_ActionName: Player/Attack[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 5b0f55a9-319c-451c-acea-b5978df97f4c
-    m_ActionName: Player/PlayerFacingRight[/Keyboard/d]
+    m_ActionId: b8495c28-7325-49c4-8d17-aa6a16d9e9a2
+    m_ActionName: Player/Defend[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -290,7 +278,7 @@ Rigidbody2D:
   m_Mass: 1.7335001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
