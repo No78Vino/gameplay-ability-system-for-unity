@@ -64,6 +64,9 @@ MonoBehaviour:
   - _id: 15
     _name: Event
     _depth: 0
+  - _id: 34
+    _name: Defending
+    _depth: 1
   - _id: 24
     _name: Dodging
     _depth: 1
@@ -190,6 +193,12 @@ MonoBehaviour:
     _shortName: Event
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: Event.Defending
+    _hashCode: -2001503536
+    _shortName: Defending
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
   - _name: Event.Dodging
     _hashCode: 1531892232
     _shortName: Dodging

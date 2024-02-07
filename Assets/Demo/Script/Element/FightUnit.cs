@@ -22,6 +22,7 @@ public abstract class FightUnit : MonoBehaviour
     protected bool Grounded;
     private float jumpVelocity = 10;
     protected float LastVelocityY;
+    private static readonly int Defending = Animator.StringToHash("Defending");
 
     public AbilitySystemComponent ASC { get; private set; }
 
@@ -57,6 +58,7 @@ public abstract class FightUnit : MonoBehaviour
         _animator.SetFloat(IsInAir, Grounded ? 0 : 1);
         _animator.SetFloat(UpOrDown, 0.5f * (1 - Mathf.Clamp(LastVelocityY, -1, 1)));
         _animator.SetFloat(Moving, IsMoving ? 1 : 0);
+        _animator.SetBool(Defending, ASC.HasTag(GameplayTagSumCollection.Event_Defending));
     }
 
     protected virtual void OnEnable()
@@ -75,6 +77,13 @@ public abstract class FightUnit : MonoBehaviour
     
     public void SetIsGrounded(bool grounded)
     {
+        if (Grounded != grounded)
+        {
+            if(grounded)
+                ASC.RemoveFixedTag(GameplayTagSumCollection.Event_InAir);
+            else
+                ASC.AddFixedTag(GameplayTagSumCollection.Event_InAir);
+        }
         Grounded = grounded;
     }
 
@@ -96,19 +105,17 @@ public abstract class FightUnit : MonoBehaviour
 
     public void Attack()
     {
-        // TODO
+        ASC.TryActivateAbility(AbilityCollection.PlayerAttack_Info.Name);
     }
 
     public void ActivateDefend()
     {
-        // TODO
-        //_asc.TryActivateAbility(AbilityCollection.Defend_Info.Name);
+        ASC.TryActivateAbility(AbilityCollection.PlayerDefend_Info.Name);
     }
 
     public void DeactivateDefend()
     {
-        // TODO
-        //_asc.TryEndAbility(AbilityCollection.Defend_Info.Name);
+        ASC.TryEndAbility(AbilityCollection.PlayerDefend_Info.Name);
     }
 
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using GAS.Cue;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime.Ability
 {
@@ -8,5 +10,11 @@ namespace GAS.Runtime.Ability
         {
             return typeof(Defend);
         }
+        
+        [BoxGroup]
+        [LabelText("防御动画")]
+        [LabelWidth(100)]
+        [AssetSelector]
+        public CuePlayAnimationOfFightUnit cueDefendAnim;
     }
 }

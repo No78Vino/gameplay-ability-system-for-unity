@@ -17,7 +17,13 @@ MonoBehaviour:
   Cost: {fileID: 11400000, guid: 52a367ac5c57adc49aacdbe63680edeb, type: 2}
   Cooldown: {fileID: 11400000, guid: de6c7185a4635214693fecf5008e6b7c, type: 2}
   CooldownTime: 1
-  AssetTag: []
+  AssetTag:
+  - _name: Ability.Dodge
+    _hashCode: 1796722389
+    _shortName: Dodge
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   CancelAbilityTags:
   - _name: Ability.Defend
     _hashCode: 465592122
@@ -71,3 +77,4 @@ MonoBehaviour:
   motionTime: 0.2
   endTime: 0.1
   motionDistance: 6
+  cuePowerForceVFX: {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}

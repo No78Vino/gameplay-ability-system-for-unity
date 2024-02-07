@@ -17,9 +17,20 @@ MonoBehaviour:
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  AssetTag: []
+  AssetTag:
+  - _name: Ability.Attack
+    _hashCode: 115429334
+    _shortName: Attack
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
+  cueAttackAnim: {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
+  DirectDamageEffect: {fileID: 0}
+  DefendedDamageEffect: {fileID: 0}
+  waitTimeForDoDamage: 0.06668
+  waitTimeForEnd: 0.06668

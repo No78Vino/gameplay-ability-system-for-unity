@@ -15,7 +15,7 @@ public class Player : FightUnit
     private const int StaminaMax = 100;
     private const int PostureMax = 10;
     private const int ATK = 10;
-    private const int Speed = 5;
+    private const int Speed = 8;
 
     [SerializeField]private GameplayEffectAsset GEBuffStaminaRecover;
     
@@ -34,6 +34,7 @@ public class Player : FightUnit
         _inputActionReference.Player.Dodge.performed += OnDodge;
 
         InitAttribute();
+        // 添加永久耐力自动恢复Buff
         ASC.ApplyGameplayEffectToSelf(new GameplayEffect(GEBuffStaminaRecover));
     }
 

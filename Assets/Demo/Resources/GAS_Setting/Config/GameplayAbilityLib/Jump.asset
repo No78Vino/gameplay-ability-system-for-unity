@@ -17,7 +17,13 @@ MonoBehaviour:
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  AssetTag: []
+  AssetTag:
+  - _name: Ability.Jump
+    _hashCode: -183664866
+    _shortName: Jump
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTag: []

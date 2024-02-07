@@ -1,11 +1,15 @@
-﻿using GAS.Runtime.Component;
+﻿using GAS.Cue;
+using GAS.Runtime.Component;
+using GAS.Runtime.Cue;
 
 namespace GAS.Runtime.Ability
 {
     public class Defend:AbstractAbility<AADefend>
     {
+        public readonly CuePlayAnimationOfFightUnit cueDefendAnim;
         public Defend(AbilityAsset abilityAsset) : base(abilityAsset)
         {
+            cueDefendAnim = AbilityAsset.cueDefendAnim;
         }
 
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
@@ -16,23 +20,29 @@ namespace GAS.Runtime.Ability
     
     public class DefendSpec: AbilitySpec
     {
+        private Defend _defend;
+        FightUnit _unit;
         public DefendSpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
+            _defend = ability as Defend;
+            _unit = owner.GetComponent<FightUnit>();
         }
 
         public override void ActivateAbility(params object[] args)
         {
-            throw new System.NotImplementedException();
+            var cueDefendAnimSpec =
+                _defend.cueDefendAnim.CreateSpec(new GameplayCueParameters() { sourceAbilitySpec = this });
+            
+            cueDefendAnimSpec.Trigger();
         }
 
         public override void CancelAbility()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void EndAbility()
         {
-            throw new System.NotImplementedException();
+            CancelAbility();
         }
     }
 }

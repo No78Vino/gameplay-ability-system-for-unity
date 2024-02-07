@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Player_StaminaRecover_Buff
   m_EditorClassIdentifier: 
   Name: "\u73A9\u5BB6\u7684\u8010\u529B\u6062\u590DBuff"
-  Description: "\u6BCF1\u79D2\u6062\u590D2\u70B9\u8010\u529B"
+  Description: "\u6BCF0.25\u79D2\u6062\u590D1\u70B9\u8010\u529B"
   DurationPolicy: 2
   Duration: 0
-  Period: 1
+  Period: 0.25
   PeriodExecution: {fileID: 11400000, guid: 5e1707ae027148c4899501f7113153d0, type: 2}
   GrantedAbilities: []
   Modifiers: []

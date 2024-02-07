@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Player_StaminaRecover
   m_EditorClassIdentifier: 
   Name: "\u73A9\u5BB6\u7684\u8010\u529B\u6062\u590D"
-  Description: "\u6062\u590D2\u70B9\u8010\u529B"
+  Description: "\u6062\u590D1\u70B9\u8010\u529B"
   DurationPolicy: 1
   Duration: 0
   Period: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
   - AttributeName: AS_Fight.STAMINA
     AttributeSetName: AS_Fight
     AttributeShortName: STAMINA
-    ModiferMagnitude: 2
+    ModiferMagnitude: 1
     Operation: 0
     MMC: {fileID: 11400000, guid: 225023c90079b7f4287ec4604d8d8039, type: 2}
   AssetTags: []

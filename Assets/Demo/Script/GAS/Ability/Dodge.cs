@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using Demo.Script.GAS.Cue;
+using GAS.Cue;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
 using UnityEngine;
@@ -14,6 +14,7 @@ namespace GAS.Runtime.Ability
         public readonly float MotionTime;
         public readonly float EndTime;
         public readonly float MotionDistance;
+        public readonly CueOneShotVFX CuePowerForceVFX;
         
         public Dodge(AbilityAsset abilityAsset) : base(abilityAsset)
         {
@@ -23,6 +24,7 @@ namespace GAS.Runtime.Ability
             EndTime = AbilityAsset.endTime;
             MotionDistance = AbilityAsset.motionDistance;
             CueTrail = AbilityAsset.cueTrail;
+            CuePowerForceVFX = AbilityAsset.cuePowerForceVFX;
         }
 
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
@@ -61,6 +63,9 @@ namespace GAS.Runtime.Ability
             DoCost();
             var cueSpec = _dodge.CueDodge.CreateSpec(new GameplayCueParameters { sourceAbilitySpec = this });
             cueSpec.Trigger();
+            
+            var cuePowerForce = _dodge.CuePowerForceVFX.CreateSpec(new GameplayCueParameters { sourceAbilitySpec = this });
+            cuePowerForce.Trigger();
             
             var cueTrialSpec = _dodge.CueTrail.CreateSpec(new GameplayCueParameters { sourceAbilitySpec = this });
             cueTrialSpec.OnAdd();

@@ -1,7 +1,7 @@
 ﻿using GAS.Runtime.Cue;
 using UnityEngine;
 
-namespace Demo.Script.GAS.Cue
+namespace GAS.Cue
 {
     public class CuePlayAnimationOfFightUnit: GameplayCueInstant
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Demo.Script.GAS.Cue;
+using GAS.Cue;
 using GAS.Runtime.Cue;
 using Sirenix.OdinInspector;
 
@@ -46,5 +46,11 @@ namespace GAS.Runtime.Ability
         [LabelText("移动距离")]
         [LabelWidth(100)]
         public float motionDistance;
+        
+        [BoxGroup]
+        [LabelText("闪避额外特效")]
+        [LabelWidth(100)]
+        [AssetSelector]
+        public CueOneShotVFX cuePowerForceVFX;
     }
 }

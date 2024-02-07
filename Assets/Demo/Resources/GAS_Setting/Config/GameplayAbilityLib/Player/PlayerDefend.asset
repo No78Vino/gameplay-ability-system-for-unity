@@ -13,13 +13,37 @@ MonoBehaviour:
   m_Name: PlayerDefend
   m_EditorClassIdentifier: 
   UniqueName: PlayerDefend
-  Description: 
+  Description: "\u73A9\u5BB6\u9632\u5FA1"
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  AssetTag: []
+  AssetTag:
+  - _name: Ability.Defend
+    _hashCode: 465592122
+    _shortName: Defend
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   CancelAbilityTags: []
-  BlockAbilityTags: []
-  ActivationOwnedTag: []
+  BlockAbilityTags:
+  - _name: Ability
+    _hashCode: -523153736
+    _shortName: Ability
+    _ancestorHashCodes: 
+    _ancestorNames: []
+  ActivationOwnedTag:
+  - _name: Event.Defending
+    _hashCode: -2001503536
+    _shortName: Defending
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
   ActivationRequiredTags: []
-  ActivationBlockedTags: []
+  ActivationBlockedTags:
+  - _name: Event.InAir
+    _hashCode: -487023025
+    _shortName: InAir
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
+  cueDefendAnim: {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
