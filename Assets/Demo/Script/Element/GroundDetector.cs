@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class GroundDetector : MonoBehaviour
 {
-    [SerializeField] private Player _element;
+    [SerializeField] private FightUnit _unit;
     private BoxCollider2D _box;
     private static int GroundLayer;
     
@@ -20,7 +21,7 @@ public class GroundDetector : MonoBehaviour
     private void FixedUpdate()
     {
         bool grounded = IsGrounded();
-        _element.SetIsGrounded(grounded);
+        _unit.SetIsGrounded(grounded);
     }
 
     bool IsGrounded()

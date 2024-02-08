@@ -17,5 +17,13 @@ namespace GAS.General
         public static long Timestamp() => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + _deltaTimeWithServer;
 
         public static long TimestampSeconds() => Timestamp() / 1000;
+
+        
+        private static int _frameCount;
+        public static int FrameCount => _frameCount;
+
+
+        private static long _startTimestamp;
+        public static float Time;
     }
 }

@@ -45,7 +45,6 @@ namespace GAS.Runtime.Ability
 
         public override void CancelAbility()
         {
-            
         }
 
         public override void EndAbility()

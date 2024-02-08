@@ -57,5 +57,15 @@ namespace Demo.Script.UI
         {
             playerHp.Value = value;
         }
+        
+        public void UpdateBossPosture(float value)
+        {
+            BossPosture.Value = value;
+        }
+        
+        public void UpdateBossHp(float value)
+        {
+            BossHp.Value = value;
+        }
     }
 }

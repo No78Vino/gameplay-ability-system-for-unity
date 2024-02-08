@@ -1,5 +1,4 @@
-﻿using GAS.Runtime.Ability;
-using GAS.Runtime.Attribute;
+﻿using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
@@ -12,17 +11,14 @@ public abstract class FightUnit : MonoBehaviour
     private static readonly int IsInAir = Animator.StringToHash("IsInAir");
     private static readonly int UpOrDown = Animator.StringToHash("UpOrDown");
     private static readonly int Moving = Animator.StringToHash("Moving");
+    private static readonly int Defending = Animator.StringToHash("Defending");
     [SerializeField] protected Animator _animator;
     [SerializeField] protected Transform _renderer;
 
     protected Rigidbody2D _rb;
-
     private int _velocityX;
-    
     protected bool Grounded;
-    private float jumpVelocity = 10;
     protected float LastVelocityY;
-    private static readonly int Defending = Animator.StringToHash("Defending");
 
     public AbilitySystemComponent ASC { get; private set; }
 
@@ -32,6 +28,7 @@ public abstract class FightUnit : MonoBehaviour
     private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
     public Animator Animator => _animator;
     private bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
+
 
     protected virtual void Awake()
     {
@@ -51,6 +48,7 @@ public abstract class FightUnit : MonoBehaviour
                 velocity.x = _velocityX * ASC.AttrSet<AS_Fight>().SPEED.CurrentValue;
                 _rb.velocity = velocity;
             }
+
             LastVelocityY = _rb.velocity.y;
         }
 
@@ -71,62 +69,74 @@ public abstract class FightUnit : MonoBehaviour
         ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChange);
     }
 
-    public virtual void InitAttribute()
-    {
-    }
-    
+    public abstract void InitAttribute();
+
     public void SetIsGrounded(bool grounded)
     {
         if (Grounded != grounded)
         {
-            if(grounded)
+            if (grounded)
                 ASC.RemoveFixedTag(GameplayTagSumCollection.Event_InAir);
             else
                 ASC.AddFixedTag(GameplayTagSumCollection.Event_InAir);
         }
+
         Grounded = grounded;
     }
 
-    public void ActivateMove(float direction)
+    protected void ActivateMove(float direction)
     {
-        ASC.TryActivateAbility(AbilityCollection.Move_Info.Name, direction);
+        ASC.TryActivateAbility(MoveName, direction);
     }
 
-    public void DeactivateMove()
+    protected void DeactivateMove()
     {
-        ASC.TryEndAbility(AbilityCollection.Move_Info.Name);
+        ASC.TryEndAbility(MoveName);
     }
 
-    public void Jump()
+    protected void Jump()
     {
         if (Grounded || DoubleJumpValid)
-            ASC.TryActivateAbility(AbilityCollection.Jump_Info.Name, _rb);
+            ASC.TryActivateAbility(JumpName, _rb);
     }
 
-    public void Attack()
+    protected void Attack()
     {
-        ASC.TryActivateAbility(AbilityCollection.PlayerAttack_Info.Name);
+        ASC.TryActivateAbility(AttackName);
     }
 
-    public void ActivateDefend()
+    protected void ActivateDefend()
     {
-        ASC.TryActivateAbility(AbilityCollection.PlayerDefend_Info.Name);
+        ASC.TryActivateAbility(DefendName);
     }
 
-    public void DeactivateDefend()
+    protected void DeactivateDefend()
     {
-        ASC.TryEndAbility(AbilityCollection.PlayerDefend_Info.Name);
+        ASC.TryEndAbility(DefendName);
     }
 
+    protected void Dodge()
+    {
+        ASC.TryActivateAbility(DodgeName);
+    }
 
-    
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
     }
-    
+
     public void SetVelocityX(int velocityX)
     {
         _velocityX = velocityX;
     }
+
+    #region AbilityName
+
+    protected abstract string MoveName { get; }
+    protected abstract string JumpName { get; }
+    protected abstract string AttackName { get; }
+    protected abstract string DefendName { get; }
+    protected abstract string DodgeName { get; }
+
+    #endregion
 }

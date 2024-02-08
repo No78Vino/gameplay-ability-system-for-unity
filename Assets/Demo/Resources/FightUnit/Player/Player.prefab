@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 2899910684522074209}
   - component: {fileID: 7380934428422306499}
   - component: {fileID: 177387264360248764}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -736,6 +736,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 694419890840365810}
     m_Modifications:
+    - target: {fileID: 5160606485342552588, guid: 0f9d1c0e48b69aa4cb8e0e4bbb2f7b05, type: 3}
+      propertyPath: _unit
+      value: 
+      objectReference: {fileID: 8962994496256881039}
     - target: {fileID: 5160606485342552588, guid: 0f9d1c0e48b69aa4cb8e0e4bbb2f7b05, type: 3}
       propertyPath: _element
       value: 

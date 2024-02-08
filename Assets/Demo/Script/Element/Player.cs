@@ -9,20 +9,26 @@ using UnityEngine.InputSystem;
 
 public class Player : FightUnit
 {
-    private DemoController _inputActionReference;
     private const int HpMax = 100;
     private const int MpMax = 100;
     private const int StaminaMax = 100;
-    private const int PostureMax = 10;
+    private const int PostureMax = 100;
     private const int ATK = 10;
     private const int Speed = 8;
 
-    [SerializeField]private GameplayEffectAsset GEBuffStaminaRecover;
-    
+    [SerializeField] private GameplayEffectAsset GEBuffStaminaRecover;
+    private DemoController _inputActionReference;
+
+    protected override string MoveName => AbilityCollection.Move_Info.Name;
+    protected override string JumpName => AbilityCollection.Jump_Info.Name;
+    protected override string AttackName => AbilityCollection.PlayerAttack_Info.Name;
+    protected override string DefendName => AbilityCollection.PlayerDefend_Info.Name;
+    protected override string DodgeName => AbilityCollection.PlayerDodge_Info.Name;
+
     protected override void Awake()
     {
         base.Awake();
-        
+
         _inputActionReference = new DemoController();
         _inputActionReference.Enable();
         _inputActionReference.Player.Move.performed += OnActivateMove;
@@ -36,6 +42,19 @@ public class Player : FightUnit
         InitAttribute();
         // 添加永久耐力自动恢复Buff
         ASC.ApplyGameplayEffectToSelf(new GameplayEffect(GEBuffStaminaRecover));
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if (_inputActionReference.Player.Move.IsPressed())
+            ActivateMove(_inputActionReference.Player.Move.ReadValue<Vector2>().x);
+
+        if (!Grounded && LastVelocityY <= 0 && _inputActionReference.Player.Jump.IsPressed())
+            _rb.gravityScale = HalfGravity;
+        else
+            _rb.gravityScale = Gravity;
     }
 
     protected override void OnEnable()
@@ -53,28 +72,9 @@ public class Player : FightUnit
         base.OnDisable();
         ASC.AttrSet<AS_Fight>().STAMINA.UnregisterPostBaseValueChange(OnStaminaChangePost);
         ASC.AttrSet<AS_Fight>().STAMINA.UnregisterPreBaseValueChange(OnStaminaChangePre);
-        
+
         ASC.AttrSet<AS_Fight>().HP.UnregisterPreBaseValueChange(OnHpChangePre);
         ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChangePost);
-    }
-    
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        
-        if (_inputActionReference.Player.Move.IsPressed())
-        {
-            ActivateMove(_inputActionReference.Player.Move.ReadValue<Vector2>().x);
-        }
-        
-        if (!Grounded && LastVelocityY<=0 && _inputActionReference.Player.Jump.IsPressed())
-        {
-            _rb.gravityScale = HalfGravity;
-        }
-        else
-        {
-            _rb.gravityScale = Gravity;
-        }
     }
 
     public override void InitAttribute()
@@ -98,22 +98,22 @@ public class Player : FightUnit
     {
         DeactivateMove();
     }
-    
+
     private void OnJump(InputAction.CallbackContext context)
     {
         Jump();
     }
-    
+
     private void OnAttack(InputAction.CallbackContext context)
     {
         Attack();
     }
-    
+
     private void OnActivateDefend(InputAction.CallbackContext context)
     {
         ActivateDefend();
     }
-    
+
     private void OnDeactivateDefend(InputAction.CallbackContext context)
     {
         DeactivateDefend();
@@ -124,27 +124,22 @@ public class Player : FightUnit
         Dodge();
     }
 
-    void Dodge()
-    {
-        ASC.TryActivateAbility(AbilityCollection.PlayerDodge_Info.Name);
-    }
-    
     private float OnStaminaChangePre(AttributeBase attr, float newValue)
     {
-        return  Mathf.Clamp(newValue,0,StaminaMax);
+        return Mathf.Clamp(newValue, 0, StaminaMax);
     }
-    
+
     private void OnStaminaChangePost(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"Stamina changed from {oldValue} to {newValue}");
         XUI.M.VM<MainUIVM>().UpdateStamina(newValue);
     }
-    
+
     private float OnHpChangePre(AttributeBase attr, float newValue)
     {
-        return  Mathf.Clamp(newValue,0,HpMax);
+        return Mathf.Clamp(newValue, 0, HpMax);
     }
-    
+
     private void OnHpChangePost(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");

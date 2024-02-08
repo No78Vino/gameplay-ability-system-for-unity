@@ -24,7 +24,13 @@ MonoBehaviour:
     _ancestorHashCodes: b84ed1e0
     _ancestorNames:
     - Ability
-  CancelAbilityTags: []
+  CancelAbilityTags:
+  - _name: Ability.Move
+    _hashCode: -1903949459
+    _shortName: Move
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   BlockAbilityTags:
   - _name: Ability
     _hashCode: -523153736

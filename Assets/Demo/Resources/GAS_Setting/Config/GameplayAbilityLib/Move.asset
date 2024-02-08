@@ -34,4 +34,10 @@ MonoBehaviour:
     _ancestorNames:
     - Event
   ActivationRequiredTags: []
-  ActivationBlockedTags: []
+  ActivationBlockedTags:
+  - _name: Event.Defending
+    _hashCode: -2001503536
+    _shortName: Defending
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
