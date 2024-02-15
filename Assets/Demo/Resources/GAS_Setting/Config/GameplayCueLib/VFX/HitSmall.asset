@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1ab3d7fe6d43578dc7ce89968d115c, type: 3}
+  m_Name: HitSmall
+  m_EditorClassIdentifier: 
+  applyTarget: 0
+  vfxPrefab: {fileID: 6193925533486064990, guid: 0c9e0c406fc88fd4fbc044ef9d0f7824, type: 3}
+  isAttachToOwner: 0
+  offset: {x: 0, y: 2, z: 0}
+  rotation: 0
+  duration: 0.5

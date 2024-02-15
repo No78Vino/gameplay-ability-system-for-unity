@@ -4,6 +4,8 @@ using GAS.Cue;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
+using GAS.Runtime.Tags;
+using UnityEngine;
 
 namespace GAS.Runtime.Ability
 {
@@ -32,10 +34,12 @@ namespace GAS.Runtime.Ability
     
     public class AttackSpec: AbilitySpec
     {
+        private FightUnit _unit;
         private Attack _attack;
         public AttackSpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
             _attack = ability as Attack;
+            _unit = owner.GetComponent<FightUnit>();
         }
 
         public override void ActivateAbility(params object[] args)
@@ -58,8 +62,23 @@ namespace GAS.Runtime.Ability
                 _attack.cueAttackAnim.CreateSpec(new GameplayCueParameters() { sourceAbilitySpec = this });
             cueAttackAnimSpec.Trigger();
             await UniTask.Delay(TimeSpan.FromSeconds(_attack.waitTimeForDoDamage));
-            // TODO
-            // DO DAMAGE
+
+            var box = _unit.BoxAttack00;
+            var targets =
+                Physics2D.OverlapBoxAll(box.Center, box.Size, 0, LayerMask.GetMask("FightUnit"));
+
+            foreach (var target in targets)
+            {
+                var targetUnit = target.GetComponent<FightUnit>();
+                if (targetUnit)
+                {
+                    var effectAsset = _unit.ASC.HasTag(GameplayTagSumCollection.Event_Defending)
+                        ? _attack.DefendedDamageEffect
+                        : _attack.DirectDamageEffect;
+                    var effect = new GameplayEffect(effectAsset);
+                    Owner.ApplyGameplayEffectTo(effect, targetUnit.ASC);
+                }
+            }
             await UniTask.Delay(TimeSpan.FromSeconds(_attack.waitTimeForEnd));
             TryEndAbility();
         }

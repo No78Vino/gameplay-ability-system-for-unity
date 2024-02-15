@@ -16209,6 +16209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 1824567659}
   _renderer: {fileID: 521018600}
+  _boxAttack00: {fileID: 0}
   GEBuffStaminaRecover: {fileID: 11400000, guid: c4184d08ecb21db4282674b16419f7c8, type: 2}
 --- !u!1 &738742195
 GameObject:
@@ -16420,7 +16421,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5169009690508895175, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7380934428422306499, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_Enabled
@@ -16493,7 +16494,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5169009690508895175, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9006442441603880742, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
       propertyPath: _unit
@@ -22183,6 +22184,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4574284699450854141, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
+      propertyPath: preset
+      value: 
+      objectReference: {fileID: 11400000, guid: 03c52d7d1ce16564aa91bfa85d913822, type: 2}
     - target: {fileID: 5169009690508895175, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
       propertyPath: m_Name
       value: BossBladeFang

@@ -30,7 +30,7 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   cueAttackAnim: {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
-  DirectDamageEffect: {fileID: 0}
+  DirectDamageEffect: {fileID: 11400000, guid: c5e31576ebac04c419ab8665dda77486, type: 2}
   DefendedDamageEffect: {fileID: 0}
   waitTimeForDoDamage: 0.06668
   waitTimeForEnd: 0.06668

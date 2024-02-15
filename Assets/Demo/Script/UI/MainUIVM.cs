@@ -1,4 +1,5 @@
-﻿using GAS.General;
+﻿using Demo.Script.Element;
+using GAS.General;
 using Loxodon.Framework.Extension;
 
 namespace Demo.Script.UI
@@ -27,20 +28,20 @@ namespace Demo.Script.UI
 
         public MainUIVM()
         {
-            playerHpMax.Value = 100;
-            playerHp.Value = 100;
-            playerMpMax.Value = 100;
-            playerMp.Value = 100;
+            playerHpMax.Value = Player.HpMax;
+            playerHp.Value = Player.HpMax;
+            playerMpMax.Value = Player.MpMax;
+            playerMp.Value = Player.MpMax;
             playerStaminaMax.Value = 100;
             playerStamina.Value = 100;
-            playerPostureMax.Value = 100;
-            playerPosture.Value = 100;
+            playerPostureMax.Value = Player.PostureMax;
+            playerPosture.Value = Player.PostureMax;
             
             BossName.Value = "【Boss】爪刃";
-            BossHpMax.Value = 100;
-            BossHp.Value = 100;
-            BossPostureMax.Value = 100;
-            BossPosture.Value = 100;
+            BossHpMax.Value = BossBladeFang.HpMax;
+            BossHp.Value = BossBladeFang.HpMax;
+            BossPostureMax.Value = BossBladeFang.PostureMax;
+            BossPosture.Value = BossBladeFang.PostureMax;
         }
         
         public void UpdateStamina(float value)

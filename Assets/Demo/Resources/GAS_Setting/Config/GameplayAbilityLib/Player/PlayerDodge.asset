@@ -74,7 +74,7 @@ MonoBehaviour:
   cueDodge: {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
   cueTrail: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
   prepareTime: 0.05
-  motionTime: 0.2
-  endTime: 0.1
+  motionTime: 0.1
+  endTime: 0.05
   motionDistance: 6
   cuePowerForceVFX: {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}

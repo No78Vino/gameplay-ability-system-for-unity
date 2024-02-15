@@ -9,10 +9,10 @@ namespace Demo.Script.Element
 {
     public class BossBladeFang:FightUnit
     {
-        private const int HpMax = 300;
-        private const int PostureMax = 100;
-        private const int ATK = 20;
-        private const int Speed = 12;
+        public const int HpMax = 300;
+        public const int PostureMax = 100;
+        public const int ATK = 20;
+        public const int Speed = 12;
 
         protected override string MoveName => AbilityCollection.Move_Info.Name;
         protected override string JumpName => AbilityCollection.Jump_Info.Name;

@@ -9,12 +9,12 @@ using UnityEngine.InputSystem;
 
 public class Player : FightUnit
 {
-    private const int HpMax = 100;
-    private const int MpMax = 100;
-    private const int StaminaMax = 100;
-    private const int PostureMax = 100;
-    private const int ATK = 10;
-    private const int Speed = 8;
+    public const int HpMax = 100;
+    public const int MpMax = 100;
+    public const int StaminaMax = 100;
+    public const int PostureMax = 100;
+    public const int ATK = 10;
+    public const int Speed = 8;
 
     [SerializeField] private GameplayEffectAsset GEBuffStaminaRecover;
     private DemoController _inputActionReference;

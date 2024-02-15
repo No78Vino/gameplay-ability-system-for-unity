@@ -1,4 +1,5 @@
-﻿using GAS.Runtime.Attribute;
+﻿using Demo.Script.Fight;
+using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
@@ -14,7 +15,8 @@ public abstract class FightUnit : MonoBehaviour
     private static readonly int Defending = Animator.StringToHash("Defending");
     [SerializeField] protected Animator _animator;
     [SerializeField] protected Transform _renderer;
-
+    [SerializeField] protected EffectBoundingBox _boxAttack00;
+    
     protected Rigidbody2D _rb;
     private int _velocityX;
     protected bool Grounded;
@@ -24,6 +26,7 @@ public abstract class FightUnit : MonoBehaviour
 
     public Transform Renderer => _renderer;
     public Rigidbody2D Rb => _rb;
+    public EffectBoundingBox BoxAttack00 => _boxAttack00; 
     public float VelocityX => _velocityX;
     private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
     public Animator Animator => _animator;
