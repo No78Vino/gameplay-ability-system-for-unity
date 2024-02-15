@@ -37,4 +37,10 @@
     </component>
     <group id="n11_rfg0" name="Player" xy="17,26" size="836,185"/>
   </displayList>
+  <transition name="shakeSmall">
+    <item time="0" type="Shake" value="3,0.7"/>
+  </transition>
+  <transition name="shakeBig">
+    <item time="0" type="Shake" value="6,0.75"/>
+  </transition>
 </component>

@@ -16,17 +16,20 @@ public abstract class FightUnit : MonoBehaviour
     [SerializeField] protected Animator _animator;
     [SerializeField] protected Transform _renderer;
     [SerializeField] protected EffectBoundingBox _boxAttack00;
+    [SerializeField] protected BoxCollider2D defendArea;
     
     protected Rigidbody2D _rb;
     private int _velocityX;
     protected bool Grounded;
     protected float LastVelocityY;
-
+    public FightUnit target { get; protected set; }
+    
     public AbilitySystemComponent ASC { get; private set; }
 
     public Transform Renderer => _renderer;
     public Rigidbody2D Rb => _rb;
-    public EffectBoundingBox BoxAttack00 => _boxAttack00; 
+    public EffectBoundingBox BoxAttack00 => _boxAttack00;
+    public BoxCollider2D DefendArea => defendArea;
     public float VelocityX => _velocityX;
     private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
     public Animator Animator => _animator;
@@ -87,38 +90,38 @@ public abstract class FightUnit : MonoBehaviour
         Grounded = grounded;
     }
 
-    protected void ActivateMove(float direction)
+    public void ActivateMove(float direction)
     {
         ASC.TryActivateAbility(MoveName, direction);
     }
 
-    protected void DeactivateMove()
+    public void DeactivateMove()
     {
         ASC.TryEndAbility(MoveName);
     }
 
-    protected void Jump()
+    public void Jump()
     {
         if (Grounded || DoubleJumpValid)
             ASC.TryActivateAbility(JumpName, _rb);
     }
 
-    protected void Attack()
+    public bool Attack()
     {
-        ASC.TryActivateAbility(AttackName);
+        return ASC.TryActivateAbility(AttackName);
     }
 
-    protected void ActivateDefend()
+    public void ActivateDefend()
     {
         ASC.TryActivateAbility(DefendName);
     }
 
-    protected void DeactivateDefend()
+    public void DeactivateDefend()
     {
         ASC.TryEndAbility(DefendName);
     }
 
-    protected void Dodge()
+    public void Dodge()
     {
         ASC.TryActivateAbility(DodgeName);
     }
@@ -133,6 +136,16 @@ public abstract class FightUnit : MonoBehaviour
         _velocityX = velocityX;
     }
 
+    public virtual bool CatchTarget()
+    {
+        if (target == null)
+            return false;
+
+        var deltaVector3 = target.transform.position - transform.position;
+        float distance = deltaVector3.magnitude;
+        return distance < 3;
+    }
+    
     #region AbilityName
 
     protected abstract string MoveName { get; }

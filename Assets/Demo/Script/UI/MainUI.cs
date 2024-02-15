@@ -51,6 +51,16 @@ namespace Demo.Script.UI
         {
             base.Msg_Common(sender, args);
             var msg = args.Context.ToString();
+            if (msg =="shakeSmall")
+            {
+                var t = contentPane.GetTransition("shakeSmall");
+                t.Play();
+            }
+            else if (msg == "shakeBig")
+            {
+                var t = contentPane.GetTransition("shakeBig");
+                t.Play();
+            }
         }
     }
 }

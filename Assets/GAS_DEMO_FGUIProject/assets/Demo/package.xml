@@ -10,5 +10,5 @@
     <component id="rfg08" name="ControllerKey.xml" path="/Components/" exported="true"/>
     <component id="rfg09" name="ButtonA.xml" path="/Components/" exported="true"/>
   </resources>
-  <publish name="" path="C:\gameplay-ability-system-for-unity\Assets\Demo\Resources\FairyGUI\{publish_file_name}" packageCount="2"/>
+  <publish name="" path="F:\MyRepo\gameplay-ability-system-for-unity\Assets\Demo\Resources\FairyGUI\{publish_file_name}" packageCount="2"/>
 </packageDescription>

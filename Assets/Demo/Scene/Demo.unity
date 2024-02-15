@@ -16210,6 +16210,7 @@ MonoBehaviour:
   _animator: {fileID: 1824567659}
   _renderer: {fileID: 521018600}
   _boxAttack00: {fileID: 0}
+  defendArea: {fileID: 0}
   GEBuffStaminaRecover: {fileID: 11400000, guid: c4184d08ecb21db4282674b16419f7c8, type: 2}
 --- !u!1 &738742195
 GameObject:
@@ -16488,6 +16489,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3109675073564165084, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.unityObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5169009690508895175, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
       propertyPath: m_Name
       value: BossBladeFangTest
@@ -16512,6 +16517,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 611369797}
   m_SourcePrefab: {fileID: 100100000, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
+--- !u!114 &1148549096 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8962994496256881039, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
+  m_PrefabInstance: {fileID: 762316555}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0197102102ace489840b4b19cd2e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1163709632
 GameObject:
   m_ObjectHideFlags: 0
@@ -22184,6 +22200,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1795986099027051275, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1148549096}
     - target: {fileID: 4574284699450854141, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
       propertyPath: preset
       value: 

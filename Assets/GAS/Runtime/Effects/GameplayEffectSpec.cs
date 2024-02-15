@@ -4,7 +4,7 @@ using GAS.General;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Tags;
-using Unity.Mathematics;
+using UnityEngine;
 
 namespace GAS.Runtime.Effects
 {
@@ -64,7 +64,7 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Infinite)
                 return -1;
 
-            return math.max(0, Duration - (GASTimer.Timestamp() - ActivationTime) / 1000f);
+            return Mathf.Max(0, Duration - (GASTimer.Timestamp() - ActivationTime) / 1000f);
         }
 
         public void SetLevel(float level)

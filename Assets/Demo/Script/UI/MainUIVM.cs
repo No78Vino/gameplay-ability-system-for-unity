@@ -68,5 +68,13 @@ namespace Demo.Script.UI
         {
             BossHp.Value = value;
         }
+        
+        public void UIShake(bool bigOrSmall)
+        {
+            if (bigOrSmall)
+                transitionRequest.Raise("shakeBig");
+            else
+                transitionRequest.Raise("shakeSmall");
+        }
     }
 }

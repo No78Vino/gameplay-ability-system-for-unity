@@ -1,0 +1,17 @@
+{
+    "name": "com.exhard.exgas.runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6c99ff64c0c0f1e449657448dcdd2487",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

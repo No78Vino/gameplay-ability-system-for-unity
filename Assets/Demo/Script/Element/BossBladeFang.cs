@@ -19,11 +19,14 @@ namespace Demo.Script.Element
         protected override string AttackName => AbilityCollection.PlayerAttack_Info.Name;
         protected override string DefendName => AbilityCollection.PlayerDefend_Info.Name;
         protected override string DodgeName => AbilityCollection.PlayerDodge_Info.Name;
+
+        [SerializeField] private Player player;
         
         protected override void Awake()
         {
             base.Awake();
             InitAttribute();
+            target = player;
         }
 
         protected override void OnEnable()
@@ -74,6 +77,16 @@ namespace Demo.Script.Element
         {
             Debug.Log($"Boss HP changed from {oldValue} to {newValue}");
             XUI.M.VM<MainUIVM>().UpdateBossHp(newValue);
+        }
+
+        public override bool CatchTarget()
+        {
+            if (target == null)
+                return false;
+
+            var deltaVector3 = target.transform.position - transform.position;
+            float distance = deltaVector3.magnitude;
+            return distance < 6;
         }
     }
 }

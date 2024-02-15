@@ -6,7 +6,7 @@ namespace GAS.Runtime.Ability
 {
     public abstract class AbilitySpec
     {
-        private object[] _abilityArguments;
+        protected object[] _abilityArguments;
 
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
@@ -99,9 +99,8 @@ namespace GAS.Runtime.Ability
 
         public virtual bool TryActivateAbility(params object[] args)
         {
-            if (!CanActivate()) return false;
-
             _abilityArguments = args;
+            if (!CanActivate()) return false;
             IsActive = true;
             ActiveCount++;
 
