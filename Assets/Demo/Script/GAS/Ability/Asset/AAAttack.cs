@@ -31,6 +31,12 @@ namespace GAS.Runtime.Ability
         public GameplayEffectAsset DefendedDamageEffect;
         
         [BoxGroup]
+        [LabelText("被完美格挡效果")]
+        [LabelWidth(100)]
+        [AssetSelector]
+        public GameplayEffectAsset PerfectDefendEffect;
+        
+        [BoxGroup]
         [LabelText("等待攻击生效时间")]
         [LabelWidth(100)]
         [Unit(Units.Second)]

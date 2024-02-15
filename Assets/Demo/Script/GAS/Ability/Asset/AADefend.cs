@@ -1,5 +1,6 @@
 ﻿using System;
 using GAS.Cue;
+using GAS.Runtime.Effects;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime.Ability
@@ -16,5 +17,11 @@ namespace GAS.Runtime.Ability
         [LabelWidth(100)]
         [AssetSelector]
         public CuePlayAnimationOfFightUnit cueDefendAnim;
+        
+        [BoxGroup]
+        [LabelText("完美防御效果")]
+        [LabelWidth(100)]
+        [AssetSelector]
+        public GameplayEffectAsset PerfectDefendEffect;
     }
 }

@@ -23,6 +23,7 @@ public static class GameplayTagSumCollection
     public static GameplayTag State_Debuff_Stun { get;} = new GameplayTag("State.Debuff.Stun");
     public static GameplayTag State_Debuff_LoseBalance { get;} = new GameplayTag("State.Debuff.LoseBalance");
     public static GameplayTag Event { get;} = new GameplayTag("Event");
+    public static GameplayTag Event_PerfectDefending { get;} = new GameplayTag("Event.PerfectDefending");
     public static GameplayTag Event_Defending { get;} = new GameplayTag("Event.Defending");
     public static GameplayTag Event_Dodging { get;} = new GameplayTag("Event.Dodging");
     public static GameplayTag Event_InAir { get;} = new GameplayTag("Event.InAir");
@@ -53,6 +54,7 @@ public static class GameplayTagSumCollection
          ["State.Debuff.Stun"] = State_Debuff_Stun,
          ["State.Debuff.LoseBalance"] = State_Debuff_LoseBalance,
          ["Event"] = Event,
+         ["Event.PerfectDefending"] = Event_PerfectDefending,
          ["Event.Defending"] = Event_Defending,
          ["Event.Dodging"] = Event_Dodging,
          ["Event.InAir"] = Event_InAir,

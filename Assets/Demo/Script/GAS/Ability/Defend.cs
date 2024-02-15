@@ -1,15 +1,18 @@
 ﻿using GAS.Cue;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
+using GAS.Runtime.Effects;
 
 namespace GAS.Runtime.Ability
 {
     public class Defend:AbstractAbility<AADefend>
     {
         public readonly CuePlayAnimationOfFightUnit cueDefendAnim;
+        public readonly GameplayEffectAsset PerfectDefendEffect;
         public Defend(AbilityAsset abilityAsset) : base(abilityAsset)
         {
             cueDefendAnim = AbilityAsset.cueDefendAnim;
+            PerfectDefendEffect = AbilityAsset.PerfectDefendEffect;
         }
 
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
@@ -34,6 +37,8 @@ namespace GAS.Runtime.Ability
                 _defend.cueDefendAnim.CreateSpec(new GameplayCueParameters() { sourceAbilitySpec = this });
             
             cueDefendAnimSpec.Trigger();
+            
+            Owner.ApplyGameplayEffectToSelf(new GameplayEffect(_defend.PerfectDefendEffect));
         }
 
         public override void CancelAbility()

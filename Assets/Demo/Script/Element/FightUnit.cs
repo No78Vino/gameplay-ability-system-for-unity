@@ -2,6 +2,7 @@
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
+using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public abstract class FightUnit : MonoBehaviour
     [SerializeField] protected Transform _renderer;
     [SerializeField] protected EffectBoundingBox _boxAttack00;
     [SerializeField] protected BoxCollider2D defendArea;
-    
+    [SerializeField] protected GameplayEffectAsset gePostureReductionBuff;
     protected Rigidbody2D _rb;
     private int _velocityX;
     protected bool Grounded;
@@ -42,6 +43,8 @@ public abstract class FightUnit : MonoBehaviour
         _rb.gravityScale = Gravity;
         ASC = GetComponent<AbilitySystemComponent>();
         ASC.InitWithPreset(1);
+
+        ASC.ApplyGameplayEffectToSelf(new GameplayEffect(gePostureReductionBuff));
     }
 
     protected virtual void FixedUpdate()

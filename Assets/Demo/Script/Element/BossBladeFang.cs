@@ -52,7 +52,7 @@ namespace Demo.Script.Element
         public override void InitAttribute()
         {
             ASC.AttrSet<AS_Fight>().InitHP(HpMax);
-            ASC.AttrSet<AS_Fight>().InitPOSTURE(PostureMax);
+            ASC.AttrSet<AS_Fight>().InitPOSTURE(0);
             ASC.AttrSet<AS_Fight>().InitATK(ATK);
             ASC.AttrSet<AS_Fight>().InitSPEED(Speed);
         }

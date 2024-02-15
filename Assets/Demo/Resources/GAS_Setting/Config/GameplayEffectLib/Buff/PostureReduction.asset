@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
-  m_Name: GE_PlayerAttackDamage
+  m_Name: PostureReduction
   m_EditorClassIdentifier: 
-  Name: "\u73A9\u5BB6\u7684\u666E\u901A\u653B\u51FB\u6548\u679C"
+  Name: "\u67B6\u52BF\u6761\u51CF\u5C11"
   Description: 
   DurationPolicy: 1
   Duration: 0
@@ -20,28 +20,19 @@ MonoBehaviour:
   PeriodExecution: {fileID: 0}
   GrantedAbilities: []
   Modifiers:
-  - AttributeName: AS_Fight.HP
+  - AttributeName: AS_Fight.POSTURE
     AttributeSetName: AS_Fight
-    AttributeShortName: HP
-    ModiferMagnitude: 0
+    AttributeShortName: POSTURE
+    ModiferMagnitude: 1
     Operation: 0
-    MMC: {fileID: 11400000, guid: 4cdf1be5fad45684688e32e418b9aaf3, type: 2}
+    MMC: {fileID: 11400000, guid: a61a964540d8ce542aba5f563af307d9, type: 2}
   AssetTags: []
   GrantedTags: []
   ApplicationRequiredTags: []
   OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
-  ApplicationImmunityTags:
-  - _name: Event.Defending
-    _hashCode: -2001503536
-    _shortName: Defending
-    _ancestorHashCodes: 0276cb27
-    _ancestorNames:
-    - Event
-  CueOnExecute:
-  - {fileID: 11400000, guid: 66a772dca31a5c8449a7a22ed775065d, type: 2}
-  - {fileID: 11400000, guid: 5421ecb82ce59c541ba10e7946a2dcd7, type: 2}
-  - {fileID: 11400000, guid: 845c9febc8a50f147b4394d056ef86d0, type: 2}
+  ApplicationImmunityTags: []
+  CueOnExecute: []
   CueDurational: []
   CueOnAdd: []
   CueOnRemove: []

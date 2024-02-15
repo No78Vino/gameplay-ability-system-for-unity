@@ -64,6 +64,9 @@ MonoBehaviour:
   - _id: 15
     _name: Event
     _depth: 0
+  - _id: 35
+    _name: PerfectDefending
+    _depth: 1
   - _id: 34
     _name: Defending
     _depth: 1
@@ -193,6 +196,12 @@ MonoBehaviour:
     _shortName: Event
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: Event.PerfectDefending
+    _hashCode: 1419440733
+    _shortName: PerfectDefending
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
   - _name: Event.Defending
     _hashCode: -2001503536
     _shortName: Defending

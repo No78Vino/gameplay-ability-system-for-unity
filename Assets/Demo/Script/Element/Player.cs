@@ -65,6 +65,9 @@ public class Player : FightUnit
 
         ASC.AttrSet<AS_Fight>().HP.RegisterPreBaseValueChange(OnHpChangePre);
         ASC.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChangePost);
+        
+        ASC.AttrSet<AS_Fight>().POSTURE.RegisterPreBaseValueChange(OnPostureChangePre);
+        ASC.AttrSet<AS_Fight>().POSTURE.RegisterPostBaseValueChange(OnPostureChangePost);
     }
 
     protected override void OnDisable()
@@ -75,6 +78,9 @@ public class Player : FightUnit
 
         ASC.AttrSet<AS_Fight>().HP.UnregisterPreBaseValueChange(OnHpChangePre);
         ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChangePost);
+        
+        ASC.AttrSet<AS_Fight>().POSTURE.UnregisterPreBaseValueChange(OnPostureChangePre);
+        ASC.AttrSet<AS_Fight>().POSTURE.UnregisterPostBaseValueChange(OnPostureChangePost);
     }
 
     public override void InitAttribute()
@@ -82,7 +88,7 @@ public class Player : FightUnit
         ASC.AttrSet<AS_Fight>().InitHP(HpMax);
         ASC.AttrSet<AS_Fight>().InitMP(MpMax);
         ASC.AttrSet<AS_Fight>().InitSTAMINA(StaminaMax);
-        ASC.AttrSet<AS_Fight>().InitPOSTURE(PostureMax);
+        ASC.AttrSet<AS_Fight>().InitPOSTURE(0);
         ASC.AttrSet<AS_Fight>().InitATK(ATK);
         ASC.AttrSet<AS_Fight>().InitSPEED(Speed);
     }
@@ -144,5 +150,16 @@ public class Player : FightUnit
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
         XUI.M.VM<MainUIVM>().UpdateHp(newValue);
+    }
+    
+    private float OnPostureChangePre(AttributeBase attr, float newValue)
+    {
+        return Mathf.Clamp(newValue, 0, PostureMax);
+    }
+    
+    private void OnPostureChangePost(AttributeBase attr, float oldValue, float newValue)
+    {
+        Debug.Log($"Posture changed from {oldValue} to {newValue}");
+        XUI.M.VM<MainUIVM>().UpdatePosture(newValue);
     }
 }

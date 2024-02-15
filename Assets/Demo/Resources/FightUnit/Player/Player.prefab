@@ -426,6 +426,7 @@ MonoBehaviour:
   _renderer: {fileID: 3182258008151415995}
   _boxAttack00: {fileID: 3372042695506233510}
   defendArea: {fileID: 6308679207622655300}
+  gePostureReductionBuff: {fileID: 11400000, guid: 0e44690e21c6c6b48bcc520828d7c0d8, type: 2}
   GEBuffStaminaRecover: {fileID: 11400000, guid: c4184d08ecb21db4282674b16419f7c8, type: 2}
 --- !u!114 &4574284699450854141
 MonoBehaviour:

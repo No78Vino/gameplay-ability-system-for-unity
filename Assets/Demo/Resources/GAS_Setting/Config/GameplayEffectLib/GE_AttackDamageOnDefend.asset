@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
-  m_Name: GE_PlayerAttackDamage
+  m_Name: GE_AttackDamageOnDefend
   m_EditorClassIdentifier: 
-  Name: "\u73A9\u5BB6\u7684\u666E\u901A\u653B\u51FB\u6548\u679C"
+  Name: "\u653B\u51FB\u5728\u9632\u5FA1\u65F6"
   Description: 
   DurationPolicy: 1
   Duration: 0
@@ -20,28 +20,28 @@ MonoBehaviour:
   PeriodExecution: {fileID: 0}
   GrantedAbilities: []
   Modifiers:
-  - AttributeName: AS_Fight.HP
+  - AttributeName: AS_Fight.POSTURE
     AttributeSetName: AS_Fight
-    AttributeShortName: HP
-    ModiferMagnitude: 0
+    AttributeShortName: POSTURE
+    ModiferMagnitude: 5
     Operation: 0
-    MMC: {fileID: 11400000, guid: 4cdf1be5fad45684688e32e418b9aaf3, type: 2}
+    MMC: {fileID: 11400000, guid: 225023c90079b7f4287ec4604d8d8039, type: 2}
   AssetTags: []
   GrantedTags: []
-  ApplicationRequiredTags: []
-  OngoingRequiredTags: []
-  RemoveGameplayEffectsWithTags: []
-  ApplicationImmunityTags:
+  ApplicationRequiredTags:
   - _name: Event.Defending
     _hashCode: -2001503536
     _shortName: Defending
     _ancestorHashCodes: 0276cb27
     _ancestorNames:
     - Event
+  OngoingRequiredTags: []
+  RemoveGameplayEffectsWithTags: []
+  ApplicationImmunityTags: []
   CueOnExecute:
+  - {fileID: 11400000, guid: db52ea357fc403241a89cf15c8dc25b1, type: 2}
+  - {fileID: 11400000, guid: f2c51d4ee6e24154887837678848ee61, type: 2}
   - {fileID: 11400000, guid: 66a772dca31a5c8449a7a22ed775065d, type: 2}
-  - {fileID: 11400000, guid: 5421ecb82ce59c541ba10e7946a2dcd7, type: 2}
-  - {fileID: 11400000, guid: 845c9febc8a50f147b4394d056ef86d0, type: 2}
   CueDurational: []
   CueOnAdd: []
   CueOnRemove: []

@@ -31,6 +31,7 @@ MonoBehaviour:
   ActivationBlockedTags: []
   cueAttackAnim: {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
   DirectDamageEffect: {fileID: 11400000, guid: c5e31576ebac04c419ab8665dda77486, type: 2}
-  DefendedDamageEffect: {fileID: 0}
+  DefendedDamageEffect: {fileID: 11400000, guid: 60b43e14760513547a1ed0e33f130981, type: 2}
+  PerfectDefendEffect: {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}
   waitTimeForDoDamage: 0.06668
   waitTimeForEnd: 0.06668

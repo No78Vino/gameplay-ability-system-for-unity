@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using GAS.Cue;
 using GAS.Runtime.Component;
@@ -14,6 +15,7 @@ namespace GAS.Runtime.Ability
         public readonly CuePlayAnimationOfFightUnit cueAttackAnim;
         public readonly GameplayEffectAsset DirectDamageEffect;
         public readonly GameplayEffectAsset DefendedDamageEffect;
+        public readonly GameplayEffectAsset PerfectDefendEffect;
         public readonly float waitTimeForDoDamage;
         public readonly float waitTimeForEnd;
         
@@ -22,6 +24,7 @@ namespace GAS.Runtime.Ability
             cueAttackAnim = AbilityAsset.cueAttackAnim;
             DirectDamageEffect = AbilityAsset.DirectDamageEffect;
             DefendedDamageEffect = AbilityAsset.DefendedDamageEffect;
+            PerfectDefendEffect = AbilityAsset.PerfectDefendEffect;
             waitTimeForDoDamage = AbilityAsset.waitTimeForDoDamage;
             waitTimeForEnd = AbilityAsset.waitTimeForEnd;
         }
@@ -67,20 +70,54 @@ namespace GAS.Runtime.Ability
             var targets =
                 Physics2D.OverlapBoxAll(box.Center, box.Size, 0, LayerMask.GetMask("FightUnit"));
 
+            var defendAreas =
+                Physics2D.OverlapBoxAll(box.Center, box.Size, 0, LayerMask.GetMask("DefendArea"));
+            
             foreach (var target in targets)
             {
                 var targetUnit = target.GetComponent<FightUnit>();
                 if (targetUnit)
                 {
-                    var effectAsset = _unit.ASC.HasTag(GameplayTagSumCollection.Event_Defending)
-                        ? _attack.DefendedDamageEffect
-                        : _attack.DirectDamageEffect;
-                    var effect = new GameplayEffect(effectAsset);
-                    Owner.ApplyGameplayEffectTo(effect, targetUnit.ASC);
+                    var defended = Defended(targetUnit, defendAreas);
+                    if (defended)
+                    {
+                        bool isPerfectDefended = IsPerfectDefended(targetUnit);
+                        if (isPerfectDefended)
+                        {
+                            var effect = new GameplayEffect(_attack.PerfectDefendEffect);
+                            targetUnit.ASC.ApplyGameplayEffectTo(effect, Owner);
+                        }
+                        else
+                        {
+                            var effect = new GameplayEffect(_attack.DefendedDamageEffect);
+                            Owner.ApplyGameplayEffectTo(effect, targetUnit.ASC);
+                        }
+
+                    }
+                    else
+                    {
+                        var effect = new GameplayEffect(_attack.DirectDamageEffect);
+                        Owner.ApplyGameplayEffectTo(effect, targetUnit.ASC);
+                    }
+
+                    
                 }
             }
             await UniTask.Delay(TimeSpan.FromSeconds(_attack.waitTimeForEnd));
             TryEndAbility();
         }
+        
+        bool Defended(FightUnit target,Collider2D[] defendAreas)
+        {
+            if(!target.ASC.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
+            
+            return defendAreas.Any(defendArea => target.DefendArea == defendArea);
+        }
+
+        bool IsPerfectDefended(FightUnit target)
+        {
+            return target.ASC.HasTag(GameplayTagSumCollection.Event_PerfectDefending);
+        }
     }
+
 }
