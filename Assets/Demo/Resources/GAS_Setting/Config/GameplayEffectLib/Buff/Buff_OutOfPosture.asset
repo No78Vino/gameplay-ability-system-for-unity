@@ -10,26 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
-  m_Name: PostureReduction_Buff
+  m_Name: Buff_OutOfPosture
   m_EditorClassIdentifier: 
-  Name: "\u67B6\u52BF\u6761\u51CF\u5C11Buff"
-  Description: 
-  DurationPolicy: 2
-  Duration: 0
-  Period: 1
-  PeriodExecution: {fileID: 11400000, guid: 91b62af094cd0c5469a2598c12c2e194, type: 2}
+  Name: "\u5931\u8861\u6548\u679C"
+  Description: "\u6301\u7EED5\u79D2\uFF0C\u65E0\u6CD5\u4F7F\u7528\u4EFB\u4F55\u80FD\u529B\u3002"
+  DurationPolicy: 3
+  Duration: 5
+  Period: 0
+  PeriodExecution: {fileID: 0}
   GrantedAbilities: []
   Modifiers: []
   AssetTags:
-  - _name: State.Buff
-    _hashCode: 743086286
-    _shortName: Buff
-    _ancestorHashCodes: 4b461665
-    _ancestorNames:
-    - State
-  GrantedTags: []
-  ApplicationRequiredTags: []
-  OngoingRequiredTags:
   - _name: State.Debuff.LoseBalance
     _hashCode: -639020104
     _shortName: LoseBalance
@@ -37,6 +28,16 @@ MonoBehaviour:
     _ancestorNames:
     - State
     - State.Debuff
+  GrantedTags:
+  - _name: State.Debuff.LoseBalance
+    _hashCode: -639020104
+    _shortName: LoseBalance
+    _ancestorHashCodes: 4b461665e315d1b6
+    _ancestorNames:
+    - State
+    - State.Debuff
+  ApplicationRequiredTags: []
+  OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
   ApplicationImmunityTags: []
   CueOnExecute: []
