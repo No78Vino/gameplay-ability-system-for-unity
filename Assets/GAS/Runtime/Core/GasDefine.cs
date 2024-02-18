@@ -36,6 +36,8 @@ namespace GAS.Core
 
         public const string GAS_MMC_LIBRARY_FOLDER = "ModMagnitudeCalculationLib";
         
+        public const string GAS_ABILITY_TIMELINE_LIBRARY_FOLDER = "AbilityTimelineLib";
+        
         
         public static string GAS_ASSET_PATH => $"Assets/{GAS_ASSET_FOLDER_NAME}";
         public static string GAS_SYSTEM_ASSET_PATH => $"{GAS_ASSET_PATH}/GASSettingAsset.asset";

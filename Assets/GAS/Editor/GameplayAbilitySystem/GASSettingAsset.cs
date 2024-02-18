@@ -85,6 +85,12 @@ namespace GAS.Editor.GameplayAbilitySystem
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
         [LabelWidth(SHORT_LABLE_WIDTH)]
+        public static string AbilityTimelineLib => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_TIMELINE_LIBRARY_FOLDER}";
+        
+        [ShowInInspector]
+        [BoxGroup("A")]
+        [DisplayAsString(TextAlignment.Left,true)]
+        [LabelWidth(SHORT_LABLE_WIDTH)]
         [LabelText("Tag Asset Path")]
         public static string GAS_TAG_ASSET_PATH => $"{Setting.GASConfigAssetPath}/GameplayTagsAsset.asset";
 
@@ -163,6 +169,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             CheckPathFolderExist(GameplayEffectLibPath);
             CheckPathFolderExist(GameplayCueLibPath);
             CheckPathFolderExist(MMCLibPath);
+            CheckPathFolderExist(AbilityTimelineLib);
         }
 
         [BoxGroup("A")]

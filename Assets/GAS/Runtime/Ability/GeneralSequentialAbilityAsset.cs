@@ -1,4 +1,8 @@
 using System;
+using GAS.Core;
+using GAS.General;
+using GAS.General.AbilityTimeline;
+using GAS.Runtime.Effects.Modifier;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.Timeline;
@@ -19,6 +23,7 @@ namespace GAS.Runtime.Ability
         [InfoBox("时间轴资源不可为空！", InfoMessageType.Error, "IsTimelineAssetEmpty")]
         [LabelWidth(100)]
         [InlineButton("EditTimelineAsset", "编辑时间轴")]
+        [AssetSelector]
         public TimelineAsset timelineAsset;
 
         bool IsTimelineAssetEmpty()
@@ -27,35 +32,44 @@ namespace GAS.Runtime.Ability
         }
 
 #if UNITY_EDITOR
+        void OnCreateTimelineAsset(TimelineAsset asset)
+        {
+            timelineAsset = asset;
+            OpenTimelineWindow();
+        }
+        
+        void CreateTimelineAsset()
+        {
+            string path = AssetDatabase.GetAssetPath(this);
+            path = path.Substring(0, path.IndexOf(GasDefine.GAS_ABILITY_LIBRARY_FOLDER, StringComparison.Ordinal));
+            path +=  GasDefine.GAS_ABILITY_TIMELINE_LIBRARY_FOLDER;
+            ScriptableObjectCreator.ShowDialog<TimelineAsset>(path, OnCreateTimelineAsset);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        void OpenTimelineWindow()
+        {
+            var window = TimelineEditor.GetOrCreateWindow();
+            EditorApplication.delayCall +=
+                () =>
+                {
+                    var inspectorWindow = AbilityTimelineInspector.Open(timelineAsset);
+                    inspectorWindow.Show();
+                    window.DockWindow(inspectorWindow, DockUtilities.DockPosition.Right);
+                };
+        }
+        
         private void EditTimelineAsset()
         {
             if (timelineAsset == null)
             {
-                // 创建 TimelineAsset
-                TimelineAsset asset = CreateInstance<TimelineAsset>();
-
-                // // 添加轨道
-                // TrackAsset track = asset.CreateTrack<AnimationTrack>(null, "Animation Track");
-                //
-                // // 添加片段
-                // AnimationClip clip = /* 获取你的 AnimationClip */;
-                // asset.CreateClip(clip, track);
-
-                // 保存 TimelineAsset
-                string path = "Assets/TimelineExample.timeline";
-                AssetDatabase.CreateAsset(asset, path);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
+                CreateTimelineAsset();
             }
-            //TimelineEditor.timelineAsset = 
-            var window = UnityEditor.Timeline.TimelineEditor.GetOrCreateWindow();
-            EditorApplication.delayCall +=
-                () =>
-                {
-                    // var inspectorWindow = AbilityTimelineInspector.Open();
-                    // inspectorWindow.Show();
-                    // window.DockWindow(inspectorWindow, DockUtilities.DockPosition.Right);
-                };
+            else
+            {
+                OpenTimelineWindow();
+            }
         }
 #endif
     }

@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.General;
+
+#if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
     using System;
@@ -68,7 +70,7 @@ namespace GAS.Editor.GameplayAbilitySystem
                 GASSettingAsset.GameplayCueLibPath,
                 GASSettingAsset.GameplayEffectLibPath,
                 GASSettingAsset.GameplayAbilityLibPath,
-                GASSettingAsset.ASCLibPath
+                GASSettingAsset.ASCLibPath,
             };
 
             _subDirectoryInfos.Clear();
