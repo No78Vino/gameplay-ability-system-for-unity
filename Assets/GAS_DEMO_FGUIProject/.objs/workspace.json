@@ -1,5 +1,5 @@
 {
-  "libview.firstColumnWidth": 283,
+  "libview.firstColumnWidth": 421,
   "libview.iconScale": 0,
   "backgroundColor": 6710886,
   "auxline1": true,
@@ -10,6 +10,8 @@
   "libview.expandedNodes": [
     "vw8ofc6l",
     "/",
+    "vw8ofc6l",
+    "/Components/",
     "vw8ofc6l",
     "/Resource/"
   ],

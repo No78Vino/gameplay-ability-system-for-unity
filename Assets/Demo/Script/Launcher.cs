@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
-using Cysharp.Threading.Tasks.Triggers;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using UnityEngine;
-using UnityEngine.Serialization;
-using YooAsset;
 
 namespace Demo.Script
 {

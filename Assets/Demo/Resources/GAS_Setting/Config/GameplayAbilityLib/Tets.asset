@@ -9,24 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 315006a064ff47229677f3a8cba2a8a6, type: 3}
-  m_Name: Jump
+  m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
+  m_Name: Tets
   m_EditorClassIdentifier: 
-  UniqueName: Jump
+  UniqueName: 
   Description: 
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
-  AssetTag:
-  - _name: Ability.Jump
-    _hashCode: -183664866
-    _shortName: Jump
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
+  AssetTag: []
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  JumpPower: 20
+  timelineAsset: {fileID: 0}
+  TimelineEditor: TimelineEditor
