@@ -34,7 +34,6 @@ namespace GAS.General.AbilityTimeline
             if (Selection.activeObject is PlayableAsset ||
                 Selection.activeObject is ScriptableObject)
             {
-                //_timelineEditorWindow.SetCurrentTimeline((TimelineAsset)Selection.activeObject);
                 target = Selection.activeObject;
             }
             else
@@ -43,22 +42,17 @@ namespace GAS.General.AbilityTimeline
             }
         }
         
-        float _time = 3.6f;
-
+        // [BoxGroup("0", false, order: 0)] 
+        // [LabelText("预览用的实例单位")]
+        // [InlineButton("PreviewDirector", "预览")]
+        // [SerializeField]
+        // public GeneralSequentialAbilityAsset directorForPreview;
+        
         [BoxGroup("0", false, order: 0)] 
-        [LabelText("预览用的实例单位")]
+        [LabelText("预览用的实例")]
         [InlineButton("PreviewDirector", "预览")]
-        [SceneObjectsOnly]
+        [SerializeField]
         public GameObject directorForPreview;
-        
-        [BoxGroup("A", false, order: 1)] [Title("时间轴信息")]
-        [HideLabel][DisplayAsString(TextAlignment.Left,true)]
-        public string blank = "<size=6>  </size>";
-        
-        [BoxGroup("A",false,order:1)]
-        [DisplayAsString(TextAlignment.Left,true)]
-        [ShowInInspector]
-        private string FrameInfo => $"<size=13><color=white>开始 -> {_time}s/0f </color></size>";
 
         [BoxGroup("B",false,order:2)]
         [Title("面板属性")] 
@@ -80,8 +74,11 @@ namespace GAS.General.AbilityTimeline
             }
 
             director.playableAsset = _currentTimeline;
-            director.time = _time;
-            director.Play();
+            //director.time = _time;
+            
+            var window = TimelineEditor.GetWindow();
+            window.SetTimeline(director);
+            //director.Play();
         }
     }
 }

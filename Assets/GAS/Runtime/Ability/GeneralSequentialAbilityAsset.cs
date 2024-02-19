@@ -56,7 +56,8 @@ namespace GAS.Runtime.Ability
                 {
                     var inspectorWindow = AbilityTimelineInspector.Open(timelineAsset);
                     inspectorWindow.Show();
-                    window.DockWindow(inspectorWindow, DockUtilities.DockPosition.Right);
+                    window.DockWindow(inspectorWindow, DockUtilities.DockPosition.Left);
+                    window.SetTimeline(timelineAsset);
                 };
         }
         
