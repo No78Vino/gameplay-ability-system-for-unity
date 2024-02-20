@@ -20,9 +20,9 @@
                             <ui:Button text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnRightFrame" style="-unity-font-style: bold; font-size: 13px;" />
                         </ui:VisualElement>
                         <ui:VisualElement name="FrameCount" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-end; align-items: center; align-self: auto; flex-wrap: nowrap; flex-shrink: 1;">
-                            <ui:TextField picking-mode="Ignore" name="MaxFrame" style="width: 40px; justify-content: flex-end;" />
+                            <ui:IntegerField value="42" name="MaxFrame" style="width: 40px;" />
                             <ui:Label tabindex="-1" text="/" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" />
-                            <ui:TextField picking-mode="Ignore" name="CurrentFrame" keyboard-type="NumbersAndPunctuation" style="width: 40px; justify-content: flex-end;" />
+                            <ui:IntegerField value="42" name="CurrentFrame" style="width: 40px;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -31,7 +31,8 @@
                     <ui:ScrollView name="MainContent" mode="VerticalAndHorizontal" vertical-scroller-visibility="AlwaysVisible" style="flex-grow: 1;">
                         <ui:VisualElement name="ContentList" style="flex-grow: 1; height: 1000px; flex-shrink: 1; width: auto;" />
                     </ui:ScrollView>
-                    <ui:IMGUIContainer name="SelectLine" style="position: absolute; left: 5px;" />
+                    <ui:IMGUIContainer name="SelectLine" style="position: absolute; left: 3px;" />
+                    <ui:IMGUIContainer name="FinishLine" style="position: absolute; left: 3px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

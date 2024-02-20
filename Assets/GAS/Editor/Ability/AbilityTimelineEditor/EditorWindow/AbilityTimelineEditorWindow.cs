@@ -12,10 +12,11 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private VisualTreeAsset m_VisualTreeAsset = default;
 
     [MenuItem("EX-GAS/Ability/AbilityTimelineEditorWindow")]
-    public static void ShowExample()
+    public static void Open(GeneralSequentialAbilityAsset asset)
     {
         AbilityTimelineEditorWindow wnd = GetWindow<AbilityTimelineEditorWindow>();
         wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
+        wnd.InitAbility(asset);
     }
 
     private VisualElement root;
@@ -38,14 +39,23 @@ public class AbilityTimelineEditorWindow : EditorWindow
         InitController();
     }
 
+    private void InitAbility(GeneralSequentialAbilityAsset asset)
+    {
+        SequentialAbilityAsset.value = asset;
+        MaxFrame.value = asset.MaxFrameCount;
+    }
+    
+    private void SaveAsset()
+    {
+        EditorUtility.SetDirty(AbilityAsset);
+        AssetDatabase.SaveAssetIfDirty(AbilityAsset);
+    }
+    
     #region Config
     private AbilityTimelineEditorConfig _config = new AbilityTimelineEditorConfig();
-    #endregion
-    
-    
-    #region AbilityAsset
-
     private ObjectField SequentialAbilityAsset;
+    private GeneralSequentialAbilityAsset AbilityAsset => SequentialAbilityAsset.value as GeneralSequentialAbilityAsset;
+
     void InitLeftInspector()
     {
         SequentialAbilityAsset = root.Q<ObjectField>(nameof(SequentialAbilityAsset));
@@ -56,10 +66,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
     {
         GeneralSequentialAbilityAsset asset = evt.newValue as GeneralSequentialAbilityAsset;
-        if (asset != null)
-        {
-            Debug.Log(asset.name);
-        }
+        RefreshTimerDraw();
     }
 
     #endregion
@@ -112,24 +119,41 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private IMGUIContainer TimerShaft;
     private VisualElement TimeLineContainer;
     private IMGUIContainer SelectLine;
+    private IMGUIContainer FinishLine;
     private VisualElement contentViewPort;
 
     private bool timerShaftMouseIn;
-    private int currentSelectFrameIndex;
+    private int _currentSelectFrameIndex;
     private int CurrentSelectFrameIndex
     {
-        get => currentSelectFrameIndex;
+        get => _currentSelectFrameIndex;
         set
         {
-            if (currentSelectFrameIndex == value) return;
-            currentSelectFrameIndex = value;
-            CurrentFrame.value = currentSelectFrameIndex.ToString();
+            if (_currentSelectFrameIndex == value) return;
+            _currentSelectFrameIndex = Mathf.Clamp(value, 0, MaxFrame.value);
+            CurrentFrame.value = _currentSelectFrameIndex;
             RefreshTimerDraw();
         }
     }
 
+    private int _currentMaxFrame;
+    private int CurrentMaxFrame
+    {
+        get => _currentMaxFrame;
+        set
+        {
+            if (_currentMaxFrame == value) return;
+            _currentMaxFrame = value;
+            AbilityAsset.MaxFrameCount = _currentMaxFrame;
+            SaveAsset();
+            MaxFrame.value = _currentMaxFrame;
+            RefreshTimerDraw();
+        }
+    }
+    
     private float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
-    private float CurrentSelectFramePos => currentSelectFrameIndex * _config.FrameUnitWidth;
+    private float CurrentSelectFramePos => _currentSelectFrameIndex * _config.FrameUnitWidth;
+    private float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
     void InitTimerShaft()
     {
         var mainContainer = root.Q<ScrollView>("MainContent");
@@ -146,12 +170,29 @@ public class AbilityTimelineEditorWindow : EditorWindow
         
         SelectLine = root.Q<IMGUIContainer>(nameof(SelectLine));
         SelectLine.onGUIHandler = OnSelectLineGUI;
+        
+        FinishLine = root.Q<IMGUIContainer>(nameof(FinishLine));
+        FinishLine.onGUIHandler = OnFinishLineGUI;
+    }
+
+    private void OnFinishLineGUI()
+    {
+        if (CurrentEndFramePos >= CurrentFramePos)
+        {
+            Handles.BeginGUI();
+            Handles.color = Color.red;
+            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
+            var x = CurrentEndFramePos - CurrentFramePos;
+            Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
+            Handles.EndGUI();
+        }
     }
 
     void RefreshTimerDraw()
     {
         TimerShaft.MarkDirtyRepaint();
         SelectLine.MarkDirtyRepaint();
+        FinishLine.MarkDirtyRepaint();
     }
 
     private void OnTimerShaftMouseDown(MouseDownEvent evt)
@@ -246,8 +287,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private Button BtnPlay;
     private Button BtnLeftFrame;
     private Button BtnRightFrame;
-    private TextField CurrentFrame;
-    private TextField MaxFrame;
+    private IntegerField CurrentFrame;
+    private IntegerField MaxFrame;
 
     private void InitController()
     {
@@ -260,10 +301,22 @@ public class AbilityTimelineEditorWindow : EditorWindow
         BtnRightFrame = root.Q<Button>(nameof(BtnRightFrame));
         BtnRightFrame.clickable.clicked += OnRightFrame;
         
-        CurrentFrame = root.Q<TextField>(nameof(CurrentFrame));
-        MaxFrame = root.Q<TextField>(nameof(MaxFrame));
+        CurrentFrame = root.Q<IntegerField>(nameof(CurrentFrame));
+        CurrentFrame.RegisterValueChangedCallback(OnCurrentFrameChanged);
+        MaxFrame = root.Q<IntegerField>(nameof(MaxFrame));
+        MaxFrame.RegisterValueChangedCallback( OnMaxFrameChanged);
     }
-    
+
+    private void OnMaxFrameChanged(ChangeEvent<int> evt)
+    {
+        CurrentMaxFrame = evt.newValue;
+    }
+
+    private void OnCurrentFrameChanged(ChangeEvent<int> evt)
+    {
+        CurrentSelectFrameIndex = evt.newValue;
+    }
+
     private void OnPlay()
     {
         
