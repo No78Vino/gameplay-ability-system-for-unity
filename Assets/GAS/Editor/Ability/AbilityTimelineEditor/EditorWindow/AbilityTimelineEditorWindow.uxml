@@ -22,7 +22,7 @@
                         <ui:VisualElement name="FrameCount" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-end; align-items: center; align-self: auto; flex-wrap: nowrap; flex-shrink: 1;">
                             <ui:TextField picking-mode="Ignore" name="MaxFrame" style="width: 40px; justify-content: flex-end;" />
                             <ui:Label tabindex="-1" text="/" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" />
-                            <ui:TextField picking-mode="Ignore" name="CurrentFrame" style="width: 40px; justify-content: flex-end;" />
+                            <ui:TextField picking-mode="Ignore" name="CurrentFrame" keyboard-type="NumbersAndPunctuation" style="width: 40px; justify-content: flex-end;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>

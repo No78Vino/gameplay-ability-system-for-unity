@@ -118,14 +118,16 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private int currentSelectFrameIndex;
     private int CurrentSelectFrameIndex
     {
+        get => currentSelectFrameIndex;
         set
         {
             if (currentSelectFrameIndex == value) return;
             currentSelectFrameIndex = value;
+            CurrentFrame.value = currentSelectFrameIndex.ToString();
             RefreshTimerDraw();
         }
     }
-    
+
     private float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
     private float CurrentSelectFramePos => currentSelectFrameIndex * _config.FrameUnitWidth;
     void InitTimerShaft()
@@ -269,11 +271,12 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     private void OnLeftFrame()
     {
-        
+        CurrentSelectFrameIndex -= 1;
     }
 
     private void OnRightFrame()
     {
+        CurrentSelectFrameIndex += 1;
     }
 
     #endregion
