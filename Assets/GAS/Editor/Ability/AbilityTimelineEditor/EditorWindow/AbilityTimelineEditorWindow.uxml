@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/GAS/Editor/Ability/AbilityTimelineEditor/EditorWindow/AbilityTimelineEditorWindow.uss?fileID=7433441132597879392&amp;guid=28fcc296ac2d3554db81c84901f63835&amp;type=3#AbilityTimelineEditorWindow" />
+    <ui:VisualElement name="Root" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="LeftInspector" style="flex-grow: 1; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); border-bottom-width: 0; flex-direction: column; height: 100%; margin-bottom: 3px; align-items: auto; width: 200px; border-right-width: 2px; min-width: 200px;">
+            <uie:ObjectField label="时间序列能力配置      " name="SequentialAbilityAsset" type="GAS.Runtime.Ability.GeneralSequentialAbilityAsset, com.exhard.exgas.runtime" style="-unity-font-style: bold; font-size: 13px; -unity-text-align: middle-left; align-items: center; width: auto; align-self: stretch; flex-direction: column; min-width: auto;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Main" style="flex-grow: 1;">
+            <ui:VisualElement name="TopBar" style="flex-grow: 1; height: 45px; width: auto; align-items: flex-start; justify-content: flex-start; align-self: auto; flex-basis: 45px; flex-direction: row; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; border-top-width: 0; border-right-width: 0; border-bottom-width: 2px; border-left-width: 0; border-left-color: rgb(46, 46, 46); border-right-color: rgb(46, 46, 46); border-top-color: rgb(46, 46, 46); border-bottom-color: rgb(46, 46, 46); padding-bottom: 2px;">
+                <ui:Button text="预览场景" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnLoadPreviewScene" style="-unity-font-style: bold; width: 120px; height: 39px;" />
+                <ui:Button text="返回原场景" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnBackToScene" style="width: 120px; -unity-font-style: bold; height: 39px;" />
+                <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button" style="width: 120px; -unity-font-style: bold; height: 39px;" />
+                <uie:ObjectField label="预览实例" name="PreviewInstance" type="UnityEngine.GameObject, UnityEngine.CoreModule" style="align-items: center; align-self: flex-start; flex-direction: row; height: 45px; -unity-font-style: bold; font-size: 15px; -unity-text-align: middle-left; width: 300px; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Content" style="flex-grow: 1; flex-direction: row; flex-shrink: 1;">
+                <ui:VisualElement name="LeftConsole" style="flex-grow: 1; width: 200px; min-width: 200px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); border-left-width: 0; border-right-width: 2px; margin-right: 5px;">
+                    <ui:VisualElement name="Controller" style="flex-grow: 1; height: 30px; min-height: 30px; max-height: 30px; border-left-color: rgb(43, 43, 43); border-right-color: rgb(43, 43, 43); border-top-color: rgb(43, 43, 43); border-bottom-color: rgb(43, 43, 43); border-bottom-width: 1px; flex-direction: row;">
+                        <ui:VisualElement name="ButtonGroup" style="flex-grow: 1; flex-direction: row; justify-content: flex-start;">
+                            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnLeftFrame" style="font-size: 13px; -unity-font-style: bold;" />
+                            <ui:Button text="▶" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnPlay" style="-unity-font-style: bold; font-size: 13px;" />
+                            <ui:Button text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnRightFrame" style="-unity-font-style: bold; font-size: 13px;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="FrameCount" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-end; align-items: center; align-self: auto; flex-wrap: nowrap; flex-shrink: 1;">
+                            <ui:TextField picking-mode="Ignore" name="MaxFrame" style="width: 40px; justify-content: flex-end;" />
+                            <ui:Label tabindex="-1" text="/" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" />
+                            <ui:TextField picking-mode="Ignore" name="CurrentFrame" style="width: 40px; justify-content: flex-end;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="RightTimeline" style="flex-grow: 1; padding-right: 0;">
+                    <ui:IMGUIContainer name="TimerShaft" style="height: 30px; min-height: 30px; border-left-color: rgb(43, 43, 43); border-right-color: rgb(43, 43, 43); border-top-color: rgb(43, 43, 43); border-bottom-color: rgb(43, 43, 43); border-bottom-width: 1px; margin-right: 13px; max-height: 30px;" />
+                    <ui:ScrollView name="MainContent" mode="VerticalAndHorizontal" vertical-scroller-visibility="AlwaysVisible" style="flex-grow: 1;">
+                        <ui:VisualElement name="ContentList" style="flex-grow: 1; height: 1000px; flex-shrink: 1; width: auto;" />
+                    </ui:ScrollView>
+                    <ui:IMGUIContainer name="SelectLine" style="position: absolute; left: 5px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
