@@ -127,7 +127,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     }
     
     private float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
-    private float CurrentSelectFramePos => currentSelectFrameIndex * _config.frameUnitWidth;
+    private float CurrentSelectFramePos => currentSelectFrameIndex * _config.FrameUnitWidth;
     void InitTimerShaft()
     {
         var mainContainer = root.Q<ScrollView>("MainContent");
@@ -176,7 +176,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private int GetFrameIndexByMouse(float x)
     {
-        return Mathf.RoundToInt(x + CurrentFramePos) / _config.frameUnitWidth;
+        return Mathf.RoundToInt(x + CurrentFramePos) / _config.FrameUnitWidth;
     }
     
     private void OnSelectLineGUI()
@@ -195,8 +195,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private void OnWheelEvent(WheelEvent evt)
     {
         int deltaY = (int)evt.delta.y;
-        _config.frameUnitWidth =
-            Mathf.Clamp(_config.frameUnitWidth - deltaY,
+        _config.FrameUnitWidth =
+            Mathf.Clamp(_config.FrameUnitWidth - deltaY,
                 AbilityTimelineEditorConfig.StandardFrameUnitWidth,
                 AbilityTimelineEditorConfig.MaxFrameUnitLevel * AbilityTimelineEditorConfig.StandardFrameUnitWidth);
         RefreshTimerDraw();
@@ -210,15 +210,15 @@ public class AbilityTimelineEditorWindow : EditorWindow
         var rect = TimerShaft.contentRect;
 
         int tickStep = AbilityTimelineEditorConfig.MaxFrameUnitLevel + 1 -
-                       (_config.frameUnitWidth / AbilityTimelineEditorConfig.StandardFrameUnitWidth);//5;
+                       (_config.FrameUnitWidth / AbilityTimelineEditorConfig.StandardFrameUnitWidth);//5;
         tickStep /= 2;
         tickStep = Mathf.Max(tickStep, 1);
         
-        int index = Mathf.CeilToInt(CurrentFramePos / _config.frameUnitWidth);
+        int index = Mathf.CeilToInt(CurrentFramePos / _config.FrameUnitWidth);
         float startFrameOffset =
-            index > 0 ? _config.frameUnitWidth - CurrentFramePos % _config.frameUnitWidth : 0;
+            index > 0 ? _config.FrameUnitWidth - CurrentFramePos % _config.FrameUnitWidth : 0;
 
-        for(var i=startFrameOffset;i<=rect.width;i+=_config.frameUnitWidth)
+        for(var i=startFrameOffset;i<=rect.width;i+=_config.FrameUnitWidth)
         {
             bool isTick = index % tickStep == 0;
             var x = i;
@@ -281,7 +281,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
 public class AbilityTimelineEditorConfig
 {
-    public int frameUnitWidth = 10;
+    public int FrameUnitWidth = 10;
     public const int StandardFrameUnitWidth = 10;
     public const int MaxFrameUnitLevel= 10;
 }
