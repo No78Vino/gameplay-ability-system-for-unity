@@ -37,6 +37,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         InitTopBar();
         InitTimerShaft();
         InitController();
+        InitTracks();
     }
 
     private void InitAbility(GeneralSequentialAbilityAsset asset)
@@ -147,6 +148,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
             AbilityAsset.MaxFrameCount = _currentMaxFrame;
             SaveAsset();
             MaxFrame.value = _currentMaxFrame;
+            UpdateContentSize();
             RefreshTimerDraw();
         }
     }
@@ -243,6 +245,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
                 AbilityTimelineEditorConfig.StandardFrameUnitWidth,
                 AbilityTimelineEditorConfig.MaxFrameUnitLevel * AbilityTimelineEditorConfig.StandardFrameUnitWidth);
         RefreshTimerDraw();
+        UpdateContentSize();    
     }
 
     private void OnTimerShaftGUI()
@@ -332,6 +335,22 @@ public class AbilityTimelineEditorWindow : EditorWindow
         CurrentSelectFrameIndex += 1;
     }
 
+    #endregion
+
+    #region Track
+
+    private VisualElement ContentTrackList;
+
+    void InitTracks()
+    {
+        ContentTrackList = root.Q<VisualElement>(nameof(ContentTrackList));
+        UpdateContentSize();    
+    }
+
+    private void UpdateContentSize()
+    {
+        ContentTrackList.style.width = (CurrentMaxFrame + 10) * _config.FrameUnitWidth;
+    }
     #endregion
 }
 
