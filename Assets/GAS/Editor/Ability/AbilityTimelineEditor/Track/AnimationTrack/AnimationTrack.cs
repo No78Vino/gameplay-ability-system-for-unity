@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using GAS.Runtime.Ability;
+using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,23 +8,52 @@ using UnityEngine.UIElements;
 #if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 {
-    public class AnimationTrack:TrackBase
+    public class AnimationTrack : TrackBase
     {
-        protected override string TrackAssetPath => "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrack.uxml";
-        protected override string MenuAssetPath => "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
-
-        public AnimationTrack(VisualElement trackParent, VisualElement menuParent) : base(trackParent, menuParent)
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth)
         {
+            base.Init(trackParent, menuParent, frameWidth);
             Track.RegisterCallback<DragUpdatedEvent>(OnDragUpdated);
-            Track.RegisterCallback<DragExitedEvent >(OnDragExited);
+            Track.RegisterCallback<DragExitedEvent>(OnDragExited);
+            RefreshShow();
         }
+
+        protected override string TrackAssetPath =>
+            "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrack.uxml";
+
+        protected override string MenuAssetPath =>
+            "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
+
+        private Dictionary<int, AnimationTrackItem> _trackItems = new Dictionary<int, AnimationTrackItem>();
+        protected override void RefreshShow(float newFrameWidth)
+        {
+            base.RefreshShow(newFrameWidth);
+            foreach (var kv in _trackItems)
+            {
+                Track.Remove(kv.Value.ItemLabel);
+            }
+            _trackItems.Clear();
+
+            if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
+            {
+                foreach (var frameEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.frameData)
+                {
+                    var animationFrameEvent = frameEvent.Event;
+                    var item = new AnimationTrackItem();
+                    item.Init(this, Track, frameEvent.Frame, FrameWidth, animationFrameEvent);
+                    _trackItems.Add(frameEvent.Frame, item);
+                }
+            }
+        }
+
+        #region DragEvent
 
         private void OnDragUpdated(DragUpdatedEvent evt)
         {
-            Object[] objects = DragAndDrop.objectReferences;
+            var objects = DragAndDrop.objectReferences;
             if (objects.Length > 0)
             {
-                AnimationClip clip = objects[0] as AnimationClip;
+                var clip = objects[0] as AnimationClip;
                 DragAndDrop.visualMode = clip != null ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.Rejected;
             }
             else
@@ -30,68 +61,75 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                 DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
             }
         }
-        
+
         private void OnDragExited(DragExitedEvent evt)
         {
-            Object[] objects = DragAndDrop.objectReferences;
+            var objects = DragAndDrop.objectReferences;
             if (objects.Length > 0)
             {
-                AnimationClip clip = objects[0] as AnimationClip;
+                var clip = objects[0] as AnimationClip;
                 if (clip != null)
                 {
-                    int selectedFrame = AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(evt.localMousePosition.x);
+                    var selectedFrame =
+                        AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(evt.localMousePosition.x);
                     // TODO:判断是否在无效帧上（已存在AnimationClip时不可添加）
-                    bool valid = true;
-                    int durationFrame = -1;
-                    int nextTrackItemFrame = -1;
-                    int currentOffset = int.MaxValue;
-                    int clipFrameCount = (int)(clip.frameRate * clip.length);
-                    
-                    foreach (var kv in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.FrameData)
+                    var valid = true;
+                    var durationFrame = -1;
+                    var nextTrackItemFrame = -1;
+                    var currentOffset = int.MaxValue;
+                    var clipFrameCount = (int)(clip.frameRate * clip.length);
+
+                    foreach (var animFrameEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.frameData)
                     {
-                        if (selectedFrame > kv.Key && selectedFrame < kv.Key + kv.Value.DurationFrame)
+                        if (selectedFrame > animFrameEvent.Frame && selectedFrame < animFrameEvent.Frame + (animFrameEvent.Event).DurationFrame)
                         {
                             valid = false;
                             break;
                         }
 
-                        if (kv.Key > selectedFrame)
+                        if (animFrameEvent.Frame > selectedFrame)
                         {
-                            int tempOffset = kv.Key - selectedFrame;
-                            if(tempOffset < currentOffset)
+                            var tempOffset = animFrameEvent.Frame - selectedFrame;
+                            if (tempOffset < currentOffset)
                             {
                                 currentOffset = tempOffset;
-                                nextTrackItemFrame = kv.Key;
+                                nextTrackItemFrame = animFrameEvent.Frame;
                             }
                         }
                     }
-                    
+
                     if (valid)
                     {
                         if (nextTrackItemFrame >= 0)
                         {
-                            int offset = clipFrameCount - currentOffset;
-                            durationFrame = offset<0 ? clipFrameCount : currentOffset;
+                            var offset = clipFrameCount - currentOffset;
+                            durationFrame = offset < 0 ? clipFrameCount : currentOffset;
                         }
                         else
                         {
                             durationFrame = clipFrameCount;
                         }
-                        
-                        AnimationFrameEvent animationFrameEvent = new AnimationFrameEvent
+
+                        var animationFrameEvent = new AnimationFrameEvent
                         {
                             Clip = clip,
                             DurationFrame = durationFrame,
                             TransitionTime = 0.25f
                         };
-                        
-                        AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.FrameData.Add(selectedFrame, animationFrameEvent);
+
+                        AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.frameData.Add(new AnimationFrameEventInfo
+                        {
+                            Frame = selectedFrame,
+                            Event = animationFrameEvent
+                        });
                         AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
-                        Debug.Log( $"Add Animation Clip {clip.name} to Frame {selectedFrame}");
+                        Debug.Log($"Add Animation Clip {clip.name} to Frame {selectedFrame}");
                     }
                 }
             }
         }
+
+        #endregion
     }
 }
 #endif

@@ -6,6 +6,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 {
     public abstract class TrackBase
     {
+        protected float FrameWidth;
         protected VisualElement MenuParent;
         protected VisualElement TrackParent;
         protected VisualElement Track;
@@ -14,12 +15,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected abstract string TrackAssetPath { get; }
         protected abstract string MenuAssetPath { get; }
 
-        public TrackBase(VisualElement trackParent, VisualElement menuParent)
-        {
-            Init(trackParent, menuParent);
-        }
+        // public TrackBase(VisualElement trackParent, VisualElement menuParent, float frameWidth)
+        // {
+        //     Init(trackParent, menuParent,frameWidth);
+        // }
 
-        private void Init( VisualElement trackParent, VisualElement menuParent)
+        public virtual void Init( VisualElement trackParent, VisualElement menuParent, float frameWidth)
         {
             TrackParent = trackParent;
             MenuParent = menuParent;
@@ -27,6 +28,18 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             Menu = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(MenuAssetPath).Instantiate().Query().ToList()[1];
             TrackParent.Add(Track);
             MenuParent.Add(Menu);
+            
+            FrameWidth = frameWidth;
+        }
+
+        protected virtual void RefreshShow(float newFrameWidth)
+        {
+            FrameWidth = newFrameWidth;
+        }
+
+        protected virtual void RefreshShow()
+        {
+            RefreshShow(FrameWidth);
         }
     }
 }

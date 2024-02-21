@@ -44,6 +44,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     {
         _sequentialAbilityAsset.value = asset;
         MaxFrame.value = asset.MaxFrameCount;
+        InitTracks();
     }
     
     private void SaveAsset()
@@ -70,6 +71,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     {
         GeneralSequentialAbilityAsset asset = evt.newValue as GeneralSequentialAbilityAsset;
         RefreshTimerDraw();
+        InitTracks();
     }
 
     #endregion
@@ -360,7 +362,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private void InitAnimationTrack()
     {
-        var animationTrack = new AnimationTrack(_contentTrackListParent, _trackMenuParent);
+        var animationTrack = new AnimationTrack();
+        animationTrack.Init(_contentTrackListParent, _trackMenuParent,10);
     }
     
     private void UpdateContentSize()

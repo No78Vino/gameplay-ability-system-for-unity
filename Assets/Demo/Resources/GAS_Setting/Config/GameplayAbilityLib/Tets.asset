@@ -24,3 +24,5 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   MaxFrameCount: 30
+  AnimationData:
+    frameData: []
