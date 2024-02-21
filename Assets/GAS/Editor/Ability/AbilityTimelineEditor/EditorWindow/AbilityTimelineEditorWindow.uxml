@@ -25,14 +25,15 @@
                             <ui:IntegerField value="42" name="CurrentFrame" style="width: 40px;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
+                    <ui:VisualElement name="TrackMenu" style="flex-grow: 1; height: 100%; max-height: 100%; min-height: auto; padding-left: 3px; padding-right: 3px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="RightTimeline" style="flex-grow: 1; padding-right: 0;">
                     <ui:IMGUIContainer name="TimerShaft" style="height: 30px; min-height: 30px; border-left-color: rgb(43, 43, 43); border-right-color: rgb(43, 43, 43); border-top-color: rgb(43, 43, 43); border-bottom-color: rgb(43, 43, 43); border-bottom-width: 1px; margin-right: 13px; max-height: 30px;" />
                     <ui:ScrollView name="MainContent" mode="VerticalAndHorizontal" vertical-scroller-visibility="AlwaysVisible" style="flex-grow: 1;">
                         <ui:VisualElement name="ContentTrackList" style="flex-grow: 1; height: 1000px; flex-shrink: 1; width: auto;" />
                     </ui:ScrollView>
-                    <ui:IMGUIContainer name="SelectLine" style="position: absolute; left: 3px;" />
-                    <ui:IMGUIContainer name="FinishLine" style="position: absolute; left: 3px;" />
+                    <ui:IMGUIContainer name="SelectLine" style="position: absolute; left: 0;" />
+                    <ui:IMGUIContainer name="FinishLine" style="position: absolute; left: 0;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

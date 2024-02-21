@@ -1,3 +1,5 @@
+using GAS.Editor.Ability.AbilityTimelineEditor;
+using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
 using GAS.Runtime.Ability;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -8,30 +10,28 @@ using UnityEngine.UIElements;
 
 public class AbilityTimelineEditorWindow : EditorWindow
 {
+    public static AbilityTimelineEditorWindow Instance { get; private set; }
+    
     [SerializeField]
     private VisualTreeAsset m_VisualTreeAsset = default;
 
-    [MenuItem("EX-GAS/Ability/AbilityTimelineEditorWindow")]
-    public static void Open(GeneralSequentialAbilityAsset asset)
+
+    public static void ShowWindow(GeneralSequentialAbilityAsset asset)
     {
         AbilityTimelineEditorWindow wnd = GetWindow<AbilityTimelineEditorWindow>();
         wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
         wnd.InitAbility(asset);
     }
 
-    private VisualElement root;
+    private VisualElement _root;
     public void CreateGUI()
     {
-        // Each editor window contains a root VisualElement object
-        root = rootVisualElement;
-
-        // // VisualElements objects can contain other VisualElement following a tree hierarchy.
-        // VisualElement label = new Label("Hello World! From C#");
-        // root.Add(label);
-
+        Instance = this;
+        _root = rootVisualElement;
+        
         // Instantiate UXML
-        VisualElement labelFromUXML = m_VisualTreeAsset.Instantiate();
-        root.Add(labelFromUXML);
+        VisualElement labelFromUxml = m_VisualTreeAsset.Instantiate();
+        _root.Add(labelFromUxml);
         
         InitLeftInspector();
         InitTopBar();
@@ -42,7 +42,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private void InitAbility(GeneralSequentialAbilityAsset asset)
     {
-        SequentialAbilityAsset.value = asset;
+        _sequentialAbilityAsset.value = asset;
         MaxFrame.value = asset.MaxFrameCount;
     }
     
@@ -54,14 +54,16 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     #region Config
     private AbilityTimelineEditorConfig _config = new AbilityTimelineEditorConfig();
-    private ObjectField SequentialAbilityAsset;
-    private GeneralSequentialAbilityAsset AbilityAsset => SequentialAbilityAsset.value as GeneralSequentialAbilityAsset;
+    public AbilityTimelineEditorConfig Config => _config;
+    
+    private ObjectField _sequentialAbilityAsset;
+    public GeneralSequentialAbilityAsset AbilityAsset => _sequentialAbilityAsset.value as GeneralSequentialAbilityAsset;
 
     void InitLeftInspector()
     {
-        SequentialAbilityAsset = root.Q<ObjectField>(nameof(SequentialAbilityAsset));
-        SequentialAbilityAsset.objectType = typeof(GeneralSequentialAbilityAsset);
-        SequentialAbilityAsset.RegisterValueChangedCallback(OnSequentialAbilityAssetChanged);
+        _sequentialAbilityAsset = _root.Q<ObjectField>(("SequentialAbilityAsset"));
+        _sequentialAbilityAsset.objectType = typeof(GeneralSequentialAbilityAsset);
+        _sequentialAbilityAsset.RegisterValueChangedCallback(OnSequentialAbilityAssetChanged);
     }
 
     private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
@@ -79,9 +81,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     void InitTopBar()
     {
-        BtnLoadPreviewScene = root.Q<Button>(nameof(BtnLoadPreviewScene));
+        BtnLoadPreviewScene = _root.Q<Button>(nameof(BtnLoadPreviewScene));
         BtnLoadPreviewScene.clickable.clicked += LoadPreviewScene;
-        BtnBackToScene = root.Q<Button>(nameof(BtnBackToScene));
+        BtnBackToScene = _root.Q<Button>(nameof(BtnBackToScene));
         BtnBackToScene.clickable.clicked += BackToScene;
     }
 
@@ -158,11 +160,11 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
     void InitTimerShaft()
     {
-        var mainContainer = root.Q<ScrollView>("MainContent");
+        var mainContainer = _root.Q<ScrollView>("MainContent");
         TimeLineContainer = mainContainer.Q<VisualElement>("unity-content-container");
         contentViewPort = mainContainer.Q<VisualElement>("unity-content-viewport");
         
-        TimerShaft = root.Q<IMGUIContainer>(nameof(TimerShaft));
+        TimerShaft = _root.Q<IMGUIContainer>(nameof(TimerShaft));
         TimerShaft.onGUIHandler = OnTimerShaftGUI;
         TimerShaft.RegisterCallback<WheelEvent>(OnWheelEvent);
         TimerShaft.RegisterCallback<MouseDownEvent>(OnTimerShaftMouseDown);
@@ -170,10 +172,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
         TimerShaft.RegisterCallback<MouseUpEvent>(OnTimerShaftMouseUp);
         TimerShaft.RegisterCallback<MouseOutEvent>(OnTimerShaftMouseOut);
         
-        SelectLine = root.Q<IMGUIContainer>(nameof(SelectLine));
+        SelectLine = _root.Q<IMGUIContainer>(nameof(SelectLine));
         SelectLine.onGUIHandler = OnSelectLineGUI;
         
-        FinishLine = root.Q<IMGUIContainer>(nameof(FinishLine));
+        FinishLine = _root.Q<IMGUIContainer>(nameof(FinishLine));
         FinishLine.onGUIHandler = OnFinishLineGUI;
     }
 
@@ -221,7 +223,12 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private int GetFrameIndexByMouse(float x)
     {
-        return Mathf.RoundToInt(x + CurrentFramePos) / _config.FrameUnitWidth;
+        return GetFrameIndexByPosition(x + CurrentFramePos);
+    }
+    
+    public int GetFrameIndexByPosition(float x)
+    {
+        return Mathf.RoundToInt(x) / _config.FrameUnitWidth;
     }
     
     private void OnSelectLineGUI()
@@ -295,18 +302,18 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private void InitController()
     {
-        BtnPlay = root.Q<Button>(nameof(BtnPlay));
+        BtnPlay = _root.Q<Button>(nameof(BtnPlay));
         BtnPlay.clickable.clicked += OnPlay;
         
-        BtnLeftFrame = root.Q<Button>(nameof(BtnLeftFrame));
+        BtnLeftFrame = _root.Q<Button>(nameof(BtnLeftFrame));
         BtnLeftFrame.clickable.clicked += OnLeftFrame;
         
-        BtnRightFrame = root.Q<Button>(nameof(BtnRightFrame));
+        BtnRightFrame = _root.Q<Button>(nameof(BtnRightFrame));
         BtnRightFrame.clickable.clicked += OnRightFrame;
         
-        CurrentFrame = root.Q<IntegerField>(nameof(CurrentFrame));
+        CurrentFrame = _root.Q<IntegerField>(nameof(CurrentFrame));
         CurrentFrame.RegisterValueChangedCallback(OnCurrentFrameChanged);
-        MaxFrame = root.Q<IntegerField>(nameof(MaxFrame));
+        MaxFrame = _root.Q<IntegerField>(nameof(MaxFrame));
         MaxFrame.RegisterValueChangedCallback( OnMaxFrameChanged);
     }
 
@@ -339,24 +346,27 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     #region Track
 
-    private VisualElement ContentTrackList;
-
-    void InitTracks()
+    private VisualElement _contentTrackListParent;
+    private VisualElement _trackMenuParent;
+    
+    private void InitTracks()
     {
-        ContentTrackList = root.Q<VisualElement>(nameof(ContentTrackList));
-        UpdateContentSize();    
+        _contentTrackListParent = _root.Q<VisualElement>("ContentTrackList");
+        _trackMenuParent = _root.Q<VisualElement>("TrackMenu");
+        UpdateContentSize();
+
+        InitAnimationTrack();
     }
 
+    private void InitAnimationTrack()
+    {
+        var animationTrack = new AnimationTrack(_contentTrackListParent, _trackMenuParent);
+    }
+    
     private void UpdateContentSize()
     {
-        ContentTrackList.style.width = (CurrentMaxFrame + 10) * _config.FrameUnitWidth;
+        _contentTrackListParent.style.width = CurrentMaxFrame * _config.FrameUnitWidth;
     }
     #endregion
 }
 
-public class AbilityTimelineEditorConfig
-{
-    public int FrameUnitWidth = 10;
-    public const int StandardFrameUnitWidth = 10;
-    public const int MaxFrameUnitLevel= 10;
-}

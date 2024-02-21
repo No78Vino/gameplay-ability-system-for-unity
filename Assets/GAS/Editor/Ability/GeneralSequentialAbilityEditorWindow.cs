@@ -25,7 +25,7 @@ namespace GAS.Editor.Ability
         
         void EditAbilityTimeline()
         {
-            AbilityTimelineEditorWindow.Open(_asset);
+            AbilityTimelineEditorWindow.ShowWindow(_asset);
         }
     }
 }
