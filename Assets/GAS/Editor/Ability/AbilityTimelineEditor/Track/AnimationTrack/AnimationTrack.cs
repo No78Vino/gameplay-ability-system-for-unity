@@ -25,6 +25,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
 
         private Dictionary<int, AnimationTrackItem> _trackItems = new Dictionary<int, AnimationTrackItem>();
+
+        private AbilityAnimationData AbilityAnimationData =>
+            AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
         protected override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
@@ -36,7 +39,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
             {
-                foreach (var frameEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.frameData)
+                foreach (var frameEvent in AbilityAnimationData.frameData)
                 {
                     var animationFrameEvent = frameEvent.Event;
                     var item = new AnimationTrackItem();
@@ -79,7 +82,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                     var currentOffset = int.MaxValue;
                     var clipFrameCount = (int)(clip.frameRate * clip.length);
 
-                    foreach (var animFrameEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.frameData)
+                    foreach (var animFrameEvent in AbilityAnimationData.frameData)
                     {
                         if (selectedFrame > animFrameEvent.Frame && selectedFrame < animFrameEvent.Frame + (animFrameEvent.Event).DurationFrame)
                         {
@@ -117,12 +120,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                             TransitionTime = 0.25f
                         };
 
-                        AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.frameData.Add(new AnimationFrameEventInfo
+                        AbilityAnimationData.frameData.Add(new AnimationFrameEventInfo
                         {
                             Frame = selectedFrame,
                             Event = animationFrameEvent
                         });
                         AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
+                        RefreshShow();
                         Debug.Log($"Add Animation Clip {clip.name} to Frame {selectedFrame}");
                     }
                 }
@@ -130,6 +134,33 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         }
 
         #endregion
+        
+        public bool CheckFrameIndexOnDrag(int targetIndex)
+        {
+            foreach (var item in AbilityAnimationData.frameData)
+            {
+                if(targetIndex>item.Frame && targetIndex<item.Frame+item.Event.DurationFrame)
+                    return false;
+            }
+
+            return true;
+        }
+        
+        public void SetFrameIndex(int oldIndex, int newIndex)
+        {
+            var index = -1;
+            var list = AbilityAnimationData.frameData;
+            for (var i = 0; i < list.Count; i++)
+            {
+                if (list[i].Frame != oldIndex) continue;
+                index = i;
+                break;
+            }
+
+            if (index < 0) return;
+            AbilityAnimationData.frameData[index].Frame= newIndex;
+            AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
+        }
     }
 }
 #endif

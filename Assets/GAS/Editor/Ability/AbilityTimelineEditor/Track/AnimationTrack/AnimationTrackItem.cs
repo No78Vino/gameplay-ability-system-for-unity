@@ -11,18 +11,28 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
         private AnimationFrameEvent _animationFrameEvent;
         private VisualElement _animOverLine;
-        private float _frameUnitWidth;
-        private VisualElement _mainDragArea;
-        private int _startFrameIndex;
+
 
         private bool _dragging;
+        private float _frameUnitWidth;
+        private VisualElement _mainDragArea;
+        private int _startDragFrameIndex;
+        private float _startDragX;
+        private int _startFrameIndex;
+
+
         private AnimationTrack _track;
         public Label ItemLabel { get; private set; }
 
         protected override string ItemAssetPath =>
             "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackItem.uxml";
 
-        public void Init(AnimationTrack track, VisualElement parent, int frameIndex, float frameUnitWidth,
+
+        public void Init(
+            AnimationTrack track,
+            VisualElement parent,
+            int frameIndex,
+            float frameUnitWidth,
             AnimationFrameEvent animationFrameEvent)
         {
             base.Init();
@@ -41,7 +51,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             _mainDragArea.RegisterCallback<MouseOutEvent>(OnMouseOut);
 
             Item.style.backgroundColor = normalColor;
-            
+
             RefreshShow(_frameUnitWidth);
         }
 
@@ -77,45 +87,55 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         {
             Item.style.backgroundColor = selectColor;
             _dragging = true;
+            _startDragFrameIndex = _startFrameIndex;
+            _startDragX = evt.mousePosition.x;
         }
 
         private void OnMouseUp(MouseUpEvent evt)
         {
-            if (_dragging)
-            {
-                _dragging = false;
-                Item.style.backgroundColor = normalColor;
-            }
+            _dragging = false;
+            Item.style.backgroundColor = normalColor;
+            ApplyDrag();
         }
 
         private void OnMouseMove(MouseMoveEvent evt)
         {
             if (_dragging)
             {
-                // var delta = evt.mouseDelta.x;
-                // var frameDelta = Mathf.RoundToInt(delta / _frameUnitWidth);
-                // var newStartFrame = _startFrameIndex + frameDelta;
-                // if (newStartFrame < 0)
-                // {
-                //     newStartFrame = 0;
-                // }
-                //
-                // var newEndFrame = newStartFrame + _animationFrameEvent.DurationFrame;
-                // if (newEndFrame > _track.TrackLength)
-                // {
-                //     newStartFrame = _track.TrackLength - _animationFrameEvent.DurationFrame;
-                // }
-                //
-                // _startFrameIndex = newStartFrame;
-                // var mainPos = ItemLabel.transform.position;
-                // mainPos.x = _startFrameIndex * _frameUnitWidth;
-                // ItemLabel.transform.position = mainPos;
+                var offset = evt.mousePosition.x - _startDragX;
+                var offsetFrame = Mathf.RoundToInt(offset / _frameUnitWidth);
+                int targetFrame = _startDragFrameIndex + offsetFrame;
+                if(offsetFrame==0 || targetFrame<0) return;
+                
+                var checkDrag = offsetFrame > 0 ? _track.CheckFrameIndexOnDrag(targetFrame + _animationFrameEvent.DurationFrame) : _track.CheckFrameIndexOnDrag(targetFrame);
+
+                if (checkDrag)
+                {
+                    _startFrameIndex = targetFrame;
+                    if (_startFrameIndex + _animationFrameEvent.DurationFrame >
+                        AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
+                    {
+                        AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex =
+                            _startFrameIndex + _animationFrameEvent.DurationFrame;
+                    }
+                    RefreshShow(_frameUnitWidth);
+                }
             }
         }
 
         private void OnMouseOut(MouseOutEvent evt)
         {
+            if (_dragging) ApplyDrag();
             Item.style.backgroundColor = normalColor;
+            _dragging = false;
+        }
+
+        void ApplyDrag()
+        {
+            if (_startFrameIndex != _startDragFrameIndex)
+            {
+                _track.SetFrameIndex( _startDragFrameIndex, _startFrameIndex);
+            }
         }
 
         #endregion

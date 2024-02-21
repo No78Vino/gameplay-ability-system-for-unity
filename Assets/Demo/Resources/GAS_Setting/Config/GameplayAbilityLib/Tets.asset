@@ -31,8 +31,13 @@ MonoBehaviour:
         Clip: {fileID: 7400000, guid: 0acf70afed1b40d469d52b940e98d7c4, type: 2}
         TransitionTime: 0.25
         DurationFrame: 70
-    - Frame: 72
+    - Frame: 96
       Event:
         Clip: {fileID: 7400000, guid: 0cd9551d9db72774ea4673823c4ebd58, type: 2}
         TransitionTime: 0.8
         DurationFrame: 20
+    - Frame: 80
+      Event:
+        Clip: {fileID: 7400000, guid: bc71342962d02b1438f0d8415ad693a5, type: 2}
+        TransitionTime: 0.25
+        DurationFrame: 8

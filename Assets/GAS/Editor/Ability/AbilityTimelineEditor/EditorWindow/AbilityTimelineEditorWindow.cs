@@ -133,7 +133,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private bool timerShaftMouseIn;
     private int _currentSelectFrameIndex;
-    private int CurrentSelectFrameIndex
+    public int CurrentSelectFrameIndex
     {
         get => _currentSelectFrameIndex;
         set
