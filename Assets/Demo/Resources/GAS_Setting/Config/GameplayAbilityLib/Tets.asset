@@ -23,6 +23,16 @@ MonoBehaviour:
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 30
+  MaxFrameCount: 200
   AnimationData:
-    frameData: []
+    frameData:
+    - Frame: 0
+      Event:
+        Clip: {fileID: 7400000, guid: 0acf70afed1b40d469d52b940e98d7c4, type: 2}
+        TransitionTime: 0.25
+        DurationFrame: 70
+    - Frame: 72
+      Event:
+        Clip: {fileID: 7400000, guid: 0cd9551d9db72774ea4673823c4ebd58, type: 2}
+        TransitionTime: 0.8
+        DurationFrame: 20

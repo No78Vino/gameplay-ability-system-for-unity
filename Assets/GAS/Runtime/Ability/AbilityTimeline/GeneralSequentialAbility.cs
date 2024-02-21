@@ -26,7 +26,6 @@ namespace GAS.Runtime.Ability
 
         public override void ActivateAbility(params object[] args)
         {
-            // DoDodge().Forget();
         }
 
         public override void CancelAbility()

@@ -43,8 +43,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private void InitAbility(GeneralSequentialAbilityAsset asset)
     {
         _sequentialAbilityAsset.value = asset;
-        MaxFrame.value = asset.MaxFrameCount;
-        InitTracks();
+        MaxFrame.value = AbilityAsset.MaxFrameCount;
+        CurrentSelectFrameIndex = 0;
+        RefreshTimerDraw();
+        RefreshTrackDraw();
     }
     
     private void SaveAsset()
@@ -70,8 +72,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
     {
         GeneralSequentialAbilityAsset asset = evt.newValue as GeneralSequentialAbilityAsset;
+        MaxFrame.value = AbilityAsset.MaxFrameCount;
+        CurrentSelectFrameIndex = 0;
         RefreshTimerDraw();
-        InitTracks();
+        RefreshTrackDraw();
     }
 
     #endregion
@@ -357,13 +361,15 @@ public class AbilityTimelineEditorWindow : EditorWindow
         _trackMenuParent = _root.Q<VisualElement>("TrackMenu");
         UpdateContentSize();
 
-        InitAnimationTrack();
+        RefreshTrackDraw();
     }
 
-    private void InitAnimationTrack()
+    private void RefreshTrackDraw()
     {
+        _contentTrackListParent.Clear();
+        _trackMenuParent.Clear();
         var animationTrack = new AnimationTrack();
-        animationTrack.Init(_contentTrackListParent, _trackMenuParent,10);
+        animationTrack.Init(_contentTrackListParent, _trackMenuParent,_config.FrameUnitWidth);
     }
     
     private void UpdateContentSize()
