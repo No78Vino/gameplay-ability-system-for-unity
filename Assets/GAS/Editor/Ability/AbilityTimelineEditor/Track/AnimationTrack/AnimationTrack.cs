@@ -27,7 +27,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
         private List<AnimationTrackItem> _trackItems = new List<AnimationTrackItem>();
 
-        private AbilityAnimationData AbilityAnimationData =>
+        public AbilityAnimationData AbilityAnimationData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
         public override void RefreshShow(float newFrameWidth)
         {
