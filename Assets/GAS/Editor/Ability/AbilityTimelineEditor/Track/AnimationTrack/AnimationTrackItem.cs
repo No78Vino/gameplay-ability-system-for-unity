@@ -59,7 +59,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
         private ObjectField clip;
         private Label startFrame;
-        private Label duration;
+        private Label endFrame;
+        private IntegerField duration;
         private FloatField transition;
         public override VisualElement Inspector()
         {
@@ -76,10 +77,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             startFrame = new Label($"起始帧:{_startFrameIndex}f/{_startFrameIndex * Time.fixedDeltaTime}s");
             startFrame.style.display = DisplayStyle.Flex;
             inspector.Add(startFrame);
+            // 结束
+            endFrame = new Label($"结束帧:{_animationClipEvent.EndFrame}f/{_animationClipEvent.EndFrame * Time.fixedDeltaTime}s");
+            endFrame.style.display = DisplayStyle.Flex;
+            inspector.Add(endFrame);
             
             // 时长
-            duration = new Label($"时长:{_animationClipEvent.durationFrame}f/" +
-                                       $"{_animationClipEvent.durationFrame * Time.fixedDeltaTime}s");
+            duration = new IntegerField("时长(f)");
+            duration.value = _animationClipEvent.durationFrame;
+            duration.RegisterValueChangedCallback(OnDurationChanged);
             duration.style.display = DisplayStyle.Flex;
             inspector.Add(duration);
             
@@ -99,12 +105,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
            return inspector;
         }
 
+        private void OnDurationChanged(ChangeEvent<int> evt)
+        {
+            var newDuration = Mathf.Max(1, evt.newValue);
+            _animationClipEvent.durationFrame = newDuration;
+            AbilityTimelineEditorWindow.Instance.Save();
+            duration.value = newDuration;
+            RefreshShow(_frameUnitWidth);
+        }
+
         public override void Delete()
         {
-            var keyFrameIndex = _animationClipEvent.startFrame;
             var success = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData.Remove(
                 _animationClipEvent);
-
+            AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             _track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();

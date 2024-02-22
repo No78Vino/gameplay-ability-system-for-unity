@@ -32,6 +32,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         public abstract VisualElement Inspector();
         public abstract void Delete();
+
+        protected void CheckStyle(VisualElement element)
+        {
+            element.style.fontSize = 14;
+            //element.style.width = new StyleLength(1);
+        }
     }
 }
 #endif
