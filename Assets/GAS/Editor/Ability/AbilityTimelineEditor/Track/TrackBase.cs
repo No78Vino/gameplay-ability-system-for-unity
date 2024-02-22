@@ -32,12 +32,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             FrameWidth = frameWidth;
         }
 
-        protected virtual void RefreshShow(float newFrameWidth)
+        public virtual void RefreshShow(float newFrameWidth)
         {
             FrameWidth = newFrameWidth;
         }
 
-        protected virtual void RefreshShow()
+        public virtual void RefreshShow()
         {
             RefreshShow(FrameWidth);
         }

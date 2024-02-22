@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace GAS.Runtime.Ability.AbilityTimeline
@@ -7,13 +8,8 @@ namespace GAS.Runtime.Ability.AbilityTimeline
     [Serializable]
     public class AbilityAnimationData
     {
-        public List<AnimationFrameEventInfo> frameData = new List<AnimationFrameEventInfo>();
-    }
-    
-    [Serializable]
-    public class AnimationFrameEventInfo
-    {
-        public int Frame;
-        public AnimationFrameEvent Event;
+        // TODO 绑定的动画机
+        public Animator Animator;
+        public List<AnimationClipEvent> animationClipData = new List<AnimationClipEvent>();
     }
 }

@@ -4,13 +4,10 @@ using UnityEngine;
 namespace GAS.Runtime.Ability.AbilityTimeline
 {
     [Serializable]
-    public class AnimationFrameEvent : FrameEventBase
+    public class AnimationClipEvent : ClipEventBase
     {
         public AnimationClip Clip;
         public float TransitionTime;
-
-#if UNITY_EDITOR
-        public int DurationFrame;
-#endif
+        //public int DurationFrame;
     }
 }

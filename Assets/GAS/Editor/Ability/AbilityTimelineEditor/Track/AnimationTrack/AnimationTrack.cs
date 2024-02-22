@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
@@ -24,29 +25,34 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         protected override string MenuAssetPath =>
             "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
 
-        private Dictionary<int, AnimationTrackItem> _trackItems = new Dictionary<int, AnimationTrackItem>();
+        private List<AnimationTrackItem> _trackItems = new List<AnimationTrackItem>();
 
         private AbilityAnimationData AbilityAnimationData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
-        protected override void RefreshShow(float newFrameWidth)
+        public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var kv in _trackItems)
+            foreach (var item in _trackItems)
             {
-                Track.Remove(kv.Value.ItemLabel);
+                Track.Remove(item.ItemLabel);
             }
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
             {
-                foreach (var frameEvent in AbilityAnimationData.frameData)
+                foreach (var clipEvent in AbilityAnimationData.animationClipData)
                 {
-                    var animationFrameEvent = frameEvent.Event;
                     var item = new AnimationTrackItem();
-                    item.Init(this, Track, frameEvent.Frame, FrameWidth, animationFrameEvent);
-                    _trackItems.Add(frameEvent.Frame, item);
+                    item.Init(this, Track, FrameWidth, clipEvent);
+                    _trackItems.Add(item);
                 }
             }
+        }
+
+        public void RemoveTrackItem(AnimationTrackItem item)
+        {
+            Track.Remove(item.ItemLabel);
+            _trackItems.Remove(item);
         }
 
         #region DragEvent
@@ -75,28 +81,27 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                 {
                     var selectedFrame =
                         AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(evt.localMousePosition.x);
-                    // TODO:判断是否在无效帧上（已存在AnimationClip时不可添加）
                     var valid = true;
                     var durationFrame = -1;
                     var nextTrackItemFrame = -1;
                     var currentOffset = int.MaxValue;
                     var clipFrameCount = (int)(clip.frameRate * clip.length);
 
-                    foreach (var animFrameEvent in AbilityAnimationData.frameData)
+                    foreach (var clipEvent in AbilityAnimationData.animationClipData)
                     {
-                        if (selectedFrame > animFrameEvent.Frame && selectedFrame < animFrameEvent.Frame + (animFrameEvent.Event).DurationFrame)
+                        if (selectedFrame > clipEvent.startFrame && selectedFrame < clipEvent.EndFrame)
                         {
                             valid = false;
                             break;
                         }
 
-                        if (animFrameEvent.Frame > selectedFrame)
+                        if (clipEvent.startFrame > selectedFrame)
                         {
-                            var tempOffset = animFrameEvent.Frame - selectedFrame;
+                            var tempOffset = clipEvent.startFrame - selectedFrame;
                             if (tempOffset < currentOffset)
                             {
                                 currentOffset = tempOffset;
-                                nextTrackItemFrame = animFrameEvent.Frame;
+                                nextTrackItemFrame = clipEvent.startFrame;
                             }
                         }
                     }
@@ -113,20 +118,19 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                             durationFrame = clipFrameCount;
                         }
 
-                        var animationFrameEvent = new AnimationFrameEvent
+                        AbilityAnimationData.animationClipData.Add(new AnimationClipEvent()
                         {
+                            startFrame = selectedFrame,
+                            durationFrame = durationFrame,
                             Clip = clip,
-                            DurationFrame = durationFrame,
-                            TransitionTime = 0.25f
-                        };
-
-                        AbilityAnimationData.frameData.Add(new AnimationFrameEventInfo
-                        {
-                            Frame = selectedFrame,
-                            Event = animationFrameEvent
+                            TransitionTime = 0
                         });
                         AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
                         RefreshShow();
+                        
+                        // 面板选中新增的Item
+                        AbilityTimelineEditorWindow.Instance.SetInspector(_trackItems.Last());
+                        
                         Debug.Log($"Add Animation Clip {clip.name} to Frame {selectedFrame}");
                     }
                 }
@@ -137,28 +141,22 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         
         public bool CheckFrameIndexOnDrag(int targetIndex)
         {
-            foreach (var item in AbilityAnimationData.frameData)
-            {
-                if(targetIndex>item.Frame && targetIndex<item.Frame+item.Event.DurationFrame)
-                    return false;
-            }
-
-            return true;
+            return AbilityAnimationData.animationClipData.All(clipEvent => targetIndex <= clipEvent.startFrame || targetIndex >= clipEvent.EndFrame);
         }
         
         public void SetFrameIndex(int oldIndex, int newIndex)
         {
             var index = -1;
-            var list = AbilityAnimationData.frameData;
+            var list = AbilityAnimationData.animationClipData;
             for (var i = 0; i < list.Count; i++)
             {
-                if (list[i].Frame != oldIndex) continue;
+                if (list[i].startFrame != oldIndex) continue;
                 index = i;
                 break;
             }
 
             if (index < 0) return;
-            AbilityAnimationData.frameData[index].Frame= newIndex;
+            AbilityAnimationData.animationClipData[index].startFrame= newIndex;
             AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
         }
     }

@@ -1,12 +1,17 @@
+using System.Collections.Generic;
+using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
+using GAS.Editor.Ability.AbilityTimelineEditor.Track;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
 using GAS.Runtime.Ability;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 public class AbilityTimelineEditorWindow : EditorWindow
 {
@@ -38,7 +43,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
         InitTimerShaft();
         InitController();
         InitTracks();
+        InitClipInspector();
     }
+
+    public void Save() => AbilityAsset.Save();
 
     private void InitAbility(GeneralSequentialAbilityAsset asset)
     {
@@ -61,6 +69,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     private ObjectField _sequentialAbilityAsset;
     public GeneralSequentialAbilityAsset AbilityAsset => _sequentialAbilityAsset.value as GeneralSequentialAbilityAsset;
+
+    private GeneralSequentialAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
+        ? Editor.CreateEditor(AbilityAsset) as GeneralSequentialAbilityEditorWindow
+        : null;
 
     void InitLeftInspector()
     {
@@ -185,19 +197,6 @@ public class AbilityTimelineEditorWindow : EditorWindow
         FinishLine.onGUIHandler = OnFinishLineGUI;
     }
 
-    private void OnFinishLineGUI()
-    {
-        if (CurrentEndFramePos >= CurrentFramePos)
-        {
-            Handles.BeginGUI();
-            Handles.color = Color.red;
-            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
-            var x = CurrentEndFramePos - CurrentFramePos;
-            Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
-            Handles.EndGUI();
-        }
-    }
-
     void RefreshTimerDraw()
     {
         TimerShaft.MarkDirtyRepaint();
@@ -239,7 +238,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     private void OnSelectLineGUI()
     {
-        if (CurrentSelectFramePos >= CurrentFramePos)
+        if (CurrentSelectFramePos >= CurrentFramePos && CurrentSelectFramePos< CurrentFramePos + TimerShaft.contentRect.width)
         {
             Handles.BeginGUI();
             Handles.color = Color.green;
@@ -250,6 +249,19 @@ public class AbilityTimelineEditorWindow : EditorWindow
         }
     }
 
+    private void OnFinishLineGUI()
+    {
+        if (CurrentEndFramePos >= CurrentFramePos && CurrentEndFramePos < CurrentFramePos + TimerShaft.contentRect.width)
+        {
+            Handles.BeginGUI();
+            Handles.color = Color.red;
+            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
+            var x = CurrentEndFramePos - CurrentFramePos;
+            Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
+            Handles.EndGUI();
+        }
+    }
+    
     private void OnWheelEvent(WheelEvent evt)
     {
         int deltaY = (int)evt.delta.y;
@@ -354,28 +366,58 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private VisualElement _contentTrackListParent;
     private VisualElement _trackMenuParent;
-    
+    List<TrackBase> _trackList = new List<TrackBase>();
     private void InitTracks()
     {
         _contentTrackListParent = _root.Q<VisualElement>("ContentTrackList");
         _trackMenuParent = _root.Q<VisualElement>("TrackMenu");
-        UpdateContentSize();
-
         RefreshTrackDraw();
+        UpdateContentSize();
     }
 
     private void RefreshTrackDraw()
     {
+        _trackList.Clear();
         _contentTrackListParent.Clear();
         _trackMenuParent.Clear();
         var animationTrack = new AnimationTrack();
         animationTrack.Init(_contentTrackListParent, _trackMenuParent,_config.FrameUnitWidth);
+        _trackList.Add(animationTrack);
     }
     
     private void UpdateContentSize()
     {
         _contentTrackListParent.style.width = CurrentMaxFrame * _config.FrameUnitWidth;
+        foreach (var track in _trackList)
+        {
+            track.RefreshShow(_config.FrameUnitWidth);
+        }
+        
     }
+    #endregion
+
+    #region Clip Inspector
+
+    private VisualElement _clipInspector;
+    public object CurrentInspectorObject;
+    void InitClipInspector()
+    {
+        _clipInspector = _root.Q<VisualElement>("ClipInspector");
+        SetInspector();
+    }
+
+    public void SetInspector(object target=null)
+    {
+        CurrentInspectorObject = target;
+        _clipInspector.Clear();
+        if(target == null) return;
+        
+        if(target is TrackItemBase trackItem)
+        {
+            _clipInspector.Add(trackItem.Inspector());
+        }
+    }
+    
     #endregion
 }
 
