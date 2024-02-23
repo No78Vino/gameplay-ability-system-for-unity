@@ -43,7 +43,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                 foreach (var clipEvent in AbilityAnimationData.animationClipData)
                 {
                     var item = new AnimationTrackItem();
-                    item.Init(this, Track, FrameWidth, clipEvent);
+                    item.InitTrackItem(this, Track, FrameWidth, clipEvent);
                     _trackItems.Add(item);
                 }
             }
@@ -158,6 +158,21 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             if (index < 0) return;
             AbilityAnimationData.animationClipData[index].startFrame= newIndex;
             AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
+        }
+        
+        public override void TickView(int frameIndex, params object[] param )
+        {
+            GameObject previewObject = param[0] as GameObject;
+            foreach (var clipEvent in AbilityAnimationData.animationClipData)
+            {
+                if (clipEvent.startFrame <= frameIndex && frameIndex < clipEvent.EndFrame)
+                {
+                    float clipFrameCount = (int)(clipEvent.Clip.frameRate * clipEvent.Clip.length);
+                    float progress = (frameIndex - clipEvent.startFrame) / clipFrameCount;
+                    if (progress > 1 && clipEvent.Clip.isLooping) progress -= (int)progress;
+                    clipEvent.Clip.SampleAnimation(previewObject, progress * clipEvent.Clip.length);
+                }
+            }
         }
     }
 }

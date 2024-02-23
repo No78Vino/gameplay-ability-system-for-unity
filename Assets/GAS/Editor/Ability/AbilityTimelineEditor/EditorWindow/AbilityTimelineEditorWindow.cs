@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
@@ -96,6 +97,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private string _previousScenePath;
     private Button BtnLoadPreviewScene;
     private Button BtnBackToScene;
+    private ObjectField _previewObjectField;
 
     void InitTopBar()
     {
@@ -103,6 +105,13 @@ public class AbilityTimelineEditorWindow : EditorWindow
         BtnLoadPreviewScene.clickable.clicked += LoadPreviewScene;
         BtnBackToScene = _root.Q<Button>(nameof(BtnBackToScene));
         BtnBackToScene.clickable.clicked += BackToScene;
+        _previewObjectField = _root.Q<ObjectField>("PreviewInstance");
+        _previewObjectField.RegisterValueChangedCallback(OnPreviewObjectChanged);
+    }
+
+    private void OnPreviewObjectChanged(ChangeEvent<Object> evt)
+    {
+        // TODO : 在这里处理预览对象的变化
     }
 
     private void BackToScene()
@@ -154,6 +163,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
             _currentSelectFrameIndex = Mathf.Clamp(value, 0, MaxFrame.value);
             CurrentFrame.value = _currentSelectFrameIndex;
             RefreshTimerDraw();
+            
+            EvaluateFrame(_currentSelectFrameIndex);
         }
     }
 
@@ -345,18 +356,26 @@ public class AbilityTimelineEditorWindow : EditorWindow
         CurrentSelectFrameIndex = evt.newValue;
     }
 
+    void RefreshPlayButton()
+    {
+        BtnPlay.text = !IsPlaying?"▶":"⏹";
+        BtnPlay.style.backgroundColor = !IsPlaying?new Color(0.5f, 0.5f, 0.5f, 0.5f):new Color(0.1f, 0.8f, 0.1f, 0.5f);
+    }
+    
     private void OnPlay()
     {
-        
+        IsPlaying = !IsPlaying;
     }
     
     private void OnLeftFrame()
     {
+        IsPlaying = false;
         CurrentSelectFrameIndex -= 1;
     }
 
     private void OnRightFrame()
     {
+        IsPlaying = false;
         CurrentSelectFrameIndex += 1;
     }
 
@@ -366,6 +385,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     private VisualElement _contentTrackListParent;
     private VisualElement _trackMenuParent;
+    private AnimationTrack animationTrack;
     List<TrackBase> _trackList = new List<TrackBase>();
     private void InitTracks()
     {
@@ -380,7 +400,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         _trackList.Clear();
         _contentTrackListParent.Clear();
         _trackMenuParent.Clear();
-        var animationTrack = new AnimationTrack();
+        animationTrack = new AnimationTrack();
         animationTrack.Init(_contentTrackListParent, _trackMenuParent,_config.FrameUnitWidth);
         _trackList.Add(animationTrack);
     }
@@ -408,16 +428,83 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     public void SetInspector(object target=null)
     {
+        if (CurrentInspectorObject == target) return;
+        if (CurrentInspectorObject != null)
+        {
+            if (CurrentInspectorObject is TrackItemBase oldTrackItem) oldTrackItem.OnUnSelect();
+            if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
+        }
+
         CurrentInspectorObject = target;
         _clipInspector.Clear();
-        if(target == null) return;
-        
-        if(target is TrackItemBase trackItem)
+        switch (CurrentInspectorObject)
         {
-            _clipInspector.Add(trackItem.Inspector());
+            case null:
+                return;
+            case TrackItemBase trackItem:
+                _clipInspector.Add(trackItem.Inspector());
+                trackItem.OnSelect();
+                break;
+            case TrackBase track:
+                track.OnSelect();
+                break;
         }
     }
     
+    #endregion
+
+    #region TimelinePreview
+
+    private DateTime _startTime;
+    private int _startPlayFrameIndex;
+    private bool _isPlaying;
+    public bool IsPlaying
+    {
+        get => _isPlaying;
+        private set
+        {
+            _isPlaying = CanPlay() && value;
+            
+            if (_isPlaying)
+            {
+                _startTime = DateTime.Now;
+                _startPlayFrameIndex = CurrentSelectFrameIndex;
+            }
+
+            RefreshPlayButton();
+        }
+    }
+
+    private void Update()
+    {
+        if (IsPlaying)
+        {
+            var deltaTime = (DateTime.Now - _startTime).TotalSeconds;
+            var frameIndex = (int)(deltaTime * _config.DefaultFrameRate) + _startPlayFrameIndex;
+            if (frameIndex >= CurrentMaxFrame)
+            {
+                frameIndex = CurrentMaxFrame;
+                IsPlaying = false;
+            }
+            CurrentSelectFrameIndex = frameIndex;
+        }
+    }
+    
+    private void EvaluateFrame(int frameIndex)
+    {
+        if (AbilityAsset != null && _previewObjectField.value != null)
+        {
+            // TODO : 在这里处理预览对象的动画,特效等等
+            animationTrack.TickView(frameIndex, _previewObjectField.value as GameObject);
+        }
+    }
+
+    bool CanPlay()
+    {
+        bool canPlay= AbilityAsset != null && _previewObjectField.value != null;
+        return canPlay;
+    }
+
     #endregion
 }
 

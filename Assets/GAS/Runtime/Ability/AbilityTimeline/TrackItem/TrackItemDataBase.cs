@@ -4,14 +4,19 @@ using UnityEngine.Serialization;
 namespace GAS.Runtime.Ability.AbilityTimeline
 {
     [Serializable]
-    public abstract class FrameEventBase
+    public abstract class TrackEventBase
+    {        
+        public int startFrame;
+    }
+    
+    [Serializable]
+    public abstract class FrameEventBase:TrackEventBase
     {
     }
     
     [Serializable]
-    public abstract class ClipEventBase
+    public abstract class ClipEventBase:TrackEventBase
     {
-        public int startFrame;
         public int durationFrame;
         public int EndFrame => startFrame + durationFrame;
     }

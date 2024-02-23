@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
@@ -14,6 +15,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         protected abstract string TrackAssetPath { get; }
         protected abstract string MenuAssetPath { get; }
+        public abstract void TickView(int frameIndex, params object[] param);
 
         // public TrackBase(VisualElement trackParent, VisualElement menuParent, float frameWidth)
         // {
@@ -41,6 +43,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         {
             RefreshShow(FrameWidth);
         }
+
+        #region Select
+
+        public void Select(){}
+        public void OnSelect(){}
+        public void OnUnSelect(){}
+
+        #endregion
     }
 }
 #endif

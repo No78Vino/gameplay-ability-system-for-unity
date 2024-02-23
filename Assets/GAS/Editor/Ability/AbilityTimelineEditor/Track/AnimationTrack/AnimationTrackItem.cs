@@ -6,66 +6,53 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 {
-    public class AnimationTrackItem : TrackItemBase
+    public class AnimationTrackItem : TrackItem<AnimationTrack>
     {
-        private static readonly Color normalColor = new(0, 0.8f, 0.1f, 0.5f);
-        private static readonly Color selectColor = new(0.7f, 0.1f, 0f, 0.5f);
-
-        private AnimationClipEvent _animationClipEvent;
+        private AnimationClipEvent AnimationClipEvent => trackEvent as AnimationClipEvent;
         private VisualElement _animOverLine;
 
         private bool _dragging;
-        private float _frameUnitWidth;
+
         private VisualElement _mainDragArea;
         private int _startDragFrameIndex;
         private float _startDragX;
-        private int _startFrameIndex;
-
-
-        private AnimationTrack _track;
+  
+        
         public Label ItemLabel { get; private set; }
 
         protected override string ItemAssetPath =>
             "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackItem.uxml";
 
-        public void Init(
-            AnimationTrack track,
+        public override void InitTrackItem(
+            TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            AnimationClipEvent animationClipEvent)
+            TrackEventBase animationClipEvent)
         {
-            base.Init(animationClipEvent);
+            base.InitTrackItem(track, parent, frameUnitWidth, animationClipEvent);
+    
             ItemLabel = Item as Label;
-            _track = track;
-            parent.Add(Item);
-            _startFrameIndex = animationClipEvent.startFrame;
-            _frameUnitWidth = frameUnitWidth;
-            _animationClipEvent = animationClipEvent;
             _mainDragArea = Item.Q<VisualElement>("Main");
             _animOverLine = Item.Q<VisualElement>("OverLine");
-
             _mainDragArea.RegisterCallback<MouseDownEvent>(OnMouseDown);
             _mainDragArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
             _mainDragArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             _mainDragArea.RegisterCallback<MouseOutEvent>(OnMouseOut);
-
-            Item.style.backgroundColor = normalColor;
-
-            RefreshShow(_frameUnitWidth);
+            
+            RefreshShow(this.frameUnitWidth);
         }
 
-        public void RefreshShow(float newFrameUnitWidth)
+        public override void RefreshShow(float newFrameUnitWidth)
         {
-            _frameUnitWidth = newFrameUnitWidth;
-
-            ItemLabel.text = _animationClipEvent.Clip.name;
+            base.RefreshShow(newFrameUnitWidth);
+            ItemLabel.text = AnimationClipEvent.Clip.name;
             var mainPos = ItemLabel.transform.position;
-            mainPos.x = _startFrameIndex * _frameUnitWidth;
+            mainPos.x = startFrameIndex * frameUnitWidth;
             ItemLabel.transform.position = mainPos;
-            ItemLabel.style.width = _animationClipEvent.durationFrame * _frameUnitWidth;
+            ItemLabel.style.width = AnimationClipEvent.durationFrame * frameUnitWidth;
 
-            var clipFrameCount = (int)(_animationClipEvent.Clip.length * _animationClipEvent.Clip.frameRate);
-            if (clipFrameCount > _animationClipEvent.durationFrame)
+            var clipFrameCount = (int)(AnimationClipEvent.Clip.length * AnimationClipEvent.Clip.frameRate);
+            if (clipFrameCount > AnimationClipEvent.durationFrame)
             {
                 _animOverLine.style.display = DisplayStyle.None;
             }
@@ -74,7 +61,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                 _animOverLine.style.display = DisplayStyle.Flex;
 
                 var overLinePos = _animOverLine.transform.position;
-                overLinePos.x = clipFrameCount * _frameUnitWidth - 1;
+                overLinePos.x = clipFrameCount * frameUnitWidth - 1;
                 _animOverLine.transform.position = overLinePos;
             }
 
@@ -98,23 +85,23 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             clip = new ObjectField("动画资源");
             clip.style.display = DisplayStyle.Flex;
             clip.objectType = typeof(AnimationClip);
-            clip.value = _animationClipEvent.Clip;
+            clip.value = AnimationClipEvent.Clip;
             clip.RegisterValueChangedCallback(OnClipChanged);
             inspector.Add(clip);
 
             // 起始
-            startFrame = new Label($"起始帧:{_startFrameIndex}f/{_startFrameIndex * Time.fixedDeltaTime}s");
+            startFrame = new Label($"起始帧:{startFrameIndex}f/{startFrameIndex * Time.fixedDeltaTime}s");
             startFrame.style.display = DisplayStyle.Flex;
             inspector.Add(startFrame);
             // 结束
             endFrame = new Label(
-                $"结束帧:{_animationClipEvent.EndFrame}f/{_animationClipEvent.EndFrame * Time.fixedDeltaTime}s");
+                $"结束帧:{AnimationClipEvent.EndFrame}f/{AnimationClipEvent.EndFrame * Time.fixedDeltaTime}s");
             endFrame.style.display = DisplayStyle.Flex;
             inspector.Add(endFrame);
 
             // 时长
             duration = new IntegerField("时长(f)");
-            duration.value = _animationClipEvent.durationFrame;
+            duration.value = AnimationClipEvent.durationFrame;
             duration.isDelayed = true;
             duration.RegisterValueChangedCallback(OnDurationChanged);
             duration.style.display = DisplayStyle.Flex;
@@ -123,7 +110,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             // 过渡
             transition = new FloatField("过渡时间");
             transition.style.display = DisplayStyle.Flex;
-            transition.value = _animationClipEvent.TransitionTime;
+            transition.value = AnimationClipEvent.TransitionTime;
             transition.isDelayed = true;
             transition.RegisterValueChangedCallback(OnTransitionChanged);
             inspector.Add(transition);
@@ -139,34 +126,34 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
         private void OnDurationChanged(ChangeEvent<int> evt)
         {
-            var max = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount - _startFrameIndex;
-            foreach (var clipEvent in _track.AbilityAnimationData.animationClipData)
+            var max = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount - startFrameIndex;
+            foreach (var clipEvent in track.AbilityAnimationData.animationClipData)
             {
-                if (_startFrameIndex >= clipEvent.startFrame) continue;
-                var length = Mathf.Max(1,clipEvent.startFrame - _startFrameIndex);
+                if (startFrameIndex >= clipEvent.startFrame) continue;
+                var length = Mathf.Max(1,clipEvent.startFrame - startFrameIndex);
                 max = Mathf.Min(max, length);
             }
             var newDuration = Mathf.Clamp(evt.newValue,1,max);
-            _animationClipEvent.durationFrame = newDuration;
+            AnimationClipEvent.durationFrame = newDuration;
             AbilityTimelineEditorWindow.Instance.Save();
             duration.value = newDuration;
-            RefreshShow(_frameUnitWidth);
+            RefreshShow(frameUnitWidth);
         }
 
         public override void Delete()
         {
             var success = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData.Remove(
-                _animationClipEvent);
+                AnimationClipEvent);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
-            _track.RemoveTrackItem(this);
+            track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();
         }
 
         private void OnTransitionChanged(ChangeEvent<float> evt)
         {
             var newTransition = Mathf.Max(0, evt.newValue);
-            _animationClipEvent.TransitionTime = newTransition;
+            AnimationClipEvent.TransitionTime = newTransition;
             AbilityTimelineEditorWindow.Instance.Save();
             transition.value = newTransition;
             //RefreshShow(_frameUnitWidth);
@@ -177,15 +164,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             var animClip = evt.newValue as AnimationClip;
             if (animClip != null)
             {
-                _animationClipEvent.Clip = animClip;
-                _animationClipEvent.durationFrame = (int)(animClip.length * animClip.frameRate);
+                AnimationClipEvent.Clip = animClip;
+                AnimationClipEvent.durationFrame = (int)(animClip.length * animClip.frameRate);
                 AbilityTimelineEditorWindow.Instance.Save();
-                RefreshShow(_frameUnitWidth);
+                RefreshShow(frameUnitWidth);
             }
             else
             {
                 EditorUtility.DisplayDialog("ERROR", "动画资源不可为空！", "确定");
-                RefreshShow(_frameUnitWidth);
+                RefreshShow(frameUnitWidth);
             }
         }
 
@@ -195,19 +182,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
         private void OnMouseDown(MouseDownEvent evt)
         {
-            Item.style.backgroundColor = selectColor;
             _dragging = true;
-            _startDragFrameIndex = _startFrameIndex;
+            _startDragFrameIndex = startFrameIndex;
             _startDragX = evt.mousePosition.x;
-
-            // 更新小面板
-            AbilityTimelineEditorWindow.Instance.SetInspector(this);
+            Select();
         }
 
         private void OnMouseUp(MouseUpEvent evt)
         {
             _dragging = false;
-            Item.style.backgroundColor = normalColor;
             ApplyDrag();
         }
 
@@ -216,22 +199,22 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             if (_dragging)
             {
                 var offset = evt.mousePosition.x - _startDragX;
-                var offsetFrame = Mathf.RoundToInt(offset / _frameUnitWidth);
+                var offsetFrame = Mathf.RoundToInt(offset / frameUnitWidth);
                 var targetFrame = _startDragFrameIndex + offsetFrame;
                 if (offsetFrame == 0 || targetFrame < 0) return;
 
                 var checkDrag = offsetFrame > 0
-                    ? _track.CheckFrameIndexOnDrag(targetFrame + _animationClipEvent.durationFrame)
-                    : _track.CheckFrameIndexOnDrag(targetFrame);
+                    ? track.CheckFrameIndexOnDrag(targetFrame + AnimationClipEvent.durationFrame)
+                    : track.CheckFrameIndexOnDrag(targetFrame);
 
                 if (checkDrag)
                 {
-                    _startFrameIndex = targetFrame;
-                    if (_startFrameIndex + _animationClipEvent.durationFrame >
+                    startFrameIndex = targetFrame;
+                    if (startFrameIndex + AnimationClipEvent.durationFrame >
                         AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
                         AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex =
-                            _startFrameIndex + _animationClipEvent.durationFrame;
-                    RefreshShow(_frameUnitWidth);
+                            startFrameIndex + AnimationClipEvent.durationFrame;
+                    RefreshShow(frameUnitWidth);
                 }
             }
         }
@@ -239,13 +222,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         private void OnMouseOut(MouseOutEvent evt)
         {
             if (_dragging) ApplyDrag();
-            Item.style.backgroundColor = normalColor;
             _dragging = false;
         }
 
         private void ApplyDrag()
         {
-            if (_startFrameIndex != _startDragFrameIndex) _track.SetFrameIndex(_startDragFrameIndex, _startFrameIndex);
+            if (startFrameIndex != _startDragFrameIndex) track.SetFrameIndex(_startDragFrameIndex, startFrameIndex);
         }
 
         #endregion
