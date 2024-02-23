@@ -10,18 +10,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
     {
         private AnimationClipEvent AnimationClipEvent => trackEvent as AnimationClipEvent;
         private VisualElement _animOverLine;
-
-        private bool _dragging;
-
+        private VisualElement _areaChangeSize;
         private VisualElement _mainDragArea;
         private int _startDragFrameIndex;
         private float _startDragX;
   
-        
+        private bool _dragging;
         public Label ItemLabel { get; private set; }
-
-        protected override string ItemAssetPath =>
-            "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackItem.uxml";
+        protected override string ItemAssetGUID => "3197d239f4ce79b41b2278ecea5aaab8";
 
         public override void InitTrackItem(
             TrackBase track,
@@ -34,11 +30,18 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             ItemLabel = Item as Label;
             _mainDragArea = Item.Q<VisualElement>("Main");
             _animOverLine = Item.Q<VisualElement>("OverLine");
+            _areaChangeSize = Item.Q<VisualElement>("AreaSizeChange");
+            
             _mainDragArea.RegisterCallback<MouseDownEvent>(OnMouseDown);
             _mainDragArea.RegisterCallback<MouseUpEvent>(OnMouseUp);
             _mainDragArea.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             _mainDragArea.RegisterCallback<MouseOutEvent>(OnMouseOut);
             
+            _areaChangeSize.RegisterCallback<MouseDownEvent>(OnBtnSizeMouseDown);
+            _areaChangeSize.RegisterCallback<MouseUpEvent>(OnBtnSizeMouseUp);
+            _areaChangeSize.RegisterCallback<MouseMoveEvent>(OnBtnSizeMouseMove);
+            
+            _mainDragArea.generateVisualContent += OnDrawBoxGenerateVisualContent;
             RefreshShow(this.frameUnitWidth);
         }
 
@@ -215,6 +218,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                         AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex =
                             startFrameIndex + AnimationClipEvent.durationFrame;
                     RefreshShow(frameUnitWidth);
+                    AbilityTimelineEditorWindow.Instance.SetInspector(this);
                 }
             }
         }
@@ -231,5 +235,87 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         }
 
         #endregion
+
+        #region SizeLine Mouse Event
+        
+        bool _sizeDragging;
+        private float _lastSizeMousePosX;
+        private void OnBtnSizeMouseDown(MouseDownEvent evt)
+        {
+            _sizeDragging = true;
+            _lastSizeMousePosX = evt.mousePosition.x;
+            Debug.Log($"OnBtnSizeMouseDown");
+        }
+        
+        private void OnBtnSizeMouseUp(MouseUpEvent evt)
+        {
+            _sizeDragging = false;
+            // float offset = evt.mousePosition.x - _lastSizeMousePosX;
+            // int offsetFrame = Mathf.RoundToInt(offset / frameUnitWidth);
+            // int durationFrame = AnimationClipEvent.durationFrame + offsetFrame;
+            // ApplySizeDrag(durationFrame);
+            Debug.Log($"OnBtnSizeMouseUp");
+        }
+
+        private void OnBtnSizeMouseMove(MouseMoveEvent evt)
+        {
+            if (_sizeDragging)
+            {
+                float offset = evt.mousePosition.x - _lastSizeMousePosX;
+                int offsetFrame = Mathf.RoundToInt(offset / frameUnitWidth);
+                int durationFrame = AnimationClipEvent.durationFrame + offsetFrame;
+                if (offsetFrame == 0 || durationFrame < 1) return;
+                Debug.Log($"DurationFrame:{durationFrame}");
+                //ApplySizeDrag(durationFrame);
+            }
+        }
+        
+        private void ApplySizeDrag(int durationFrame)
+        {            
+            var max = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount - startFrameIndex;
+            foreach (var clipEvent in track.AbilityAnimationData.animationClipData)
+            {
+                if (startFrameIndex >= clipEvent.startFrame) continue;
+                var length = Mathf.Max(1,clipEvent.startFrame - startFrameIndex);
+                max = Mathf.Min(max, length);
+            }
+            
+            durationFrame = Mathf.Clamp(durationFrame, 1, max);
+            AnimationClipEvent.durationFrame = durationFrame;
+            AbilityTimelineEditorWindow.Instance.Save();
+            RefreshShow(frameUnitWidth);
+            AbilityTimelineEditorWindow.Instance.SetInspector(this);
+        }
+        #endregion
+        
+        public override void OnUnSelect()
+        {
+            base.OnUnSelect();
+            if(_areaChangeSize!=null) _areaChangeSize.style.display = DisplayStyle.None;
+        }
+        
+        public override void OnSelect()
+        {
+            base.OnUnSelect();
+            if(_areaChangeSize!=null) _areaChangeSize.style.display = DisplayStyle.Flex;
+        }
+        
+        
+        void OnDrawBoxGenerateVisualContent(MeshGenerationContext mgc)
+        {
+            bool Hovered = true;
+            if (Hovered)
+            {
+                var paint2D = mgc.painter2D;
+                paint2D.strokeColor = new Color(68, 192, 255, 255);
+                paint2D.BeginPath();
+                paint2D.MoveTo(new Vector2(0, 0));
+                paint2D.LineTo(new Vector2(_mainDragArea.worldBound.width, 0));
+                paint2D.LineTo(new Vector2(_mainDragArea.worldBound.width, _mainDragArea.worldBound.height));
+                paint2D.LineTo(new Vector2(0, _mainDragArea.worldBound.height));
+                paint2D.LineTo(new Vector2(0, 0));
+                paint2D.Stroke();
+            }
+        }
     }
 }

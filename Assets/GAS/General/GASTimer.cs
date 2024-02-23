@@ -25,5 +25,13 @@ namespace GAS.General
 
         private static long _startTimestamp;
         public static float Time;
+
+        private static int _frameRate = 60;
+        public static int FrameRate => _frameRate;
+        
+        public static void SetFrameRate(int rate)
+        {
+            _frameRate = rate;
+        }
     }
 }

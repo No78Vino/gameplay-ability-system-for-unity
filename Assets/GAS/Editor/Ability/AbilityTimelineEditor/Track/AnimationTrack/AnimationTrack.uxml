@@ -1,3 +1,3 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="AnimationTrack" style="flex-grow: 1; height: 35px; min-height: 35px; max-height: 35px; margin-bottom: 1px; background-color: rgb(68, 87, 65); align-items: auto; align-self: auto; justify-content: flex-start; flex-direction: row;" />
+    <ui:VisualElement name="AnimationTrack" style="flex-grow: 1; height: 35px; min-height: 35px; max-height: 35px; margin-bottom: 1px; background-color: rgb(111, 111, 111); align-items: auto; align-self: auto; justify-content: flex-start; flex-direction: row; border-left-color: rgba(0, 248, 238, 0.85); border-right-color: rgba(0, 248, 238, 0.85); border-top-color: rgba(0, 248, 238, 0.85); border-bottom-color: rgba(0, 248, 238, 0.85); border-bottom-width: 1px;" />
 </ui:UXML>

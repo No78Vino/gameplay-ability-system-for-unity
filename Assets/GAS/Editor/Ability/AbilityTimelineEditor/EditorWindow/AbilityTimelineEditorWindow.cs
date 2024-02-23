@@ -20,8 +20,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     [SerializeField]
     private VisualTreeAsset m_VisualTreeAsset = default;
-
-
+    
     public static void ShowWindow(GeneralSequentialAbilityAsset asset)
     {
         AbilityTimelineEditorWindow wnd = GetWindow<AbilityTimelineEditorWindow>();

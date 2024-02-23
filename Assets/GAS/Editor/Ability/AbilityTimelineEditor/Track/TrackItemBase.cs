@@ -20,7 +20,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             this.frameUnitWidth = frameUnitWidth;
             this.trackEvent = trackEvent;
 
-            Item = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(ItemAssetPath).Instantiate().Query().ToList()[1];
+            var path = AssetDatabase.GUIDToAssetPath(ItemAssetGUID);
+            Item = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path).Instantiate().Query().ToList()[1];
+     
             parent.Add(Item);
             startFrameIndex = trackEvent.startFrame;
 
@@ -34,7 +36,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected VisualElement Item;
         protected int startFrameIndex;
         protected TrackEventBase trackEvent;
-        protected abstract string ItemAssetPath { get; }
+        protected abstract string ItemAssetGUID { get; }
         public abstract VisualElement Inspector();
         public abstract void Delete();
 

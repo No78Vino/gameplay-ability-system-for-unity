@@ -28,7 +28,7 @@ namespace GAS.Runtime.Ability
         
         // TODO : 持续性GameplayEffect发动轨道集合
         
-        // TODO : 瞬时性GameplayEffect发动轨道集合（Target生效函数覆写）
+        // TODO : 单位施加GameplayEffect发动轨道集合（Target生效函数覆写）
         
         // TODO : 自定义事件轨道集合
         
