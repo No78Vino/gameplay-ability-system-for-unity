@@ -38,7 +38,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         VisualElement labelFromUxml = m_VisualTreeAsset.Instantiate();
         _root.Add(labelFromUxml);
         
-        InitLeftInspector();
+        InitAbilityAssetBar();
         InitTopBar();
         InitTimerShaft();
         InitController();
@@ -74,7 +74,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         ? Editor.CreateEditor(AbilityAsset) as GeneralSequentialAbilityEditorWindow
         : null;
 
-    void InitLeftInspector()
+    void InitAbilityAssetBar()
     {
         _sequentialAbilityAsset = _root.Q<ObjectField>(("SequentialAbilityAsset"));
         _sequentialAbilityAsset.objectType = typeof(GeneralSequentialAbilityAsset);
@@ -430,7 +430,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         if (CurrentInspectorObject == target) return;
         if (CurrentInspectorObject != null)
         {
-            if (CurrentInspectorObject is TrackItemBase oldTrackItem) oldTrackItem.OnUnSelect();
+            if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.OnUnSelect();
             if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
         }
 
@@ -440,9 +440,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
         {
             case null:
                 return;
-            case TrackItemBase trackItem:
-                _clipInspector.Add(trackItem.Inspector());
-                trackItem.OnSelect();
+            case TrackClipBase trackClip:
+                _clipInspector.Add(trackClip.Inspector());
+                trackClip.OnSelect();
                 break;
             case TrackBase track:
                 track.OnSelect();

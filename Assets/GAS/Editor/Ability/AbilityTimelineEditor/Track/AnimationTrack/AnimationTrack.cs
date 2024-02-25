@@ -25,7 +25,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         protected override string MenuAssetPath =>
             "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
 
-        private List<AnimationTrackItem> _trackItems = new List<AnimationTrackItem>();
+        private List<AnimationTrackClip> _trackItems = new List<AnimationTrackClip>();
 
         public AbilityAnimationData AbilityAnimationData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
@@ -42,17 +42,17 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             {
                 foreach (var clipEvent in AbilityAnimationData.animationClipData)
                 {
-                    var item = new AnimationTrackItem();
-                    item.InitTrackItem(this, Track, FrameWidth, clipEvent);
+                    var item = new AnimationTrackClip();
+                    item.InitTrackClip(this, Track, FrameWidth, clipEvent);
                     _trackItems.Add(item);
                 }
             }
         }
 
-        public void RemoveTrackItem(AnimationTrackItem item)
+        public void RemoveTrackItem(AnimationTrackClip clip)
         {
-            Track.Remove(item.ItemLabel);
-            _trackItems.Remove(item);
+            Track.Remove(clip.ItemLabel);
+            _trackItems.Remove(clip);
         }
 
         #region DragEvent
