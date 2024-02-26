@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,6 +9,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 {
     public abstract class TrackBase
     {
+        protected List<AnimationTrackClip> _trackItems = new List<AnimationTrackClip>();
+        
         protected float FrameWidth;
         protected VisualElement MenuParent;
         protected VisualElement TrackParent;
@@ -35,6 +39,33 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             MenuParent.Add(Menu);
             
             FrameWidth = frameWidth;
+            
+            
+            Track.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            Track.RegisterCallback<PointerOutEvent>(OnPointerOut);
+        }
+
+        private void OnPointerOut(PointerOutEvent evt)
+        {
+            foreach (var clipViewPair in _trackItems)
+            {
+                clipViewPair.Ve.OnHover(false);
+            }
+        }
+
+        private void OnPointerMove(PointerMoveEvent evt)
+        {
+            var mousePos = evt.position;
+            foreach (var clipViewPair in _trackItems)
+            {
+                clipViewPair.Ve.OnHover(false);
+                if (clipViewPair.Ve.InClipRect(mousePos))
+                {
+                    clipViewPair.Ve.OnHover(true);
+                    evt.StopImmediatePropagation();
+                    return;
+                }
+            }
         }
 
         public virtual void RefreshShow(float newFrameWidth)

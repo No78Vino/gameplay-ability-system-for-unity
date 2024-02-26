@@ -149,6 +149,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private VisualElement TimeLineContainer;
     private IMGUIContainer SelectLine;
     private IMGUIContainer FinishLine;
+    private IMGUIContainer DottedLine;
     private VisualElement contentViewPort;
 
     private bool timerShaftMouseIn;
@@ -182,7 +183,27 @@ public class AbilityTimelineEditorWindow : EditorWindow
             RefreshTimerDraw();
         }
     }
-    
+
+    private int _dottedLineFrameIndex = -1;
+    public int DottedLineFrameIndex
+    {
+        get => _dottedLineFrameIndex;
+        set
+        {
+            if (_dottedLineFrameIndex == value) return;
+            _dottedLineFrameIndex = value;
+            bool showDottedLine = _dottedLineFrameIndex* _config.FrameUnitWidth >= CurrentFramePos &&
+                                  _dottedLineFrameIndex* _config.FrameUnitWidth < CurrentFramePos + TimerShaft.contentRect.width;
+            DottedLine.style.display = showDottedLine ? DisplayStyle.Flex : DisplayStyle.None;
+            DottedLine.MarkDirtyRepaint();
+
+            // AbilityAsset.MaxFrameCount = _currentMaxFrame;
+            // SaveAsset();
+            // MaxFrame.value = _currentMaxFrame;
+            // UpdateContentSize();
+            // RefreshTimerDraw();
+        }
+    }
     private float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
     private float CurrentSelectFramePos => _currentSelectFrameIndex * _config.FrameUnitWidth;
     private float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
@@ -205,6 +226,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
         
         FinishLine = _root.Q<IMGUIContainer>(nameof(FinishLine));
         FinishLine.onGUIHandler = OnFinishLineGUI;
+        
+        DottedLine = _root.Q<IMGUIContainer>(nameof(DottedLine));
+        DottedLine.onGUIHandler = OnDottedLineGUI;
     }
 
     void RefreshTimerDraw()
@@ -268,6 +292,29 @@ public class AbilityTimelineEditorWindow : EditorWindow
             var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
             var x = CurrentEndFramePos - CurrentFramePos;
             Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
+            Handles.EndGUI();
+        }
+    }
+    
+    private void OnDottedLineGUI()
+    {
+        var dottedLinePos =  DottedLineFrameIndex * _config.FrameUnitWidth;
+        if (dottedLinePos >= CurrentFramePos &&
+            dottedLinePos < CurrentFramePos + TimerShaft.contentRect.width)
+        {
+            Handles.BeginGUI();
+            Handles.color = new Color(1, 0.5f, 0, 1);
+            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
+            var x = dottedLinePos - CurrentFramePos;
+
+            float lineUnitSize = 10f;
+            int lineUnitsCount = 0;
+            for (float i = 0; i < length; i += lineUnitSize)
+            {
+                if (lineUnitsCount++ % 2 == 0)
+                    Handles.DrawLine(new Vector3(x, i), new Vector3(x, i + lineUnitSize));
+            }
+
             Handles.EndGUI();
         }
     }
@@ -442,10 +489,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
                 return;
             case TrackClipBase trackClip:
                 _clipInspector.Add(trackClip.Inspector());
-                trackClip.Ve.OnSelect();
+                //trackClip.Ve.OnSelect();
                 break;
             case TrackBase track:
-                track.OnSelect();
+                //track.OnSelect();
                 break;
         }
     }

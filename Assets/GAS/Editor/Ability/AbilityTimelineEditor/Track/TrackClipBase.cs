@@ -15,6 +15,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected ClipEventBase clipData;
         protected TrackBase trackBase;
         public TrackBase TrackBase => trackBase;
+        public ClipEventBase ClipData => clipData;
         
         public virtual void InitTrackClip(
             TrackBase track,
@@ -29,7 +30,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             ve = new TrackClipVisualElement();
             ve.InitClipInfo(this);
             parent.Add(ve);
-            ve.OnUnSelect();
+            if(AbilityTimelineEditorWindow.Instance.CurrentInspectorObject is TrackClipBase clipBase &&
+               clipData == clipBase.clipData)
+                ve.OnSelect();
+            else
+                ve.OnUnSelect();
         }
 
         public virtual VisualElement Inspector()
@@ -57,6 +62,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             clipData.startFrame = newStartFrame;
         }
         
+        public void UpdateClipDataDurationFrame(int neDurationFrame)
+        {
+            clipData.durationFrame = neDurationFrame;
+        }
+        
         #region Visual Element Event
         
         public void OnMainMouseDown(MouseDownEvent evt)
@@ -69,26 +79,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         public void OnMainMouseMove(MouseMoveEvent evt)
         {
-            // if (_dragging)
-            // {
-            //     var offset = evt.mousePosition.x - _startDragX;
-            //     var offsetFrame = Mathf.RoundToInt(offset / FrameUnitWidth);
-            //     var targetFrame = _startDragFrameIndex + offsetFrame;
-            //     if (offsetFrame == 0 || targetFrame < 0) return;
-
-                // var checkDrag = offsetFrame > 0
-                //     ? trackBase.CheckFrameIndexOnDrag(targetFrame + DurationFrame)
-                //     : trackBase.CheckFrameIndexOnDrag(targetFrame);
-                //
-                // if (checkDrag)
-                // {
-                //     StartFrameIndex = targetFrame;
-                //     if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
-                //         AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
-                //     RefreshShow(FrameUnitWidth);
-                //     AbilityTimelineEditorWindow.Instance.SetInspector(this);
-                // }
-            //}
         }
 
         public void OnMainMouseOut(MouseOutEvent evt)

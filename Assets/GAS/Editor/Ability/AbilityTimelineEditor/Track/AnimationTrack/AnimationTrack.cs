@@ -25,7 +25,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         protected override string MenuAssetPath =>
             "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
 
-        private List<AnimationTrackClip> _trackItems = new List<AnimationTrackClip>();
 
         public AbilityAnimationData AbilityAnimationData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
