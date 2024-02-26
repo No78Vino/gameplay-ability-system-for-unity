@@ -144,14 +144,14 @@ public class AbilityTimelineEditorWindow : EditorWindow
     #endregion
     
     #region TimerShaft
-    
-    private IMGUIContainer TimerShaft;
+
+    public IMGUIContainer TimerShaft { get; private set; }
     private VisualElement TimeLineContainer;
     private IMGUIContainer SelectLine;
     private IMGUIContainer FinishLine;
     private IMGUIContainer DottedLine;
     private IMGUIContainer DragItemPreview;
-    
+    public VisualElement MainContent{ get; private set; }
     private VisualElement contentViewPort;
 
     private bool timerShaftMouseIn;
@@ -200,7 +200,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
             DottedLine.MarkDirtyRepaint();
         }
     }
-    private float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
+    public float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
     private float CurrentSelectFramePos => _currentSelectFrameIndex * _config.FrameUnitWidth;
     private float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
 
@@ -231,6 +231,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     void InitTimerShaft()
     {
         var mainContainer = _root.Q<ScrollView>("MainContent");
+        MainContent = mainContainer;
         TimeLineContainer = mainContainer.Q<VisualElement>("unity-content-container");
         contentViewPort = mainContainer.Q<VisualElement>("unity-content-viewport");
         

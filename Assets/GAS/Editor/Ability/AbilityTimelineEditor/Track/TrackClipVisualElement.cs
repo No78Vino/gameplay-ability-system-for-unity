@@ -93,9 +93,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         #region Main Area Mouse Event
         
-        // private int _startDragFrameIndex;
-        // private float _startDragX;
-        
         private float _lastMainDragStartPos;
         private float _newStartFramePos;
         private int NewStartFrame => (int)_newStartFramePos;
@@ -113,127 +110,68 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = -1;
         }
 
-        protected void OnMainMouseMove(Vector2 delta)
+        private void OnMainMouseMove(Vector2 delta)
         {
             var offsetFrame = delta.x / FrameUnitWidth;
             _newStartFramePos = _lastMainDragStartPos + offsetFrame;
             if (offsetFrame == 0 || _newStartFramePos < 0) return;
-
-            int minFrame = 0;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
+            int minFrame = LeftMinFrameIndex();
+            int maxFrame = RightMaxFrameIndex();
+            if (NewStartFrame >= minFrame && NewStartFrame+DurationFrame <= maxFrame)
             {
-                if (clipEvent != _clip.ClipData && clipEvent.EndFrame<_lastMainDragStartPos)
-                {
-                    minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                    break;
-                }
-            }
-            
-            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastMainDragStartPos+DurationFrame)
-                {
-                    maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                    break;
-                }
-            }
-            if (NewResizeStartFrame >= minFrame && NewResizeStartFrame <= maxFrame)
-            {
+                var mainContent=AbilityTimelineEditorWindow.Instance.MainContent;
                 var bound = _mainArea.worldBound;
-                bound.x = NewStartFrame * FrameUnitWidth;
-                bound.y = bound.height;
-                AbilityTimelineEditorWindow.Instance.ShowDragItemPreview=true;
+                var rectOriginX = NewStartFrame * FrameUnitWidth - AbilityTimelineEditorWindow.Instance.CurrentFramePos;
+                bound.y = bound.y - mainContent.worldBound.y + bound.height;
+                bound.x = Mathf.Clamp(rectOriginX, 0, parent.worldBound.width);
+                if (rectOriginX < 0)
+                    bound.width += rectOriginX;
+                if (bound.width + bound.x > mainContent.worldBound.width)
+                    bound.width = mainContent.worldBound.width - bound.x;
+                AbilityTimelineEditorWindow.Instance.ShowDragItemPreview = true;
                 AbilityTimelineEditorWindow.Instance.DragItemPreviewRect = bound;
                 AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = NewStartFrame;
+                
+                Debug.Log($"Draw Preview bound={bound}");
             }
-            
-            // var offsetFrame = delta.x / FrameUnitWidth;
-            // var targetFrame = _startDragFrameIndex + Mathf.RoundToInt(offsetFrame);
-            // if (offsetFrame == 0 || targetFrame < 0) return;
-            //
-            // onMainMouseMove?.Invoke(delta);
-            //
-            // var checkDrag = offsetFrame > 0
-            //     ? _clip.TrackBase.CheckFrameIndexOnDrag(targetFrame + DurationFrame)
-            //     : _clip.TrackBase.CheckFrameIndexOnDrag(targetFrame);
-            //
-            // if (checkDrag)
-            // {
-            //     var bound = _mainArea.worldBound;
-            //     bound.x = targetFrame * FrameUnitWidth;
-            //     
-            //     AbilityTimelineEditorWindow.Instance.ShowDragItemPreview=true;
-            //     AbilityTimelineEditorWindow.Instance.DragItemPreviewRect = bound;
-            //     AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = targetFrame;
-            // }
         }
-        // {
-        //     if (_dragging)
-        //     {
-        //         var offset = evt.mousePosition.x - _startDragX;
-        //         var offsetFrame = Mathf.RoundToInt(offset / FrameUnitWidth);
-        //         var targetFrame = _startDragFrameIndex + offsetFrame;
-        //         if (offsetFrame == 0 || targetFrame < 0) return;
-        //         
-        //         onMainMouseMove?.Invoke(evt);
-        //         
-        //         var checkDrag = offsetFrame > 0
-        //             ? _clip.TrackBase.CheckFrameIndexOnDrag(targetFrame + DurationFrame)
-        //             : _clip.TrackBase.CheckFrameIndexOnDrag(targetFrame);
-        //
-        //         if (checkDrag)
-        //         {
-        //             var bound = _mainArea.worldBound;
-        //             bound.x = targetFrame * FrameUnitWidth;
-        //             AbilityTimelineEditorWindow.Instance.DragItemPreviewRect = bound;
-        //             AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = targetFrame;
-        //             // _clip.UpdateClipDataStartFrame(targetFrame);
-        //             // if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
-        //             //     AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
-        //             // _clip.RefreshShow(FrameUnitWidth);
-        //             // AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
-        //         }
-        //     }
-        //}
-        
-        protected void OnMainAreaApplyDrag()
+
+        private void OnMainAreaApplyDrag()
+        {
+            int minFrame = LeftMinFrameIndex();
+            int maxFrame = RightMaxFrameIndex();
+            var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame - DurationFrame);
+            _clip.UpdateClipDataStartFrame(newStartFrame);
+            _clip.RefreshShow(FrameUnitWidth);
+        }
+
+        int LeftMinFrameIndex()
         {
             int minFrame = 0;
             foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
             {
-                if (clipEvent != _clip.ClipData && clipEvent.EndFrame<_lastMainDragStartPos)
+                if (clipEvent != _clip.ClipData && clipEvent.EndFrame<=_lastMainDragStartPos)
                 {
                     minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                    break;
                 }
             }
-            
+
+            return minFrame;
+        }
+        
+        int RightMaxFrameIndex()
+        {
             int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
             foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
             {
                 if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastMainDragStartPos+DurationFrame)
                 {
                     maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                    break;
                 }
             }
-            var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame);
-            _clip.UpdateClipDataStartFrame(newStartFrame);
-            _clip.RefreshShow(FrameUnitWidth);
-            
-            // if (StartFrameIndex != _startDragFrameIndex)
-            // {
-            //     _clip.TrackBase.SetFrameIndex(_startDragFrameIndex, StartFrameIndex);
-            // }
-            
-            // _clip.UpdateClipDataStartFrame(targetFrame);
-            // if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
-            //     AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
-            // _clip.RefreshShow(FrameUnitWidth);
-            // AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
-        }
 
+            return maxFrame;
+        }
         #endregion
         
         #region Hover And Select

@@ -35,7 +35,7 @@
                     <ui:IMGUIContainer name="SelectLine" style="position: absolute; left: 0;" />
                     <ui:IMGUIContainer name="FinishLine" style="position: absolute; left: 0;" />
                     <ui:IMGUIContainer name="DottedLine" style="position: absolute; left: 0;" />
-                    <ui:IMGUIContainer name="DragItemPreview" style="position: absolute; left: 0;" />
+                    <ui:IMGUIContainer name="DragItemPreview" style="position: absolute; left: 0; top: 0;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="ClipInspector" style="flex-grow: 0; width: 300px; min-width: 300px; border-left-color: rgb(120, 120, 120); border-right-color: rgb(120, 120, 120); border-top-color: rgb(120, 120, 120); border-bottom-color: rgb(120, 120, 120); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; max-width: 300px; align-self: auto; align-items: flex-start; flex-shrink: 1;" />
             </ui:VisualElement>
