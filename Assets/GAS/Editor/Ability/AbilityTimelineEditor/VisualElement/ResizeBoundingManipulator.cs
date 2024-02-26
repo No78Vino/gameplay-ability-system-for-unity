@@ -16,7 +16,7 @@ namespace GAS.Editor.Ability
         private Vector3 m_Start;
         public float Offset = 0;
 
-        private const int CursorWidth = 4;
+        private const int CursorWidth = 5;
 
         public ResizeBoundingManipulator(Action<Vector2> onDragMove)
         {
@@ -58,9 +58,9 @@ namespace GAS.Editor.Ability
             Handles.BeginGUI();
             var rect = ResizeHandle.worldBound;
             EditorGUIUtility.AddCursorRect(new Rect(0, 0, CursorWidth, rect.height), MouseCursor.ResizeHorizontal);
-            Handles.color = new Color(1f, 0f, 0f, 1f);
-            Handles.DrawLine(new Vector3(0, 0, 0), new Vector3(0, rect.height, 0));
-            Handles.DrawLine(new Vector3(CursorWidth, 0, 0), new Vector3(CursorWidth, rect.height, 0));
+            // Handles.color = new Color(1f, 0f, 0f, 1f);
+            // Handles.DrawLine(new Vector3(0, 0, 0), new Vector3(0, rect.height, 0));
+            // Handles.DrawLine(new Vector3(CursorWidth, 0, 0), new Vector3(CursorWidth, rect.height, 0));
             Handles.EndGUI();
         }
         

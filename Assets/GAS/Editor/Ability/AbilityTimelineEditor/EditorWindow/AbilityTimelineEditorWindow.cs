@@ -150,6 +150,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private IMGUIContainer SelectLine;
     private IMGUIContainer FinishLine;
     private IMGUIContainer DottedLine;
+    private IMGUIContainer DragItemPreview;
+    
     private VisualElement contentViewPort;
 
     private bool timerShaftMouseIn;
@@ -196,17 +198,36 @@ public class AbilityTimelineEditorWindow : EditorWindow
                                   _dottedLineFrameIndex* _config.FrameUnitWidth < CurrentFramePos + TimerShaft.contentRect.width;
             DottedLine.style.display = showDottedLine ? DisplayStyle.Flex : DisplayStyle.None;
             DottedLine.MarkDirtyRepaint();
-
-            // AbilityAsset.MaxFrameCount = _currentMaxFrame;
-            // SaveAsset();
-            // MaxFrame.value = _currentMaxFrame;
-            // UpdateContentSize();
-            // RefreshTimerDraw();
         }
     }
     private float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
     private float CurrentSelectFramePos => _currentSelectFrameIndex * _config.FrameUnitWidth;
     private float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
+
+    private bool _showDragItemPreview;
+
+    public bool ShowDragItemPreview
+    {
+        get => _showDragItemPreview;
+        set
+        {
+            if (_showDragItemPreview == value) return;
+            _showDragItemPreview = value;
+            DragItemPreview.MarkDirtyRepaint();
+        }
+    }
+    private Rect _dragItemPreviewRect;
+
+    public Rect DragItemPreviewRect
+    {
+        get => _dragItemPreviewRect;
+        set
+        {
+            _dragItemPreviewRect = value;
+            DragItemPreview.MarkDirtyRepaint();
+        }
+    }
+    
     void InitTimerShaft()
     {
         var mainContainer = _root.Q<ScrollView>("MainContent");
@@ -229,6 +250,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
         
         DottedLine = _root.Q<IMGUIContainer>(nameof(DottedLine));
         DottedLine.onGUIHandler = OnDottedLineGUI;
+        
+        DragItemPreview = _root.Q<IMGUIContainer>(nameof(DragItemPreview));
+        DragItemPreview.onGUIHandler = OnDragItemPreviewGUI;
     }
 
     void RefreshTimerDraw()
@@ -315,6 +339,17 @@ public class AbilityTimelineEditorWindow : EditorWindow
                     Handles.DrawLine(new Vector3(x, i), new Vector3(x, i + lineUnitSize));
             }
 
+            Handles.EndGUI();
+        }
+    }
+    
+    void OnDragItemPreviewGUI()
+    {
+        if (ShowDragItemPreview)
+        {
+            Handles.BeginGUI();
+            Handles.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            Handles.DrawSolidRectangleWithOutline(DragItemPreviewRect, new Color(0.9f, 0.5f, 0, 0.9f), Color.white);
             Handles.EndGUI();
         }
     }
