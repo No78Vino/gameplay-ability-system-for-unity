@@ -1,3 +1,4 @@
+using System;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         private VisualElement _rightResizeArea;
 
         public Label ItemLabel => _itemLabel;
+        public VisualElement OverLine => _overLine;
 
         private TrackClipBase _clip;
         private float FrameUnitWidth=>_clip.FrameUnitWidth;
@@ -30,19 +32,26 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         private int _startDragFrameIndex;
         private float _startDragX;
         private bool _dragging;
-        
-        
+
+        #region Visual Element Event
+
+        public EventCallback<MouseDownEvent> onMainMouseDown;
+        public EventCallback<MouseUpEvent> onMainMouseUp;
+        public EventCallback<MouseMoveEvent> onMainMouseMove;
+        public EventCallback<MouseOutEvent> onMainMouseOut;
+
+        #endregion
         public TrackClipVisualElement()
         {
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AssetDatabase.GUIDToAssetPath(ItemAssetGUID));
             visualTree.CloneTree(this);
-            AddToClassList("trackItem");
+            AddToClassList("clip");
             
             _outsideBox = this.Q<VisualElement>("OutsideBox");
             _itemLabel = this.Q<Label>("ItemLabel");
             _overLine = this.Q<VisualElement>("OverLine");
             _selectedBottomLine = this.Q<VisualElement>("SelectedBottomLine");
-            _mainArea = this.Q<VisualElement>("MainArea");
+            _mainArea = this.Q<VisualElement>("Main");
             _leftResizeArea = this.Q<VisualElement>("LeftResizeArea");
             _rightResizeArea = this.Q<VisualElement>("RightResizeArea");
             
@@ -50,13 +59,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _mainArea.RegisterCallback<MouseDownEvent>(OnMainMouseDown);
             _mainArea.RegisterCallback<MouseUpEvent>(OnMainMouseUp);
             _mainArea.RegisterCallback<MouseMoveEvent>(OnMainMouseMove);
-            _mainArea.RegisterCallback<MouseOutEvent>(OnMouseOut);
-            _mainArea.generateVisualContent += OnDrawBoxGenerateVisualContent;
-        }
+            _mainArea.RegisterCallback<MouseOutEvent>(OnMainMouseOut);
 
+            //style.height = 200;
+
+            //_mainArea.generateVisualContent += OnDrawBoxGenerateVisualContent;
+        }
+        
         public void InitClipInfo(TrackClipBase trackClipBase)
         {
             _clip = trackClipBase;
+            onMainMouseDown=_clip.OnMainMouseDown;
+            onMainMouseUp=_clip.OnMainMouseUp;
+            onMainMouseMove=_clip.OnMainMouseMove;
+            onMainMouseOut=_clip.OnMainMouseOut;
         }
         
         private void OnDrawBoxGenerateVisualContent(MeshGenerationContext mgc)
@@ -85,13 +101,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _startDragX = evt.mousePosition.x;
             Select();
         }
-
+        
         protected void OnMainMouseUp(MouseUpEvent evt)
         {
             _dragging = false;
-            ApplyDrag();
+            OnMainAreaApplyDrag();
         }
-
+        
         protected void OnMainMouseMove(MouseMoveEvent evt)
         {
             if (_dragging)
@@ -100,31 +116,36 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 var offsetFrame = Mathf.RoundToInt(offset / FrameUnitWidth);
                 var targetFrame = _startDragFrameIndex + offsetFrame;
                 if (offsetFrame == 0 || targetFrame < 0) return;
-
+                
+                onMainMouseMove?.Invoke(evt);
+                
                 var checkDrag = offsetFrame > 0
-                    ? _clip.trackBase.CheckFrameIndexOnDrag(targetFrame + AnimationClipEvent.durationFrame)
-                    : _clip.trackBase.CheckFrameIndexOnDrag(targetFrame);
+                    ? _clip.TrackBase.CheckFrameIndexOnDrag(targetFrame + DurationFrame)
+                    : _clip.TrackBase.CheckFrameIndexOnDrag(targetFrame);
 
                 if (checkDrag)
                 {
-                    _clip.StartFrameIndex = targetFrame;
+                    _clip.UpdateClipDataStartFrame(targetFrame);
                     if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
                         AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
-                    RefreshShow(FrameUnitWidth);
-                    AbilityTimelineEditorWindow.Instance.SetInspector(this);
+                    _clip.RefreshShow(FrameUnitWidth);
+                    AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
                 }
             }
         }
-
-        protected void OnMouseOut(MouseOutEvent evt)
+        
+        protected void OnMainMouseOut(MouseOutEvent evt)
         {
-            if (_dragging) ApplyDrag();
+            if (_dragging) OnMainAreaApplyDrag();
             _dragging = false;
         }
-
-        protected void ApplyDrag()
+        
+        protected void OnMainAreaApplyDrag()
         {
-            if (StartFrameIndex != _startDragFrameIndex) _clip.trackBase.SetFrameIndex(_startDragFrameIndex, StartFrameIndex);
+            if (StartFrameIndex != _startDragFrameIndex)
+            {
+                _clip.TrackBase.SetFrameIndex(_startDragFrameIndex, StartFrameIndex);
+            }
         }
 
         #endregion
@@ -137,7 +158,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         public virtual void Select()
         {
             // 更新小面板
-            AbilityTimelineEditorWindow.Instance.SetInspector(this);
+            AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
         }
 
         public virtual void OnSelect()

@@ -430,7 +430,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         if (CurrentInspectorObject == target) return;
         if (CurrentInspectorObject != null)
         {
-            if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.OnUnSelect();
+            if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.Ve.OnUnSelect();
             if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
         }
 
@@ -442,7 +442,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
                 return;
             case TrackClipBase trackClip:
                 _clipInspector.Add(trackClip.Inspector());
-                trackClip.OnSelect();
+                trackClip.Ve.OnSelect();
                 break;
             case TrackBase track:
                 track.OnSelect();

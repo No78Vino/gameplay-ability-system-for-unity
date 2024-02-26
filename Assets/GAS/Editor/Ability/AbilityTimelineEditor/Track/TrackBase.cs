@@ -16,6 +16,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected abstract string TrackAssetPath { get; }
         protected abstract string MenuAssetPath { get; }
         public abstract void TickView(int frameIndex, params object[] param);
+        public abstract bool CheckFrameIndexOnDrag(int targetIndex);
+        public abstract void SetFrameIndex(int oldIndex, int newIndex);
+        
 
         // public TrackBase(VisualElement trackParent, VisualElement menuParent, float frameWidth)
         // {

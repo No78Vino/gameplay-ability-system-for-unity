@@ -9,46 +9,34 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
     public class AnimationTrackClip : TrackClip<AnimationTrack>
     {
         private AnimationClipEvent AnimationClipEvent => clipData as AnimationClipEvent;
-        // private VisualElement _animOverLine;
-        // private VisualElement _areaChangeSize;
-        // private VisualElement _mainDragArea;
-
+        private VisualElement AnimOverLine => ve.OverLine;
         public Label ItemLabel => ve.ItemLabel;
-
-        public override void InitTrackClip(
-            TrackBase track,
-            VisualElement parent,
-            float frameUnitWidth,
-            TrackEventBase animationClipEvent)
-        {
-            base.InitTrackClip(track, parent, frameUnitWidth, animationClipEvent);
-    
-            //ItemLabel = ve as Label;
-          
-            RefreshShow(this.FrameUnitWidth);
-        }
 
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
+            // clip 文本
             ItemLabel.text = AnimationClipEvent.Clip.name;
-            var mainPos = ItemLabel.transform.position;
+            
+            // clip位置，宽度
+            var mainPos = ve.transform.position;
             mainPos.x = StartFrameIndex * FrameUnitWidth;
-            ItemLabel.transform.position = mainPos;
-            ItemLabel.style.width = AnimationClipEvent.durationFrame * FrameUnitWidth;
+            ve.transform.position = mainPos;
+            ve.style.width = AnimationClipEvent.durationFrame * FrameUnitWidth;
 
+            // 动画Clip结束线
             var clipFrameCount = (int)(AnimationClipEvent.Clip.length * AnimationClipEvent.Clip.frameRate);
             if (clipFrameCount > AnimationClipEvent.durationFrame)
             {
-                _animOverLine.style.display = DisplayStyle.None;
+                AnimOverLine.style.display = DisplayStyle.None;
             }
             else
             {
-                _animOverLine.style.display = DisplayStyle.Flex;
+                AnimOverLine.style.display = DisplayStyle.Flex;
 
-                var overLinePos = _animOverLine.transform.position;
+                var overLinePos = AnimOverLine.transform.position;
                 overLinePos.x = clipFrameCount * FrameUnitWidth - 1;
-                _animOverLine.transform.position = overLinePos;
+                AnimOverLine.transform.position = overLinePos;
             }
 
             // 刷新面板显示
@@ -142,7 +130,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             AnimationClipEvent.TransitionTime = newTransition;
             AbilityTimelineEditorWindow.Instance.Save();
             transition.value = newTransition;
-            //RefreshShow(_frameUnitWidth);
+            RefreshShow(FrameUnitWidth);
         }
 
         private void OnClipChanged(ChangeEvent<Object> evt)

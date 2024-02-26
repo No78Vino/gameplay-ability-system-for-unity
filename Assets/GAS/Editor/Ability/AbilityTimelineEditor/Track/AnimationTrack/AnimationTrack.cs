@@ -34,7 +34,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             base.RefreshShow(newFrameWidth);
             foreach (var item in _trackItems)
             {
-                Track.Remove(item.ItemLabel);
+                Track.Remove(item.Ve);
             }
             _trackItems.Clear();
 
@@ -139,12 +139,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
         #endregion
         
-        public bool CheckFrameIndexOnDrag(int targetIndex)
+        public override bool CheckFrameIndexOnDrag(int targetIndex)
         {
             return AbilityAnimationData.animationClipData.All(clipEvent => targetIndex <= clipEvent.startFrame || targetIndex >= clipEvent.EndFrame);
         }
         
-        public void SetFrameIndex(int oldIndex, int newIndex)
+        public override void SetFrameIndex(int oldIndex, int newIndex)
         {
             var index = -1;
             var list = AbilityAnimationData.animationClipData;

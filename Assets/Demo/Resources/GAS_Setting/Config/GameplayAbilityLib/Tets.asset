@@ -27,11 +27,11 @@ MonoBehaviour:
   AnimationData:
     Animator: {fileID: 0}
     animationClipData:
-    - startFrame: 56
-      durationFrame: 67
+    - startFrame: 67
+      durationFrame: 49
       Clip: {fileID: 7400000, guid: 0cd9551d9db72774ea4673823c4ebd58, type: 2}
       TransitionTime: 2.39
-    - startFrame: 0
-      durationFrame: 40
+    - startFrame: 10
+      durationFrame: 28
       Clip: {fileID: 7400000, guid: bc71342962d02b1438f0d8415ad693a5, type: 2}
-      TransitionTime: 0
+      TransitionTime: 0.87
