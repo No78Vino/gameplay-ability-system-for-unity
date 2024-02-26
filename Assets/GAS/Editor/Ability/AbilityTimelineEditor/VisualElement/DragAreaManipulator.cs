@@ -5,7 +5,14 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability
 {
-    public class ResizeBoundingManipulator : PointerManipulator
+    public enum MouseCursorType
+    {
+        None,
+        ResizeHorizontal,
+        ResizeVertical,
+    }
+    
+    public class DragAreaManipulator : PointerManipulator
     {
         public bool Enable = true;
         private readonly Action<Vector2> _onDragMove;
@@ -17,10 +24,12 @@ namespace GAS.Editor.Ability
         public float Offset = 0;
 
         private const int CursorWidth = 5;
+        private MouseCursorType _cursorType;
 
-        public ResizeBoundingManipulator(Action<Vector2> onDragMove)
+        public DragAreaManipulator(MouseCursorType cursorType,Action<Vector2> onDragMove)
         {
             _onDragMove = onDragMove;
+            _cursorType = cursorType;
             Active = false;
             activators.Add(new ManipulatorActivationFilter
             {
@@ -28,8 +37,8 @@ namespace GAS.Editor.Ability
             });
         }
 
-        public ResizeBoundingManipulator(Action<Vector2> onDragMove,
-            Action<PointerDownEvent> onDragStart, Action onDragStop) : this(onDragMove)
+        public DragAreaManipulator(MouseCursorType cursorType,Action<Vector2> onDragMove,
+            Action<PointerDownEvent> onDragStart, Action onDragStop) : this(cursorType,onDragMove)
         {
             _onDragStart = onDragStart;
             _onDragStop = onDragStop;
@@ -40,28 +49,29 @@ namespace GAS.Editor.Ability
 
         protected override void RegisterCallbacksOnTarget()
         {
-            ResizeHandle.onGUIHandler = OnGUIHandler;
-            ResizeHandle.RegisterCallback<PointerDownEvent>(OnPointerDown);
-            ResizeHandle.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            ResizeHandle.RegisterCallback<PointerUpEvent>(OnPointerUp);
+            if(ResizeHandle!=null) ResizeHandle.onGUIHandler = OnGUIHandler;
+            target.RegisterCallback<PointerDownEvent>(OnPointerDown);
+            target.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            target.RegisterCallback<PointerUpEvent>(OnPointerUp);
         }
 
         protected override void UnregisterCallbacksFromTarget()
         {
-            ResizeHandle.UnregisterCallback<PointerDownEvent>(OnPointerDown);
-            ResizeHandle.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
-            ResizeHandle.UnregisterCallback<PointerUpEvent>(OnPointerUp);
+            target.UnregisterCallback<PointerDownEvent>(OnPointerDown);
+            target.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
+            target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
         }
 
         private void OnGUIHandler()
         {
-            Handles.BeginGUI();
-            var rect = ResizeHandle.worldBound;
-            EditorGUIUtility.AddCursorRect(new Rect(0, 0, CursorWidth, rect.height), MouseCursor.ResizeHorizontal);
-            // Handles.color = new Color(1f, 0f, 0f, 1f);
-            // Handles.DrawLine(new Vector3(0, 0, 0), new Vector3(0, rect.height, 0));
-            // Handles.DrawLine(new Vector3(CursorWidth, 0, 0), new Vector3(CursorWidth, rect.height, 0));
-            Handles.EndGUI();
+            if (_cursorType != MouseCursorType.None)
+            {
+                Handles.BeginGUI();
+                var rect = ResizeHandle.worldBound;
+                MouseCursor mouseCursor = MouseCursor.ResizeHorizontal;
+                EditorGUIUtility.AddCursorRect(new Rect(0, 0, CursorWidth, rect.height), mouseCursor);
+                Handles.EndGUI();
+            }
         }
         
         private void OnPointerDown(PointerDownEvent e)
@@ -76,7 +86,7 @@ namespace GAS.Editor.Ability
             {
                 m_Start = e.localPosition;
                 Active = true;
-                ResizeHandle.CapturePointer(e.pointerId);
+                target.CapturePointer(e.pointerId);
                 e.StopPropagation();
 
                 _onDragStart?.Invoke(e);
@@ -87,7 +97,7 @@ namespace GAS.Editor.Ability
         {
             if (!Enable) return;
 
-            if (Active && ResizeHandle.HasPointerCapture(e.pointerId))
+            if (Active && target.HasPointerCapture(e.pointerId))
             {
                 Vector2 delta = e.localPosition - m_Start;
                 ApplyDelta(delta);
@@ -102,7 +112,7 @@ namespace GAS.Editor.Ability
             if (Active && CanStopManipulation(e))
             {
                 Active = false;
-                ResizeHandle.ReleasePointer(e.pointerId);
+                target.ReleasePointer(e.pointerId);
                 e.StopPropagation();
 
                 _onDragStop?.Invoke();
