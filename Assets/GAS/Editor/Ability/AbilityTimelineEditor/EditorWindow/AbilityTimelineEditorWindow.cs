@@ -21,7 +21,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     [SerializeField]
     private VisualTreeAsset m_VisualTreeAsset = default;
     
-    public static void ShowWindow(GeneralSequentialAbilityAsset asset)
+    public static void ShowWindow(TimelineAbilityAsset asset)
     {
         AbilityTimelineEditorWindow wnd = GetWindow<AbilityTimelineEditorWindow>();
         wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
@@ -48,9 +48,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     public void Save() => AbilityAsset.Save();
 
-    private void InitAbility(GeneralSequentialAbilityAsset asset)
+    private void InitAbility(TimelineAbilityAsset asset)
     {
-        _sequentialAbilityAsset.value = asset;
+        _abilityAsset.value = asset;
         MaxFrame.value = AbilityAsset.MaxFrameCount;
         CurrentSelectFrameIndex = 0;
         RefreshTimerDraw();
@@ -67,23 +67,22 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private AbilityTimelineEditorConfig _config = new AbilityTimelineEditorConfig();
     public AbilityTimelineEditorConfig Config => _config;
     
-    private ObjectField _sequentialAbilityAsset;
-    public GeneralSequentialAbilityAsset AbilityAsset => _sequentialAbilityAsset.value as GeneralSequentialAbilityAsset;
+    private ObjectField _abilityAsset;
+    public TimelineAbilityAsset AbilityAsset => _abilityAsset.value as TimelineAbilityAsset;
 
-    private GeneralSequentialAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
-        ? Editor.CreateEditor(AbilityAsset) as GeneralSequentialAbilityEditorWindow
+    private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
+        ? Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
         : null;
 
     void InitAbilityAssetBar()
     {
-        _sequentialAbilityAsset = _root.Q<ObjectField>(("SequentialAbilityAsset"));
-        _sequentialAbilityAsset.objectType = typeof(GeneralSequentialAbilityAsset);
-        _sequentialAbilityAsset.RegisterValueChangedCallback(OnSequentialAbilityAssetChanged);
+        _abilityAsset = _root.Q<ObjectField>(("SequentialAbilityAsset"));
+        _abilityAsset.RegisterValueChangedCallback(OnSequentialAbilityAssetChanged);
     }
 
     private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
     {
-        GeneralSequentialAbilityAsset asset = evt.newValue as GeneralSequentialAbilityAsset;
+        TimelineAbilityAsset asset = evt.newValue as TimelineAbilityAsset;
         MaxFrame.value = AbilityAsset.MaxFrameCount;
         CurrentSelectFrameIndex = 0;
         RefreshTimerDraw();
@@ -361,7 +360,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         _config.FrameUnitWidth =
             Mathf.Clamp(_config.FrameUnitWidth - deltaY,
                 AbilityTimelineEditorConfig.StandardFrameUnitWidth,
-                AbilityTimelineEditorConfig.MaxFrameUnitLevel * AbilityTimelineEditorConfig.StandardFrameUnitWidth);
+                Mathf.RoundToInt(AbilityTimelineEditorConfig.MaxFrameUnitLevel * AbilityTimelineEditorConfig.StandardFrameUnitWidth));
         RefreshTimerDraw();
         UpdateContentSize();    
     }
@@ -370,31 +369,41 @@ public class AbilityTimelineEditorWindow : EditorWindow
     {
         Handles.BeginGUI();
         Handles.color = Color.white;
-        
+
         var rect = TimerShaft.contentRect;
 
         int tickStep = AbilityTimelineEditorConfig.MaxFrameUnitLevel + 1 -
-                       (_config.FrameUnitWidth / AbilityTimelineEditorConfig.StandardFrameUnitWidth);//5;
+                       (_config.FrameUnitWidth / AbilityTimelineEditorConfig.StandardFrameUnitWidth);
         tickStep /= 2;
         tickStep = Mathf.Max(tickStep, 1);
-        
+
         int index = Mathf.CeilToInt(CurrentFramePos / _config.FrameUnitWidth);
         float startFrameOffset =
             index > 0 ? _config.FrameUnitWidth - CurrentFramePos % _config.FrameUnitWidth : 0;
 
-        for(var i=startFrameOffset;i<=rect.width;i+=_config.FrameUnitWidth)
+        float minDrawStep = AbilityTimelineEditorConfig.MinTimerShaftFrameDrawStep;
+        bool tooSmall = _config.FrameUnitWidth < minDrawStep;
+        int drawStepFrame = tooSmall ? Mathf.CeilToInt(minDrawStep / _config.FrameUnitWidth) : 1;
+        tickStep *= drawStepFrame;
+        
+        for (var i = startFrameOffset; i <= rect.width; i += _config.FrameUnitWidth)
         {
-            bool isTick = index % tickStep == 0;
-            var x = i;
-            var startY = isTick ? rect.height * 0.6f : rect.height * 0.85f;
-            var endY = rect.height;
-            Handles.DrawLine(new Vector3(x, startY), new Vector3(x, endY));
-            
-            if (isTick)
+            bool isDraw = !tooSmall || index % drawStepFrame == 0;
+            if (isDraw)
             {
-                string frameStr = index.ToString();
-                Handles.Label(new Vector3(x - frameStr.Length * 4.3f, rect.height * 0.3f), frameStr);
+                bool isTick = index % tickStep == 0;
+                var x = i;
+                var startY = isTick ? rect.height * 0.5f : rect.height * 0.85f;
+                var endY = rect.height;
+                Handles.DrawLine(new Vector3(x, startY), new Vector3(x, endY));
+
+                if (isTick)
+                {
+                    string frameStr = index.ToString();
+                    Handles.Label(new Vector3(x, rect.height * 0.3f), frameStr);
+                }
             }
+
             index++;
         }
 
@@ -525,10 +534,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
                 return;
             case TrackClipBase trackClip:
                 _clipInspector.Add(trackClip.Inspector());
-                //trackClip.Ve.OnSelect();
                 break;
             case TrackBase track:
-                //track.OnSelect();
+                //_clipInspector.Add(track.Inspector());
                 break;
         }
     }

@@ -126,13 +126,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 bound.x = Mathf.Clamp(rectOriginX, 0, parent.worldBound.width);
                 if (rectOriginX < 0)
                     bound.width += rectOriginX;
-                if (bound.width + bound.x > mainContent.worldBound.width)
-                    bound.width = mainContent.worldBound.width - bound.x;
+                if (bound.width + bound.x > mainContent.worldBound.width - 8)
+                    bound.width = mainContent.worldBound.width - bound.x - 8; // 8 = 滑动条宽度
                 AbilityTimelineEditorWindow.Instance.ShowDragItemPreview = true;
                 AbilityTimelineEditorWindow.Instance.DragItemPreviewRect = bound;
                 AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = NewStartFrame;
-                
-                Debug.Log($"Draw Preview bound={bound}");
             }
         }
 
@@ -164,7 +162,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
             foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
             {
-                if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastMainDragStartPos+DurationFrame)
+                if (clipEvent != _clip.ClipData && clipEvent.startFrame>=_lastMainDragStartPos+DurationFrame)
                 {
                     maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
                 }
@@ -254,7 +252,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 if (clipEvent != _clip.ClipData && clipEvent.EndFrame<_lastResizeDragStartPos)
                 {
                     minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                    break;
                 }
             }
             int maxFrame = EndFrameIndex - 1;
@@ -278,7 +275,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 if (clipEvent != _clip.ClipData && clipEvent.EndFrame<_lastResizeDragStartPos)
                 {
                     minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                    break;
                 }
             }
 
@@ -306,7 +302,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastResizeDragEndPos)
                 {
                     maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                    break;
                 }
             }
             int minFrame = _clip.StartFrameIndex + 1;
@@ -330,7 +325,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastResizeDragEndPos)
                 {
                     maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                    break;
                 }
             }
             var newEndFrame = Mathf.Clamp(NewResizeEndFrame, lastStartFrame + 1, maxFrame);

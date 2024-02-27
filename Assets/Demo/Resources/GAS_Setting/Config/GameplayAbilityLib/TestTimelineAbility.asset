@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
-  m_Name: Tets
+  m_Name: TestTimelineAbility
   m_EditorClassIdentifier: 
   UniqueName: 
   Description: 
@@ -23,15 +23,11 @@ MonoBehaviour:
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 300
+  MaxFrameCount: 1500
   AnimationData:
     Animator: {fileID: 0}
     animationClipData:
-    - startFrame: 79
-      durationFrame: 50
+    - startFrame: 11
+      durationFrame: 86
       Clip: {fileID: 7400000, guid: 0cd9551d9db72774ea4673823c4ebd58, type: 2}
-      TransitionTime: 2.39
-    - startFrame: 12
-      durationFrame: 20
-      Clip: {fileID: 7400000, guid: bc71342962d02b1438f0d8415ad693a5, type: 2}
-      TransitionTime: 0.87
+      TransitionTime: 0

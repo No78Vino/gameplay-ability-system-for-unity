@@ -8,10 +8,10 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability
 {
-    [CustomEditor(typeof(GeneralSequentialAbilityAsset))]
-    public class GeneralSequentialAbilityEditorWindow:OdinEditor
+    [CustomEditor(typeof(TimelineAbilityAsset))]
+    public class TimelineAbilityEditorWindow:OdinEditor
     {
-        private GeneralSequentialAbilityAsset _asset => target as GeneralSequentialAbilityAsset;
+        private TimelineAbilityAsset _asset => target as TimelineAbilityAsset;
 
         public override void OnInspectorGUI()
         {

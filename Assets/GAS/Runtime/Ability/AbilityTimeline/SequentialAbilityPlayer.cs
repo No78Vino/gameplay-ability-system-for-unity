@@ -7,14 +7,14 @@ namespace GAS.Runtime.Ability.AbilityTimeline
     {
         bool _isPlaying;
         public bool IsPlaying => _isPlaying;
-        public readonly GeneralSequentialAbilityAsset AbilityAsset;
+        public readonly TimelineAbilityAsset AbilityAsset;
 
         private int _currentFrame;
         private float _playTotalTime;
         private int MaxFrameCount => AbilityAsset.MaxFrameCount;
         private int FrameRate => GASTimer.FrameRate;
         
-        public SequentialAbilityPlayer(GeneralSequentialAbilityAsset abilityAsset)
+        public SequentialAbilityPlayer(TimelineAbilityAsset abilityAsset)
         {
             AbilityAsset = abilityAsset;
         }

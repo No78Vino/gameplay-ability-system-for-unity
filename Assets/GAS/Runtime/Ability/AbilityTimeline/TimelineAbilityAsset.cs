@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GAS.Runtime.Ability
 {
-    public class GeneralSequentialAbilityAsset : AbilityAsset
+    public class TimelineAbilityAsset : AbilityAsset
     {
         public override Type AbilityType()
         {
