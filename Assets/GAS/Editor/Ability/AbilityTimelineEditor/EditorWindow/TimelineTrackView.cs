@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private static List<Type> _trackTypeList;
         private static readonly Dictionary<string, Type> _trackTypeMap = new();
         private readonly VisualElement _root;
-        private readonly List<TrackBase> _trackList = new();
+        private readonly List<TrackBase> _trackList = new List<TrackBase>();
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
         private VisualElement _trackMenuParent;
@@ -27,6 +28,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
 
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
+        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         private void InitTracks()
         {
@@ -58,10 +60,19 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _trackList.Clear();
             _contentTrackListParent.Clear();
             _trackMenuParent.Clear();
-            animationTrack = new AnimationTrack();
-            animationTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData);
-            _trackList.Add(animationTrack);
+            if (AbilityAsset == null) return;
+            
+            // 绘制轨道
+            // Cue轨道
+            foreach (var durationalCueTrackData  in AbilityAsset.DurationalCues)
+            {
+                var cueTrack = new DurationalCueTrack();
+                cueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, durationalCueTrackData);
+                _trackList.Add(cueTrack);
+            }
+            // animationTrack = new AnimationTrack();
+            // animationTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.AnimationData);
+            // _trackList.Add(animationTrack);
         }
 
         public void UpdateContentSize()
@@ -90,14 +101,22 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         /// <param name="trackType"></param>
         private void CreateTrack(Type trackType)
         {
-            // TODO:创建Data
-            var data = new CueTrackData();
             // 创建View
             var track = (TrackBase)Activator.CreateInstance(trackType);
+
+            // 创建Data
+            var dataType = track.TrackDataType;
+            var data = (TrackDataBase)Activator.CreateInstance(dataType);
+            data.DefaultInit(_trackList.Count);
+            data.AddToAbilityAsset(AbilityAsset);
+            
+            // 初始化View
             track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, data);
             _trackList.Add(track);
-
+            
             Debug.Log("[EX] Add a new track:" + trackType.Name);
+            
+            AbilityAsset.Save();
         }
     }
 }

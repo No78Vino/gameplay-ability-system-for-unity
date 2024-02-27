@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
 using GAS.Runtime.Ability.AbilityTimeline;
@@ -18,9 +19,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected VisualElement MenuParent;
         protected VisualElement Track;
         protected VisualElement TrackParent;
+        protected Label MenuText;
         private static string TrackAssetGuid => "67e1b3c42dcc09a4dbb9e9b107500dfd";
         private static string MenuAssetGuid => "afb618c74510baa41a7d3928c0e57641";
-
+        public abstract Type TrackDataType { get; }
+        protected abstract Color TrackColor { get; }
+        protected abstract Color MenuColor { get; }
+        
         public abstract void TickView(int frameIndex, params object[] param);
 
         public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,TrackDataBase trackData)
@@ -32,6 +37,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             var menuAssetPath = AssetDatabase.GUIDToAssetPath(MenuAssetGuid);
             Track = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(trackAssetPath).Instantiate().Query().ToList()[1];
             Menu = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(menuAssetPath).Instantiate().Query().ToList()[1];
+            MenuText = Menu.Q<Label>("TrackName");
             TrackParent.Add(Track);
             MenuParent.Add(Menu);
 
@@ -40,6 +46,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             Track.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             Track.RegisterCallback<PointerOutEvent>(OnPointerOut);
             Track.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
+            
+            Track.style.backgroundColor = TrackColor;
+            MenuText.style.backgroundColor = MenuColor;
         }
 
         private void OnPointerOut(PointerOutEvent evt)

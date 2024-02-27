@@ -22,8 +22,7 @@ namespace GAS.Runtime.Ability
         public AbilityAnimationData AnimationData = new AbilityAnimationData();
         
         [BoxGroup]
-        // TODO : 持续性Cue轨道集合(特效，音效包含其中)
-        public List<CueTrackData> DurationalCues = new List<CueTrackData>();
+        public List<DurationalCueTrackData> DurationalCues = new List<DurationalCueTrackData>();
         
         //[BoxGroup]
         // TODO : 瞬时性Cue轨道集合(特效，音效包含其中)

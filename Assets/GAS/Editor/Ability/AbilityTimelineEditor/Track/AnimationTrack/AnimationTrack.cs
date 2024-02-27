@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
@@ -40,6 +41,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             Track.Remove(clip.ItemLabel);
             _trackItems.Remove(clip);
         }
+
+        public override Type TrackDataType => typeof(AbilityAnimationData);
+        protected override Color TrackColor => new Color(0.5f, 0.5f, 0.9f, 0.5f);
+        protected override Color MenuColor => new Color(0.5f, 0.5f, 0.9f, 1);
 
         public override void TickView(int frameIndex, params object[] param)
         {
