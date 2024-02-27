@@ -81,7 +81,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _rightResizeArea.AddManipulator(_rightDragAreaManipulator);
 
 
-            EditorGUIUtility.AddCursorRect(new Rect(0, 0, 600, 600), MouseCursor.ResizeHorizontal);
+            //EditorGUIUtility.AddCursorRect(new Rect(0, 0, 600, 600), MouseCursor.ResizeHorizontal);
         }
 
         public void InitClipInfo(TrackClipBase trackClipBase)

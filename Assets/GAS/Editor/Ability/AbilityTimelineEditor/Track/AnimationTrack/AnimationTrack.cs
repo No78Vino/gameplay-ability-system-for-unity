@@ -10,8 +10,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 {
     public class AnimationTrack : TrackBase
     {
-        public AbilityAnimationData AbilityAnimationData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
+        public AbilityAnimationData AbilityAnimationData => null;
+            //AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
+
+        public override VisualElement Inspector()
+        {
+            var inspector = new VisualElement();
+            return inspector;
+        }
 
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,TrackDataBase trackData)
         {
@@ -34,6 +40,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                     item.InitTrackClip(this, Track, _frameWidth, clipEvent);
                     _trackItems.Add(item);
                 }
+        }
+
+        protected override void OnAddClip(DropdownMenuAction action)
+        {
+            Debug.Log("Add Animation Clip");
         }
 
         public void RemoveTrackItem(AnimationTrackClip clip)

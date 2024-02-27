@@ -12,7 +12,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
     public abstract class TrackBase
     {
         protected TrackDataBase _trackData;
-        protected List<AnimationTrackClip> _trackItems = new List<AnimationTrackClip>();
+        protected List<TrackClipBase> _trackItems = new List<TrackClipBase>();
 
         protected float _frameWidth;
         protected VisualElement Menu;
@@ -20,6 +20,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected VisualElement Track;
         protected VisualElement TrackParent;
         protected Label MenuText;
+        protected VisualElement BoundingBox;
+        
         private static string TrackAssetGuid => "67e1b3c42dcc09a4dbb9e9b107500dfd";
         private static string MenuAssetGuid => "afb618c74510baa41a7d3928c0e57641";
         public abstract Type TrackDataType { get; }
@@ -27,7 +29,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected abstract Color MenuColor { get; }
         
         public abstract void TickView(int frameIndex, params object[] param);
-
+        public abstract VisualElement Inspector();
+        
         public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,TrackDataBase trackData)
         {
             _trackData = trackData;
@@ -38,17 +41,25 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             Track = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(trackAssetPath).Instantiate().Query().ToList()[1];
             Menu = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(menuAssetPath).Instantiate().Query().ToList()[1];
             MenuText = Menu.Q<Label>("TrackName");
+            BoundingBox = Menu.Q<VisualElement>("BoundingBox");
             TrackParent.Add(Track);
             MenuParent.Add(Menu);
 
             _frameWidth = frameWidth;
-            
+
+            Menu.RegisterCallback<MouseDownEvent>(OnMenuMouseDown);
+                
             Track.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             Track.RegisterCallback<PointerOutEvent>(OnPointerOut);
             Track.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
             
             Track.style.backgroundColor = TrackColor;
-            MenuText.style.backgroundColor = MenuColor;
+            BoundingBox.style.backgroundColor = MenuColor;
+        }
+
+        private void OnMenuMouseDown(MouseDownEvent evt)
+        {
+            OnSelect();
         }
 
         private void OnPointerOut(PointerOutEvent evt)
@@ -80,17 +91,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         }
 
         #region Select
-
-        public void Select()
-        {
-        }
-
+        public bool Selected { get; private set; }
+        private static Color MenuSelectedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+        private static Color MenuUnSelectedColor = new Color(0.5f, 0.5f, 0.5f, 0f);
         public void OnSelect()
         {
+            Selected = true;
+            AbilityTimelineEditorWindow.Instance.SetInspector(this);
+            Menu.style.backgroundColor = MenuSelectedColor;
         }
 
         public void OnUnSelect()
         {
+            Selected = false;
+            Menu.style.backgroundColor = MenuUnSelectedColor;
         }
 
         #endregion
@@ -103,12 +117,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             evt.menu.AppendAction("Add Clip", OnAddClip, DropdownMenuAction.AlwaysEnabled);
             evt.menu.AppendAction("Remove Track", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
         }
-        
-        protected virtual void OnAddClip(DropdownMenuAction action)
-        {
-            // TODO 添加Clip
-            Debug.Log($"[EX]Menu Item Clicked: {action.name}");
-        }
+
+        protected abstract void OnAddClip(DropdownMenuAction action);
         
         protected virtual void OnRemoveTrack(DropdownMenuAction action)
         {

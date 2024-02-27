@@ -56,14 +56,16 @@ namespace GAS.Runtime.Ability.AbilityTimeline
         private void TickFrame(int frame)
         {
             // TODO : 播放当前帧的事件
+            
             // 动画
-            foreach (var animationClipEvent in AbilityAsset.AnimationData.animationClipData)
-            {
-                if (frame >= animationClipEvent.startFrame && frame <= animationClipEvent.EndFrame)
-                {
-                    // TODO : 播放动画
-                }
-            }
+            // foreach (var animationClipEvent in AbilityAsset.AnimationData.animationClipData)
+            // {
+            //     if (frame >= animationClipEvent.startFrame && frame <= animationClipEvent.EndFrame)
+            //     {
+            //         // TODO : 播放动画
+            //     }
+            // }
+            
             // 能力是否可打断（取消）状态更新
             // Cue 持续性
             // Cue 瞬时性

@@ -17,6 +17,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         public TrackBase TrackBase => trackBase;
         public ClipEventBase ClipData => clipData;
         
+        public Label ItemLabel => ve.ItemLabel;
+        
         public virtual void InitTrackClip(
             TrackBase track,
             VisualElement parent,
@@ -37,10 +39,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 ve.OnUnSelect();
         }
 
-        public virtual VisualElement Inspector()
-        {
-            return null;
-        }
+        public abstract VisualElement Inspector();
 
         public virtual void Delete()
         {

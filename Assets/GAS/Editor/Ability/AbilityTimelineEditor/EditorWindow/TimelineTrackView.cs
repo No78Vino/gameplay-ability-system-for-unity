@@ -15,7 +15,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private static List<Type> _trackTypeList;
         private static readonly Dictionary<string, Type> _trackTypeMap = new();
         private readonly VisualElement _root;
-        private readonly List<TrackBase> _trackList = new List<TrackBase>();
+        private readonly List<TrackBase> _trackList = new();
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
         private VisualElement _trackMenuParent;
@@ -61,10 +61,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _contentTrackListParent.Clear();
             _trackMenuParent.Clear();
             if (AbilityAsset == null) return;
-            
+
             // 绘制轨道
             // Cue轨道
-            foreach (var durationalCueTrackData  in AbilityAsset.DurationalCues)
+            foreach (var durationalCueTrackData in AbilityAsset.DurationalCues)
             {
                 var cueTrack = new DurationalCueTrack();
                 cueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, durationalCueTrackData);
@@ -109,14 +109,19 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var data = (TrackDataBase)Activator.CreateInstance(dataType);
             data.DefaultInit(_trackList.Count);
             data.AddToAbilityAsset(AbilityAsset);
-            
+
             // 初始化View
             track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, data);
             _trackList.Add(track);
-            
+
             Debug.Log("[EX] Add a new track:" + trackType.Name);
-            
+
             AbilityAsset.Save();
+        }
+
+        public void TrackMenusUnSelect()
+        {
+            foreach (var t in _trackList) t.OnUnSelect();
         }
     }
 }

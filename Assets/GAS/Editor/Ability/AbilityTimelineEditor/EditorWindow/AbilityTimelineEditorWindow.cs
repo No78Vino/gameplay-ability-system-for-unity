@@ -70,6 +70,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
         AssetDatabase.SaveAssetIfDirty(AbilityAsset);
     }
     
+    public void TrackMenusUnSelect()
+    {
+        _trackView.TrackMenusUnSelect();
+    }
     #region Config
     private AbilityTimelineEditorConfig _config = new AbilityTimelineEditorConfig();
     public AbilityTimelineEditorConfig Config => _config;
@@ -298,7 +302,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
                 _clipInspector.Add(trackClip.Inspector());
                 break;
             case TrackBase track:
-                //_clipInspector.Add(track.Inspector());
+                _clipInspector.Add(track.Inspector());
                 break;
         }
     }

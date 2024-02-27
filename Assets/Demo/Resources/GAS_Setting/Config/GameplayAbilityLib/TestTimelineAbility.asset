@@ -33,7 +33,10 @@ MonoBehaviour:
       Clip: {fileID: 7400000, guid: 0cd9551d9db72774ea4673823c4ebd58, type: 2}
       TransitionTime: 0
   DurationalCues:
+  - trackIndex: 0
+    trackName: DurationalCue1
+    clipEvents: []
   - trackIndex: 1
-    trackName: DurationalCueTrack
+    trackName: DurationalCue2
     clipEvents: []
   GameplayEffects: []
