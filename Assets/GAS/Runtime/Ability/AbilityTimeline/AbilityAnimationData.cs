@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 namespace GAS.Runtime.Ability.AbilityTimeline
 {
     [Serializable]
-    public class AbilityAnimationData
+    public class AbilityAnimationData:TrackDataBase
     {
         // TODO 绑定的动画机
         public Animator Animator;

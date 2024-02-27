@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
@@ -11,47 +9,49 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 {
     public class AnimationTrack : TrackBase
     {
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth)
+        public AbilityAnimationData AbilityAnimationData =>
+            AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
+
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,TrackDataBase trackData)
         {
-            base.Init(trackParent, menuParent, frameWidth);
+            base.Init(trackParent, menuParent, frameWidth,trackData);
             Track.RegisterCallback<DragUpdatedEvent>(OnDragUpdated);
             Track.RegisterCallback<DragExitedEvent>(OnDragExited);
             RefreshShow();
         }
 
-        protected override string TrackAssetPath =>
-            "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrack.uxml";
-
-        protected override string MenuAssetPath =>
-            "Assets/GAS/Editor/Ability/AbilityTimelineEditor/Track/AnimationTrack/AnimationTrackMenu.uxml";
-
-
-        public AbilityAnimationData AbilityAnimationData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData;
         public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var item in _trackItems)
-            {
-                Track.Remove(item.Ve);
-            }
+            foreach (var item in _trackItems) Track.Remove(item.Ve);
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
-            {
                 foreach (var clipEvent in AbilityAnimationData.animationClipData)
                 {
                     var item = new AnimationTrackClip();
-                    item.InitTrackClip(this, Track, FrameWidth, clipEvent);
+                    item.InitTrackClip(this, Track, _frameWidth, clipEvent);
                     _trackItems.Add(item);
                 }
-            }
         }
 
         public void RemoveTrackItem(AnimationTrackClip clip)
         {
             Track.Remove(clip.ItemLabel);
             _trackItems.Remove(clip);
+        }
+
+        public override void TickView(int frameIndex, params object[] param)
+        {
+            var previewObject = param[0] as GameObject;
+            foreach (var clipEvent in AbilityAnimationData.animationClipData)
+                if (clipEvent.startFrame <= frameIndex && frameIndex < clipEvent.EndFrame)
+                {
+                    float clipFrameCount = (int)(clipEvent.Clip.frameRate * clipEvent.Clip.length);
+                    var progress = (frameIndex - clipEvent.startFrame) / clipFrameCount;
+                    if (progress > 1 && clipEvent.Clip.isLooping) progress -= (int)progress;
+                    clipEvent.Clip.SampleAnimation(previewObject, progress * clipEvent.Clip.length);
+                }
         }
 
         #region DragEvent
@@ -81,7 +81,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                     var selectedFrame =
                         AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(evt.localMousePosition.x);
                     var valid = true;
-                    var durationFrame = -1;
                     var nextTrackItemFrame = -1;
                     var currentOffset = int.MaxValue;
                     var clipFrameCount = (int)(clip.frameRate * clip.length);
@@ -107,6 +106,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
 
                     if (valid)
                     {
+                        var durationFrame = -1;
                         if (nextTrackItemFrame >= 0)
                         {
                             var offset = clipFrameCount - currentOffset;
@@ -117,7 +117,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                             durationFrame = clipFrameCount;
                         }
 
-                        AbilityAnimationData.animationClipData.Add(new AnimationClipEvent()
+                        AbilityAnimationData.animationClipData.Add(new AnimationClipEvent
                         {
                             startFrame = selectedFrame,
                             durationFrame = durationFrame,
@@ -126,10 +126,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                         });
                         AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
                         RefreshShow();
-                        
+
                         // 面板选中新增的Item
                         AbilityTimelineEditorWindow.Instance.SetInspector(_trackItems.Last());
-                        
+
                         Debug.Log($"Add Animation Clip {clip.name} to Frame {selectedFrame}");
                     }
                 }
@@ -137,42 +137,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         }
 
         #endregion
-        
-        public override bool CheckFrameIndexOnDrag(int targetIndex)
-        {
-            return AbilityAnimationData.animationClipData.All(clipEvent => targetIndex <= clipEvent.startFrame || targetIndex >= clipEvent.EndFrame);
-        }
-        
-        public override void SetFrameIndex(int oldIndex, int newIndex)
-        {
-            var index = -1;
-            var list = AbilityAnimationData.animationClipData;
-            for (var i = 0; i < list.Count; i++)
-            {
-                if (list[i].startFrame != oldIndex) continue;
-                index = i;
-                break;
-            }
-
-            if (index < 0) return;
-            AbilityAnimationData.animationClipData[index].startFrame= newIndex;
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.Save();
-        }
-        
-        public override void TickView(int frameIndex, params object[] param )
-        {
-            GameObject previewObject = param[0] as GameObject;
-            foreach (var clipEvent in AbilityAnimationData.animationClipData)
-            {
-                if (clipEvent.startFrame <= frameIndex && frameIndex < clipEvent.EndFrame)
-                {
-                    float clipFrameCount = (int)(clipEvent.Clip.frameRate * clipEvent.Clip.length);
-                    float progress = (frameIndex - clipEvent.startFrame) / clipFrameCount;
-                    if (progress > 1 && clipEvent.Clip.isLooping) progress -= (int)progress;
-                    clipEvent.Clip.SampleAnimation(previewObject, progress * clipEvent.Clip.length);
-                }
-            }
-        }
     }
 }
 #endif

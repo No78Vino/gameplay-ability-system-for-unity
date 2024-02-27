@@ -27,8 +27,8 @@ MonoBehaviour:
   AnimationData:
     Animator: {fileID: 0}
     animationClipData:
-    - startFrame: 14
-      durationFrame: 46
+    - startFrame: 217
+      durationFrame: 43
       Clip: {fileID: 7400000, guid: 0cd9551d9db72774ea4673823c4ebd58, type: 2}
       TransitionTime: 0
   DurationalCues:

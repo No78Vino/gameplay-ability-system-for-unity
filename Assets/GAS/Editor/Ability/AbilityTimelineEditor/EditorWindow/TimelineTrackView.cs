@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
+using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -58,7 +59,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _contentTrackListParent.Clear();
             _trackMenuParent.Clear();
             animationTrack = new AnimationTrack();
-            animationTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth);
+            animationTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
+                AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData);
             _trackList.Add(animationTrack);
         }
 
@@ -89,10 +91,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void CreateTrack(Type trackType)
         {
             // TODO:创建Data
-
+            var data = new CueTrackData();
             // 创建View
             var track = (TrackBase)Activator.CreateInstance(trackType);
-            track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth);
+            track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, data);
             _trackList.Add(track);
 
             Debug.Log("[EX] Add a new track:" + trackType.Name);
