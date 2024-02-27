@@ -22,12 +22,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         public abstract void TickView(int frameIndex, params object[] param);
         public abstract bool CheckFrameIndexOnDrag(int targetIndex);
         public abstract void SetFrameIndex(int oldIndex, int newIndex);
-        
-
-        // public TrackBase(VisualElement trackParent, VisualElement menuParent, float frameWidth)
-        // {
-        //     Init(trackParent, menuParent,frameWidth);
-        // }
 
         public virtual void Init( VisualElement trackParent, VisualElement menuParent, float frameWidth)
         {
@@ -43,8 +37,25 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             
             Track.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             Track.RegisterCallback<PointerOutEvent>(OnPointerOut);
+            
+            Track.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
         }
 
+        private void OnContextMenu(ContextualMenuPopulateEvent evt)
+        {
+            // 添加右键菜单项
+            string[] menuName = {"Add Clip"};
+            evt.menu.AppendAction("Add Clip", OnMenuItemClicked, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("Delete Clip", OnMenuItemClicked, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("Remove Track", OnMenuItemClicked, DropdownMenuAction.AlwaysEnabled);
+        }
+
+        // 右键菜单项点击回调函数
+        private void OnMenuItemClicked(DropdownMenuAction action)
+        {
+            Debug.Log($"Menu Item Clicked: {action.name}");
+        }
+        
         private void OnPointerOut(PointerOutEvent evt)
         {
             foreach (var clipViewPair in _trackItems)

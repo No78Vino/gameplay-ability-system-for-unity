@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GAS.Runtime.Ability.AbilityTimeline
 {
-    public class SequentialAbilityPlayer
+    public class TimelineAbilityPlayer
     {
         bool _isPlaying;
         public bool IsPlaying => _isPlaying;
@@ -14,7 +14,7 @@ namespace GAS.Runtime.Ability.AbilityTimeline
         private int MaxFrameCount => AbilityAsset.MaxFrameCount;
         private int FrameRate => GASTimer.FrameRate;
         
-        public SequentialAbilityPlayer(TimelineAbilityAsset abilityAsset)
+        public TimelineAbilityPlayer(TimelineAbilityAsset abilityAsset)
         {
             AbilityAsset = abilityAsset;
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Editor.Ability.AbilityTimelineEditor.Track;
@@ -29,6 +30,11 @@ public class AbilityTimelineEditorWindow : EditorWindow
     }
 
     private VisualElement _root;
+    
+    
+    private TimelineTrackView _trackView;
+    public TimelineTrackView TrackView => _trackView;
+    
     public void CreateGUI()
     {
         Instance = this;
@@ -40,9 +46,10 @@ public class AbilityTimelineEditorWindow : EditorWindow
         
         InitAbilityAssetBar();
         InitTopBar();
-        InitTimerShaft();
+
         InitController();
-        InitTracks();
+        _timerShaftView = new TimerShaftView(_root);
+        _trackView = new TimelineTrackView(_root);
         InitClipInspector();
     }
 
@@ -53,8 +60,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
         _abilityAsset.value = asset;
         MaxFrame.value = AbilityAsset.MaxFrameCount;
         CurrentSelectFrameIndex = 0;
-        RefreshTimerDraw();
-        RefreshTrackDraw();
+        _timerShaftView.RefreshTimerDraw();
+        _trackView.RefreshTrackDraw();
     }
     
     private void SaveAsset()
@@ -68,6 +75,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     public AbilityTimelineEditorConfig Config => _config;
     
     private ObjectField _abilityAsset;
+    private Button _btnShowAbilityAssetDetail;
     public TimelineAbilityAsset AbilityAsset => _abilityAsset.value as TimelineAbilityAsset;
 
     private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
@@ -78,6 +86,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
     {
         _abilityAsset = _root.Q<ObjectField>(("SequentialAbilityAsset"));
         _abilityAsset.RegisterValueChangedCallback(OnSequentialAbilityAssetChanged);
+        
+        _btnShowAbilityAssetDetail = _root.Q<Button>("BtnShowAbilityAssetDetail");
+        _btnShowAbilityAssetDetail.clickable.clicked += ShowAbilityAssetDetail;
     }
 
     private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
@@ -85,10 +96,22 @@ public class AbilityTimelineEditorWindow : EditorWindow
         TimelineAbilityAsset asset = evt.newValue as TimelineAbilityAsset;
         MaxFrame.value = AbilityAsset.MaxFrameCount;
         CurrentSelectFrameIndex = 0;
-        RefreshTimerDraw();
-        RefreshTrackDraw();
+        _timerShaftView.RefreshTimerDraw();
+        _trackView.RefreshTrackDraw();
     }
 
+    private void ShowAbilityAssetDetail()
+    {
+        if (AbilityAsset == null) return;
+        Type inspectorType = typeof(Editor).Assembly.GetType("UnityEditor.InspectorWindow");
+        EditorWindow inspectorInstance = CreateInstance(inspectorType) as EditorWindow;
+        Object prevSelection = Selection.activeObject;
+        Selection.activeObject = AbilityAsset;
+        var isLocked = inspectorType.GetProperty("isLocked", BindingFlags.Instance | BindingFlags.Public);
+        if (isLocked != null) isLocked.GetSetMethod().Invoke(inspectorInstance, new object[] { true });
+        Selection.activeObject = prevSelection;
+        if (inspectorInstance != null) inspectorInstance.Show();
+    }
     #endregion
     
     #region TopBar
@@ -144,16 +167,25 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     #region TimerShaft
 
-    public IMGUIContainer TimerShaft { get; private set; }
-    private VisualElement TimeLineContainer;
-    private IMGUIContainer SelectLine;
-    private IMGUIContainer FinishLine;
-    private IMGUIContainer DottedLine;
-    private IMGUIContainer DragItemPreview;
-    public VisualElement MainContent{ get; private set; }
-    private VisualElement contentViewPort;
-
-    private bool timerShaftMouseIn;
+    private TimerShaftView _timerShaftView;
+    public TimerShaftView TimerShaftView => _timerShaftView;
+    
+    private int _currentMaxFrame;
+    public int CurrentMaxFrame
+    {
+        get => _currentMaxFrame;
+        private set
+        {
+            if (_currentMaxFrame == value) return;
+            _currentMaxFrame = value;
+            AbilityAsset.MaxFrameCount = _currentMaxFrame;
+            SaveAsset();
+            MaxFrame.value = _currentMaxFrame;
+            _trackView.UpdateContentSize();
+            _timerShaftView.RefreshTimerDraw();
+        }
+    }
+    
     private int _currentSelectFrameIndex;
     public int CurrentSelectFrameIndex
     {
@@ -163,253 +195,18 @@ public class AbilityTimelineEditorWindow : EditorWindow
             if (_currentSelectFrameIndex == value) return;
             _currentSelectFrameIndex = Mathf.Clamp(value, 0, MaxFrame.value);
             CurrentFrame.value = _currentSelectFrameIndex;
-            RefreshTimerDraw();
-            
+            _timerShaftView.RefreshTimerDraw();
+
             EvaluateFrame(_currentSelectFrameIndex);
         }
     }
-
-    private int _currentMaxFrame;
-    private int CurrentMaxFrame
-    {
-        get => _currentMaxFrame;
-        set
-        {
-            if (_currentMaxFrame == value) return;
-            _currentMaxFrame = value;
-            AbilityAsset.MaxFrameCount = _currentMaxFrame;
-            SaveAsset();
-            MaxFrame.value = _currentMaxFrame;
-            UpdateContentSize();
-            RefreshTimerDraw();
-        }
-    }
-
-    private int _dottedLineFrameIndex = -1;
-    public int DottedLineFrameIndex
-    {
-        get => _dottedLineFrameIndex;
-        set
-        {
-            if (_dottedLineFrameIndex == value) return;
-            _dottedLineFrameIndex = value;
-            bool showDottedLine = _dottedLineFrameIndex* _config.FrameUnitWidth >= CurrentFramePos &&
-                                  _dottedLineFrameIndex* _config.FrameUnitWidth < CurrentFramePos + TimerShaft.contentRect.width;
-            DottedLine.style.display = showDottedLine ? DisplayStyle.Flex : DisplayStyle.None;
-            DottedLine.MarkDirtyRepaint();
-        }
-    }
-    public float CurrentFramePos => Mathf.Abs(TimeLineContainer.transform.position.x);
-    private float CurrentSelectFramePos => _currentSelectFrameIndex * _config.FrameUnitWidth;
-    private float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
-
-    private bool _showDragItemPreview;
-
-    public bool ShowDragItemPreview
-    {
-        get => _showDragItemPreview;
-        set
-        {
-            if (_showDragItemPreview == value) return;
-            _showDragItemPreview = value;
-            DragItemPreview.MarkDirtyRepaint();
-        }
-    }
-    private Rect _dragItemPreviewRect;
-
-    public Rect DragItemPreviewRect
-    {
-        get => _dragItemPreviewRect;
-        set
-        {
-            _dragItemPreviewRect = value;
-            DragItemPreview.MarkDirtyRepaint();
-        }
-    }
     
-    void InitTimerShaft()
-    {
-        var mainContainer = _root.Q<ScrollView>("MainContent");
-        MainContent = mainContainer;
-        TimeLineContainer = mainContainer.Q<VisualElement>("unity-content-container");
-        contentViewPort = mainContainer.Q<VisualElement>("unity-content-viewport");
-        
-        TimerShaft = _root.Q<IMGUIContainer>(nameof(TimerShaft));
-        TimerShaft.onGUIHandler = OnTimerShaftGUI;
-        TimerShaft.RegisterCallback<WheelEvent>(OnWheelEvent);
-        TimerShaft.RegisterCallback<MouseDownEvent>(OnTimerShaftMouseDown);
-        TimerShaft.RegisterCallback<MouseMoveEvent>(OnTimerShaftMouseMove);
-        TimerShaft.RegisterCallback<MouseUpEvent>(OnTimerShaftMouseUp);
-        TimerShaft.RegisterCallback<MouseOutEvent>(OnTimerShaftMouseOut);
-        
-        SelectLine = _root.Q<IMGUIContainer>(nameof(SelectLine));
-        SelectLine.onGUIHandler = OnSelectLineGUI;
-        
-        FinishLine = _root.Q<IMGUIContainer>(nameof(FinishLine));
-        FinishLine.onGUIHandler = OnFinishLineGUI;
-        
-        DottedLine = _root.Q<IMGUIContainer>(nameof(DottedLine));
-        DottedLine.onGUIHandler = OnDottedLineGUI;
-        
-        DragItemPreview = _root.Q<IMGUIContainer>(nameof(DragItemPreview));
-        DragItemPreview.onGUIHandler = OnDragItemPreviewGUI;
-    }
+    public float CurrentFramePos => Mathf.Abs(_timerShaftView.TimeLineContainer.transform.position.x);
+    public float CurrentSelectFramePos => _currentSelectFrameIndex * _config.FrameUnitWidth;
+    public float CurrentEndFramePos => CurrentMaxFrame * _config.FrameUnitWidth;
 
-    void RefreshTimerDraw()
-    {
-        TimerShaft.MarkDirtyRepaint();
-        SelectLine.MarkDirtyRepaint();
-        FinishLine.MarkDirtyRepaint();
-    }
-
-    private void OnTimerShaftMouseDown(MouseDownEvent evt)
-    {
-        timerShaftMouseIn = true;
-        CurrentSelectFrameIndex = GetFrameIndexByMouse(evt.localMousePosition.x);
-    }
-    private void OnTimerShaftMouseUp(MouseUpEvent evt)
-    {
-        timerShaftMouseIn = false;
-    }
-
-    private void OnTimerShaftMouseMove(MouseMoveEvent evt)
-    {
-        if (timerShaftMouseIn)
-        {
-            CurrentSelectFrameIndex = GetFrameIndexByMouse(evt.localMousePosition.x);
-        }
-    }
+    public int GetFrameIndexByPosition(float x) => _timerShaftView.GetFrameIndexByPosition(x);
     
-    private void OnTimerShaftMouseOut(MouseOutEvent evt)
-    {
-    }
-
-    private int GetFrameIndexByMouse(float x)
-    {
-        return GetFrameIndexByPosition(x + CurrentFramePos);
-    }
-    
-    public int GetFrameIndexByPosition(float x)
-    {
-        return Mathf.RoundToInt(x) / _config.FrameUnitWidth;
-    }
-    
-    private void OnSelectLineGUI()
-    {
-        if (CurrentSelectFramePos >= CurrentFramePos && CurrentSelectFramePos< CurrentFramePos + TimerShaft.contentRect.width)
-        {
-            Handles.BeginGUI();
-            Handles.color = Color.green;
-            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
-            var x = CurrentSelectFramePos - CurrentFramePos;
-            Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
-            Handles.EndGUI();
-        }
-    }
-
-    private void OnFinishLineGUI()
-    {
-        if (CurrentEndFramePos >= CurrentFramePos && CurrentEndFramePos < CurrentFramePos + TimerShaft.contentRect.width)
-        {
-            Handles.BeginGUI();
-            Handles.color = Color.red;
-            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
-            var x = CurrentEndFramePos - CurrentFramePos;
-            Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
-            Handles.EndGUI();
-        }
-    }
-    
-    private void OnDottedLineGUI()
-    {
-        var dottedLinePos =  DottedLineFrameIndex * _config.FrameUnitWidth;
-        if (dottedLinePos >= CurrentFramePos &&
-            dottedLinePos < CurrentFramePos + TimerShaft.contentRect.width)
-        {
-            Handles.BeginGUI();
-            Handles.color = new Color(1, 0.5f, 0, 1);
-            var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
-            var x = dottedLinePos - CurrentFramePos;
-
-            float lineUnitSize = 10f;
-            int lineUnitsCount = 0;
-            for (float i = 0; i < length; i += lineUnitSize)
-            {
-                if (lineUnitsCount++ % 2 == 0)
-                    Handles.DrawLine(new Vector3(x, i), new Vector3(x, i + lineUnitSize));
-            }
-
-            Handles.EndGUI();
-        }
-    }
-    
-    void OnDragItemPreviewGUI()
-    {
-        if (ShowDragItemPreview)
-        {
-            Handles.BeginGUI();
-            Handles.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-            Handles.DrawSolidRectangleWithOutline(DragItemPreviewRect, new Color(0.9f, 0.5f, 0, 0.9f), Color.white);
-            Handles.EndGUI();
-        }
-    }
-    
-    private void OnWheelEvent(WheelEvent evt)
-    {
-        int deltaY = (int)evt.delta.y;
-        _config.FrameUnitWidth =
-            Mathf.Clamp(_config.FrameUnitWidth - deltaY,
-                AbilityTimelineEditorConfig.StandardFrameUnitWidth,
-                Mathf.RoundToInt(AbilityTimelineEditorConfig.MaxFrameUnitLevel * AbilityTimelineEditorConfig.StandardFrameUnitWidth));
-        RefreshTimerDraw();
-        UpdateContentSize();    
-    }
-
-    private void OnTimerShaftGUI()
-    {
-        Handles.BeginGUI();
-        Handles.color = Color.white;
-
-        var rect = TimerShaft.contentRect;
-
-        int tickStep = AbilityTimelineEditorConfig.MaxFrameUnitLevel + 1 -
-                       (_config.FrameUnitWidth / AbilityTimelineEditorConfig.StandardFrameUnitWidth);
-        tickStep /= 2;
-        tickStep = Mathf.Max(tickStep, 1);
-
-        int index = Mathf.CeilToInt(CurrentFramePos / _config.FrameUnitWidth);
-        float startFrameOffset =
-            index > 0 ? _config.FrameUnitWidth - CurrentFramePos % _config.FrameUnitWidth : 0;
-
-        float minDrawStep = AbilityTimelineEditorConfig.MinTimerShaftFrameDrawStep;
-        bool tooSmall = _config.FrameUnitWidth < minDrawStep;
-        int drawStepFrame = tooSmall ? Mathf.CeilToInt(minDrawStep / _config.FrameUnitWidth) : 1;
-        tickStep *= drawStepFrame;
-        
-        for (var i = startFrameOffset; i <= rect.width; i += _config.FrameUnitWidth)
-        {
-            bool isDraw = !tooSmall || index % drawStepFrame == 0;
-            if (isDraw)
-            {
-                bool isTick = index % tickStep == 0;
-                var x = i;
-                var startY = isTick ? rect.height * 0.5f : rect.height * 0.85f;
-                var endY = rect.height;
-                Handles.DrawLine(new Vector3(x, startY), new Vector3(x, endY));
-
-                if (isTick)
-                {
-                    string frameStr = index.ToString();
-                    Handles.Label(new Vector3(x, rect.height * 0.3f), frameStr);
-                }
-            }
-
-            index++;
-        }
-
-        Handles.EndGUI();
-    }
-
     #endregion
 
     #region Controller
@@ -471,42 +268,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
     }
 
     #endregion
-
-    #region Track
-
-    private VisualElement _contentTrackListParent;
-    private VisualElement _trackMenuParent;
-    private AnimationTrack animationTrack;
-    List<TrackBase> _trackList = new List<TrackBase>();
-    private void InitTracks()
-    {
-        _contentTrackListParent = _root.Q<VisualElement>("ContentTrackList");
-        _trackMenuParent = _root.Q<VisualElement>("TrackMenu");
-        RefreshTrackDraw();
-        UpdateContentSize();
-    }
-
-    private void RefreshTrackDraw()
-    {
-        _trackList.Clear();
-        _contentTrackListParent.Clear();
-        _trackMenuParent.Clear();
-        animationTrack = new AnimationTrack();
-        animationTrack.Init(_contentTrackListParent, _trackMenuParent,_config.FrameUnitWidth);
-        _trackList.Add(animationTrack);
-    }
     
-    private void UpdateContentSize()
-    {
-        _contentTrackListParent.style.width = CurrentMaxFrame * _config.FrameUnitWidth;
-        foreach (var track in _trackList)
-        {
-            track.RefreshShow(_config.FrameUnitWidth);
-        }
-        
-    }
-    #endregion
-
     #region Clip Inspector
 
     private VisualElement _clipInspector;
@@ -585,7 +347,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         if (AbilityAsset != null && _previewObjectField.value != null)
         {
             // TODO : 在这里处理预览对象的动画,特效等等
-            animationTrack.TickView(frameIndex, _previewObjectField.value as GameObject);
+            _trackView.animationTrack.TickView(frameIndex, _previewObjectField.value as GameObject);
         }
     }
 
@@ -597,4 +359,3 @@ public class AbilityTimelineEditorWindow : EditorWindow
 
     #endregion
 }
-

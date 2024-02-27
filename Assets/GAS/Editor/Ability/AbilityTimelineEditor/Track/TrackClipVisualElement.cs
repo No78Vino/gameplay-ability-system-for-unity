@@ -46,6 +46,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         #endregion
 
+        private TimerShaftView TimerShaftView => AbilityTimelineEditorWindow.Instance.TimerShaftView;
+        
         public TrackClipVisualElement()
         {
             var visualTree =
@@ -106,8 +108,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected void OnMainMouseUp()
         {
             OnMainAreaApplyDrag();
-            AbilityTimelineEditorWindow.Instance.ShowDragItemPreview = false;
-            AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = -1;
+            TimerShaftView.ShowDragItemPreview = false;
+            TimerShaftView.DottedLineFrameIndex = -1;
         }
 
         private void OnMainMouseMove(Vector2 delta)
@@ -119,7 +121,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             int maxFrame = RightMaxFrameIndex();
             if (NewStartFrame >= minFrame && NewStartFrame+DurationFrame <= maxFrame)
             {
-                var mainContent=AbilityTimelineEditorWindow.Instance.MainContent;
+                var mainContent=TimerShaftView.MainContent;
                 var bound = _mainArea.worldBound;
                 var rectOriginX = NewStartFrame * FrameUnitWidth - AbilityTimelineEditorWindow.Instance.CurrentFramePos;
                 bound.y = bound.y - mainContent.worldBound.y + bound.height;
@@ -128,9 +130,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                     bound.width += rectOriginX;
                 if (bound.width + bound.x > mainContent.worldBound.width - 8)
                     bound.width = mainContent.worldBound.width - bound.x - 8; // 8 = 滑动条宽度
-                AbilityTimelineEditorWindow.Instance.ShowDragItemPreview = true;
-                AbilityTimelineEditorWindow.Instance.DragItemPreviewRect = bound;
-                AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = NewStartFrame;
+                TimerShaftView.ShowDragItemPreview = true;
+                TimerShaftView.DragItemPreviewRect = bound;
+                TimerShaftView.DottedLineFrameIndex = NewStartFrame;
             }
         }
 
@@ -257,7 +259,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             int maxFrame = EndFrameIndex - 1;
             if (NewResizeStartFrame >= minFrame && NewResizeStartFrame <= maxFrame)
             {
-                AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = NewResizeStartFrame;
+                TimerShaftView.DottedLineFrameIndex = NewResizeStartFrame;
             }
         }
 
@@ -286,7 +288,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
-            AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = -1;
+            TimerShaftView.DottedLineFrameIndex = -1;
         }
         
         void OnRightResizeDragMove  (Vector2 delta)
@@ -307,7 +309,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             int minFrame = _clip.StartFrameIndex + 1;
             if (NewResizeEndFrame >= minFrame && NewResizeEndFrame <= maxFrame)
             {
-                AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = NewResizeEndFrame;
+                TimerShaftView.DottedLineFrameIndex = NewResizeEndFrame;
             }
         }
         
@@ -333,7 +335,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
-            AbilityTimelineEditorWindow.Instance.DottedLineFrameIndex = -1;
+            TimerShaftView.DottedLineFrameIndex = -1;
         }
         #endregion
     }
