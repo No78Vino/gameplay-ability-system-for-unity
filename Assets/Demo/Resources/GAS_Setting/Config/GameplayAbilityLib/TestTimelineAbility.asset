@@ -42,21 +42,18 @@ MonoBehaviour:
     - startFrame: 69
       durationFrame: 19
       cue: {fileID: 0}
+  - trackIndex: 4
+    trackName: DurationalCueTrack
+    clipEvents: []
   InstantCues:
     trackIndex: 0
     markEvents:
     - startFrame: 52
       cues: []
-    - startFrame: 45
-      cues: []
     - startFrame: 21
       cues: []
-    - startFrame: 36
+    - startFrame: 32
       cues:
-      - {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
-      - {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
-      - {fileID: 0}
-      - {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
-      - {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
       - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
+      - {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
   GameplayEffects: []

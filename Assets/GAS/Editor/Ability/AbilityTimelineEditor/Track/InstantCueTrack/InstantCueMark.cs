@@ -40,15 +40,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             return inspector;
         }
 
-        private void OnCueAssetChanged(ChangeEvent<Object> evt)
+        private void OnCueAssetChanged(int index, ChangeEvent<Object> evt)
         {
             var cue = evt.newValue as GameplayCueInstant;
-            var index = MarkDataForSave.cues.IndexOf(evt.previousValue as GameplayCueInstant);
-            if (index != -1)
-            {
-                MarkDataForSave.cues[index] = cue;
-                AbilityTimelineEditorWindow.Instance.Save();
-            }
+            MarkDataForSave.cues[index] = cue;
+            AbilityTimelineEditorWindow.Instance.Save();
+            
+            RefreshShow(FrameUnitWidth);
         }
 
         public override void Delete()

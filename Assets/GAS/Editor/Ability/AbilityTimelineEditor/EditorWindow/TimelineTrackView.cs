@@ -63,10 +63,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             if (AbilityAsset == null) return;
 
             // 绘制轨道
-            // 即时Cue轨道
+            // 即时Cue轨道（唯一）
             var instantCueTrack = new InstantCueTrack();
             instantCueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.InstantCues);
             _trackList.Add(instantCueTrack);
+            
+            // TODO 施放型GameplayEffect轨道（唯一）
+            
+            // TODO 自定义即时型事件轨道（唯一）
             
             // 持续Cue轨道
             foreach (var durationalCueTrackData in AbilityAsset.DurationalCues)
@@ -76,9 +80,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 _trackList.Add(cueTrack);
             }
             
-            // GameplayEffect轨道
+            // TODO 短暂Buff型GameplayEffect轨道
             
-
+            // TODO 自定义持续型事件轨道
+            
+            
             UpdateContentSize();
         }
 

@@ -18,15 +18,19 @@ namespace GAS.Runtime.Ability
         [HideInInspector]
         public int MaxFrameCount;// 能力结束时间
         
-        [BoxGroup]
+        [HideInInspector]
         public AbilityAnimationData AnimationData = new AbilityAnimationData();
         
         [BoxGroup]
         public List<DurationalCueTrackData> DurationalCues = new List<DurationalCueTrackData>();
         
-        // 瞬时Cue有且只有一个轨道
+        // 即时Cue有且只有一个轨道
         [BoxGroup]
         public InstantCueTrackData InstantCues = new InstantCueTrackData();
+        
+        // 施放型GameplayEffect轨道（唯一）
+        [BoxGroup]
+        public ReleaseGameplayEffectTrackData ReleaseGameplayEffect = new ReleaseGameplayEffectTrackData();
         
         // TODO : GameplayEffect发动轨道集合
         public List<GameplayEffectTrackData> GameplayEffects = new List<GameplayEffectTrackData>();

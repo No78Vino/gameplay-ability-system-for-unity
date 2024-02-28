@@ -103,22 +103,26 @@ namespace GAS.Editor.Ability
         }
 
         public static ListView CreateObjectListView<T>(string label, List<T> list,
-            EventCallback<ChangeEvent<UnityEngine.Object>> onItemValueChanged) where T : UnityEngine.Object
+            Action<int,ChangeEvent<UnityEngine.Object>> onItemValueChanged) where T : UnityEngine.Object
         {
-            Func<VisualElement> makeItem = () =>
+            VisualElement MakeItem()
             {
                 var objectField = new ObjectField();
                 objectField.objectType = typeof(T);
-                objectField.RegisterValueChangedCallback(onItemValueChanged);
                 return objectField;
-            };
-            
-            Action<VisualElement, int> bindItem = (e, i) =>
+            }
+
+            void BindItem(VisualElement e, int i)
             {
-                ((ObjectField)e).value = list[i];
-            };
-            
-            var listView = new ListView(list,LineHeight,makeItem,bindItem);
+                var objectField = (ObjectField)e;
+                objectField.value = list[i];
+                objectField.RegisterValueChangedCallback(evt =>
+                {
+                    onItemValueChanged(i, evt);
+                });
+            }
+
+            var listView = new ListView(list,LineHeight,MakeItem,BindItem);
             listView.headerTitle = label;
             listView.reorderable= true;
             listView.showAddRemoveFooter = true;
