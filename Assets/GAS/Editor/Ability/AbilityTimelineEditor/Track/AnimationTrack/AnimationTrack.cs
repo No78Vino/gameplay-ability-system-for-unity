@@ -30,7 +30,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).Ve);
+            foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).ClipVe);
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)

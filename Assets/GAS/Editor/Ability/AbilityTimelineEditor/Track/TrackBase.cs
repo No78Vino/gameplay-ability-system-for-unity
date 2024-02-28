@@ -66,7 +66,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             foreach (var trackItemBase in _trackItems)
             {
                 if (trackItemBase is TrackClipBase clipViewPair)
-                    clipViewPair.Ve.OnHover(false);
+                    clipViewPair.ClipVe.OnHover(false);
             }
         }
 
@@ -77,9 +77,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             {
                 if (trackItemBase is TrackClipBase clipViewPair)
                 {
-                    clipViewPair.Ve.OnHover(false);
-                    if (!clipViewPair.Ve.InClipRect(mousePos)) continue;
-                    clipViewPair.Ve.OnHover(true);
+                    clipViewPair.ClipVe.OnHover(false);
+                    if (!clipViewPair.ClipVe.InClipRect(mousePos)) continue;
+                    clipViewPair.ClipVe.OnHover(true);
                     evt.StopImmediatePropagation();
                     return;
                 }
@@ -96,10 +96,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             RefreshShow(_frameWidth);
         }
 
-        public void RemoveTrackItem(TrackClipBase clip)
+        public void RemoveTrackItem(TrackItemBase item)
         {
-            Track.Remove(clip.Ve);
-            _trackItems.Remove(clip);
+            Track.Remove(item.Ve);
+            _trackItems.Remove(item);
         }
         
         #region Select

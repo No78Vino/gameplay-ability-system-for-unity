@@ -26,7 +26,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             if (CurrentInspectorObject != null && !force)
             {
-                if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.Ve.OnUnSelect();
+                if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.ClipVe.OnUnSelect();
                 if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
                 if (CurrentInspectorObject is TrackMarkBase oldMark) oldMark.OnUnSelect();
             }

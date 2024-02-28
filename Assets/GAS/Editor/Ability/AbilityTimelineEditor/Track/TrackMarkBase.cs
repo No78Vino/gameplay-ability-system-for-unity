@@ -8,9 +8,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
     public abstract class TrackMarkBase:TrackItemBase
     {
         private static string MarkAssetGuid => "5a3b3360bcba29b4cac2875f518af19d";
-        
-        protected VisualElement ve;
-        public VisualElement Ve => ve;
         public float FrameUnitWidth { get;protected set; }
         public int StartFrameIndex=>markData.startFrame;
         

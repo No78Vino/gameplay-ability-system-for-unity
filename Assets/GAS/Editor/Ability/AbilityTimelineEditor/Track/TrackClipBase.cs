@@ -7,8 +7,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
     {
         protected ClipEventBase clipData;
         protected TrackBase trackBase;
-        protected TrackClipVisualElement ve;
-        public TrackClipVisualElement Ve => ve;
+        //protected TrackClipVisualElement ve;
+        public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
         public int StartFrameIndex => clipData.startFrame;
         public int EndFrameIndex => clipData.EndFrame;
@@ -16,7 +16,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         public TrackBase TrackBase => trackBase;
         public ClipEventBase ClipData => clipData;
 
-        public Label ItemLabel => ve.ItemLabel;
+        public Label ItemLabel => ClipVe.ItemLabel;
 
         public virtual void InitTrackClip(
             TrackBase track,
@@ -29,13 +29,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             this.clipData = clipData;
 
             ve = new TrackClipVisualElement();
-            ve.InitClipInfo(this);
+            ClipVe.InitClipInfo(this);
             parent.Add(ve);
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject is TrackClipBase clipBase &&
                 clipData == clipBase.clipData)
-                ve.OnSelect();
+                ClipVe.OnSelect();
             else
-                ve.OnUnSelect();
+                ClipVe.OnUnSelect();
         }
 
         public abstract VisualElement Inspector();

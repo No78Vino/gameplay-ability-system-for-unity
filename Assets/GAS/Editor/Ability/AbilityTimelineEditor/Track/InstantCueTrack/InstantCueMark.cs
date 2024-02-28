@@ -36,25 +36,28 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             var list = TrackInspectorUtil.CreateObjectListView("Cue列表", MarkData.cues, OnCueAssetChanged);
             inspector.Add(list);
-            // foreach (var c in ((InstantCueMarkEvent) markData).cues)
-            // {
-            //     var cueName = c != null ? c.name : "NULL";
-            //     var cueCount = TrackInspectorUtil.CreateLabel($"    |-> Cue:{cueName}");
-            //     inspector.Add(cueCount);
-            // }
             
             return inspector;
         }
 
         private void OnCueAssetChanged(ChangeEvent<Object> evt)
         {
-            //var cue = evt.newValue as GameplayCueInstant;
-            AbilityTimelineEditorWindow.Instance.Save();
+            var cue = evt.newValue as GameplayCueInstant;
+            var index = MarkDataForSave.cues.IndexOf(evt.previousValue as GameplayCueInstant);
+            if (index != -1)
+            {
+                MarkDataForSave.cues[index] = cue;
+                AbilityTimelineEditorWindow.Instance.Save();
+            }
         }
 
         public override void Delete()
         {
-            //TODO
+            var success = InstantCueTrack.InstantCueTrackData.markEvents.Remove(MarkData);
+            AbilityTimelineEditorWindow.Instance.Save();
+            if (!success) return;
+            track.RemoveTrackItem(this);
+            AbilityTimelineEditorWindow.Instance.SetInspector();
         }
 
         public override void UpdateMarkDataFrame(int newStartFrame)

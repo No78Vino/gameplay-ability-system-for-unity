@@ -9,7 +9,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
     public class AnimationTrackClip : TrackClip<AnimationTrack>
     {
         private AnimationClipEvent AnimationClipEvent => clipData as AnimationClipEvent;
-        private VisualElement AnimOverLine => ve.OverLine;
+        private VisualElement AnimOverLine => ClipVe.OverLine;
 
         public override void RefreshShow(float newFrameUnitWidth)
         {

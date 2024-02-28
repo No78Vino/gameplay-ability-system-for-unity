@@ -42,7 +42,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).Ve);
+            foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).ClipVe);
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
@@ -70,7 +70,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _trackItems.Add(item);
             
             // 选中新Clip
-            item.Ve.OnSelect();
+            item.ClipVe.OnSelect();
             
             Debug.Log("[EX] Add a new Durational Cue Clip");
         }
