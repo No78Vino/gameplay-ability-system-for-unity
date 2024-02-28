@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability
@@ -98,5 +101,47 @@ namespace GAS.Editor.Ability
             button.style.height = ButtonHeight;
             return button;
         }
+
+        public static ListView CreateListView<T>(string label, List<T> list,
+            VisualElement itemTemplate, EventCallback<ChangeEvent<T>> onItemChanged) where T : UnityEngine.Object
+        {
+            Func<VisualElement> makeItem = () =>
+            {
+                var objectField = new ObjectField();
+                objectField.objectType = typeof(T);
+                return objectField;
+            };
+            
+            Action<VisualElement, int> bindItem = (e, i) =>
+            {
+                ((ObjectField)e).value = list[i];
+            };
+            
+            var listView = new ListView(list,LineHeight,makeItem,bindItem);
+            listView.headerTitle = label;
+            listView.reorderable= true;
+            listView.showAddRemoveFooter = true;
+            listView.showBorder= true;
+            listView.showFoldoutHeader = true;
+            listView.itemsSource = list;
+            listView.selectionType = SelectionType.Single;
+            
+            listView.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            listView.style.height = new StyleLength(StyleKeyword.Auto);
+            
+            listView.style.paddingLeft = 5;
+            listView.style.paddingRight = 5;
+            listView.style.paddingTop = 5;
+            listView.style.paddingBottom = 5;
+            
+            listView.style.alignItems = Align.Stretch;
+            listView.style.alignContent = Align.Stretch;
+            listView.style.justifyContent = Justify.FlexStart;
+            listView.style.flexDirection = FlexDirection.Column;
+            listView.style.flexWrap = Wrap.NoWrap;
+   
+            return listView;
+        }
+
     }
 }

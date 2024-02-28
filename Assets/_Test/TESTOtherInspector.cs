@@ -1,55 +1,91 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using GAS.General;
-using GAS.General.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class MoreInspector : EditorWindow
+public class ListViewExampleWindow : EditorWindow
 {
-    private static MoreInspector _window;
-    private EditorWindow inspectorWindow;
-    private static readonly Vector2 MIN_SIE = new Vector2(400, 300);
-
-    [MenuItem("Test/额外Inspector面板", priority = 43)]
-    private static void PopUp()
+    [MenuItem("Window/ListViewExampleWindow")]
+    public static void OpenDemoManual()
     {
-        _window = GetWindow<MoreInspector>("额外Inspector面板");
-        _window.minSize = MIN_SIE;
-        _window.Show();
+        GetWindow<ListViewExampleWindow>().Show();
     }
 
-    private void OnGUI()
+    public void OnEnable()
     {
-        if (GUILayout.Button("显示额外Inspector面板"))
+        // Create a list of data. In this case, numbers from 1 to 1000.
+        const int itemCount = 1000;
+        var items = new List<string>(itemCount);
+        for (int i = 0; i <= itemCount - 1; i++)
+            items.Add(i.ToString());
+
+        // The "makeItem" function is called when the
+        // ListView needs more items to render.
+        Func<VisualElement> makeItem = () => new Label();
+
+        // As the user scrolls through the list, the ListView object
+        // recycles elements created by the "makeItem" function,
+        // and invoke the "bindItem" callback to associate
+        // the element with the matching data item (specified as an index in the list).
+        Action<VisualElement, int> bindItem = (e, i) => (e as Label).text = items[i];
+
+        // Provide the list view with an explicit height for every row
+        // so it can calculate how many items to actually display
+        const int itemHeight = 16;
+
+        ListView listView = new ListView(items, itemHeight, makeItem, bindItem)
         {
-            inspectorWindow = GetInspectTarget();
-            inspectorWindow.Show();
-            DockUtilities.DockWindow(this, inspectorWindow, DockUtilities.DockPosition.Right);
-        }
-    }
+            // Enables multiple selection using shift or ctrl/cmd keys.
+            selectionType = SelectionType.Multiple
+        };
 
-    public EditorWindow GetInspectTarget()
-    {
-        // Get Unity Internal Objects
-        Type inspectorType = typeof(Editor).Assembly.GetType("UnityEditor.InspectorWindow");
-        // Create an inspector window Instance
-        EditorWindow inspectorInstance = ScriptableObject.CreateInstance(inspectorType) as EditorWindow;
-        // We display it - currently, it will inspect whatever gameObject is currently selected
-        // So we need to find a way to let it inspect/aim at our target GO that we passed
+        // Set up list view so that you can add or remove items dynamically.
+        listView.showAddRemoveFooter = true;
 
-        // 1. Cache the current selected gameObject
-        UnityEngine.Object prevSelection = Selection.activeObject;
-        // 2. Set the current selection to our target GO
-        // 3. Get a ref to the "locked" property, which will lock the state of the inspector to the current inspected target
-        var isLocked = inspectorType.GetProperty("isLocked", BindingFlags.Instance | BindingFlags.Public);
-        // 4. Invoke 'isLocked' setter method passing "true" to lock the inspector
-        isLocked.GetSetMethod().Invoke(inspectorInstance, new object[] {true});
-        // 5. Finally revert back to the previous selection so that other inspector will continue to inspector whatever they were inspecting
-        Selection.activeObject = prevSelection;
+        // Implement functionality on the list view to add or remove items.
+        // listView.onAdd = view =>
+        // {
+        //     var itemsSourceCount = view.itemsSource.Count;
+        //     view.itemsSource.Add(itemsSourceCount.ToString());
+        //     view.RefreshItems();
+        //     view.ScrollToItem(itemsSourceCount);
+        // };
+        
+        // listView.onRemove = view =>
+        // {
+        //     var itemsSourceCount = view.itemsSource.Count;
+        //     view.itemsSource.RemoveAt(itemsSourceCount - 1);
+        //     view.RefreshItems();
+        //     view.ScrollToItem(itemsSourceCount - 2);
+        // };
 
-        return inspectorInstance;
+        // Single click triggers "selectionChanged" with the selected items. (f.k.a. "onSelectionChange")
+        // Use "selectedIndicesChanged" to get the indices of the selected items instead. (f.k.a. "onSelectedIndicesChange")
+        listView.selectionChanged += objects => Debug.Log($"Selected: {string.Join(", ", objects)}");
+
+        // Double-click triggers "itemsChosen" with the selected items. (f.k.a. "onItemsChosen")
+        listView.itemsChosen += objects => Debug.Log($"Double-clicked: {string.Join(", ", objects)}");
+
+        listView.style.flexGrow = 1.0f;
+
+        rootVisualElement.Add(listView);
+
+        // Allow to add items, but only when there is no override, by using a Toggle.
+        //listView.allowAdd = true;
+        var toggle = new Toggle("Override Add functionality")
+        {
+            value = false, //listView.overridingAddButtonBehavior != null,
+            style = {alignSelf = Align.Auto},
+        };
+        
+        // toggle.RegisterValueChangedCallback(evt => listView.overridingAddButtonBehavior = evt.newValue
+        //     ? (view, button) =>
+        //     {
+        //         Debug.Log("You cannot add new items at this time");
+        //     }
+        //     : null
+        // );
+        rootVisualElement.Add(toggle);
     }
 }

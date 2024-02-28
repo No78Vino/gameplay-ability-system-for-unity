@@ -10,7 +10,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class InstantCueTrack : TrackBase
     {
-        private static InstantCueTrackData InstantCueTrackData =>
+        public static InstantCueTrackData InstantCueTrackData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.InstantCues;
 
         public override Type TrackDataType => typeof(InstantCueTrackData);

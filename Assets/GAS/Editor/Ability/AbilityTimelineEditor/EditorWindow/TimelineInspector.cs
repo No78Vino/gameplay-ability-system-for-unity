@@ -28,6 +28,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             {
                 if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.Ve.OnUnSelect();
                 if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
+                if (CurrentInspectorObject is TrackMarkBase oldMark) oldMark.OnUnSelect();
             }
 
             CurrentInspectorObject = target;
@@ -41,6 +42,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     break;
                 case TrackBase track:
                     _clipInspector.Add(track.Inspector());
+                    break;
+                case TrackMarkBase mark:
+                    _clipInspector.Add(mark.Inspector());
                     break;
             }
         }

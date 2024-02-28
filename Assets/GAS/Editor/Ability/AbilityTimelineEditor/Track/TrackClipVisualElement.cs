@@ -36,15 +36,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         public bool Selected { get; private set; }
         public bool Hovered { get; private set; }
-        
-        #region Visual Element Event
-
-        public EventCallback<MouseDownEvent> onMainMouseDown;
-        public EventCallback<MouseUpEvent> onMainMouseUp;
-        public EventCallback<MouseMoveEvent> onMainMouseMove;
-        public EventCallback<MouseOutEvent> onMainMouseOut;
-
-        #endregion
 
         private TimerShaftView TimerShaftView => AbilityTimelineEditorWindow.Instance.TimerShaftView;
         
@@ -87,10 +78,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         public void InitClipInfo(TrackClipBase trackClipBase)
         {
             _clip = trackClipBase;
-            onMainMouseDown=_clip.OnMainMouseDown;
-            onMainMouseUp=_clip.OnMainMouseUp;
-            onMainMouseMove=_clip.OnMainMouseMove;
-            onMainMouseOut=_clip.OnMainMouseOut;
         }
         
         #region Main Area Mouse Event

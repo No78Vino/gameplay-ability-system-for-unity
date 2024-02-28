@@ -57,27 +57,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
 
         public abstract void UpdateClipDataDurationFrame(int newDurationFrame);
-
-
-        #region Visual Element Event
-
-        public void OnMainMouseDown(MouseDownEvent evt)
-        {
-        }
-
-        public void OnMainMouseUp(MouseUpEvent evt)
-        {
-        }
-
-        public void OnMainMouseMove(MouseMoveEvent evt)
-        {
-        }
-
-        public void OnMainMouseOut(MouseOutEvent evt)
-        {
-        }
-
-        #endregion
     }
 
     public abstract class TrackClip<T> : TrackClipBase where T : TrackBase

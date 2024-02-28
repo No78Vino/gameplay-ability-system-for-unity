@@ -48,6 +48,7 @@
                     <ui:VisualElement name="ClipInspector" style="flex-grow: 0; width: 300px; min-width: 100px; border-left-color: rgb(120, 120, 120); border-right-color: rgb(120, 120, 120); border-top-color: rgb(120, 120, 120); border-bottom-color: rgb(120, 120, 120); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; max-width: none; align-self: auto; align-items: flex-start; flex-shrink: 1; height: 100%; max-height: 100%; min-height: 500px;" />
                 </GAS.Editor.General.VisualElement.SplitView>
             </ui:VisualElement>
+            <ui:ListView focusable="true" header-title="text" show-foldout-header="true" horizontal-scrolling="true" reorderable="true" reorder-mode="Animated" show-add-remove-footer="true" style="width: 200px; max-width: 200px; min-width: 200px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
