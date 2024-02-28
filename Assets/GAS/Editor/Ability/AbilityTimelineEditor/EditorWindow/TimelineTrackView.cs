@@ -70,9 +70,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 cueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, durationalCueTrackData);
                 _trackList.Add(cueTrack);
             }
-            // animationTrack = new AnimationTrack();
-            // animationTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.AnimationData);
-            // _trackList.Add(animationTrack);
+
+            UpdateContentSize();
         }
 
         public void UpdateContentSize()

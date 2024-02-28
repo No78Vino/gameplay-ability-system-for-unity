@@ -23,7 +23,7 @@ MonoBehaviour:
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 1500
+  MaxFrameCount: 200
   AnimationData:
     trackIndex: 0
     Animator: {fileID: 0}
@@ -34,9 +34,18 @@ MonoBehaviour:
       TransitionTime: 0
   DurationalCues:
   - trackIndex: 0
-    trackName: DurationalCue1
-    clipEvents: []
+    trackName: DurCue6
+    clipEvents:
+    - startFrame: 86
+      durationFrame: 27
+      cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
+    - startFrame: 17
+      durationFrame: 58
+      cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
   - trackIndex: 1
     trackName: DurationalCue2
-    clipEvents: []
+    clipEvents:
+    - startFrame: 28
+      durationFrame: 41
+      cue: {fileID: 0}
   GameplayEffects: []

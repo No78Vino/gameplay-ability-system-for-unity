@@ -56,27 +56,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             //element.style.width = new StyleLength(1);
         }
 
-        public void UpdateClipDataStartFrame(int newStartFrame)
-        {
-            int index = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData.IndexOf(clipData as AnimationClipEvent);
-            if (index != -1)
-            {
-                AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index].startFrame = newStartFrame;
-                AbilityTimelineEditorWindow.Instance.Save();
-                clipData = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index];
-            }
-        }
-        
-        public void UpdateClipDataDurationFrame(int newDurationFrame)
-        {
-            int index = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData.IndexOf(clipData as AnimationClipEvent);
-            if (index != -1)
-            {
-                AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index].durationFrame = newDurationFrame;
-                AbilityTimelineEditorWindow.Instance.Save();
-                clipData = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index];
-            }
-        }
+        public abstract void UpdateClipDataStartFrame(int newStartFrame);
+       
+
+        public abstract void UpdateClipDataDurationFrame(int newDurationFrame);
+
         
         #region Visual Element Event
         

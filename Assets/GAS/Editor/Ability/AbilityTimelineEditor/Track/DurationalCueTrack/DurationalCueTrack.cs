@@ -15,7 +15,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected override Color MenuColor => new Color(0.1f, 0.6f, 0.1f, 1);
 
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        private DurationalCueTrackData CueDataForSave
+        public DurationalCueTrackData CueTrackDataForSave
         {
             get
             {
@@ -59,10 +59,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 添加Clip数据
             var clipEvent = new DurationalCueClipEvent
             {
-                startFrame = (int)(action.eventInfo.mousePosition.x / _frameWidth),
+                startFrame = (int)(action.eventInfo.localMousePosition.x / _frameWidth),
                 durationFrame = 5
             };
-            CueDataForSave.clipEvents.Add(clipEvent);
+            CueTrackDataForSave.clipEvents.Add(clipEvent);
             
             // 刷新显示
             var item = new DurationalCueClip();
@@ -78,17 +78,19 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #region Inspector
         public override VisualElement Inspector()
         {
-            var inspector = new VisualElement();
+            var inspector = TrackInspectorUtil.CreateTrackInspector();
             // track Name
-            var trackName = new TextField("Track Name");
-            trackName.value = _durationalCueTrackData.trackName;
-            trackName.RegisterValueChangedCallback(evt =>
-            {
-                // TODO 修改数据
-                _durationalCueTrackData.trackName = evt.newValue;
-                MenuText.text = evt.newValue;
-            });
-            inspector.Add(trackName);
+            var trackNameTextField =TrackInspectorUtil.CreateTextField("轨道名",_durationalCueTrackData.trackName,
+                (evt =>
+                {
+                    // 修改数据
+                    CueTrackDataForSave.trackName = evt.newValue;
+                    AbilityAsset.Save();
+                    // 修改显示
+                    MenuText.text = evt.newValue;
+                }));
+            inspector.Add(trackNameTextField);
+            
             
             return inspector;
         }

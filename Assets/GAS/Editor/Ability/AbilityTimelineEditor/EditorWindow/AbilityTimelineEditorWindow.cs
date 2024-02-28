@@ -34,6 +34,9 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     private TimelineTrackView _trackView;
     public TimelineTrackView TrackView => _trackView;
+
+    private TimelineInspector _timelineInspector;
+    public TimelineInspector TimelineInspector => _timelineInspector;
     
     public void CreateGUI()
     {
@@ -50,7 +53,7 @@ public class AbilityTimelineEditorWindow : EditorWindow
         InitController();
         _timerShaftView = new TimerShaftView(_root);
         _trackView = new TimelineTrackView(_root);
-        InitClipInspector();
+        _timelineInspector = new TimelineInspector(_root);
     }
 
     public void Save() => AbilityAsset.Save();
@@ -275,37 +278,8 @@ public class AbilityTimelineEditorWindow : EditorWindow
     
     #region Clip Inspector
 
-    private VisualElement _clipInspector;
-    public object CurrentInspectorObject;
-    void InitClipInspector()
-    {
-        _clipInspector = _root.Q<VisualElement>("ClipInspector");
-        SetInspector();
-    }
-
-    public void SetInspector(object target=null)
-    {
-        if (CurrentInspectorObject == target) return;
-        if (CurrentInspectorObject != null)
-        {
-            if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.Ve.OnUnSelect();
-            if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
-        }
-
-        CurrentInspectorObject = target;
-        _clipInspector.Clear();
-        switch (CurrentInspectorObject)
-        {
-            case null:
-                return;
-            case TrackClipBase trackClip:
-                _clipInspector.Add(trackClip.Inspector());
-                break;
-            case TrackBase track:
-                _clipInspector.Add(track.Inspector());
-                break;
-        }
-    }
+    public object CurrentInspectorObject => _timelineInspector.CurrentInspectorObject;
+    public void SetInspector(object target=null) => _timelineInspector.SetInspector(target);
     
     #endregion
 

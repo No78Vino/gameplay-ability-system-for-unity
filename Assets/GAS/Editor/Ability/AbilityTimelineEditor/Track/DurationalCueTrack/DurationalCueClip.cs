@@ -1,80 +1,158 @@
 ﻿using GAS.Editor.Ability.AbilityTimelineEditor.Track;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
 using GAS.Runtime.Cue;
-using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class DurationalCueClip: TrackClip<DurationalCueTrack>
+    public class DurationalCueClip : TrackClip<DurationalCueTrack>
     {
-        private DurationalCueClipEvent DurationalCueClipEvent => clipData as DurationalCueClipEvent;
+        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private DurationalCueClipEvent DurationalCueClipData => clipData as DurationalCueClipEvent;
+
+        private DurationalCueClipEvent ClipDataForSave
+        {
+            get
+            {
+                var cueTrackDataForSave = track.CueTrackDataForSave;
+                for (var i = 0; i < cueTrackDataForSave.clipEvents.Count; i++)
+                    if (cueTrackDataForSave.clipEvents[i] == DurationalCueClipData)
+                        return track.CueTrackDataForSave.clipEvents[i];
+                return null;
+            }
+        }
+
+        public override void InitTrackClip(TrackBase track, VisualElement parent, float frameUnitWidth,
+            ClipEventBase clipData)
+        {
+            base.InitTrackClip(track, parent, frameUnitWidth, clipData);
+
+            //ve.RegisterFuncGetMinStartFrameIndex(MinStartFrameIndex);
+            //ve.RegisterFuncGetMaxEndFrameIndex(MaxEndFrameIndex);
+        }
+
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
-            ItemLabel.text = DurationalCueClipEvent.cue ? DurationalCueClipEvent.cue.name : "【NULL】";
-            
+            ItemLabel.text = DurationalCueClipData.cue ? DurationalCueClipData.cue.name : "【NULL】";
+
             // clip位置，宽度
             var mainPos = ve.transform.position;
             mainPos.x = StartFrameIndex * FrameUnitWidth;
             ve.transform.position = mainPos;
-            ve.style.width = DurationalCueClipEvent.durationFrame * FrameUnitWidth;
+            ve.style.width = DurationalCueClipData.durationFrame * FrameUnitWidth;
 
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
                 AbilityTimelineEditorWindow.Instance.SetInspector(this);
         }
 
+        public override void UpdateClipDataStartFrame(int newStartFrame)
+        {
+            var updatedClip = ClipDataForSave;
+            ClipDataForSave.startFrame = newStartFrame;
+            AbilityTimelineEditorWindow.Instance.Save();
+            clipData = updatedClip;
+        }
+
+        public override void UpdateClipDataDurationFrame(int newDurationFrame)
+        {
+            var updatedClip = ClipDataForSave;
+            ClipDataForSave.durationFrame = newDurationFrame;
+            AbilityTimelineEditorWindow.Instance.Save();
+            clipData = updatedClip;
+        }
+
+        #region Clip Visual Element Event
+
+        private int MinStartFrameIndex(float lastMainDragStartPos)
+        {
+            var minFrame = 0;
+            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
+                if (clipEvent != ClipData && clipEvent.EndFrame <= lastMainDragStartPos)
+                    minFrame = Mathf.Max(minFrame, clipEvent.EndFrame);
+
+            return minFrame;
+        }
+
+        private int MaxEndFrameIndex(float lastMainDragStartPos)
+        {
+            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
+                if (clipEvent != ClipData && clipEvent.startFrame >= lastMainDragStartPos + DurationFrame)
+                    maxFrame = Mathf.Min(maxFrame, clipEvent.startFrame);
+
+            return maxFrame;
+        }
+
+        #endregion
+
+
+        #region Inspector
+
+        private Label _startFrameLabel;
+        private Label _endFrameLabel;
+        private IntegerField _durationField;
+
         public override VisualElement Inspector()
         {
-            var inspector = new VisualElement();
-            // 动画Clip
-            var cue = new ObjectField("持续性提示");
-            cue.style.display = DisplayStyle.Flex;
-            cue.objectType = typeof(GameplayCueDurational);
-            cue.value = DurationalCueClipEvent.cue;
-            cue.RegisterValueChangedCallback(evt =>
-            {
-                // TODO 保存数据
-                // DurationalCueClipEvent.cue = evt.newValue as DurationalCue;
-                // TrackBase.RefreshShow(TrackBase.FrameWidth);
-            });
+            var inspector = TrackInspectorUtil.CreateTrackInspector();
+            // cue Asset
+            var cue = TrackInspectorUtil.CreateObjectField("Cue资源", typeof(GameplayCueDurational),
+                DurationalCueClipData.cue,
+                evt =>
+                {
+                    // 修改数据
+                    ClipDataForSave.cue = evt.newValue as GameplayCueDurational;
+                    AbilityAsset.Save();
+                    clipData = ClipDataForSave;
+                    // 修改显示
+                    RefreshShow(FrameUnitWidth);
+                });
             inspector.Add(cue);
-            
+
             // 开始帧
-            var startFrame = new Label("开始帧");
-            inspector.Add(startFrame);
-            var startFrameValue = new Label(DurationalCueClipEvent.startFrame.ToString());
-            inspector.Add(startFrameValue);
-            
+            _startFrameLabel = TrackInspectorUtil.CreateLabel($"开始帧:{DurationalCueClipData.startFrame}");
+            inspector.Add(_startFrameLabel);
+
             // 结束帧
-            var endFrame = new Label("结束帧");
-            inspector.Add(endFrame);
-            var endFrameValue = new Label(DurationalCueClipEvent.EndFrame.ToString());
-            inspector.Add(endFrameValue);
-            
+            _endFrameLabel = TrackInspectorUtil.CreateLabel($"结束帧:{DurationalCueClipData.EndFrame}");
+            inspector.Add(_endFrameLabel);
+
             // 持续帧
-            var duration = new IntegerField("持续时长（f）");
-            duration.value = DurationalCueClipEvent.durationFrame;
-            duration.RegisterValueChangedCallback(evt =>
-            {
-                // TODO 保存数据
-                // DurationalCueClipEvent.durationFrame = evt.newValue;
-                // TrackBase.RefreshShow(TrackBase.FrameWidth);
-            });
-            inspector.Add(duration);
-            
+            _durationField = TrackInspectorUtil.CreateIntegerField("持续帧数(f)", DurationalCueClipData.durationFrame,
+                OnDurationFrameChanged);
+            inspector.Add(_durationField);
+
             // 删除按钮
-            var deleteButton = new Button(() =>
+            var deleteButton = TrackInspectorUtil.CreateButton("删除", () =>
             {
                 // TODO 删除数据
-                // TrackBase.RemoveTrackItem(this);
+                AbilityAsset.Save();
+                // 删除显示
             });
-            deleteButton.text = "删除";
+            deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
             inspector.Add(deleteButton);
-            
+
             return inspector;
         }
+
+        private void OnDurationFrameChanged(ChangeEvent<int> evt)
+        {
+            // 钳制
+            var max = AbilityAsset.MaxFrameCount - DurationalCueClipData.startFrame;
+            var newValue = Mathf.Clamp(evt.newValue, 1, max);
+            // 保存数据
+            UpdateClipDataDurationFrame(newValue);
+            // 修改显示
+            RefreshShow(FrameUnitWidth);
+            _endFrameLabel.text = $"结束帧:{DurationalCueClipData.EndFrame}";
+            _durationField.value = newValue;
+        }
+
+        #endregion
     }
 }

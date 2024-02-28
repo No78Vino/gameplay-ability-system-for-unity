@@ -43,6 +43,28 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                 AbilityTimelineEditorWindow.Instance.SetInspector(this);
         }
 
+        public override void UpdateClipDataStartFrame(int newStartFrame)
+        {
+            int index = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData.IndexOf(clipData as AnimationClipEvent);
+            if (index != -1)
+            {
+                AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index].startFrame = newStartFrame;
+                AbilityTimelineEditorWindow.Instance.Save();
+                clipData = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index];
+            }
+        }
+
+        public override void UpdateClipDataDurationFrame(int newDurationFrame)
+        {
+            int index = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData.IndexOf(clipData as AnimationClipEvent);
+            if (index != -1)
+            {
+                AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index].durationFrame = newDurationFrame;
+                AbilityTimelineEditorWindow.Instance.Save();
+                clipData = AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData[index];
+            }
+        }
+
         #region Inspector
 
         private ObjectField clip;

@@ -23,7 +23,7 @@ namespace GAS.Editor.Ability
         private Vector3 m_Start;
         public float Offset = 0;
 
-        private const int CursorWidth = 5;
+        private const int CursorWidth = 6;
         private MouseCursorType _cursorType;
 
         public DragAreaManipulator(MouseCursorType cursorType,Action<Vector2> onDragMove)

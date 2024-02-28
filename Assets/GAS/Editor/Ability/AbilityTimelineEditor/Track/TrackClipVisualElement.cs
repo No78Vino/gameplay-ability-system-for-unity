@@ -67,10 +67,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _mainAreaDragAreaManipulator = new DragAreaManipulator(MouseCursorType.None, OnMainMouseMove,
                 OnMainMouseDown, OnMainMouseUp);
             _mainArea.AddManipulator(_mainAreaDragAreaManipulator);
-            // _mainArea.RegisterCallback<MouseDownEvent>(OnMainMouseDown);
-            // _mainArea.RegisterCallback<MouseUpEvent>(OnMainMouseUp);
-            // _mainArea.RegisterCallback<MouseMoveEvent>(OnMainMouseMove);
-            // _mainArea.RegisterCallback<MouseOutEvent>(OnMainMouseOut);
 
             _leftDragAreaManipulator = new DragAreaManipulator(MouseCursorType.ResizeHorizontal, OnLeftResizeDragMove,
                 OnLeftResizeDragStart, OnLeftResizeDragEnd);
@@ -79,9 +75,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _rightDragAreaManipulator = new DragAreaManipulator(MouseCursorType.ResizeHorizontal, OnRightResizeDragMove,
                 OnRightResizeDragStart, OnRightResizeDragEnd);
             _rightResizeArea.AddManipulator(_rightDragAreaManipulator);
-
-
-            //EditorGUIUtility.AddCursorRect(new Rect(0, 0, 600, 600), MouseCursor.ResizeHorizontal);
         }
 
         public void InitClipInfo(TrackClipBase trackClipBase)
@@ -95,9 +88,21 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         #region Main Area Mouse Event
         
+        private Func<float,int> getMinStartFrameIndex;
+        private Func<float,int> getMaxEndFrameIndex;
         private float _lastMainDragStartPos;
         private float _newStartFramePos;
         private int NewStartFrame => (int)_newStartFramePos;
+        
+        public void RegisterFuncGetMinStartFrameIndex (Func<float,int> func)
+        {
+            getMinStartFrameIndex = func;
+        }
+        
+        public void RegisterFuncGetMaxEndFrameIndex (Func<float,int> func)
+        {
+            getMaxEndFrameIndex = func;
+        }
         
         protected void OnMainMouseDown(PointerDownEvent evt)
         {
@@ -107,6 +112,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         protected void OnMainMouseUp()
         {
+            if(TimerShaftView.ShowDragItemPreview == false) return;
+            
             OnMainAreaApplyDrag();
             TimerShaftView.ShowDragItemPreview = false;
             TimerShaftView.DottedLineFrameIndex = -1;
@@ -117,8 +124,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             var offsetFrame = delta.x / FrameUnitWidth;
             _newStartFramePos = _lastMainDragStartPos + offsetFrame;
             if (offsetFrame == 0 || _newStartFramePos < 0) return;
-            int minFrame = LeftMinFrameIndex();
-            int maxFrame = RightMaxFrameIndex();
+            int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
             if (NewStartFrame >= minFrame && NewStartFrame+DurationFrame <= maxFrame)
             {
                 var mainContent=TimerShaftView.MainContent;
@@ -138,40 +145,17 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         private void OnMainAreaApplyDrag()
         {
-            int minFrame = LeftMinFrameIndex();
-            int maxFrame = RightMaxFrameIndex();
+            int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
             var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame - DurationFrame);
+            if (newStartFrame == StartFrameIndex) return;
+            
             _clip.UpdateClipDataStartFrame(newStartFrame);
             _clip.RefreshShow(FrameUnitWidth);
-        }
-
-        int LeftMinFrameIndex()
-        {
-            int minFrame = 0;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.EndFrame<=_lastMainDragStartPos)
-                {
-                    minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                }
-            }
-
-            return minFrame;
+            
+            AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
         }
         
-        int RightMaxFrameIndex()
-        {
-            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.startFrame>=_lastMainDragStartPos+DurationFrame)
-                {
-                    maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                }
-            }
-
-            return maxFrame;
-        }
         #endregion
         
         #region Hover And Select
@@ -203,6 +187,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
                 _outsideBox.MarkDirtyRepaint();
             }
         }
+        
         public void OnHover(bool value)
         {
             Hovered = value switch
@@ -216,8 +201,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         public virtual void OnSelect()
         {
-            Selected = true;
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
+            Selected = true;
             _itemLabel.style.backgroundColor = SelectColor;
             SwitchBounding();
         }
@@ -245,17 +230,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         {
             var offsetFrame = delta.x / FrameUnitWidth;
             _newResizeStartFramePos = _lastResizeDragStartPos + offsetFrame;
-            Debug.Log($"_newResizeStartFrame={_newResizeStartFramePos}");
+            
             if (offsetFrame == 0 || _newResizeStartFramePos < 0 || NewResizeStartFrame + 1 >= EndFrameIndex) return;
 
-            int minFrame = 0;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.EndFrame<_lastResizeDragStartPos)
-                {
-                    minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                }
-            }
+            int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
             int maxFrame = EndFrameIndex - 1;
             if (NewResizeStartFrame >= minFrame && NewResizeStartFrame <= maxFrame)
             {
@@ -271,16 +249,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         private void OnLeftResizeDragEnd()
         { 
             int lastEndFrame = EndFrameIndex;
-            int minFrame = 0;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.EndFrame<_lastResizeDragStartPos)
-                {
-                    minFrame = Mathf.Max(minFrame,clipEvent.EndFrame);
-                }
-            }
-
-            var newStartFrame = Mathf.Clamp(NewResizeStartFrame, minFrame, EndFrameIndex - 1);
+            int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
+            int maxFrame = EndFrameIndex - 1;
+            var newStartFrame = Mathf.Clamp(NewResizeStartFrame, minFrame, maxFrame);
             
             _clip.UpdateClipDataStartFrame(newStartFrame);
             _clip.UpdateClipDataDurationFrame(lastEndFrame - _clip.StartFrameIndex);
@@ -289,6 +260,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _clip.RefreshShow(FrameUnitWidth);
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
             TimerShaftView.DottedLineFrameIndex = -1;
+            
+            AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
         }
         
         void OnRightResizeDragMove  (Vector2 delta)
@@ -296,16 +269,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             var offsetFrame = delta.x / FrameUnitWidth;
             _newResizeEndFramePos = _lastResizeDragEndPos + offsetFrame;
             if (offsetFrame == 0 || _newResizeEndFramePos < 0 || NewResizeEndFrame - 1 <= StartFrameIndex) return;
-
             
-            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastResizeDragEndPos)
-                {
-                    maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                }
-            }
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
             int minFrame = _clip.StartFrameIndex + 1;
             if (NewResizeEndFrame >= minFrame && NewResizeEndFrame <= maxFrame)
             {
@@ -320,22 +285,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         void OnRightResizeDragEnd()
         {
-            int lastStartFrame = StartFrameIndex;
-            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-            {
-                if (clipEvent != _clip.ClipData && clipEvent.startFrame>_lastResizeDragEndPos)
-                {
-                    maxFrame = Mathf.Min(maxFrame,clipEvent.startFrame);
-                }
-            }
-            var newEndFrame = Mathf.Clamp(NewResizeEndFrame, lastStartFrame + 1, maxFrame);
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            var newEndFrame = Mathf.Clamp(NewResizeEndFrame, StartFrameIndex + 1, maxFrame);
             _clip.UpdateClipDataDurationFrame(newEndFrame - _clip.StartFrameIndex);
             if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
             TimerShaftView.DottedLineFrameIndex = -1;
+            
+            AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
         }
         #endregion
     }
