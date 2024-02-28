@@ -102,13 +102,14 @@ namespace GAS.Editor.Ability
             return button;
         }
 
-        public static ListView CreateListView<T>(string label, List<T> list,
-            VisualElement itemTemplate, EventCallback<ChangeEvent<T>> onItemChanged) where T : UnityEngine.Object
+        public static ListView CreateObjectListView<T>(string label, List<T> list,
+            EventCallback<ChangeEvent<UnityEngine.Object>> onItemValueChanged) where T : UnityEngine.Object
         {
             Func<VisualElement> makeItem = () =>
             {
                 var objectField = new ObjectField();
                 objectField.objectType = typeof(T);
+                objectField.RegisterValueChangedCallback(onItemValueChanged);
                 return objectField;
             };
             

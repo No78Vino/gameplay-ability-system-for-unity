@@ -1,6 +1,7 @@
 ﻿using GAS.Editor.Ability.AbilityTimelineEditor.Track;
 using GAS.Runtime.Ability.AbilityTimeline;
 using GAS.Runtime.Cue;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
@@ -33,7 +34,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var markFrame = TrackInspectorUtil.CreateLabel($"触发帧:{markData.startFrame}");
             inspector.Add(markFrame);
 
-            var list = TrackInspectorUtil.CreateListView<GameplayCueInstant>("Cue列表", MarkData.cues, null, null);
+            var list = TrackInspectorUtil.CreateObjectListView("Cue列表", MarkData.cues, OnCueAssetChanged);
             inspector.Add(list);
             // foreach (var c in ((InstantCueMarkEvent) markData).cues)
             // {
@@ -43,6 +44,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // }
             
             return inspector;
+        }
+
+        private void OnCueAssetChanged(ChangeEvent<Object> evt)
+        {
+            //var cue = evt.newValue as GameplayCueInstant;
+            AbilityTimelineEditorWindow.Instance.Save();
         }
 
         public override void Delete()
