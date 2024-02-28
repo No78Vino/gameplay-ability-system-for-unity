@@ -16,12 +16,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
             ItemLabel.text = AnimationClipEvent.Clip.name;
-            
-            // clip位置，宽度
-            var mainPos = ve.transform.position;
-            mainPos.x = StartFrameIndex * FrameUnitWidth;
-            ve.transform.position = mainPos;
-            ve.style.width = AnimationClipEvent.durationFrame * FrameUnitWidth;
 
             // 动画Clip结束线
             var clipFrameCount = (int)(AnimationClipEvent.Clip.length * AnimationClipEvent.Clip.frameRate);

@@ -10,7 +10,7 @@ namespace GAS.Runtime.Ability.AbilityTimeline
     }
     
     [Serializable]
-    public abstract class FrameEventBase:TrackEventBase
+    public abstract class MarkEventBase:TrackEventBase
     {
     }
     

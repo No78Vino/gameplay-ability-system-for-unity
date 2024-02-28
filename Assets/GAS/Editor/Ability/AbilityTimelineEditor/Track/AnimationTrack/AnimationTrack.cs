@@ -30,7 +30,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
         public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var item in _trackItems) Track.Remove(item.Ve);
+            foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).Ve);
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
@@ -42,15 +42,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
                 }
         }
 
-        protected override void OnAddClip(DropdownMenuAction action)
+        protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             Debug.Log("Add Animation Clip");
         }
 
-        public void RemoveTrackItem(AnimationTrackClip clip)
+        protected override void OnRemoveTrack(DropdownMenuAction action)
         {
-            Track.Remove(clip.ItemLabel);
-            _trackItems.Remove(clip);
+                // 删除数据
+                Debug.Log($"[EX]Menu Item Clicked: {action.name}");
         }
 
         public override Type TrackDataType => typeof(AbilityAnimationData);

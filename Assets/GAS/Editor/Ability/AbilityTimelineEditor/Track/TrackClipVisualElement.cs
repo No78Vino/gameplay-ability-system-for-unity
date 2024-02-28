@@ -75,6 +75,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             _rightDragAreaManipulator = new DragAreaManipulator(MouseCursorType.ResizeHorizontal, OnRightResizeDragMove,
                 OnRightResizeDragStart, OnRightResizeDragEnd);
             _rightResizeArea.AddManipulator(_rightDragAreaManipulator);
+            
+            _mainArea.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
+        }
+
+        private void OnContextMenu(ContextualMenuPopulateEvent obj)
+        {
+            obj.menu.AppendAction("Delete", action => _clip.Delete());
         }
 
         public void InitClipInfo(TrackClipBase trackClipBase)

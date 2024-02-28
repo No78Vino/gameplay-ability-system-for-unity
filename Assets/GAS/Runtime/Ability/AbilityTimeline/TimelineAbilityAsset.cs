@@ -24,9 +24,9 @@ namespace GAS.Runtime.Ability
         [BoxGroup]
         public List<DurationalCueTrackData> DurationalCues = new List<DurationalCueTrackData>();
         
-        //[BoxGroup]
-        // TODO : 瞬时性Cue轨道集合(特效，音效包含其中)
-        //public List<GameplayCueInstant> InstantCues = new List<GameplayCueInstant>();
+        // 瞬时Cue有且只有一个轨道
+        [BoxGroup]
+        public InstantCueTrackData InstantCues = new InstantCueTrackData();
         
         // TODO : GameplayEffect发动轨道集合
         public List<GameplayEffectTrackData> GameplayEffects = new List<GameplayEffectTrackData>();

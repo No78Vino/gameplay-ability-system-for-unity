@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="TrackMark" style="flex-grow: 1; background-color: rgb(214, 214, 214); border-left-color: rgb(132, 0, 107); border-right-color: rgb(132, 0, 107); border-top-color: rgb(132, 0, 107); border-bottom-color: rgb(132, 0, 107); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; -unity-text-align: upper-center; align-items: center; justify-content: center; align-self: auto; height: 90%; max-height: 90%; min-height: 90%; width: 5px; max-width: 5px; min-width: 5px;">
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MarkText" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -33,17 +33,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             //ve.RegisterFuncGetMaxEndFrameIndex(MaxEndFrameIndex);
         }
 
+        public override void Delete()
+        {
+            var success = track.CueTrackDataForSave.clipEvents.Remove(DurationalCueClipData);
+            AbilityTimelineEditorWindow.Instance.Save();
+            if (!success) return;
+            track.RemoveTrackItem(this);
+            AbilityTimelineEditorWindow.Instance.SetInspector();
+        }
+
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
             ItemLabel.text = DurationalCueClipData.cue ? DurationalCueClipData.cue.name : "【NULL】";
-
-            // clip位置，宽度
-            var mainPos = ve.transform.position;
-            mainPos.x = StartFrameIndex * FrameUnitWidth;
-            ve.transform.position = mainPos;
-            ve.style.width = DurationalCueClipData.durationFrame * FrameUnitWidth;
 
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
@@ -128,12 +131,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             inspector.Add(_durationField);
 
             // 删除按钮
-            var deleteButton = TrackInspectorUtil.CreateButton("删除", () =>
-            {
-                // TODO 删除数据
-                AbilityAsset.Save();
-                // 删除显示
-            });
+            var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
             deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
             inspector.Add(deleteButton);
 

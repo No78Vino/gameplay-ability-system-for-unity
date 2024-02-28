@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
     public abstract class TrackBase
     {
         protected TrackDataBase _trackData;
-        protected List<TrackClipBase> _trackItems = new List<TrackClipBase>();
+        protected List<TrackItemBase> _trackItems = new List<TrackItemBase>();
 
         protected float _frameWidth;
         protected VisualElement Menu;
@@ -27,7 +26,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         public abstract Type TrackDataType { get; }
         protected abstract Color TrackColor { get; }
         protected abstract Color MenuColor { get; }
-        
+        public virtual bool IsFixedTrack() => false;
         public abstract void TickView(int frameIndex, params object[] param);
         public abstract VisualElement Inspector();
         
@@ -64,19 +63,26 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         private void OnPointerOut(PointerOutEvent evt)
         {
-            foreach (var clipViewPair in _trackItems) clipViewPair.Ve.OnHover(false);
+            foreach (var trackItemBase in _trackItems)
+            {
+                if (trackItemBase is TrackClipBase clipViewPair)
+                    clipViewPair.Ve.OnHover(false);
+            }
         }
 
         private void OnPointerMove(PointerMoveEvent evt)
         {
             var mousePos = evt.position;
-            foreach (var clipViewPair in _trackItems)
+            foreach (var trackItemBase in _trackItems)
             {
-                clipViewPair.Ve.OnHover(false);
-                if (!clipViewPair.Ve.InClipRect(mousePos)) continue;
-                clipViewPair.Ve.OnHover(true);
-                evt.StopImmediatePropagation();
-                return;
+                if (trackItemBase is TrackClipBase clipViewPair)
+                {
+                    clipViewPair.Ve.OnHover(false);
+                    if (!clipViewPair.Ve.InClipRect(mousePos)) continue;
+                    clipViewPair.Ve.OnHover(true);
+                    evt.StopImmediatePropagation();
+                    return;
+                }
             }
         }
 
@@ -90,6 +96,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             RefreshShow(_frameWidth);
         }
 
+        public void RemoveTrackItem(TrackClipBase clip)
+        {
+            Track.Remove(clip.Ve);
+            _trackItems.Remove(clip);
+        }
+        
         #region Select
         public bool Selected { get; private set; }
         private static Color MenuSelectedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
@@ -114,17 +126,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         private void OnContextMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendAction("Add Clip", OnAddClip, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("Add Clip", OnAddTrackItem, DropdownMenuAction.AlwaysEnabled);
             evt.menu.AppendAction("Remove Track", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
         }
 
-        protected abstract void OnAddClip(DropdownMenuAction action);
-        
-        protected virtual void OnRemoveTrack(DropdownMenuAction action)
-        {
-            // TODO 删除Track
-            Debug.Log($"[EX]Menu Item Clicked: {action.name}");
-        }
+        protected abstract void OnAddTrackItem(DropdownMenuAction action);
+
+        protected abstract void OnRemoveTrack(DropdownMenuAction action);
 
         #endregion
     }

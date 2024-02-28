@@ -42,7 +42,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var item in _trackItems) Track.Remove(item.Ve);
+            foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).Ve);
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
@@ -54,12 +54,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 }
         }
         
-        protected override void OnAddClip(DropdownMenuAction action)
+        protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Clip数据
             var clipEvent = new DurationalCueClipEvent
             {
-                startFrame = (int)(action.eventInfo.localMousePosition.x / _frameWidth),
+                startFrame = AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(action.eventInfo.localMousePosition.x),
                 durationFrame = 5
             };
             CueTrackDataForSave.clipEvents.Add(clipEvent);
@@ -75,7 +75,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             Debug.Log("[EX] Add a new Durational Cue Clip");
         }
 
+        protected override void OnRemoveTrack(DropdownMenuAction action)
+        {
+            // 删除数据
+            AbilityAsset.DurationalCues.Remove(_durationalCueTrackData);
+            AbilityTimelineEditorWindow.Instance.Save();
+            // 删除显示
+            TrackParent.Remove(Track);
+            MenuParent.Remove(Menu);
+            Debug.Log("[EX] Remove Durational Cue Track");
+        }
+
+
         #region Inspector
+        
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();

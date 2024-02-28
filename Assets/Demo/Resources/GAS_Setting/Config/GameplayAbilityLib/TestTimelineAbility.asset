@@ -36,16 +36,15 @@ MonoBehaviour:
   - trackIndex: 0
     trackName: DurCue6
     clipEvents:
-    - startFrame: 86
-      durationFrame: 27
-      cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
-    - startFrame: 17
-      durationFrame: 58
-      cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
-  - trackIndex: 1
-    trackName: DurationalCue2
-    clipEvents:
-    - startFrame: 28
-      durationFrame: 41
+    - startFrame: 23
+      durationFrame: 34
       cue: {fileID: 0}
+    - startFrame: 69
+      durationFrame: 19
+      cue: {fileID: 0}
+  InstantCues:
+    trackIndex: 0
+    markEvents:
+    - startFrame: 59
+      cues: []
   GameplayEffects: []

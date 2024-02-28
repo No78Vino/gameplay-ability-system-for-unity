@@ -63,13 +63,21 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             if (AbilityAsset == null) return;
 
             // 绘制轨道
-            // Cue轨道
+            // 即时Cue轨道
+            var instantCueTrack = new InstantCueTrack();
+            instantCueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.InstantCues);
+            _trackList.Add(instantCueTrack);
+            
+            // 持续Cue轨道
             foreach (var durationalCueTrackData in AbilityAsset.DurationalCues)
             {
                 var cueTrack = new DurationalCueTrack();
                 cueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, durationalCueTrackData);
                 _trackList.Add(cueTrack);
             }
+            
+            // GameplayEffect轨道
+            
 
             UpdateContentSize();
         }
@@ -102,7 +110,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             // 创建View
             var track = (TrackBase)Activator.CreateInstance(trackType);
-
+            if (track.IsFixedTrack()) return;
+            
             // 创建Data
             var dataType = track.TrackDataType;
             var data = (TrackDataBase)Activator.CreateInstance(dataType);
