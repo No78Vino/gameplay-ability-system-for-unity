@@ -26,7 +26,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
-            MenuText.text = "即时Cue轨道";
+            MenuText.text = "即时GameplayCue";
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -54,7 +54,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
             var trackLabel = TrackInspectorUtil.CreateLabel("即时Cue轨道：");
-            trackLabel.style.fontSize = 16;
+            trackLabel.style.fontSize = 14;
             inspector.Add(trackLabel);
 
             foreach (var mark in InstantCueTrackData.markEvents)

@@ -54,8 +54,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
-            var trackLabel = TrackInspectorUtil.CreateLabel("施放型GameplayEffect：");
-            trackLabel.style.fontSize = 16;
+            var trackLabel = TrackInspectorUtil.CreateLabel("施放型GameplayEffect:");
+            trackLabel.style.fontSize = 14;
             inspector.Add(trackLabel);
 
             foreach (var mark in ReleaseGameplayEffectTrackData.markEvents)
