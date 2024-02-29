@@ -23,7 +23,7 @@ MonoBehaviour:
   ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 200
+  MaxFrameCount: 300
   AnimationData:
     trackIndex: 0
     Animator: {fileID: 0}
@@ -51,7 +51,7 @@ MonoBehaviour:
   - trackIndex: 4
     trackName: DurationalCueTrack
     clipEvents:
-    - startFrame: 17
+    - startFrame: 16
       durationFrame: 5
       cue: {fileID: 0}
   InstantCues:
@@ -77,4 +77,15 @@ MonoBehaviour:
       gameplayEffectAssets:
       - {fileID: 11400000, guid: de6c7185a4635214693fecf5008e6b7c, type: 2}
       - {fileID: 11400000, guid: 52a367ac5c57adc49aacdbe63680edeb, type: 2}
-  GameplayEffects: []
+  BuffGameplayEffects:
+  - trackIndex: 4
+    trackName: Buff
+    clipEvents:
+    - startFrame: 27
+      durationFrame: 5
+      buffTarget: 0
+      gameplayEffect: {fileID: 0}
+    - startFrame: 45
+      durationFrame: 29
+      buffTarget: 0
+      gameplayEffect: {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}

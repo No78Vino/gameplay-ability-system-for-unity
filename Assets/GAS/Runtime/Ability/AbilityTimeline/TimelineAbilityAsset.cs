@@ -32,8 +32,8 @@ namespace GAS.Runtime.Ability
         [BoxGroup]
         public ReleaseGameplayEffectTrackData ReleaseGameplayEffect = new ReleaseGameplayEffectTrackData();
         
-        // TODO : GameplayEffect发动轨道集合
-        public List<GameplayEffectTrackData> GameplayEffects = new List<GameplayEffectTrackData>();
+        // Buff型GameplayEffect
+        public List<BuffGameplayEffectTrackData> BuffGameplayEffects = new List<BuffGameplayEffectTrackData>();
         
         // TODO : 单位施加GameplayEffect发动轨道集合（Target生效函数覆写）
         
