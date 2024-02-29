@@ -32,7 +32,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public IMGUIContainer TimerShaft { get; private set; }
         public VisualElement TimeLineContainer { get; private set; }
-        public VisualElement MainContent { get; private set; }
+        public ScrollView MainContent { get; private set; }
 
         public int DottedLineFrameIndex
         {
@@ -203,6 +203,18 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     AbilityTimelineEditorConfig.StandardFrameUnitWidth,
                     Mathf.RoundToInt(AbilityTimelineEditorConfig.MaxFrameUnitLevel *
                                      AbilityTimelineEditorConfig.StandardFrameUnitWidth));
+
+            // 以鼠标为缩放中心
+            // var mousePos = evt.localMousePosition.x;
+            // var mouseFrame = GetFrameIndexByMouse(mousePos);
+            // var mouseFramePos = mouseFrame * Config.FrameUnitWidth;
+            // var deltaFrame = mouseFramePos - EditorInst.CurrentFramePos;
+            // var contentWidth = contentViewPort.contentRect.width;
+            // var scrollViewWidth = MainContent.worldBound.width;
+            // var scrollOffsetDelta = (EditorInst.CurrentFramePos + deltaFrame * Config.FrameUnitWidth) / contentWidth *
+            //                         scrollViewWidth;
+            // MainContent.scrollOffset = new Vector2(MainContent.scrollOffset.x - scrollOffsetDelta, 0);
+            
             RefreshTimerDraw();
             EditorInst.TrackView.UpdateContentSize();
         }

@@ -68,11 +68,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             AssetDatabase.SaveAssetIfDirty(AbilityAsset);
         }
 
-        public void TrackMenusUnSelect()
-        {
-            TrackView.TrackMenusUnSelect();
-        }
-
         #region Config
 
         public AbilityTimelineEditorConfig Config { get; } = new();
