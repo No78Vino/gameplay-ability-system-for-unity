@@ -77,8 +77,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 添加Mark数据
             var markEvent = new InstantCueMarkEvent
             {
-                startFrame =
-                    AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(action.eventInfo.localMousePosition.x),
+                startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
                 cues = new List<GameplayCueInstant>()
             };
             InstantCueTrackData.markEvents.Add(markEvent);

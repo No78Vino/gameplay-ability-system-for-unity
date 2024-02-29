@@ -97,7 +97,11 @@ public class AbilityTimelineEditorWindow : EditorWindow
     private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
     {
         var asset = evt.newValue as TimelineAbilityAsset;
-        MaxFrame.value = AbilityAsset.MaxFrameCount;
+        if (AbilityAsset != null)
+        {
+            MaxFrame.value = AbilityAsset.MaxFrameCount;
+        }
+
         CurrentSelectFrameIndex = 0;
         TimerShaftView.RefreshTimerDraw();
         TrackView.RefreshTrackDraw();
@@ -210,6 +214,11 @@ public class AbilityTimelineEditorWindow : EditorWindow
     public int GetFrameIndexByPosition(float x)
     {
         return TimerShaftView.GetFrameIndexByPosition(x);
+    }
+    
+    public int GetFrameIndexByMouse(float x)
+    {
+        return TimerShaftView.GetFrameIndexByMouse(x);
     }
 
     #endregion

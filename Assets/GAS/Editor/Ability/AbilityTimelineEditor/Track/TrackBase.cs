@@ -23,6 +23,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         private static string TrackAssetGuid => "67e1b3c42dcc09a4dbb9e9b107500dfd";
         private static string MenuAssetGuid => "afb618c74510baa41a7d3928c0e57641";
+        protected static AbilityTimelineEditorWindow editor => AbilityTimelineEditorWindow.Instance;
         public abstract Type TrackDataType { get; }
         protected abstract Color TrackColor { get; }
         protected abstract Color MenuColor { get; }
@@ -135,6 +136,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected abstract void OnRemoveTrack(DropdownMenuAction action);
 
         #endregion
+
+        public static int GetTrackIndexByMouse(float mouseLocalPositionX)
+        {
+            var x = mouseLocalPositionX - editor.TimerShaftView.TimerShaft.worldBound.x;
+            return Mathf.RoundToInt(x) / editor.Config.FrameUnitWidth;
+        }
     }
 }
 #endif

@@ -59,7 +59,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 添加Clip数据
             var clipEvent = new DurationalCueClipEvent
             {
-                startFrame = AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(action.eventInfo.localMousePosition.x),
+                startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
                 durationFrame = 5
             };
             CueTrackDataForSave.clipEvents.Add(clipEvent);

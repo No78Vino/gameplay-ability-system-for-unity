@@ -125,7 +125,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
         }
 
-        private int GetFrameIndexByMouse(float x)
+        public int GetFrameIndexByMouse(float x)
         {
             return GetFrameIndexByPosition(x + EditorInst.CurrentFramePos);
         }

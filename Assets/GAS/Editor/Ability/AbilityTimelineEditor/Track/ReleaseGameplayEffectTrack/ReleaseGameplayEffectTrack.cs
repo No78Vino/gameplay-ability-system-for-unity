@@ -78,8 +78,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 添加Mark数据
             var markEvent = new ReleaseGameplayEffectMarkEvent
             {
-                startFrame =
-                    AbilityTimelineEditorWindow.Instance.GetFrameIndexByPosition(action.eventInfo.localMousePosition.x),
+                startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
                 gameplayEffectAssets = new List<GameplayEffectAsset>()
             };
             ReleaseGameplayEffectTrackData.markEvents.Add(markEvent);
