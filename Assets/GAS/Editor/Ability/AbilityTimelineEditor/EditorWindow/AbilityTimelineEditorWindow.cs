@@ -40,13 +40,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             TrackView = new TimelineTrackView(_root);
             TimelineInspector = new TimelineInspector(_root);
         }
-
-        public void OnGUI()
-        {
-            var assetEditor =  UnityEditor.Editor.CreateEditor(AbilityAsset);
-            assetEditor.OnInspectorGUI();
-        }
-
+        
         public static void ShowWindow(TimelineAbilityAsset asset)
         {
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
