@@ -61,7 +61,7 @@ namespace GAS.Editor
             return uniqueList;
         }
         
-        public static List<Type> FindAllTypesInheritingFrom(Type baseType)
+        public static List<Type> FindAllTypesInheritingFrom(Type baseType,Type ban = null)
         {
             List<Type> results = new List<Type>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -76,7 +76,8 @@ namespace GAS.Editor
                     {
                         if (type.IsSubclassOf(baseType) && !type.IsAbstract)
                         {
-                            results.Add(type);
+                            if(ban == null || !type.IsSubclassOf(ban))
+                                results.Add(type);
                         }
                     }
                 }

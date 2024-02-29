@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class ReleaseGameplayEffectTrack:TrackBase
+    public class ReleaseGameplayEffectTrack:FixedTrack
     {
         public static ReleaseGameplayEffectTrackData ReleaseGameplayEffectTrackData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.ReleaseGameplayEffect;
@@ -17,12 +17,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override Type TrackDataType => typeof(ReleaseGameplayEffectTrackData);
         protected override Color TrackColor => new(0.9f, 0.3f, 0.35f, 0.2f);
         protected override Color MenuColor => new(0.9f, 0.3f, 0.35f, 0.9f);
-
-        public override bool IsFixedTrack()
-        {
-            return true;
-        }
-
+        
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
             TrackDataBase trackData)
         {

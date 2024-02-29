@@ -33,11 +33,17 @@ namespace GAS.Runtime.Ability
         public ReleaseGameplayEffectTrackData ReleaseGameplayEffect = new ReleaseGameplayEffectTrackData();
         
         // Buff型GameplayEffect
+        [BoxGroup]
         public List<BuffGameplayEffectTrackData> BuffGameplayEffects = new List<BuffGameplayEffectTrackData>();
         
-        // TODO : 单位施加GameplayEffect发动轨道集合（Target生效函数覆写）
         
-        // TODO : 自定义事件轨道集合
+        // 自定义标记事件（唯一）
+        [BoxGroup]
+        public CustomMarkEventTrackData CustomMarks = new CustomMarkEventTrackData();
+        
+        // 自定义片段事件
+        [BoxGroup]
+        public List<CustomClipEventTrackData> CustomClips = new List<CustomClipEventTrackData>();
         
 #if UNITY_EDITOR
         public void Save()

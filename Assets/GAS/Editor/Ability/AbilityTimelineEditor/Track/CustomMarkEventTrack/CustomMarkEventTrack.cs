@@ -8,20 +8,20 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class InstantCueTrack : FixedTrack
+    public class CustomMarkEventTrack:FixedTrack
     {
-        public static InstantCueTrackData InstantCueTrackData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.InstantCues;
+        public static CustomMarkEventTrackData CustomMarkEventTrackData =>
+            AbilityTimelineEditorWindow.Instance.AbilityAsset.CustomMarks;
 
-        public override Type TrackDataType => typeof(InstantCueTrackData);
-        protected override Color TrackColor => new(0.1f, 0.2f, 0.6f, 0.2f);
-        protected override Color MenuColor => new(0.1f, 0.6f, 0.9f, 0.9f);
+        public override Type TrackDataType => typeof(CustomMarkEventTrackData);
+        protected override Color TrackColor => new(0.1f, 0.6f, 0.6f, 0.2f);
+        protected override Color MenuColor => new(0.1f, 0.6f, 0.6f, 0.9f);
         
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
             TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
-            MenuText.text = "即时GameplayCue";
+            MenuText.text = "自定义Mark";
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -36,9 +36,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset == null) return;
 
-            foreach (var markEvent in InstantCueTrackData.markEvents)
+            foreach (var markEvent in CustomMarkEventTrackData.markEvents)
             {
-                var item = new InstantCueMark();
+                var item = new CustomMark();
                 item.InitTrackMark(this, Track, _frameWidth, markEvent);
                 _trackItems.Add(item);
             }
@@ -48,21 +48,21 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
-            var trackLabel = TrackInspectorUtil.CreateLabel("即时Cue轨道：");
+            var trackLabel = TrackInspectorUtil.CreateLabel("自定义Mark：");
             trackLabel.style.fontSize = 14;
             inspector.Add(trackLabel);
 
-            foreach (var mark in InstantCueTrackData.markEvents)
-            {
-                var markFrame = TrackInspectorUtil.CreateLabel($"||标记帧:{mark.startFrame}/ cue数量{mark.cues.Count}");
-                inspector.Add(markFrame);
-                foreach (var c in mark.cues)
-                {
-                    var cueName = c != null ? c.name : "NULL";
-                    var cueCount = TrackInspectorUtil.CreateLabel($"    |-> Cue:{cueName}");
-                    inspector.Add(cueCount);
-                }
-            }
+            // foreach (var mark in CustomMarkEventTrackData.markEvents)
+            // {
+            //     var markFrame = TrackInspectorUtil.CreateLabel($"||标记帧:{mark.startFrame}/ cue数量{mark.cues.Count}");
+            //     inspector.Add(markFrame);
+            //     foreach (var c in mark.cues)
+            //     {
+            //         var cueName = c != null ? c.name : "NULL";
+            //         var cueCount = TrackInspectorUtil.CreateLabel($"    |-> Cue:{cueName}");
+            //         inspector.Add(cueCount);
+            //     }
+            // }
 
             return inspector;
         }
@@ -70,15 +70,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Mark数据
-            var markEvent = new InstantCueMarkEvent
+            var markEvent = new CustomMarkEvent
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
-                cues = new List<GameplayCueInstant>()
             };
-            InstantCueTrackData.markEvents.Add(markEvent);
+            CustomMarkEventTrackData.markEvents.Add(markEvent);
 
             // 刷新显示
-            var mark = new InstantCueMark();
+            var mark = new CustomMark();
             mark.InitTrackMark(this, Track, _frameWidth, markEvent);
             _trackItems.Add(mark);
 
@@ -90,7 +89,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
-            InstantCueTrackData.markEvents.Clear();
+            CustomMarkEventTrackData.markEvents.Clear();
             AbilityTimelineEditorWindow.Instance.Save();
         }
     }

@@ -32,7 +32,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         private void InitTracks()
         {
-            _trackTypeList = EditorUtil.FindAllTypesInheritingFrom(typeof(TrackBase));
+            _trackTypeList = EditorUtil.FindAllTypesInheritingFrom(typeof(TrackBase),typeof(FixedTrack));
             _trackTypeMap.Clear();
             foreach (var t in _trackTypeList) _trackTypeMap.Add(t.Name, t);
 
@@ -73,7 +73,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             releaseGameplayEffectTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.ReleaseGameplayEffect);
             _trackList.Add(releaseGameplayEffectTrack);
             
-            // TODO 自定义即时型事件轨道（唯一）
+            // 自定义即时型事件轨道（唯一）
+            var customMarkEventTrack = new CustomMarkEventTrack();
+            customMarkEventTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.CustomMarks);
+            _trackList.Add(customMarkEventTrack);
             
             // 持续Cue轨道
             foreach (var durationalCueTrackData in AbilityAsset.DurationalCues)
@@ -91,8 +94,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 _trackList.Add(buffTrack);
             }
             
-            // TODO 自定义持续型事件轨道
-            
+            // 自定义持续型事件轨道
+            foreach (var customClipEventTrackData in AbilityAsset.CustomClips)
+            {
+                var customClipTrack = new CustomClipEventTrack();
+                customClipTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, customClipEventTrackData);
+                _trackList.Add(customClipTrack);
+            }
             
             UpdateContentSize();
         }
@@ -103,19 +111,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 AbilityTimelineEditorWindow.Instance.CurrentMaxFrame * Config.FrameUnitWidth;
             foreach (var track in _trackList) track.RefreshShow(Config.FrameUnitWidth);
         }
-
-        // private void OnContextMenu(ContextualMenuPopulateEvent evt)
-        // {
-        //     foreach (var t in _trackTypeList)
-        //         evt.menu.AppendAction(t.Name, OnMenuItemClicked, DropdownMenuAction.AlwaysEnabled);
-        // }
-        //
-        // // 右键菜单项点击回调函数
-        // private void OnMenuItemClicked(DropdownMenuAction action)
-        // {
-        //     if (_trackTypeMap.TryGetValue(action.name, out var trackType))
-        //         CreateTrack(trackType);
-        // }
 
         /// <summary>
         ///     创建新的轨道

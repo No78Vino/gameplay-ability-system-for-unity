@@ -20,6 +20,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected VisualElement TrackParent;
         protected Label MenuText;
         protected VisualElement BoundingBox;
+        protected VisualElement Lock;
         
         private static string TrackAssetGuid => "67e1b3c42dcc09a4dbb9e9b107500dfd";
         private static string MenuAssetGuid => "afb618c74510baa41a7d3928c0e57641";
@@ -42,18 +43,21 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             Menu = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(menuAssetPath).Instantiate().Query().ToList()[1];
             MenuText = Menu.Q<Label>("TrackName");
             BoundingBox = Menu.Q<VisualElement>("BoundingBox");
+            Lock = Menu.Q<VisualElement>("Lock");
+            Lock.style.display = DisplayStyle.None;
             TrackParent.Add(Track);
             MenuParent.Add(Menu);
 
             _frameWidth = frameWidth;
 
             Menu.RegisterCallback<MouseDownEvent>(OnMenuMouseDown);
+            Menu.AddManipulator(new ContextualMenuManipulator(OnMenuContextMenu));
                 
             Track.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             Track.RegisterCallback<PointerOutEvent>(OnPointerOut);
             Track.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
-            
-            Track.style.backgroundColor = TrackColor;
+
+            Track.style.backgroundColor = new Color(0, 0, 0, 0); //TrackColor;
             BoundingBox.style.backgroundColor = MenuColor;
         }
 
@@ -124,11 +128,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         
         #region Operation of Track
-
+        private void OnMenuContextMenu(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction("Delete", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
+        }
+        
         private void OnContextMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendAction("Add Clip", OnAddTrackItem, DropdownMenuAction.AlwaysEnabled);
-            evt.menu.AppendAction("Remove Track", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("Add Item", OnAddTrackItem, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("Delete Track", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
         }
 
         protected abstract void OnAddTrackItem(DropdownMenuAction action);
@@ -141,6 +149,17 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         {
             var x = mouseLocalPositionX - EditorInst.TimerShaftView.TimerShaft.worldBound.x + EditorInst.CurrentFramePos;
             return Mathf.RoundToInt(x) / EditorInst.Config.FrameUnitWidth;
+        }
+    }
+
+    public abstract class FixedTrack:TrackBase
+    {
+        public override bool IsFixedTrack() => true;
+        
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData)
+        {
+            base.Init(trackParent, menuParent, frameWidth, trackData);
+            Lock.style.display = DisplayStyle.Flex;
         }
     }
 }

@@ -42,7 +42,7 @@ MonoBehaviour:
     - startFrame: 69
       durationFrame: 19
       cue: {fileID: 0}
-    - startFrame: 9
+    - startFrame: 7
       durationFrame: 5
       cue: {fileID: 0}
     - startFrame: 59
@@ -64,7 +64,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
     - startFrame: 25
       cues: []
-    - startFrame: 13
+    - startFrame: 12
       cues: []
     - startFrame: 35
       cues: []
@@ -81,7 +81,7 @@ MonoBehaviour:
   - trackIndex: 4
     trackName: Buff
     clipEvents:
-    - startFrame: 27
+    - startFrame: 26
       durationFrame: 5
       buffTarget: 0
       gameplayEffect: {fileID: 0}
@@ -89,3 +89,17 @@ MonoBehaviour:
       durationFrame: 29
       buffTarget: 0
       gameplayEffect: {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}
+  CustomMarks:
+    trackIndex: 0
+    markEvents:
+    - startFrame: 39
+    - startFrame: 49
+  CustomClips:
+  - trackIndex: 6
+    trackName: Custom Clips
+    clipEvents:
+    - startFrame: 12
+      durationFrame: 27
+  - trackIndex: 7
+    trackName: Custom Clips
+    clipEvents: []

@@ -63,7 +63,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         private void OnContextMenu(ContextualMenuPopulateEvent obj)
         {
-            obj.menu.AppendAction("Delete", _ => Delete());
+            obj.menu.AppendAction("Delete Mark", _ => Delete());
         }
         
         public abstract void UpdateMarkDataFrame(int newStartFrame);

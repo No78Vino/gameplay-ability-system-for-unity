@@ -72,7 +72,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
 
         private void OnContextMenu(ContextualMenuPopulateEvent obj)
         {
-            obj.menu.AppendAction("Delete", action => _clip.Delete());
+            obj.menu.AppendAction("Delete Clip", action => _clip.Delete());
         }
 
         public void InitClipInfo(TrackClipBase trackClipBase)
@@ -154,8 +154,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         
         #region Hover And Select
 
-        protected static readonly Color NormalColor = new(0, 0.6f, 0.7f, 0.75f);
+        protected static readonly Color NormalColor = new(0.3f, 0.3f, 0.5f, 0.75f);
         protected static readonly Color SelectColor = new(0.6f, 0.1f, 0.1f, 0.75f);
+        protected static readonly Color OutsideBoxSelectColor = new Color(0.8f, 0.5f, 0.1f, 1f);
+        protected static readonly Color OutsideBoxHoverColor =new Color(0.8f, 0.8f, 0.7f, 0.9f);
+        
         private const int TipBoundingSize = 4;
         public bool InClipRect(Vector2 position)
         {
@@ -168,7 +171,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             bool isShow = Hovered || Selected;
             if(isShow)
             {
-                var color =Selected?new Color(0.8f, 0.5f, 0.1f, 1f):new Color(0.5f, 0.6f, 0.7f, 0.9f);
+                var color = Selected ? OutsideBoxSelectColor : OutsideBoxHoverColor;
                 _outsideBox.style.backgroundColor = new StyleColor(color);
                 _outsideBox.style.width = new StyleLength(_mainArea.worldBound.width+TipBoundingSize);
                 _outsideBox.style.height = new StyleLength(_mainArea.worldBound.height+TipBoundingSize);
