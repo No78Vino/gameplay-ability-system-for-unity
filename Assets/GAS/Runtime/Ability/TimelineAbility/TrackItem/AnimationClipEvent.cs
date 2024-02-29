@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability.AbilityTimeline
+namespace GAS.Runtime.Ability
 {
     [Serializable]
     public class AnimationClipEvent : ClipEventBase

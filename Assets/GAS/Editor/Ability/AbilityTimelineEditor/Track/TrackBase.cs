@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.AbilityTimeline;
+using GAS.Runtime.Ability.TimelineAbility;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;

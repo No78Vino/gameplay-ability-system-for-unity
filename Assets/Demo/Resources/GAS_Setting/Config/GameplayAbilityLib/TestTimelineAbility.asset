@@ -62,7 +62,7 @@ MonoBehaviour:
     - startFrame: 43
       cues:
       - {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
-    - startFrame: 25
+    - startFrame: 24
       cues: []
     - startFrame: 12
       cues: []
@@ -100,7 +100,7 @@ MonoBehaviour:
   CustomMarks:
     trackIndex: 0
     markEvents:
-    - startFrame: 39
+    - startFrame: 28
       customEventKeys: []
     - startFrame: 49
       customEventKeys: []

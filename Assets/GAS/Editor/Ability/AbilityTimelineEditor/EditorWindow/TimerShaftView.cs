@@ -225,11 +225,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             Handles.color = Color.white;
 
             var rect = TimerShaft.contentRect;
-
             var tickStep = AbilityTimelineEditorConfig.MaxFrameUnitLevel + 1 -
                            Config.FrameUnitWidth / AbilityTimelineEditorConfig.StandardFrameUnitWidth;
             tickStep /= 2;
-            tickStep = Mathf.Max(tickStep, 1);
+            tickStep = Mathf.Max(tickStep, 2);
 
             var index = Mathf.CeilToInt(EditorInst.CurrentFramePos / Config.FrameUnitWidth);
             var startFrameOffset =

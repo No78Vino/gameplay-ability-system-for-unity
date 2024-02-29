@@ -5,7 +5,7 @@ using GAS.Runtime.Effects;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GAS.Runtime.Ability.AbilityTimeline
+namespace GAS.Runtime.Ability.TimelineAbility
 {
     [Serializable]
     public class ReleaseGameplayEffectTrackData:TrackDataBase

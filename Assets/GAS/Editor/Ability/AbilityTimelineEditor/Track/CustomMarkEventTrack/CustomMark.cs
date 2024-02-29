@@ -1,4 +1,4 @@
-﻿using GAS.Runtime.Ability.AbilityTimeline;
+﻿using GAS.Runtime.Ability.TimelineAbility;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor

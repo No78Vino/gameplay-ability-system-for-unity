@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using GAS.Runtime.Ability;
+using GAS.Runtime.Ability.TimelineAbility;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
@@ -34,11 +35,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             InitAbilityAssetBar();
             InitTopBar();
-
             InitController();
             TimerShaftView = new TimerShaftView(_root);
             TrackView = new TimelineTrackView(_root);
             TimelineInspector = new TimelineInspector(_root);
+        }
+
+        public void OnGUI()
+        {
+            var assetEditor =  UnityEditor.Editor.CreateEditor(AbilityAsset);
+            assetEditor.OnInspectorGUI();
         }
 
         public static void ShowWindow(TimelineAbilityAsset asset)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GAS.Runtime.Ability.AbilityTimeline
+namespace GAS.Runtime.Ability.TimelineAbility
 {
     [Serializable]
     public class CustomClipEventTrackData:TrackDataBase

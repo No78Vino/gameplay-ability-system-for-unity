@@ -1,7 +1,8 @@
 using GAS.General;
+using GAS.Runtime.Ability.TimelineAbility;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability.AbilityTimeline
+namespace GAS.Runtime.Ability
 {
     public class TimelineAbilityPlayer
     {

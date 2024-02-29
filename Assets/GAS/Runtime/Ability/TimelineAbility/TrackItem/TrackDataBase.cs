@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GAS.Runtime.Ability.AbilityTimeline
+namespace GAS.Runtime.Ability.TimelineAbility
 {
     [Serializable]
     public class TrackDataBase

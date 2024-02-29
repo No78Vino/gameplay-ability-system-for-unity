@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using GAS.Runtime.Ability.AbilityTimeline;
 using GAS.Runtime.Cue;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime.Ability.TimelineAbility
 {
     public class TimelineAbilityAsset : AbilityAsset
     {

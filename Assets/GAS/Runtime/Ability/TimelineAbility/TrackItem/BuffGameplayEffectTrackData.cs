@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GAS.Runtime.Effects;
 using UnityEngine.Serialization;
 
-namespace GAS.Runtime.Ability.AbilityTimeline
+namespace GAS.Runtime.Ability.TimelineAbility
 {
     [Serializable]
     public class BuffGameplayEffectTrackData:TrackDataBase

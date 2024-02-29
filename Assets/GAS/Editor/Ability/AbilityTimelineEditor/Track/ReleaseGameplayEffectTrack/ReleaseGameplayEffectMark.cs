@@ -1,6 +1,6 @@
 ﻿using System;
 using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.AbilityTimeline;
+using GAS.Runtime.Ability.TimelineAbility;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using UnityEngine.UIElements;
