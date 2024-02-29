@@ -26,6 +26,6 @@ namespace GAS.Runtime.Ability.AbilityTimeline
     [Serializable]
     public class CustomClipEvent : ClipEventBase
     {
-        
+        public string customEventKey;
     }
 }

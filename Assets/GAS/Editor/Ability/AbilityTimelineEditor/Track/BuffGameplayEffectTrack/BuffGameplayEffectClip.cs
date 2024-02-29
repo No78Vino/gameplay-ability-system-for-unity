@@ -73,7 +73,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 运行帧
             _startFrameLabel =
                 TrackInspectorUtil.CreateLabel(
-                    $"运行(f):{BuffGameplayEffectClipData.startFrame}/{BuffGameplayEffectClipData.EndFrame}");
+                    $"运行(f):{BuffGameplayEffectClipData.startFrame}->{BuffGameplayEffectClipData.EndFrame}");
             inspector.Add(_startFrameLabel);
 
             // 持续帧

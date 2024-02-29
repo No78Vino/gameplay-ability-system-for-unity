@@ -25,7 +25,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            ItemLabel.text = "临时"; //MarkData.cues.Count.ToString();
+            ItemLabel.text = "";
         }
 
         public override VisualElement Inspector()
@@ -33,20 +33,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var inspector = TrackInspectorUtil.CreateTrackInspector();
             var markFrame = TrackInspectorUtil.CreateLabel($"触发帧:{markData.startFrame}");
             inspector.Add(markFrame);
-
-            // var list = TrackInspectorUtil.CreateObjectListView("Cue列表", MarkData.cues, OnCueAssetChanged);
-            // inspector.Add(list);
+            
+            // 自定义事件
+            var customEvent = TrackInspectorUtil.CreateStringListView("自定义事件", MarkData.customEventKeys, (index, evt) =>
+            {
+                MarkDataForSave.customEventKeys[index] = evt.newValue;
+                AbilityTimelineEditorWindow.Instance.Save();
+            });
+            inspector.Add(customEvent);
             
             return inspector;
-        }
-
-        private void OnCueAssetChanged(int index, ChangeEvent<Object> evt)
-        {
-            //var cue = evt.newValue as GameplayCueInstant;
-            //MarkDataForSave.cues[index] = cue;
-            AbilityTimelineEditorWindow.Instance.Save();
-            
-            RefreshShow(FrameUnitWidth);
         }
 
         public override void Delete()

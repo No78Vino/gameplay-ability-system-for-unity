@@ -18,5 +18,6 @@ namespace GAS.Runtime.Ability.AbilityTimeline
     [Serializable]
     public class CustomMarkEvent:MarkEventBase
     {
+        public List<string> customEventKeys = new List<string>();
     }
 }

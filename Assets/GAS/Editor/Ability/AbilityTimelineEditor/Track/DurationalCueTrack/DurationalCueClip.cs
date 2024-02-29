@@ -97,12 +97,21 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #region Inspector
 
         private Label _startFrameLabel;
-        private Label _endFrameLabel;
         private IntegerField _durationField;
 
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
+
+            // 运行帧
+            _startFrameLabel = TrackInspectorUtil.CreateLabel($"运行(f) :{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
+            inspector.Add(_startFrameLabel);
+
+            // 持续帧
+            _durationField = TrackInspectorUtil.CreateIntegerField("持续帧数(f)", DurationalCueClipData.durationFrame,
+                OnDurationFrameChanged);
+            inspector.Add(_durationField);
+            
             // cue Asset
             var cue = TrackInspectorUtil.CreateObjectField("Cue资源", typeof(GameplayCueDurational),
                 DurationalCueClipData.cue,
@@ -116,19 +125,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     RefreshShow(FrameUnitWidth);
                 });
             inspector.Add(cue);
-
-            // 开始帧
-            _startFrameLabel = TrackInspectorUtil.CreateLabel($"开始帧:{DurationalCueClipData.startFrame}");
-            inspector.Add(_startFrameLabel);
-
-            // 结束帧
-            _endFrameLabel = TrackInspectorUtil.CreateLabel($"结束帧:{DurationalCueClipData.EndFrame}");
-            inspector.Add(_endFrameLabel);
-
-            // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("持续帧数(f)", DurationalCueClipData.durationFrame,
-                OnDurationFrameChanged);
-            inspector.Add(_durationField);
 
             // 删除按钮
             var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
@@ -147,7 +143,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             UpdateClipDataDurationFrame(newValue);
             // 修改显示
             RefreshShow(FrameUnitWidth);
-            _endFrameLabel.text = $"结束帧:{DurationalCueClipData.EndFrame}";
+            _startFrameLabel = TrackInspectorUtil.CreateLabel($"运行(f) :{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
             _durationField.value = newValue;
         }
 

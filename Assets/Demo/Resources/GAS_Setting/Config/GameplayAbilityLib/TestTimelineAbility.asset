@@ -73,15 +73,23 @@ MonoBehaviour:
   ReleaseGameplayEffect:
     trackIndex: 0
     markEvents:
-    - startFrame: 28
-      gameplayEffectAssets:
-      - {fileID: 11400000, guid: de6c7185a4635214693fecf5008e6b7c, type: 2}
-      - {fileID: 11400000, guid: 52a367ac5c57adc49aacdbe63680edeb, type: 2}
+    - startFrame: 30
+      method:
+        method: 3
+        checkLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        centerType: 0
+        center: {x: 0, y: 0, z: 0}
+        radius: 0.27
+        size: {x: 0, y: 0, z: 0}
+        customMethodRegisterKey: 
+      gameplayEffectAssets: []
   BuffGameplayEffects:
   - trackIndex: 4
     trackName: Buff
     clipEvents:
-    - startFrame: 31
+    - startFrame: 30
       durationFrame: 9
       buffTarget: 0
       gameplayEffect: {fileID: 0}
@@ -93,15 +101,19 @@ MonoBehaviour:
     trackIndex: 0
     markEvents:
     - startFrame: 39
+      customEventKeys: []
     - startFrame: 49
+      customEventKeys: []
   CustomClips:
   - trackIndex: 6
     trackName: Custom Clips
     clipEvents:
     - startFrame: 8
       durationFrame: 27
+      customEventKey: 
   - trackIndex: 7
     trackName: Custom Clips
     clipEvents:
     - startFrame: 28
       durationFrame: 20
+      customEventKey: 

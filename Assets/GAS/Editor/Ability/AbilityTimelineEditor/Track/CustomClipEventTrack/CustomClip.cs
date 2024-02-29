@@ -36,9 +36,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            // clip 文本
-            ItemLabel.text = "临时";//BuffGameplayEffectClipData.gameplayEffect ? BuffGameplayEffectClipData.gameplayEffect.name : "【NULL】";
-
+            ItemLabel.text = CustomClipData.customEventKey;
+            
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
                 AbilityTimelineEditorWindow.Instance.SetInspector(this);
@@ -80,20 +79,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _durationField = TrackInspectorUtil.CreateIntegerField("时长(f)", CustomClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
-
-            // GameplayEffect Asset
-            // var buff = TrackInspectorUtil.CreateObjectField("Buff GameplayEffect", typeof(GameplayEffectAsset),
-            //     BuffGameplayEffectClipData.gameplayEffect,
-            //     evt =>
-            //     {
-            //         // 修改数据
-            //         ClipDataForSave.gameplayEffect = evt.newValue as GameplayEffectAsset;
-            //         AbilityAsset.Save();
-            //         clipData = ClipDataForSave;
-            //         // 修改显示
-            //         RefreshShow(FrameUnitWidth);
-            //     });
-            // inspector.Add(buff);
+            
+            // 自定义事件
+            var customEventField = TrackInspectorUtil.CreateTextField("自定义事件", CustomClipData.customEventKey,
+                (evt =>
+                {
+                    ClipDataForSave.customEventKey = evt.newValue;
+                    AbilityTimelineEditorWindow.Instance.Save();
+                    ItemLabel.text = CustomClipData.customEventKey;
+                }));
+            inspector.Add(customEventField);
             
             // 删除按钮
             var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
