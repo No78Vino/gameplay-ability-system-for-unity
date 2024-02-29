@@ -1,13 +1,12 @@
 ﻿using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
-using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class BuffGameplayEffectClip: TrackClip<BuffGameplayEffectTrack>
+    public class BuffGameplayEffectClip : TrackClip<BuffGameplayEffectTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         private BuffGameplayEffectClipEvent BuffGameplayEffectClipData => clipData as BuffGameplayEffectClipEvent;
@@ -37,7 +36,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
-            ItemLabel.text = BuffGameplayEffectClipData.gameplayEffect ? BuffGameplayEffectClipData.gameplayEffect.name : "【NULL】";
+            ItemLabel.text = BuffGameplayEffectClipData.gameplayEffect
+                ? BuffGameplayEffectClipData.gameplayEffect.name
+                : "【NULL】";
 
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
@@ -94,7 +95,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     RefreshShow(FrameUnitWidth);
                 });
             inspector.Add(buff);
-            
+
             // 删除按钮
             var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
             deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));

@@ -1,15 +1,13 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability;
+﻿using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
-using GAS.Runtime.Effects;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class CustomClip:TrackClip<CustomClipEventTrack>
+    public class CustomClip : TrackClip<CustomClipEventTrack>
     {
-         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         private CustomClipEvent CustomClipData => clipData as CustomClipEvent;
 
         private CustomClipEvent ClipDataForSave
@@ -37,7 +35,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             base.RefreshShow(newFrameUnitWidth);
             ItemLabel.text = CustomClipData.customEventKey;
-            
+
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
                 AbilityTimelineEditorWindow.Instance.SetInspector(this);
@@ -79,17 +77,17 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _durationField = TrackInspectorUtil.CreateIntegerField("时长(f)", CustomClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
-            
+
             // 自定义事件
             var customEventField = TrackInspectorUtil.CreateTextField("自定义事件", CustomClipData.customEventKey,
-                (evt =>
+                evt =>
                 {
                     ClipDataForSave.customEventKey = evt.newValue;
                     AbilityTimelineEditorWindow.Instance.Save();
                     ItemLabel.text = CustomClipData.customEventKey;
-                }));
+                });
             inspector.Add(customEventField);
-            
+
             // 删除按钮
             var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
             deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
@@ -110,6 +108,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _endFrameLabel.text = $"结束帧:{CustomClipData.EndFrame}";
             _durationField.value = newValue;
         }
+
         #endregion
     }
 }

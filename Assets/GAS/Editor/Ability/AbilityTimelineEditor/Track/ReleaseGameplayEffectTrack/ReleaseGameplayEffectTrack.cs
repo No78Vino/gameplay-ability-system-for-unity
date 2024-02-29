@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Runtime.Ability.AbilityTimeline;
-using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class ReleaseGameplayEffectTrack:FixedTrack
+    public class ReleaseGameplayEffectTrack : FixedTrack
     {
         public static ReleaseGameplayEffectTrackData ReleaseGameplayEffectTrackData =>
             AbilityTimelineEditorWindow.Instance.AbilityAsset.ReleaseGameplayEffect;
@@ -17,7 +15,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override Type TrackDataType => typeof(ReleaseGameplayEffectTrackData);
         protected override Color TrackColor => new(0.9f, 0.3f, 0.35f, 0.2f);
         protected override Color MenuColor => new(0.9f, 0.3f, 0.35f, 0.9f);
-        
+
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
             TrackDataBase trackData)
         {
@@ -55,7 +53,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             foreach (var mark in ReleaseGameplayEffectTrackData.markEvents)
             {
-                var markFrame = TrackInspectorUtil.CreateLabel($"||标记帧:{mark.startFrame}  GameplayEffect数量{mark.gameplayEffectAssets.Count}");
+                var markFrame =
+                    TrackInspectorUtil.CreateLabel(
+                        $"||标记帧:{mark.startFrame}  GameplayEffect数量{mark.gameplayEffectAssets.Count}");
                 inspector.Add(markFrame);
                 foreach (var ge in mark.gameplayEffectAssets)
                 {

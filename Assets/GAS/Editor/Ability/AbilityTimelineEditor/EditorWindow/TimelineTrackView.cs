@@ -48,6 +48,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         private void OnClickAddTrack()
         {
+            if(AbilityAsset==null) return;
             var menu = new GenericMenu();
             foreach (var t in _trackTypeList) menu.AddItem(new GUIContent($"Add {t.Name}"), false, () => CreateTrack(t));
             menu.ShowAsContext();

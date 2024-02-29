@@ -1,12 +1,9 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.AbilityTimeline;
-using GAS.Runtime.Cue;
-using UnityEngine;
+﻿using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class CustomMark:TrackMark<CustomMarkEventTrack>
+    public class CustomMark : TrackMark<CustomMarkEventTrack>
     {
         private CustomMarkEvent MarkData => markData as CustomMarkEvent;
 
@@ -33,7 +30,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var inspector = TrackInspectorUtil.CreateTrackInspector();
             var markFrame = TrackInspectorUtil.CreateLabel($"触发帧:{markData.startFrame}");
             inspector.Add(markFrame);
-            
+
             // 自定义事件
             var customEvent = TrackInspectorUtil.CreateStringListView("自定义事件", MarkData.customEventKeys, (index, evt) =>
             {
@@ -41,7 +38,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 AbilityTimelineEditorWindow.Instance.Save();
             });
             inspector.Add(customEvent);
-            
+
             return inspector;
         }
 
