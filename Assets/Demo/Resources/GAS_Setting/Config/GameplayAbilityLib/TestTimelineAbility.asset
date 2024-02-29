@@ -56,4 +56,11 @@ MonoBehaviour:
       cues:
       - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
       - {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
+  ReleaseGameplayEffect:
+    trackIndex: 0
+    markEvents:
+    - startFrame: 29
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: de6c7185a4635214693fecf5008e6b7c, type: 2}
+      - {fileID: 11400000, guid: 52a367ac5c57adc49aacdbe63680edeb, type: 2}
   GameplayEffects: []

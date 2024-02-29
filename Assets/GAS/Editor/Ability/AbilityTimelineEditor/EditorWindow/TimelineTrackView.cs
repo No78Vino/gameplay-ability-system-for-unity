@@ -68,7 +68,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             instantCueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.InstantCues);
             _trackList.Add(instantCueTrack);
             
-            // TODO 施放型GameplayEffect轨道（唯一）
+            // 施放型GameplayEffect轨道（唯一）
+            var releaseGameplayEffectTrack = new ReleaseGameplayEffectTrack();
+            releaseGameplayEffectTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.ReleaseGameplayEffect);
+            _trackList.Add(releaseGameplayEffectTrack);
             
             // TODO 自定义即时型事件轨道（唯一）
             

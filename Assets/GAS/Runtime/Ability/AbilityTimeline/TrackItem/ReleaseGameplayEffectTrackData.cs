@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.Runtime.Cue;
+using GAS.Runtime.Effects;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime.Ability.AbilityTimeline
 {
@@ -8,19 +10,13 @@ namespace GAS.Runtime.Ability.AbilityTimeline
     public class ReleaseGameplayEffectTrackData:TrackDataBase
     {
         public ReleaseGameplayEffectTargetMethod targetMethod;
-        public List<ReleaseGameplayEffectMarkEvent> markEvents;
-        
-        public override void DefaultInit(int index)
-        {
-            base.DefaultInit(index);
-            markEvents = new List<ReleaseGameplayEffectMarkEvent>();
-        }
+        public List<ReleaseGameplayEffectMarkEvent> markEvents = new List<ReleaseGameplayEffectMarkEvent>();
     }
     
     [Serializable]
     public class ReleaseGameplayEffectMarkEvent:MarkEventBase
     {
-        public List<GameplayCueInstant> cues = new List<GameplayCueInstant>();
+        public List<GameplayEffectAsset> gameplayEffectAssets = new List<GameplayEffectAsset>();
     }
 
     public class ReleaseGameplayEffectTargetMethod
