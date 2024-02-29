@@ -4,7 +4,7 @@ using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
+namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class BuffGameplayEffectTrack: TrackBase
     {
@@ -80,7 +80,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             AbilityAsset.BuffGameplayEffects.Remove(_buffGameplayEffectTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
-            TrackParent.Remove(Track);
+            TrackParent.Remove(TrackRoot);
             MenuParent.Remove(Menu);
             Debug.Log("[EX] Remove Durational Cue Track");
         }

@@ -5,7 +5,7 @@ using GAS.Runtime.Effects;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
+namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class BuffGameplayEffectClip: TrackClip<BuffGameplayEffectTrack>
     {

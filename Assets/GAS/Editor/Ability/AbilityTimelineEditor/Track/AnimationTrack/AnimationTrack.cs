@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
+namespace GAS.Editor.Ability.AbilityTimelineEditor.AnimationTrack
 {
     public class AnimationTrack : TrackBase
     {

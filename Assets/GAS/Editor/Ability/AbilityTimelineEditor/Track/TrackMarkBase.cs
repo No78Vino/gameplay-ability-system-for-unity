@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
+namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public abstract class TrackMarkBase:TrackItemBase
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using GAS.Editor.Ability.AbilityTimelineEditor.Track;
+using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEngine;
@@ -81,7 +81,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             AbilityAsset.CustomClips.Remove(_customClipEventTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
-            TrackParent.Remove(Track);
+            TrackParent.Remove(TrackRoot);
             MenuParent.Remove(Menu);
             Debug.Log("[EX] Remove Custom Clip Track");
         }

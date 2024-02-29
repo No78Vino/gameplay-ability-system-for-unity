@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Editor.Ability.AbilityTimelineEditor.Track;
-using GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
@@ -19,7 +17,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
         private VisualElement _trackMenuParent;
-        public AnimationTrack animationTrack;
+        public AnimationTrack.AnimationTrack animationTrack;
 
         public TimelineTrackView(VisualElement root)
         {

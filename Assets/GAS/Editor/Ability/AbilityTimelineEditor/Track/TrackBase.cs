@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
+namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public abstract class TrackBase
     {
@@ -16,6 +17,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
         protected float _frameWidth;
         protected VisualElement Menu;
         protected VisualElement MenuParent;
+        protected VisualElement TrackRoot;
         protected VisualElement Track;
         protected VisualElement TrackParent;
         protected Label MenuText;
@@ -39,13 +41,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             MenuParent = menuParent;
             var trackAssetPath = AssetDatabase.GUIDToAssetPath(TrackAssetGuid);
             var menuAssetPath = AssetDatabase.GUIDToAssetPath(MenuAssetGuid);
-            Track = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(trackAssetPath).Instantiate().Query().ToList()[1];
+            TrackRoot = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(trackAssetPath).Instantiate().Query().ToList()[1];
             Menu = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(menuAssetPath).Instantiate().Query().ToList()[1];
+            Track = TrackRoot.Q<VisualElement>("Container");
             MenuText = Menu.Q<Label>("TrackName");
             BoundingBox = Menu.Q<VisualElement>("BoundingBox");
             Lock = Menu.Q<VisualElement>("Lock");
             Lock.style.display = DisplayStyle.None;
-            TrackParent.Add(Track);
+            TrackParent.Add(TrackRoot);
             MenuParent.Add(Menu);
 
             _frameWidth = frameWidth;
@@ -53,11 +56,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
             Menu.RegisterCallback<MouseDownEvent>(OnMenuMouseDown);
             Menu.AddManipulator(new ContextualMenuManipulator(OnMenuContextMenu));
                 
-            Track.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            Track.RegisterCallback<PointerOutEvent>(OnPointerOut);
-            Track.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
+            TrackRoot.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            TrackRoot.RegisterCallback<PointerOutEvent>(OnPointerOut);
+            TrackRoot.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
 
-            Track.style.backgroundColor = new Color(0, 0, 0, 0); //TrackColor;
+            //Track.style.backgroundColor = new Color(0, 0, 0, 0); //TrackColor;
             BoundingBox.style.backgroundColor = MenuColor;
         }
 

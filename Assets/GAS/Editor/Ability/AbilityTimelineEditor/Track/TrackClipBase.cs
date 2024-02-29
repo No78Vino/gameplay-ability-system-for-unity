@@ -1,7 +1,7 @@
 ﻿using GAS.Runtime.Ability.AbilityTimeline;
 using UnityEngine.UIElements;
 
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
+namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public abstract class TrackClipBase:TrackItemBase
     {

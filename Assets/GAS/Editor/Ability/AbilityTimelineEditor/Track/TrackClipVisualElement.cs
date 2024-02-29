@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track
+namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class TrackClipVisualElement:VisualElement
     {

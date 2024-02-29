@@ -42,7 +42,7 @@ MonoBehaviour:
     - startFrame: 69
       durationFrame: 19
       cue: {fileID: 0}
-    - startFrame: 7
+    - startFrame: 11
       durationFrame: 5
       cue: {fileID: 0}
     - startFrame: 59
@@ -51,7 +51,7 @@ MonoBehaviour:
   - trackIndex: 4
     trackName: DurationalCueTrack
     clipEvents:
-    - startFrame: 16
+    - startFrame: 30
       durationFrame: 5
       cue: {fileID: 0}
   InstantCues:
@@ -81,8 +81,8 @@ MonoBehaviour:
   - trackIndex: 4
     trackName: Buff
     clipEvents:
-    - startFrame: 26
-      durationFrame: 5
+    - startFrame: 31
+      durationFrame: 9
       buffTarget: 0
       gameplayEffect: {fileID: 0}
     - startFrame: 45
@@ -98,8 +98,10 @@ MonoBehaviour:
   - trackIndex: 6
     trackName: Custom Clips
     clipEvents:
-    - startFrame: 12
+    - startFrame: 8
       durationFrame: 27
   - trackIndex: 7
     trackName: Custom Clips
-    clipEvents: []
+    clipEvents:
+    - startFrame: 28
+      durationFrame: 20

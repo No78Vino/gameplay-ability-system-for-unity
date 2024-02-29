@@ -4,7 +4,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GAS.Editor.Ability.AbilityTimelineEditor.Track.AnimationTrack
+namespace GAS.Editor.Ability.AbilityTimelineEditor.AnimationTrack
 {
     public class AnimationTrackClip : TrackClip<AnimationTrack>
     {
