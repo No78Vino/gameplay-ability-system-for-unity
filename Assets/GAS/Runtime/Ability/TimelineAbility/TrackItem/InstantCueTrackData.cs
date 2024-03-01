@@ -7,13 +7,7 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class InstantCueTrackData:TrackDataBase
     {
-        public List<InstantCueMarkEvent> markEvents;
-        
-        public override void DefaultInit(int index)
-        {
-            base.DefaultInit(index);
-            markEvents = new List<InstantCueMarkEvent>();
-        }
+        public List<InstantCueMarkEvent> markEvents = new List<InstantCueMarkEvent>();
     }
     
     [Serializable]

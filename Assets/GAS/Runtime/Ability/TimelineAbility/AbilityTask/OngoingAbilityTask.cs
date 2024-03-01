@@ -2,11 +2,11 @@
 {
     public abstract class OngoingAbilityTask:AbilityTaskBase
     {
-        public abstract void OnStart();
+        public abstract void OnStart(int startFrame);
 
-        public abstract void OnEnd();
+        public abstract void OnEnd(int endFrame);
 
-        public abstract void OnTick();
+        public abstract void OnTick(int frameIndex,int startFrame,int endFrame);
         
 #if UNITY_EDITOR
         public virtual void OnEditorPreviewTick(int frameIndex,int startFrame,int endFrame)

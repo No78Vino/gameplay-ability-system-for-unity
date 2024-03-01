@@ -52,7 +52,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             "A- Gameplay Cue",
             "B- Gameplay Effect",
             "C- Ability",
-            "C- Ability Task",
+            "B- Ability Task",
             "D- Ability System Component"
         };
 

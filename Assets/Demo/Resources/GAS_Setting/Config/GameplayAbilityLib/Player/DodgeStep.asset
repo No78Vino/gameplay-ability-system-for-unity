@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa6980fa348a4712abe7e048c5ce087c, type: 3}
-  m_Name: PlayerDodge
+  m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
+  m_Name: DodgeStep
   m_EditorClassIdentifier: 
-  UniqueName: PlayerDodge
-  Description: "\u73A9\u5BB6\u95EA\u907F"
+  UniqueName: DodgeStep
+  Description: "\u95EA\u907F\u6B65\u4F10"
   Cost: {fileID: 11400000, guid: 52a367ac5c57adc49aacdbe63680edeb, type: 2}
   Cooldown: {fileID: 11400000, guid: de6c7185a4635214693fecf5008e6b7c, type: 2}
   CooldownTime: 1
@@ -44,15 +44,15 @@ MonoBehaviour:
     _ancestorHashCodes: b84ed1e0
     _ancestorNames:
     - Ability
-  - _name: Ability.Attack
-    _hashCode: 115429334
-    _shortName: Attack
-    _ancestorHashCodes: b84ed1e0
-    _ancestorNames:
-    - Ability
   - _name: Ability.Defend
     _hashCode: 465592122
     _shortName: Defend
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  - _name: Ability.Attack
+    _hashCode: 115429334
+    _shortName: Attack
     _ancestorHashCodes: b84ed1e0
     _ancestorNames:
     - Ability
@@ -71,10 +71,33 @@ MonoBehaviour:
     - Ban
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  cueDodge: {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
-  cueTrail: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
-  prepareTime: 0.05
-  motionTime: 0.1
-  endTime: 0.05
-  motionDistance: 6
-  cuePowerForceVFX: {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
+  MaxFrameCount: 30
+  AnimationData:
+    trackIndex: 0
+    Animator: {fileID: 0}
+    animationClipData: []
+  DurationalCues:
+  - trackIndex: 3
+    trackName: Durational Cue
+    clipEvents:
+    - startFrame: 1
+      durationFrame: 14
+      cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
+  InstantCues:
+    trackIndex: 0
+    markEvents:
+    - startFrame: 1
+      cues:
+      - {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
+      - {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
+  ReleaseGameplayEffect:
+    trackIndex: 0
+    markEvents: []
+  BuffGameplayEffects: []
+  taskMarks:
+    trackIndex: 0
+    markEvents:
+    - startFrame: 1
+      InstantTasks:
+      - {fileID: 11400000, guid: bc207aad95cd94e458528ec7ed841f97, type: 2}
+  taskClips: []

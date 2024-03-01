@@ -1,3 +1,4 @@
+using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 
@@ -13,6 +14,26 @@ namespace GAS.Runtime.Cue
     {
         public InstantCueApplyTarget applyTarget;
 
+        public virtual void ApplyFrom(GameplayEffectSpec gameplayEffectSpec)
+        {
+            if (Triggerable(gameplayEffectSpec.Owner))
+            {
+                var instantCue = CreateSpec(new GameplayCueParameters
+                    { sourceGameplayEffectSpec = gameplayEffectSpec });
+                instantCue?.Trigger();
+            }
+        }
+
+        public virtual void ApplyFrom(AbilitySpec abilitySpec,params object[] customArguments)
+        {
+            if (Triggerable(abilitySpec.Owner))
+            {
+                var instantCue = CreateSpec(new GameplayCueParameters
+                    { sourceAbilitySpec = abilitySpec, customArguments = customArguments});
+                instantCue?.Trigger();
+            }
+        }
+        
 #if UNITY_EDITOR
         public virtual void OnEditorPreview()
         {

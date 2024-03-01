@@ -117,34 +117,29 @@ namespace GAS.Runtime.Effects
             PeriodTicker?.Tick();
         }
 
+        void TriggerInstantCues(GameplayCueInstant[] cues)
+        {
+            foreach (var cue in cues) cue.ApplyFrom(this);
+        }
+        
         private void TriggerCueOnExecute()
         {
             if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
-            foreach (var cue in GameplayEffect.CueOnExecute)
-            {
-                if (!cue.Triggerable(Owner)) continue;
-                var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
-                instantCue?.Trigger();
-            }
+            TriggerInstantCues(GameplayEffect.CueOnExecute);
         }
 
         private void TriggerCueOnAdd()
         {
             if (GameplayEffect.CueOnAdd != null && GameplayEffect.CueOnAdd.Length > 0)
-                foreach (var cue in GameplayEffect.CueOnAdd)
-                {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
-                    instantCue?.Trigger();
-                }
+                TriggerInstantCues(GameplayEffect.CueOnAdd);
 
             if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
             {
                 _cueDurationalSpecs.Clear();
                 foreach (var cueDurational in GameplayEffect.CueDurational)
                 {
-                    if (cueDurational.Triggerable(Owner))
-                        _cueDurationalSpecs.Add(cueDurational.CreateSpec(new GameplayCueParameters
-                            { sourceGameplayEffectSpec = this }));
+                    var cueSpec = cueDurational.ApplyFrom(this);
+                    if (cueSpec != null) _cueDurationalSpecs.Add(cueSpec);
                 }
 
                 foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
@@ -154,11 +149,7 @@ namespace GAS.Runtime.Effects
         private void TriggerCueOnRemove()
         {
             if (GameplayEffect.CueOnRemove != null && GameplayEffect.CueOnRemove.Length > 0)
-                foreach (var cue in GameplayEffect.CueOnRemove)
-                {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
-                    instantCue?.Trigger();
-                }
+                TriggerInstantCues(GameplayEffect.CueOnRemove);
 
             if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
             {
@@ -171,11 +162,7 @@ namespace GAS.Runtime.Effects
         private void TriggerCueOnActivation()
         {
             if (GameplayEffect.CueOnActivate != null && GameplayEffect.CueOnActivate.Length > 0)
-                foreach (var cue in GameplayEffect.CueOnActivate)
-                {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
-                    instantCue?.Trigger();
-                }
+                TriggerInstantCues(GameplayEffect.CueOnActivate);
 
             if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
                 foreach (var cue in _cueDurationalSpecs)
@@ -185,11 +172,7 @@ namespace GAS.Runtime.Effects
         private void TriggerCueOnDeactivation()
         {
             if (GameplayEffect.CueOnDeactivate != null && GameplayEffect.CueOnDeactivate.Length > 0)
-                foreach (var cue in GameplayEffect.CueOnDeactivate)
-                {
-                    var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
-                    instantCue?.Trigger();
-                }
+                TriggerInstantCues(GameplayEffect.CueOnDeactivate);
 
             if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
                 foreach (var cue in _cueDurationalSpecs)
