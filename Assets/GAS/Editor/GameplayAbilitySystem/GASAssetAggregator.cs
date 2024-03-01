@@ -1,6 +1,4 @@
-﻿using GAS.General;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
     using System;
@@ -19,16 +17,19 @@ namespace GAS.Editor.GameplayAbilitySystem
     using Sirenix.Utilities.Editor;
     using UnityEditor;
     using UnityEngine;
+    using GAS.General;
+    using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
     using Debug = UnityEngine.Debug;
     
     public class GASAssetAggregator : OdinMenuEditorWindow
     {
-        private static readonly Type[] _types = new Type[5]
+        private static readonly Type[] _types = new Type[6]
         {
             typeof(ModifierMagnitudeCalculation),
             typeof(GameplayCue),
             typeof(GameplayEffectAsset),
             typeof(AbilityAsset),
+            typeof(AbilityTaskBase),
             typeof(AbilitySystemComponentPreset)
         };
 
@@ -42,15 +43,16 @@ namespace GAS.Editor.GameplayAbilitySystem
             }
         }
 
-        private static readonly DirectoryInfo[] _directoryInfos = new DirectoryInfo[5];
+        private static readonly DirectoryInfo[] _directoryInfos = new DirectoryInfo[6];
         private static readonly List<DirectoryInfo> _subDirectoryInfos = new List<DirectoryInfo>();
 
-        private static readonly string[] MenuNames = new string[5]
+        private static readonly string[] MenuNames = new string[6]
         {
             "A- Mod Magnitude Calculation",
             "A- Gameplay Cue",
             "B- Gameplay Effect",
-            "C- Gameplay Ability",
+            "C- Ability",
+            "C- Ability Task",
             "D- Ability System Component"
         };
 
@@ -70,6 +72,7 @@ namespace GAS.Editor.GameplayAbilitySystem
                 GASSettingAsset.GameplayCueLibPath,
                 GASSettingAsset.GameplayEffectLibPath,
                 GASSettingAsset.GameplayAbilityLibPath,
+                GASSettingAsset.AbilityTaskLib,
                 GASSettingAsset.ASCLibPath,
             };
 
@@ -223,6 +226,9 @@ namespace GAS.Editor.GameplayAbilitySystem
                 ScriptableObjectCreator.ShowDialog<AbilityAsset>(directoryInfo.RootDirectory,
                     TrySelectMenuItemWithObject);
             else if (directoryInfo.AssetType == _types[4])
+                ScriptableObjectCreator.ShowDialog<AbilityTaskBase>(directoryInfo.RootDirectory,
+                    TrySelectMenuItemWithObject);
+            else if (directoryInfo.AssetType == _types[5])
                 ScriptableObjectCreator.ShowDialog<AbilitySystemComponentPreset>(directoryInfo.RootDirectory,
                     TrySelectMenuItemWithObject);
         }

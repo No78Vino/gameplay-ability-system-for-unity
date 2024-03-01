@@ -231,5 +231,50 @@ namespace GAS.Editor.Ability
             return listView;
         }
         
+        
+        public static ListView CreateTypeListView(string label, List<Type> list,
+            Action<int,ChangeEvent<Type>> onItemValueChanged)
+        {
+            VisualElement MakeItem()
+            {
+                var typeField = new ObjectField();//TypeField();
+                return typeField;
+            }
+
+            void BindItem(VisualElement e, int i)
+            {
+                var typeField = (ObjectField)e;
+                // typeField.value = list[i];
+                // typeField.RegisterValueChangedCallback(evt =>
+                // {
+                //     onItemValueChanged(i, evt);
+                // });
+            }
+
+            var listView = new ListView(list,LineHeight,MakeItem,BindItem);
+            listView.headerTitle = label;
+            listView.reorderable= true;
+            listView.showAddRemoveFooter = true;
+            listView.showBorder= true;
+            listView.showFoldoutHeader = true;
+            listView.itemsSource = list;
+            listView.selectionType = SelectionType.Single;
+            
+            listView.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            listView.style.height = new StyleLength(StyleKeyword.Auto);
+            
+            listView.style.paddingLeft = 5;
+            listView.style.paddingRight = 5;
+            listView.style.paddingTop = 5;
+            listView.style.paddingBottom = 5;
+            
+            listView.style.alignItems = Align.Stretch;
+            listView.style.alignContent = Align.Stretch;
+            listView.style.justifyContent = Justify.FlexStart;
+            listView.style.flexDirection = FlexDirection.Column;
+            listView.style.flexWrap = Wrap.NoWrap;
+   
+            return listView;
+        }
     }
 }

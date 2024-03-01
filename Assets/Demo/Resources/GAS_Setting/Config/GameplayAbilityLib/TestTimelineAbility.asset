@@ -51,8 +51,8 @@ MonoBehaviour:
   - trackIndex: 4
     trackName: DurationalCueTrack
     clipEvents:
-    - startFrame: 30
-      durationFrame: 5
+    - startFrame: 29
+      durationFrame: 12
       cue: {fileID: 0}
   InstantCues:
     trackIndex: 0
@@ -72,19 +72,7 @@ MonoBehaviour:
       cues: []
   ReleaseGameplayEffect:
     trackIndex: 0
-    markEvents:
-    - startFrame: 30
-      method:
-        method: 3
-        checkLayer:
-          serializedVersion: 2
-          m_Bits: 0
-        centerType: 0
-        center: {x: 0, y: 0, z: 0}
-        radius: 0.27
-        size: {x: 0, y: 0, z: 0}
-        customMethodRegisterKey: 
-      gameplayEffectAssets: []
+    markEvents: []
   BuffGameplayEffects:
   - trackIndex: 4
     trackName: Buff
@@ -97,23 +85,16 @@ MonoBehaviour:
       durationFrame: 29
       buffTarget: 0
       gameplayEffect: {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}
-  CustomMarks:
+  taskMarks:
     trackIndex: 0
     markEvents:
-    - startFrame: 28
-      customEventKeys: []
-    - startFrame: 49
-      customEventKeys: []
-  CustomClips:
+    - startFrame: 4
+      InstantTasks:
+      - {fileID: 11400000, guid: bc207aad95cd94e458528ec7ed841f97, type: 2}
+  taskClips:
   - trackIndex: 6
-    trackName: Custom Clips
+    trackName: Task Clips
     clipEvents:
-    - startFrame: 8
-      durationFrame: 27
-      customEventKey: 
-  - trackIndex: 7
-    trackName: Custom Clips
-    clipEvents:
-    - startFrame: 28
-      durationFrame: 20
-      customEventKey: 
+    - startFrame: 20
+      durationFrame: 17
+      task: {fileID: 0}

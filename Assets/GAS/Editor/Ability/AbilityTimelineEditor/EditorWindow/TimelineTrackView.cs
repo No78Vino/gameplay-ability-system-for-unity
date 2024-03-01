@@ -73,8 +73,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _trackList.Add(releaseGameplayEffectTrack);
             
             // 自定义即时型事件轨道（唯一）
-            var customMarkEventTrack = new CustomMarkEventTrack();
-            customMarkEventTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.CustomMarks);
+            var customMarkEventTrack = new TaskMarkEventTrack();
+            customMarkEventTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, AbilityAsset.taskMarks);
             _trackList.Add(customMarkEventTrack);
             
             // 持续Cue轨道
@@ -94,9 +94,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
             
             // 自定义持续型事件轨道
-            foreach (var customClipEventTrackData in AbilityAsset.CustomClips)
+            foreach (var customClipEventTrackData in AbilityAsset.taskClips)
             {
-                var customClipTrack = new CustomClipEventTrack();
+                var customClipTrack = new TaskClipEventTrack();
                 customClipTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, customClipEventTrackData);
                 _trackList.Add(customClipTrack);
             }

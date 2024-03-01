@@ -8,12 +8,12 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class CustomMarkEventTrack:FixedTrack
+    public class TaskMarkEventTrack:FixedTrack
     {
-        public static CustomMarkEventTrackData CustomMarkEventTrackData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.CustomMarks;
+        public static TaskMarkEventTrackData TaskMarkEventTrackData =>
+            AbilityTimelineEditorWindow.Instance.AbilityAsset.taskMarks;
 
-        public override Type TrackDataType => typeof(CustomMarkEventTrackData);
+        public override Type TrackDataType => typeof(TaskMarkEventTrackData);
         protected override Color TrackColor => new(0.1f, 0.6f, 0.6f, 0.2f);
         protected override Color MenuColor => new(0.1f, 0.6f, 0.6f, 0.9f);
         
@@ -21,7 +21,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
-            MenuText.text = "自定义Mark";
+            MenuText.text = "Instant Task";
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -36,9 +36,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset == null) return;
 
-            foreach (var markEvent in CustomMarkEventTrackData.markEvents)
+            foreach (var markEvent in TaskMarkEventTrackData.markEvents)
             {
-                var item = new CustomMark();
+                var item = new TaskMark();
                 item.InitTrackMark(this, Track, _frameWidth, markEvent);
                 _trackItems.Add(item);
             }
@@ -48,21 +48,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
-            var trackLabel = TrackInspectorUtil.CreateLabel("自定义Mark：");
-            trackLabel.style.fontSize = 14;
+            var trackLabel = TrackInspectorUtil.CreateLabel("Instant Task:");
             inspector.Add(trackLabel);
 
-            // foreach (var mark in CustomMarkEventTrackData.markEvents)
-            // {
-            //     var markFrame = TrackInspectorUtil.CreateLabel($"||标记帧:{mark.startFrame}/ cue数量{mark.cues.Count}");
-            //     inspector.Add(markFrame);
-            //     foreach (var c in mark.cues)
-            //     {
-            //         var cueName = c != null ? c.name : "NULL";
-            //         var cueCount = TrackInspectorUtil.CreateLabel($"    |-> Cue:{cueName}");
-            //         inspector.Add(cueCount);
-            //     }
-            // }
+            foreach (var mark in TaskMarkEventTrackData.markEvents)
+            {
+                var markFrame = TrackInspectorUtil.CreateLabel($"   Trigger(f):{mark.startFrame}");
+                inspector.Add(markFrame);
+                foreach (var task in mark.InstantTasks)
+                {
+                    var taskName = task != null ? task.name : "Null!";
+                    var taskInfo = TrackInspectorUtil.CreateLabel($"    |-> {taskName}");
+                    inspector.Add(taskInfo);
+                }
+            }
 
             return inspector;
         }
@@ -70,14 +69,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Mark数据
-            var markEvent = new CustomMarkEvent
+            var markEvent = new TaskMarkEvent
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
             };
-            CustomMarkEventTrackData.markEvents.Add(markEvent);
+            TaskMarkEventTrackData.markEvents.Add(markEvent);
 
             // 刷新显示
-            var mark = new CustomMark();
+            var mark = new TaskMark();
             mark.InitTrackMark(this, Track, _frameWidth, markEvent);
             _trackItems.Add(mark);
 
@@ -89,7 +88,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
-            CustomMarkEventTrackData.markEvents.Clear();
+            TaskMarkEventTrackData.markEvents.Clear();
             AbilityTimelineEditorWindow.Instance.Save();
         }
     }

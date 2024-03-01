@@ -4,6 +4,7 @@ using GAS.Runtime.Cue;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime.Ability.TimelineAbility
 {
@@ -35,14 +36,13 @@ namespace GAS.Runtime.Ability.TimelineAbility
         [BoxGroup]
         public List<BuffGameplayEffectTrackData> BuffGameplayEffects = new List<BuffGameplayEffectTrackData>();
         
-        
-        // 自定义标记事件（唯一）
+        // 任务标记事件（唯一）
         [BoxGroup]
-        public CustomMarkEventTrackData CustomMarks = new CustomMarkEventTrackData();
+        public TaskMarkEventTrackData taskMarks = new TaskMarkEventTrackData();
         
-        // 自定义片段事件
+        // 任务片段事件
         [BoxGroup]
-        public List<CustomClipEventTrackData> CustomClips = new List<CustomClipEventTrackData>();
+        public List<TaskClipEventTrackData> taskClips = new List<TaskClipEventTrackData>();
         
 #if UNITY_EDITOR
         public void Save()

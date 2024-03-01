@@ -7,22 +7,22 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class CustomClipEventTrack:TrackBase
+    public class TaskClipEventTrack:TrackBase
     {
-        private CustomClipEventTrackData _customClipEventTrackData;
-        public override Type TrackDataType => typeof(CustomClipEventTrackData);
+        private TaskClipEventTrackData _taskClipEventTrackData;
+        public override Type TrackDataType => typeof(TaskClipEventTrackData);
         protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
         protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
 
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        public CustomClipEventTrackData CustomClipTrackDataForSave
+        public TaskClipEventTrackData TaskClipTrackDataForSave
         {
             get
             {
-                for (int i = 0; i < AbilityAsset.CustomClips.Count; i++)
+                for (int i = 0; i < AbilityAsset.taskClips.Count; i++)
                 {
-                    if(AbilityAsset.CustomClips[i] == _customClipEventTrackData)
-                        return AbilityAsset.CustomClips[i];
+                    if(AbilityAsset.taskClips[i] == _taskClipEventTrackData)
+                        return AbilityAsset.taskClips[i];
                 }
                 return null;
             }
@@ -35,8 +35,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
-            _customClipEventTrackData = trackData as CustomClipEventTrackData;
-            MenuText.text = _customClipEventTrackData.trackName;
+            _taskClipEventTrackData = trackData as TaskClipEventTrackData;
+            MenuText.text = _taskClipEventTrackData.trackName;
         }
 
         public override void RefreshShow(float newFrameWidth)
@@ -46,9 +46,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
-                foreach (var clipEvent in _customClipEventTrackData.clipEvents)
+                foreach (var clipEvent in _taskClipEventTrackData.clipEvents)
                 {
-                    var item = new CustomClip();
+                    var item = new TaskClip();
                     item.InitTrackClip(this, Track, _frameWidth, clipEvent);
                     _trackItems.Add(item);
                 }
@@ -57,15 +57,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Clip数据
-            var clipEvent = new CustomClipEvent
+            var clipEvent = new TaskClipEvent
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
                 durationFrame = 5
             };
-            CustomClipTrackDataForSave.clipEvents.Add(clipEvent);
+            TaskClipTrackDataForSave.clipEvents.Add(clipEvent);
             
             // 刷新显示
-            var item = new CustomClip();
+            var item = new TaskClip();
             item.InitTrackClip(this, Track, _frameWidth, clipEvent);
             _trackItems.Add(item);
             
@@ -78,7 +78,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
             // 删除数据
-            AbilityAsset.CustomClips.Remove(_customClipEventTrackData);
+            AbilityAsset.taskClips.Remove(_taskClipEventTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
             TrackParent.Remove(TrackRoot);
@@ -93,17 +93,23 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
             // track Name
-            var trackNameTextField =TrackInspectorUtil.CreateTextField("轨道名",_customClipEventTrackData.trackName,
+            var trackNameTextField =TrackInspectorUtil.CreateTextField("Name",_taskClipEventTrackData.trackName,
                 (evt =>
                 {
                     // 修改数据
-                    CustomClipTrackDataForSave.trackName = evt.newValue;
+                    TaskClipTrackDataForSave.trackName = evt.newValue;
                     AbilityAsset.Save();
                     // 修改显示
                     MenuText.text = evt.newValue;
                 }));
             inspector.Add(trackNameTextField);
             
+            foreach (var clip in _taskClipEventTrackData.clipEvents)
+            {
+                var taskName = clip.task ? clip.task.name : "Null!";
+                var runInfo = TrackInspectorUtil.CreateLabel($"  [ {taskName} ] Run(f):{clip.startFrame}->{clip.EndFrame}");
+                inspector.Add(runInfo);
+            }
             
             return inspector;
         }

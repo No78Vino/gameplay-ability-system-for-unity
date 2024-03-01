@@ -1,20 +1,22 @@
 ﻿using GAS.Runtime.Ability.TimelineAbility;
+using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class CustomMark : TrackMark<CustomMarkEventTrack>
+    public class TaskMark : TrackMark<TaskMarkEventTrack>
     {
-        private CustomMarkEvent MarkData => markData as CustomMarkEvent;
+        private TaskMarkEvent MarkData => markData as TaskMarkEvent;
 
-        private CustomMarkEvent MarkDataForSave
+        private TaskMarkEvent MarkDataForSave
         {
             get
             {
-                var trackDataForSave = CustomMarkEventTrack.CustomMarkEventTrackData;
+                var trackDataForSave = TaskMarkEventTrack.TaskMarkEventTrackData;
                 for (var i = 0; i < trackDataForSave.markEvents.Count; i++)
                     if (trackDataForSave.markEvents[i] == MarkData)
-                        return CustomMarkEventTrack.CustomMarkEventTrackData.markEvents[i];
+                        return TaskMarkEventTrack.TaskMarkEventTrackData.markEvents[i];
                 return null;
             }
         }
@@ -28,23 +30,27 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
-            var markFrame = TrackInspectorUtil.CreateLabel($"触发帧:{markData.startFrame}");
+            var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
             inspector.Add(markFrame);
-
-            // 自定义事件
-            var customEvent = TrackInspectorUtil.CreateStringListView("自定义事件", MarkData.customEventKeys, (index, evt) =>
-            {
-                MarkDataForSave.customEventKeys[index] = evt.newValue;
-                AbilityTimelineEditorWindow.Instance.Save();
-            });
-            inspector.Add(customEvent);
+            
+            var taskList = TrackInspectorUtil.CreateObjectListView<InstantAbilityTask>("Task", MarkData.InstantTasks,
+                OnTaskAssetChanged);
+            inspector.Add(taskList);
 
             return inspector;
         }
 
+        private void OnTaskAssetChanged(int index, ChangeEvent<Object> evt)
+        {
+            var cue = evt.newValue as InstantAbilityTask;
+            MarkDataForSave.InstantTasks[index] = cue;
+            AbilityTimelineEditorWindow.Instance.Save();
+            RefreshShow(FrameUnitWidth);
+        }
+        
         public override void Delete()
         {
-            var success = CustomMarkEventTrack.CustomMarkEventTrackData.markEvents.Remove(MarkData);
+            var success = TaskMarkEventTrack.TaskMarkEventTrackData.markEvents.Remove(MarkData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             track.RemoveTrackItem(this);

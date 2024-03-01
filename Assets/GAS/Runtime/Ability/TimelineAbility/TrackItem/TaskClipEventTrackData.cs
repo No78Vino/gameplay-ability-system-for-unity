@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
 
 namespace GAS.Runtime.Ability.TimelineAbility
 {
     [Serializable]
-    public class CustomClipEventTrackData:TrackDataBase
+    public class TaskClipEventTrackData:TrackDataBase
     {
         public string trackName;
-        public List<CustomClipEvent> clipEvents;
+        public List<TaskClipEvent> clipEvents;
 
         public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
-            abilityAsset.CustomClips.Add(this);
+            abilityAsset.taskClips.Add(this);
         }
 
         public override void DefaultInit(int index)
         {
             base.DefaultInit(index);
-            trackName = "Custom Clips";
-            clipEvents = new List<CustomClipEvent>();
+            trackName = "Task Clips";
+            clipEvents = new List<TaskClipEvent>();
         }
     }
     
     [Serializable]
-    public class CustomClipEvent : ClipEventBase
+    public class TaskClipEvent : ClipEventBase
     {
-        public string customEventKey;
+        public OngoingAbilityTask task;
     }
 }

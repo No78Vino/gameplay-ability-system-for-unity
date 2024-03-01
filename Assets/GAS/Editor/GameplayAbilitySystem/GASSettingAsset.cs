@@ -85,7 +85,7 @@ namespace GAS.Editor.GameplayAbilitySystem
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
         [LabelWidth(SHORT_LABLE_WIDTH)]
-        public static string AbilityTimelineLib => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_TIMELINE_LIBRARY_FOLDER}";
+        public static string AbilityTaskLib => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_TASK_LIBRARY_FOLDER}";
         
         [ShowInInspector]
         [BoxGroup("A")]
@@ -169,7 +169,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             CheckPathFolderExist(GameplayEffectLibPath);
             CheckPathFolderExist(GameplayCueLibPath);
             CheckPathFolderExist(MMCLibPath);
-            CheckPathFolderExist(AbilityTimelineLib);
+            CheckPathFolderExist(AbilityTaskLib);
         }
 
         [BoxGroup("A")]

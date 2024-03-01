@@ -1,30 +1,31 @@
 ﻿using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TimelineAbility;
+using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class CustomClip : TrackClip<CustomClipEventTrack>
+    public class TaskClip : TrackClip<TaskClipEventTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        private CustomClipEvent CustomClipData => clipData as CustomClipEvent;
+        private TaskClipEvent TaskClipData => clipData as TaskClipEvent;
 
-        private CustomClipEvent ClipDataForSave
+        private TaskClipEvent ClipDataForSave
         {
             get
             {
-                var cueTrackDataForSave = track.CustomClipTrackDataForSave;
+                var cueTrackDataForSave = track.TaskClipTrackDataForSave;
                 for (var i = 0; i < cueTrackDataForSave.clipEvents.Count; i++)
-                    if (cueTrackDataForSave.clipEvents[i] == CustomClipData)
-                        return track.CustomClipTrackDataForSave.clipEvents[i];
+                    if (cueTrackDataForSave.clipEvents[i] == TaskClipData)
+                        return track.TaskClipTrackDataForSave.clipEvents[i];
                 return null;
             }
         }
 
         public override void Delete()
         {
-            var success = track.CustomClipTrackDataForSave.clipEvents.Remove(CustomClipData);
+            var success = track.TaskClipTrackDataForSave.clipEvents.Remove(TaskClipData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             track.RemoveTrackItem(this);
@@ -34,11 +35,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            ItemLabel.text = CustomClipData.customEventKey;
-
-            // 刷新面板显示
-            if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
-                AbilityTimelineEditorWindow.Instance.SetInspector(this);
+            ItemLabel.text = TaskClipData.task?TaskClipData.task.name:"Null!";
         }
 
         public override void UpdateClipDataStartFrame(int newStartFrame)
@@ -70,23 +67,23 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 运行帧
             _startFrameLabel =
                 TrackInspectorUtil.CreateLabel(
-                    $"运行(f):{CustomClipData.startFrame}/{CustomClipData.EndFrame}");
+                    $"运行(f):{TaskClipData.startFrame}/{TaskClipData.EndFrame}");
             inspector.Add(_startFrameLabel);
 
             // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("时长(f)", CustomClipData.durationFrame,
+            _durationField = TrackInspectorUtil.CreateIntegerField("时长(f)", TaskClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
 
-            // 自定义事件
-            var customEventField = TrackInspectorUtil.CreateTextField("自定义事件", CustomClipData.customEventKey,
+            // 任务
+            var taskField = TrackInspectorUtil.CreateObjectField("自定义事件",typeof(OngoingAbilityTask) ,TaskClipData.task,
                 evt =>
                 {
-                    ClipDataForSave.customEventKey = evt.newValue;
+                    ClipDataForSave.task = evt.newValue as OngoingAbilityTask;
                     AbilityTimelineEditorWindow.Instance.Save();
-                    ItemLabel.text = CustomClipData.customEventKey;
+                    ItemLabel.text = TaskClipData.task.name;
                 });
-            inspector.Add(customEventField);
+            inspector.Add(taskField);
 
             // 删除按钮
             var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
@@ -99,13 +96,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnDurationFrameChanged(ChangeEvent<int> evt)
         {
             // 钳制
-            var max = AbilityAsset.MaxFrameCount - CustomClipData.startFrame;
+            var max = AbilityAsset.MaxFrameCount - TaskClipData.startFrame;
             var newValue = Mathf.Clamp(evt.newValue, 1, max);
             // 保存数据
             UpdateClipDataDurationFrame(newValue);
             // 修改显示
             RefreshShow(FrameUnitWidth);
-            _endFrameLabel.text = $"结束帧:{CustomClipData.EndFrame}";
+            _endFrameLabel.text = $"结束帧:{TaskClipData.EndFrame}";
             _durationField.value = newValue;
         }
 
