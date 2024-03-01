@@ -5,6 +5,11 @@ namespace GAS.Runtime.Cue
 {
     public abstract class GameplayCueDurational : GameplayCue<GameplayCueDurationalSpec>
     {
+#if UNITY_EDITOR
+        public virtual void OnEditorPreviewTick(int frameIndex,int startFrame,int endFrame)
+        {
+        }
+#endif
     }
 
     public abstract class GameplayCueDurationalSpec : GameplayCueSpec

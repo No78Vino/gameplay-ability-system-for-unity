@@ -12,7 +12,7 @@ namespace GAS.Runtime.Effects
     {
         private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
         private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
-        private GameplayCueDurationalSpec[] _cueDurationalSpecs;
+        private List<GameplayCueDurationalSpec> _cueDurationalSpecs = new List<GameplayCueDurationalSpec>();
         
         /// <summary>
         /// The execution type of onImmunity is one shot.
@@ -122,6 +122,7 @@ namespace GAS.Runtime.Effects
             if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
             foreach (var cue in GameplayEffect.CueOnExecute)
             {
+                if (!cue.Triggerable(Owner)) continue;
                 var instantCue = cue.CreateSpec(new GameplayCueParameters { sourceGameplayEffectSpec = this });
                 instantCue?.Trigger();
             }
@@ -138,12 +139,12 @@ namespace GAS.Runtime.Effects
 
             if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
             {
-                _cueDurationalSpecs = new GameplayCueDurationalSpec[GameplayEffect.CueDurational.Length];
-                for (var i = 0; i < GameplayEffect.CueDurational.Length; i++)
+                _cueDurationalSpecs.Clear();
+                foreach (var cueDurational in GameplayEffect.CueDurational)
                 {
-                    var cueDurational = GameplayEffect.CueDurational[i];
-                    _cueDurationalSpecs[i] = cueDurational.CreateSpec(new GameplayCueParameters
-                        { sourceGameplayEffectSpec = this });
+                    if (cueDurational.Triggerable(Owner))
+                        _cueDurationalSpecs.Add(cueDurational.CreateSpec(new GameplayCueParameters
+                            { sourceGameplayEffectSpec = this }));
                 }
 
                 foreach (var cue in _cueDurationalSpecs) cue.OnAdd();

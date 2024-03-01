@@ -12,6 +12,12 @@ namespace GAS.Runtime.Cue
     public abstract class GameplayCueInstant : GameplayCue<GameplayCueInstantSpec>
     {
         public InstantCueApplyTarget applyTarget;
+
+#if UNITY_EDITOR
+        public virtual void OnEditorPreview()
+        {
+        }
+#endif
     }
 
     public abstract class GameplayCueInstantSpec : GameplayCueSpec

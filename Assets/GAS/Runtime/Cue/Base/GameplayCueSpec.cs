@@ -8,6 +8,11 @@ namespace GAS.Runtime.Cue
         protected readonly GameplayCueParameters _parameters;
         public AbilitySystemComponent Owner { get; protected set; }
 
+        public virtual bool Triggerable()
+        {
+            return _cue.Triggerable(Owner);
+        }
+        
         public GameplayCueSpec(GameplayCue cue, GameplayCueParameters cueParameters)
         {
             _cue = cue;
