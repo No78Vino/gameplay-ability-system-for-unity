@@ -9,14 +9,19 @@ namespace GAS.Runtime.Ability.TimelineAbility.AbilityTask
         [ShowInInspector]
         [DisplayAsString(TextAlignment.Left, true)]
         [HideLabel]
-        [BoxGroup]
+        [BoxGroup(Order = -1)]
         private string TextTaskType =>
             $"<color=white><b>TaskClass: ({(this is InstantAbilityTask ? "Instant" : "Ongoing")}) {GetType().FullName} </b></color>";
 #endif
-        protected AbilitySpec _spec;
-        public virtual void Init(AbilitySpec spec)
+    }
+    
+    public static class AbilityTaskBaseExtension
+    {
+        public static T CreateSpec<T>(this AbilityTaskBase abilityTaskBase,AbilitySpec abilitySpec) where T:AbilityTaskSpec,new()
         {
-            _spec = spec;
+            var spec = new T();
+            spec.Init(abilityTaskBase,abilitySpec);
+            return spec;
         }
     }
 }

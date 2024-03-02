@@ -19,10 +19,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             get
             {
-                for (int i = 0; i < AbilityAsset.taskClips.Count; i++)
+                for (int i = 0; i < AbilityAsset.OngoingTasks.Count; i++)
                 {
-                    if(AbilityAsset.taskClips[i] == _taskClipEventTrackData)
-                        return AbilityAsset.taskClips[i];
+                    if(AbilityAsset.OngoingTasks[i] == _taskClipEventTrackData)
+                        return AbilityAsset.OngoingTasks[i];
                 }
                 return null;
             }
@@ -78,7 +78,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
             // 删除数据
-            AbilityAsset.taskClips.Remove(_taskClipEventTrackData);
+            AbilityAsset.OngoingTasks.Remove(_taskClipEventTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
             TrackParent.Remove(TrackRoot);

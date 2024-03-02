@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
   m_Name: TestTimelineAbility
   m_EditorClassIdentifier: 
-  UniqueName: 
+  UniqueName: TESTAbility
   Description: 
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}

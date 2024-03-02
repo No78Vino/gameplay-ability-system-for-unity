@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GAS.General;
 using GAS.Runtime.Component;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace GAS.Core
         private GameplayAbilitySystem()
         {
             AbilitySystemComponents = new List<IAbilitySystemComponent>();
+            GASTimer.InitStartTimestamp();
             GasHost.gameObject.SetActive(true);
         }
 

@@ -71,7 +71,7 @@ MonoBehaviour:
     - Ban
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 30
+  MaxFrameCount: 9
   AnimationData:
     trackIndex: 0
     Animator: {fileID: 0}
@@ -81,7 +81,7 @@ MonoBehaviour:
     trackName: Durational Cue
     clipEvents:
     - startFrame: 1
-      durationFrame: 14
+      durationFrame: 6
       cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
   InstantCues:
     trackIndex: 0
@@ -94,10 +94,16 @@ MonoBehaviour:
     trackIndex: 0
     markEvents: []
   BuffGameplayEffects: []
-  taskMarks:
+  InstantTasks:
     trackIndex: 0
     markEvents:
     - startFrame: 1
       InstantTasks:
       - {fileID: 11400000, guid: bc207aad95cd94e458528ec7ed841f97, type: 2}
-  taskClips: []
+  OngoingTasks:
+  - trackIndex: 4
+    trackName: Task Clips
+    clipEvents:
+    - startFrame: 1
+      durationFrame: 6
+      task: {fileID: 11400000, guid: c92a03ff2df99014e8a6c9c3f2b6bd9c, type: 2}

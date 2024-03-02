@@ -10,8 +10,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class TaskMarkEventTrack:FixedTrack
     {
-        public static TaskMarkEventTrackData TaskMarkEventTrackData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.taskMarks;
+        public static TaskMarkEventTrackData InstantTaskEventTrackData =>
+            AbilityTimelineEditorWindow.Instance.AbilityAsset.InstantTasks;
 
         public override Type TrackDataType => typeof(TaskMarkEventTrackData);
         protected override Color TrackColor => new(0.1f, 0.6f, 0.6f, 0.2f);
@@ -36,7 +36,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset == null) return;
 
-            foreach (var markEvent in TaskMarkEventTrackData.markEvents)
+            foreach (var markEvent in InstantTaskEventTrackData.markEvents)
             {
                 var item = new TaskMark();
                 item.InitTrackMark(this, Track, _frameWidth, markEvent);
@@ -51,7 +51,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var trackLabel = TrackInspectorUtil.CreateLabel("Instant Task:");
             inspector.Add(trackLabel);
 
-            foreach (var mark in TaskMarkEventTrackData.markEvents)
+            foreach (var mark in InstantTaskEventTrackData.markEvents)
             {
                 var markFrame = TrackInspectorUtil.CreateLabel($"   Trigger(f):{mark.startFrame}");
                 inspector.Add(markFrame);
@@ -73,7 +73,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
             };
-            TaskMarkEventTrackData.markEvents.Add(markEvent);
+            InstantTaskEventTrackData.markEvents.Add(markEvent);
 
             // 刷新显示
             var mark = new TaskMark();
@@ -88,7 +88,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
-            TaskMarkEventTrackData.markEvents.Clear();
+            InstantTaskEventTrackData.markEvents.Clear();
             AbilityTimelineEditorWindow.Instance.Save();
         }
     }

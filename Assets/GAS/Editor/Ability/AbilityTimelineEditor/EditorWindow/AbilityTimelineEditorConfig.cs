@@ -1,3 +1,5 @@
+using GAS.General;
+
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class AbilityTimelineEditorConfig
@@ -6,6 +8,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public const int StandardFrameUnitWidth = 1;
         public const int MaxFrameUnitLevel= 20;
         public const float MinTimerShaftFrameDrawStep = 5;
-        public int DefaultFrameRate = 60;
+        public int DefaultFrameRate => GASTimer.FrameRate;
     }
 }

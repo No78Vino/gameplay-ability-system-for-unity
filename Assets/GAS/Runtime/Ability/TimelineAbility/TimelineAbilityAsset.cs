@@ -38,11 +38,11 @@ namespace GAS.Runtime.Ability.TimelineAbility
         
         // 任务标记事件（唯一）
         [BoxGroup]
-        public TaskMarkEventTrackData taskMarks = new TaskMarkEventTrackData();
+        public TaskMarkEventTrackData InstantTasks = new TaskMarkEventTrackData();
         
         // 任务片段事件
         [BoxGroup]
-        public List<TaskClipEventTrackData> taskClips = new List<TaskClipEventTrackData>();
+        public List<TaskClipEventTrackData> OngoingTasks = new List<TaskClipEventTrackData>();
         
 #if UNITY_EDITOR
         public void Save()

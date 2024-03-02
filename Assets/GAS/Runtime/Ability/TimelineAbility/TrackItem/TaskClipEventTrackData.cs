@@ -13,7 +13,7 @@ namespace GAS.Runtime.Ability.TimelineAbility
         public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
-            abilityAsset.taskClips.Add(this);
+            abilityAsset.OngoingTasks.Add(this);
         }
 
         public override void DefaultInit(int index)

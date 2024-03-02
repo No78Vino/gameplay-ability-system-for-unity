@@ -4,8 +4,10 @@ namespace GAS.Runtime.Ability.TimelineAbility
 {
     public class TimelineAbility:AbstractAbility
     {
+        public readonly TimelineAbilityAsset AbilityAsset;
         public TimelineAbility(AbilityAsset abilityAsset) : base(abilityAsset)
         {
+            AbilityAsset = abilityAsset as TimelineAbilityAsset;
         }
 
         public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
@@ -17,33 +19,38 @@ namespace GAS.Runtime.Ability.TimelineAbility
     public class TimelineAbilitySpec: AbilitySpec
     {
         private TimelineAbility _ability;
-
+        public TimelineAbilityAsset AbilityAsset => _ability.AbilityAsset;
+        private TimelineAbilityPlayer _player;
         public TimelineAbilitySpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
             _ability = ability as TimelineAbility;
-            // 必要数据初始化
+            _player = new TimelineAbilityPlayer(this);
         }
 
         public override void ActivateAbility(params object[] args)
         {
             // TODO 播放前准备工作
             
-            // TODO 播放时间轴
+            // 播放时间轴
+            _player.Play();
         }
 
         public override void CancelAbility()
         {
             // TODO 取消时间轴播放
+            _player.Stop();
         }
 
         public override void EndAbility()
         {
             // TODO 时间轴播放结束
+            _player.Stop();
         }
 
         protected override void AbilityTick()
         {
             // TODO 时间轴播放中的逻辑
+            _player.Tick();
         }
     }
 }
