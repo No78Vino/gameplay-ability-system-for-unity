@@ -19,12 +19,6 @@ namespace GAS.Runtime.Effects
         /// </summary>
         public event Action<AbilitySystemComponent,GameplayEffectSpec> onImmunity; 
 
-        /// <summary>
-        ///     If the gameplay effect has a period and the execution is not null,
-        ///     this is the execution that will be triggered every period.
-        /// </summary>
-        public GameplayEffectSpec PeriodExecution;
-
         public GameplayEffectSpec(
             GameplayEffect gameplayEffect,
             AbilitySystemComponent source,
@@ -36,6 +30,7 @@ namespace GAS.Runtime.Effects
             Owner = owner;
             Level = level;
             Duration = GameplayEffect.Duration;
+            DurationPolicy = GameplayEffect.DurationPolicy;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 PeriodExecution = GameplayEffect.Asset.PeriodExecution != null
@@ -56,12 +51,14 @@ namespace GAS.Runtime.Effects
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration { get; private set; }
+        public EffectsDurationPolicy DurationPolicy { get; private set; }
+        public GameplayEffectSpec PeriodExecution{ get; private set; }
 
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
 
         public float DurationRemaining()
         {
-            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Infinite)
+            if (DurationPolicy == EffectsDurationPolicy.Infinite)
                 return -1;
 
             return Mathf.Max(0, Duration - (GASTimer.Timestamp() - ActivationTime) / 1000f);
@@ -75,6 +72,16 @@ namespace GAS.Runtime.Effects
         public void SetDuration(float duration)
         {
             Duration = duration;
+        }
+        
+        public void SetDurationPolicy(EffectsDurationPolicy durationPolicy)
+        {
+            DurationPolicy = durationPolicy;
+        }
+        
+        public void SetPeriodExecution(GameplayEffectSpec periodExecution)
+        {
+            PeriodExecution = periodExecution;
         }
 
         public void Apply()
@@ -220,8 +227,8 @@ namespace GAS.Runtime.Effects
 
         public void TriggerOnTick()
         {
-            if (GameplayEffect.DurationPolicy == EffectsDurationPolicy.Duration ||
-                GameplayEffect.DurationPolicy == EffectsDurationPolicy.Infinite)
+            if (DurationPolicy == EffectsDurationPolicy.Duration ||
+                DurationPolicy == EffectsDurationPolicy.Infinite)
                 CueOnTick();
         }
 

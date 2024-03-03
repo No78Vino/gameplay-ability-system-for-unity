@@ -230,51 +230,49 @@ namespace GAS.Editor.Ability
    
             return listView;
         }
-        
-        
-        public static ListView CreateTypeListView(string label, List<Type> list,
-            Action<int,ChangeEvent<Type>> onItemValueChanged)
+
+        public static DropdownField CreateDropdownField(string label, List<string> options, string initValue,
+            EventCallback<ChangeEvent<string>> onValueChanged)
         {
-            VisualElement MakeItem()
-            {
-                var typeField = new ObjectField();//TypeField();
-                return typeField;
-            }
-
-            void BindItem(VisualElement e, int i)
-            {
-                var typeField = (ObjectField)e;
-                // typeField.value = list[i];
-                // typeField.RegisterValueChangedCallback(evt =>
-                // {
-                //     onItemValueChanged(i, evt);
-                // });
-            }
-
-            var listView = new ListView(list,LineHeight,MakeItem,BindItem);
-            listView.headerTitle = label;
-            listView.reorderable= true;
-            listView.showAddRemoveFooter = true;
-            listView.showBorder= true;
-            listView.showFoldoutHeader = true;
-            listView.itemsSource = list;
-            listView.selectionType = SelectionType.Single;
-            
-            listView.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-            listView.style.height = new StyleLength(StyleKeyword.Auto);
-            
-            listView.style.paddingLeft = 5;
-            listView.style.paddingRight = 5;
-            listView.style.paddingTop = 5;
-            listView.style.paddingBottom = 5;
-            
-            listView.style.alignItems = Align.Stretch;
-            listView.style.alignContent = Align.Stretch;
-            listView.style.justifyContent = Justify.FlexStart;
-            listView.style.flexDirection = FlexDirection.Column;
-            listView.style.flexWrap = Wrap.NoWrap;
-   
-            return listView;
+            var dropdownField = new DropdownField(label, options, initValue);
+            dropdownField.RegisterValueChangedCallback(onValueChanged);
+            dropdownField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            dropdownField.style.height = LineHeight;
+            dropdownField.labelElement.style.width = new StyleLength(new Length(LabelWidth, LengthUnit.Percent));
+            dropdownField.labelElement.style.minWidth = new StyleLength(new Length(LabelWidth, LengthUnit.Percent));
+            dropdownField.labelElement.style.maxWidth = new StyleLength(new Length(LabelWidth, LengthUnit.Percent));
+            return dropdownField;
+        }
+        
+        public static Vector2Field CreateVector2Field(string label,Vector2 initValue,EventCallback<ChangeEvent<Vector2>> onValueChanged)
+        {
+            var vector2Field = new Vector2Field(label);
+            vector2Field.value = initValue;
+            vector2Field.RegisterValueChangedCallback(onValueChanged);
+            vector2Field.style.width = new StyleLength(new Length(100,LengthUnit.Percent));
+            vector2Field.style.height = LineHeight;
+            vector2Field.labelElement.style.width = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            vector2Field.labelElement.style.minWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            vector2Field.labelElement.style.maxWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            return vector2Field;
+        }
+        
+        public static VisualElement CreateTargetCatcherInspector()
+        {
+            var inspector = new VisualElement();
+            inspector.style.width = new StyleLength(new Length(100,LengthUnit.Percent));
+            inspector.style.height = new StyleLength(StyleKeyword.Auto);
+            inspector.style.alignItems = Align.Center;
+            inspector.style.alignContent = Align.Center;
+            inspector.style.paddingLeft = 3;
+            inspector.style.paddingRight = 3;
+            inspector.style.paddingTop = 6;
+            inspector.style.paddingBottom = 3;
+            inspector.style.borderBottomColor = new Color(0.15f,0.15f,0.15f,0.9f);
+            inspector.style.borderTopColor = new Color(0.15f,0.15f,0.15f,0.9f);
+            inspector.style.borderBottomWidth = 2;
+            inspector.style.borderTopWidth = 2;
+            return inspector;
         }
     }
 }

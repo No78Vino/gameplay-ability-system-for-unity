@@ -29,8 +29,6 @@ namespace GAS.Runtime.Ability.TimelineAbility
 
         public override void ActivateAbility(params object[] args)
         {
-            // TODO 播放前准备工作
-            
             // 播放时间轴
             _player.Play();
         }
@@ -43,13 +41,11 @@ namespace GAS.Runtime.Ability.TimelineAbility
 
         public override void EndAbility()
         {
-            // TODO 时间轴播放结束
             _player.Stop();
         }
 
         protected override void AbilityTick()
         {
-            // TODO 时间轴播放中的逻辑
             _player.Tick();
         }
     }

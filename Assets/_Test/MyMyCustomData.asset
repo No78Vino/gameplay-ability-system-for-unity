@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: MyMyCustomData
+  m_EditorClassIdentifier: Assembly-CSharp::MyScriptableObject
+  jsonDataList:
+  - "{\"name\":\"\u5F20\u4E09\",\"age\":20}"
+  - "{\"name\":\"\u674E\u56DB\",\"age\":21,\"sonName\":\"\u674E\u56DB\u7684\u513F\u5B50\",\"sonAge\":1}"
+  - "{\"name\":\"\u738B\u4E94\",\"age\":22}"

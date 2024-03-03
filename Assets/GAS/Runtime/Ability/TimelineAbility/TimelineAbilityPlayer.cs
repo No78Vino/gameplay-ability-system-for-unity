@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GAS.General;
 using GAS.Runtime.Ability.TimelineAbility;
 using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
+using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace GAS.Runtime.Ability
     
     public class RuntimeBuffClip:RuntimeClipInfo
     {
+        public GameplayEffect buff;
         public GameplayEffectSpec buffSpec;
     }
     
@@ -95,19 +97,21 @@ namespace GAS.Runtime.Ability
             _cacheBuffGameplayEffectTrack.Clear();
             foreach (var track in AbilityAsset.BuffGameplayEffects)
             {
-                // TODO
-                // foreach (var clipEvent in track.clipEvents)
-                // {
-                //     var buffSpec = clipEvent.gameplayEffect.ApplyFrom(_abilitySpec);
-                //     if (buffSpec == null) continue;
-                //     var runtimeBuffClip = new RuntimeBuffClip
-                //     {
-                //         startFrame = clipEvent.startFrame,
-                //         endFrame = clipEvent.EndFrame,
-                //         buffSpec = buffSpec
-                //     };
-                //     _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
-                // }
+                foreach (var clipEvent in track.clipEvents)
+                {
+                    // 只有持续型的GameplayEffect可视作buff
+                    if (clipEvent.gameplayEffect.DurationPolicy is EffectsDurationPolicy.Duration or EffectsDurationPolicy.Infinite)
+                    {
+                        var runtimeBuffClip = new RuntimeBuffClip
+                        {
+                            startFrame = clipEvent.startFrame,
+                            endFrame = clipEvent.EndFrame,
+                            buff = new GameplayEffect(clipEvent.gameplayEffect),
+                            buffSpec = null,
+                        };
+                        _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
+                    }
+                }
             }
             
             _cacheOngoingTaskTrack.Clear();
@@ -126,9 +130,6 @@ namespace GAS.Runtime.Ability
                     _cacheOngoingTaskTrack.Add(runtimeTaskClip);
                 }
             }
-            // _cacheOngoingTaskTrack.AddRange(AbilityAsset.taskClips);
-            // for (int i = 0; i < _cacheOngoingTaskTrack.Count; i++)
-            //     _cacheOngoingTaskTrack[i].clipEvents.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
         }
         
         public void Play()
@@ -148,11 +149,10 @@ namespace GAS.Runtime.Ability
 
             foreach (var clip in _cacheDurationalCueTrack) clip.cueSpec.OnRemove();
             _cacheDurationalCueTrack.Clear();
-            
-            // TODO
-            // foreach (var track in _cacheBuffGameplayEffectTrack)
-            //     foreach (var clip in track.clipEvents)
-            //         clip.gameplayEffect.OnRemove();
+
+            foreach (var clip in _cacheBuffGameplayEffectTrack)
+                if (clip.buffSpec != null)
+                    _abilitySpec.Owner.RemoveGameplayEffect(clip.buffSpec);
             _cacheBuffGameplayEffectTrack.Clear();
             
             foreach (var clip in _cacheOngoingTaskTrack) clip.taskSpec.OnEnd(clip.endFrame);
@@ -163,23 +163,21 @@ namespace GAS.Runtime.Ability
 
         public void Tick()
         {
-            if(_isPlaying)
+            if (!_isPlaying) return;
+            
+            _playTotalTime += Time.deltaTime;
+            int targetFrame = (int)(_playTotalTime * FrameRate);
+            // 追帧
+            while(_currentFrame < targetFrame)
             {
-                _playTotalTime += Time.deltaTime;
-                int targetFrame = (int)(_playTotalTime * FrameRate);
-                // 追帧
-                while(_currentFrame < targetFrame)
-                {
-                    _currentFrame++;
-                    TickFrame(_currentFrame);
-                }
-
-                if (_currentFrame >= MaxFrameCount) OnPlayEnd();
+                _currentFrame++;
+                TickFrame(_currentFrame);
             }
+            if (_currentFrame >= MaxFrameCount) OnPlayEnd();
         }
 
         /// <summary>
-        /// TODO : 播放结束
+        /// 播放结束
         /// </summary>
         private void OnPlayEnd()
         {
@@ -193,17 +191,6 @@ namespace GAS.Runtime.Ability
         /// <param name="frame"></param>
         private void TickFrame(int frame)
         {
-            // TODO : 播放当前帧的事件
-            
-            // 动画
-            // foreach (var animationClipEvent in AbilityAsset.AnimationData.animationClipData)
-            // {
-            //     if (frame >= animationClipEvent.startFrame && frame <= animationClipEvent.EndFrame)
-            //     {
-            //         // TODO : 播放动画
-            //     }
-            // }
-            
             // Cue 即时
             while(_cacheInstantCues.Count > 0 && frame == _cacheInstantCues[0].startFrame)
             {
@@ -214,8 +201,11 @@ namespace GAS.Runtime.Ability
             // 释放型GameplayEffect
             while(_cacheReleaseGameplayEffect.Count > 0 && frame == _cacheReleaseGameplayEffect[0].startFrame)
             {
-                // TODO
-                //_cacheReleaseGameplayEffect[0].gameplayEffectAssets.ForEach(effect => effect.ApplyFrom(_abilitySpec));
+                // TODO 捕获目标的手段 
+                AbilitySystemComponent[] targets = new[] { _abilitySpec.Owner };
+                foreach (var asc in targets)
+                    _cacheReleaseGameplayEffect[0].gameplayEffectAssets
+                        .ForEach(effect => _abilitySpec.Owner.ApplyGameplayEffectTo(new GameplayEffect(effect),asc));
                 _cacheReleaseGameplayEffect.RemoveAt(0);
             }
             
@@ -235,11 +225,23 @@ namespace GAS.Runtime.Ability
                 if(frame == cueClip.endFrame) cueClip.cueSpec.OnRemove();
             }
             
-            // Buff型GameplayEffect 
+            // Buff型GameplayEffect
+            // buff持续时间以Timeline配置时间为准（执行策略全部改为Infinite）
             foreach (var buffClip in _cacheBuffGameplayEffectTrack)
             {
-                // if (frame == buffClip.startFrame) buffClip.buffSpec.OnAdd();
-                // if(frame == buffClip.endFrame) buffClip.cueSpec.OnRemove();
+                if (frame == buffClip.startFrame)
+                {
+                    var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
+                    buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
+                    buffClip.buffSpec = buffSpec;
+                }
+
+                if (frame == buffClip.endFrame)
+                {
+                    if (buffClip.buffSpec != null)
+                        _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
+                    buffClip.buffSpec = null;
+                }
             }
             
             // Ongoing Task
