@@ -13,12 +13,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private static List<Type> _trackTypeList;
         private static readonly Dictionary<string, Type> _trackTypeMap = new();
         private readonly VisualElement _root;
-        private readonly List<TrackBase> _trackList = new();
+        private readonly List<TrackBase> _trackList = new List<TrackBase>();
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
         private VisualElement _trackMenuParent;
-        public AnimationTrack.AnimationTrack animationTrack;
+        //public AnimationTrack.AnimationTrack animationTrack;
 
+        public List<TrackBase> TrackList => _trackList;
+        
         public TimelineTrackView(VisualElement root)
         {
             _root = root;

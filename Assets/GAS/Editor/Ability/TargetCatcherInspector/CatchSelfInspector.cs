@@ -13,5 +13,9 @@ namespace GAS.Editor.Ability
         {
             return new VisualElement();
         }
+
+        public override void OnTargetCatcherPreview(UnityEngine.GameObject obj)
+        {
+        }
     }
 }

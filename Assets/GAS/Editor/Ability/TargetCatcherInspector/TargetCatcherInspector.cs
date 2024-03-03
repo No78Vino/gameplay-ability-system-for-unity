@@ -1,6 +1,6 @@
-﻿using System;
-using GAS.Editor.Ability.AbilityTimelineEditor;
+﻿using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Runtime.Ability.TargetCatcher;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability
@@ -24,6 +24,8 @@ namespace GAS.Editor.Ability
         }
         
         public abstract VisualElement Inspector();
+
+        public abstract void OnTargetCatcherPreview(GameObject obj);
     }
     
     public abstract class TargetCatcherInspector<T>:TargetCatcherInspector where T : TargetCatcherBase

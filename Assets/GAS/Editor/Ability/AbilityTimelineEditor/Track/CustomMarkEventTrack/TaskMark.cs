@@ -64,5 +64,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             AbilityTimelineEditorWindow.Instance.Save();
             markData = updatedClip;
         }
+
+        public override void OnTickView(int frameIndex)
+        {
+            // TODO
+        }
     }
 }

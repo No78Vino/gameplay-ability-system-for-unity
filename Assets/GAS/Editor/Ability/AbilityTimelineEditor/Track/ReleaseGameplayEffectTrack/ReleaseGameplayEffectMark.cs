@@ -57,7 +57,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             base.RefreshShow(newFrameUnitWidth);
             ItemLabel.text = MarkData.gameplayEffectAssets.Count.ToString();
         }
-
+        
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
@@ -95,6 +95,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnTargetCatcherChanged(ChangeEvent<string> evt)
         {
             MarkDataForSave.jsonTargetCatcher.Type = evt.newValue;
+            MarkDataForSave.jsonTargetCatcher.Data = null;
             AbilityTimelineEditorWindow.Instance.Save();
             
             AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
@@ -124,6 +125,25 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             MarkDataForSave.startFrame = newStartFrame;
             AbilityTimelineEditorWindow.Instance.Save();
             markData = updatedClip;
+        }
+
+        public override void OnTickView(int frameIndex)
+        {
+            var previewComponent =
+                AbilityTimelineEditorWindow.Instance.PreviewObject.GetComponent<TargetCatcherPreview>();
+            if (previewComponent == null)
+                previewComponent =
+                    AbilityTimelineEditorWindow.Instance.PreviewObject.AddComponent<TargetCatcherPreview>();
+
+            TargetCatcherInspector targetCatcherInspector = null;
+            if (frameIndex == StartFrameIndex)
+            {
+                var targetCatcher = MarkData.LoadTargetCatcher();
+                if (TargetCatcherInspectorMap.TryGetValue(targetCatcher.GetType(), out var inspectorType))
+                    targetCatcherInspector =
+                        (TargetCatcherInspector)Activator.CreateInstance(inspectorType, targetCatcher);
+            }
+            previewComponent.Init( targetCatcherInspector);
         }
     }
 }

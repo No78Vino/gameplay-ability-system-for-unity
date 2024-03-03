@@ -69,6 +69,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         
         public abstract void UpdateMarkDataFrame(int newStartFrame);
         
+        public abstract void OnTickView(int frameIndex);
         
         
         #region Mouse Event

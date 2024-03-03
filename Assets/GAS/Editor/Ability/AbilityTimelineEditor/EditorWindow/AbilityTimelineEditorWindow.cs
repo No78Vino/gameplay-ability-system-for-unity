@@ -123,6 +123,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private Button BtnLoadPreviewScene;
         private Button BtnBackToScene;
         private ObjectField _previewObjectField;
+        public GameObject PreviewObject => _previewObjectField.value as GameObject;
 
         private void InitTopBar()
         {
@@ -337,9 +338,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         private void EvaluateFrame(int frameIndex)
         {
-            if (AbilityAsset != null && _previewObjectField.value != null)
-                // TODO : 在这里处理预览对象的动画,特效等等
-                TrackView.animationTrack.TickView(frameIndex, _previewObjectField.value as GameObject);
+            if (AbilityAsset == null || _previewObjectField.value == null) return;
+            
+            foreach (var track in TrackView.TrackList)
+                track.TickView(frameIndex);       
         }
 
         private bool CanPlay()

@@ -96,7 +96,7 @@ MonoBehaviour:
     - startFrame: 0
       jsonTargetCatcher:
         Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
-        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":768},"offset":{"x":0.8999999761581421,"y":0.0},"rotation":0.20999999344348908,"size":{"x":0.0,"y":0.0}}'
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":1.4600000381469727,"y":2.0},"rotation":0.0,"size":{"x":2.0,"y":3.0}}'
       gameplayEffectAssets: []
   BuffGameplayEffects: []
   InstantTasks:
