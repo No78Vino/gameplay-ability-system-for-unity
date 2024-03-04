@@ -93,12 +93,19 @@ MonoBehaviour:
   ReleaseGameplayEffect:
     trackIndex: 0
     markEvents:
-    - startFrame: 0
+    - startFrame: 1
       jsonTargetCatcher:
         Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":1.4600000381469727,"y":2.0},"rotation":0.0,"size":{"x":2.0,"y":3.0}}'
       gameplayEffectAssets: []
-  BuffGameplayEffects: []
+  BuffGameplayEffects:
+  - trackIndex: 5
+    trackName: BuffGameplayEffect
+    clipEvents:
+    - startFrame: 2
+      durationFrame: 5
+      buffTarget: 0
+      gameplayEffect: {fileID: 11400000, guid: c091102c3dfdb034ba602921b160443a, type: 2}
   InstantTasks:
     trackIndex: 0
     markEvents:

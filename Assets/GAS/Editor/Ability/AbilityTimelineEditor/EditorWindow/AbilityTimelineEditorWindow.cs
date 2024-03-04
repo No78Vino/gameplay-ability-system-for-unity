@@ -177,6 +177,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             get => _currentMaxFrame;
             private set
             {
+                if (AbilityAsset == null)
+                {
+                    _currentMaxFrame = 0;
+                    return;
+                }
+                
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
                 AbilityAsset.MaxFrameCount = _currentMaxFrame;
@@ -194,6 +200,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             get => _currentSelectFrameIndex;
             set
             {
+                if (AbilityAsset == null || PreviewObject == null)
+                {
+                    _currentSelectFrameIndex = 0;
+                    return;
+                }
+                
                 if (_currentSelectFrameIndex == value) return;
                 _currentSelectFrameIndex = Mathf.Clamp(value, 0, MaxFrame.value);
                 CurrentFrame.value = _currentSelectFrameIndex;
@@ -246,14 +258,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         private void OnMaxFrameChanged(ChangeEvent<int> evt)
         {
-            if(AbilityAsset==null) return;
             CurrentMaxFrame = evt.newValue;
+            MaxFrame.value = CurrentMaxFrame;
         }
 
         private void OnCurrentFrameChanged(ChangeEvent<int> evt)
         {
-            if(AbilityAsset==null) return;
             CurrentSelectFrameIndex = evt.newValue;
+            CurrentFrame.value = CurrentSelectFrameIndex;
         }
 
         private void RefreshPlayButton()

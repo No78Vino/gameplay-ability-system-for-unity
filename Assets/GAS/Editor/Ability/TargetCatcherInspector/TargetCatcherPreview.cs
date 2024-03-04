@@ -1,4 +1,5 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
+﻿#if UNITY_EDITOR
+using GAS.Editor.Ability.AbilityTimelineEditor;
 using UnityEditor;
 using UnityEngine;
 namespace GAS.Editor.Ability
@@ -22,3 +23,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

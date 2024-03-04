@@ -144,6 +144,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 Handles.color = Color.green;
                 var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
                 var x = EditorInst.CurrentSelectFramePos - EditorInst.CurrentFramePos;
+                x = Mathf.Max(x, 1);
                 Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
                 Handles.EndGUI();
             }
@@ -158,6 +159,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 Handles.color = Color.red;
                 var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
                 var x = EditorInst.CurrentEndFramePos - EditorInst.CurrentFramePos;
+                x = Mathf.Max(x, 1);
                 Handles.DrawLine(new Vector3(x, 0), new Vector3(x, length));
                 Handles.EndGUI();
             }
@@ -173,6 +175,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 Handles.color = new Color(1, 0.5f, 0, 1);
                 var length = contentViewPort.contentRect.height + TimerShaft.contentRect.height;
                 var x = dottedLinePos - EditorInst.CurrentFramePos;
+                x = Mathf.Max(x, 1);
 
                 var lineUnitSize = 10f;
                 var lineUnitsCount = 0;
