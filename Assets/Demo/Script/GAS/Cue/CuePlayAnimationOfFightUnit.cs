@@ -12,6 +12,10 @@ namespace GAS.Cue
         {
             return new CuePlayAnimationOfFightUnitSpec(this, parameters);
         }
+
+        public override void OnEditorPreview(GameObject preview,int frame, int startFrame)
+        {
+        }
     }
     
     public class CuePlayAnimationOfFightUnitSpec: GameplayCueInstantSpec

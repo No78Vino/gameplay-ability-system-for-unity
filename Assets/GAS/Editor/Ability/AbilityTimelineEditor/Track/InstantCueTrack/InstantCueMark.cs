@@ -68,7 +68,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void OnTickView(int frameIndex)
         {
-            // TODO
+            foreach (var cue in MarkData.cues)
+            {
+                cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
+                    MarkData.startFrame);
+            }
         }
     }
 }

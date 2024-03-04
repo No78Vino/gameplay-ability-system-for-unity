@@ -85,16 +85,7 @@ MonoBehaviour:
       durationFrame: 29
       buffTarget: 0
       gameplayEffect: {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}
-  taskMarks:
+  InstantTasks:
     trackIndex: 0
-    markEvents:
-    - startFrame: 4
-      InstantTasks:
-      - {fileID: 11400000, guid: bc207aad95cd94e458528ec7ed841f97, type: 2}
-  taskClips:
-  - trackIndex: 6
-    trackName: Task Clips
-    clipEvents:
-    - startFrame: 20
-      durationFrame: 17
-      task: {fileID: 0}
+    markEvents: []
+  OngoingTasks: []

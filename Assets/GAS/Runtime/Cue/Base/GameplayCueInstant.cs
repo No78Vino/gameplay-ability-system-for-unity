@@ -1,6 +1,7 @@
 using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
+using UnityEngine;
 
 namespace GAS.Runtime.Cue
 {
@@ -34,11 +35,9 @@ namespace GAS.Runtime.Cue
             }
         }
         
-#if UNITY_EDITOR
-        public virtual void OnEditorPreview()
+        public virtual void OnEditorPreview(GameObject previewObject,int frame,int startFrame)
         {
         }
-#endif
     }
 
     public abstract class GameplayCueInstantSpec : GameplayCueSpec

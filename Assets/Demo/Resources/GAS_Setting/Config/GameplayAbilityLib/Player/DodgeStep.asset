@@ -71,7 +71,7 @@ MonoBehaviour:
     - Ban
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 9
+  MaxFrameCount: 10
   AnimationData:
     trackIndex: 0
     Animator: {fileID: 0}
@@ -88,8 +88,8 @@ MonoBehaviour:
     markEvents:
     - startFrame: 1
       cues:
-      - {fileID: 11400000, guid: a2b7e2905596f4c419da29b2b5e5d6ce, type: 2}
       - {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
+      - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
   ReleaseGameplayEffect:
     trackIndex: 0
     markEvents:
