@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
 
 namespace GAS.Runtime.Ability.TimelineAbility
 {
@@ -13,6 +12,6 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class TaskMarkEvent:MarkEventBase
     {
-        public List<InstantAbilityTask> InstantTasks = new List<InstantAbilityTask>();
+        public List<InstantTaskData> InstantTasks = new List<InstantTaskData>();
     }
 }

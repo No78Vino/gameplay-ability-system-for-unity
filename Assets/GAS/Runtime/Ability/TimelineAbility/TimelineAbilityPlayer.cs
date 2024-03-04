@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using GAS.General;
 using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
-using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using UnityEngine;
@@ -26,11 +24,6 @@ namespace GAS.Runtime.Ability
         public GameplayEffectSpec buffSpec;
     }
     
-    public class RuntimeTaskClip:RuntimeClipInfo
-    {
-        public OngoingAbilityTaskSpec taskSpec;
-    }
-    
     public class TimelineAbilityPlayer
     {
         bool _isPlaying;
@@ -44,40 +37,40 @@ namespace GAS.Runtime.Ability
         private int FrameRate => GASTimer.FrameRate;
         
         
-        //  Cache Cue 即时
-        private List<InstantCueMarkEvent> _cacheInstantCues = new List<InstantCueMarkEvent>();
-        //  Cache 释放型GameplayEffect
-        private List<ReleaseGameplayEffectMarkEvent> _cacheReleaseGameplayEffect = new List<ReleaseGameplayEffectMarkEvent>();
-        //  Cache Instant Task
-        private List<TaskMarkEvent> _cacheInstantTasks = new List<TaskMarkEvent>();
+        private List<InstantCueMarkEvent> _cacheInstantCues;
+        private List<ReleaseGameplayEffectMarkEvent> _cacheReleaseGameplayEffect;
+        private List<TaskMarkEvent> _cacheInstantTasks;
         
-        //  Cache Cue 持续
-        private List<RuntimeDurationCueClip> _cacheDurationalCueTrack = new List<RuntimeDurationCueClip>();
-        //  Cache Buff型GameplayEffect 
-        private List<RuntimeBuffClip> _cacheBuffGameplayEffectTrack = new List<RuntimeBuffClip>();
-        //  Cache Ongoing Task
-        private List<RuntimeTaskClip> _cacheOngoingTaskTrack = new List<RuntimeTaskClip>();
+        private List<RuntimeDurationCueClip> _cacheDurationalCueTrack;
+        private List<RuntimeBuffClip> _cacheBuffGameplayEffectTrack;
+        private List<TaskClipEvent> _cacheOngoingTaskTrack;
         
         public TimelineAbilityPlayer(TimelineAbilitySpec abilitySpec)
         {
             _abilitySpec = abilitySpec;
+            Cache();
         }
 
-        private void Prepare()
+        private void Cache()
         {
-            _cacheInstantCues.Clear();
+            _cacheInstantCues = new List<InstantCueMarkEvent>();
             _cacheInstantCues.AddRange(AbilityAsset.InstantCues.markEvents);
             _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
             
             _cacheReleaseGameplayEffect.Clear();
             _cacheReleaseGameplayEffect.AddRange(AbilityAsset.ReleaseGameplayEffect.markEvents);
             _cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+            for (int i = 0; i < _cacheReleaseGameplayEffect.Count; i++)
+                _cacheReleaseGameplayEffect[i].CacheTargetCatcher();
             
-            _cacheInstantTasks.Clear();
+            _cacheInstantTasks = new List<TaskMarkEvent>();
             _cacheInstantTasks.AddRange(AbilityAsset.InstantTasks.markEvents);
             _cacheInstantTasks.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+            for (int i = 0; i < _cacheInstantTasks.Count; i++)
+                for (int j = 0; j < _cacheInstantTasks[i].InstantTasks.Count; j++)
+                    _cacheInstantTasks[i].InstantTasks[j].Cache(_abilitySpec);
             
-            _cacheDurationalCueTrack.Clear();
+            _cacheDurationalCueTrack = new List<RuntimeDurationCueClip>();
             foreach (var track in AbilityAsset.DurationalCues)
             {
                 foreach (var clipEvent in track.clipEvents)
@@ -93,8 +86,8 @@ namespace GAS.Runtime.Ability
                     _cacheDurationalCueTrack.Add(runtimeDurationCueClip);
                 }
             }
-            
-            _cacheBuffGameplayEffectTrack.Clear();
+
+            _cacheBuffGameplayEffectTrack = new List<RuntimeBuffClip>();
             foreach (var track in AbilityAsset.BuffGameplayEffects)
             {
                 foreach (var clipEvent in track.clipEvents)
@@ -113,22 +106,19 @@ namespace GAS.Runtime.Ability
                     }
                 }
             }
-            
-            _cacheOngoingTaskTrack.Clear();
+
+            _cacheOngoingTaskTrack = new List<TaskClipEvent>();
             foreach (var track in AbilityAsset.OngoingTasks)
+                _cacheOngoingTaskTrack.AddRange(track.clipEvents);
+            for (int i = 0; i < _cacheOngoingTaskTrack.Count; i++)
+                _cacheOngoingTaskTrack[i].ongoingTask.Cache(_abilitySpec);
+        }
+        
+        private void Prepare()
+        {
+            for (int i = 0; i < _cacheBuffGameplayEffectTrack.Count; i++)
             {
-                foreach (var clipEvent in track.clipEvents)
-                {
-                    var taskSpec = clipEvent.task.CreateBaseSpec(_abilitySpec);
-                    if (taskSpec == null) continue;
-                    var runtimeTaskClip = new RuntimeTaskClip
-                    {
-                        startFrame = clipEvent.startFrame,
-                        endFrame = clipEvent.EndFrame,
-                        taskSpec = taskSpec
-                    };
-                    _cacheOngoingTaskTrack.Add(runtimeTaskClip);
-                }
+                _cacheBuffGameplayEffectTrack[i].buffSpec = null;
             }
         }
         
@@ -143,20 +133,14 @@ namespace GAS.Runtime.Ability
         public void Stop()
         {
             if(!_isPlaying) return;
-            _cacheInstantCues.Clear();
-            _cacheReleaseGameplayEffect.Clear();
-            _cacheInstantTasks.Clear();
 
             foreach (var clip in _cacheDurationalCueTrack) clip.cueSpec.OnRemove();
-            _cacheDurationalCueTrack.Clear();
 
             foreach (var clip in _cacheBuffGameplayEffectTrack)
                 if (clip.buffSpec != null)
                     _abilitySpec.Owner.RemoveGameplayEffect(clip.buffSpec);
-            _cacheBuffGameplayEffectTrack.Clear();
             
-            foreach (var clip in _cacheOngoingTaskTrack) clip.taskSpec.OnEnd(clip.endFrame);
-            _cacheOngoingTaskTrack.Clear();
+            foreach (var clip in _cacheOngoingTaskTrack) clip.ongoingTask.Task.OnEnd(clip.EndFrame);
             
             _isPlaying = false;
         }
@@ -192,28 +176,37 @@ namespace GAS.Runtime.Ability
         private void TickFrame(int frame)
         {
             // Cue 即时
-            while(_cacheInstantCues.Count > 0 && frame == _cacheInstantCues[0].startFrame)
+            foreach (var cueMark in _cacheInstantCues)
             {
-                _cacheInstantCues[0].cues.ForEach(cue => cue.ApplyFrom(_abilitySpec));
-                _cacheInstantCues.RemoveAt(0);
+                if (frame == cueMark.startFrame)
+                {
+                    cueMark.cues.ForEach(cue => cue.ApplyFrom(_abilitySpec));
+                }
             }
                 
             // 释放型GameplayEffect
-            while(_cacheReleaseGameplayEffect.Count > 0 && frame == _cacheReleaseGameplayEffect[0].startFrame)
+            foreach (var mark in _cacheReleaseGameplayEffect)
             {
-                // TODO 捕获目标的手段 
-                AbilitySystemComponent[] targets = new[] { _abilitySpec.Owner };
-                foreach (var asc in targets)
-                    _cacheReleaseGameplayEffect[0].gameplayEffectAssets
-                        .ForEach(effect => _abilitySpec.Owner.ApplyGameplayEffectTo(new GameplayEffect(effect),asc));
-                _cacheReleaseGameplayEffect.RemoveAt(0);
+                if (frame == mark.startFrame)
+                {
+                    var catcher = mark.LoadTargetCatcher();
+                    var targets = catcher.CatchTargets(_abilitySpec.Target);
+                    if (targets != null)
+                    {
+                        foreach (var asc in targets)
+                            mark.gameplayEffectAssets
+                                .ForEach(effect => _abilitySpec.Owner.ApplyGameplayEffectTo(new GameplayEffect(effect), asc));
+                    }
+                }
             }
             
             // Instant Task
-            while(_cacheInstantTasks.Count > 0 && frame == _cacheInstantTasks[0].startFrame)
+            foreach (var mark in _cacheInstantTasks)
             {
-                _cacheInstantTasks[0].InstantTasks.ForEach(task => task.CreateBaseSpec(_abilitySpec).OnExecute());
-                _cacheInstantTasks.RemoveAt(0);
+                if (frame == mark.startFrame)
+                {
+                    mark.InstantTasks.ForEach(task => task.Task.OnExecute());
+                }
             }
             
             // Cue 持续
@@ -247,10 +240,10 @@ namespace GAS.Runtime.Ability
             // Ongoing Task
             foreach (var taskClip in _cacheOngoingTaskTrack)
             {
-                if(frame == taskClip.startFrame) taskClip.taskSpec.OnStart(frame);
-                if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
-                    taskClip.taskSpec.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
-                if(frame == taskClip.endFrame) taskClip.taskSpec.OnEnd(frame);
+                if(frame == taskClip.startFrame) taskClip.ongoingTask.Task.OnStart(frame);
+                if (frame >= taskClip.startFrame && frame <= taskClip.EndFrame)
+                    taskClip.ongoingTask.Task.OnTick(frame, taskClip.startFrame, taskClip.EndFrame);
+                if(frame == taskClip.EndFrame) taskClip.ongoingTask.Task.OnEnd(frame);
             }
         }
     }

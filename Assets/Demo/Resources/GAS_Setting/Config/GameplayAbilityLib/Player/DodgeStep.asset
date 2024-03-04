@@ -81,7 +81,7 @@ MonoBehaviour:
     trackName: Durational Cue
     clipEvents:
     - startFrame: 1
-      durationFrame: 6
+      durationFrame: 7
       cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
   InstantCues:
     trackIndex: 0
@@ -92,30 +92,23 @@ MonoBehaviour:
       - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
   ReleaseGameplayEffect:
     trackIndex: 0
-    markEvents:
-    - startFrame: 1
-      jsonTargetCatcher:
-        Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
-        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":1.4600000381469727,"y":2.0},"rotation":0.0,"size":{"x":2.0,"y":3.0}}'
-      gameplayEffectAssets: []
-  BuffGameplayEffects:
-  - trackIndex: 5
-    trackName: BuffGameplayEffect
-    clipEvents:
-    - startFrame: 2
-      durationFrame: 5
-      buffTarget: 0
-      gameplayEffect: {fileID: 11400000, guid: c091102c3dfdb034ba602921b160443a, type: 2}
+    markEvents: []
+  BuffGameplayEffects: []
   InstantTasks:
     trackIndex: 0
     markEvents:
     - startFrame: 1
       InstantTasks:
-      - {fileID: 11400000, guid: bc207aad95cd94e458528ec7ed841f97, type: 2}
+      - TaskData:
+          Type: 
+          Data: 
   OngoingTasks:
   - trackIndex: 4
     trackName: Task Clips
     clipEvents:
     - startFrame: 1
-      durationFrame: 6
-      task: {fileID: 11400000, guid: c92a03ff2df99014e8a6c9c3f2b6bd9c, type: 2}
+      durationFrame: 7
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.DodgeTask
+          Data: '{"_dodgeDistance":1.2599999904632569}'

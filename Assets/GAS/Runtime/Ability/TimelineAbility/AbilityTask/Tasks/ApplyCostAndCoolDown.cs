@@ -1,16 +1,6 @@
-﻿using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
-
-namespace GAS.Runtime.Ability
+﻿namespace GAS.Runtime.Ability
 {
-    public class ApplyCostAndCoolDown:InstantAbilityTask<ApplyCostAndCoolDownSpec>
-    {
-        public override InstantAbilityTaskSpec CreateBaseSpec(AbilitySpec abilitySpec)
-        {
-            return CreateSpec(abilitySpec);
-        }
-    }
-    
-    public class ApplyCostAndCoolDownSpec:InstantAbilityTaskSpec
+    public class ApplyCostAndCoolDown:InstantAbilityTask
     {
         public override void OnExecute()
         {

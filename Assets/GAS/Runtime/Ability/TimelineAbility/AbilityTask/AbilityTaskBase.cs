@@ -1,27 +1,11 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
-
-namespace GAS.Runtime.Ability.TimelineAbility.AbilityTask
+﻿namespace GAS.Runtime.Ability
 {
-    public abstract class AbilityTaskBase:ScriptableObject
+    public abstract class AbilityTaskBase
     {
-#if UNITY_EDITOR
-        [ShowInInspector]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [HideLabel]
-        [BoxGroup(Order = -1)]
-        private string TextTaskType =>
-            $"<color=white><b>TaskClass: ({(this is InstantAbilityTask ? "Instant" : "Ongoing")}) {GetType().FullName} </b></color>";
-#endif
-    }
-    
-    public static class AbilityTaskBaseExtension
-    {
-        public static T CreateSpec<T>(this AbilityTaskBase abilityTaskBase,AbilitySpec abilitySpec) where T:AbilityTaskSpec,new()
+        protected AbilitySpec _spec;
+        public virtual void Init(AbilitySpec spec)
         {
-            var spec = new T();
-            spec.Init(abilityTaskBase,abilitySpec);
-            return spec;
+            _spec = spec;
         }
     }
 }

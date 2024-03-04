@@ -21,21 +21,30 @@ namespace GAS.Runtime.Ability.TimelineAbility
         private TimelineAbility _ability;
         public TimelineAbilityAsset AbilityAsset => _ability.AbilityAsset;
         private TimelineAbilityPlayer _player;
+
+        /// <summary>
+        /// 向性技能的作用目标
+        /// </summary>
+        public AbilitySystemComponent Target { get; private set; }
+
         public TimelineAbilitySpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
             _ability = ability as TimelineAbility;
             _player = new TimelineAbilityPlayer(this);
         }
 
+        public void SetAbilityTarget(AbilitySystemComponent mainTarget)
+        {
+            Target = mainTarget;
+        }
+        
         public override void ActivateAbility(params object[] args)
         {
-            // 播放时间轴
             _player.Play();
         }
 
         public override void CancelAbility()
         {
-            // TODO 取消时间轴播放
             _player.Stop();
         }
 

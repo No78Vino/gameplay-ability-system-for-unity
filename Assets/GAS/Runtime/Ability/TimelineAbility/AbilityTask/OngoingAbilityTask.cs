@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Ability.TimelineAbility.AbilityTask
+﻿namespace GAS.Runtime.Ability
 {
     public abstract class OngoingAbilityTask:AbilityTaskBase
     {
@@ -7,19 +7,6 @@
         {
         }
 #endif
-        public abstract OngoingAbilityTaskSpec CreateBaseSpec(AbilitySpec abilitySpec);
-    }
-    
-    public abstract class OngoingAbilityTask<T> : OngoingAbilityTask where T:OngoingAbilityTaskSpec,new()
-    {
-        public T CreateSpec(AbilitySpec abilitySpec)
-        {
-            return this.CreateSpec<T>(abilitySpec);
-        }
-    }
-    
-    public abstract class OngoingAbilityTaskSpec:AbilityTaskSpec
-    {
         public abstract void OnStart(int startFrame);
 
         public abstract void OnEnd(int endFrame);

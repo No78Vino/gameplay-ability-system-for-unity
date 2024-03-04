@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime.Ability.TimelineAbility
 {
@@ -27,6 +27,11 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class TaskClipEvent : ClipEventBase
     {
-        public OngoingAbilityTask task;
+        public OngoingTaskData ongoingTask;
+
+        public OngoingAbilityTask Load()
+        {
+            return ongoingTask.Load() as OngoingAbilityTask;
+        }
     }
 }

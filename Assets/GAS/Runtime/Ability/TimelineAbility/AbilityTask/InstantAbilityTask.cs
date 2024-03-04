@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Ability.TimelineAbility.AbilityTask
+﻿namespace GAS.Runtime.Ability
 {
     public abstract class InstantAbilityTask:AbilityTaskBase
     {
@@ -7,19 +7,6 @@
         {
         }
 #endif
-        public abstract InstantAbilityTaskSpec CreateBaseSpec(AbilitySpec abilitySpec);
-    }
-    
-    public abstract class InstantAbilityTask<T> : InstantAbilityTask where T:InstantAbilityTaskSpec,new()
-    {
-        public T CreateSpec(AbilitySpec abilitySpec)
-        {
-            return this.CreateSpec<T>(abilitySpec);
-        }
-    }
-    
-    public abstract class InstantAbilityTaskSpec:AbilityTaskSpec
-    {
         public abstract void OnExecute();
     }
 }

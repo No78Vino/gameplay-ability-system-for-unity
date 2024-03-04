@@ -11,18 +11,25 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class ReleaseGameplayEffectTrackData : TrackDataBase
     {
-        public List<ReleaseGameplayEffectMarkEvent> markEvents = new();
+        public List<ReleaseGameplayEffectMarkEvent> markEvents = new List<ReleaseGameplayEffectMarkEvent>();
     }
 
     [Serializable]
     public class ReleaseGameplayEffectMarkEvent : MarkEventBase
     {
-        //public LockOnTargetMethod method = new LockOnTargetMethod();
         public JsonData jsonTargetCatcher = new JsonData()
         {
             Type = typeof(CatchSelf).FullName // 默认 CatchSelf
         };
-        public List<GameplayEffectAsset> gameplayEffectAssets = new();
+        public List<GameplayEffectAsset> gameplayEffectAssets = new List<GameplayEffectAsset>();
+
+        
+        private TargetCatcherBase _targetCatcher;
+        public TargetCatcherBase TargetCatcher => _targetCatcher;
+        public void CacheTargetCatcher()
+        {
+            _targetCatcher = LoadTargetCatcher();
+        }
 
         public void SaveTargetCatcher(TargetCatcherBase targetCatcher)
         {

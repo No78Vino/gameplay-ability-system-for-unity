@@ -1,5 +1,6 @@
 ﻿using System;
 using GAS.Editor.Ability.AbilityTimelineEditor;
+using GAS.General;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TimelineAbility;
 using UnityEngine;
@@ -60,7 +61,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var clipEvent = new TaskClipEvent
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
-                durationFrame = 5
+                durationFrame = 5,
+                ongoingTask = new OngoingTaskData()
             };
             TaskClipTrackDataForSave.clipEvents.Add(clipEvent);
             
@@ -83,7 +85,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 删除显示
             TrackParent.Remove(TrackRoot);
             MenuParent.Remove(Menu);
-            Debug.Log("[EX] Remove Custom Clip Track");
+            Debug.Log("[EX] Remove Task Clip Track");
         }
 
 
@@ -106,7 +108,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             
             foreach (var clip in _taskClipEventTrackData.clipEvents)
             {
-                var taskName = clip.task ? clip.task.name : "Null!";
+                var taskType = clip.ongoingTask.TaskData.Type;
+                var taskName = !string.IsNullOrEmpty(taskType) ? taskType : "Null!";
                 var runInfo = TrackInspectorUtil.CreateLabel($"  [ {taskName} ] Run(f):{clip.startFrame}->{clip.EndFrame}");
                 inspector.Add(runInfo);
             }

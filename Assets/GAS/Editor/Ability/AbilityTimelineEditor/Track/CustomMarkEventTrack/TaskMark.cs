@@ -1,5 +1,4 @@
 ﻿using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,19 +32,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
             inspector.Add(markFrame);
             
-            var taskList = TrackInspectorUtil.CreateObjectListView<InstantAbilityTask>("Task", MarkData.InstantTasks,
-                OnTaskAssetChanged);
-            inspector.Add(taskList);
+            // TODO InstantTask面板渲染
+            // var taskList = TrackInspectorUtil.CreateObjectListView<InstantAbilityTask>("Task", MarkData.InstantTasks,
+            //     OnTaskAssetChanged);
+            // inspector.Add(taskList);
 
             return inspector;
         }
 
         private void OnTaskAssetChanged(int index, ChangeEvent<Object> evt)
         {
-            var cue = evt.newValue as InstantAbilityTask;
-            MarkDataForSave.InstantTasks[index] = cue;
-            AbilityTimelineEditorWindow.Instance.Save();
-            RefreshShow(FrameUnitWidth);
+            // var cue = evt.newValue as InstantAbilityTask;
+            // MarkDataForSave.InstantTasks[index] = cue;
+            // AbilityTimelineEditorWindow.Instance.Save();
+            // RefreshShow(FrameUnitWidth);
         }
         
         public override void Delete()

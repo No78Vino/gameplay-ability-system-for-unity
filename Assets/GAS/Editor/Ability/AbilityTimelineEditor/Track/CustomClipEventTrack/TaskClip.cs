@@ -1,6 +1,9 @@
-﻿using GAS.Runtime.Ability;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GAS.General;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Ability.TimelineAbility.AbilityTask;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,7 +14,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         private TaskClipEvent TaskClipData => clipData as TaskClipEvent;
 
-        private TaskClipEvent ClipDataForSave
+        public TaskClipEvent ClipDataForSave
         {
             get
             {
@@ -23,6 +26,28 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
         }
 
+        private static Type[] _ongoingTaskInspectorTypes;
+
+        public static Type[] OngoingTaskInspectorTypes =>
+            _ongoingTaskInspectorTypes ??= TypeUtil.GetAllSonTypesOf(typeof(OngoingAbilityTaskInspector));
+        
+        private static Dictionary<Type, Type> _ongoingTaskInspectorMap;
+        private static Dictionary<Type, Type> OngoingTaskInspectorMap
+        {
+            get
+            {
+                if (_ongoingTaskInspectorMap != null) return _ongoingTaskInspectorMap;
+                _ongoingTaskInspectorMap = new Dictionary<Type, Type>();
+                foreach (var inspectorType in OngoingTaskInspectorTypes)
+                {
+                    var taskType = inspectorType.BaseType.GetGenericArguments()[0];
+                    _ongoingTaskInspectorMap.Add(taskType, inspectorType);
+                }
+
+                return _ongoingTaskInspectorMap;
+            }
+        }
+        
         public override void Delete()
         {
             var success = track.TaskClipTrackDataForSave.clipEvents.Remove(TaskClipData);
@@ -35,7 +60,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            ItemLabel.text = TaskClipData.task?TaskClipData.task.name:"Null!";
+            var taskType = TaskClipData.ongoingTask.TaskData.Type;
+            var shortName = taskType.Split('.').Last();
+            ItemLabel.text = !string.IsNullOrEmpty(shortName) ? shortName : "Null!";
         }
 
         public override void UpdateClipDataStartFrame(int newStartFrame)
@@ -67,23 +94,33 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 运行帧
             _startFrameLabel =
                 TrackInspectorUtil.CreateLabel(
-                    $"运行(f):{TaskClipData.startFrame}/{TaskClipData.EndFrame}");
+                    $"Run(f):{TaskClipData.startFrame}->{TaskClipData.EndFrame}");
             inspector.Add(_startFrameLabel);
 
             // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("时长(f)", TaskClipData.durationFrame,
+            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)", TaskClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
-
-            // 任务
-            var taskField = TrackInspectorUtil.CreateObjectField("自定义事件",typeof(OngoingAbilityTask) ,TaskClipData.task,
-                evt =>
-                {
-                    ClipDataForSave.task = evt.newValue as OngoingAbilityTask;
-                    AbilityTimelineEditorWindow.Instance.Save();
-                    ItemLabel.text = TaskClipData.task.name;
-                });
-            inspector.Add(taskField);
+            
+            // 选择项：所有OngoingAbilityTask子类
+            var ongoingTaskSonTypes= OngoingTaskData.OngoingTaskSonTypes;
+            List<string> ongoingTaskSons  = ongoingTaskSonTypes.Select(sonType => sonType.FullName).ToList();
+            var catcherTypeSelector =
+                TrackInspectorUtil.CreateDropdownField("OngoingTask", ongoingTaskSons,
+                    TaskClipData.ongoingTask.TaskData.Type, OnTaskTypeChanged);
+            inspector.Add(catcherTypeSelector);
+            
+            // 根据选择的OngoingAbilityTask子类，显示对应的属性
+            var ongoingAbilityTask = TaskClipData.Load();
+            if(OngoingTaskInspectorMap.TryGetValue(ongoingAbilityTask.GetType(), out var inspectorType))
+            {
+                var taskInspector = (OngoingAbilityTaskInspector)Activator.CreateInstance(inspectorType, ongoingAbilityTask);
+                inspector.Add(taskInspector.Inspector());
+            }
+            else
+            {
+                Debug.LogError( $"[EX] OngoingAbilityTask's Inspector not found: {ongoingAbilityTask.GetType()}");
+            }
 
             // 删除按钮
             var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
@@ -91,6 +128,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             inspector.Add(deleteButton);
 
             return inspector;
+        }
+
+        private void OnTaskTypeChanged(ChangeEvent<string> evt)
+        {
+            ClipDataForSave.ongoingTask.TaskData.Type = evt.newValue;
+            ClipDataForSave.ongoingTask.TaskData.Data = null;
+            AbilityTimelineEditorWindow.Instance.Save();
+            AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
         }
 
         private void OnDurationFrameChanged(ChangeEvent<int> evt)

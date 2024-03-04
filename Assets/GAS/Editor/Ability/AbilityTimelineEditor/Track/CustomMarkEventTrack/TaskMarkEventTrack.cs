@@ -48,16 +48,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
-            var trackLabel = TrackInspectorUtil.CreateLabel("Instant Task:");
+            var trackLabel = TrackInspectorUtil.CreateLabel("[ Instant Ability Task ]");
             inspector.Add(trackLabel);
 
             foreach (var mark in InstantTaskEventTrackData.markEvents)
             {
-                var markFrame = TrackInspectorUtil.CreateLabel($"   Trigger(f):{mark.startFrame}");
+                var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{mark.startFrame}");
                 inspector.Add(markFrame);
                 foreach (var task in mark.InstantTasks)
                 {
-                    var taskName = task != null ? task.name : "Null!";
+                    var taskName = task != null ? task.TaskData.Type : "Null!";
                     var taskInfo = TrackInspectorUtil.CreateLabel($"    |-> {taskName}");
                     inspector.Add(taskInfo);
                 }
