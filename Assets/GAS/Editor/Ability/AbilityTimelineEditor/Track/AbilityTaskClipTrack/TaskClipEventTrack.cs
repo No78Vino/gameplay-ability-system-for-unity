@@ -31,6 +31,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         
         public override void TickView(int frameIndex, params object[] param)
         {
+            foreach (var item in _trackItems)
+            {
+                var taskClip = item as TaskClip;
+                taskClip.OnTickView(frameIndex, taskClip.StartFrameIndex, taskClip.EndFrameIndex);
+            }
         }
 
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData)

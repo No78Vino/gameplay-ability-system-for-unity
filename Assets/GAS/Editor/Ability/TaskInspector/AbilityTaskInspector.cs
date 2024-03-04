@@ -16,17 +16,5 @@ namespace GAS.Editor.Ability
         public abstract VisualElement Inspector();
 
         protected abstract void Save();
-
-        public abstract void OnTargetCatcherPreview(GameObject obj);
-        
-        
-        
-        // {
-        //     var currentInspectorObject = AbilityTimelineEditorWindow.Instance.CurrentInspectorObject;
-        //     (currentInspectorObject as ReleaseGameplayEffectMark)?.MarkDataForSave
-        //         .SaveTargetCatcher(_taskBase);
-        //     
-        //     AbilityTimelineEditorWindow.Instance.Save();
-        // }
     }
 }

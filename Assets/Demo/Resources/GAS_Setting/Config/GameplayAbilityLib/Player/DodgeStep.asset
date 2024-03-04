@@ -102,9 +102,6 @@ MonoBehaviour:
       - TaskData:
           Type: GAS.Runtime.Ability.ApplyCostAndCoolDown
           Data: 
-      - TaskData:
-          Type: GAS.Runtime.Ability.DefaultInstantAbilityTask
-          Data: 
   OngoingTasks:
   - trackIndex: 4
     trackName: Task Clips

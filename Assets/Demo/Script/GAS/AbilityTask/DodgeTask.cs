@@ -1,6 +1,7 @@
 ﻿using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Runtime.Ability;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,7 +30,6 @@ namespace Demo.Script.GAS.AbilityTask
 
         public override void OnEnd(int endFrame)
         {
-            
         }
 
         public override void OnTick(int frameIndex, int startFrame, int endFrame)
@@ -44,6 +44,7 @@ namespace Demo.Script.GAS.AbilityTask
     
     public class DodgeTaskInspector:OngoingAbilityTaskInspector<DodgeTask>
     {
+        private Vector3? _start;
         public DodgeTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
         {
         }
@@ -66,9 +67,13 @@ namespace Demo.Script.GAS.AbilityTask
             return inspector;
         }
 
-        public override void OnTargetCatcherPreview(GameObject obj)
-        {
-            // TODO
+        public override void OnEditorPreview(int frame, int startFrame, int endFrame)
+        { 
+            _start ??= AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position;
+            var endPos = _start.Value;
+            endPos.x+=  _task.DodgeDistance;
+            float t = (float)(frame - startFrame) / (endFrame - startFrame);
+            AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position = (Vector3.Lerp(_start.Value, endPos, t));
         }
     }
 }

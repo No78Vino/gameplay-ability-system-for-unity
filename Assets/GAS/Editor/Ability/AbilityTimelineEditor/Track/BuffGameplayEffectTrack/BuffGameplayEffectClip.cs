@@ -61,6 +61,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             clipData = updatedClip;
         }
 
+        public override void OnTickView(int frameIndex, int startFrame, int endFrame)
+        {
+        }
+
         #region Inspector
 
         private Label _startFrameLabel;

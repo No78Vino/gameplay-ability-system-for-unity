@@ -8,6 +8,8 @@ namespace GAS.Editor.Ability
         protected OngoingAbilityTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
         {
         }
+        
+        public abstract void OnEditorPreview(int frame,int startFrame,int endFrame);
     }
     
     public abstract class OngoingAbilityTaskInspector<T>:OngoingAbilityTaskInspector where T:OngoingAbilityTask

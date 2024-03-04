@@ -68,6 +68,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             clipData = updatedClip;
         }
 
+        public override void OnTickView(int frameIndex, int startFrame, int endFrame)
+        {
+            // TODO
+        }
+
         #region Clip Visual Element Event
 
         private int MinStartFrameIndex(float lastMainDragStartPos)

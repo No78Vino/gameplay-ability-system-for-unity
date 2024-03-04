@@ -58,6 +58,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
 
         public abstract void UpdateClipDataDurationFrame(int newDurationFrame);
+
+        public abstract void OnTickView(int frameIndex, int startFrame, int endFrame);
     }
 
     public abstract class TrackClip<T> : TrackClipBase where T : TrackBase

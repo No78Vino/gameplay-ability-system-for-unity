@@ -8,6 +8,8 @@ namespace GAS.Editor.Ability
         protected InstantAbilityTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
         {
         }
+        
+        public abstract void OnEditorPreview();
     }
     
     public abstract class InstantAbilityTaskInspector<T>:InstantAbilityTaskInspector where T:InstantAbilityTask

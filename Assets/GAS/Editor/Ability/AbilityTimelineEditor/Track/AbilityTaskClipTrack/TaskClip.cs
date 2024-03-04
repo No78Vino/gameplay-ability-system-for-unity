@@ -81,6 +81,17 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             clipData = updatedClip;
         }
 
+        public override void OnTickView(int frameIndex, int startFrame, int endFrame)
+        {
+            if (frameIndex < startFrame || frameIndex > endFrame) return;
+            var ongoingAbilityTask = TaskClipData.Load();
+            if(OngoingTaskInspectorMap.TryGetValue(ongoingAbilityTask.GetType(), out var inspectorType))
+            {
+                var taskInspector = (OngoingAbilityTaskInspector)Activator.CreateInstance(inspectorType, ongoingAbilityTask);
+                taskInspector.OnEditorPreview( frameIndex, startFrame, endFrame);
+            }
+        }
+
         #region Inspector
 
         private Label _startFrameLabel;

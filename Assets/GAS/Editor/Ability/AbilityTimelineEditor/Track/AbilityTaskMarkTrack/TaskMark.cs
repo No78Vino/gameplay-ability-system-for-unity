@@ -162,7 +162,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void OnTickView(int frameIndex)
         {
-            // TODO
+            foreach (var t in MarkData.InstantTasks)
+            {
+                var task = t.Load();
+                if(InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
+                {
+                    var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
+                    taskInspector.OnEditorPreview();
+                }
+            }
         }
 
         public void SaveCurrentTask(InstantAbilityTask task)

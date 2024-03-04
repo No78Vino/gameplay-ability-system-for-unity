@@ -59,6 +59,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.AnimationTrack
             }
         }
 
+        public override void OnTickView(int frameIndex, int startFrame, int endFrame)
+        {
+        }
+
         #region Inspector
 
         private ObjectField clip;

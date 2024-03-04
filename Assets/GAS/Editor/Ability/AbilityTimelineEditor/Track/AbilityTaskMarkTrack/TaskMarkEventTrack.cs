@@ -26,6 +26,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void TickView(int frameIndex, params object[] param)
         {
+            foreach (var item in _trackItems)
+                ((TrackMarkBase)item).OnTickView(frameIndex);
         }
 
         public override void RefreshShow(float newFrameWidth)

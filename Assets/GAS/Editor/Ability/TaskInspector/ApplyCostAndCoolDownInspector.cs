@@ -27,9 +27,8 @@ namespace GAS.Editor.Ability
             return inspector;
         }
 
-        public override void OnTargetCatcherPreview(GameObject obj)
+        public override void OnEditorPreview()
         {
-            // TODO
         }
     }
 }
