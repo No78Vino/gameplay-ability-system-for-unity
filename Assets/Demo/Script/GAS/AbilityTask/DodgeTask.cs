@@ -50,7 +50,7 @@ namespace Demo.Script.GAS.AbilityTask
 
         public override VisualElement Inspector()
         {
-            var inspector = TrackInspectorUtil.CreateTargetCatcherInspector();
+            var inspector = TrackInspectorUtil.CreateSonInspector(false);
 
             var label = TrackInspectorUtil.CreateLabel("Dodge Task");
             inspector.Add(label);

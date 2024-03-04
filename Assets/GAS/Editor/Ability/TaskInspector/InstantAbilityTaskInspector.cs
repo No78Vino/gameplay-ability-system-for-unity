@@ -1,4 +1,5 @@
-﻿using GAS.Runtime.Ability;
+﻿using GAS.Editor.Ability.AbilityTimelineEditor;
+using GAS.Runtime.Ability;
 
 namespace GAS.Editor.Ability
 {
@@ -15,6 +16,13 @@ namespace GAS.Editor.Ability
         protected InstantAbilityTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
         {
             _task = _taskBase as T;
+        }
+        
+        protected override void Save()
+        {
+            var currentInspectorObject = AbilityTimelineEditorWindow.Instance.CurrentInspectorObject;
+            (currentInspectorObject as TaskMark)?.SaveCurrentTask(_task);
+            AbilityTimelineEditorWindow.Instance.Save();
         }
     }
 }

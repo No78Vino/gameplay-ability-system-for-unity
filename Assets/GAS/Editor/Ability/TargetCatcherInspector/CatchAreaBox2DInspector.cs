@@ -14,7 +14,7 @@ namespace GAS.Editor.Ability
 
         public override VisualElement Inspector()
         {
-            var inspector = TrackInspectorUtil.CreateTargetCatcherInspector();
+            var inspector = TrackInspectorUtil.CreateSonInspector();
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Offset", _targetCatcher.offset,
                 (evt) =>
                 {

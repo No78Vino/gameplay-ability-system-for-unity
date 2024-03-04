@@ -12,17 +12,19 @@ namespace GAS.Editor.Ability
 
         public override VisualElement Inspector()
         {
-            var inspector = TrackInspectorUtil.CreateTargetCatcherInspector();
+            var inspector = TrackInspectorUtil.CreateSonInspector(false);
 
             var label = TrackInspectorUtil.CreateLabel("Apply Cost And CD");
             inspector.Add(label);
             
+            var textTest = TrackInspectorUtil.CreateFloatField("test",_task.test,(evt =>
+            {
+                _task.test=(evt.newValue);
+                Save();
+            }));
+            inspector.Add(textTest);
+            
             return inspector;
-        }
-
-        protected override void Save()
-        {
-            // TODO
         }
 
         public override void OnTargetCatcherPreview(GameObject obj)

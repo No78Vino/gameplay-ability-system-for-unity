@@ -257,7 +257,7 @@ namespace GAS.Editor.Ability
             return vector2Field;
         }
         
-        public static VisualElement CreateTargetCatcherInspector()
+        public static VisualElement CreateSonInspector(bool showBorder=true)
         {
             var inspector = new VisualElement();
             inspector.style.width = new StyleLength(new Length(100,LengthUnit.Percent));
@@ -268,11 +268,62 @@ namespace GAS.Editor.Ability
             inspector.style.paddingRight = 3;
             inspector.style.paddingTop = 6;
             inspector.style.paddingBottom = 3;
-            inspector.style.borderBottomColor = new Color(0.15f,0.15f,0.15f,0.9f);
-            inspector.style.borderTopColor = new Color(0.15f,0.15f,0.15f,0.9f);
-            inspector.style.borderBottomWidth = 2;
-            inspector.style.borderTopWidth = 2;
+            if (showBorder)
+            {
+                inspector.style.borderBottomColor = new Color(0.15f, 0.15f, 0.15f, 0.9f);
+                inspector.style.borderTopColor = new Color(0.15f, 0.15f, 0.15f, 0.9f);
+                inspector.style.borderBottomWidth = 2;
+                inspector.style.borderTopWidth = 2;
+            }
+
             return inspector;
+        }
+
+        public static ListView CreateListView<T>(string label, List<T> list, Func<VisualElement> makeItem,
+            Action<VisualElement, int> bindItem,Action<IEnumerable<object>> onSelectionChanged =null)
+        {
+            // VisualElement MakeItem()
+            // {
+            //     var textField = new TextField();
+            //     textField.isDelayed = true;
+            //     return textField;
+            // }
+
+            // void BindItem(VisualElement e, int i)
+            // {
+            //     var textField = (TextField)e;
+            //     textField.value = list[i];
+            //     textField.RegisterValueChangedCallback(evt =>
+            //     {
+            //         onItemValueChanged(i, evt);
+            //     });
+            // }
+
+            var listView = new ListView(list, LineHeight, makeItem, bindItem);
+            listView.headerTitle = label;
+            listView.reorderable = true;
+            listView.showAddRemoveFooter = true;
+            listView.showBorder = true;
+            listView.showFoldoutHeader = true;
+            listView.itemsSource = list;
+            listView.selectionType = SelectionType.Single;
+            listView.selectionChanged += onSelectionChanged;
+
+            listView.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            listView.style.height = new StyleLength(StyleKeyword.Auto);
+
+            listView.style.paddingLeft = 5;
+            listView.style.paddingRight = 5;
+            listView.style.paddingTop = 5;
+            listView.style.paddingBottom = 5;
+
+            listView.style.alignItems = Align.Stretch;
+            listView.style.alignContent = Align.Stretch;
+            listView.style.justifyContent = Justify.FlexStart;
+            listView.style.flexDirection = FlexDirection.Column;
+            listView.style.flexWrap = Wrap.NoWrap;
+            
+            return listView;
         }
     }
 }

@@ -97,10 +97,13 @@ MonoBehaviour:
   InstantTasks:
     trackIndex: 0
     markEvents:
-    - startFrame: 1
+    - startFrame: 0
       InstantTasks:
       - TaskData:
-          Type: 
+          Type: GAS.Runtime.Ability.ApplyCostAndCoolDown
+          Data: 
+      - TaskData:
+          Type: GAS.Runtime.Ability.DefaultInstantAbilityTask
           Data: 
   OngoingTasks:
   - trackIndex: 4
