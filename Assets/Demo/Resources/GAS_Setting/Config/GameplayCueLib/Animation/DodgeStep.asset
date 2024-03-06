@@ -15,5 +15,5 @@ MonoBehaviour:
   RequiredTags: []
   ImmunityTags: []
   applyTarget: 0
-  _animatorRelativePath: Renderer/Root
+  _animatorRelativePath: 
   _stateName: DodgeStep

@@ -58,5 +58,5 @@ MonoBehaviour:
       InstantTasks:
       - TaskData:
           Type: Demo.Script.GAS.AbilityTask.DefendableAttack
-          Data: '{"CenterType":0,"Size":{"x":2.0,"y":2.0},"Offset":{"x":1.600000023841858,"y":1.0},"Angle":0.0,"DefendedDamageEffect":{"instanceID":14032},"PerfectDefendEffect":{"instanceID":14058},"DirectDamageEffect":{"instanceID":14040}}'
+          Data: '{"CenterType":0,"Size":{"x":2.0,"y":2.0},"Offset":{"x":1.600000023841858,"y":1.0},"Angle":0.0,"DefendedDamageEffect":{"instanceID":14032},"PerfectDefendEffect":{"instanceID":14058},"DirectDamageEffect":{"instanceID":14156}}'
   OngoingTasks: []
