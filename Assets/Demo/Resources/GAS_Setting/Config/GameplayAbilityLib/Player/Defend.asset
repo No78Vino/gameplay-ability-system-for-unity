@@ -53,7 +53,7 @@ MonoBehaviour:
     _ancestorNames:
     - Event
   manualEndAbility: 1
-  FrameCount: 30
+  FrameCount: 10
   AnimationData:
     trackIndex: 0
     Animator: {fileID: 0}
@@ -73,7 +73,7 @@ MonoBehaviour:
     trackName: BuffGameplayEffect
     clipEvents:
     - startFrame: 0
-      durationFrame: 30
+      durationFrame: 10
       buffTarget: 0
       gameplayEffect: {fileID: 11400000, guid: fc81845fcee67d94cb39cd37d5dd6e69, type: 2}
   InstantTasks:

@@ -1,5 +1,9 @@
-﻿using GAS.Runtime.Cue;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GAS.Runtime.Cue;
+using UnityEditor.Animations;
 using UnityEngine;
+using GAS.General.Util;
 
 namespace GAS.Cue
 {
@@ -15,6 +19,28 @@ namespace GAS.Cue
 
         public override void OnEditorPreview(GameObject preview,int frame, int startFrame)
         {
+            var unit = preview.GetComponent<FightUnit>();
+            if (startFrame <= frame)
+            {
+                var animatorObject = unit.Animator.gameObject;
+                var animator = unit.Animator;
+                var stateMap = animator.GetAllAnimationState(0);
+                if(stateMap.TryGetValue(animName, out var clip))
+                {
+                    float clipFrameCount = (int)(clip.frameRate * clip.length);
+                    if (frame < clipFrameCount + startFrame)
+                    {
+                        var progress = (frame - startFrame) / clipFrameCount;
+                        if (progress > 1 && clip.isLooping) progress -= (int)progress;
+                        clip.SampleAnimation(animatorObject.gameObject, progress * clip.length);
+                    }
+                }
+            }
+        }
+        
+        AnimationClip FindClipByStateName(RuntimeAnimatorController animatorController, string stateName)
+        {
+            return animatorController.animationClips.FirstOrDefault(clip => clip.name == stateName);
         }
     }
     

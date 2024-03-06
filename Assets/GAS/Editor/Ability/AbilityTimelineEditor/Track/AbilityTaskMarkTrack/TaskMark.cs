@@ -90,29 +90,33 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             parent.Clear();
             
             // 选择项：所有InstantAbilityTask子类
-            var taskSonTypes= InstantTaskData.InstantTaskSonTypes;
-            List<string> taskSons  = taskSonTypes.Select(sonType => sonType.FullName).ToList();
-            var typeSelector =
-                TrackInspectorUtil.CreateDropdownField("", taskSons,
-                    MarkData.InstantTasks[taskList.selectedIndex].TaskData.Type, (evt) =>
+            if (taskList.selectedIndex < MarkData.InstantTasks.Count && taskList.selectedIndex >= 0)
+            {
+                taskList.SetSelection(0);
+                var taskSonTypes = InstantTaskData.InstantTaskSonTypes;
+                List<string> taskSons = taskSonTypes.Select(sonType => sonType.FullName).ToList();
+                var initValue = MarkData.InstantTasks[taskList.selectedIndex].TaskData.Type;
+                var typeSelector =
+                    TrackInspectorUtil.CreateDropdownField("", taskSons, initValue, (evt) =>
                     {
                         MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Type = evt.newValue;
                         MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Data = null;
                         AbilityTimelineEditorWindow.Instance.Save();
                         AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
                     });
-            parent.Add(typeSelector);
-            
-            // 根据选择的InstantAbilityTask子类，显示对应的属性
-            var task = MarkDataForSave.InstantTasks[taskList.selectedIndex].Load();
-            if(InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
-            {
-                var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
-                parent.Add(taskInspector.Inspector());
-            }
-            else
-            {
-                parent.Add(TrackInspectorUtil.CreateLabel($"{task.GetType()}'s Inspector not found!"));
+                parent.Add(typeSelector);
+                
+                // 根据选择的InstantAbilityTask子类，显示对应的属性
+                var task = MarkDataForSave.InstantTasks[taskList.selectedIndex].Load();
+                if(InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
+                {
+                    var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
+                    parent.Add(taskInspector.Inspector());
+                }
+                else
+                {
+                    parent.Add(TrackInspectorUtil.CreateLabel($"{task.GetType()}'s Inspector not found!"));
+                }
             }
             
             parent.MarkDirtyRepaint();
@@ -162,13 +166,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void OnTickView(int frameIndex)
         {
-            foreach (var t in MarkData.InstantTasks)
+            if (frameIndex == StartFrameIndex)
             {
-                var task = t.Load();
-                if(InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
+                foreach (var t in MarkData.InstantTasks)
                 {
-                    var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
-                    taskInspector.OnEditorPreview();
+                    var task = t.Load();
+                    if (InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
+                    {
+                        var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
+                        taskInspector.OnEditorPreview();
+                    }
                 }
             }
         }
