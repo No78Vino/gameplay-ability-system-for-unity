@@ -25,7 +25,6 @@ MonoBehaviour:
     - Faction
   BaseAbilities:
   - {fileID: 11400000, guid: 7e336de72122257479d22f5a6e8701da, type: 2}
-  - {fileID: 11400000, guid: 417d3d3616f1b0c43819f77707844fc3, type: 2}
   - {fileID: 11400000, guid: 0fd04e63d5c9b8e42be5eec6b49a80b4, type: 2}
   - {fileID: 11400000, guid: ba59ee9165d57a3479c36a9fd1a95df0, type: 2}
   - {fileID: 11400000, guid: 558f983e070c4a24ca6106a5a4e88b5d, type: 2}

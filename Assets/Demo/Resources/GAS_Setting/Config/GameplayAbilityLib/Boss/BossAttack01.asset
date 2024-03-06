@@ -48,6 +48,9 @@ MonoBehaviour:
     - startFrame: 0
       cues:
       - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
+    - startFrame: 12
+      cues:
+      - {fileID: 11400000, guid: f7d150d6495268e4ba87893c291c11ec, type: 2}
   ReleaseGameplayEffect:
     trackIndex: 0
     markEvents: []
@@ -60,4 +63,19 @@ MonoBehaviour:
       - TaskData:
           Type: Demo.Script.GAS.AbilityTask.DefendableAttack
           Data: '{"CenterType":0,"Size":{"x":5.0,"y":3.0},"Offset":{"x":2.0,"y":2.0},"Angle":0.0,"DefendedDamageEffect":{"instanceID":14148},"PerfectDefendEffect":{"instanceID":14172},"DirectDamageEffect":{"instanceID":14156}}'
-  OngoingTasks: []
+  OngoingTasks:
+  - trackIndex: 4
+    trackName: Task Clips
+    clipEvents:
+    - startFrame: 2
+      durationFrame: 5
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.DodgeTask
+          Data: '{"_dodgeDistance":2.0}'
+    - startFrame: 12
+      durationFrame: 5
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.DodgeTask
+          Data: '{"_dodgeDistance":2.0}'
