@@ -93,7 +93,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var taskSonTypes= InstantTaskData.InstantTaskSonTypes;
             List<string> taskSons  = taskSonTypes.Select(sonType => sonType.FullName).ToList();
             var typeSelector =
-                TrackInspectorUtil.CreateDropdownField("InstantTask", taskSons,
+                TrackInspectorUtil.CreateDropdownField("", taskSons,
                     MarkData.InstantTasks[taskList.selectedIndex].TaskData.Type, (evt) =>
                     {
                         MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Type = evt.newValue;

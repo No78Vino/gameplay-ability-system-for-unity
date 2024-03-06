@@ -16443,13 +16443,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2134990080715133630, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2899910684522074209, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 738742197}
     - target: {fileID: 2899910684522074209, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2899910684522074209, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_ActionId
@@ -16502,6 +16506,10 @@ PrefabInstance:
     - target: {fileID: 2899910684522074209, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_ControlsChangedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334168539659362619, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5169009690508895175, guid: e3328f11fa1a3514390e1b0bf32663d6, type: 3}
       propertyPath: m_Name
@@ -16739,6 +16747,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 15, y: 18}
   m_EdgeRadius: 0
+--- !u!1 &1280077006 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5169009690508895175, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
+  m_PrefabInstance: {fileID: 1963082175}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1280077007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280077006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537b9bd40bbb430aab998d7b066966a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1431028659
 GameObject:
   m_ObjectHideFlags: 0
@@ -22433,7 +22458,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5169009690508895175, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1280077007}
   m_SourcePrefab: {fileID: 100100000, guid: 430603f51ba1a6244809b0108d80b804, type: 3}
 --- !u!1 &1987533051
 GameObject:

@@ -71,7 +71,7 @@ MonoBehaviour:
     - Ban
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  MaxFrameCount: 10
+  FrameCount: 10
   AnimationData:
     trackIndex: 0
     Animator: {fileID: 0}
@@ -111,4 +111,4 @@ MonoBehaviour:
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.DodgeTask
-          Data: '{"_dodgeDistance":1.2599999904632569}'
+          Data: '{"_dodgeDistance":6.0}'

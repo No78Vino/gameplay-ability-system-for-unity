@@ -119,7 +119,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor.AnimationTrack
 
         private void OnDurationChanged(ChangeEvent<int> evt)
         {
-            var max = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount - StartFrameIndex;
+            var max = AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount - StartFrameIndex;
             foreach (var clipEvent in track.AbilityAnimationData.animationClipData)
             {
                 if (StartFrameIndex >= clipEvent.startFrame) continue;

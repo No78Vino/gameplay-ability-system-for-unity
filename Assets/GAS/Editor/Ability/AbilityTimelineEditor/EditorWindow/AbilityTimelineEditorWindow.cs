@@ -56,7 +56,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void InitAbility(TimelineAbilityAsset asset)
         {
             _abilityAsset.value = asset;
-            MaxFrame.value = AbilityAsset.MaxFrameCount;
+            MaxFrame.value = AbilityAsset.FrameCount;
             CurrentSelectFrameIndex = 0;
             TimerShaftView.RefreshTimerDraw();
             TrackView.RefreshTrackDraw();
@@ -94,7 +94,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var asset = evt.newValue as TimelineAbilityAsset;
             if (AbilityAsset != null)
             {
-                MaxFrame.value = AbilityAsset.MaxFrameCount;
+                MaxFrame.value = AbilityAsset.FrameCount;
             }
 
             CurrentSelectFrameIndex = 0;
@@ -185,7 +185,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
-                AbilityAsset.MaxFrameCount = _currentMaxFrame;
+                AbilityAsset.FrameCount = _currentMaxFrame;
                 SaveAsset();
                 MaxFrame.value = _currentMaxFrame;
                 TrackView.UpdateContentSize();

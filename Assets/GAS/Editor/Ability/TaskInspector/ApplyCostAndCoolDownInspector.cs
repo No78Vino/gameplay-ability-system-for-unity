@@ -17,13 +17,6 @@ namespace GAS.Editor.Ability
             var label = TrackInspectorUtil.CreateLabel("Apply Cost And CD");
             inspector.Add(label);
             
-            var textTest = TrackInspectorUtil.CreateFloatField("test",_task.test,(evt =>
-            {
-                _task.test=(evt.newValue);
-                Save();
-            }));
-            inspector.Add(textTest);
-            
             return inspector;
         }
 

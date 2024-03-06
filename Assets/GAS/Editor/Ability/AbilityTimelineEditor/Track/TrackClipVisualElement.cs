@@ -119,7 +119,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _newStartFramePos = _lastMainDragStartPos + offsetFrame;
             if (offsetFrame == 0 || _newStartFramePos < 0) return;
             int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
             if (NewStartFrame >= minFrame && NewStartFrame+DurationFrame <= maxFrame)
             {
                 var mainContent=TimerShaftView.MainContent;
@@ -140,7 +140,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnMainAreaApplyDrag()
         {
             int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
             var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame - DurationFrame);
             if (newStartFrame == StartFrameIndex) return;
             
@@ -252,7 +252,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             
             _clip.UpdateClipDataStartFrame(newStartFrame);
             _clip.UpdateClipDataDurationFrame(lastEndFrame - _clip.StartFrameIndex);
-            if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
+            if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount)
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
@@ -267,7 +267,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             _newResizeEndFramePos = _lastResizeDragEndPos + offsetFrame;
             if (offsetFrame == 0 || _newResizeEndFramePos < 0 || NewResizeEndFrame - 1 <= StartFrameIndex) return;
             
-            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
             int minFrame = _clip.StartFrameIndex + 1;
             if (NewResizeEndFrame >= minFrame && NewResizeEndFrame <= maxFrame)
             {
@@ -282,10 +282,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         
         void OnRightResizeDragEnd()
         {
-            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
             var newEndFrame = Mathf.Clamp(NewResizeEndFrame, StartFrameIndex + 1, maxFrame);
             _clip.UpdateClipDataDurationFrame(newEndFrame - _clip.StartFrameIndex);
-            if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount)
+            if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount)
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);

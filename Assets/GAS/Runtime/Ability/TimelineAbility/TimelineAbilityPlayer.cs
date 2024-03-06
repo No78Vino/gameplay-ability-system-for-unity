@@ -33,7 +33,7 @@ namespace GAS.Runtime.Ability
 
         private int _currentFrame;
         private float _playTotalTime;
-        private int MaxFrameCount => AbilityAsset.MaxFrameCount;
+        private int FrameCount => AbilityAsset.FrameCount;
         private int FrameRate => GASTimer.FrameRate;
         
         
@@ -56,8 +56,8 @@ namespace GAS.Runtime.Ability
             _cacheInstantCues = new List<InstantCueMarkEvent>();
             _cacheInstantCues.AddRange(AbilityAsset.InstantCues.markEvents);
             _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
-            
-            _cacheReleaseGameplayEffect.Clear();
+
+            _cacheReleaseGameplayEffect = new List<ReleaseGameplayEffectMarkEvent>();
             _cacheReleaseGameplayEffect.AddRange(AbilityAsset.ReleaseGameplayEffect.markEvents);
             _cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
             for (int i = 0; i < _cacheReleaseGameplayEffect.Count; i++)
@@ -157,7 +157,7 @@ namespace GAS.Runtime.Ability
                 _currentFrame++;
                 TickFrame(_currentFrame);
             }
-            if (_currentFrame >= MaxFrameCount) OnPlayEnd();
+            if (_currentFrame >= FrameCount) OnPlayEnd();
         }
 
         /// <summary>
@@ -166,7 +166,9 @@ namespace GAS.Runtime.Ability
         private void OnPlayEnd()
         {
             _isPlaying = false;
-            _abilitySpec.TryEndAbility();
+            
+            if(!AbilityAsset.manualEndAbility)
+                _abilitySpec.TryEndAbility();
         }
 
         /// <summary>
@@ -236,7 +238,7 @@ namespace GAS.Runtime.Ability
                     buffClip.buffSpec = null;
                 }
             }
-            
+                                                              
             // Ongoing Task
             foreach (var taskClip in _cacheOngoingTaskTrack)
             {

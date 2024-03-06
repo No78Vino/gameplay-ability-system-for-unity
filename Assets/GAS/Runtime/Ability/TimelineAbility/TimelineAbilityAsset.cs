@@ -14,34 +14,39 @@ namespace GAS.Runtime.Ability.TimelineAbility
         {
             return typeof(TimelineAbility);
         }
+
+        [BoxGroup] 
+        [LabelText("手动结束能力")]
+        [LabelWidth(100)]
+        public bool manualEndAbility;
         
         [HideInInspector]
-        public int MaxFrameCount;// 能力结束时间
+        public int FrameCount;// 能力结束时间
         
         [HideInInspector]
         public AbilityAnimationData AnimationData = new AbilityAnimationData();
         
-        [BoxGroup]
+        [HideInInspector]
         public List<DurationalCueTrackData> DurationalCues = new List<DurationalCueTrackData>();
         
         // 即时Cue有且只有一个轨道
-        [BoxGroup]
+        [HideInInspector]
         public InstantCueTrackData InstantCues = new InstantCueTrackData();
         
         // 施放型GameplayEffect轨道（唯一）
-        [BoxGroup]
+        [HideInInspector]
         public ReleaseGameplayEffectTrackData ReleaseGameplayEffect = new ReleaseGameplayEffectTrackData();
         
         // Buff型GameplayEffect
-        [BoxGroup]
+        [HideInInspector]
         public List<BuffGameplayEffectTrackData> BuffGameplayEffects = new List<BuffGameplayEffectTrackData>();
         
         // 任务标记事件（唯一）
-        [BoxGroup]
+        [HideInInspector]
         public TaskMarkEventTrackData InstantTasks = new TaskMarkEventTrackData();
         
         // 任务片段事件
-        [BoxGroup]
+        [HideInInspector]
         public List<TaskClipEventTrackData> OngoingTasks = new List<TaskClipEventTrackData>();
         
 #if UNITY_EDITOR

@@ -64,8 +64,9 @@ public abstract class FightUnit : MonoBehaviour
         // 设置动画机参数
         _animator.SetFloat(IsInAir, Grounded ? 0 : 1);
         _animator.SetFloat(UpOrDown, 0.5f * (1 - Mathf.Clamp(LastVelocityY, -1, 1)));
-        _animator.SetFloat(Moving, IsMoving ? 1 : 0);
-        _animator.SetBool(Defending, ASC.HasTag(GameplayTagSumCollection.Event_Defending));
+        bool isDefending = ASC.HasTag(GameplayTagSumCollection.Event_Defending);
+        _animator.SetFloat(Moving, IsMoving && !isDefending ? 1 : 0);
+        _animator.SetBool(Defending, isDefending);
     }
 
     protected virtual void OnEnable()

@@ -87,7 +87,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         private int MaxEndFrameIndex(float lastMainDragStartPos)
         {
-            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
+            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
             foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
                 if (clipEvent != ClipData && clipEvent.startFrame >= lastMainDragStartPos + DurationFrame)
                     maxFrame = Mathf.Min(maxFrame, clipEvent.startFrame);
@@ -141,7 +141,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnDurationFrameChanged(ChangeEvent<int> evt)
         {
             // 钳制
-            var max = AbilityAsset.MaxFrameCount - DurationalCueClipData.startFrame;
+            var max = AbilityAsset.FrameCount - DurationalCueClipData.startFrame;
             var newValue = Mathf.Clamp(evt.newValue, 1, max);
             // 保存数据
             UpdateClipDataDurationFrame(newValue);

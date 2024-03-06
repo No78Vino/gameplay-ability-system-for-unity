@@ -113,28 +113,30 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
             
+            var sonInspector = TrackInspectorUtil.CreateSonInspector();
             // 选择项：所有OngoingAbilityTask子类
             var ongoingTaskSonTypes= OngoingTaskData.OngoingTaskSonTypes;
             List<string> ongoingTaskSons  = ongoingTaskSonTypes.Select(sonType => sonType.FullName).ToList();
             var catcherTypeSelector =
-                TrackInspectorUtil.CreateDropdownField("OngoingTask", ongoingTaskSons,
+                TrackInspectorUtil.CreateDropdownField("", ongoingTaskSons,
                     TaskClipData.ongoingTask.TaskData.Type, OnTaskTypeChanged);
-            inspector.Add(catcherTypeSelector);
+            sonInspector.Add(catcherTypeSelector);
             
             // 根据选择的OngoingAbilityTask子类，显示对应的属性
             var ongoingAbilityTask = TaskClipData.Load();
             if(OngoingTaskInspectorMap.TryGetValue(ongoingAbilityTask.GetType(), out var inspectorType))
             {
                 var taskInspector = (OngoingAbilityTaskInspector)Activator.CreateInstance(inspectorType, ongoingAbilityTask);
-                inspector.Add(taskInspector.Inspector());
+                sonInspector.Add(taskInspector.Inspector());
             }
             else
             {
-                Debug.LogError( $"[EX] OngoingAbilityTask's Inspector not found: {ongoingAbilityTask.GetType()}");
+                sonInspector.Add(TrackInspectorUtil.CreateLabel($"{ongoingAbilityTask.GetType()}'s Inspector not found!"));
             }
+            inspector.Add(sonInspector);
 
             // 删除按钮
-            var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
+            var deleteButton = TrackInspectorUtil.CreateButton("DELETE", Delete);
             deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
             inspector.Add(deleteButton);
 
@@ -152,7 +154,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnDurationFrameChanged(ChangeEvent<int> evt)
         {
             // 钳制
-            var max = AbilityAsset.MaxFrameCount - TaskClipData.startFrame;
+            var max = AbilityAsset.FrameCount - TaskClipData.startFrame;
             var newValue = Mathf.Clamp(evt.newValue, 1, max);
             // 保存数据
             UpdateClipDataDurationFrame(newValue);

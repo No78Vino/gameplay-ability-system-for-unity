@@ -68,7 +68,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #region Inspector
 
         private Label _startFrameLabel;
-        private Label _endFrameLabel;
         private IntegerField _durationField;
 
         public override VisualElement Inspector()
@@ -78,11 +77,11 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 运行帧
             _startFrameLabel =
                 TrackInspectorUtil.CreateLabel(
-                    $"运行(f):{BuffGameplayEffectClipData.startFrame}->{BuffGameplayEffectClipData.EndFrame}");
+                    $"Run(f):{BuffGameplayEffectClipData.startFrame}->{BuffGameplayEffectClipData.EndFrame}");
             inspector.Add(_startFrameLabel);
 
             // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("时长(f)", BuffGameplayEffectClipData.durationFrame,
+            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)", BuffGameplayEffectClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
 
@@ -111,13 +110,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnDurationFrameChanged(ChangeEvent<int> evt)
         {
             // 钳制
-            var max = AbilityAsset.MaxFrameCount - BuffGameplayEffectClipData.startFrame;
+            var max = AbilityAsset.FrameCount - BuffGameplayEffectClipData.startFrame;
             var newValue = Mathf.Clamp(evt.newValue, 1, max);
             // 保存数据
             UpdateClipDataDurationFrame(newValue);
             // 修改显示
             RefreshShow(FrameUnitWidth);
-            _endFrameLabel.text = $"结束帧:{BuffGameplayEffectClipData.EndFrame}";
+            _startFrameLabel.text =
+                $"Run(f):{BuffGameplayEffectClipData.startFrame}->{BuffGameplayEffectClipData.EndFrame}";
             _durationField.value = newValue;
         }
 
