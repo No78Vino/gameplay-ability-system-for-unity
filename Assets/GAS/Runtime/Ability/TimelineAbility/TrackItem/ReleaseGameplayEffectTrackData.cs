@@ -12,6 +12,12 @@ namespace GAS.Runtime.Ability.TimelineAbility
     public class ReleaseGameplayEffectTrackData : TrackDataBase
     {
         public List<ReleaseGameplayEffectMarkEvent> markEvents = new List<ReleaseGameplayEffectMarkEvent>();
+        
+        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        {
+            base.AddToAbilityAsset(abilityAsset);
+            abilityAsset.ReleaseGameplayEffect.Add(this);
+        }
     }
 
     [Serializable]

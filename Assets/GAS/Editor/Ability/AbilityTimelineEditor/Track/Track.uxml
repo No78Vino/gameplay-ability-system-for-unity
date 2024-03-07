@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="AnimationTrack" style="flex-grow: 1; height: 35px; min-height: 35px; max-height: 35px; margin-bottom: 1px; background-color: rgba(56, 56, 56, 0); align-items: auto; align-self: auto; justify-content: flex-start; flex-direction: row; border-left-color: rgba(255, 255, 255, 0.85); border-right-color: rgba(255, 255, 255, 0.85); border-top-color: rgba(255, 255, 255, 0.85); border-bottom-color: rgba(255, 255, 255, 0.85); border-bottom-width: 0; top: auto;">
-        <ui:VisualElement name="Container" style="flex-grow: 1; height: 30px; max-height: 30px; min-height: 30px; width: 100%; max-width: 100%; min-width: 100%; background-color: rgb(94, 94, 94); align-self: center;" />
+        <ui:VisualElement name="Container" style="flex-grow: 1; height: 90%; max-height: 90%; min-height: 90%; width: 100%; max-width: 100%; min-width: 100%; background-color: rgb(94, 94, 94); align-self: center;" />
     </ui:VisualElement>
 </ui:UXML>

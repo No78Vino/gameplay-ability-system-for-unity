@@ -18,10 +18,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             get
             {
-                var trackDataForSave = TaskMarkEventTrack.InstantTaskEventTrackData;
+                var trackDataForSave = track.InstantTaskEventTrackData;
                 for (var i = 0; i < trackDataForSave.markEvents.Count; i++)
                     if (trackDataForSave.markEvents[i] == MarkData)
-                        return TaskMarkEventTrack.InstantTaskEventTrackData.markEvents[i];
+                        return track.InstantTaskEventTrackData.markEvents[i];
                 return null;
             }
         }
@@ -147,7 +147,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         
         public override void Delete()
         {
-            var success = TaskMarkEventTrack.InstantTaskEventTrackData.markEvents.Remove(MarkData);
+            var success = track.InstantTaskEventTrackData.markEvents.Remove(MarkData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             track.RemoveTrackItem(this);

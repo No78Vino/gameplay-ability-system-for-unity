@@ -7,20 +7,12 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class DurationalCueTrackData:TrackDataBase
     {
-        public string trackName;
-        public List<DurationalCueClipEvent> clipEvents;
+        public List<DurationalCueClipEvent> clipEvents = new List<DurationalCueClipEvent>();
 
         public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
             abilityAsset.DurationalCues.Add(this);
-        }
-
-        public override void DefaultInit(int index)
-        {
-            base.DefaultInit(index);
-            trackName = "DurationalCueTrack";
-            clipEvents = new List<DurationalCueClipEvent>();
         }
     }
     

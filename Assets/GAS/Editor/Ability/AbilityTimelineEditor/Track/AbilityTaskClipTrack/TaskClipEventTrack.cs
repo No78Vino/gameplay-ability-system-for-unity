@@ -89,7 +89,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
             TrackParent.Remove(TrackRoot);
-            MenuParent.Remove(Menu);
+            MenuParent.Remove(MenuRoot);
             Debug.Log("[EX] Remove Task Clip Track");
         }
 

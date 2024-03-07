@@ -7,8 +7,7 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class TaskClipEventTrackData:TrackDataBase
     {
-        public string trackName;
-        public List<TaskClipEvent> clipEvents;
+        public List<TaskClipEvent> clipEvents = new List<TaskClipEvent>();
 
         public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
         {
@@ -16,11 +15,10 @@ namespace GAS.Runtime.Ability.TimelineAbility
             abilityAsset.OngoingTasks.Add(this);
         }
 
-        public override void DefaultInit(int index)
+        public override void DefaultInit()
         {
-            base.DefaultInit(index);
+            base.DefaultInit();
             trackName = "Task Clips";
-            clipEvents = new List<TaskClipEvent>();
         }
     }
     

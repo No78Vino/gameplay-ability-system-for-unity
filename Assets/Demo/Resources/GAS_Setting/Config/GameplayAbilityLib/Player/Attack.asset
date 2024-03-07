@@ -31,32 +31,9 @@ MonoBehaviour:
   ActivationBlockedTags: []
   manualEndAbility: 0
   FrameCount: 10
-  AnimationData:
-    trackIndex: 0
-    Animator: {fileID: 0}
-    animationClipData: []
   DurationalCues: []
-  InstantCues:
-    trackIndex: 0
-    markEvents:
-    - startFrame: 0
-      cues:
-      - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
-  ReleaseGameplayEffect:
-    trackIndex: 0
-    markEvents:
-    - startFrame: 4
-      jsonTargetCatcher:
-        Type: GAS.Runtime.Ability.TargetCatcher.CatchSelf
-        Data: 
-      gameplayEffectAssets: []
+  InstantCues: []
+  ReleaseGameplayEffect: []
   BuffGameplayEffects: []
-  InstantTasks:
-    trackIndex: 0
-    markEvents:
-    - startFrame: 4
-      InstantTasks:
-      - TaskData:
-          Type: Demo.Script.GAS.AbilityTask.DefendableAttack
-          Data: '{"CenterType":0,"Size":{"x":2.0,"y":2.0},"Offset":{"x":1.600000023841858,"y":1.0},"Angle":0.0,"DefendedDamageEffect":{"instanceID":14032},"PerfectDefendEffect":{"instanceID":14058},"DirectDamageEffect":{"instanceID":14156}}'
+  InstantTasks: []
   OngoingTasks: []

@@ -54,17 +54,20 @@ namespace GAS.Runtime.Ability
         private void Cache()
         {
             _cacheInstantCues = new List<InstantCueMarkEvent>();
-            _cacheInstantCues.AddRange(AbilityAsset.InstantCues.markEvents);
+            foreach (var trackData in AbilityAsset.InstantCues)
+                _cacheInstantCues.AddRange(trackData.markEvents);
             _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
 
             _cacheReleaseGameplayEffect = new List<ReleaseGameplayEffectMarkEvent>();
-            _cacheReleaseGameplayEffect.AddRange(AbilityAsset.ReleaseGameplayEffect.markEvents);
+            foreach (var trackData in AbilityAsset.ReleaseGameplayEffect)
+                _cacheReleaseGameplayEffect.AddRange(trackData.markEvents);
             _cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
             for (int i = 0; i < _cacheReleaseGameplayEffect.Count; i++)
                 _cacheReleaseGameplayEffect[i].CacheTargetCatcher();
             
             _cacheInstantTasks = new List<TaskMarkEvent>();
-            _cacheInstantTasks.AddRange(AbilityAsset.InstantTasks.markEvents);
+            foreach (var trackData in AbilityAsset.InstantTasks)
+                _cacheInstantTasks.AddRange(trackData.markEvents);
             _cacheInstantTasks.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
             for (int i = 0; i < _cacheInstantTasks.Count; i++)
                 for (int j = 0; j < _cacheInstantTasks[i].InstantTasks.Count; j++)

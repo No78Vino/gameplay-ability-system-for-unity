@@ -8,16 +8,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public class InstantCueMark:TrackMark<InstantCueTrack>
     {
-        private InstantCueMarkEvent MarkData => markData as InstantCueMarkEvent;
+        private InstantCueMarkEvent InstantCueMarkData => markData as InstantCueMarkEvent;
 
         private InstantCueMarkEvent MarkDataForSave
         {
             get
             {
-                var cueTrackDataForSave = InstantCueTrack.InstantCueTrackData;
+                var cueTrackDataForSave = track.InstantCueTrackData;
                 for (var i = 0; i < cueTrackDataForSave.markEvents.Count; i++)
-                    if (cueTrackDataForSave.markEvents[i] == MarkData)
-                        return InstantCueTrack.InstantCueTrackData.markEvents[i];
+                    if (cueTrackDataForSave.markEvents[i] == InstantCueMarkData)
+                        return track.InstantCueTrackData.markEvents[i];
                 return null;
             }
         }
@@ -25,7 +25,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            ItemLabel.text = MarkData.cues.Count.ToString();
+            ItemLabel.text = InstantCueMarkData.cues.Count.ToString();
         }
 
         public override VisualElement Inspector()
@@ -34,7 +34,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var markFrame = TrackInspectorUtil.CreateLabel($"触发帧:{markData.startFrame}");
             inspector.Add(markFrame);
 
-            var list = TrackInspectorUtil.CreateObjectListView("Cue列表", MarkData.cues, OnCueAssetChanged);
+            var list = TrackInspectorUtil.CreateObjectListView("Cue列表", InstantCueMarkData.cues, OnCueAssetChanged);
             inspector.Add(list);
             
             return inspector;
@@ -51,7 +51,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void Delete()
         {
-            var success = InstantCueTrack.InstantCueTrackData.markEvents.Remove(MarkData);
+            var success = track.InstantCueTrackData.markEvents.Remove(InstantCueMarkData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             track.RemoveTrackItem(this);
@@ -68,10 +68,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void OnTickView(int frameIndex)
         {
-            foreach (var cue in MarkData.cues)
+            foreach (var cue in InstantCueMarkData.cues)
             {
                 cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
-                    MarkData.startFrame);
+                    InstantCueMarkData.startFrame);
             }
         }
     }

@@ -7,11 +7,22 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class ReleaseGameplayEffectTrack : FixedTrack
+    public class ReleaseGameplayEffectTrack : TrackBase
     {
-        public static ReleaseGameplayEffectTrackData ReleaseGameplayEffectTrackData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.ReleaseGameplayEffect;
+        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        public ReleaseGameplayEffectTrackData ReleaseGameplayEffectTrackData {
+            get
+            {
+                for (int i = 0; i < AbilityAsset.ReleaseGameplayEffect.Count; i++)
+                {
+                    if(AbilityAsset.ReleaseGameplayEffect[i] == _releaseGameplayEffectTrackData)
+                        return AbilityAsset.ReleaseGameplayEffect[i];
+                }
+                return null;
+            }
+        }
 
+        private ReleaseGameplayEffectTrackData _releaseGameplayEffectTrackData;
         public override Type TrackDataType => typeof(ReleaseGameplayEffectTrackData);
         protected override Color TrackColor => new(0.9f, 0.3f, 0.35f, 0.2f);
         protected override Color MenuColor => new(0.9f, 0.3f, 0.35f, 0.9f);
@@ -21,6 +32,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
             MenuText.text = "施放型GameplayEffect";
+            _releaseGameplayEffectTrackData = trackData as ReleaseGameplayEffectTrackData;
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -37,7 +49,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset == null) return;
 
-            foreach (var markEvent in ReleaseGameplayEffectTrackData.markEvents)
+            foreach (var markEvent in _releaseGameplayEffectTrackData.markEvents)
             {
                 var item = new ReleaseGameplayEffectMark();
                 item.InitTrackMark(this, Track, _frameWidth, markEvent);
@@ -53,7 +65,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             trackLabel.style.fontSize = 14;
             inspector.Add(trackLabel);
 
-            foreach (var mark in ReleaseGameplayEffectTrackData.markEvents)
+            foreach (var mark in _releaseGameplayEffectTrackData.markEvents)
             {
                 var markFrame =
                     TrackInspectorUtil.CreateLabel(
@@ -93,8 +105,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
-            ReleaseGameplayEffectTrackData.markEvents.Clear();
+            // 删除数据
+            AbilityAsset.ReleaseGameplayEffect.Remove(_releaseGameplayEffectTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
+            // 删除显示
+            TrackParent.Remove(TrackRoot);
+            MenuParent.Remove(MenuRoot);
+            Debug.Log("[EX] Remove Release GameplayEffect Track");
         }
     }
 }

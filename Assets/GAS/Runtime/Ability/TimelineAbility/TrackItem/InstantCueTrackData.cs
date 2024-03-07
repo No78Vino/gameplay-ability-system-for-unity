@@ -8,6 +8,12 @@ namespace GAS.Runtime.Ability.TimelineAbility
     public class InstantCueTrackData:TrackDataBase
     {
         public List<InstantCueMarkEvent> markEvents = new List<InstantCueMarkEvent>();
+        
+        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        {
+            base.AddToAbilityAsset(abilityAsset);
+            abilityAsset.InstantCues.Add(this);
+        }
     }
     
     [Serializable]

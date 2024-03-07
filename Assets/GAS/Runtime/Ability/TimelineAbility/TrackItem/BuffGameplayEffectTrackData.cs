@@ -8,7 +8,6 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class BuffGameplayEffectTrackData:TrackDataBase
     {
-        public string trackName;
         public List<BuffGameplayEffectClipEvent> clipEvents = new List<BuffGameplayEffectClipEvent>();
 
         public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
@@ -17,10 +16,10 @@ namespace GAS.Runtime.Ability.TimelineAbility
             abilityAsset.BuffGameplayEffects.Add(this);
         }
 
-        public override void DefaultInit(int index)
+        public override void DefaultInit()
         {
-            base.DefaultInit(index);
-            trackName = "BuffGameplayEffect";
+            base.DefaultInit();
+            trackName = "Buff";
         }
     }
     

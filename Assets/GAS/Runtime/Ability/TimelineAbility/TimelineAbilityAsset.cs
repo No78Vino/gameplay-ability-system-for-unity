@@ -23,29 +23,20 @@ namespace GAS.Runtime.Ability.TimelineAbility
         [HideInInspector]
         public int FrameCount;// 能力结束时间
         
-        [HideInInspector]
-        public AbilityAnimationData AnimationData = new AbilityAnimationData();
         
         [HideInInspector]
         public List<DurationalCueTrackData> DurationalCues = new List<DurationalCueTrackData>();
-        
-        // 即时Cue有且只有一个轨道
+
+        [HideInInspector] public List<InstantCueTrackData> InstantCues = new List<InstantCueTrackData>();
+
         [HideInInspector]
-        public InstantCueTrackData InstantCues = new InstantCueTrackData();
+        public List<ReleaseGameplayEffectTrackData> ReleaseGameplayEffect = new List<ReleaseGameplayEffectTrackData>();
         
-        // 施放型GameplayEffect轨道（唯一）
-        [HideInInspector]
-        public ReleaseGameplayEffectTrackData ReleaseGameplayEffect = new ReleaseGameplayEffectTrackData();
-        
-        // Buff型GameplayEffect
         [HideInInspector]
         public List<BuffGameplayEffectTrackData> BuffGameplayEffects = new List<BuffGameplayEffectTrackData>();
+
+        [HideInInspector] public List<TaskMarkEventTrackData> InstantTasks = new List<TaskMarkEventTrackData>();
         
-        // 任务标记事件（唯一）
-        [HideInInspector]
-        public TaskMarkEventTrackData InstantTasks = new TaskMarkEventTrackData();
-        
-        // 任务片段事件
         [HideInInspector]
         public List<TaskClipEventTrackData> OngoingTasks = new List<TaskClipEventTrackData>();
         

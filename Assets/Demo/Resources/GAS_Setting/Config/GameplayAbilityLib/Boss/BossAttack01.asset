@@ -37,35 +37,27 @@ MonoBehaviour:
   ActivationBlockedTags: []
   manualEndAbility: 0
   FrameCount: 20
-  AnimationData:
-    trackIndex: 0
-    Animator: {fileID: 0}
-    animationClipData: []
   DurationalCues: []
   InstantCues:
-    trackIndex: 0
+  - trackName: 
+    markEvents: []
+  - trackName: 
     markEvents:
-    - startFrame: 0
-      cues:
-      - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
-    - startFrame: 12
-      cues:
-      - {fileID: 11400000, guid: f7d150d6495268e4ba87893c291c11ec, type: 2}
+    - startFrame: 8
+      cues: []
   ReleaseGameplayEffect:
-    trackIndex: 0
+  - trackName: 
+    markEvents: []
+  - trackName: 
     markEvents: []
   BuffGameplayEffects: []
   InstantTasks:
-    trackIndex: 0
-    markEvents:
-    - startFrame: 10
-      InstantTasks:
-      - TaskData:
-          Type: Demo.Script.GAS.AbilityTask.DefendableAttack
-          Data: '{"CenterType":0,"Size":{"x":5.0,"y":3.0},"Offset":{"x":2.0,"y":2.0},"Angle":0.0,"DefendedDamageEffect":{"instanceID":14148},"PerfectDefendEffect":{"instanceID":14172},"DirectDamageEffect":{"instanceID":14156}}'
+  - trackName: 
+    markEvents: []
+  - trackName: 
+    markEvents: []
   OngoingTasks:
-  - trackIndex: 4
-    trackName: Task Clips
+  - trackName: Task Clips
     clipEvents:
     - startFrame: 2
       durationFrame: 5

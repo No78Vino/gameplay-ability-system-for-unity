@@ -8,20 +8,31 @@ using UnityEngine.UIElements;
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class TaskMarkEventTrack:FixedTrack
+    public class TaskMarkEventTrack:TrackBase
     {
-        public static TaskMarkEventTrackData InstantTaskEventTrackData =>
-            AbilityTimelineEditorWindow.Instance.AbilityAsset.InstantTasks;
-
+        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        public TaskMarkEventTrackData InstantTaskEventTrackData {
+            get
+            {
+                for (int i = 0; i < AbilityAsset.InstantTasks.Count; i++)
+                {
+                    if(AbilityAsset.InstantTasks[i] == _instantTasksTrackData)
+                        return AbilityAsset.InstantTasks[i];
+                }
+                return null;
+            }
+        }
         public override Type TrackDataType => typeof(TaskMarkEventTrackData);
         protected override Color TrackColor => new(0.1f, 0.6f, 0.6f, 0.2f);
         protected override Color MenuColor => new(0.1f, 0.6f, 0.6f, 0.9f);
         
+        private TaskMarkEventTrackData _instantTasksTrackData;
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
             TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
             MenuText.text = "Instant Task";
+            _instantTasksTrackData = trackData as TaskMarkEventTrackData;
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -38,7 +49,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             if (AbilityTimelineEditorWindow.Instance.AbilityAsset == null) return;
 
-            foreach (var markEvent in InstantTaskEventTrackData.markEvents)
+            foreach (var markEvent in _instantTasksTrackData.markEvents)
             {
                 var item = new TaskMark();
                 item.InitTrackMark(this, Track, _frameWidth, markEvent);
@@ -53,7 +64,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var trackLabel = TrackInspectorUtil.CreateLabel("[ Instant Ability Task ]");
             inspector.Add(trackLabel);
 
-            foreach (var mark in InstantTaskEventTrackData.markEvents)
+            foreach (var mark in _instantTasksTrackData.markEvents)
             {
                 var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{mark.startFrame}");
                 inspector.Add(markFrame);
@@ -85,13 +96,18 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 选中新Clip
             mark.OnSelect();
 
-            Debug.Log("[EX] Add Instant Cue Mark");
+            Debug.Log("[EX] Add Instant Task Mark");
         }
 
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
-            InstantTaskEventTrackData.markEvents.Clear();
+            // 删除数据
+            AbilityAsset.InstantTasks.Remove(_instantTasksTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
+            // 删除显示
+            TrackParent.Remove(TrackRoot);
+            MenuParent.Remove(MenuRoot);
+            Debug.Log("[EX] Remove Instant Task Track");
         }
     }
 }

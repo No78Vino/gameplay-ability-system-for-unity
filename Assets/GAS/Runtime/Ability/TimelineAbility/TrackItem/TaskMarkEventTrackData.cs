@@ -7,6 +7,12 @@ namespace GAS.Runtime.Ability.TimelineAbility
     public class TaskMarkEventTrackData : TrackDataBase
     {
         public List<TaskMarkEvent> markEvents = new List<TaskMarkEvent>();
+        
+        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        {
+            base.AddToAbilityAsset(abilityAsset);
+            abilityAsset.InstantTasks.Add(this);
+        }
     }
 
     [Serializable]

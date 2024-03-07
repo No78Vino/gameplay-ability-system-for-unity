@@ -5,15 +5,14 @@ namespace GAS.Runtime.Ability.TimelineAbility
     [Serializable]
     public class TrackDataBase
     {
-        public int trackIndex;
+        public string trackName;
         
         public virtual void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
         {
         }
         
-        public virtual void DefaultInit(int index)
+        public virtual void DefaultInit()
         {
-            trackIndex = index;
         }
     }
 }

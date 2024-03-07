@@ -75,25 +75,25 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         #region Clip Visual Element Event
 
-        private int MinStartFrameIndex(float lastMainDragStartPos)
-        {
-            var minFrame = 0;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-                if (clipEvent != ClipData && clipEvent.EndFrame <= lastMainDragStartPos)
-                    minFrame = Mathf.Max(minFrame, clipEvent.EndFrame);
-
-            return minFrame;
-        }
-
-        private int MaxEndFrameIndex(float lastMainDragStartPos)
-        {
-            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
-            foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
-                if (clipEvent != ClipData && clipEvent.startFrame >= lastMainDragStartPos + DurationFrame)
-                    maxFrame = Mathf.Min(maxFrame, clipEvent.startFrame);
-
-            return maxFrame;
-        }
+        // private int MinStartFrameIndex(float lastMainDragStartPos)
+        // {
+        //     var minFrame = 0;
+        //     foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
+        //         if (clipEvent != ClipData && clipEvent.EndFrame <= lastMainDragStartPos)
+        //             minFrame = Mathf.Max(minFrame, clipEvent.EndFrame);
+        //
+        //     return minFrame;
+        // }
+        //
+        // private int MaxEndFrameIndex(float lastMainDragStartPos)
+        // {
+        //     var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
+        //     foreach (var clipEvent in AbilityTimelineEditorWindow.Instance.AbilityAsset.AnimationData.animationClipData)
+        //         if (clipEvent != ClipData && clipEvent.startFrame >= lastMainDragStartPos + DurationFrame)
+        //             maxFrame = Mathf.Min(maxFrame, clipEvent.startFrame);
+        //
+        //     return maxFrame;
+        // }
 
         #endregion
 
