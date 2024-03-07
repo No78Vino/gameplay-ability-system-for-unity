@@ -44,11 +44,11 @@ namespace GAS.Editor.Ability
 
         public override void OnTargetCatcherPreview(GameObject previewObject)
         {
-            Gizmos.color = new Color(0, 1, 1, 0.5f);
-            var position = previewObject.transform.position + (Vector3)_targetCatcher.offset;
-            Gizmos.DrawCube(position, (Vector3)_targetCatcher.size);
-            // 标写Catcher类名
-            Handles.Label(position, _targetCatcher.GetType().Name);
+            // Gizmos.color = new Color(0, 1, 1, 0.5f);
+            // var position = previewObject.transform.position + (Vector3)_targetCatcher.offset;
+            // Gizmos.DrawCube(position, (Vector3)_targetCatcher.size);
+            // // 标写Catcher类名
+            // Handles.Label(position, _targetCatcher.GetType().Name);
         }
     }
 }

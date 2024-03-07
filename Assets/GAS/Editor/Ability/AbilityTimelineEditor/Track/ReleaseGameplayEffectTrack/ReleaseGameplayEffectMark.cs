@@ -129,21 +129,23 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public override void OnTickView(int frameIndex)
         {
-            var previewComponent =
-                AbilityTimelineEditorWindow.Instance.PreviewObject.GetComponent<TargetCatcherPreview>();
-            if (previewComponent == null)
-                previewComponent =
-                    AbilityTimelineEditorWindow.Instance.PreviewObject.AddComponent<TargetCatcherPreview>();
+            // var previewComponent =
+            //     AbilityTimelineEditorWindow.Instance.PreviewObject.GetComponent<TargetCatcherPreview>();
+            // if (previewComponent == null)
+            //     previewComponent =
+            //         AbilityTimelineEditorWindow.Instance.PreviewObject.AddComponent<TargetCatcherPreview>();
 
-            TargetCatcherInspector targetCatcherInspector = null;
+            
             if (frameIndex == StartFrameIndex)
             {
                 var targetCatcher = MarkData.LoadTargetCatcher();
                 if (TargetCatcherInspectorMap.TryGetValue(targetCatcher.GetType(), out var inspectorType))
-                    targetCatcherInspector =
-                        (TargetCatcherInspector)Activator.CreateInstance(inspectorType, targetCatcher);
+                {
+                    TargetCatcherInspector inspector= (TargetCatcherInspector)Activator.CreateInstance(inspectorType, targetCatcher);
+                    inspector.OnTargetCatcherPreview(AbilityTimelineEditorWindow.Instance.PreviewObject);
+                }
             }
-            previewComponent.Init( targetCatcherInspector);
+            //previewComponent.Init( targetCatcherInspector);
         }
     }
 }

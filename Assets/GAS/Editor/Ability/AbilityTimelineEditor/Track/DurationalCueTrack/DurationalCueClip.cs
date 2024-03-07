@@ -45,7 +45,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
-            ItemLabel.text = DurationalCueClipData.cue ? DurationalCueClipData.cue.name : "【NULL】";
+            ItemLabel.text = DurationalCueClipData.cue ? DurationalCueClipData.cue.name : "NULL!";
 
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
@@ -108,16 +108,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
             // 运行帧
-            _startFrameLabel = TrackInspectorUtil.CreateLabel($"运行(f) :{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
+            _startFrameLabel = TrackInspectorUtil.CreateLabel($"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
             inspector.Add(_startFrameLabel);
 
             // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("持续帧数(f)", DurationalCueClipData.durationFrame,
+            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)", DurationalCueClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
             
             // cue Asset
-            var cue = TrackInspectorUtil.CreateObjectField("Cue资源", typeof(GameplayCueDurational),
+            var cue = TrackInspectorUtil.CreateObjectField("Cue", typeof(GameplayCueDurational),
                 DurationalCueClipData.cue,
                 evt =>
                 {
@@ -131,7 +131,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             inspector.Add(cue);
 
             // 删除按钮
-            var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
+            var deleteButton = TrackInspectorUtil.CreateButton("DELETE", Delete);
             deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
             inspector.Add(deleteButton);
 
@@ -147,7 +147,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             UpdateClipDataDurationFrame(newValue);
             // 修改显示
             RefreshShow(FrameUnitWidth);
-            _startFrameLabel = TrackInspectorUtil.CreateLabel($"运行(f) :{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
+            _startFrameLabel = TrackInspectorUtil.CreateLabel($"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
             _durationField.value = newValue;
         }
 
