@@ -1,10 +1,10 @@
 # EX Gameplay Ability System For Unity
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
-## 提醒
+## ！！提醒！！请注意！！
 __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 
-```若没有方法解决，可以加文末的使用反馈qq群，群内提供帮助 ```
+```若没有方法解决，可以加反馈qq群（616570103），群内提供帮助 ```
 
 目前EX-GAS没有非常全面的测试，所以存在不可知的大量bug和性能问题。所以对于打算使用该插件的朋友请谨慎考虑，当然我是希望更多人用EX-GAS，毕竟相当于是变相的QA。
 
@@ -14,7 +14,13 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 
 >我非常希望EX-GAS能早日稳定，为更多游戏提供支持帮助。
 
-## 快速开始
+## 目录
+- 1.[快速开始](#快速开始)
+  - [安装](#安装)
+  - [使用](#使用)
+- 2.[GAS系统介绍](#GAS系统介绍)
+
+## 1.快速开始
 ### 安装
 1. 使用Unity Package Manager安装
 在Unity Package Manager中添加git地址：
@@ -26,7 +32,7 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 
 `参考使用案例：`
 
-#### *非编程部分*
+#### *使用流程*
 1. 基础设置
 
 在ProjectSetting中（或者Edit Menu栏入口：EX-GAS -> Setting），找到EX Gameplay Ability System的基本设置界面：
@@ -36,28 +42,59 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 设置好以下两个路径
 - Config Asset Path: 这是该项目有关GAS的配置的路径。
 - Code Gen Path: 这是GAS的生成脚本路径。GAS的基础配置（Tag，Attribute，AttributeSet）都会有对应的脚本生成。
--  __**（特别要注意的是不要对Code Gen Path路径或其父路径进行程序集定义，目前默认AttributeSet和Ability生成类的程序集为Assembly-CSharp。之后如有需求，会添加程序集参数）**__
 
 设置完路径后，点击保存（Save）按钮。
 
 
 2. 配置Tag
 
+Tag是GAS核心逻辑运作的依赖,非常重要。关于Tag的使用及运作逻辑详见章节([GameplayTag](#GameplayTag))
+
 3. 配置Attribute
+
+Attribute是GAS运行时数据单位。关于Attribute的使用及运作逻辑详见章节([Attribute](#Attribute))
 
 4. 配置AttributeSet
 
+AttributeSet是GAS运行时数据单位集合，合理的AttributeSet设计能够帮助程序解耦，提高开发效率。关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#AttributeSet))
+
 5. 设计MMC,Cue
+
 
 6. 设计Gameplay Effect
 
 7. 设计Ability
 
 8. 设计ASC预设（可选）
+---
+## 2.EX-GAS系统介绍
+### 2.1 EX-GAS概述
+>EX-GAS是对UnrealEngine的GAS（Gameplay Ability System）的模仿和实现。
 
+GAS 是 "Gameplay Ability System" 的缩写，是一套游戏能力系统。
+这个系统的目的是为开发者提供一种灵活而强大的框架，用于实现和管理游戏中的各种角色能力、技能和效果。
 
-#### *编程部分*
+如果把EX-GAS高度概括为一句话，那就是：**WHO DO WHAT**。
+- Who：AbilitySystemComponent（ASC）,EX-GAS的实例对象，是体系运转的基础单位
+- Do：Ability，是游戏中可以触发的一切行为和技能
+- What：GameplayEffect(GE)，掌握了游戏内元素的属性实际控制权，GameplayEffect本身应该理解为结果
 
+GAS本质是一套属性数值的管理系统，GameplayCue我个人理解为附加价值（虽然这个附加价值很有分量）。
+纵使GAS的Tag体系解决复杂的GameplayEffect和Ability的逻辑，但最终的结果目的也只是掌握属性数值变化。
+而属性的最底层修改权力交由了GameplayEffect。所以我把GE理解为结果。
+
+UE的GAS的使用门槛很高，这一点在我构筑完EX-GAS雏形后更是深有体会。
+所以在EX-GAS的设计上，我尽可能的做简化，优化，来降低了使用门槛。
+我制作了几个关键的编辑器，来帮助开发者快速的使用EX-GAS。
+但即便如此，GAS本身的繁多参数依然让编辑器的界面看上去十分臃肿，这很难简化，没有哪个参数是可以被删除的。
+甚至，雏形阶段的EX-GAS还有很多功能还未实现，也就是说还有更多的参数是没有被编辑器暴露出来的。
+
+_**GAS的使用者必须至少有一名程序开发人员，因为GAS的使用需要编写大量自定义业务逻辑。
+Ability，Cue，MMC等都是必须根据游戏类型和内容玩法而定的。
+非程序开发人员则需要完全理解EX-GAS的运作逻辑，才能更好的配合程序开发人员快速配置出各种各样的技能，完善玩法表现。**_
+
+### 2.2 GameplayTag
+>GameplayTag,标签.
 
 ---
 ## 可视化功能
