@@ -19,7 +19,25 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
   - [安装](#安装)
   - [使用](#使用)
 - 2.[GAS系统介绍](#GAS系统介绍)
-
+  - [2.1 EX-GAS概述](#21-ex-gas概述)
+  - [2.2 GameplayTag](#22-gameplaytag)
+  - [2.3 Attribute](#23-attribute)
+  - [2.4 AttributeSet](#24-attributeset)
+  - [2.5 ModifierMagnitudeCalculation](#25-modifiermagnitudecalculation)
+  - [2.6 GameplayCue](#26-gameplaycue)
+  - [2.7 GameplayEffect](#27-gameplayeffect)
+  - [2.8 Ability](#28-ability)
+  - [2.9 AbilitySystemComponent](#29-abilitysystemcomponent)
+- 3.[可视化功能](#3可视化功能)
+  - [GAS Base Manager (GAS基础配置管理器)](#1-gas-base-manager-gas基础配置管理器)
+  - [GAS Asset Aggregator (GAS配置资源聚合器)](#2-gas-asset-aggregator-gas配置资源聚合器)
+  - [GAS Runtime Watcher (GAS运行时监视器)](#3-gas-runtime-watcher-gas运行时监视器)
+- 4.[API(W.I.P 施工中)](#4api(W.I.P 施工中))
+- 5.[如果...我想...,应该怎么做?(持续补充)](#如果...我想...,应该怎么做?)
+- 6.[暂不支持的功能（可能有遗漏）](#6暂不支持的功能可能有遗漏)
+- 7.[后续计划](#7后续计划)
+- 8.[特别感谢](#8特别感谢)
+- 9.[插件反馈渠道](#9插件反馈渠道)
 ## 1.快速开始
 ### 安装
 1. 使用Unity Package Manager安装
@@ -94,16 +112,51 @@ Ability，Cue，MMC等都是必须根据游戏类型和内容玩法而定的。
 非程序开发人员则需要完全理解EX-GAS的运作逻辑，才能更好的配合程序开发人员快速配置出各种各样的技能，完善玩法表现。**_
 
 ### 2.2 GameplayTag
->GameplayTag,标签.
+>Gameplay Tag,标签,它用于分类和描述对象的状态，非常有用于控制游戏逻辑。
+
+- Gameplay Tag以树形层级结构（如Parent.Child.Grandchild）组织，用于描述角色状态/事件/属性/等，如眩晕（State.Debuff.Stun）。
+- Gameplay Tag主要用于替代布尔值或枚举值，进行逻辑判断。
+- 通常将Gameplay Tag添加到AbilitySystemComponent（ASC）以与系统（GameplayEffect，GameplayCue,Ability）交互。
+
+Gameplay Tag在GAS中的使用涉及到标签的添加、移除以及对标签变化的响应。
+开发者可以通过[GameplayTag Manager](#a.GameplayTag Manager)在项目设置中管理这些标签，无需手动编辑配置文件。
+Gameplay Tag的灵活性和高效性使其成为GAS中控制游戏逻辑的重要工具。
+它不仅可以用于简单的状态描述，还可以用于复杂的游戏逻辑和事件触发。
+
+>举个例子，GameplayEffect中有一个字段RequiredTags，其含义是当前GameplayEffect生效的AbilitySystemComponent（ASC）
+需要拥有【所有】的RequiredTags（需求标签）。
+
+上述例子，如果用传统的思路去做，可能需要写很多if-else判断，同时元素的实例脚本可能会增加很多状态标记的变量，
+而且还需要考虑多个游戏效果的交互，这使得代码的设计和实现变得复杂，耦合。
+
+GameplayTag的使用可以大大简化这些逻辑，使得代码更加清晰，易于维护。
+他把状态和标记全部抽象成了一个独立的Tag系统，而且最巧妙的是树形结构的设计。
+他解决了很多Gameplay设计上的问题，常见的问题比如：移除所有Debuff，传统的做法可能是让（中毒，减速，灼伤，等等）继承自Debuff类/接口；
+而GameplayTag只需要添加一个Tag（中毒:Debuff.Poison，减速:Debuff.SpeedDown，灼伤:Debuff.Burning）
+
+GameplayTag自身可以作为一个独立的系统去使用。
+我在开发Demo的过程中就发现了GameplayTag的强大之处，他几乎替代了我的所有状态值。
+甚至我设计了一个全局ASC，专门用来管理全局状态，我不需要对每个系统的状态管理，转而维护一个ASC即可。（虽然最后并没有落地这个设计，因为DEMO没有那么复杂。）
+
+### 2.3 Attribute
+>Attribute，属性，是GAS中的核心数据单位，用于描述角色的各种属性，如生命值，攻击力，防御力等。
+
+
+### 2.4 AttributeSet
+### 2.5 ModifierMagnitudeCalculation
+### 2.6 GameplayCue
+### 2.7 GameplayEffect
+### 2.8 Ability
+### 2.9 AbilitySystemComponent
 
 ---
-## 可视化功能
+## 3.可视化功能
 ### 1. GAS Base Manager (GAS基础配置管理器)
 ![$5C1@A0}R89 %WS33OY6UP0](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/85f4b1e2-ab3b-4735-8d71-b6623557bf02)
 
 基础配置是与项目工程唯一对应的，所以入口放在了ProjectSetting，另外还有Edit Menu栏入口：EX-GAS -> Setting
 
-- a.GameplayTag 管理器
+#### a.GameplayTag Manager
 ![{)7T)P@{U}GWY7T%@ 5$@@W](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d5306afc-82a0-4c3e-a263-280c0088f1ae)
 
 我模仿了UE GAS的Tag管理视图，做了树结构管理。
@@ -142,20 +195,25 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 >目前监视器较为简陋，以后可能会优化监视器。
 
 ---
-## 暂不支持的功能（可能有遗漏）
+## 4.API(W.I.P 施工中)
+
+---
+## 5.如果...我想...,应该怎么做?
+---
+## 6.暂不支持的功能（可能有遗漏）
 1. GameplayEffect Stack， 同一游戏效果堆叠（如燃烧效果堆叠，伤害提升）
 2. RPC相关的GE复制广播
 3. GameplayEffect Execution，目前只有Modifier，没有Execution
 4. Ability的触发判断用的Source/Target Tag目前不生效
 
-## 后续计划
-1. 修复bug
-2. 补全遗漏的功能
-3. 支持RPC的GE复制广播，网络同步
-4. Ability编辑器（可视化编辑，自动生成Ability类脚本）
-5. 将GAS移交DOTS或采用ECS结构来运行
+## 7.后续计划
+- 修复bug 
+- 补全遗漏的功能 
+- 优化Ability的编辑
+- 支持RPC的GE复制广播，网络同步 
+- 将GAS移交DOTS或采用ECS结构来运行(可能会做)
 
-## 特别感谢
+## 8.特别感谢
 本插件全面参考了[UE的GAS解析](https://github.com/tranek/GASDocumentation)，来自github --[@tranek](https://github.com/tranek)
 
 同时还有[中译版本](https://github.com/BillEliot/GASDocumentation_Chinese)，来自github --[@BillEliot](https://github.com/BillEliot)
@@ -165,7 +223,7 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 另外还要感谢开源项目：[UnityToolchainsTrick](https://github.com/XINCGer/UnityToolchainsTrick)
 
 多亏UnityToolchainsTrick中的大量Editor开发技巧，极大的缩减了项目中编辑器的制作时间，省了很多事儿。非常感谢！
-## 插件反馈渠道
+## 9.插件反馈渠道
 QQ群号:616570103
 
 目前该插件是一定有大量bug存在的，因为有非常多的细节没有测试到，虽然有Demo演示，但也只是一部分的功能。所以我希望有人能使用该插件，多多反馈，来完善该插件。
