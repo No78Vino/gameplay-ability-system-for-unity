@@ -1,4 +1,6 @@
-﻿using GAS.Editor.Ability;
+﻿using System;
+using System.Runtime.CompilerServices;
+using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.Runtime.Ability;
 using Unity.VisualScripting;
@@ -7,6 +9,7 @@ using UnityEngine.UIElements;
 
 namespace Demo.Script.GAS.AbilityTask
 {
+    [Serializable]
     public class DodgeTask:OngoingAbilityTask
     {
         [SerializeField] private float _dodgeDistance;

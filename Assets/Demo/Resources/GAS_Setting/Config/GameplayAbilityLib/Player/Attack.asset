@@ -32,8 +32,24 @@ MonoBehaviour:
   manualEndAbility: 0
   FrameCount: 10
   DurationalCues: []
-  InstantCues: []
-  ReleaseGameplayEffect: []
+  InstantCues:
+  - trackName: 
+    markEvents:
+    - startFrame: 0
+      cues:
+      - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
+  ReleaseGameplayEffect:
+  - trackName: 
+    markEvents:
+    - startFrame: 0
+      jsonTargetCatcher:
+        Type: Demo.Script.GAS.TargetCatcher.CatchUndefending
+        Data: 
+      gameplayEffectAssets: []
+  - trackName: 
+    markEvents: []
+  - trackName: 
+    markEvents: []
   BuffGameplayEffects: []
   InstantTasks: []
   OngoingTasks: []
