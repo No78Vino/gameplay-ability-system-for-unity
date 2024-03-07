@@ -45,13 +45,18 @@ namespace GAS.General.Util
                 // 遍历所有状态并打印名称
                 foreach (var state in stateMachine.states)
                 {
-                    foreach (var pair in overrides)
+                    if (state.state.motion is AnimationClip clip)
                     {
-                        if (state.state.motion is AnimationClip clip)
+                        foreach (var pair in overrides)
                         {
-                            result.Add(state.state.name, pair.Key.name == clip.name ? pair.Value : pair.Key);
-                            break;
+                            if (pair.Key.name == clip.name)
+                            {
+                                result.Add(state.state.name, pair.Value);
+                                break;
+                            }
                         }
+                        
+                        if(!result.ContainsKey(state.state.name)) result.Add(state.state.name, clip);
                     }
                 }
             }

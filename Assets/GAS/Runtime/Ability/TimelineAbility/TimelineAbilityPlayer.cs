@@ -195,6 +195,7 @@ namespace GAS.Runtime.Ability
                 if (frame == mark.startFrame)
                 {
                     var catcher = mark.LoadTargetCatcher();
+                    catcher.Init(_abilitySpec.Owner);
                     var targets = catcher.CatchTargets(_abilitySpec.Target);
                     if (targets != null)
                     {

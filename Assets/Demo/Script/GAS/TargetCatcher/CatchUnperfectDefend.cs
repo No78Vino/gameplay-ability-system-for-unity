@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.General.Util;
 using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TargetCatcher;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
 using UnityEngine;
@@ -12,40 +10,30 @@ using UnityEngine.UIElements;
 
 namespace Demo.Script.GAS.TargetCatcher
 {
-    [Serializable]
-    public class CatchUndefending:CatchAreaBox2D
+    public class CatchUnperfectDefend:CatchUndefending
     {
+        /// <summary>
+        /// 成功防御，但是没有完美防御
+        /// </summary>
+        /// <param name="mainTarget"></param>
+        /// <returns></returns>
         public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
         {
             var targets = CatchDefaultTargets(mainTarget);
+            
             var result = new List<AbilitySystemComponent>();
             foreach (var target in targets)
-                if (!IsDefendSuccess(target))
+                if (IsDefendSuccess(target) && !target.HasTag(GameplayTagSumCollection.Event_PerfectDefending))
                     result.Add(target);
             return result;
         }
-
-        protected List<AbilitySystemComponent> CatchDefaultTargets(AbilitySystemComponent mainTarget)
-        {
-            return base.CatchTargets(mainTarget);
-        }
-        
-        /// <summary>
-        /// 没有防御成功的判定：1.没有防御  2.防御了，但是方向错误
-        /// </summary>
-        /// <returns></returns>
-        protected bool IsDefendSuccess(AbilitySystemComponent target)
-        {
-            if (!target.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
-            return target.transform.localScale.x * Owner.transform.localScale.x < 0;
-        }
     }
-    
-    public class CatchUndefendingInspector: TargetCatcherInspector<CatchUndefending>
+
+    public class CatchUnperfectDefendInspector : TargetCatcherInspector<CatchUnperfectDefend>
     {
-        public CatchUndefendingInspector(CatchUndefending targetCatcherBase) : base(targetCatcherBase)
+        public CatchUnperfectDefendInspector(CatchUnperfectDefend targetCatcherBase) : base(targetCatcherBase)
         {
-            
+
         }
 
         public override VisualElement Inspector()
@@ -75,14 +63,14 @@ namespace Demo.Script.GAS.TargetCatcher
                     _targetCatcher.checkLayer = evt.newValue;
                     Save();
                 }));
-            
+
             var centerType = TrackInspectorUtil.CreateEnumField("CenterType", _targetCatcher.centerType, (evt) =>
             {
                 _targetCatcher.centerType = (EffectCenterType)(evt.newValue);
                 Save();
             });
             inspector.Add(centerType);
-            
+
             return inspector;
         }
 
@@ -109,6 +97,7 @@ namespace Demo.Script.GAS.TargetCatcher
                     //center = _spec.Target.transform.position + (Vector3)_task.Offset;
                     break;
             }
+
             DebugExtension.DebugBox(center, size, angle, color, showTime);
         }
     }

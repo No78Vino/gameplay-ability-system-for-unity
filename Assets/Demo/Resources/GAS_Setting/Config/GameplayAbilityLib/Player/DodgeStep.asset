@@ -71,31 +71,24 @@ MonoBehaviour:
     - Ban
   ActivationRequiredTags: []
   ActivationBlockedTags: []
+  manualEndAbility: 0
   FrameCount: 10
-  AnimationData:
-    trackIndex: 0
-    Animator: {fileID: 0}
-    animationClipData: []
   DurationalCues:
-  - trackIndex: 3
-    trackName: Durational Cue
+  - trackName: Durational Cue
     clipEvents:
     - startFrame: 1
       durationFrame: 7
       cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
   InstantCues:
-    trackIndex: 0
+  - trackName: 
     markEvents:
-    - startFrame: 1
+    - startFrame: 0
       cues:
-      - {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
       - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
-  ReleaseGameplayEffect:
-    trackIndex: 0
-    markEvents: []
+  ReleaseGameplayEffect: []
   BuffGameplayEffects: []
   InstantTasks:
-    trackIndex: 0
+  - trackName: 
     markEvents:
     - startFrame: 0
       InstantTasks:
@@ -103,8 +96,7 @@ MonoBehaviour:
           Type: GAS.Runtime.Ability.ApplyCostAndCoolDown
           Data: 
   OngoingTasks:
-  - trackIndex: 4
-    trackName: Task Clips
+  - trackName: Task Clips
     clipEvents:
     - startFrame: 1
       durationFrame: 7

@@ -37,11 +37,6 @@ namespace GAS.Cue
                 }
             }
         }
-        
-        AnimationClip FindClipByStateName(RuntimeAnimatorController animatorController, string stateName)
-        {
-            return animatorController.animationClips.FirstOrDefault(clip => clip.name == stateName);
-        }
     }
     
     public class CuePlayAnimationOfFightUnitSpec: GameplayCueInstantSpec

@@ -1,4 +1,5 @@
 using System.Linq;
+using GAS.General.Util;
 using Sirenix.OdinInspector;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -32,20 +33,18 @@ namespace GAS.Runtime.Cue
             {
                 var animatorObject = previewObject.transform.Find(AnimatorRelativePath);
                 var animator = animatorObject.GetComponent<Animator>();
-                AnimationClip clip = FindClipByStateName(animator.runtimeAnimatorController, _stateName);
-                float clipFrameCount = (int)(clip.frameRate * clip.length);
-                if (frame < clipFrameCount + startFrame)
+                var stateMap = animator.GetAllAnimationState(0);
+                if(stateMap.TryGetValue(StateName, out var clip))
                 {
-                    var progress = (frame - startFrame) / clipFrameCount;
-                    if (progress > 1 && clip.isLooping) progress -= (int)progress;
-                    clip.SampleAnimation(animatorObject.gameObject, progress * clip.length);
+                    float clipFrameCount = (int)(clip.frameRate * clip.length);
+                    if (frame < clipFrameCount + startFrame)
+                    {
+                        var progress = (frame - startFrame) / clipFrameCount;
+                        if (progress > 1 && clip.isLooping) progress -= (int)progress;
+                        clip.SampleAnimation(animatorObject.gameObject, progress * clip.length);
+                    }
                 }
             }
-        }
-        
-        AnimationClip FindClipByStateName(RuntimeAnimatorController animatorController, string stateName)
-        {
-            return animatorController.animationClips.FirstOrDefault(clip => clip.name == stateName);
         }
     }
     

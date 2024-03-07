@@ -57,12 +57,11 @@ MonoBehaviour:
   DurationalCues: []
   InstantCues:
   - trackName: 
-    markEvents: []
-  - trackName: 
-    markEvents: []
-  ReleaseGameplayEffect:
-  - trackName: 
-    markEvents: []
+    markEvents:
+    - startFrame: 0
+      cues:
+      - {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
+  ReleaseGameplayEffect: []
   BuffGameplayEffects:
   - trackName: BuffGameplayEffect
     clipEvents:
@@ -70,9 +69,5 @@ MonoBehaviour:
       durationFrame: 10
       buffTarget: 0
       gameplayEffect: {fileID: 11400000, guid: fc81845fcee67d94cb39cd37d5dd6e69, type: 2}
-  InstantTasks:
-  - trackName: 
-    markEvents: []
-  - trackName: 
-    markEvents: []
+  InstantTasks: []
   OngoingTasks: []

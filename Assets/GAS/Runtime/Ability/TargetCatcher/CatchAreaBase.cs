@@ -1,8 +1,10 @@
-﻿using GAS.Runtime.Component;
+﻿using System;
+using GAS.Runtime.Component;
 using UnityEngine;
 
 namespace GAS.Runtime.Ability.TargetCatcher
 {
+    [Serializable]
     public abstract class CatchAreaBase : TargetCatcherBase
     {
         public LayerMask checkLayer;

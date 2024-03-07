@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.General.Util;
 using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TargetCatcher;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
 using UnityEngine;
@@ -12,42 +10,31 @@ using UnityEngine.UIElements;
 
 namespace Demo.Script.GAS.TargetCatcher
 {
-    [Serializable]
-    public class CatchUndefending:CatchAreaBox2D
+    public class CatchPerfectDefended:CatchUndefending
     {
+        /// <summary>
+        /// 完美防御,自身收到效果
+        /// </summary>
+        /// <param name="mainTarget"></param>
+        /// <returns></returns>
         public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
         {
             var targets = CatchDefaultTargets(mainTarget);
-            var result = new List<AbilitySystemComponent>();
+            
             foreach (var target in targets)
-                if (!IsDefendSuccess(target))
-                    result.Add(target);
-            return result;
-        }
-
-        protected List<AbilitySystemComponent> CatchDefaultTargets(AbilitySystemComponent mainTarget)
-        {
-            return base.CatchTargets(mainTarget);
-        }
-        
-        /// <summary>
-        /// 没有防御成功的判定：1.没有防御  2.防御了，但是方向错误
-        /// </summary>
-        /// <returns></returns>
-        protected bool IsDefendSuccess(AbilitySystemComponent target)
-        {
-            if (!target.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
-            return target.transform.localScale.x * Owner.transform.localScale.x < 0;
+                if (IsDefendSuccess(target) && target.HasTag(GameplayTagSumCollection.Event_PerfectDefending))
+                    return new List<AbilitySystemComponent> { Owner };
+            return new List<AbilitySystemComponent>();
         }
     }
     
-    public class CatchUndefendingInspector: TargetCatcherInspector<CatchUndefending>
+    public class CatchPerfectDefendedInspector : TargetCatcherInspector<CatchPerfectDefended>
     {
-        public CatchUndefendingInspector(CatchUndefending targetCatcherBase) : base(targetCatcherBase)
+        public CatchPerfectDefendedInspector(CatchPerfectDefended targetCatcherBase) : base(targetCatcherBase)
         {
             
         }
-
+        
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateSonInspector();

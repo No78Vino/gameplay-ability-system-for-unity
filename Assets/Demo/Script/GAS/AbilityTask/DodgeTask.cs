@@ -72,11 +72,11 @@ namespace Demo.Script.GAS.AbilityTask
 
         public override void OnEditorPreview(int frame, int startFrame, int endFrame)
         { 
-            _start ??= AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position;
-            var endPos = _start.Value;
-            endPos.x+=  _task.DodgeDistance;
-            float t = (float)(frame - startFrame) / (endFrame - startFrame);
-            AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position = (Vector3.Lerp(_start.Value, endPos, t));
+            // _start ??= AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position;
+            // var endPos = _start.Value;
+            // endPos.x+=  _task.DodgeDistance;
+            // float t = (float)(frame - startFrame) / (endFrame - startFrame);
+            // AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position = (Vector3.Lerp(_start.Value, endPos, t));
         }
     }
 }
