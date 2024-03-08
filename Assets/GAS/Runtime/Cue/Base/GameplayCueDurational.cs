@@ -42,4 +42,14 @@ namespace GAS.Runtime.Cue
         public abstract void OnGameplayEffectDeactivate();
         public abstract void OnTick();
     }
+
+    public abstract class GameplayCueDurationalSpec<T> : GameplayCueDurationalSpec where T : GameplayCueDurational
+    {
+        public readonly T cue;
+
+        protected GameplayCueDurationalSpec(T cue, GameplayCueParameters parameters) : base(cue, parameters)
+        {
+            this.cue = cue;
+        }
+    }
 }

@@ -47,8 +47,16 @@ namespace GAS.Runtime.Cue
         {
         }
         
-        private GameplayCueInstant instantCue => _cue as GameplayCueInstant;
-
         public abstract void Trigger();
+    }
+    
+    public abstract class GameplayCueInstantSpec<T>:GameplayCueInstantSpec where T:GameplayCueInstant
+    {
+        public readonly T cue;
+        
+        public GameplayCueInstantSpec(T cue, GameplayCueParameters parameters) : base(cue, parameters)
+        {
+            this.cue = cue;
+        }
     }
 }
