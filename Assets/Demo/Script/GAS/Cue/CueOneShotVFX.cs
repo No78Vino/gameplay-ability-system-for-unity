@@ -70,6 +70,7 @@ namespace GAS.Cue
             if (_cueOneShotVfx.IsAttachToOwner)
             {
                 vfx.transform.SetParent(Owner.transform);
+                vfx.transform.localScale = Vector3.one;
                 vfx.transform.localPosition = _cueOneShotVfx.Offset;
                 vfx.transform.localEulerAngles = new Vector3(0, 0, _cueOneShotVfx.Rotation);
             }

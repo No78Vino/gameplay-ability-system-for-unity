@@ -451,6 +451,7 @@ MonoBehaviour:
   defendArea: {fileID: 0}
   gePostureReductionBuff: {fileID: 11400000, guid: 0e44690e21c6c6b48bcc520828d7c0d8, type: 2}
   player: {fileID: 0}
+  core: {fileID: 977401605639662180}
 --- !u!114 &7519437156345001825
 MonoBehaviour:
   m_ObjectHideFlags: 0

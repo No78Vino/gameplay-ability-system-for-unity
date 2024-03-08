@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
+  m_Name: BossAttack02
+  m_EditorClassIdentifier: 
+  UniqueName: BossAttack02
+  Description: "\u77AC\u79FB\u4E0B\u7838\u653B\u51FB"
+  Cost: {fileID: 0}
+  Cooldown: {fileID: 0}
+  CooldownTime: 0
+  AssetTag:
+  - _name: Ability.Attack
+    _hashCode: 115429334
+    _shortName: Attack
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTag:
+  - _name: Event.Attacking
+    _hashCode: 1440924632
+    _shortName: Attacking
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  manualEndAbility: 0
+  FrameCount: 38
+  DurationalCues:
+  - trackName: 
+    clipEvents:
+    - startFrame: 30
+      durationFrame: 8
+      cue: {fileID: 11400000, guid: 425dbab896a2f964bab1ee717c0f46f7, type: 2}
+  InstantCues:
+  - trackName: 
+    markEvents:
+    - startFrame: 1
+      cues:
+      - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
+    - startFrame: 34
+      cues:
+      - {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
+  ReleaseGameplayEffect:
+  - trackName: 
+    markEvents:
+    - startFrame: 34
+      jsonTargetCatcher:
+        Type: Demo.Script.GAS.TargetCatcher.CatchUndefending
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":0.0,"y":-5.0},"rotation":0.0,"size":{"x":5.0,"y":15.0},"centerType":0}'
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
+  - trackName: 
+    markEvents:
+    - startFrame: 34
+      jsonTargetCatcher:
+        Type: Demo.Script.GAS.TargetCatcher.CatchUnperfectDefend
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":0.0,"y":-5.0},"rotation":0.0,"size":{"x":5.0,"y":15.0},"centerType":0}'
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: 60b43e14760513547a1ed0e33f130981, type: 2}
+  - trackName: 
+    markEvents:
+    - startFrame: 34
+      jsonTargetCatcher:
+        Type: Demo.Script.GAS.TargetCatcher.CatchPerfectDefended
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":0.0,"y":-5.0},"rotation":0.0,"size":{"x":5.0,"y":15.0},"centerType":0}'
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}
+  BuffGameplayEffects: []
+  InstantTasks:
+  - trackName: 
+    markEvents:
+    - startFrame: 7
+      InstantTasks:
+      - TaskData:
+          Type: Demo.Script.GAS.AbilityTask.TeleportAbovePlayer
+          Data: 
+  OngoingTasks:
+  - trackName: Task Clips
+    clipEvents:
+    - startFrame: 7
+      durationFrame: 23
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.FreezePosition
+          Data: 
+    - startFrame: 30
+      durationFrame: 4
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.SuperFallen
+          Data: 

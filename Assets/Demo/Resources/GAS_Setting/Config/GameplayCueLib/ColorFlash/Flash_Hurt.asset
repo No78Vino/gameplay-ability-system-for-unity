@@ -15,5 +15,5 @@ MonoBehaviour:
   RequiredTags: []
   ImmunityTags: []
   applyTarget: 0
-  color: {r: 1, g: 0, b: 0, a: 0.56078434}
-  time: 0.25
+  color: {r: 1, g: 0, b: 0, a: 1}
+  time: 0.1

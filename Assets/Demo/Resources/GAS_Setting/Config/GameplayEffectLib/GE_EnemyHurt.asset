@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
-  m_Name: GE_PlayerAttackDamage
+  m_Name: GE_EnemyHurt
   m_EditorClassIdentifier: 
   Name: "\u73A9\u5BB6\u7684\u666E\u901A\u653B\u51FB\u6548\u679C"
   Description: 
@@ -28,13 +28,19 @@ MonoBehaviour:
     MMC: {fileID: 11400000, guid: 4cdf1be5fad45684688e32e418b9aaf3, type: 2}
   AssetTags: []
   GrantedTags: []
-  ApplicationRequiredTags: []
+  ApplicationRequiredTags:
+  - _name: Faction.Enemy
+    _hashCode: -1091112840
+    _shortName: Enemy
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
   OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
   ApplicationImmunityTags: []
   CueOnExecute:
   - {fileID: 11400000, guid: 66a772dca31a5c8449a7a22ed775065d, type: 2}
-  - {fileID: 11400000, guid: 5421ecb82ce59c541ba10e7946a2dcd7, type: 2}
+  - {fileID: 11400000, guid: f2c51d4ee6e24154887837678848ee61, type: 2}
   - {fileID: 11400000, guid: 3ef17154951b8f348b85e5502160ea00, type: 2}
   CueDurational: []
   CueOnAdd: []

@@ -50,6 +50,10 @@ namespace GAS.Runtime.Ability
         protected override void AbilityTick()
         {
             base.AbilityTick();
+            
+            // 切换状态至Idle
+            PlayMoveAnimation();
+            
             float direction = (float) _abilityArguments[0];
             if (Mathf.Abs(direction) > 0)
             {
@@ -60,6 +64,16 @@ namespace GAS.Runtime.Ability
             {
                 _unit.SetVelocityX(0);
             }
+        }
+        
+        private void PlayMoveAnimation()
+        {
+            AnimatorStateInfo currentState = _unit.Animator.GetCurrentAnimatorStateInfo(0);
+
+            string stateName = "Idle";
+            if (currentState.IsName(stateName)) return;
+            
+            _unit.Animator.Play(stateName, 0, 0f);
         }
     }
 }

@@ -36,7 +36,7 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   manualEndAbility: 0
-  FrameCount: 20
+  FrameCount: 100
   DurationalCues: []
   InstantCues:
   - trackName: 
@@ -44,33 +44,33 @@ MonoBehaviour:
     - startFrame: 0
       cues:
       - {fileID: 11400000, guid: ead6675cd93ce274897e38d122126ab6, type: 2}
-    - startFrame: 10
+    - startFrame: 44
       cues:
       - {fileID: 11400000, guid: f7d150d6495268e4ba87893c291c11ec, type: 2}
   ReleaseGameplayEffect:
   - trackName: 
     markEvents:
-    - startFrame: 5
+    - startFrame: 63
       jsonTargetCatcher:
         Type: Demo.Script.GAS.TargetCatcher.CatchUndefending
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":2.799999952316284,"y":1.0},"rotation":-10.0,"size":{"x":3.0,"y":3.0},"centerType":0}'
       gameplayEffectAssets:
-      - {fileID: 11400000, guid: c5e31576ebac04c419ab8665dda77486, type: 2}
-    - startFrame: 16
+      - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
+    - startFrame: 30
       jsonTargetCatcher:
         Type: Demo.Script.GAS.TargetCatcher.CatchUndefending
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":2.799999952316284,"y":1.0},"rotation":-10.0,"size":{"x":3.0,"y":3.0},"centerType":0}'
       gameplayEffectAssets:
-      - {fileID: 11400000, guid: c5e31576ebac04c419ab8665dda77486, type: 2}
+      - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
   - trackName: 
     markEvents:
-    - startFrame: 5
+    - startFrame: 63
       jsonTargetCatcher:
         Type: Demo.Script.GAS.TargetCatcher.CatchUnperfectDefend
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":2.799999952316284,"y":1.0},"rotation":-10.0,"size":{"x":3.0,"y":3.0},"centerType":0}'
       gameplayEffectAssets:
       - {fileID: 11400000, guid: 60b43e14760513547a1ed0e33f130981, type: 2}
-    - startFrame: 16
+    - startFrame: 30
       jsonTargetCatcher:
         Type: Demo.Script.GAS.TargetCatcher.CatchUnperfectDefend
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":2.799999952316284,"y":1.0},"rotation":-10.0,"size":{"x":3.0,"y":3.0},"centerType":0}'
@@ -78,13 +78,13 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 60b43e14760513547a1ed0e33f130981, type: 2}
   - trackName: 
     markEvents:
-    - startFrame: 5
+    - startFrame: 63
       jsonTargetCatcher:
         Type: Demo.Script.GAS.TargetCatcher.CatchPerfectDefended
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":2.799999952316284,"y":1.0},"rotation":-10.0,"size":{"x":3.0,"y":3.0},"centerType":0}'
       gameplayEffectAssets:
       - {fileID: 11400000, guid: 6b65e74633f1c4a48bf24ce03cda28d5, type: 2}
-    - startFrame: 16
+    - startFrame: 30
       jsonTargetCatcher:
         Type: Demo.Script.GAS.TargetCatcher.CatchPerfectDefended
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":2.799999952316284,"y":1.0},"rotation":-10.0,"size":{"x":3.0,"y":3.0},"centerType":0}'
@@ -95,13 +95,7 @@ MonoBehaviour:
   OngoingTasks:
   - trackName: Task Clips
     clipEvents:
-    - startFrame: 2
-      durationFrame: 5
-      ongoingTask:
-        TaskData:
-          Type: Demo.Script.GAS.AbilityTask.DodgeTask
-          Data: '{"_dodgeDistance":2.0}'
-    - startFrame: 12
+    - startFrame: 18
       durationFrame: 5
       ongoingTask:
         TaskData:

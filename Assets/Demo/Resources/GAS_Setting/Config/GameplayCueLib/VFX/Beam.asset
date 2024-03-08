@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49877c7e273045d7b6b37485e1a72a22, type: 3}
-  m_Name: Flash_BePerfectDefended
+  m_Script: {fileID: 11500000, guid: 4d1ab3d7fe6d43578dc7ce89968d115c, type: 3}
+  m_Name: Beam
   m_EditorClassIdentifier: 
   RequiredTags: []
   ImmunityTags: []
   applyTarget: 0
-  color: {r: 1, g: 0.96840537, b: 0, a: 1}
-  time: 0.1
+  vfxPrefab: {fileID: 4944441686713988043, guid: a0da3a4b39f9ca74a84d5234c2dcfe60, type: 3}
+  isAttachToOwner: 1
+  offset: {x: 0, y: 0, z: 0}
+  rotation: 0
+  duration: 0.5

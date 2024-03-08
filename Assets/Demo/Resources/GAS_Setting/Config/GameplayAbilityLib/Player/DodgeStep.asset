@@ -85,6 +85,7 @@ MonoBehaviour:
     - startFrame: 0
       cues:
       - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
+      - {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
   ReleaseGameplayEffect: []
   BuffGameplayEffects: []
   InstantTasks:

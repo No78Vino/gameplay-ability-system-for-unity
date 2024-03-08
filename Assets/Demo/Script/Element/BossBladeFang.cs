@@ -16,11 +16,14 @@ namespace Demo.Script.Element
 
         protected override string MoveName => AbilityCollection.Move_Info.Name;
         protected override string JumpName => AbilityCollection.Jump_Info.Name;
-        protected override string AttackName => AbilityCollection.BossAttack01_Info.Name;
+        protected override string AttackName => AbilityCollection.BossAttack03_Info.Name;
         protected override string DefendName => AbilityCollection.Defend_Info.Name;
         protected override string DodgeName => AbilityCollection.DodgeStep_Info.Name;
 
         [SerializeField] private Player player;
+        [SerializeField] private BossCore core;
+        
+        public BossCore Core => core;
         
         protected override void Awake()
         {

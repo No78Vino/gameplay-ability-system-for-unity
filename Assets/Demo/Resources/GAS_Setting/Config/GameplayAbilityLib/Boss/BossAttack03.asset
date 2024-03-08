@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
+  m_Name: BossAttack03
+  m_EditorClassIdentifier: 
+  UniqueName: BossAttack03
+  Description: "\u84C4\u529B\u70AE\u51FB"
+  Cost: {fileID: 0}
+  Cooldown: {fileID: 0}
+  CooldownTime: 0
+  AssetTag:
+  - _name: Ability.Attack
+    _hashCode: 115429334
+    _shortName: Attack
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTag:
+  - _name: Event.Attacking
+    _hashCode: 1440924632
+    _shortName: Attacking
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  manualEndAbility: 0
+  FrameCount: 120
+  DurationalCues: []
+  InstantCues:
+  - trackName: 
+    markEvents:
+    - startFrame: 0
+      cues:
+      - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
+    - startFrame: 111
+      cues:
+      - {fileID: 11400000, guid: f0c2effeccd629c4ba26c7722aa8224b, type: 2}
+  ReleaseGameplayEffect:
+  - trackName: 
+    markEvents:
+    - startFrame: 113
+      jsonTargetCatcher:
+        Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":15.0,"y":2.0},"rotation":0.0,"size":{"x":30.0,"y":4.0},"centerType":0}'
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
+  BuffGameplayEffects: []
+  InstantTasks:
+  - trackName: 
+    markEvents:
+    - startFrame: 4
+      InstantTasks:
+      - TaskData:
+          Type: Demo.Script.GAS.AbilityTask.TeleportToBeamPoint
+          Data: '{"BeamPointLeft":{"x":-11.0,"y":2.0},"BeamPointRight":{"x":11.0,"y":2.0}}'
+  OngoingTasks:
+  - trackName: Task Clips
+    clipEvents:
+    - startFrame: 12
+      durationFrame: 98
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.BossCoreCharge
+          Data: 

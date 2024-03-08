@@ -34,9 +34,11 @@ namespace GAS.Cue
         {
             var spriteRenderers = Owner.transform.GetComponentsInChildren<SpriteRenderer>();
             
-            foreach (var spriteRenderer in spriteRenderers) spriteRenderer.color = cue.color;
+            foreach (var sr in spriteRenderers) sr.color = cue.color;
+            
             await UniTask.Delay((int)(cue.time * 1000));
-            foreach (var spriteRenderer in spriteRenderers) spriteRenderer.color = Color.white;
+            
+            foreach (var sr in spriteRenderers) sr.color = Color.white;
         }
     }
 }

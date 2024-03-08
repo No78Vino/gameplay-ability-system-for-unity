@@ -19,7 +19,7 @@ public abstract class FightUnit : MonoBehaviour
     [SerializeField] protected GameplayEffectAsset gePostureReductionBuff;
     protected Rigidbody2D _rb;
     private int _velocityX;
-    protected bool Grounded;
+    public bool Grounded { get; protected set; }
     protected float LastVelocityY;
     public FightUnit target { get; protected set; }
     
