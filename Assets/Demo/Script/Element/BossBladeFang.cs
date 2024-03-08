@@ -12,11 +12,11 @@ namespace Demo.Script.Element
         public const int HpMax = 300;
         public const int PostureMax = 100;
         public const int ATK = 20;
-        public const int Speed = 12;
+        public const int Speed = 6;
 
         protected override string MoveName => AbilityCollection.Move_Info.Name;
         protected override string JumpName => AbilityCollection.Jump_Info.Name;
-        protected override string AttackName => AbilityCollection.BossAttack04_Info.Name;
+        protected override string AttackName => AbilityCollection.BossAttack01_Info.Name;
         protected override string DefendName => AbilityCollection.Defend_Info.Name;
         protected override string DodgeName => AbilityCollection.DodgeStep_Info.Name;
 
@@ -58,6 +58,21 @@ namespace Demo.Script.Element
             ASC.AttrSet<AS_Fight>().InitPOSTURE(0);
             ASC.AttrSet<AS_Fight>().InitATK(ATK);
             ASC.AttrSet<AS_Fight>().InitSPEED(Speed);
+        }
+
+        public bool FallDownAttack()
+        {
+            return ASC.TryActivateAbility(AbilityCollection.BossAttack02_Info.Name);
+        }
+        
+        public bool BeamAttack()
+        {
+            return ASC.TryActivateAbility(AbilityCollection.BossAttack03_Info.Name);
+        }
+        
+        public bool RoarAttack()
+        {
+            return ASC.TryActivateAbility(AbilityCollection.BossAttack04_Info.Name);
         }
         
         private float OnPostureChangePre(AttributeBase attr, float newValue)
