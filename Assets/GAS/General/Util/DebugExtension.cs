@@ -30,5 +30,18 @@ namespace GAS.General.Util
             var y = sin * (point.x - center.x) + cos * (point.y - center.y) + center.y;
             return new Vector2(x, y);
         }
+        
+        public static void DebugDrawCircle (Vector2 center, float radius, Color color, float showTime,float segments = 120)
+        {
+            var step = 360f / segments;
+            var from = center + new Vector2(radius, 0);
+            for (var i = 0; i < segments; i++)
+            {
+                var to = center + new Vector2(radius * Mathf.Cos((i + 1) * step * Mathf.Deg2Rad),
+                    radius * Mathf.Sin((i + 1) * step * Mathf.Deg2Rad));
+                Debug.DrawLine(from, to, color, showTime);
+                from = to;
+            }
+        }
     }
 }

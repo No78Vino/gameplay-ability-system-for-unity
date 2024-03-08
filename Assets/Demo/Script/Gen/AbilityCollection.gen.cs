@@ -22,6 +22,8 @@ namespace GAS.Runtime.Ability
 
     public static AbilityInfo BossAttack03_Info = new AbilityInfo { Name = "BossAttack03", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Boss/BossAttack03.asset",AbilityClassType = typeof(GAS.Runtime.Ability.TimelineAbility.TimelineAbility) };
 
+    public static AbilityInfo BossAttack04_Info = new AbilityInfo { Name = "BossAttack04", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Boss/BossAttack04.asset",AbilityClassType = typeof(GAS.Runtime.Ability.TimelineAbility.TimelineAbility) };
+
     public static AbilityInfo Jump_Info = new AbilityInfo { Name = "Jump", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Jump.asset",AbilityClassType = typeof(GAS.Runtime.Ability.Jump) };
 
     public static AbilityInfo Move_Info = new AbilityInfo { Name = "Move", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Move.asset",AbilityClassType = typeof(GAS.Runtime.Ability.Move) };
@@ -37,6 +39,7 @@ namespace GAS.Runtime.Ability
       ["BossAttack01"] = BossAttack01_Info,
       ["BossAttack02"] = BossAttack02_Info,
       ["BossAttack03"] = BossAttack03_Info,
+      ["BossAttack04"] = BossAttack04_Info,
       ["Jump"] = Jump_Info,
       ["Move"] = Move_Info,
       ["Attack"] = Attack_Info,

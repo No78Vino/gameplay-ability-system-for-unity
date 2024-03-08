@@ -16,7 +16,7 @@ namespace Demo.Script.GAS.AbilityTask
         {
             var unit = _spec.Owner.GetComponent<FightUnit>();
             var pos = unit.transform.position;
-            bool left = true; //Random.value > 0.5f;
+            bool left = Random.value > 0.5f;
             var beamPoint = left ? BeamPointLeft : BeamPointRight;
             pos.x = beamPoint.x;
             pos.y = beamPoint.y;

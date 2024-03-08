@@ -8,8 +8,7 @@ namespace BehaviorDesigner.Runtime
         {
             if (_unit.Value.target == null)
                 return TaskStatus.Failure;
-
-            return _unit.Value.Attack() ? TaskStatus.Success : TaskStatus.Running;
+            return _unit.Value.Attack() ? TaskStatus.Success :TaskStatus.Failure;
         }
     }
 }

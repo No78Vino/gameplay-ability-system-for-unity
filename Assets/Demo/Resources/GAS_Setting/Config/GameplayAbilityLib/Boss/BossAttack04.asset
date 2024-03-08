@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
-  m_Name: BossAttack03
+  m_Name: BossAttack04
   m_EditorClassIdentifier: 
-  UniqueName: BossAttack03
-  Description: "\u84C4\u529B\u70AE\u51FB"
+  UniqueName: BossAttack04
+  Description: "\u5486\u54EE\n"
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
@@ -36,24 +36,29 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   manualEndAbility: 0
-  FrameCount: 120
-  DurationalCues: []
+  FrameCount: 130
+  DurationalCues:
+  - trackName: "\u9884\u8B66\u8303\u56F4"
+    clipEvents:
+    - startFrame: 10
+      durationFrame: 114
+      cue: {fileID: 11400000, guid: d7c3a95631553914383b9eeb2513f003, type: 2}
   InstantCues:
   - trackName: 
     markEvents:
     - startFrame: 0
       cues:
       - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
-    - startFrame: 111
+    - startFrame: 124
       cues:
-      - {fileID: 11400000, guid: f0c2effeccd629c4ba26c7722aa8224b, type: 2}
+      - {fileID: 11400000, guid: 138401b076b748b4187c2f7b322fae42, type: 2}
   ReleaseGameplayEffect:
   - trackName: 
     markEvents:
-    - startFrame: 113
+    - startFrame: 124
       jsonTargetCatcher:
-        Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
-        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":15.0,"y":2.0},"rotation":0.0,"size":{"x":30.0,"y":4.0},"centerType":0}'
+        Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaCircle2D
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"radius":12.0,"offset":{"x":0.0,"y":0.0},"centerType":0}'
       gameplayEffectAssets:
       - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
   BuffGameplayEffects: []
@@ -64,12 +69,20 @@ MonoBehaviour:
       InstantTasks:
       - TaskData:
           Type: Demo.Script.GAS.AbilityTask.TeleportToBeamPoint
-          Data: '{"BeamPointLeft":{"x":-11.0,"y":-6.0},"BeamPointRight":{"x":11.0,"y":-6.0}}'
+          Data: '{"BeamPointLeft":{"x":0.0,"y":3.0},"BeamPointRight":{"x":0.0,"y":3.0}}'
   OngoingTasks:
-  - trackName: Task Clips
+  - trackName: "\u6EDE\u7A7A"
     clipEvents:
-    - startFrame: 12
-      durationFrame: 98
+    - startFrame: 4
+      durationFrame: 126
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.FreezePosition
+          Data: 
+  - trackName: "\u84C4\u529B"
+    clipEvents:
+    - startFrame: 10
+      durationFrame: 114
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.BossCoreCharge

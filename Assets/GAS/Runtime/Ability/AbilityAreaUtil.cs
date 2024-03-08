@@ -41,5 +41,16 @@ namespace GAS.Runtime.Ability
 
             return null;
         }
+        
+        public static Collider2D[] OverlapCircle2D(this AbilitySystemComponent asc, Vector2 offset, float radius,
+            int layerMask,Transform relativeTransform = null)
+        {
+            relativeTransform ??= asc.transform;
+            var center = (Vector2)relativeTransform.position;
+            offset.x *= relativeTransform.lossyScale.x > 0 ? 1 : -1;
+            center += offset;
+
+            return Physics2D.OverlapCircleAll(center, radius, layerMask);
+        }
     }
 }
