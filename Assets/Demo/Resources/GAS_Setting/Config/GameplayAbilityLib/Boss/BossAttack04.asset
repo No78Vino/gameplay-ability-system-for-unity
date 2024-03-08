@@ -36,7 +36,7 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   manualEndAbility: 0
-  FrameCount: 130
+  FrameCount: 145
   DurationalCues:
   - trackName: "\u9884\u8B66\u8303\u56F4"
     clipEvents:
@@ -52,6 +52,9 @@ MonoBehaviour:
     - startFrame: 124
       cues:
       - {fileID: 11400000, guid: 138401b076b748b4187c2f7b322fae42, type: 2}
+    - startFrame: 140
+      cues:
+      - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
   ReleaseGameplayEffect:
   - trackName: 
     markEvents:
@@ -74,10 +77,16 @@ MonoBehaviour:
   - trackName: "\u6EDE\u7A7A"
     clipEvents:
     - startFrame: 4
-      durationFrame: 126
+      durationFrame: 136
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.FreezePosition
+          Data: 
+    - startFrame: 140
+      durationFrame: 5
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.SuperFallen
           Data: 
   - trackName: "\u84C4\u529B"
     clipEvents:
