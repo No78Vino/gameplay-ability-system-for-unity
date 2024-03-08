@@ -31,13 +31,7 @@ MonoBehaviour:
   ApplicationRequiredTags: []
   OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
-  ApplicationImmunityTags:
-  - _name: Event.Defending
-    _hashCode: -2001503536
-    _shortName: Defending
-    _ancestorHashCodes: 0276cb27
-    _ancestorNames:
-    - Event
+  ApplicationImmunityTags: []
   CueOnExecute:
   - {fileID: 11400000, guid: 66a772dca31a5c8449a7a22ed775065d, type: 2}
   - {fileID: 11400000, guid: 5421ecb82ce59c541ba10e7946a2dcd7, type: 2}
