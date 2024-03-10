@@ -13,13 +13,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     {
         protected TrackDataBase _trackData;
         protected List<TrackItemBase> _trackItems = new List<TrackItemBase>();
+        public List<TrackItemBase> TrackItems => _trackItems;
 
         protected float _frameWidth;
         public VisualElement MenuRoot;
         public VisualElement TrackRoot;
         protected VisualElement MenuParent;
         protected VisualElement TrackParent;
-        protected VisualElement Track;
+        public VisualElement Track { get; protected set; }
         protected Label MenuText;
         protected VisualElement MenuBox;
         protected VisualElement BoundingBox;
@@ -150,7 +151,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected abstract void OnAddTrackItem(DropdownMenuAction action);
 
         protected abstract void OnRemoveTrack(DropdownMenuAction action);
-
+        
         #endregion
 
         public static int GetTrackIndexByMouse(float mouseLocalPositionX)

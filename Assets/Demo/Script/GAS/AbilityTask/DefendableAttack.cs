@@ -93,19 +93,21 @@ namespace Demo.Script.GAS.AbilityTask
                 Save();
             });
             inspector.Add(centerType);
-            
-            var size = TrackInspectorUtil.CreateVector2Field("Size", _task.Size, (evt) =>
-            {
-                _task.Size = evt.newValue;
-                Save();
-            });
+
+            var size = TrackInspectorUtil.CreateVector2Field("Size", _task.Size,
+                (oldValue,newValue) =>
+                {
+                    _task.Size = newValue;
+                    Save();
+                });
             inspector.Add(size);
-            
-            var offset = TrackInspectorUtil.CreateVector2Field("Offset", _task.Offset, (evt) =>
-            {
-                _task.Offset = evt.newValue;
-                Save();
-            });
+
+            var offset = TrackInspectorUtil.CreateVector2Field("Offset", _task.Offset,
+                (oldValue,newValue) =>
+                {
+                    _task.Offset = newValue;
+                    Save();
+                });
             inspector.Add(offset);
             
             var angle = TrackInspectorUtil.CreateFloatField("Angle", _task.Angle, (evt) =>

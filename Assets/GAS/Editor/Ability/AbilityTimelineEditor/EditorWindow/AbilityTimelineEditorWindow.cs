@@ -200,12 +200,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             get => _currentSelectFrameIndex;
             set
             {
-                if (AbilityAsset == null || PreviewObject == null)
-                {
-                    _currentSelectFrameIndex = 0;
-                    return;
-                }
-                
                 if (_currentSelectFrameIndex == value) return;
                 _currentSelectFrameIndex = Mathf.Clamp(value, 0, MaxFrame.value);
                 CurrentFrame.value = _currentSelectFrameIndex;

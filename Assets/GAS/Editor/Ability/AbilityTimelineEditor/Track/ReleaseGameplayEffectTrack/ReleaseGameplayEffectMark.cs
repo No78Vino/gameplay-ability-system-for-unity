@@ -52,6 +52,27 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
         }
 
+        public override void Duplicate()
+        {
+            var startFrame = markData.startFrame < AbilityAsset.FrameCount
+                ? markData.startFrame + 1
+                : markData.startFrame - 1;
+            startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.FrameCount);
+            var markEvent = new ReleaseGameplayEffectMarkEvent
+            {
+                startFrame = startFrame,
+                jsonTargetCatcher = (markData as ReleaseGameplayEffectMarkEvent)?.jsonTargetCatcher,
+                gameplayEffectAssets = (markData as ReleaseGameplayEffectMarkEvent)?.gameplayEffectAssets
+            };
+            track.ReleaseGameplayEffectTrackData.markEvents.Add(markEvent);
+            AbilityTimelineEditorWindow.Instance.Save();
+            
+            var mark = new ReleaseGameplayEffectMark();
+            mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
+            track.TrackItems.Add(mark);
+            mark.OnSelect();
+        }
+
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);

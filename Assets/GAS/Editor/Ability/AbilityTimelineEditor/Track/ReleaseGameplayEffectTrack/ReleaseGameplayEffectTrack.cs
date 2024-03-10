@@ -31,8 +31,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
-            MenuText.text = "施放型GameplayEffect";
             _releaseGameplayEffectTrackData = trackData as ReleaseGameplayEffectTrackData;
+            MenuText.text = _releaseGameplayEffectTrackData.trackName;
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -60,21 +60,26 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
-
-            var trackLabel = TrackInspectorUtil.CreateLabel("施放型GameplayEffect:");
-            trackLabel.style.fontSize = 14;
-            inspector.Add(trackLabel);
+            
+            var trackName = TrackInspectorUtil.CreateTextField( "Name", _releaseGameplayEffectTrackData.trackName,
+                (evt) =>
+                {
+                    _releaseGameplayEffectTrackData.trackName = evt.newValue;
+                    MenuText.text = evt.newValue;
+                    AbilityTimelineEditorWindow.Instance.Save();
+                });
+            inspector.Add(trackName);
 
             foreach (var mark in _releaseGameplayEffectTrackData.markEvents)
             {
                 var markFrame =
                     TrackInspectorUtil.CreateLabel(
-                        $"||标记帧:{mark.startFrame}  GameplayEffect数量{mark.gameplayEffectAssets.Count}");
+                        $"Trigger(f):{mark.startFrame}");
                 inspector.Add(markFrame);
                 foreach (var ge in mark.gameplayEffectAssets)
                 {
                     var geName = ge != null ? ge.name : "NULL";
-                    var geNameLabel = TrackInspectorUtil.CreateLabel($"    |-> GameplayEffect:{geName}");
+                    var geNameLabel = TrackInspectorUtil.CreateLabel($"    |-> {geName}");
                     inspector.Add(geNameLabel);
                 }
             }
@@ -96,8 +101,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var mark = new ReleaseGameplayEffectMark();
             mark.InitTrackMark(this, Track, _frameWidth, markEvent);
             _trackItems.Add(mark);
-
-            // 选中新Clip
+            
             mark.OnSelect();
 
             Debug.Log("[EX] Add ReleaseGameplayEffect Mark");

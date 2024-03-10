@@ -18,15 +18,15 @@ namespace GAS.Editor.Ability
         {
             var inspector = TrackInspectorUtil.CreateSonInspector();
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Offset", _targetCatcher.offset,
-                (evt) =>
+                (oldValue,newValue) =>
                 {
-                    _targetCatcher.offset = evt.newValue;
+                    _targetCatcher.offset = newValue;
                     Save();
                 }));
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Size", _targetCatcher.size,
-                (evt) =>
+                (oldValue,newValue) =>
                 {
-                    _targetCatcher.size = evt.newValue;
+                    _targetCatcher.size = newValue;
                     Save();
                 }));
             inspector.Add(TrackInspectorUtil.CreateFloatField("Rotation", _targetCatcher.rotation,

@@ -123,6 +123,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         private void OnTimerShaftMouseOut(MouseOutEvent evt)
         {
+            timerShaftMouseIn = false;
         }
 
         public int GetFrameIndexByMouse(float x)

@@ -31,8 +31,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
-            MenuText.text = "Instant Task";
             _instantTasksTrackData = trackData as TaskMarkEventTrackData;
+            MenuText.text = _instantTasksTrackData.trackName;
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -60,9 +60,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
-
-            var trackLabel = TrackInspectorUtil.CreateLabel("[ Instant Ability Task ]");
-            inspector.Add(trackLabel);
+            
+            var trackName = TrackInspectorUtil.CreateTextField( "Name", _instantTasksTrackData.trackName,
+                (evt) =>
+                {
+                    _instantTasksTrackData.trackName = evt.newValue;
+                    MenuText.text = evt.newValue;
+                    AbilityTimelineEditorWindow.Instance.Save();
+                });
+            inspector.Add(trackName);
 
             foreach (var mark in _instantTasksTrackData.markEvents)
             {
@@ -92,8 +98,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var mark = new TaskMark();
             mark.InitTrackMark(this, Track, _frameWidth, markEvent);
             _trackItems.Add(mark);
-
-            // 选中新Clip
+            
             mark.OnSelect();
 
             Debug.Log("[EX] Add Instant Task Mark");

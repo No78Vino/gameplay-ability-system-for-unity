@@ -22,6 +22,27 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
         }
 
+        public override void Duplicate()
+        {
+            // 添加Mark数据
+            var startFrame = markData.startFrame < AbilityAsset.FrameCount
+                ? markData.startFrame + 1
+                : markData.startFrame - 1;
+            startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.FrameCount);
+            var markEvent = new InstantCueMarkEvent
+            {
+                startFrame = startFrame,
+                cues = (markData as InstantCueMarkEvent)?.cues
+            };
+            track.InstantCueTrackData.markEvents.Add(markEvent);
+            AbilityTimelineEditorWindow.Instance.Save();
+            
+            var mark = new InstantCueMark();
+            mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
+            track.TrackItems.Add(mark);
+            mark.OnSelect();
+        }
+
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
@@ -31,10 +52,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
-            var markFrame = TrackInspectorUtil.CreateLabel($"触发帧:{markData.startFrame}");
+            var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
             inspector.Add(markFrame);
 
-            var list = TrackInspectorUtil.CreateObjectListView("Cue列表", InstantCueMarkData.cues, OnCueAssetChanged);
+            var list = TrackInspectorUtil.CreateObjectListView("Cue", InstantCueMarkData.cues, OnCueAssetChanged);
             inspector.Add(list);
             
             return inspector;

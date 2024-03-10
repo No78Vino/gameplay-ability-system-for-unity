@@ -8,6 +8,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
     public abstract class TrackMarkBase:TrackItemBase
     {
+        protected static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         private static string MarkAssetGuid => "5a3b3360bcba29b4cac2875f518af19d";
         public float FrameUnitWidth { get;protected set; }
         public int StartFrameIndex=>markData.startFrame;
@@ -51,6 +52,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public abstract VisualElement Inspector();
 
         public abstract void Delete();
+        public abstract void Duplicate();
 
         public virtual void RefreshShow(float newFrameUnitWidth)
         {
@@ -65,6 +67,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnContextMenu(ContextualMenuPopulateEvent obj)
         {
             obj.menu.AppendAction("Delete Mark", _ => Delete());
+            obj.menu.AppendAction("Duplicate", _ => Duplicate());
         }
         
         public abstract void UpdateMarkDataFrame(int newStartFrame);
@@ -156,6 +159,25 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             
             RefreshShow(FrameUnitWidth);
         }
-       
+
+
+        // public override void Duplicate()
+        // {
+        //     // 添加Mark数据
+        //     var startFrame = markData.startFrame < AbilityAsset.FrameCount
+        //         ? markData.startFrame + 1
+        //         : markData.startFrame - 1;
+        //     startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.FrameCount);
+        //     var markEvent = markData;
+        //     markEvent.startFrame = startFrame;
+        //     track.AddTrackItem();
+        //     track.InstantTaskEventTrackData.markEvents.Add(markEvent);
+        //
+        //     // 刷新显示
+        //     var mark = new TaskMark();
+        //     mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
+        //     track.TrackItems.Add(mark);
+        //     mark.OnSelect();
+        // }
     }
 }

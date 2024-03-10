@@ -117,16 +117,58 @@ namespace GAS.Editor.Ability
             return layerMaskField;
         }
         
-        public static Vector3Field CreateVector3Field(string label,Vector3 initValue,EventCallback<ChangeEvent<Vector3>> onValueChanged)
+        public static VisualElement CreateVector3Field(string label,Vector3 initValue,Action<Vector3,Vector3> onValueChanged)
         {
-            var vector3Field = new Vector3Field(label);
-            vector3Field.value = initValue;
-            vector3Field.RegisterValueChangedCallback(onValueChanged);
+            var vector3Field = new VisualElement();
             vector3Field.style.width = new StyleLength(new Length(100,LengthUnit.Percent));
             vector3Field.style.height = LineHeight;
-            vector3Field.labelElement.style.width = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
-            vector3Field.labelElement.style.minWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
-            vector3Field.labelElement.style.maxWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            vector3Field.style.flexDirection = FlexDirection.Row;
+            
+            var labelElement = new Label(label);
+            labelElement.style.width = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            labelElement.style.minWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            labelElement.style.maxWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            vector3Field.Add(labelElement);
+            
+            var xField = new FloatField("X");
+            xField.labelElement.style.width = 10;
+            xField.labelElement.style.minWidth = 10;
+            xField.labelElement.style.maxWidth = 10;
+            xField.value = initValue.x;
+            xField.isDelayed = true;
+            xField.RegisterValueChangedCallback(evt =>
+            {
+                var value = new Vector3(evt.newValue,initValue.y,initValue.z);
+                onValueChanged(initValue,value);
+            });
+            vector3Field.Add(xField);
+            
+            var yField = new FloatField("Y");
+            yField.labelElement.style.width = 10;
+            yField.labelElement.style.minWidth = 10;
+            yField.labelElement.style.maxWidth = 10;
+            yField.value = initValue.y;
+            yField.isDelayed = true;
+            yField.RegisterValueChangedCallback(evt =>
+            {
+                var value = new Vector3(initValue.x,evt.newValue,initValue.z);
+                onValueChanged(initValue,value);
+            });
+            vector3Field.Add(yField);
+            
+            var zField = new FloatField("Z");
+            zField.labelElement.style.width = 10;
+            zField.labelElement.style.minWidth = 10;
+            zField.labelElement.style.maxWidth = 10;
+            zField.value = initValue.z;
+            zField.isDelayed = true;
+            zField.RegisterValueChangedCallback(evt =>
+            {
+                var value = new Vector3(initValue.x,initValue.y,evt.newValue);
+                onValueChanged(initValue,value);
+            });
+            vector3Field.Add(zField);
+            
             return vector3Field;
         }
 
@@ -244,16 +286,45 @@ namespace GAS.Editor.Ability
             return dropdownField;
         }
         
-        public static Vector2Field CreateVector2Field(string label,Vector2 initValue,EventCallback<ChangeEvent<Vector2>> onValueChanged)
+        public static VisualElement CreateVector2Field(string label,Vector2 initValue,Action<Vector2,Vector2> onValueChanged)
         {
-            var vector2Field = new Vector2Field(label);
-            vector2Field.value = initValue;
-            vector2Field.RegisterValueChangedCallback(onValueChanged);
+            var vector2Field = new VisualElement();
             vector2Field.style.width = new StyleLength(new Length(100,LengthUnit.Percent));
             vector2Field.style.height = LineHeight;
-            vector2Field.labelElement.style.width = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
-            vector2Field.labelElement.style.minWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
-            vector2Field.labelElement.style.maxWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            vector2Field.style.flexDirection = FlexDirection.Row;
+            
+            var labelElement = new Label(label);
+            labelElement.style.width = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            labelElement.style.minWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            labelElement.style.maxWidth = new StyleLength(new Length(LabelWidth,LengthUnit.Percent));
+            vector2Field.Add(labelElement);
+            
+            var xField = new FloatField("X");
+            xField.labelElement.style.width = 10;
+            xField.labelElement.style.minWidth = 10;
+            xField.labelElement.style.maxWidth = 10;
+            xField.value = initValue.x;
+            xField.isDelayed = true;
+            xField.RegisterValueChangedCallback(evt =>
+            {
+                var value = new Vector2(evt.newValue,initValue.y);
+                onValueChanged(initValue,value);
+            });
+            vector2Field.Add(xField);
+
+            var yField = new FloatField("Y");
+            yField.labelElement.style.width = 10;
+            yField.labelElement.style.minWidth = 10;
+            yField.labelElement.style.maxWidth = 10;
+            yField.value = initValue.y;
+            yField.isDelayed = true;
+            yField.RegisterValueChangedCallback(evt =>
+            {
+                var value = new Vector2(initValue.x,evt.newValue);
+                onValueChanged(initValue,value);
+            });
+            vector2Field.Add(yField);
+
             return vector2Field;
         }
         

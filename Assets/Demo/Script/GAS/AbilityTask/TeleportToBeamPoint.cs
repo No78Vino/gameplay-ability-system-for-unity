@@ -37,16 +37,16 @@ namespace Demo.Script.GAS.AbilityTask
         {
             var inspector = TrackInspectorUtil.CreateSonInspector(false);
             var left = TrackInspectorUtil.CreateVector2Field("Beam Point Left", _task.BeamPointLeft,
-                (evt) =>
+                (oldValue,newValue) =>
                 {
-                    _task.BeamPointLeft = evt.newValue;
+                    _task.BeamPointLeft = newValue;
                     Save();
                 });
             inspector.Add(left);
             var right = TrackInspectorUtil.CreateVector2Field("Beam Point Right", _task.BeamPointRight,
-                (evt) =>
+                (oldValue,newValue) =>
                 {
-                    _task.BeamPointRight = evt.newValue;
+                    _task.BeamPointRight = newValue;
                     Save();
                 });
             inspector.Add(right);

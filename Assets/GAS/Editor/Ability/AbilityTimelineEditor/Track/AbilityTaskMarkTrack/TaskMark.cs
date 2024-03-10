@@ -47,7 +47,28 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 return _instantTaskInspectorMap;
             }
         }
+
+        public override void Duplicate()
+        {
+            // 添加Mark数据
+            var startFrame = markData.startFrame < AbilityAsset.FrameCount
+                ? markData.startFrame + 1
+                : markData.startFrame - 1;
+            startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.FrameCount);
+            var markEvent = new TaskMarkEvent
+            {
+                startFrame = startFrame,
+                InstantTasks = (markData as TaskMarkEvent)?.InstantTasks
+            };
+            track.InstantTaskEventTrackData.markEvents.Add(markEvent);
         
+            // 刷新显示
+            var mark = new TaskMark();
+            mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
+            track.TrackItems.Add(mark);
+            mark.OnSelect();
+        }
+
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);

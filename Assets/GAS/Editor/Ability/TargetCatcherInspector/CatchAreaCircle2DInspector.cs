@@ -17,9 +17,9 @@ namespace GAS.Editor.Ability
         {
             var inspector = TrackInspectorUtil.CreateSonInspector();
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Offset", _targetCatcher.offset,
-                (evt) =>
+                (oldValue,newValue) =>
                 {
-                    _targetCatcher.offset = evt.newValue;
+                    _targetCatcher.offset = newValue;
                     Save();
                 }));
             inspector.Add(TrackInspectorUtil.CreateFloatField("Radius", _targetCatcher.radius,
