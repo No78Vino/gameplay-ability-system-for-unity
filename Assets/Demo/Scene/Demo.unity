@@ -15397,6 +15397,30 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7519437156345001825, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
+      value: '{"Variables":[{"Type":"SharedFightUnit","Name":"unit","IsShared":true,"FightUnitmValue":0},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"dead","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"outOfPosture","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"InPhase1","IsShared":true,"BooleanmValue":true}]}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519437156345001825, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.variableStartIndex.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519437156345001825, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.startIndex.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519437156345001825, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.dataPosition.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519437156345001825, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.byteDataArray.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519437156345001825, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.fieldSerializationData.fieldNameHash.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7739991656243295134, guid: f45e9d846c9913a468f2a78ee63326d2, type: 3}
       propertyPath: m_Name
       value: BossBladeFang
@@ -21861,9 +21885,9 @@ BoxCollider2D:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1080991908}
+  - {fileID: 803427070}
   - {fileID: 738742198}
   - {fileID: 1431028661}
   - {fileID: 1688416725}
   - {fileID: 1163709634}
-  - {fileID: 803427070}
-  - {fileID: 1080991908}

@@ -24,6 +24,7 @@ public class Player : FightUnit
     protected override string AttackName => AbilityCollection.Attack_Info.Name;
     protected override string DefendName => AbilityCollection.Defend_Info.Name;
     protected override string DodgeName => AbilityCollection.DodgeStep_Info.Name;
+    protected override string DieName => AbilityCollection.DodgeStep_Info.Name;
 
     protected override void Awake()
     {

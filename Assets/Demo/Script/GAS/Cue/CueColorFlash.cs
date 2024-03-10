@@ -32,7 +32,7 @@ namespace GAS.Cue
 
         private async UniTask Flash()
         {
-            var spriteRenderers = Owner.transform.GetComponentsInChildren<SpriteRenderer>();
+            var spriteRenderers = Owner.transform.Find("Root").GetComponentsInChildren<SpriteRenderer>();
             
             foreach (var sr in spriteRenderers) sr.color = cue.color;
             

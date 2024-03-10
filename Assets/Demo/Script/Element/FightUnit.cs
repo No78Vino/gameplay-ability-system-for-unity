@@ -127,6 +127,11 @@ public abstract class FightUnit : MonoBehaviour
         ASC.TryActivateAbility(DodgeName);
     }
 
+    public void Die()
+    {
+        ASC.TryActivateAbility(DieName);
+    }
+    
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
@@ -154,6 +159,7 @@ public abstract class FightUnit : MonoBehaviour
     protected abstract string AttackName { get; }
     protected abstract string DefendName { get; }
     protected abstract string DodgeName { get; }
+    protected abstract string DieName { get; }
 
     #endregion
 }
