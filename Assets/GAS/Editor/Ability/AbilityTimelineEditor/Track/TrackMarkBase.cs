@@ -101,19 +101,19 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var offsetFrame = delta.x / FrameUnitWidth;
             _newStartFramePos = _lastMainDragStartPos + offsetFrame;
             if (offsetFrame == 0 || _newStartFramePos < 0) return;
-            // int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            // int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
-            // if (NewStartFrame >= minFrame && NewStartFrame+DurationFrame <= maxFrame)
-            // {
+            int minFrame =  0;
+            int maxFrame =  AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
+            if (NewStartFrame >= minFrame && NewStartFrame <= maxFrame)
+            {
                 TimerShaftView.DottedLineFrameIndex = NewStartFrame;
-            //}
+            }
         }
         
         private void ApplyMarkDrag()
         {
-            //int minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            //int maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ?? AbilityTimelineEditorWindow.Instance.AbilityAsset.MaxFrameCount;
-            var newStartFrame = NewStartFrame;//Mathf.Clamp(NewStartFrame, minFrame, maxFrame - DurationFrame);
+            int minFrame =  0;
+            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
+            var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame);
             if (newStartFrame == StartFrameIndex) return;
             
             UpdateMarkDataFrame(newStartFrame);
