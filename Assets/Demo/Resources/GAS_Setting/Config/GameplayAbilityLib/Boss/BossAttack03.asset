@@ -36,7 +36,7 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   manualEndAbility: 0
-  FrameCount: 120
+  FrameCount: 150
   DurationalCues: []
   InstantCues:
   - trackName: "\u52A8\u753B"
@@ -53,7 +53,7 @@ MonoBehaviour:
   ReleaseGameplayEffect:
   - trackName: "\u4F24\u5BB3"
     markEvents:
-    - startFrame: 116
+    - startFrame: 120
       jsonTargetCatcher:
         Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":15.0,"y":2.0},"rotation":0.0,"size":{"x":30.0,"y":4.0},"centerType":0}'

@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45cfca0b93324cec9aa3aadd6e7a58ff, type: 3}
-  m_Name: CircleAreaVisualization
+  m_Script: {fileID: 11500000, guid: 4d1ab3d7fe6d43578dc7ce89968d115c, type: 3}
+  m_Name: FallDownDash
   m_EditorClassIdentifier: 
   RequiredTags: []
   ImmunityTags: []
-  Radius: 16
-  Visualization: {fileID: 332061679763296354, guid: 2fc7ec7b2a334644fa6cee9dafc6ce65, type: 3}
-  Duration: 114
+  applyTarget: 0
+  vfxPrefab: {fileID: 2052278724288779225, guid: 2f965348337343046beef87cce54c5c0, type: 3}
+  isAttachToOwner: 0
+  offset: {x: 0, y: 0, z: 0}
+  rotation: 0
+  duration: 0.8

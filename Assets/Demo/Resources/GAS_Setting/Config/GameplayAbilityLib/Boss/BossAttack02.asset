@@ -49,9 +49,9 @@ MonoBehaviour:
     - startFrame: 1
       cues:
       - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
-    - startFrame: 34
+    - startFrame: 35
       cues:
-      - {fileID: 11400000, guid: 60bc8cc0ed71ab545a716d583ac0c49e, type: 2}
+      - {fileID: 11400000, guid: feb0320164e6ee643a3834462f2b560d, type: 2}
   ReleaseGameplayEffect:
   - trackName: 
     markEvents:

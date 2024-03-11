@@ -22,7 +22,7 @@ namespace Demo.Script.Element
         protected override string AttackName => AbilityCollection.BossAttack01_Info.Name;
         protected override string DefendName => AbilityCollection.Defend_Info.Name;
         protected override string DodgeName => AbilityCollection.DodgeStep_Info.Name;
-        protected override string DieName => AbilityCollection.DodgeStep_Info.Name;
+        protected override string DieName => AbilityCollection.BossDie_Info.Name;
 
         [SerializeField] private Player player;
         [SerializeField] private BossCore core;
@@ -33,6 +33,8 @@ namespace Demo.Script.Element
         private bool _dead;
         private bool _outOfPosture;
         private bool _inPhase1;
+        public bool ChangingPhase { get; private set; }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -64,6 +66,7 @@ namespace Demo.Script.Element
             if (_inPhase1 != ASC.AttrSet<AS_Fight>().HP.CurrentValue >= HpMax / 2)
             {
                 _inPhase1 = !_inPhase1;
+                ChangingPhase = true;
                 _bt.SetVariableValue("InPhase1", ASC.AttrSet<AS_Fight>().HP.CurrentValue >= HpMax / 2);
                 _bt.DisableBehavior();
                 _bt.EnableBehavior();
@@ -145,6 +148,11 @@ namespace Demo.Script.Element
             var deltaVector3 = target.transform.position - transform.position;
             float distance = deltaVector3.magnitude;
             return distance < 6;
+        }
+
+        public void ChangingPhaseEnd()
+        {
+            ChangingPhase = false;
         }
     }
 }

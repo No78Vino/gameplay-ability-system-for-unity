@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d763af469c524557946c477b9bea3a46, type: 3}
-  m_Name: Die
+  m_Name: BossDie
   m_EditorClassIdentifier: 
-  UniqueName: Die
-  Description: "\u6B7B\u4EA1"
+  UniqueName: BossDie
+  Description: "Boss\u6B7B\u4EA1"
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   CooldownTime: 0
@@ -36,16 +36,16 @@ MonoBehaviour:
     _ancestorNames:
     - Event
   manualEndAbility: 0
-  FrameCount: 60
+  FrameCount: 120
   DurationalCues: []
   InstantCues:
   - trackName: "\u52A8\u753B"
     markEvents:
-    - startFrame: 1
+    - startFrame: 0
       cues:
       - {fileID: 11400000, guid: d3689ca719882044aab5e9cc5b59e932, type: 2}
   ReleaseGameplayEffect:
-  - trackName: "\u6B7B\u4EA1Buff"
+  - trackName: 
     markEvents:
     - startFrame: 0
       jsonTargetCatcher:
@@ -54,5 +54,45 @@ MonoBehaviour:
       gameplayEffectAssets:
       - {fileID: 11400000, guid: 69acc751f2f4ecd48a5c754fe25692ee, type: 2}
   BuffGameplayEffects: []
-  InstantTasks: []
-  OngoingTasks: []
+  InstantTasks:
+  - trackName: 
+    markEvents:
+    - startFrame: 0
+      InstantTasks:
+      - TaskData:
+          Type: Demo.Script.GAS.AbilityTask.DisableBehaviorTree
+          Data: 
+    - startFrame: 1
+      InstantTasks:
+      - TaskData:
+          Type: Demo.Script.GAS.AbilityTask.TeleportToBeamPoint
+          Data: 
+  OngoingTasks:
+  - trackName: Task Clips
+    clipEvents:
+    - startFrame: 2
+      durationFrame: 83
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.FreezePosition
+          Data: 
+    - startFrame: 85
+      durationFrame: 35
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.SuperFallen
+          Data: 
+  - trackName: Task Clips
+    clipEvents:
+    - startFrame: 2
+      durationFrame: 83
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.BossCoreCharge
+          Data: 
+    - startFrame: 85
+      durationFrame: 35
+      ongoingTask:
+        TaskData:
+          Type: Demo.Script.GAS.AbilityTask.BossCoreDie
+          Data: 

@@ -11,6 +11,7 @@ public static class GameplayTagSumCollection
     public static GameplayTag Faction_Enemy { get;} = new GameplayTag("Faction.Enemy");
     public static GameplayTag Faction_Player { get;} = new GameplayTag("Faction.Player");
     public static GameplayTag Ability { get;} = new GameplayTag("Ability");
+    public static GameplayTag Ability_Die { get;} = new GameplayTag("Ability.Die");
     public static GameplayTag Ability_Jump { get;} = new GameplayTag("Ability.Jump");
     public static GameplayTag Ability_Defend { get;} = new GameplayTag("Ability.Defend");
     public static GameplayTag Ability_Dodge { get;} = new GameplayTag("Ability.Dodge");
@@ -20,9 +21,11 @@ public static class GameplayTagSumCollection
     public static GameplayTag State_Buff { get;} = new GameplayTag("State.Buff");
     public static GameplayTag State_Buff_BulkUp { get;} = new GameplayTag("State.Buff.BulkUp");
     public static GameplayTag State_Debuff { get;} = new GameplayTag("State.Debuff");
+    public static GameplayTag State_Debuff_Death { get;} = new GameplayTag("State.Debuff.Death");
     public static GameplayTag State_Debuff_Stun { get;} = new GameplayTag("State.Debuff.Stun");
     public static GameplayTag State_Debuff_LoseBalance { get;} = new GameplayTag("State.Debuff.LoseBalance");
     public static GameplayTag Event { get;} = new GameplayTag("Event");
+    public static GameplayTag Event_Dying { get;} = new GameplayTag("Event.Dying");
     public static GameplayTag Event_PerfectDefending { get;} = new GameplayTag("Event.PerfectDefending");
     public static GameplayTag Event_Defending { get;} = new GameplayTag("Event.Defending");
     public static GameplayTag Event_Dodging { get;} = new GameplayTag("Event.Dodging");
@@ -30,6 +33,7 @@ public static class GameplayTagSumCollection
     public static GameplayTag Event_Attacking { get;} = new GameplayTag("Event.Attacking");
     public static GameplayTag Event_Moving { get;} = new GameplayTag("Event.Moving");
     public static GameplayTag CD { get;} = new GameplayTag("CD");
+    public static GameplayTag CD_FireBullet { get;} = new GameplayTag("CD.FireBullet");
     public static GameplayTag CD_Skill0 { get;} = new GameplayTag("CD.Skill0");
     public static GameplayTag CD_Skill1 { get;} = new GameplayTag("CD.Skill1");
     public static GameplayTag CD_Dodge { get;} = new GameplayTag("CD.Dodge");
@@ -42,6 +46,7 @@ public static class GameplayTagSumCollection
          ["Faction.Enemy"] = Faction_Enemy,
          ["Faction.Player"] = Faction_Player,
          ["Ability"] = Ability,
+         ["Ability.Die"] = Ability_Die,
          ["Ability.Jump"] = Ability_Jump,
          ["Ability.Defend"] = Ability_Defend,
          ["Ability.Dodge"] = Ability_Dodge,
@@ -51,9 +56,11 @@ public static class GameplayTagSumCollection
          ["State.Buff"] = State_Buff,
          ["State.Buff.BulkUp"] = State_Buff_BulkUp,
          ["State.Debuff"] = State_Debuff,
+         ["State.Debuff.Death"] = State_Debuff_Death,
          ["State.Debuff.Stun"] = State_Debuff_Stun,
          ["State.Debuff.LoseBalance"] = State_Debuff_LoseBalance,
          ["Event"] = Event,
+         ["Event.Dying"] = Event_Dying,
          ["Event.PerfectDefending"] = Event_PerfectDefending,
          ["Event.Defending"] = Event_Defending,
          ["Event.Dodging"] = Event_Dodging,
@@ -61,6 +68,7 @@ public static class GameplayTagSumCollection
          ["Event.Attacking"] = Event_Attacking,
          ["Event.Moving"] = Event_Moving,
          ["CD"] = CD,
+         ["CD.FireBullet"] = CD_FireBullet,
          ["CD.Skill0"] = CD_Skill0,
          ["CD.Skill1"] = CD_Skill1,
          ["CD.Dodge"] = CD_Dodge,

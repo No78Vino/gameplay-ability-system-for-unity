@@ -28,6 +28,9 @@ MonoBehaviour:
   - _id: 2
     _name: Ability
     _depth: 0
+  - _id: 37
+    _name: Die
+    _depth: 1
   - _id: 19
     _name: Jump
     _depth: 1
@@ -55,6 +58,9 @@ MonoBehaviour:
   - _id: 12
     _name: Debuff
     _depth: 1
+  - _id: 36
+    _name: Death
+    _depth: 2
   - _id: 21
     _name: Stun
     _depth: 2
@@ -64,6 +70,9 @@ MonoBehaviour:
   - _id: 15
     _name: Event
     _depth: 0
+  - _id: 38
+    _name: Dying
+    _depth: 1
   - _id: 35
     _name: PerfectDefending
     _depth: 1
@@ -85,6 +94,9 @@ MonoBehaviour:
   - _id: 25
     _name: CD
     _depth: 0
+  - _id: 39
+    _name: FireBullet
+    _depth: 1
   - _id: 27
     _name: Skill0
     _depth: 1
@@ -123,6 +135,12 @@ MonoBehaviour:
     _shortName: Ability
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: Ability.Die
+    _hashCode: 265453460
+    _shortName: Die
+    _ancestorHashCodes: b84ed1e0
+    _ancestorNames:
+    - Ability
   - _name: Ability.Jump
     _hashCode: -183664866
     _shortName: Jump
@@ -177,6 +195,13 @@ MonoBehaviour:
     _ancestorHashCodes: 4b461665
     _ancestorNames:
     - State
+  - _name: State.Debuff.Death
+    _hashCode: -1760211843
+    _shortName: Death
+    _ancestorHashCodes: 4b461665e315d1b6
+    _ancestorNames:
+    - State
+    - State.Debuff
   - _name: State.Debuff.Stun
     _hashCode: -1559194643
     _shortName: Stun
@@ -196,6 +221,12 @@ MonoBehaviour:
     _shortName: Event
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: Event.Dying
+    _hashCode: 1569540943
+    _shortName: Dying
+    _ancestorHashCodes: 0276cb27
+    _ancestorNames:
+    - Event
   - _name: Event.PerfectDefending
     _hashCode: 1419440733
     _shortName: PerfectDefending
@@ -237,6 +268,12 @@ MonoBehaviour:
     _shortName: CD
     _ancestorHashCodes: 
     _ancestorNames: []
+  - _name: CD.FireBullet
+    _hashCode: 868182143
+    _shortName: FireBullet
+    _ancestorHashCodes: aba22dbc
+    _ancestorNames:
+    - CD
   - _name: CD.Skill0
     _hashCode: -4094734
     _shortName: Skill0
