@@ -37,7 +37,7 @@ namespace Demo.Script.UI
             playerPostureMax.Value = Player.PostureMax;
             playerPosture.Value = Player.PostureMax;
             
-            BossName.Value = "【Boss】爪刃";
+            BossName.Value = "【Boss】矩形和圆形";
             BossHpMax.Value = BossBladeFang.HpMax;
             BossHp.Value = BossBladeFang.HpMax;
             BossPostureMax.Value = BossBladeFang.PostureMax;

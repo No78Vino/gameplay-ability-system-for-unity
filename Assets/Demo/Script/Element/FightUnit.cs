@@ -65,6 +65,8 @@ public abstract class FightUnit : MonoBehaviour
         var isDefending = ASC.HasTag(GameplayTagSumCollection.Event_Defending);
         _animator.SetFloat(Moving, IsMoving && !isDefending ? 1 : 0);
         _animator.SetBool(Defending, isDefending);
+        
+        // 
     }
 
     protected virtual void OnEnable()

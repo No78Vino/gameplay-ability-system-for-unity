@@ -63,11 +63,11 @@ namespace Demo.Script.Element
                 _bt.EnableBehavior();
             }
             
-            if (_inPhase1 != ASC.AttrSet<AS_Fight>().HP.CurrentValue >= HpMax / 2)
+            if (_inPhase1 != ASC.AttrSet<AS_Fight>().HP.CurrentValue > HpMax / 2)
             {
                 _inPhase1 = !_inPhase1;
                 ChangingPhase = true;
-                _bt.SetVariableValue("InPhase1", ASC.AttrSet<AS_Fight>().HP.CurrentValue >= HpMax / 2);
+                _bt.SetVariableValue("InPhase1", ASC.AttrSet<AS_Fight>().HP.CurrentValue > HpMax / 2);
                 _bt.DisableBehavior();
                 _bt.EnableBehavior();
 

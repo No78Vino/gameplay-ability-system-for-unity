@@ -179,4 +179,14 @@ public class Player : FightUnit
         XUI.M.OpenWindow<RetryWindow>();
         XUI.M.VM<RetryWindowVM>().SetRetryWindow(false);
     }
+
+    public void EnableInput()
+    {
+        _inputActionReference.Enable();
+    }
+
+    public void DisableInput()
+    {
+        _inputActionReference.Disable();
+    }
 }
