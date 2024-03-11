@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf2b71a297b84564b930517da7ba2d8, type: 3}
+  m_Name: GunShot
+  m_EditorClassIdentifier: 
+  Strength: {x: 0.5, y: 0, z: 0}
+  Duration: 0.04
+  Vibrato: 1
+  Randomness: 0
+  Smoothness: 0.0344
+  UseRandomInitialAngle: 0
+  InitialAngle: 10
+  Rotation: {x: 0, y: 0, z: 0}
+  IgnoreTimeScale: 0

@@ -1,0 +1,19 @@
+{
+    "name": "ProCamera2D.Editor",
+    "rootNamespace": "Com.LuisPedroFonseca.ProCamera2D",
+    "references": [
+        "GUID:da0319847955a4a36b91883508290fe8",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

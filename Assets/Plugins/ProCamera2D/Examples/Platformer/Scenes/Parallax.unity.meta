@@ -1,0 +1,35 @@
+fileFormatVersion: 2
+guid: eb5951c9a84dc40a19f3fa7848e47baf
+labels:
+- camera
+- 2d
+- 2.5d
+- shake
+- parallax
+- follow
+- multi-target
+- multiple-targets
+- boundaries
+- zoom
+- zoom-to-fit
+- smooth-follow
+- ortho
+- orthographic
+- perspective
+- toolkit
+- 2dtoolkit
+- tk2d
+- pixel-perfect
+- pixelperfect
+- pixelart
+- pixel-art
+- cinematics
+- axes
+- playmaker
+- playmaker-actions
+timeCreated: 1434584149
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

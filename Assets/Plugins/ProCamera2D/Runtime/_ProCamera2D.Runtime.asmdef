@@ -1,0 +1,14 @@
+{
+    "name": "ProCamera2D.Runtime",
+    "rootNamespace": "Com.LuisPedroFonseca.ProCamera2D",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

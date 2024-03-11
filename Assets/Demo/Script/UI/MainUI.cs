@@ -1,4 +1,5 @@
-﻿using FairyGUI.Extension;
+﻿using FairyGUI;
+using FairyGUI.Extension;
 using Loxodon.Framework.Binding.Builder;
 using Loxodon.Framework.Interactivity;
 using UIGen.Demo;
@@ -28,7 +29,8 @@ namespace Demo.Script.UI
             
             bindingSet.Bind(ui.Posture.Target).For(v => v.value).To(vm => vm.playerPosture.Value);
             bindingSet.Bind(ui.Posture.Target).For(v => v.max).To(vm => vm.playerPostureMax.Value);
-            
+
+            bindingSet.Bind(contentPane.GetChild("Boss") as GGroup).For(v => v.visible).To(vm => vm.BossUiVisible.Value);
             bindingSet.Bind(ui.BossName).For(v => v.text).To(vm => vm.BossName.Value);
             bindingSet.Bind(ui.BossHp.Target).For(v => v.value).To(vm => vm.BossHp.Value);
             bindingSet.Bind(ui.BossHp.Target).For(v => v.max).To(vm => vm.BossHpMax.Value);

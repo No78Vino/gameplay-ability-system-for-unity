@@ -7,6 +7,7 @@ using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Tags;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Demo.Script.Element
 {
@@ -35,10 +36,14 @@ namespace Demo.Script.Element
         private bool _inPhase1;
         public bool ChangingPhase { get; private set; }
         
+        public BehaviorTree BT => _bt;
+        
         protected override void Awake()
         {
             base.Awake();
             InitAttribute();
+            if (player == null) player = FindObjectOfType<Player>();
+            
             target = player;
         }
 

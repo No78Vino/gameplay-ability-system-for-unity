@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b203a55d908247b5a828b0c77fca2c1, type: 3}
+  m_Name: HandheldHard
+  m_EditorClassIdentifier: 
+  Intensity: 0.4
+  Layers:
+  - Frequency: {x: 0.10242978, y: 0.20485955}
+    AmplitudeHorizontal: 0.2
+    AmplitudeVertical: 0.2
+    AmplitudeDepth: 0.1
+  - Frequency: {x: 0.20485955, y: 0.5036131}
+    AmplitudeHorizontal: 0.8
+    AmplitudeVertical: 0.8
+    AmplitudeDepth: 0.2
+  - Frequency: {x: 0.5016257, y: 1.0052388}
+    AmplitudeHorizontal: 1.5
+    AmplitudeVertical: 1.5
+    AmplitudeDepth: 0.3

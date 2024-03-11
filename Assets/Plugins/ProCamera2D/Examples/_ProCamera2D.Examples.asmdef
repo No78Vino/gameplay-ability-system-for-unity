@@ -1,0 +1,16 @@
+{
+    "name": "ProCamera2D.Examples",
+    "rootNamespace": "Com.LuisPedroFonseca.ProCamera2D",
+    "references": [
+        "GUID:da0319847955a4a36b91883508290fe8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

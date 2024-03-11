@@ -18,6 +18,7 @@ namespace Demo.Script.UI
         public ObservableVariable<float> playerPosture = new ObservableVariable<float>();
         public ObservableVariable<float> playerPostureMax = new ObservableVariable<float>();
         
+        public  ObservableVariable<bool> BossUiVisible = new ObservableVariable<bool>();
         public ObservableVariable<string> BossName = new ObservableVariable<string>();
         
         public ObservableVariable<float> BossHp = new ObservableVariable<float>();
@@ -75,6 +76,16 @@ namespace Demo.Script.UI
                 transitionRequest.Raise("shakeBig");
             else
                 transitionRequest.Raise("shakeSmall");
+        }
+        
+        public void ShowBossUI()
+        {
+            BossUiVisible.Value = true;
+        }
+        
+        public void HideBossUI()
+        {
+            BossUiVisible.Value = false;
         }
     }
 }
