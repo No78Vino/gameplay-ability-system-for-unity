@@ -1,8 +1,11 @@
-﻿using Demo.Script.UI;
+﻿using System;
+using BehaviorDesigner.Runtime;
+using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
+using GAS.Runtime.Tags;
 using UnityEngine;
 
 namespace Demo.Script.Element
@@ -25,12 +28,48 @@ namespace Demo.Script.Element
         [SerializeField] private BossCore core;
         
         public BossCore Core => core;
-        
+
+
+        private bool _dead;
+        private bool _outOfPosture;
+        private bool _inPhase1;
         protected override void Awake()
         {
             base.Awake();
             InitAttribute();
             target = player;
+        }
+
+        protected override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            
+            // 更新dead, outOfPosture, inPhase1 三个状态值
+            if (_dead != ASC.AttrSet<AS_Fight>().HP.CurrentValue <= 0)
+            {
+                _dead = !_dead;
+                _bt.SetVariableValue("dead", ASC.AttrSet<AS_Fight>().HP.CurrentValue <= 0);
+                _bt.DisableBehavior();
+                _bt.EnableBehavior();
+            }
+            
+            if( _outOfPosture != ASC.HasTag(GameplayTagSumCollection.State_Debuff_LoseBalance))
+            {
+                _outOfPosture = !_outOfPosture;
+                _bt.SetVariableValue("outOfPosture", ASC.HasTag(GameplayTagSumCollection.State_Debuff_LoseBalance));
+                _bt.DisableBehavior();
+                _bt.EnableBehavior();
+            }
+            
+            if (_inPhase1 != ASC.AttrSet<AS_Fight>().HP.CurrentValue >= HpMax / 2)
+            {
+                _inPhase1 = !_inPhase1;
+                _bt.SetVariableValue("InPhase1", ASC.AttrSet<AS_Fight>().HP.CurrentValue >= HpMax / 2);
+                _bt.DisableBehavior();
+                _bt.EnableBehavior();
+
+                core.rotateSpeed = 540;
+            }
         }
 
         protected override void OnEnable()

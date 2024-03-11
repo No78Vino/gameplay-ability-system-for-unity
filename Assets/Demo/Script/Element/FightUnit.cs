@@ -1,4 +1,5 @@
-﻿using Demo.Script.Fight;
+﻿using BehaviorDesigner.Runtime;
+using Demo.Script.Fight;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
@@ -18,6 +19,7 @@ public abstract class FightUnit : MonoBehaviour
     [SerializeField] protected BoxCollider2D defendArea;
     [SerializeField] protected GameplayEffectAsset gePostureReductionBuff;
     protected Rigidbody2D _rb;
+    protected BehaviorTree _bt;
     private int _velocityX;
     public bool Grounded { get; protected set; }
     protected float LastVelocityY;
@@ -36,6 +38,7 @@ public abstract class FightUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
+        _bt = GetComponent<BehaviorTree>();
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = Gravity;
         ASC = GetComponent<AbilitySystemComponent>();
