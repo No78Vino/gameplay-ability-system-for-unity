@@ -77,7 +77,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 foreach (var task in mark.InstantTasks)
                 {
                     var taskName = task != null ? task.TaskData.Type : "Null!";
-                    var taskInfo = TrackInspectorUtil.CreateLabel($"    |-> {taskName}");
+                    var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
+                    var taskInfo = TrackInspectorUtil.CreateLabel($"    |-> {shortName}");
                     inspector.Add(taskInfo);
                 }
             }

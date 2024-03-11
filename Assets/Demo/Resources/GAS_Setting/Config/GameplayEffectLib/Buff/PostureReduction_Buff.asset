@@ -29,14 +29,7 @@ MonoBehaviour:
     - State
   GrantedTags: []
   ApplicationRequiredTags: []
-  OngoingRequiredTags:
-  - _name: State.Debuff.LoseBalance
-    _hashCode: -639020104
-    _shortName: LoseBalance
-    _ancestorHashCodes: 4b461665e315d1b6
-    _ancestorNames:
-    - State
-    - State.Debuff
+  OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
   ApplicationImmunityTags: []
   CueOnExecute: []

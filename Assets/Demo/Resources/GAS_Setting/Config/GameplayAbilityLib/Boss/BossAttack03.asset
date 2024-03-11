@@ -39,7 +39,7 @@ MonoBehaviour:
   FrameCount: 120
   DurationalCues: []
   InstantCues:
-  - trackName: 
+  - trackName: "\u52A8\u753B"
     markEvents:
     - startFrame: 0
       cues:
@@ -47,10 +47,13 @@ MonoBehaviour:
     - startFrame: 111
       cues:
       - {fileID: 11400000, guid: f0c2effeccd629c4ba26c7722aa8224b, type: 2}
+    - startFrame: 100
+      cues:
+      - {fileID: 11400000, guid: 94d41b7253445e548ab318b413789047, type: 2}
   ReleaseGameplayEffect:
-  - trackName: 
+  - trackName: "\u4F24\u5BB3"
     markEvents:
-    - startFrame: 113
+    - startFrame: 116
       jsonTargetCatcher:
         Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":15.0,"y":2.0},"rotation":0.0,"size":{"x":30.0,"y":4.0},"centerType":0}'
@@ -58,7 +61,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
   BuffGameplayEffects: []
   InstantTasks:
-  - trackName: 
+  - trackName: taskA
     markEvents:
     - startFrame: 4
       InstantTasks:

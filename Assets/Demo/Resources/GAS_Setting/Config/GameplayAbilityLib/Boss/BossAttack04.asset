@@ -55,13 +55,16 @@ MonoBehaviour:
     - startFrame: 140
       cues:
       - {fileID: 11400000, guid: ec4d2954aa3da4b498de95bb33b0ef30, type: 2}
+    - startFrame: 119
+      cues:
+      - {fileID: 11400000, guid: 94d41b7253445e548ab318b413789047, type: 2}
   ReleaseGameplayEffect:
   - trackName: 
     markEvents:
     - startFrame: 124
       jsonTargetCatcher:
         Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaCircle2D
-        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"radius":12.0,"offset":{"x":0.0,"y":0.0},"centerType":0}'
+        Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"radius":13.0,"offset":{"x":0.0,"y":0.0},"centerType":0}'
       gameplayEffectAssets:
       - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}
   BuffGameplayEffects: []

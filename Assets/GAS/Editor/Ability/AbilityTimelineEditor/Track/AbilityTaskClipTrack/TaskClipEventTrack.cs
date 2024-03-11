@@ -115,7 +115,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             {
                 var taskType = clip.ongoingTask.TaskData.Type;
                 var taskName = !string.IsNullOrEmpty(taskType) ? taskType : "Null!";
-                var runInfo = TrackInspectorUtil.CreateLabel($"  [ {taskName} ] Run(f):{clip.startFrame}->{clip.EndFrame}");
+                var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
+                var runInfo = TrackInspectorUtil.CreateLabel($"  [{shortName}] Run(f):{clip.startFrame}->{clip.EndFrame}");
                 inspector.Add(runInfo);
             }
             

@@ -36,6 +36,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5421ecb82ce59c541ba10e7946a2dcd7, type: 2}
   - {fileID: 11400000, guid: 66a772dca31a5c8449a7a22ed775065d, type: 2}
   - {fileID: 11400000, guid: 2565a4648d4db104197d27ff7326afd1, type: 2}
+  - {fileID: 11400000, guid: 8abcb034241dab44a82b6c59d8c18b57, type: 2}
   CueDurational: []
   CueOnAdd: []
   CueOnRemove: []

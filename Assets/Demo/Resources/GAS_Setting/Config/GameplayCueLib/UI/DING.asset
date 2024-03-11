@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6648e6b9da43a89f64767ace3f8b47, type: 3}
+  m_Name: DING
+  m_EditorClassIdentifier: 
+  RequiredTags: []
+  ImmunityTags: []
+  applyTarget: 0
+  prefab: {fileID: 7206582950480410580, guid: ead5cbe927d2e0544b2c64352e3dd1d7, type: 3}
+  text: DING!
+  showType: 2
