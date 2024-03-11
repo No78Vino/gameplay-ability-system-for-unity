@@ -19,6 +19,7 @@ public static class GameplayTagSumCollection
     public static GameplayTag Ability_Move { get;} = new GameplayTag("Ability.Move");
     public static GameplayTag State { get;} = new GameplayTag("State");
     public static GameplayTag State_Buff { get;} = new GameplayTag("State.Buff");
+    public static GameplayTag State_Buff_DefendBuff { get;} = new GameplayTag("State.Buff.DefendBuff");
     public static GameplayTag State_Buff_BulkUp { get;} = new GameplayTag("State.Buff.BulkUp");
     public static GameplayTag State_Debuff { get;} = new GameplayTag("State.Debuff");
     public static GameplayTag State_Debuff_Death { get;} = new GameplayTag("State.Debuff.Death");
@@ -54,6 +55,7 @@ public static class GameplayTagSumCollection
          ["Ability.Move"] = Ability_Move,
          ["State"] = State,
          ["State.Buff"] = State_Buff,
+         ["State.Buff.DefendBuff"] = State_Buff_DefendBuff,
          ["State.Buff.BulkUp"] = State_Buff_BulkUp,
          ["State.Debuff"] = State_Debuff,
          ["State.Debuff.Death"] = State_Debuff_Death,

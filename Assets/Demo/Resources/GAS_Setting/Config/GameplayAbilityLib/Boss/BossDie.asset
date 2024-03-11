@@ -36,7 +36,7 @@ MonoBehaviour:
     _ancestorNames:
     - Event
   manualEndAbility: 0
-  FrameCount: 120
+  FrameCount: 210
   DurationalCues: []
   InstantCues:
   - trackName: "\u52A8\u753B"
@@ -71,13 +71,13 @@ MonoBehaviour:
   - trackName: Task Clips
     clipEvents:
     - startFrame: 2
-      durationFrame: 83
+      durationFrame: 143
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.FreezePosition
           Data: 
-    - startFrame: 85
-      durationFrame: 35
+    - startFrame: 145
+      durationFrame: 65
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.SuperFallen
@@ -85,13 +85,13 @@ MonoBehaviour:
   - trackName: Task Clips
     clipEvents:
     - startFrame: 2
-      durationFrame: 83
+      durationFrame: 143
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.BossCoreCharge
           Data: 
-    - startFrame: 85
-      durationFrame: 35
+    - startFrame: 145
+      durationFrame: 65
       ongoingTask:
         TaskData:
           Type: Demo.Script.GAS.AbilityTask.BossCoreDie

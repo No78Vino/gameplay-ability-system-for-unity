@@ -37,13 +37,7 @@ MonoBehaviour:
     _shortName: Ability
     _ancestorHashCodes: 
     _ancestorNames: []
-  ActivationOwnedTag:
-  - _name: Event.Defending
-    _hashCode: -2001503536
-    _shortName: Defending
-    _ancestorHashCodes: 0276cb27
-    _ancestorNames:
-    - Event
+  ActivationOwnedTag: []
   ActivationRequiredTags: []
   ActivationBlockedTags:
   - _name: Event.InAir
@@ -61,7 +55,15 @@ MonoBehaviour:
     - startFrame: 0
       cues:
       - {fileID: 11400000, guid: 131d5c34b4ba8d14a9c68cc3b1d9382a, type: 2}
-  ReleaseGameplayEffect: []
+  ReleaseGameplayEffect:
+  - trackName: 
+    markEvents:
+    - startFrame: 0
+      jsonTargetCatcher:
+        Type: GAS.Runtime.Ability.TargetCatcher.CatchSelf
+        Data: 
+      gameplayEffectAssets:
+      - {fileID: 11400000, guid: aa57a41bbd64bf248a74d1b0be4ed9f2, type: 2}
   BuffGameplayEffects:
   - trackName: BuffGameplayEffect
     clipEvents:

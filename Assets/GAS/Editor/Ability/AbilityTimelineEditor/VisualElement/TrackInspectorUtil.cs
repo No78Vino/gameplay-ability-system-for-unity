@@ -351,25 +351,11 @@ namespace GAS.Editor.Ability
         }
 
         public static ListView CreateListView<T>(string label, List<T> list, Func<VisualElement> makeItem,
-            Action<VisualElement, int> bindItem,Action<IEnumerable<object>> onSelectionChanged =null)
+            Action<VisualElement, int> bindItem,
+            Action<IEnumerable<object>> onSelectionChanged =null,
+            Action<IEnumerable<int>> onItemsAdded = null,
+            Action<IEnumerable<int>> onItemsRemoved = null)
         {
-            // VisualElement MakeItem()
-            // {
-            //     var textField = new TextField();
-            //     textField.isDelayed = true;
-            //     return textField;
-            // }
-
-            // void BindItem(VisualElement e, int i)
-            // {
-            //     var textField = (TextField)e;
-            //     textField.value = list[i];
-            //     textField.RegisterValueChangedCallback(evt =>
-            //     {
-            //         onItemValueChanged(i, evt);
-            //     });
-            // }
-
             var listView = new ListView(list, LineHeight, makeItem, bindItem);
             listView.headerTitle = label;
             listView.reorderable = true;
@@ -379,6 +365,9 @@ namespace GAS.Editor.Ability
             listView.itemsSource = list;
             listView.selectionType = SelectionType.Single;
             listView.selectionChanged += onSelectionChanged;
+            listView.itemsAdded += onItemsAdded;
+            listView.itemsRemoved += onItemsRemoved;
+            
 
             listView.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             listView.style.height = new StyleLength(StyleKeyword.Auto);

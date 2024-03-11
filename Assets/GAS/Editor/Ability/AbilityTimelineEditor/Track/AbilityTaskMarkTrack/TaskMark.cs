@@ -91,7 +91,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             
             // task列表
             taskList = TrackInspectorUtil.CreateListView<InstantTaskData>("Task", MarkData.InstantTasks,
-                MakeInstantTaskData,BindInstantTaskData, OnSelectionChanged);
+                MakeInstantTaskData,BindInstantTaskData, OnSelectionChanged,OnItemAdded,OnItemRemoved);
             inspector.Add(taskList);
             taskList.SetSelection(0);
 
@@ -99,6 +99,23 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             DrawTaskSonInspector(taskSonInspector);
             
             return inspector;
+        }
+
+        private void OnItemRemoved(IEnumerable<int> obj)
+        {
+            if (taskList.childCount == 0)
+            {
+                taskSonInspector.Clear();
+            }
+        }
+
+        private void OnItemAdded(IEnumerable<int> obj)
+        {
+            if (taskList.childCount == 1)
+            {
+                taskList.SetSelection(0);
+                DrawTaskSonInspector(taskSonInspector);
+            }
         }
 
         private void OnSelectionChanged(IEnumerable<object> obj)

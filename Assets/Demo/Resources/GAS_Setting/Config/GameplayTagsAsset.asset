@@ -52,6 +52,9 @@ MonoBehaviour:
   - _id: 13
     _name: Buff
     _depth: 1
+  - _id: 40
+    _name: DefendBuff
+    _depth: 2
   - _id: 22
     _name: BulkUp
     _depth: 2
@@ -182,6 +185,13 @@ MonoBehaviour:
     _ancestorHashCodes: 4b461665
     _ancestorNames:
     - State
+  - _name: State.Buff.DefendBuff
+    _hashCode: 1648387519
+    _shortName: DefendBuff
+    _ancestorHashCodes: 4b461665ce984a2c
+    _ancestorNames:
+    - State
+    - State.Buff
   - _name: State.Buff.BulkUp
     _hashCode: 8988933
     _shortName: BulkUp

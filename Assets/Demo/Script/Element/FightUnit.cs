@@ -1,5 +1,4 @@
 ﻿using BehaviorDesigner.Runtime;
-using Demo.Script.Fight;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Component;
@@ -18,13 +17,13 @@ public abstract class FightUnit : MonoBehaviour
     [SerializeField] protected Animator _animator;
     [SerializeField] protected BoxCollider2D defendArea;
     [SerializeField] protected GameplayEffectAsset gePostureReductionBuff;
-    protected Rigidbody2D _rb;
     protected BehaviorTree _bt;
+    protected Rigidbody2D _rb;
     private int _velocityX;
-    public bool Grounded { get; protected set; }
     protected float LastVelocityY;
+    public bool Grounded { get; protected set; }
     public FightUnit target { get; protected set; }
-    
+
     public AbilitySystemComponent ASC { get; private set; }
 
     public Transform Renderer => transform;
@@ -34,7 +33,6 @@ public abstract class FightUnit : MonoBehaviour
     private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
     public Animator Animator => _animator;
     private bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
-
 
     protected virtual void Awake()
     {
@@ -64,7 +62,7 @@ public abstract class FightUnit : MonoBehaviour
         // 设置动画机参数
         _animator.SetFloat(IsInAir, Grounded ? 0 : 1);
         _animator.SetFloat(UpOrDown, 0.5f * (1 - Mathf.Clamp(LastVelocityY, -1, 1)));
-        bool isDefending = ASC.HasTag(GameplayTagSumCollection.Event_Defending);
+        var isDefending = ASC.HasTag(GameplayTagSumCollection.Event_Defending);
         _animator.SetFloat(Moving, IsMoving && !isDefending ? 1 : 0);
         _animator.SetBool(Defending, isDefending);
     }
@@ -79,6 +77,16 @@ public abstract class FightUnit : MonoBehaviour
         ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChange);
     }
 
+    protected bool IsAlive()
+    {
+        return ASC.AttrSet<AS_Fight>().HP.CurrentValue > 0;
+    }
+
+    protected bool InDeath()
+    {
+        return ASC.HasTag(GameplayTagSumCollection.State_Debuff_Death);
+    }
+    
     public abstract void InitAttribute();
 
     public void SetIsGrounded(bool grounded)
@@ -123,6 +131,8 @@ public abstract class FightUnit : MonoBehaviour
     public void DeactivateDefend()
     {
         ASC.TryEndAbility(DefendName);
+        // 移除防御Buff
+        ASC.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(new GameplayTagSet(GameplayTagSumCollection.State_Buff_DefendBuff));
     }
 
     public void Dodge()
@@ -134,7 +144,7 @@ public abstract class FightUnit : MonoBehaviour
     {
         ASC.TryActivateAbility(DieName);
     }
-    
+
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
@@ -151,10 +161,10 @@ public abstract class FightUnit : MonoBehaviour
             return false;
 
         var deltaVector3 = target.transform.position - transform.position;
-        float distance = deltaVector3.magnitude;
+        var distance = deltaVector3.magnitude;
         return distance < 3;
     }
-    
+
     #region AbilityName
 
     protected abstract string MoveName { get; }

@@ -125,6 +125,30 @@ namespace UIGen
             internal static Main_Proxy GetUIDefine(this I_Main @this) => new Main_Proxy((GComponent)U.G(@this));
         }
 
+        internal interface I_RetryWindow { }
+        internal struct RetryWindow_Proxy
+        {
+            internal readonly GComponent Target { get; }
+            internal RetryWindow_Proxy(GComponent o) => Target = o;
+            
+            internal readonly Controller Controller_windowState => U.G(Target).GetController("windowState");
+            
+            internal readonly ButtonA_Proxy btnReturn => new ButtonA_Proxy((GButton)U.G(Target, "btnReturn"));
+            internal readonly ButtonA_Proxy btnRetry => new ButtonA_Proxy((GButton)U.G(Target, "btnRetry"));
+        }
+        internal static class RetryWindow_Extensions
+        {
+            internal static string GetUIPackageName(this I_RetryWindow _) => "Demo";
+            internal static string GetUIPackageItemName(this I_RetryWindow _) => "RetryWindow";
+            internal static RetryWindow_Proxy GetUIDefine(this I_RetryWindow @this) => new RetryWindow_Proxy((GComponent)U.G(@this));
+        }
+        internal static class RetryWindow_Pages
+        {
+            
+            internal static readonly string windowState_win = "win";
+            internal static readonly string windowState_lose = "lose";
+        }
+
         internal interface I_Setting { }
         internal struct Setting_Proxy
         {

@@ -31,13 +31,14 @@ namespace Demo.Script.GAS.TargetCatcher
         }
         
         /// <summary>
-        /// 没有防御成功的判定：1.没有防御  2.防御了，但是方向错误
+        /// 没有防御成功的判定：1.没有防御  2.防御了，但是方向错误(丢弃判断)
         /// </summary>
         /// <returns></returns>
         protected bool IsDefendSuccess(AbilitySystemComponent target)
         {
-            if (!target.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
-            return target.transform.localScale.x * Owner.transform.localScale.x < 0;
+            return target.HasTag(GameplayTagSumCollection.Event_Defending);
+            // if (!target.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
+            // return target.transform.localScale.x * Owner.transform.localScale.x < 0;
         }
     }
     

@@ -1,3 +1,4 @@
+using System;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime.Ability;
@@ -13,7 +14,7 @@ public class Player : FightUnit
     public const int MpMax = 100;
     public const int StaminaMax = 100;
     public const int PostureMax = 100;
-    public const int ATK = 10;
+    public const int ATK = 5;
     public const int Speed = 8;
 
     [SerializeField] private GameplayEffectAsset GEBuffStaminaRecover;
@@ -151,6 +152,11 @@ public class Player : FightUnit
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
         XUI.M.VM<MainUIVM>().UpdateHp(newValue);
+
+        if (Math.Abs(oldValue - newValue) > 0.1f && !IsAlive())
+        {
+            OnDie();
+        }
     }
     
     private float OnPostureChangePre(AttributeBase attr, float newValue)
@@ -162,5 +168,15 @@ public class Player : FightUnit
     {
         Debug.Log($"Posture changed from {oldValue} to {newValue}");
         XUI.M.VM<MainUIVM>().UpdatePosture(newValue);
+    }
+
+    private void OnDie()
+    {
+        Die();
+        // 死亡后，停止所有行为
+        _inputActionReference.Disable();
+        // 死亡UI界面
+        XUI.M.OpenWindow<RetryWindow>();
+        XUI.M.VM<RetryWindowVM>().SetRetryWindow(false);
     }
 }

@@ -67,7 +67,7 @@ MonoBehaviour:
       InstantTasks:
       - TaskData:
           Type: Demo.Script.GAS.AbilityTask.TeleportToBeamPoint
-          Data: '{"BeamPointLeft":{"x":-11.0,"y":-6.0},"BeamPointRight":{"x":11.0,"y":-6.0}}'
+          Data: '{"BeamPointLeft":{"x":-15.0,"y":-6.0},"BeamPointRight":{"x":15.0,"y":-6.0}}'
   OngoingTasks:
   - trackName: Task Clips
     clipEvents:
