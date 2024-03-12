@@ -26,9 +26,26 @@ namespace Demo.Script.UI
         
         public ObservableVariable<float> BossPosture = new ObservableVariable<float>();
         public ObservableVariable<float> BossPostureMax = new ObservableVariable<float>();
-
-
+        
+        public ObservableVariable<string> FireBulletName = new ObservableVariable<string>();
+        public ObservableVariable<float> FireBulletCDMax = new ObservableVariable<float>();
+        public ObservableVariable<float> FireBulletCD = new ObservableVariable<float>();
         public ObservableVariable<bool> FireBulletCDVisible = new ObservableVariable<bool>();
+        
+        public ObservableVariable<string> DodgeName = new ObservableVariable<string>();
+        public ObservableVariable<float> DodgeCDMax = new ObservableVariable<float>();
+        public ObservableVariable<float> DodgeCD = new ObservableVariable<float>();
+        public ObservableVariable<bool> DodgeCDVisible = new ObservableVariable<bool>();
+        
+        public ObservableVariable<string> PlayerBuffName = new ObservableVariable<string>();
+        public ObservableVariable<float> PlayerBuffTimeMax = new ObservableVariable<float>();
+        public ObservableVariable<float> PlayerBuffTime = new ObservableVariable<float>();
+        public ObservableVariable<bool> PlayerBuffVisible = new ObservableVariable<bool>();
+        
+        public ObservableVariable<string> BossBuffName = new ObservableVariable<string>();
+        public ObservableVariable<float> BossBuffTimeMax = new ObservableVariable<float>();
+        public ObservableVariable<float> BossBuffTime = new ObservableVariable<float>();
+        public ObservableVariable<bool> BossBuffVisible = new ObservableVariable<bool>();
         
         public MainUIVM()
         {
@@ -46,6 +63,15 @@ namespace Demo.Script.UI
             BossHp.Value = BossBladeFang.HpMax;
             BossPostureMax.Value = BossBladeFang.PostureMax;
             BossPosture.Value = BossBladeFang.PostureMax;
+            
+            FireBulletCDVisible.Value = false;
+            DodgeCDVisible.Value = false;
+            PlayerBuffVisible.Value = false;
+            BossBuffVisible.Value = false;
+            FireBulletName.Value = "火球术";
+            DodgeName.Value = "闪避";
+            PlayerBuffName.Value = "失衡";
+            BossBuffName.Value = "失衡";
         }
         
         public void UpdateStamina(float value)
@@ -103,6 +129,30 @@ namespace Demo.Script.UI
             UpdateBossHp(BossBladeFang.HpMax);
             
             HideBossUI();
+        }
+        
+        public void UpdateFireBulletCD(float value,float max)
+        {
+            FireBulletCD.Value = value;
+            FireBulletCDMax.Value = max;
+        }
+        
+        public void UpdateDodgeCD(float value,float max)
+        {
+            DodgeCD.Value = value;
+            DodgeCDMax.Value = max;
+        }
+        
+        public void UpdatePlayerBuffTime(float value,float max)
+        {
+            PlayerBuffTime.Value = value;
+            PlayerBuffTimeMax.Value = max;
+        }
+        
+        public void UpdateBossBuffTime(float value,float max)
+        {
+            BossBuffTime.Value = value;
+            BossBuffTimeMax.Value = max;
         }
     }
 }

@@ -16,5 +16,5 @@
       <relation target="" sidePair="left-left,bottom-bottom"/>
     </text>
   </displayList>
-  <ProgressBar titleType="value"/>
+  <ProgressBar titleType="valueAndmax"/>
 </component>

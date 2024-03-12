@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b8532700dc640b4aa84c6ef6fd6ad38, type: 3}
+  m_Name: CdBossStun
+  m_EditorClassIdentifier: 
+  RequiredTags:
+  - _name: Faction.Enemy
+    _hashCode: -1091112840
+    _shortName: Enemy
+    _ancestorHashCodes: 82bdedf5
+    _ancestorNames:
+    - Faction
+  ImmunityTags: []
+  cdType: 3

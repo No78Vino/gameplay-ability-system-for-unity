@@ -39,7 +39,30 @@ namespace Demo.Script.UI
             bindingSet.Bind(ui.BossPosture.Target).For(v => v.max).To(vm => vm.BossPostureMax.Value);
 
             #region skill and buff
+
+            bindingSet.Bind(ui.FireBulletCD.skillName).For(v => v.text).To(vm => vm.FireBulletName.Value);
             bindingSet.Bind(ui.FireBulletCD.Target).For(v => v.visible).To(vm => vm.FireBulletCDVisible.Value);
+            bindingSet.Bind(ui.FireBulletCD.Target).For(v => v.value).To(vm => vm.FireBulletCD.Value);
+            bindingSet.Bind(ui.FireBulletCD.Target).For(v => v.max).To(vm => vm.FireBulletCDMax.Value);
+            bindingSet.Bind(ui.FireBulletCD.cd).For(v => v.text).To(vm => vm.FireBulletCD.Value);
+
+            bindingSet.Bind(ui.DodgeCD.skillName).For(v => v.text).To(vm => vm.DodgeName.Value);
+            bindingSet.Bind(ui.DodgeCD.Target).For(v => v.visible).To(vm => vm.DodgeCDVisible.Value);
+            bindingSet.Bind(ui.DodgeCD.Target).For(v => v.value).To(vm => vm.DodgeCD.Value);
+            bindingSet.Bind(ui.DodgeCD.Target).For(v => v.max).To(vm => vm.DodgeCDMax.Value);
+            bindingSet.Bind(ui.DodgeCD.cd).For(v => v.text).To(vm => vm.DodgeCD.Value);
+
+            bindingSet.Bind(ui.StunStateTimer.skillName).For(v => v.text).To(vm => vm.PlayerBuffName.Value);
+            bindingSet.Bind(ui.StunStateTimer.Target).For(v => v.visible).To(vm => vm.PlayerBuffVisible.Value);
+            bindingSet.Bind(ui.StunStateTimer.Target).For(v => v.value).To(vm => vm.PlayerBuffTime.Value);
+            bindingSet.Bind(ui.StunStateTimer.Target).For(v => v.max).To(vm => vm.PlayerBuffTimeMax.Value);
+            bindingSet.Bind(ui.StunStateTimer.cd).For(v => v.text).To(vm => vm.PlayerBuffTime.Value);
+            
+            bindingSet.Bind(ui.BossStunTimer.skillName).For(v => v.text).To(vm => vm.BossBuffName.Value);
+            bindingSet.Bind(ui.BossStunTimer.Target).For(v => v.visible).To(vm => vm.BossBuffVisible.Value);
+            bindingSet.Bind(ui.BossStunTimer.Target).For(v => v.value).To(vm => vm.BossBuffTime.Value);
+            bindingSet.Bind(ui.BossStunTimer.Target).For(v => v.max).To(vm => vm.BossBuffTimeMax.Value);
+            bindingSet.Bind(ui.BossStunTimer.cd).For(v => v.text).To(vm => vm.BossBuffTime.Value);
 
             #endregion
 
