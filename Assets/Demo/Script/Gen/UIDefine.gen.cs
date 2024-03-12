@@ -113,16 +113,36 @@ namespace UIGen
             internal readonly GTextField BossName => (GTextField)U.G(Target, "BossName");
             internal readonly HpBar_Proxy BossHp => new HpBar_Proxy((GProgressBar)U.G(Target, "BossHp"));
             internal readonly HpBar_Proxy BossPosture => new HpBar_Proxy((GProgressBar)U.G(Target, "BossPosture"));
+            internal readonly GGroup Boss => (GGroup)U.G(Target, "Boss");
             internal readonly HpBar_Proxy Hp => new HpBar_Proxy((GProgressBar)U.G(Target, "Hp"));
             internal readonly HpBar_Proxy Mp => new HpBar_Proxy((GProgressBar)U.G(Target, "Mp"));
             internal readonly HpBar_Proxy Stamina => new HpBar_Proxy((GProgressBar)U.G(Target, "Stamina"));
             internal readonly HpBar_Proxy Posture => new HpBar_Proxy((GProgressBar)U.G(Target, "Posture"));
+            internal readonly GGroup Player => (GGroup)U.G(Target, "Player");
         }
         internal static class Main_Extensions
         {
             internal static string GetUIPackageName(this I_Main _) => "Demo";
             internal static string GetUIPackageItemName(this I_Main _) => "Main";
             internal static Main_Proxy GetUIDefine(this I_Main @this) => new Main_Proxy((GComponent)U.G(@this));
+        }
+
+        internal interface I_Menu { }
+        internal struct Menu_Proxy
+        {
+            internal readonly GComponent Target { get; }
+            internal Menu_Proxy(GComponent o) => Target = o;
+            
+            
+            internal readonly ButtonA_Proxy BtnStart => new ButtonA_Proxy((GButton)U.G(Target, "BtnStart"));
+            internal readonly ButtonA_Proxy BtnQuit => new ButtonA_Proxy((GButton)U.G(Target, "BtnQuit"));
+            internal readonly ButtonA_Proxy BtnGithub => new ButtonA_Proxy((GButton)U.G(Target, "BtnGithub"));
+        }
+        internal static class Menu_Extensions
+        {
+            internal static string GetUIPackageName(this I_Menu _) => "Demo";
+            internal static string GetUIPackageItemName(this I_Menu _) => "Menu";
+            internal static Menu_Proxy GetUIDefine(this I_Menu @this) => new Menu_Proxy((GComponent)U.G(@this));
         }
 
         internal interface I_RetryWindow { }

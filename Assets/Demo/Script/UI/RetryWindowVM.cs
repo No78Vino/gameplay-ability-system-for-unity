@@ -1,5 +1,6 @@
 using Loxodon.Framework.Extension;
 using UIGen.Demo;
+using UnityEngine;
 
 namespace Demo.Script.UI
 {
@@ -14,12 +15,14 @@ namespace Demo.Script.UI
         
         public void ReturnMenu()
         {
-            
+            Object.FindObjectOfType<Launcher>().StartGame();
+            commonRequest.Raise("close");
         }
 
         public void Retry()
         {
-            
+            Object.FindObjectOfType<Launcher>().ResetGameScene();
+            commonRequest.Raise("close");
         }
     }
 }

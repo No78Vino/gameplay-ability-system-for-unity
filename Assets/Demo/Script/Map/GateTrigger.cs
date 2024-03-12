@@ -16,14 +16,10 @@ public class GateTrigger : MonoBehaviour
     public ProCamera2D proCamera2D;
     public Transform BossRoomFollowTarget;
     
+    public Vector3 gateOpenPosition;
     public Vector3 gateClosePosition;
 
     public GameObject bossPrefab;
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -39,13 +35,12 @@ public class GateTrigger : MonoBehaviour
         player.DisableInput();
         
         // 关门
-        var startGatePosition = gate.transform.position;
         var closeTime = 0.5f;
         var timer = closeTime;
         while (timer > 0)
         {
             timer -= Time.deltaTime;
-            gate.transform.position = Vector3.Lerp(startGatePosition, gateClosePosition, 1 - timer / closeTime);
+            gate.transform.position = Vector3.Lerp(gateOpenPosition, gateClosePosition, 1 - timer / closeTime);
             await UniTask.Yield();
         }
         gate.transform.position = gateClosePosition;

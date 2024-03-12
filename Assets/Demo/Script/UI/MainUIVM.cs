@@ -87,5 +87,19 @@ namespace Demo.Script.UI
         {
             BossUiVisible.Value = false;
         }
+
+        public void ResetUI()
+        {
+            // 刷新player血条
+            UpdateStamina(Player.StaminaMax);
+            UpdatePosture(0);
+            UpdateHp(Player.HpMax);
+
+            // 刷新Boss血条
+            UpdateBossPosture(0);
+            UpdateBossHp(BossBladeFang.HpMax);
+            
+            HideBossUI();
+        }
     }
 }

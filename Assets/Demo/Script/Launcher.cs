@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using Com.LuisPedroFonseca.ProCamera2D;
+using Demo.Script.Element;
+using Demo.Script.Map;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using UnityEngine;
@@ -8,17 +11,17 @@ namespace Demo.Script
 {
     public class Launcher : MonoBehaviour
     {
-        private InputListener _inputListener;
-        private Player _player;
         [SerializeField] string prefixOfFguiPackagePath = "Assets/Game/FairyGUI/";
+        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private Vector3 playerSpawnPosition;
+        public BossRoomManager bossRoomManager;
+        public ProCamera2D proCamera2D;
         
-        private IEnumerator Start()
+        private void Start()
         {
             XUI.Launch(prefixOfFguiPackagePath,LoadResource);
-            XUI.M.OpenWindow<MainUI>();
-
-            yield return new WaitForSeconds(1f);
-            RegisterInputAction();
+            
+            StartGame();
         }
 
         private object LoadResource(string path, Type type)
@@ -39,9 +42,32 @@ namespace Demo.Script
             return obj;
         }
 
-        private void RegisterInputAction()
+
+        #region GameManager
+
+        public void StartGame()
         {
-            _player = FindObjectOfType<Player>();
+            XUI.M.OpenWindow<MainUI>();
+            XUI.M.OpenWindow<MenuWindow>();
+
+            ResetGameScene();
         }
+
+        public void ResetGameScene()
+        {
+            // 还原Boss房配置
+            bossRoomManager.ResetRoom();
+            
+            // 加载玩家
+            var player = Instantiate(playerPrefab, playerSpawnPosition, Quaternion.identity);
+            // 设置摄像机跟随
+            proCamera2D.RemoveAllCameraTargets();
+            proCamera2D.AddCameraTarget(player.transform);
+            
+            // 重置UI
+            XUI.M.VM<MainUIVM>().ResetUI();
+        }
+        #endregion
+
     }
 }
