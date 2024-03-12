@@ -1,4 +1,4 @@
-# EX Gameplay Ability System For Unity
+# EX Gameplay Ability System For Unity(W.I.P 文档还在施工中)
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
 ## ！！提醒！！请注意！！
