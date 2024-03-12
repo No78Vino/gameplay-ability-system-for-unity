@@ -119,6 +119,10 @@ namespace UIGen
             internal readonly HpBar_Proxy Stamina => new HpBar_Proxy((GProgressBar)U.G(Target, "Stamina"));
             internal readonly HpBar_Proxy Posture => new HpBar_Proxy((GProgressBar)U.G(Target, "Posture"));
             internal readonly GGroup Player => (GGroup)U.G(Target, "Player");
+            internal readonly SkillCDBar_Proxy BossStunTimer => new SkillCDBar_Proxy((GProgressBar)U.G(Target, "BossStunTimer"));
+            internal readonly SkillCDBar_Proxy StunStateTimer => new SkillCDBar_Proxy((GProgressBar)U.G(Target, "StunStateTimer"));
+            internal readonly SkillCDBar_Proxy DodgeCD => new SkillCDBar_Proxy((GProgressBar)U.G(Target, "DodgeCD"));
+            internal readonly SkillCDBar_Proxy FireBulletCD => new SkillCDBar_Proxy((GProgressBar)U.G(Target, "FireBulletCD"));
         }
         internal static class Main_Extensions
         {
@@ -192,6 +196,7 @@ namespace UIGen
             internal readonly GProgressBar Target { get; }
             internal SkillCDBar_Proxy(GProgressBar o) => Target = o;
             
+            internal readonly Controller Controller_progressType => U.G(Target).GetController("progressType");
             
             internal readonly GGraph bar => (GGraph)U.G(Target, "bar");
             internal readonly GTextField cd => (GTextField)U.G(Target, "cd");
@@ -202,6 +207,12 @@ namespace UIGen
             internal static string GetUIPackageName(this I_SkillCDBar _) => "Demo";
             internal static string GetUIPackageItemName(this I_SkillCDBar _) => "SkillCDBar";
             internal static SkillCDBar_Proxy GetUIDefine(this I_SkillCDBar @this) => new SkillCDBar_Proxy((GProgressBar)U.G(@this));
+        }
+        internal static class SkillCDBar_Pages
+        {
+            
+            internal static readonly string progressType_CD = "CD";
+            internal static readonly string progressType_Buff = "Buff";
         }
 
     }

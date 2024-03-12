@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1920,1080">
   <displayList>
-    <list id="n10_rfg0" name="buffList" xy="44,336" size="258,513" lineGap="53" defaultItem="ui://vw8ofc6ljair3" autoClearItems="true">
-      <item/>
-      <item/>
-      <item/>
+    <list id="n10_rfg0" name="buffList" xy="44,753" size="258,96" visible="false" lineGap="53" defaultItem="ui://vw8ofc6ljair3">
+      <relation target="" sidePair="width-width,height-height"/>
       <item/>
     </list>
     <graph id="n17_11ay3" name="n17" xy="201,933" size="1518,150" group="n14_rfg0" type="rect" lineSize="0" lineColor="#ffffffff" fillColor="#4c000000" corner="10"/>
@@ -36,6 +34,19 @@
       <ProgressBar value="59" max="100"/>
     </component>
     <group id="n11_rfg0" name="Player" xy="17,26" size="836,185" advanced="true"/>
+    <component id="n18_fay3" name="BossStunTimer" src="jair3" fileName="Components/SkillCDBar.xml" xy="743,897" size="434,25" controller="progressType,1">
+      <relation target="n14_rfg0" sidePair="bottom-top"/>
+      <ProgressBar value="50" max="100"/>
+    </component>
+    <component id="n19_fay3" name="StunStateTimer" src="jair3" fileName="Components/SkillCDBar.xml" xy="36,282" size="625,32" controller="progressType,1">
+      <ProgressBar value="50" max="100"/>
+    </component>
+    <component id="n20_fay3" name="DodgeCD" src="jair3" fileName="Components/SkillCDBar.xml" xy="33,499" size="307,28">
+      <ProgressBar value="50" max="100"/>
+    </component>
+    <component id="n21_fay3" name="FireBulletCD" src="jair3" fileName="Components/SkillCDBar.xml" xy="33,588" size="307,28">
+      <ProgressBar value="50" max="100"/>
+    </component>
   </displayList>
   <transition name="shakeSmall">
     <item time="0" type="Shake" value="3,0.7"/>

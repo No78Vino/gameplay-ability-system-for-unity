@@ -34,7 +34,7 @@ namespace Demo.Script.GAS.AbilityTask
 
         public override void OnEnd(int endFrame)
         {
-
+            _unit.Rb.MovePosition(_groundPoint);
         }
 
         public override void OnTick(int frameIndex, int startFrame, int endFrame)
