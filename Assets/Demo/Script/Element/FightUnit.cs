@@ -8,6 +8,8 @@ using UnityEngine;
 
 public abstract class FightUnit : MonoBehaviour
 {
+    public const int PostureMax = 100;
+    
     protected const float Gravity = 3f;
     protected const float HalfGravity = 1.5f;
     private static readonly int IsInAir = Animator.StringToHash("IsInAir");
@@ -17,6 +19,7 @@ public abstract class FightUnit : MonoBehaviour
     [SerializeField] protected Animator _animator;
     [SerializeField] protected BoxCollider2D defendArea;
     [SerializeField] protected GameplayEffectAsset gePostureReductionBuff;
+    [SerializeField] protected GameplayEffectAsset geOutOfPostureBuff;
     protected BehaviorTree _bt;
     protected Rigidbody2D _rb;
     private int _velocityX;
@@ -72,11 +75,13 @@ public abstract class FightUnit : MonoBehaviour
     protected virtual void OnEnable()
     {
         ASC.AttrSet<AS_Fight>().HP.RegisterPostBaseValueChange(OnHpChange);
+        ASC.AttrSet<AS_Fight>().POSTURE.RegisterPostBaseValueChange(OnPostureChange);
     }
 
     protected virtual void OnDisable()
     {
         ASC.AttrSet<AS_Fight>().HP.UnregisterPostBaseValueChange(OnHpChange);
+        ASC.AttrSet<AS_Fight>().POSTURE.UnregisterPostBaseValueChange(OnPostureChange);
     }
 
     protected bool IsAlive()
@@ -150,6 +155,22 @@ public abstract class FightUnit : MonoBehaviour
     private void OnHpChange(AttributeBase attr, float oldValue, float newValue)
     {
         Debug.Log($"HP changed from {oldValue} to {newValue}");
+    }
+    
+    private void OnPostureChange(AttributeBase attr, float oldValue, float newValue)
+    {
+        Debug.Log($"Posture changed from {oldValue} to {newValue}");
+
+        if (newValue >= PostureMax)
+        {
+            // 触发失衡Buff
+            ASC.ApplyGameplayEffectToSelf(new GameplayEffect(geOutOfPostureBuff));
+            ASC.AttrSet<AS_Fight>().POSTURE.SetBaseValue(0);
+            
+            // 打断所有能力
+            foreach (var abilityName in ASC.AbilityContainer.AbilitySpecs().Keys)
+                ASC.TryEndAbility(abilityName);
+        }
     }
 
     public void SetVelocityX(int velocityX)

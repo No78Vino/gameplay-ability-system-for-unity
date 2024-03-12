@@ -14,7 +14,6 @@ namespace Demo.Script.Element
     public class BossBladeFang:FightUnit
     {
         public const int HpMax = 300;
-        public const int PostureMax = 100;
         public const int ATK = 20;
         public const int Speed = 6;
 

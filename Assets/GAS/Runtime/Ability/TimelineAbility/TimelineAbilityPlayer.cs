@@ -7,29 +7,29 @@ using UnityEngine;
 
 namespace GAS.Runtime.Ability
 {
-    public abstract class RuntimeClipInfo
+    internal abstract class RuntimeClipInfo
     {
         public int endFrame;
         public int startFrame;
     }
 
-    public class RuntimeDurationCueClip : RuntimeClipInfo
+    internal class RuntimeDurationCueClip : RuntimeClipInfo
     {
         public GameplayCueDurationalSpec cueSpec;
     }
 
-    public class RuntimeBuffClip : RuntimeClipInfo
+    internal class RuntimeBuffClip : RuntimeClipInfo
     {
         public GameplayEffect buff;
         public GameplayEffectSpec buffSpec;
     }
 
-    public class RuntimeTaskClip : RuntimeClipInfo
+    internal class RuntimeTaskClip : RuntimeClipInfo
     {
         public OngoingAbilityTask task;
     }
 
-    public class RuntimeTaskMark
+    internal class RuntimeTaskMark
     {
         public int startFrame;
         public InstantAbilityTask task;

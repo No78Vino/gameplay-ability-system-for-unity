@@ -23,7 +23,7 @@ MonoBehaviour:
   - AttributeName: AS_Fight.POSTURE
     AttributeSetName: AS_Fight
     AttributeShortName: POSTURE
-    ModiferMagnitude: 5
+    ModiferMagnitude: 15
     Operation: 0
     MMC: {fileID: 11400000, guid: 225023c90079b7f4287ec4604d8d8039, type: 2}
   AssetTags: []

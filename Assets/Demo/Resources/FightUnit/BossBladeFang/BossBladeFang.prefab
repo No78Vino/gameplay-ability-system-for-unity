@@ -1067,6 +1067,7 @@ MonoBehaviour:
   _animator: {fileID: 2229927408114495210}
   defendArea: {fileID: 0}
   gePostureReductionBuff: {fileID: 11400000, guid: 0e44690e21c6c6b48bcc520828d7c0d8, type: 2}
+  geOutOfPostureBuff: {fileID: 11400000, guid: c86bb973d6bab234c923e00df8edda34, type: 2}
   player: {fileID: 0}
   core: {fileID: 977401605639662180}
 --- !u!114 &7519437156345001825
