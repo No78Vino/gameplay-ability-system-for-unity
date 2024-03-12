@@ -40,15 +40,17 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 - 9.[插件反馈渠道](#9插件反馈渠道)
 ## 1.快速开始
 ### 安装
-1. 使用Unity Package Manager安装
-在Unity Package Manager中添加git地址：
-2. 使用git clone
+1. 导入Odin Inspector插件(付费),Odin Inspector来源请自行解决。建议使用3.2+版本。
+2. 导入本插件，建议以下两种方式：
+- 使用Unity Package Manager安装
+在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS
+【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
+- 使用git clone本仓库[镜像同上]，然后将Assets/GAS文件夹拷贝到你的项目中即可
 
----
 ### 使用
 GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移植，所以实现逻辑基本一致。建议先粗略了解一下UE版本的GAS整体逻辑，参考项目文档：https://github.com/BillEliot/GASDocumentation_Chinese
 
-`参考使用案例：`
+#### 参考使用案例 [Demo](Assets/Demo)
 
 #### *使用流程*
 1. 基础设置
