@@ -181,7 +181,8 @@ namespace GAS.Editor.GameplayAbilitySystem
             Abilities.Clear();
             foreach (var ability in _selected.AbilityContainer.AbilitySpecs())
             {
-                Abilities.Add($"{ability.Key} | Lv.{ability.Value.Level}");
+                string isActive = ability.Value.IsActive ? " ( Active ) " : "";
+                Abilities.Add($"{ability.Key} | Lv.{ability.Value.Level}  {isActive}");
             }
             
             Attributes.Clear();

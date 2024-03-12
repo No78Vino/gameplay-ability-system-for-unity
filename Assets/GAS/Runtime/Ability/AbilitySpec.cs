@@ -122,6 +122,8 @@ namespace GAS.Runtime.Ability
         {
             if (!IsActive) return;
             IsActive = false;
+            
+            Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
         }
 

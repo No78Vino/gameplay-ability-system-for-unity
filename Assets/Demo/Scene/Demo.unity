@@ -50403,11 +50403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8c96e2cdc154e848a3d9fe62464d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraTargets:
-  - TargetTransform: {fileID: 0}
-    TargetInfluenceH: 1
-    TargetInfluenceV: 1
-    TargetOffset: {x: 0, y: 0}
+  CameraTargets: []
   CenterTargetOnStart: 0
   Axis: 0
   UpdateType: 0
@@ -50453,7 +50449,7 @@ Transform:
   m_GameObject: {fileID: 1014906066}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -25.66, y: 0.89, z: 0}
+  m_LocalPosition: {x: -25.66, y: -3.959774, z: 0}
   m_LocalScale: {x: 17.274225, y: 4.7006216, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50761,6 +50757,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 1867296893552595713, guid: a50ffa46e6acbde43af6f415826b7fe4, type: 3}
   playerSpawnPosition: {x: -70, y: -5, z: 0}
   bossRoomManager: {fileID: 1059539872}
+  proCamera2D: {fileID: 738742199}
 --- !u!4 &1431028661
 Transform:
   m_ObjectHideFlags: 0
