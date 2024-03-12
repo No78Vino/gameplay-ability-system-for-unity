@@ -27,6 +27,9 @@ namespace Demo.Script.UI
         public ObservableVariable<float> BossPosture = new ObservableVariable<float>();
         public ObservableVariable<float> BossPostureMax = new ObservableVariable<float>();
 
+
+        public ObservableVariable<bool> FireBulletCDVisible = new ObservableVariable<bool>();
+        
         public MainUIVM()
         {
             playerHpMax.Value = Player.HpMax;
