@@ -1,8 +1,7 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using UnityEngine.UIElements;
     public class TimelineInspector
     {
         private VisualElement _root;
@@ -55,3 +54,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

@@ -1,13 +1,13 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.General.Util;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TargetCatcher;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using GAS.General.Util;
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TargetCatcher;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class CatchAreaBox2DInspector:TargetCatcherInspector<CatchAreaBox2D>
     {
         public CatchAreaBox2DInspector(CatchAreaBox2D targetCatcherBase) : base(targetCatcherBase)
@@ -79,3 +79,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

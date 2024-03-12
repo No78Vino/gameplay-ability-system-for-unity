@@ -1,31 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using GAS.General.Util;
 using GAS.Runtime.Cue;
-using UnityEditor.Animations;
 using UnityEngine;
-using GAS.General.Util;
 
 namespace GAS.Cue
 {
-    public class CuePlayAnimationOfFightUnit: GameplayCueInstant
+    public class CuePlayAnimationOfFightUnit : GameplayCueInstant
     {
         [SerializeField] private string animName;
         public string AnimName => animName;
-        
+
         public override GameplayCueInstantSpec CreateSpec(GameplayCueParameters parameters)
         {
             return new CuePlayAnimationOfFightUnitSpec(this, parameters);
         }
 
-        public override void OnEditorPreview(GameObject preview,int frame, int startFrame)
+        public override void OnEditorPreview(GameObject preview, int frame, int startFrame)
         {
+#if UNITY_EDITOR
             var unit = preview.GetComponent<FightUnit>();
             if (startFrame <= frame)
             {
                 var animatorObject = unit.Animator.gameObject;
                 var animator = unit.Animator;
-                var stateMap = animator.GetAllAnimationState(0);
-                if(stateMap.TryGetValue(animName, out var clip))
+                var stateMap = animator.GetAllAnimationState();
+                if (stateMap.TryGetValue(animName, out var clip))
                 {
                     float clipFrameCount = (int)(clip.frameRate * clip.length);
                     if (frame < clipFrameCount + startFrame)
@@ -36,17 +34,20 @@ namespace GAS.Cue
                     }
                 }
             }
+#endif
         }
     }
-    
-    public class CuePlayAnimationOfFightUnitSpec: GameplayCueInstantSpec
+
+    public class CuePlayAnimationOfFightUnitSpec : GameplayCueInstantSpec
     {
         private readonly CuePlayAnimationOfFightUnit _cuePlayAnimationOfFightUnit;
-        public CuePlayAnimationOfFightUnitSpec(CuePlayAnimationOfFightUnit cue, GameplayCueParameters parameters) : base(cue, parameters)
+
+        public CuePlayAnimationOfFightUnitSpec(CuePlayAnimationOfFightUnit cue, GameplayCueParameters parameters) :
+            base(cue, parameters)
         {
             _cuePlayAnimationOfFightUnit = _cue as CuePlayAnimationOfFightUnit;
         }
-        
+
         public override void Trigger()
         {
             var unit = Owner.GetComponent<FightUnit>();

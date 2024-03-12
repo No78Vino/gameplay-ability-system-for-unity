@@ -1,9 +1,11 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace UnityEditor.TreeDataModel
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    
     [Serializable]
     public class TreeElement
     {
@@ -60,3 +62,4 @@ namespace UnityEditor.TreeDataModel
         }
     }
 }
+#endif

@@ -1,9 +1,9 @@
-using GAS.Runtime.Ability;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using GAS.Runtime.Ability;
+    using UnityEngine.UIElements;
+
     public abstract class AbilityTaskInspector
     {
         protected AbilityTaskBase _taskBase;
@@ -18,3 +18,4 @@ namespace GAS.Editor.Ability
         protected abstract void Save();
     }
 }
+#endif

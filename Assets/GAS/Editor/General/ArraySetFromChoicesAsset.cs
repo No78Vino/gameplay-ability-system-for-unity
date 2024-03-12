@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
-using GAS.Runtime.Tags;
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
+    using System;
+    using System.Collections.Generic;
+    using GAS.Runtime.Tags;
+    using UnityEditor;
+    using UnityEngine;
+    
     public class ArraySetFromChoicesAsset<T>
     {
         private List<T> choices;
@@ -101,3 +102,4 @@ namespace GAS.Editor.General
         }
     }
 }
+#endif

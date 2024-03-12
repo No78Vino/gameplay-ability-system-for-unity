@@ -13,6 +13,8 @@ namespace GAS.Runtime.Cue
 {
     public abstract class GameplayCue : ScriptableObject
     {
+        private const string TagBoxGroup = "TagBoxGroup";
+        
         [Title("标签")]
         [BoxGroup(TagBoxGroup,false)]
         [ListDrawerSettings(Expanded = true)]
@@ -39,7 +41,6 @@ namespace GAS.Runtime.Cue
         }
         
 #if UNITY_EDITOR
-        private const string TagBoxGroup = "TagBoxGroup";
         private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
         
         private void OnEnable()

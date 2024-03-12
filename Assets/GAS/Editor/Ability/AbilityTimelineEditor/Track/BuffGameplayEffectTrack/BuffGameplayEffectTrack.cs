@@ -1,37 +1,38 @@
-﻿using System;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class BuffGameplayEffectTrack: TrackBase
+    using System;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
+    public class BuffGameplayEffectTrack : TrackBase
     {
         private BuffGameplayEffectTrackData _buffGameplayEffectTrackData;
         public override Type TrackDataType => typeof(BuffGameplayEffectTrackData);
-        protected override Color TrackColor => new Color(0.9f, 0.6f, 0.6f, 0.2f);
-        protected override Color MenuColor => new Color(0.9f, 0.6f, 0.6f, 1);
+        protected override Color TrackColor => new(0.9f, 0.6f, 0.6f, 0.2f);
+        protected override Color MenuColor => new(0.9f, 0.6f, 0.6f, 1);
 
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+
         public BuffGameplayEffectTrackData BuffTrackDataForSave
         {
             get
             {
-                for (int i = 0; i < AbilityAsset.BuffGameplayEffects.Count; i++)
-                {
-                    if(AbilityAsset.BuffGameplayEffects[i] == _buffGameplayEffectTrackData)
+                for (var i = 0; i < AbilityAsset.BuffGameplayEffects.Count; i++)
+                    if (AbilityAsset.BuffGameplayEffects[i] == _buffGameplayEffectTrackData)
                         return AbilityAsset.BuffGameplayEffects[i];
-                }
                 return null;
             }
         }
-        
+
         public override void TickView(int frameIndex, params object[] param)
         {
         }
 
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData)
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
+            TrackDataBase trackData)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
             _buffGameplayEffectTrackData = trackData as BuffGameplayEffectTrackData;
@@ -52,7 +53,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     _trackItems.Add(item);
                 }
         }
-        
+
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Clip数据
@@ -62,15 +63,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 durationFrame = 5
             };
             BuffTrackDataForSave.clipEvents.Add(clipEvent);
-            
+
             // 刷新显示
             var item = new BuffGameplayEffectClip();
             item.InitTrackClip(this, Track, _frameWidth, clipEvent);
             _trackItems.Add(item);
-            
+
             // 选中新Clip
             item.ClipVe.OnSelect();
-            
+
             Debug.Log("[EX] Add a new Buff GameplayEffect Clip");
         }
 
@@ -87,25 +88,27 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
 
         #region Inspector
-        
+
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
             // track Name
-            var trackNameTextField =TrackInspectorUtil.CreateTextField("轨道名",_buffGameplayEffectTrackData.trackName,
-                (evt =>
+            var trackNameTextField = TrackInspectorUtil.CreateTextField("轨道名", _buffGameplayEffectTrackData.trackName,
+                evt =>
                 {
                     // 修改数据
                     BuffTrackDataForSave.trackName = evt.newValue;
                     AbilityAsset.Save();
                     // 修改显示
                     MenuText.text = evt.newValue;
-                }));
+                });
             inspector.Add(trackNameTextField);
-            
-            
+
+
             return inspector;
         }
+
         #endregion
     }
 }
+#endif

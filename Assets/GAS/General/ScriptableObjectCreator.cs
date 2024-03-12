@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities;
-using UnityEditor;
-using UnityEngine;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.General
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Sirenix.OdinInspector.Editor;
+    using Sirenix.Utilities;
+    using UnityEditor;
+    using UnityEngine;
+    
     public static class ScriptableObjectCreator
     {
         public static void ShowDialog<T>(string defaultDestinationPath, Action<T> onScritpableObjectCreated = null)

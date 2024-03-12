@@ -1,11 +1,12 @@
-﻿using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEditor;
+    using UnityEngine;
+    
+    using UnityEngine.UIElements;
     public abstract class TrackMarkBase:TrackItemBase
     {
         protected static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
@@ -159,25 +160,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             
             RefreshShow(FrameUnitWidth);
         }
-
-
-        // public override void Duplicate()
-        // {
-        //     // 添加Mark数据
-        //     var startFrame = markData.startFrame < AbilityAsset.FrameCount
-        //         ? markData.startFrame + 1
-        //         : markData.startFrame - 1;
-        //     startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.FrameCount);
-        //     var markEvent = markData;
-        //     markEvent.startFrame = startFrame;
-        //     track.AddTrackItem();
-        //     track.InstantTaskEventTrackData.markEvents.Add(markEvent);
-        //
-        //     // 刷新显示
-        //     var mark = new TaskMark();
-        //     mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
-        //     track.TrackItems.Add(mark);
-        //     mark.OnSelect();
-        // }
     }
 }
+
+#endif

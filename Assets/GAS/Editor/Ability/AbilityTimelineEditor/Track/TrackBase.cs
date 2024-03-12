@@ -1,49 +1,55 @@
-using System;
-using System.Collections.Generic;
-using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using System.Collections.Generic;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEditor;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public abstract class TrackBase
     {
-        protected TrackDataBase _trackData;
-        protected List<TrackItemBase> _trackItems = new List<TrackItemBase>();
-        public List<TrackItemBase> TrackItems => _trackItems;
-
         protected float _frameWidth;
-        public VisualElement MenuRoot;
-        public VisualElement TrackRoot;
-        protected VisualElement MenuParent;
-        protected VisualElement TrackParent;
-        public VisualElement Track { get; protected set; }
-        protected Label MenuText;
-        protected VisualElement MenuBox;
+        protected TrackDataBase _trackData;
+        protected List<TrackItemBase> _trackItems = new();
         protected VisualElement BoundingBox;
         protected VisualElement Lock;
-        
+        protected VisualElement MenuBox;
+        protected VisualElement MenuParent;
+        public VisualElement MenuRoot;
+        protected Label MenuText;
+        protected VisualElement TrackParent;
+        public VisualElement TrackRoot;
+        public List<TrackItemBase> TrackItems => _trackItems;
+        public VisualElement Track { get; protected set; }
+
         protected virtual string TrackAssetGuid => "67e1b3c42dcc09a4dbb9e9b107500dfd";
         protected virtual string MenuAssetGuid => "afb618c74510baa41a7d3928c0e57641";
         protected static AbilityTimelineEditorWindow EditorInst => AbilityTimelineEditorWindow.Instance;
         public abstract Type TrackDataType { get; }
         protected abstract Color TrackColor { get; }
         protected abstract Color MenuColor { get; }
-        public virtual bool IsFixedTrack() => false;
+
+        public virtual bool IsFixedTrack()
+        {
+            return false;
+        }
+
         public abstract void TickView(int frameIndex, params object[] param);
         public abstract VisualElement Inspector();
-        
-        public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,TrackDataBase trackData)
+
+        public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
+            TrackDataBase trackData)
         {
             _trackData = trackData;
             TrackParent = trackParent;
             MenuParent = menuParent;
             var trackAssetPath = AssetDatabase.GUIDToAssetPath(TrackAssetGuid);
             var menuAssetPath = AssetDatabase.GUIDToAssetPath(MenuAssetGuid);
-            TrackRoot = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(trackAssetPath).Instantiate().Query().ToList()[1];
+            TrackRoot = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(trackAssetPath).Instantiate().Query()
+                .ToList()[1];
             MenuRoot = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(menuAssetPath).Instantiate().Query().ToList()[1];
             Track = TrackRoot.Q<VisualElement>("Container");
             MenuText = MenuRoot.Q<Label>("TrackName");
@@ -58,14 +64,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             MenuRoot.RegisterCallback<MouseDownEvent>(OnMenuMouseDown);
             MenuRoot.AddManipulator(new ContextualMenuManipulator(OnMenuContextMenu));
-                
+
             TrackRoot.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             TrackRoot.RegisterCallback<PointerOutEvent>(OnPointerOut);
             TrackRoot.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
 
             // Track.style.backgroundColor = new Color(0, 0, 0, 0); //TrackColor;
             // BoundingBox.style.backgroundColor = MenuColor;
-            
+
             MenuBox.style.right = 0;
             MenuBox.style.left = new StyleLength(StyleKeyword.Auto);
         }
@@ -78,17 +84,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void OnPointerOut(PointerOutEvent evt)
         {
             foreach (var trackItemBase in _trackItems)
-            {
                 if (trackItemBase is TrackClipBase clipViewPair)
                     clipViewPair.ClipVe.OnHover(false);
-            }
         }
 
         private void OnPointerMove(PointerMoveEvent evt)
         {
             var mousePos = evt.position;
             foreach (var trackItemBase in _trackItems)
-            {
                 if (trackItemBase is TrackClipBase clipViewPair)
                 {
                     clipViewPair.ClipVe.OnHover(false);
@@ -97,7 +100,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     evt.StopImmediatePropagation();
                     return;
                 }
-            }
         }
 
         public virtual void RefreshShow(float newFrameWidth)
@@ -115,11 +117,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             Track.Remove(item.Ve);
             _trackItems.Remove(item);
         }
-        
+
+        public static int GetTrackIndexByMouse(float mouseLocalPositionX)
+        {
+            var x = mouseLocalPositionX - EditorInst.TimerShaftView.TimerShaft.worldBound.x +
+                    EditorInst.CurrentFramePos;
+            return Mathf.RoundToInt(x) / EditorInst.Config.FrameUnitWidth;
+        }
+
         #region Select
+
         public bool Selected { get; private set; }
-        private static Color MenuSelectedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-        private static Color MenuUnSelectedColor = new Color(0.5f, 0.5f, 0.5f, 0f);
+        private static readonly Color MenuSelectedColor = new(0.5f, 0.5f, 0.5f, 1f);
+        private static readonly Color MenuUnSelectedColor = new(0.5f, 0.5f, 0.5f, 0f);
+
         public void OnSelect()
         {
             Selected = true;
@@ -135,13 +146,14 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         #endregion
 
-        
+
         #region Operation of Track
+
         private void OnMenuContextMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("Delete", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
         }
-        
+
         private void OnContextMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("Add Item", OnAddTrackItem, DropdownMenuAction.AlwaysEnabled);
@@ -151,14 +163,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected abstract void OnAddTrackItem(DropdownMenuAction action);
 
         protected abstract void OnRemoveTrack(DropdownMenuAction action);
-        
-        #endregion
 
-        public static int GetTrackIndexByMouse(float mouseLocalPositionX)
-        {
-            var x = mouseLocalPositionX - EditorInst.TimerShaftView.TimerShaft.worldBound.x + EditorInst.CurrentFramePos;
-            return Mathf.RoundToInt(x) / EditorInst.Config.FrameUnitWidth;
-        }
+        #endregion
     }
 }
 #endif

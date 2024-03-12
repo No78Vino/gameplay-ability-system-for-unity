@@ -1,9 +1,10 @@
-﻿using System;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+﻿#if  UNITY_EDITOR
 
 namespace GAS.Editor.Ability
 {
+    using System;
+    using UnityEngine.UIElements;
+    
     public class PointerIMGUIContainer : IMGUIContainer
     {
         private Action<MouseDownEvent> _onPointerDown;
@@ -37,3 +38,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

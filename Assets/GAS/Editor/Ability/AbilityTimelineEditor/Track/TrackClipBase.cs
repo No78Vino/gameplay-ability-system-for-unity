@@ -1,13 +1,15 @@
-﻿using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public abstract class TrackClipBase:TrackItemBase
+    using GAS.Runtime.Ability;
+    using UnityEngine.UIElements;
+    
+    public abstract class TrackClipBase : TrackItemBase
     {
         protected ClipEventBase clipData;
+
         protected TrackBase trackBase;
+
         //protected TrackClipVisualElement ve;
         public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
@@ -46,7 +48,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public virtual void RefreshShow(float newFrameUnitWidth)
         {
             FrameUnitWidth = newFrameUnitWidth;
-            
+
             // clip位置，宽度
             var mainPos = ve.transform.position;
             mainPos.x = StartFrameIndex * FrameUnitWidth;
@@ -79,3 +81,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

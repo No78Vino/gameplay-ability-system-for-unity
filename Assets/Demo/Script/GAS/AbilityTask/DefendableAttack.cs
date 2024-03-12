@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using GAS.Editor.Ability;
-using GAS.Editor.Ability.AbilityTimelineEditor;
 using GAS.General.Util;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TimelineAbility;
@@ -9,25 +7,29 @@ using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
 using UnityEngine;
 using UnityEngine.UIElements;
+#if UNITY_EDITOR
+using GAS.Editor.Ability;
+using GAS.Editor.Ability.AbilityTimelineEditor;
+#endif
 
 namespace Demo.Script.GAS.AbilityTask
 {
     [Serializable]
-    public class DefendableAttack:InstantAbilityTask
+    public class DefendableAttack : InstantAbilityTask
     {
         public EffectCenterType CenterType;
         public Vector2 Size;
         public Vector2 Offset;
         public float Angle;
-        
+
         public GameplayEffectAsset DefendedDamageEffect;
         public GameplayEffectAsset PerfectDefendEffect;
         public GameplayEffectAsset DirectDamageEffect;
-        
-        bool Defended(FightUnit target,Collider2D[] defendAreas)
+
+        bool Defended(FightUnit target, Collider2D[] defendAreas)
         {
-            if(!target.ASC.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
-            
+            if (!target.ASC.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
+
             return defendAreas.Any(defendArea => target.DefendArea == defendArea);
         }
 
@@ -35,12 +37,14 @@ namespace Demo.Script.GAS.AbilityTask
         {
             return target.ASC.HasTag(GameplayTagSumCollection.Event_PerfectDefending);
         }
-        
+
         public override void OnExecute()
         {
             var relativeTransform = _spec.Owner.GetComponent<FightUnit>().Renderer.transform;
-            var targets = ((TimelineAbilitySpec)_spec).TimelineAbilityOverlapBox2D(Offset, Size, Angle, LayerMask.GetMask("FightUnit"), CenterType,relativeTransform);
-            var defendAreas = ((TimelineAbilitySpec)_spec).TimelineAbilityOverlapBox2D(Offset, Size, Angle, LayerMask.GetMask("DefendArea"), CenterType,relativeTransform);
+            var targets = ((TimelineAbilitySpec)_spec).TimelineAbilityOverlapBox2D(Offset, Size, Angle,
+                LayerMask.GetMask("FightUnit"), CenterType, relativeTransform);
+            var defendAreas = ((TimelineAbilitySpec)_spec).TimelineAbilityOverlapBox2D(Offset, Size, Angle,
+                LayerMask.GetMask("DefendArea"), CenterType, relativeTransform);
 
             var owner = _spec.Owner;
             foreach (var target in targets)
@@ -62,7 +66,7 @@ namespace Demo.Script.GAS.AbilityTask
                             var effect = new GameplayEffect(DefendedDamageEffect);
                             owner.ApplyGameplayEffectTo(effect, targetUnit.ASC);
                         }
-            
+
                     }
                     else
                     {
@@ -74,6 +78,7 @@ namespace Demo.Script.GAS.AbilityTask
         }
     }
 
+#if UNITY_EDITOR
     public class DefendableAttackInspector : InstantAbilityTaskInspector<DefendableAttack>
     {
         public DefendableAttackInspector(AbilityTaskBase taskBase) : base(taskBase)
@@ -83,10 +88,10 @@ namespace Demo.Script.GAS.AbilityTask
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateSonInspector(false);
-            
+
             var label = TrackInspectorUtil.CreateLabel("Defendable Attack");
             inspector.Add(label);
-            
+
             var centerType = TrackInspectorUtil.CreateEnumField("CenterType", _task.CenterType, (evt) =>
             {
                 _task.CenterType = (EffectCenterType)(evt.newValue);
@@ -95,7 +100,7 @@ namespace Demo.Script.GAS.AbilityTask
             inspector.Add(centerType);
 
             var size = TrackInspectorUtil.CreateVector2Field("Size", _task.Size,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _task.Size = newValue;
                     Save();
@@ -103,41 +108,44 @@ namespace Demo.Script.GAS.AbilityTask
             inspector.Add(size);
 
             var offset = TrackInspectorUtil.CreateVector2Field("Offset", _task.Offset,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _task.Offset = newValue;
                     Save();
                 });
             inspector.Add(offset);
-            
+
             var angle = TrackInspectorUtil.CreateFloatField("Angle", _task.Angle, (evt) =>
             {
                 _task.Angle = evt.newValue;
                 Save();
             });
             inspector.Add(angle);
-            
-            var defendedDamageEffect = TrackInspectorUtil.CreateObjectField("DefendedDamageEffect",typeof(GameplayEffectAsset), _task.DefendedDamageEffect, (evt) =>
-            {
-                _task.DefendedDamageEffect = evt.newValue as GameplayEffectAsset;
-                Save();
-            });
+
+            var defendedDamageEffect = TrackInspectorUtil.CreateObjectField("DefendedDamageEffect",
+                typeof(GameplayEffectAsset), _task.DefendedDamageEffect, (evt) =>
+                {
+                    _task.DefendedDamageEffect = evt.newValue as GameplayEffectAsset;
+                    Save();
+                });
             inspector.Add(defendedDamageEffect);
-            
-            var perfectDefendEffect = TrackInspectorUtil.CreateObjectField("PerfectDefendEffect",typeof(GameplayEffectAsset), _task.PerfectDefendEffect, (evt) =>
-            {
-                _task.PerfectDefendEffect = evt.newValue as GameplayEffectAsset;
-                Save();
-            });
+
+            var perfectDefendEffect = TrackInspectorUtil.CreateObjectField("PerfectDefendEffect",
+                typeof(GameplayEffectAsset), _task.PerfectDefendEffect, (evt) =>
+                {
+                    _task.PerfectDefendEffect = evt.newValue as GameplayEffectAsset;
+                    Save();
+                });
             inspector.Add(perfectDefendEffect);
-            
-            var directDamageEffect = TrackInspectorUtil.CreateObjectField("DirectDamageEffect",typeof(GameplayEffectAsset), _task.DirectDamageEffect, (evt) =>
-            {
-                _task.DirectDamageEffect = evt.newValue as GameplayEffectAsset;
-                Save();
-            });
+
+            var directDamageEffect = TrackInspectorUtil.CreateObjectField("DirectDamageEffect",
+                typeof(GameplayEffectAsset), _task.DirectDamageEffect, (evt) =>
+                {
+                    _task.DirectDamageEffect = evt.newValue as GameplayEffectAsset;
+                    Save();
+                });
             inspector.Add(directDamageEffect);
-            
+
             return inspector;
         }
 
@@ -146,7 +154,8 @@ namespace Demo.Script.GAS.AbilityTask
             // 使用Debug 绘制box预览
             float showTime = 1;
             Color color = Color.green;
-            var relativeTransform = AbilityTimelineEditorWindow.Instance.PreviewObject.GetComponent<FightUnit>().Renderer.transform;
+            var relativeTransform = AbilityTimelineEditorWindow.Instance.PreviewObject.GetComponent<FightUnit>()
+                .Renderer.transform;
             var center = _task.Offset;
             var size = _task.Size;
             var angle = _task.Angle + relativeTransform.eulerAngles.z;
@@ -164,7 +173,9 @@ namespace Demo.Script.GAS.AbilityTask
                     //center = _spec.Target.transform.position + (Vector3)_task.Offset;
                     break;
             }
+
             DebugExtension.DebugBox(center, size, angle, color, showTime);
         }
     }
+#endif
 }

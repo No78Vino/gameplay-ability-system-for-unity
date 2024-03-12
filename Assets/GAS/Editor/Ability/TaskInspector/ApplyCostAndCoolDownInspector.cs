@@ -1,9 +1,9 @@
-using GAS.Runtime.Ability;
-using UnityEngine;
-using UnityEngine.UIElements;
+#if UNITY_EDITOR
 
 namespace GAS.Editor.Ability
 {
+    using GAS.Runtime.Ability;
+    using UnityEngine.UIElements;
     public class ApplyCostAndCoolDownInspector:InstantAbilityTaskInspector<ApplyCostAndCoolDown>
     {
         public ApplyCostAndCoolDownInspector(AbilityTaskBase taskBase) : base(taskBase)
@@ -25,3 +25,5 @@ namespace GAS.Editor.Ability
         }
     }
 }
+
+#endif

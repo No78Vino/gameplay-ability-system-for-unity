@@ -1,7 +1,8 @@
-using GAS.General;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using GAS.General;
+
     public class AbilityTimelineEditorConfig
     {
         public int FrameUnitWidth = 10;
@@ -11,3 +12,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public int DefaultFrameRate => GASTimer.FrameRate;
     }
 }
+#endif

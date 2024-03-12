@@ -1,11 +1,12 @@
-﻿using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Cue;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using GAS.Runtime.Cue;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class DurationalCueClip : TrackClip<DurationalCueTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
@@ -108,14 +109,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var inspector = TrackInspectorUtil.CreateTrackInspector();
 
             // 运行帧
-            _startFrameLabel = TrackInspectorUtil.CreateLabel($"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
+            _startFrameLabel =
+                TrackInspectorUtil.CreateLabel(
+                    $"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
             inspector.Add(_startFrameLabel);
 
             // 持续帧
             _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)", DurationalCueClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
-            
+
             // cue Asset
             var cue = TrackInspectorUtil.CreateObjectField("Cue", typeof(GameplayCueDurational),
                 DurationalCueClipData.cue,
@@ -147,10 +150,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             UpdateClipDataDurationFrame(newValue);
             // 修改显示
             RefreshShow(FrameUnitWidth);
-            _startFrameLabel = TrackInspectorUtil.CreateLabel($"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
+            _startFrameLabel =
+                TrackInspectorUtil.CreateLabel(
+                    $"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
             _durationField.value = newValue;
         }
 
         #endregion
     }
 }
+#endif

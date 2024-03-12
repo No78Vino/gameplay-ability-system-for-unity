@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GAS.General;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEngine;
-using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
-
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.General;
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class TaskMark : TrackMark<TaskMarkEventTrack>
     {
         private TaskMarkEvent MarkData => markData as TaskMarkEvent;
@@ -224,3 +225,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

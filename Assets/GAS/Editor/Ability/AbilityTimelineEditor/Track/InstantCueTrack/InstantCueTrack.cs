@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Cue;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using System.Collections.Generic;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using GAS.Runtime.Cue;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class InstantCueTrack : TrackBase
     {
         private InstantCueTrackData _instantCuesTrackData;
@@ -100,7 +102,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var mark = new InstantCueMark();
             mark.InitTrackMark(this, Track, _frameWidth, markEvent);
             _trackItems.Add(mark);
-            
+
             mark.OnSelect();
             Debug.Log("[EX] Add Instant Cue Mark");
         }
@@ -117,3 +119,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

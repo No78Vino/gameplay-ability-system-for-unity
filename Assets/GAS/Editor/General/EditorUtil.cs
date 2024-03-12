@@ -1,8 +1,7 @@
-﻿using UnityEditor;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using UnityEditor;
     using System;
     using System.Collections.Generic;
     using System.Reflection;

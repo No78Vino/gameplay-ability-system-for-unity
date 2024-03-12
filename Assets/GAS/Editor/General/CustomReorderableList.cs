@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
-using UnityEditorInternal;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.General
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEditor;
+    using UnityEditorInternal;
+    using UnityEngine;
+    
     public class CustomReorderableList<T>
     {
         private List<T> _itemList = new List<T>();
@@ -140,3 +140,4 @@ namespace GAS.Editor.General
         }
     }
 }
+#endif

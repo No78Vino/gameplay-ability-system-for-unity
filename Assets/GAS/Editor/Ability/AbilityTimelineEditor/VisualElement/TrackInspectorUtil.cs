@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEditor.UIElements;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+
     public static class TrackInspectorUtil
     {
         private const int LineHeight = 25;
@@ -387,3 +387,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

@@ -1,13 +1,13 @@
-﻿using System;
-using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.General;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class TaskClipEventTrack:TrackBase
     {
         private TaskClipEventTrackData _taskClipEventTrackData;
@@ -125,3 +125,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #endregion
     }
 }
+#endif

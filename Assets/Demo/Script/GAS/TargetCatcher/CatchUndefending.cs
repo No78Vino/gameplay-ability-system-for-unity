@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
+#endif
 using GAS.General.Util;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TargetCatcher;
@@ -13,7 +15,7 @@ using UnityEngine.UIElements;
 namespace Demo.Script.GAS.TargetCatcher
 {
     [Serializable]
-    public class CatchUndefending:CatchAreaBox2D
+    public class CatchUndefending : CatchAreaBox2D
     {
         public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
         {
@@ -29,7 +31,7 @@ namespace Demo.Script.GAS.TargetCatcher
         {
             return base.CatchTargets(mainTarget);
         }
-        
+
         /// <summary>
         /// 没有防御成功的判定：1.没有防御  2.防御了，但是方向错误(丢弃判断)
         /// </summary>
@@ -41,25 +43,25 @@ namespace Demo.Script.GAS.TargetCatcher
             // return target.transform.localScale.x * Owner.transform.localScale.x < 0;
         }
     }
-    
-    public class CatchUndefendingInspector: TargetCatcherInspector<CatchUndefending>
+#if UNITY_EDITOR
+    public class CatchUndefendingInspector : TargetCatcherInspector<CatchUndefending>
     {
         public CatchUndefendingInspector(CatchUndefending targetCatcherBase) : base(targetCatcherBase)
         {
-            
+
         }
 
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateSonInspector();
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Offset", _targetCatcher.offset,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _targetCatcher.offset = newValue;
                     Save();
                 }));
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Size", _targetCatcher.size,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _targetCatcher.size = newValue;
                     Save();
@@ -76,14 +78,14 @@ namespace Demo.Script.GAS.TargetCatcher
                     _targetCatcher.checkLayer = evt.newValue;
                     Save();
                 }));
-            
+
             var centerType = TrackInspectorUtil.CreateEnumField("CenterType", _targetCatcher.centerType, (evt) =>
             {
                 _targetCatcher.centerType = (EffectCenterType)(evt.newValue);
                 Save();
             });
             inspector.Add(centerType);
-            
+
             return inspector;
         }
 
@@ -110,7 +112,9 @@ namespace Demo.Script.GAS.TargetCatcher
                     //center = _spec.Target.transform.position + (Vector3)_task.Offset;
                     break;
             }
+
             DebugExtension.DebugBox(center, size, angle, color, showTime);
         }
     }
+#endif
 }

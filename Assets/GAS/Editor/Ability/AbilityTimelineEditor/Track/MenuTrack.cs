@@ -1,35 +1,37 @@
-using System;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class MenuTrack : TrackBase
     {
+        private Color _menuColor;
+
+        private Color _trackColor;
+        private Type _trackDataType;
+        private Type _trackType;
         private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
         private static TimelineTrackView TrackView => AbilityTimelineEditorWindow.Instance.TrackView;
-        
-        private Color _trackColor;
-        private Color _menuColor;
         public override Type TrackDataType { get; }
         protected override Color TrackColor => _trackColor;
         protected override Color MenuColor => _menuColor;
         protected override string MenuAssetGuid => "944173d62639bb04b8b64be960c8ef29";
-        
-        public Button AddButton { get; private set; }
-        private Type _trackType;
-        private Type _trackDataType;
 
-        public void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, Type trackType, Type trackDataType,
+        public Button AddButton { get; private set; }
+
+        public void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, Type trackType,
+            Type trackDataType,
             string label, Color trackColor, Color menuColor)
         {
             _trackType = trackType;
             _trackDataType = trackDataType;
             _trackColor = trackColor;
             _menuColor = menuColor;
-            
+
             base.Init(trackParent, menuParent, frameWidth, null);
             AddButton = MenuRoot.Q<Button>("BtnAdd");
             AddButton.style.display = DisplayStyle.Flex;
@@ -44,12 +46,12 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             MenuRoot.style.height = height;
             MenuRoot.style.minHeight = height;
             MenuRoot.style.maxHeight = height;
-            
+
             TrackRoot.style.height = height;
             TrackRoot.style.minHeight = height;
             TrackRoot.style.maxHeight = height;
         }
-        
+
         private void OnClickAddTrack()
         {
             // 创建View
@@ -65,10 +67,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             track.Init(TrackParent, MenuParent, Config.FrameUnitWidth, data);
             TrackParent.Remove(track.TrackRoot);
             MenuParent.Remove(track.MenuRoot);
-            int index = CurrentAddIndex();
-            TrackParent.Insert(index,track.TrackRoot);
-            MenuParent.Insert(index,track.MenuRoot);
-            
+            var index = CurrentAddIndex();
+            TrackParent.Insert(index, track.TrackRoot);
+            MenuParent.Insert(index, track.MenuRoot);
+
             TrackView.TrackList.Add(track);
 
             Debug.Log("[EX] Add a new track:" + _trackType.Name);
@@ -93,9 +95,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
         }
 
-        int CurrentAddIndex()
+        private int CurrentAddIndex()
         {
-            int baseIndex = TrackParent.IndexOf(TrackRoot);
+            var baseIndex = TrackParent.IndexOf(TrackRoot);
             if (_trackType == typeof(InstantCueTrack))
                 return baseIndex + (AbilityAsset.InstantCues?.Count ?? 0);
 
@@ -118,3 +120,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

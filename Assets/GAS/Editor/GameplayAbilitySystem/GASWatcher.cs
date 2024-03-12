@@ -1,9 +1,7 @@
-﻿using GAS.Runtime.Component;
-
+﻿
 #if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
-    using System;
     using System.Collections.Generic;
     using GAS.Runtime.Ability;
     using GAS.Runtime.Effects;
@@ -11,7 +9,8 @@ namespace GAS.Editor.GameplayAbilitySystem
     using Sirenix.OdinInspector.Editor;
     using UnityEditor;
     using UnityEngine;
-    
+    using GAS.Runtime.Component;
+
     public class GASWatcher : OdinEditorWindow
     {
         private const string BOXGROUP_TIPS = "Tips";

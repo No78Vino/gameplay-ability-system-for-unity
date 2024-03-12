@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Cue;
-using UnityEngine;
-using UnityEngine.UIElements;
+﻿#if UNITY_EDITOR
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class TaskMarkEventTrack:TrackBase
+    using System;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
+    public class TaskMarkEventTrack : TrackBase
     {
+        private TaskMarkEventTrackData _instantTasksTrackData;
         private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        public TaskMarkEventTrackData InstantTaskEventTrackData {
+
+        public TaskMarkEventTrackData InstantTaskEventTrackData
+        {
             get
             {
-                for (int i = 0; i < AbilityAsset.InstantTasks.Count; i++)
-                {
-                    if(AbilityAsset.InstantTasks[i] == _instantTasksTrackData)
+                for (var i = 0; i < AbilityAsset.InstantTasks.Count; i++)
+                    if (AbilityAsset.InstantTasks[i] == _instantTasksTrackData)
                         return AbilityAsset.InstantTasks[i];
-                }
                 return null;
             }
         }
+
         public override Type TrackDataType => typeof(TaskMarkEventTrackData);
         protected override Color TrackColor => new(0.1f, 0.6f, 0.6f, 0.2f);
         protected override Color MenuColor => new(0.1f, 0.6f, 0.6f, 0.9f);
-        
-        private TaskMarkEventTrackData _instantTasksTrackData;
+
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
             TrackDataBase trackData)
         {
@@ -60,9 +60,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override VisualElement Inspector()
         {
             var inspector = TrackInspectorUtil.CreateTrackInspector();
-            
-            var trackName = TrackInspectorUtil.CreateTextField( "Name", _instantTasksTrackData.trackName,
-                (evt) =>
+
+            var trackName = TrackInspectorUtil.CreateTextField("Name", _instantTasksTrackData.trackName,
+                evt =>
                 {
                     _instantTasksTrackData.trackName = evt.newValue;
                     MenuText.text = evt.newValue;
@@ -91,7 +91,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             // 添加Mark数据
             var markEvent = new TaskMarkEvent
             {
-                startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
+                startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x)
             };
             InstantTaskEventTrackData.markEvents.Add(markEvent);
 
@@ -99,7 +99,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var mark = new TaskMark();
             mark.InitTrackMark(this, Track, _frameWidth, markEvent);
             _trackItems.Add(mark);
-            
+
             mark.OnSelect();
 
             Debug.Log("[EX] Add Instant Task Mark");
@@ -117,3 +117,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

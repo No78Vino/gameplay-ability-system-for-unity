@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Animations;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.General.Util
 {
+    using System.Collections.Generic;
+    using UnityEditor;
+    using UnityEditor.Animations;
+    using UnityEngine;
+
+    
     public static class GASAnimatorUtil
     {
         /// <summary>
@@ -81,3 +83,4 @@ namespace GAS.General.Util
         }
     }
 }
+#endif

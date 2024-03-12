@@ -1,9 +1,10 @@
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
 
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using UnityEditor;
+    using UnityEngine;
+    using UnityEngine.UIElements;
     public class TimerShaftView
     {
         private readonly VisualElement _root;
@@ -268,3 +269,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
     }
 }
+#endif

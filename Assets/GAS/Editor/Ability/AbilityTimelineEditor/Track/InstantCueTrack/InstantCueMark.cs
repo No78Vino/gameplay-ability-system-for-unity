@@ -1,12 +1,13 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Cue;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
-    public class InstantCueMark:TrackMark<InstantCueTrack>
+    using GAS.Runtime.Ability.TimelineAbility;
+    using GAS.Runtime.Cue;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
+    public class InstantCueMark : TrackMark<InstantCueTrack>
     {
         private InstantCueMarkEvent InstantCueMarkData => markData as InstantCueMarkEvent;
 
@@ -36,7 +37,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             };
             track.InstantCueTrackData.markEvents.Add(markEvent);
             AbilityTimelineEditorWindow.Instance.Save();
-            
+
             var mark = new InstantCueMark();
             mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
             track.TrackItems.Add(mark);
@@ -57,7 +58,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
             var list = TrackInspectorUtil.CreateObjectListView("Cue", InstantCueMarkData.cues, OnCueAssetChanged);
             inspector.Add(list);
-            
+
             return inspector;
         }
 
@@ -66,7 +67,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var cue = evt.newValue as GameplayCueInstant;
             MarkDataForSave.cues[index] = cue;
             AbilityTimelineEditorWindow.Instance.Save();
-            
+
             RefreshShow(FrameUnitWidth);
         }
 
@@ -90,10 +91,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         public override void OnTickView(int frameIndex)
         {
             foreach (var cue in InstantCueMarkData.cues)
-            {
                 cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
                     InstantCueMarkData.startFrame);
-            }
         }
     }
 }
+#endif

@@ -1,10 +1,13 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
+﻿#if  UNITY_EDITOR
 
 namespace GAS.Editor.Ability
 {
+    using System;
+    using UnityEditor;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+
+    
     public enum MouseCursorType
     {
         None,
@@ -125,3 +128,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

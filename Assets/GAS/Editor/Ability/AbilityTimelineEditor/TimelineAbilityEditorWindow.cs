@@ -1,12 +1,12 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using Sirenix.OdinInspector.Editor;
-using UnityEditor;
-using UnityEngine;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using Sirenix.OdinInspector.Editor;
+    using UnityEditor;
+    using UnityEngine;
+    
     [CustomEditor(typeof(TimelineAbilityAsset))]
     public class TimelineAbilityEditorWindow : OdinEditor
     {
@@ -27,3 +27,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

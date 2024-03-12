@@ -1,5 +1,7 @@
 using System;
+#if UNITY_EDITOR
 using GAS.Editor.Ability;
+#endif
 using GAS.Runtime.Ability;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,10 +10,11 @@ using Random = UnityEngine.Random;
 namespace Demo.Script.GAS.AbilityTask
 {
     [Serializable]
-    public class TeleportToBeamPoint:InstantAbilityTask
+    public class TeleportToBeamPoint : InstantAbilityTask
     {
         public Vector2 BeamPointLeft;
         public Vector2 BeamPointRight;
+
         public override void OnExecute()
         {
             var unit = _spec.Owner.GetComponent<FightUnit>();
@@ -21,13 +24,13 @@ namespace Demo.Script.GAS.AbilityTask
             pos.x = beamPoint.x;
             pos.y = beamPoint.y;
             unit.transform.position = pos;
-            
+
             unit.transform.localScale = new Vector3(left ? 1 : -1, 1, 1);
         }
     }
-    
-    
-    public class TeleportToBeamPointInspector:InstantAbilityTaskInspector<TeleportToBeamPoint>
+
+#if UNITY_EDITOR
+    public class TeleportToBeamPointInspector : InstantAbilityTaskInspector<TeleportToBeamPoint>
     {
         public TeleportToBeamPointInspector(AbilityTaskBase taskBase) : base(taskBase)
         {
@@ -37,14 +40,14 @@ namespace Demo.Script.GAS.AbilityTask
         {
             var inspector = TrackInspectorUtil.CreateSonInspector(false);
             var left = TrackInspectorUtil.CreateVector2Field("Beam Point Left", _task.BeamPointLeft,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _task.BeamPointLeft = newValue;
                     Save();
                 });
             inspector.Add(left);
             var right = TrackInspectorUtil.CreateVector2Field("Beam Point Right", _task.BeamPointRight,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _task.BeamPointRight = newValue;
                     Save();
@@ -57,4 +60,5 @@ namespace Demo.Script.GAS.AbilityTask
         {
         }
     }
+#endif
 }

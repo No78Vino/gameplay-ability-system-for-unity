@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+#if UNITY_EDITOR
 using GAS.Editor.Ability;
 using GAS.Editor.Ability.AbilityTimelineEditor;
+#endif
 using GAS.General.Util;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
@@ -10,7 +12,7 @@ using UnityEngine.UIElements;
 
 namespace Demo.Script.GAS.TargetCatcher
 {
-    public class CatchUnperfectDefend:CatchUndefending
+    public class CatchUnperfectDefend : CatchUndefending
     {
         /// <summary>
         /// 成功防御，但是没有完美防御
@@ -20,7 +22,7 @@ namespace Demo.Script.GAS.TargetCatcher
         public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
         {
             var targets = CatchDefaultTargets(mainTarget);
-            
+
             var result = new List<AbilitySystemComponent>();
             foreach (var target in targets)
                 if (IsDefendSuccess(target) && !target.HasTag(GameplayTagSumCollection.Event_PerfectDefending))
@@ -28,7 +30,7 @@ namespace Demo.Script.GAS.TargetCatcher
             return result;
         }
     }
-
+#if UNITY_EDITOR
     public class CatchUnperfectDefendInspector : TargetCatcherInspector<CatchUnperfectDefend>
     {
         public CatchUnperfectDefendInspector(CatchUnperfectDefend targetCatcherBase) : base(targetCatcherBase)
@@ -40,13 +42,13 @@ namespace Demo.Script.GAS.TargetCatcher
         {
             var inspector = TrackInspectorUtil.CreateSonInspector();
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Offset", _targetCatcher.offset,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _targetCatcher.offset = newValue;
                     Save();
                 }));
             inspector.Add(TrackInspectorUtil.CreateVector2Field("Size", _targetCatcher.size,
-                (oldValue,newValue) =>
+                (oldValue, newValue) =>
                 {
                     _targetCatcher.size = newValue;
                     Save();
@@ -101,4 +103,5 @@ namespace Demo.Script.GAS.TargetCatcher
             DebugExtension.DebugBox(center, size, angle, color, showTime);
         }
     }
+#endif
 }

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GAS.General;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.General;
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class TaskClip : TrackClip<TaskClipEventTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
@@ -167,3 +168,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #endregion
     }
 }
+#endif

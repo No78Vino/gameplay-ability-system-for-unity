@@ -1,15 +1,15 @@
-﻿using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
-using UnityEditor;
-using UnityEditor.Timeline;
-using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
-using Object = System.Object;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.General.AbilityTimeline
 {
+    using Sirenix.OdinInspector;
+    using Sirenix.OdinInspector.Editor;
+    using UnityEditor;
+    using UnityEditor.Timeline;
+    using UnityEngine;
+    using UnityEngine.Playables;
+    using UnityEngine.Timeline;
+    using Object = System.Object;
+    
     public class AbilityTimelineInspector: OdinEditorWindow
     {
         private static TimelineEditorWindow _timelineEditorWindow;

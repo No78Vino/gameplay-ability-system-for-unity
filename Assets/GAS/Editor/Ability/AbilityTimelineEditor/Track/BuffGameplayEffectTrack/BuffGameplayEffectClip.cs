@@ -1,11 +1,12 @@
-﻿using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using GAS.Runtime.Effects;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using GAS.Runtime.Ability.TimelineAbility;
+    using GAS.Runtime.Effects;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class BuffGameplayEffectClip : TrackClip<BuffGameplayEffectTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
@@ -81,7 +82,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             inspector.Add(_startFrameLabel);
 
             // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)", BuffGameplayEffectClipData.durationFrame,
+            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)",
+                BuffGameplayEffectClipData.durationFrame,
                 OnDurationFrameChanged);
             inspector.Add(_durationField);
 
@@ -124,3 +126,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #endregion
     }
 }
+#endif

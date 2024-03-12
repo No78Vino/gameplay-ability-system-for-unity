@@ -1,10 +1,11 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability.TargetCatcher;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+﻿#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using GAS.Runtime.Ability.TargetCatcher;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public abstract class TargetCatcherInspector
     {
         protected TargetCatcherBase _targetCatcherBase;
@@ -38,3 +39,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

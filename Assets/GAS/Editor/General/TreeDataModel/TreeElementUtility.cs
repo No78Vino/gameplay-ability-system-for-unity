@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-
+#if UNITY_EDITOR
 namespace UnityEditor.TreeDataModel
 {
-
+	using System;
+	using System.Collections.Generic;
+	
 	// TreeElementUtility and TreeElement are useful helper classes for backend tree data structures.
 	// See tests at the bottom for examples of how to use.
 
@@ -170,3 +168,4 @@ namespace UnityEditor.TreeDataModel
 		}
 	}
 }
+#endif

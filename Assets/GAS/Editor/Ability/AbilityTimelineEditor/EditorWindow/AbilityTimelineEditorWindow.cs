@@ -1,17 +1,18 @@
-using System;
-using System.Reflection;
-using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TimelineAbility;
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditor.UIElements;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {
+    using System;
+    using System.Reflection;
+    using GAS.Runtime.Ability;
+    using GAS.Runtime.Ability.TimelineAbility;
+    using UnityEditor;
+    using UnityEditor.SceneManagement;
+    using UnityEditor.UIElements;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+    using UnityEngine.UIElements;
+    using Object = UnityEngine.Object;
+    
     public class AbilityTimelineEditorWindow : EditorWindow
     {
         [SerializeField] private VisualTreeAsset m_VisualTreeAsset;
@@ -359,3 +360,4 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         #endregion
     }
 }
+#endif

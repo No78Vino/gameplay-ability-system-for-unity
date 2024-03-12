@@ -1,9 +1,12 @@
-using System.Reflection;
-using UnityEditor;
-using UnityEngine;
 
+
+#if UNITY_EDITOR
 namespace GAS.General
 {
+	using System.Reflection;
+	using UnityEditor;
+	using UnityEngine;
+	
 	public static class DockUtilities
 	{
 		public enum DockPosition
@@ -73,7 +76,7 @@ namespace GAS.General
 		}
 	}
 }
-
+#endif
 
 
 

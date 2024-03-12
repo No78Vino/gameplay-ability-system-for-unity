@@ -1,12 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.IMGUI.Controls;
-using UnityEngine;
-using Object = UnityEngine.Object;
-
+#if UNITY_EDITOR
 namespace UnityEditor.TreeDataModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using UnityEditor.IMGUI.Controls;
+    using UnityEngine;
+    using Object = UnityEngine.Object;
+
+    
     internal class TreeViewItem<T> : TreeViewItem where T : TreeElement
     {
         public TreeViewItem(int id, int depth, string displayName, T data) : base(id, depth, displayName)
@@ -227,3 +229,4 @@ namespace UnityEditor.TreeDataModel
         }
     }
 }
+#endif

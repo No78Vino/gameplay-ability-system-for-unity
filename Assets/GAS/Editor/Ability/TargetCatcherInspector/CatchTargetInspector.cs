@@ -1,10 +1,11 @@
-using GAS.Runtime.Ability.TargetCatcher;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
+    using GAS.Runtime.Ability.TargetCatcher;
+    using UnityEditor;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class CatchTargetInspector:TargetCatcherInspector<CatchTarget>
     {
         public CatchTargetInspector(TargetCatcherBase targetCatcherBase) : base(targetCatcherBase)
@@ -22,3 +23,4 @@ namespace GAS.Editor.Ability
         }
     }
 }
+#endif

@@ -1,8 +1,10 @@
-﻿using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.Runtime.Ability;
+﻿#if UNITY_EDITOR
 
 namespace GAS.Editor.Ability
 {
+    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using GAS.Runtime.Ability;
+    
     public abstract class OngoingAbilityTaskInspector : AbilityTaskInspector
     {
         protected OngoingAbilityTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
@@ -28,3 +30,5 @@ namespace GAS.Editor.Ability
         }
     }
 }
+
+#endif
