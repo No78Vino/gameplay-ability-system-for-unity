@@ -67,6 +67,11 @@ MonoBehaviour:
       - TaskData:
           Type: Demo.Script.GAS.AbilityTask.TeleportToBeamPoint
           Data: 
+    - startFrame: 210
+      InstantTasks:
+      - TaskData:
+          Type: Demo.Script.GAS.AbilityTask.OpenWinWindow
+          Data: 
   OngoingTasks:
   - trackName: Task Clips
     clipEvents:
