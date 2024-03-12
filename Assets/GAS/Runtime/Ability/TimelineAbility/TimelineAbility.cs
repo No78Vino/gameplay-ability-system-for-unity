@@ -40,10 +40,10 @@ namespace GAS.Runtime.Ability.TimelineAbility
         
         public override void ActivateAbility(params object[] args)
         {
-            _player.Play();
+             _player.Play();
         }
 
-        public override void CancelAbility()
+        public override void CancelAbility() 
         {
             _player.Stop();
         }

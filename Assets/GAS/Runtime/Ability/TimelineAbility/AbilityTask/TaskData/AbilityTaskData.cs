@@ -9,12 +9,11 @@ namespace GAS.Runtime.Ability
     {
         public JsonData TaskData;
         
-        public AbilityTaskBase TaskBase { get;private set; }
-        
-        public virtual void Cache(AbilitySpec abilitySpec)
+        public virtual AbilityTaskBase Create(AbilitySpec abilitySpec)
         {
-            TaskBase = Load();
-            TaskBase.Init(abilitySpec);
+            var task = Load();
+            task.Init(abilitySpec);
+            return task;
         }
         
         public void Save(AbilityTaskBase task)

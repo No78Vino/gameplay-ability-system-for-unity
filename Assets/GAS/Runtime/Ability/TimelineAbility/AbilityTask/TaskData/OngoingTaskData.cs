@@ -8,8 +8,6 @@ namespace GAS.Runtime.Ability
     [Serializable]
     public class OngoingTaskData : AbilityTaskData
     {
-        public OngoingAbilityTask Task { get; private set; }
-
         public OngoingTaskData()
         {
             TaskData = new JsonData()
@@ -18,10 +16,11 @@ namespace GAS.Runtime.Ability
             };
         }
         
-        public override void Cache(AbilitySpec abilitySpec)
+        public OngoingAbilityTask CreateTask(AbilitySpec abilitySpec)
         {
-            base.Cache(abilitySpec);
-            Task = TaskBase as OngoingAbilityTask;
+            var task = base.Create(abilitySpec);
+            var ongoingAbilityTask = task as OngoingAbilityTask;
+            return ongoingAbilityTask;
         }
 
         public override AbilityTaskBase Load()

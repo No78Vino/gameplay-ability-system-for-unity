@@ -8,8 +8,6 @@ namespace GAS.Runtime.Ability
     [Serializable]
     public class InstantTaskData : AbilityTaskData
     {
-        public InstantAbilityTask Task { get; private set; }
-
         public InstantTaskData()
         {
             TaskData = new JsonData()
@@ -18,10 +16,11 @@ namespace GAS.Runtime.Ability
             };    
         }
         
-        public override void Cache(AbilitySpec abilitySpec)
+        public InstantAbilityTask CreateTask(AbilitySpec abilitySpec)
         {
-            base.Cache(abilitySpec);
-            Task = TaskBase as InstantAbilityTask;
+            var task = base.Create(abilitySpec);
+            var instantAbilityTask = task as InstantAbilityTask;
+            return instantAbilityTask;
         }
 
         public override AbilityTaskBase Load()

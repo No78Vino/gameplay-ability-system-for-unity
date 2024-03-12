@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 
 public class Player : FightUnit
 {
-    public const int HpMax = 100;
+    public const int HpMax = 1000;
     public const int MpMax = 100;
     public const int StaminaMax = 100;
     public const int PostureMax = 100;

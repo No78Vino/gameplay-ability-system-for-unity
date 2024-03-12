@@ -42,6 +42,11 @@ namespace Demo.Script.GAS.AbilityTask
             
             float t = (float)(frameIndex - startFrame) / (endFrame - startFrame);
             _unit.Rb.MovePosition(Vector3.Lerp(_start, endPos, t));
+            
+            if (_unit is Player)
+            {
+                Debug.Log($" [EX-Test] Player is Timeline Ability Running");
+            }
         }
     }
     
