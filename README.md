@@ -347,10 +347,67 @@ GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义
       回血效果又被激活，而这个激活的操作可以理解为回血效果自己激活的（依赖于Tag系统）。
     
 ### 2.8 Ability
+> Ability是EX-GAS的核心类之一，它是游戏中的所有能力基础。
+>
+> 同时Ability也是程序开发人员最常接触的类，Ability的完整逻辑都是由程序开发人员实现的。
+
+在EX-GAS内，Ability是游戏中可以触发的一切行为和技能。多个Ability可以在同一时刻激活, 例如移动和持盾防御。
+Ability作为EX-GAS的核心类之一，他起到了Do（做）的功能。
+
+Ability的业务逻辑取决于游戏类型和玩法。所以不存在一个通用的Ability模板，当然可以针对游戏类型制作一些通用的ability。
+Ability的逻辑并非自由，如果胡乱的实现Ability逻辑，可能会导致游戏逻辑混乱，所以需要遵循一些规则。
+
+Ability的具体实现需要策划和程序配合。
+这并不是废话，而是在EX-GAS的Ability制作流程中，确确实实的把策划和程序的工作分开了：
+- 策划的工作：配置AbilityAsset
+- 程序的工作：编写Ability（AbilityAsset,Ability,AbilitySpec）类
+- | 类                        | 功能                                                                                |
+  |--------------------------|-----------------------------------------------------------------------------------|
+  | AbilityAsset  | Ability的配置文件，同一类的Ability可以通过配置不同的AbilityAsset参数，实现复数Ability，比如跳跃段数不同，可以实现普通跳，二段跳。 |
+  | Ability  | Ability的Runtime数据类，通常数据还是依赖AbilityAsset。同时也允许运行时不依赖AbilityAsset生成Ability          |
+  | AbilitySpec   | Ability的运行实例，Ability的游戏内的表现逻辑，就在该类中实现。                                            |
+>建议 AbilitySpec和Ability在同一个脚本中编辑，因为二者本身就是成对出现。AbilityAsset单独一个脚本，因为它是Scriptable Object，应该遵从脚本名和类一致的原则。
+
+Ability运作逻辑的组成可以拆成两部分：
+- GAS系统内的运作逻辑：所有Ability通用的数据字段，被保存在AbstractAbility这个抽象基类中。所有的Ability都是继承自AbstractAbility。
+- 具体游戏内的表现逻辑：每个Ability都有自己的表现逻辑，这部分逻辑是由程序开发人员自行实现的。
+
+接下来结合Ability的配置界面来解释Ability的数据和运作逻辑。
+#### 2.8.a Ability编辑界面
+![QQ20240313162642.png](Wiki%2FQQ20240313162642.png)
+>图中A的部分就是GAS系统内的运作逻辑的参数，B的部分就是具体游戏内的表现逻辑的参数。
+
+注意到最上方显示了Ability Class，这是Ability的类名，与之成对的AbilitySpec决定了Ability游戏内的表现逻辑。
+- GAS系统内的运作逻辑参数
+  - U-Name: Ability的名称，唯一标识符，禁止重复或空。U-Name会用于AbilityLib的Ability生成和查找。
+  - Description: Ability的描述，纯粹用于显示，不会影响游戏逻辑。方便编辑者区分Ability。
+  - 消耗Cost：Ability的消耗GameplayEffect
+  - 冷却CD：Ability的冷却GameplayEffect
+  - CD时间：冷却时间，它会覆盖冷却GameplayEffect的持续时间。
+  - Tags: Ability的标签,与GameplayEffect的Tag些许类似。具体Tag功能如下
+
+| Tag                      | 功能                                                                |
+|--------------------------|-------------------------------------------------------------------|
+| Asset Tag                | 描述性质的标签，用来描述Ability的特性表现，比如伤害、治疗、控制等                              |
+| CancelAbility With Tags  | Ability激活时，Ability持有者当前持有的所有Ability中，拥有**【任意】**这些标签的Ability会被取消   |
+| BlockAbility With Tags       | Ability激活时，Ability持有者当前持有的所有Ability中，拥有**【任意】**这些标签的Ability会被阻塞激活 |
+| Activation Owned Tags    | Ability激活时，持有者会获得这些标签，Ability被失活时，这些标签也会被移除                       |
+| Activation Required Tags | Ability只有在其拥有者拥有**【所有】**这些标签时才可激活                                 |
+| Activation Blocked Tags  | Ability在其拥有者拥有**【任意】**这些标签时不能被激活                                       |
+   
+- 具体游戏内的表现逻辑参数
+  - 这部分的参数面板是由程序开发人员自行实现的，这部分参数的含义和作用不固定。
+  - 建议使用Odin的特性编辑，一是为了规范，二是美观。 
+  - 不同类的Ability，这部分的面板显示和含义不同。如下图：
+  ![QQ20240313165819.png](Wiki%2FQQ20240313165819.png)
+
+#### 2.8.b TimelineAbility 通用性Ability（W.I.P TimelineAbility还在完善中）
+在实际的开发过程中，我发现，许多的Ability都有顺序和时限两个特点。
+每次都新写一个Ability类来实现某个指定技能让我十分烦躁，于是我制作了TimelineAbility，一个极具通用性的顺序，时限Ability。
 
 
 ### 2.9 AbilitySystemComponent
-
+> 
 ---
 ## 3.可视化功能
 ### 1. GAS Base Manager (GAS基础配置管理器)
@@ -400,7 +457,9 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 ## 4.API(W.I.P)
 
 ---
+
 ## 5.如果...我想...,应该怎么做?
+
 ---
 ## 6.暂不支持的功能（可能有遗漏）
 - Granted Ability，GameplayEffect授予的能力。虽然面板显示了配置用的字段，但目前其实是不生效的

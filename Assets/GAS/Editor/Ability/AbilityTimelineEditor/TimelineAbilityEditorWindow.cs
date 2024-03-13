@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.General;
+
+#if UNITY_EDITOR
 namespace GAS.Editor.Ability
 {
     using GAS.Editor.Ability.AbilityTimelineEditor;
@@ -17,7 +19,7 @@ namespace GAS.Editor.Ability
             base.OnInspectorGUI();
 
             EditorGUILayout.BeginVertical(GUI.skin.box);
-            if (GUILayout.Button("查看/编辑能力时间轴", GUILayout.Height(30), GUILayout.Width(300))) EditAbilityTimeline();
+            if (GUILayout.Button(GASTextDefine.BUTTON_CHECK_TIMELINE_ABILITY, GUILayout.Height(30), GUILayout.Width(300))) EditAbilityTimeline();
             EditorGUILayout.EndVertical();
         }
 

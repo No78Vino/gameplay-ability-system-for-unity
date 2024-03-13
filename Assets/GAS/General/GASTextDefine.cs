@@ -77,5 +77,30 @@
         public const string TITLE_GE_CUE = "提示Cue";
         
         #endregion
+
+        #region Ability
+
+        public const string ABILITY_BASEINFO="基本信息";
+        public const string TIP_UNAME =
+            "<size=12><b><color=white><color=orange>U-Name非常重要!</color>" +
+            "GAS 会使用U-Name作为Ability的标识符。" +
+            "所以你必须保证U-Name的唯一性。" +
+            "别担心，生成AbilityLib时工具会提醒你这一点。</color></b></size>";
+        public const string ABILITY_CD_TIME="CD时间";
+        public const string ABILITY_EFFECT_CD="冷却CD";
+        public const string ABILITY_EFFECT_COST="消耗";
+        public const string ABILITY_MANUAL_ENDABILITY = "手动结束能力";
+        public const string BUTTON_CHECK_TIMELINE_ABILITY = "查看/编辑能力时间轴";
+
+        #endregion
+        
+        #region ASC
+        
+        public const string TIP_ASC_BASEINFO="基本信息只用于描述这个ASC，方便策划阅读理解该ASC。";
+        public const string ASC_BASE_TAG="固有Tag";
+        public const string ASC_BASE_ABILITY="固有能力";
+        public const string ASC_AttributeSet="属性集";
+        
+        #endregion
     }
 }

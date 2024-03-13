@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GAS.General;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Tags;
 using Sirenix.OdinInspector;
@@ -36,7 +37,8 @@ namespace GAS.Runtime.Component
         
         
         [BoxGroup(GRP_BASE,false)]
-        [Title("Base Information", bold: true)]
+        [Title(GASTextDefine.ABILITY_BASEINFO, bold: true)]
+        [InfoBox(GASTextDefine.TIP_ASC_BASEINFO)]
         [HorizontalGroup(GRP_BASE_H,Width = WIDTH_GRP_BASE_H_LEFT)]
         [VerticalGroup(GRP_BASE_H_LEFT)]
         public string Name;
@@ -48,7 +50,7 @@ namespace GAS.Runtime.Component
         public string Description;
 
 
-        [Title("AttributeSet", bold: true)]
+        [Title(GASTextDefine.ASC_AttributeSet, bold: true)]
         [HorizontalGroup(GRP_BASE_H,PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelWidth(WIDTH_LABLE)]
@@ -56,7 +58,7 @@ namespace GAS.Runtime.Component
         [ValueDropdown("AttributeSetChoice")]
         public string[] AttributeSets;
         
-        [Title("Base Tag",bold:true)]
+        [Title(GASTextDefine.ASC_BASE_TAG,bold:true)]
         [BoxGroup(GRP_DATA,false)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_PARAMETER)]
@@ -64,7 +66,7 @@ namespace GAS.Runtime.Component
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         public GameplayTag[] BaseTags;
         
-        [Title("Base Ability",bold:true)]
+        [Title(GASTextDefine.ASC_BASE_ABILITY,bold:true)]
         [HorizontalGroup(GRP_DATA_H)]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]

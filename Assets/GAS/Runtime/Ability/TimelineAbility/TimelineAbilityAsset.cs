@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GAS.General;
 using GAS.Runtime.Cue;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -16,13 +17,12 @@ namespace GAS.Runtime.Ability.TimelineAbility
         }
 
         [BoxGroup] 
-        [LabelText("手动结束能力")]
+        [LabelText(GASTextDefine.ABILITY_MANUAL_ENDABILITY)]
         [LabelWidth(100)]
         public bool manualEndAbility;
         
         [HideInInspector]
         public int FrameCount;// 能力结束时间
-        
         
         [HideInInspector]
         public List<DurationalCueTrackData> DurationalCues = new List<DurationalCueTrackData>();

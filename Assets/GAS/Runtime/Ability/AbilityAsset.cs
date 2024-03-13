@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GAS.General;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Tags;
@@ -30,12 +31,6 @@ namespace GAS.Runtime.Ability
 
         protected const int WIDTH_LABLE = 100;
         private const int WIDTH_GRP_BASE_H_LEFT = 350;
-
-        private const string TIP_UNAME =
-            "<size=12><b><color=white><color=orange>Unique Name is very important!</color>" +
-            "GAS will use the unique name as a UID for the ability." +
-            "Therefore,you must keep this name unique." +
-            "Don't worry.When generating the code, the tool will check this.</color></b></size>";
 
 
         private static IEnumerable AbilityClassChoice = new ValueDropdownList<string>();
@@ -65,10 +60,10 @@ namespace GAS.Runtime.Ability
 #endif
         
         [BoxGroup(GRP_BASE, false)]
-        [Title("Base Information", bold: true)]
+        [Title(GASTextDefine.ABILITY_BASEINFO, bold: true)]
         [HorizontalGroup(GRP_BASE_H, Width = WIDTH_GRP_BASE_H_LEFT)]
         [VerticalGroup(GRP_BASE_H_LEFT)]
-        [InfoBox(TIP_UNAME)]
+        [InfoBox(GASTextDefine.TIP_UNAME)]
         [LabelText("U-Name")]
         [LabelWidth(WIDTH_LABLE)]
         public string UniqueName;
@@ -84,16 +79,18 @@ namespace GAS.Runtime.Ability
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [LabelWidth(WIDTH_LABLE)]
         [AssetSelector]
+        [LabelText(GASTextDefine.ABILITY_EFFECT_COST)]
         public GameplayEffectAsset Cost;
         
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [LabelWidth(WIDTH_LABLE)]
         [AssetSelector]
+        [LabelText(GASTextDefine.ABILITY_EFFECT_CD)]
         public GameplayEffectAsset Cooldown;
         
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [LabelWidth(WIDTH_LABLE)]
-        [LabelText(SdfIconType.ClockFill,Text = "CD Time")]
+        [LabelText(SdfIconType.ClockFill,Text = GASTextDefine.ABILITY_CD_TIME)]
         public float CooldownTime;
         
         // Tags
@@ -107,12 +104,14 @@ namespace GAS.Runtime.Ability
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [LabelText("CancelAbility With Tags ")]
         [Space]
         public GameplayTag[] CancelAbilityTags;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [LabelText("BlockAbility With Tags ")]
         [Space]
         public GameplayTag[] BlockAbilityTags;
         
