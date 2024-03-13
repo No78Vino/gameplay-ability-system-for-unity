@@ -109,7 +109,7 @@ namespace GAS.Editor.GameplayAbilitySystem
         public static string GAS_ATTRIBUTESET_ASSET_PATH => $"{Setting.GASConfigAssetPath}/AttributeSetAsset.asset";
 
 
-        private static GASSettingAsset Load()
+        public static GASSettingAsset Load()
         {
             var asset = AssetDatabase.LoadAssetAtPath<GASSettingAsset>(GasDefine.GAS_SYSTEM_ASSET_PATH);
             if (asset == null)

@@ -25,7 +25,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             get
             {
                 if (_settingAsset == null)
-                    _settingAsset = AssetDatabase.LoadAssetAtPath<GASSettingAsset>(GasDefine.GAS_SYSTEM_ASSET_PATH);
+                    _settingAsset = GASSettingAsset.Load();
                 return _settingAsset;
             }
         }
