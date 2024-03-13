@@ -23,7 +23,7 @@ namespace GAS.Editor.GameplayAbilitySystem
 
         private static void SettingGUI()
         {
-            if (_editor == null) Load();
+            if (_asset == null) Load();
 
             EditorGUILayout.BeginVertical();
             _editor.OnInspectorGUI();
@@ -45,7 +45,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             }
 
             _asset = asset;
-            _editor = UnityEditor.Editor.CreateEditor(asset);
+            _editor = Editor.CreateEditor(asset);
         }
     }
 }

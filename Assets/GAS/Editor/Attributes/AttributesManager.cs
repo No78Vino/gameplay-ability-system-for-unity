@@ -25,7 +25,8 @@ namespace GAS.Editor.Attributes
 
         private static void SettingGUI()
         {
-            if (_editor == null) Load();
+            if (_asset == null) Load();
+            if (_editor == null) return;
             
             EditorGUILayout.BeginVertical(GUI.skin.box,GUILayout.Width(700));
             _editor.OnInspectorGUI();
@@ -35,19 +36,19 @@ namespace GAS.Editor.Attributes
         private static void Load()
         {
             var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
-            if (asset == null)
-            {
-                GasDefine.CheckGasAssetFolder();
-
-                var a = ScriptableObject.CreateInstance<AttributeAsset>();
-                AssetDatabase.CreateAsset(a, GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-                asset = ScriptableObject.CreateInstance<AttributeAsset>();
-            }
+            // if (asset == null)
+            // {
+            //     GasDefine.CheckGasAssetFolder();
+            //
+            //     var a = ScriptableObject.CreateInstance<AttributeAsset>();
+            //     AssetDatabase.CreateAsset(a, GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+            //     AssetDatabase.SaveAssets();
+            //     AssetDatabase.Refresh();
+            //     asset = ScriptableObject.CreateInstance<AttributeAsset>();
+            // }
 
             _asset = asset;
-            _editor = UnityEditor.Editor.CreateEditor(asset);
+            _editor = asset == null ? null : Editor.CreateEditor(asset);
         }
     }
 }

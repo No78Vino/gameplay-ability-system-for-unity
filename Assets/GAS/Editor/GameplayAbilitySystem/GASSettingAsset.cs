@@ -3,7 +3,9 @@ namespace GAS.Editor.GameplayAbilitySystem
 {
     using System;
     using GAS.Core;
-    using GAS.Editor.General;
+    using GAS.Runtime.Tags;
+    using GAS.Editor.Attribute;
+    using GAS.Editor.AttributeSet;
     using GAS.General;
     using Sirenix.OdinInspector;
     using UnityEditor;
@@ -170,6 +172,13 @@ namespace GAS.Editor.GameplayAbilitySystem
             CheckPathFolderExist(GameplayCueLibPath);
             CheckPathFolderExist(MMCLibPath);
             CheckPathFolderExist(AbilityTaskLib);
+            
+            // 生成TagAsset
+            CheckTagAsset();
+            // 生成AttributeAsset
+            CheckAttributeAsset();
+            // 生成AttributeSetAsset
+            CheckAttributeSetAsset();
         }
 
         [BoxGroup("A")]
@@ -181,6 +190,39 @@ namespace GAS.Editor.GameplayAbilitySystem
         void GenerateAscExtensionCode()
         {
             AbilitySystemComponentUtilGenerator.Gen();
+        }
+
+        void CheckTagAsset()
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GAS_TAG_ASSET_PATH);
+            if (asset != null) return;
+            GasDefine.CheckGasAssetFolder();
+            var a = CreateInstance<GameplayTagsAsset>();
+            AssetDatabase.CreateAsset(a, GAS_TAG_ASSET_PATH);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        
+        void CheckAttributeAsset()
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GAS_ATTRIBUTE_ASSET_PATH);
+            if (asset != null) return;
+            GasDefine.CheckGasAssetFolder();
+            var a = CreateInstance<AttributeAsset>();
+            AssetDatabase.CreateAsset(a, GAS_ATTRIBUTE_ASSET_PATH);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        
+        void CheckAttributeSetAsset()
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GAS_ATTRIBUTESET_ASSET_PATH);
+            if (asset != null) return;
+            GasDefine.CheckGasAssetFolder();
+            var a = CreateInstance<AttributeSetAsset>();
+            AssetDatabase.CreateAsset(a, GAS_ATTRIBUTESET_ASSET_PATH);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }
