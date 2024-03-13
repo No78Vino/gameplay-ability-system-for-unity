@@ -14,6 +14,8 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 
 >我非常希望EX-GAS能早日稳定，为更多游戏提供支持帮助。
 
+## 参考案例 [Demo](Assets/Demo)
+
 ## 目录
 - 1.[快速开始](#快速开始)
   - [安装](#安装)
@@ -33,7 +35,7 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
   - [GAS Asset Aggregator (GAS配置资源聚合器)](#2-gas-asset-aggregator-gas配置资源聚合器)
   - [GAS Runtime Watcher (GAS运行时监视器)](#3-gas-runtime-watcher-gas运行时监视器)
 - 4.[API(W.I.P 施工中)](#4apiwip)
-- 5.[如果...我想...,应该怎么做?(持续补充)](#5如果我想应该怎么做应该怎么做持续补充)
+- 5.[如果...我想...,应该怎么做?(持续补充)](#5如果我想应该怎么做wip)
 - 6.[暂不支持的功能（可能有遗漏）](#6暂不支持的功能可能有遗漏)
 - 7.[后续计划](#7后续计划)
 - 8.[特别感谢](#8特别感谢)
@@ -49,8 +51,6 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 
 ### 使用
 GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移植，所以实现逻辑基本一致。建议先粗略了解一下UE版本的GAS整体逻辑，参考项目文档：https://github.com/BillEliot/GASDocumentation_Chinese
-
-#### 参考使用案例 [Demo](Assets/Demo)
 
 #### *使用流程*
 1. 基础设置
@@ -69,17 +69,17 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 
 2. 配置Tag:  Tag是GAS核心逻辑运作的依赖,非常重要。关于Tag的使用及运作逻辑详见章节([GameplayTag](#22-gameplaytag))
 
-3. 配置Attribute:  Attribute是GAS运行时数据单位。关于Attribute的使用及运作逻辑详见章节([Attribute](#Attribute))
+3. 配置Attribute:  Attribute是GAS运行时数据单位。关于Attribute的使用及运作逻辑详见章节([Attribute](#23-attribute))
 
-4. 配置AttributeSet:  AttributeSet是GAS运行时数据单位集合，合理的AttributeSet设计能够帮助程序解耦，提高开发效率。关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#AttributeSet))
+4. 配置AttributeSet:  AttributeSet是GAS运行时数据单位集合，合理的AttributeSet设计能够帮助程序解耦，提高开发效率。关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#24-attributeset))
 
-5. 设计MMC,Cue:  详见[MMC](#MMC), [GameplayCue](#GameplayCue)
+5. 设计MMC,Cue:  详见[MMC](#25-modifiermagnitudecalculation), [GameplayCue](#26-gameplaycue)
 
-6. 设计Gameplay Effect:  详见 [Gameplay Effect](#GameplayEffect)
+6. 设计Gameplay Effect:  详见 [Gameplay Effect](#27-gameplayeffect)
 
-7. 设计Ability:  详见 [Ability](#Ability)
+7. 设计Ability:  详见 [Ability](#28-ability)
 
-8. 设计ASC预设（可选）:  详见 [AbilitySystemComponent](#AbilitySystemComponent)
+8. 设计ASC预设（可选）:  详见 [AbilitySystemComponent](#29-abilitysystemcomponent)
 
 
 ---
@@ -401,54 +401,60 @@ Ability运作逻辑的组成可以拆成两部分：
   - 不同类的Ability，这部分的面板显示和含义不同。如下图：
   ![QQ20240313165819.png](Wiki%2FQQ20240313165819.png)
 
+
+- **【！！注意！！】**
+  - **当创建或修改AbilityAsset的U-Name后，一定要去Ability汇总界面点击【生成AbilityLib】按钮。
+  AbilityLib.gen.cs脚本中会包含所有的Ability信息。
+  游戏运行时生成Ability依赖于AbilityLib，如果没有保持同步，会导致游戏运行时找不到Ability。**
+  - Ability汇总界面入口：在菜单栏EX-GAS -> Asset Aggregator -> 左侧菜单列点击 C-Ability
+![QQ20240313175247.png](Wiki%2FQQ20240313175247.png)
 #### 2.8.b TimelineAbility 通用性Ability（W.I.P TimelineAbility还在完善中）
 在实际的开发过程中，我发现，许多的Ability都有顺序和时限两个特点。
 每次都新写一个Ability类来实现某个指定技能让我十分烦躁，于是我制作了TimelineAbility，一个极具通用性的顺序，时限Ability。
 
 
 ### 2.9 AbilitySystemComponent
-> 
+> AbilitySystemComponent是EX-GAS的核心之一，它是GAS的基本运行单位。
+
+ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，AttributeSet，GameplayEffect等数据。
+其主要职责如下：
+- 管理能力（Abilities）： ASC 负责管理角色的所有能力。它允许角色获得、激活、取消和执行各种不同类型的能力，如攻击、防御、技能等。
+- 处理效果（GameplayEffects）： ASC 负责处理与能力相关的效果，包括伤害、治疗、状态效果等。它能够跟踪和应用这些效果，并在需要时触发相应的回调或事件。
+- 处理标签（Tags）： ASC 负责管理角色身上的标签。标签用于标识角色的状态、属性或其他特征，以便在能力和效果中进行条件检查和过滤。
+- 处理属性（Attributes）： ASC 负责管理角色的属性。属性通常表示角色的状态，如生命值、能量值等。ASC 能够增减、修改和监听这些属性的变化。
+
 ---
 ## 3.可视化功能
-### 1. GAS Base Manager (GAS基础配置管理器)
-![$5C1@A0}R89 %WS33OY6UP0](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/85f4b1e2-ab3b-4735-8d71-b6623557bf02)
-
+### 1. GAS Setting Manager (GAS基础配置管理器)
+![QQ20240313174500.png](Wiki%2FQQ20240313174500.png)
 基础配置是与项目工程唯一对应的，所以入口放在了ProjectSetting，另外还有Edit Menu栏入口：EX-GAS -> Setting
 
-#### a.GameplayTag Manager
-![{)7T)P@{U}GWY7T%@ 5$@@W](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d5306afc-82a0-4c3e-a263-280c0088f1ae)
+- GameplayTag Manager
+![QQ20240313114652.png](Wiki%2FQQ20240313114652.png)
+- Attribute Manager
+![QQ20240313115953.png](Wiki%2FQQ20240313115953.png)
+- AttributeSet Manager
+![QQ20240313121300.png](Wiki%2FQQ20240313121300.png)
 
-我模仿了UE GAS的Tag管理视图，做了树结构管理。
-
-- b.Attribute 管理器
-
-项目内可操作的属性只可从已配置的Attribute中选取。
-
-- c.AttributeSet 管理器
-![HBDG` 0 {{9 G6@AS_I0YF](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/bc227c91-1dc1-408b-93e6-c93b5936b232)
-
-属性集可以预设生成，也支持运行时自定义（CustomAttributeSet）。
 
 ### 2. GAS Asset Aggregator (GAS配置资源聚合器)
-![N~~1W5_AQQ42XY6T`9D)G3F](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/8f3ab649-fc80-426a-aa44-3a52a9df19c4)
-
+![QQ20240313175247.png](Wiki%2FQQ20240313175247.png)
 因为GAS使用过程需要大量的配置（各类预设：ASC，游戏能力，游戏效果/buff，游戏提示，MMC），为了方便集中管理，我制作了一个配置资源聚合器。
 
 通过在菜单栏EX-GAS -> Asset Aggregator 可以打开配置资源聚合器。
 
 聚合器支持：分类管理，文件夹树结构显示，搜索栏快速查找，快速创建/删除配置文件（右上角的快捷按钮）
-- a.ASC预设管理
-![)@6J1G3%FESLFG$1R0E$WNL](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/0cb0b5a9-cfde-44ad-b121-e0077330a02e)
-- b.能力配置管理
-![RY_~6~7BSVSOA0`C 4F8FD](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/acd53826-d032-49f3-a878-a649f98311a1)
-- c.游戏效果管理
-![X8L)UXB@ ARMV8}{P$04JAY](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/3442e5f8-fce4-4784-b393-064c15998401)
-- d.游戏提示 & MMC 管理
-
+- ASC预设管理
+![QQ20240313175513.png](Wiki%2FQQ20240313175513.png)
+- 能力配置管理
+![QQ20240313175749.png](Wiki%2FQQ20240313175749.png)
+- 游戏效果管理
+![QQ20240313175829.png](Wiki%2FQQ20240313175829.png)
+- 游戏提示 & MMC 管理
+![QQ20240313180028.png](Wiki%2FQQ20240313180028.png)
+![QQ20240313180054.png](Wiki%2FQQ20240313180054.png)
 ### 3. GAS Runtime Watcher (GAS运行时监视器)
-![UA_XISRD_ F9_W}7}JKII9M](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/d1a689a2-5c72-42ec-8d2d-60f005eab899)
-通过在菜单栏EX-GAS -> GAS Runtime Watcher 可以打开监视器。监视器只能在Editor下游戏运行时使用，监视器会显示GAS下正在运行的所有ASC（Ability System Component）的基础信息。
-
+![QQ20240313180923.png](Wiki%2FQQ20240313180923.png)
 __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在明显的性能问题。监视器只是为了方便调试，所以建议不要一直后台挂着监视器，有需要时再打开。*__
 
 >目前监视器较为简陋，以后可能会优化监视器。
@@ -458,7 +464,7 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 
 ---
 
-## 5.如果...我想...,应该怎么做?
+## 5.如果...我想...,应该怎么做?(W.I.P)
 
 ---
 ## 6.暂不支持的功能（可能有遗漏）

@@ -1,4 +1,6 @@
 ﻿
+using GAS.General;
+
 #if UNITY_EDITOR
 namespace GAS.Editor.GameplayAbilitySystem
 {
@@ -31,15 +33,14 @@ namespace GAS.Editor.GameplayAbilitySystem
         public string windowTitle = "<size=18><b>EX Gameplay Ability System Watcher</b></size>";
 
         [BoxGroup(BOXGROUP_TIPS)] [HideLabel] [DisplayAsString(TextAlignment.Left, true)]
-        public string tips = "This window is used to monitor the runtime state of the Gameplay Ability System. \n" +
-                             "It is recommended to open this window in the editor when debugging the Gameplay Ability System. ";
-
-        [BoxGroup(BOXGROUP_TIPS_RUNNINGTIP, false)]
-        [HideLabel]
-        [DisplayAsString(TextAlignment.Center, true)]
-        [HideIf("IsPlaying")]
-        public string onlyForGameRunning =
-            "<size=20><b><color=yellow>This monitor is only available when the game is running.</color></b></size>";
+        public string tips = GASTextDefine.TIP_WATCHER;
+        
+              [BoxGroup(BOXGROUP_TIPS_RUNNINGTIP, false)]
+              [HideLabel]
+              [DisplayAsString(TextAlignment.Center, true)]
+              [HideIf("IsPlaying")]
+              public string onlyForGameRunning = GASTextDefine.TIP_WATCHER_OnlyForGameRunning;
+            
 
         [BoxGroup(BOXGROUP_ASC)]
         [HorizontalGroup(BOXGROUP_ASC_H, 200)]

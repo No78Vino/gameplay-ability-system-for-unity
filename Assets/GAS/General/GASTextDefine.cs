@@ -102,5 +102,13 @@
         public const string ASC_AttributeSet="属性集";
         
         #endregion
+
+        #region Watcher
+
+        public const string TIP_WATCHER = "该窗口用于监视GAS运行状态,建议在调试GAS的角色能力，效果时打开该窗口。";
+        public const string TIP_WATCHER_OnlyForGameRunning = 
+            "<size=20><b><color=yellow>监视器只在游戏运行时可用.</color></b></size>";
+
+        #endregion
     }
 }
