@@ -30,7 +30,7 @@
         public const string BUTTON_CollapseAllTag = "折叠全部";
         public const string BUTTON_AddTag = "添加Tag";
         public const string BUTTON_RemoveTag = "移除Tag";
-        public const string BUTTON_GenTagCode = "生成Tag工具脚本";
+        public const string BUTTON_GenTagCode = "生成TagLib";
 
         #endregion
         
@@ -39,7 +39,7 @@
         public const string TIP_Warning_EmptyAttribute =
             "<size=13><color=yellow><color=orange>Attribute名</color>不准为<color=red><b>空</b></color>! " +
             "Please check!</color></size>";
-        public const string BUTTON_GenerateAttributeCollection = " 生成Attribute集合类";
+        public const string BUTTON_GenerateAttributeCollection = " 生成AttrLib";
         
         public const string TIP_Warning_DuplicatedAttribute =
             "<size=13><color=yellow>The <color=orange>Attribute名</color> 禁止 <color=red><b>重复</b></color>!\n" +
@@ -56,7 +56,7 @@
         
         public const string ERROR_DuplicatedAttributeSet = "<size=16><b><color=orange>存在重复AttributeSet!\n" +
                                                            "<color=white> ->  {0}</color></color></b></size>";
-        public const string BUTTON_GenerateAttributeSetCode = " 生成AttributeSet集合类";
+        public const string BUTTON_GenerateAttributeSetCode = " 生成AttrSetLib";
         
         #endregion
 

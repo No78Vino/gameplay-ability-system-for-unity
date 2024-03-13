@@ -137,17 +137,218 @@ GameplayTag自身可以作为一个独立的系统去使用。
 甚至我设计了一个全局ASC，专门用来管理全局状态，我不需要对每个系统的状态管理，转而维护一个ASC即可。（虽然最后并没有落地这个设计，因为DEMO没有那么复杂。）
 
 #### 2.2.a GameplayTag Manager
+![QQ20240313114652.png](Wiki%2FQQ20240313114652.png)
+我模仿了UE的GAS的Tag管理视图，做了树结构管理。通过选中节点，可以添加子节点，删除节点。要修改父子级关系时，只需要拖动节点即可。
+Tag的分类设计需要谨慎，策划（设计师）需要再项目初就规划好Tag的大致分类。如果开发后期出现了Tag的父子级关系大变动，会严重影响原有游戏运作逻辑。
 
+**【注意!!!】  每次编辑完Tag后，一定要点击右上角的【生成TagLib】按钮。GTagLib是包含了当前所有Tag的库类，
+便于程序开发使用。GTagLib中Tag变量名会用‘_’代替‘.’ ，比如 State.Buff.PowerUp ->  State_Buff_PowerUp**
 
 ### 2.3 Attribute
 >Attribute，属性，是GAS中的核心数据单位，用于描述角色的各种属性，如生命值，攻击力，防御力等。
 
+Attribute和AttributeSet（属性集）需要结合起来才能作为唯一标识，简单点说AttributeSet是姓氏，Attribute是名字。
+不同的AttributeSet可以有相同名字的Attribute，但是同一组的AttributeSet不可以有相同名字的Attribute。
+常见的情况，如下：
+> AttributeSet 人物: 生命值, 法力, 攻击力, 防御力
+> 
+> AttributeSet 武器: 生命值（耐久度）, 攻击力, 防御力
+> 
+> 而这两组AttributeSet中的生命值，攻击力，防御力，都是不同的属性，他们的意义和作用不同。但他们可以属于同一个单位。
+#### 2.3.a Attribute Manager
+![QQ20240313115953.png](Wiki%2FQQ20240313115953.png)
+Attribute Manager的作用很简单，提供属性名字的管理。然后作为AttributeSet的选项使用。
+
+**【注意!!!】  每次编辑完Attribute后，一定要点击【生成AttrLib】按钮。
+只有AttrLib生成后，AttributeSet的Attribute选项才会发生改变。**
 
 ### 2.4 AttributeSet
+>AttributeSet，属性集，是GAS中的核心数据单位集合，用于描述角色的某一类别的属性集合。
+
+在上文的[2.3 Attribute]中，我们提到了AttributeSet是姓氏，Attribute是名字。二者结合起来才能作为唯一标识。
+而对于AttributeSet的设计，可以较为随意，大多数情况，大家会更乐意一个单位只有一个AttributeSet。
+因为这样便于管理和分类，不同类别的单位直接使用不同的AttributeSet。但实际上一个单位是可以拥有复数AttributeSet。
+我其实比较认同一个单位只有一个AttributeSet的设计，因为这对程序开发也是好事，逻辑处理会更简单直白。
+
+配置时的注意项：
+- AttributeSet的名字禁止重复或空。这是因为AttributeSet的名字会作为类名。
+- AttributeSet内的Attribute禁止重复。
+
+#### 2.4.a AttributeSet Manager
+![QQ20240313121300.png](Wiki%2FQQ20240313121300.png)
+AttributeSet Manager统筹属性集的命名和属性管理。
+
+**【注意!!!】  每次编辑完后，一定要点击【生成AttrSetLib】按钮。AttrSetLib会在AbilitySystemComponent的预设配置中用到。
+AttrSetLib.gen.cs脚本中会包含所有的AttributeSet类（详见下文API章节），AttributeSet对应的类名是：“AS_名字”。
+比如AttributeSet名字是Fight，那它对应的类名是AS_Fight。**
+
 ### 2.5 ModifierMagnitudeCalculation
+>ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。
+
+MMC(下文开始会使用缩写指代ModifierMagnitudeCalculation)唯一的使用场景是在GameplayEffect中。
+GAS中，体系内运作的情况下，只有GameplayEffect才能修改Attribute的数值。而GameplayEffect就是通过MMC修改Attribute的数值。
+
+MMC具有以下特点：
+- 【与Attribute集成】： MMC 与 GAS 中的Attribute系统一起使用。这意味着计算效果幅度时可以考虑角色的属性，使得效果的强度与角色的属性值相关联。
+- 【实时性】： MMC 用于在运行时动态计算 Attribute 的修改幅度。这样可以根据角色的状态、属性或其他因素，实时地调整效果的强度。
+- 【自定义】： 通过继承 MMC的基类，开发者可以实现自定义的计算逻辑。这允许在计算效果幅度时考虑复杂的游戏逻辑、属性关系或其他条件。
+- 【复用性】： 由于 MMC 是一个独立的类(Scriptable Object)，开发者可以在多个 GameplayEffect 中重复使用相同的计算逻辑。这样可以确保在整个游戏中保持一致的效果计算。
+- 【灵活性】： 使用 MMC 提高了系统的灵活性，使得效果的强度不再是固定的数值，而可以根据需要在运行时进行调整，适应不同的游戏情境和需求。
+
+MMC在GameplayEffect中的运作逻辑，结合GameplayEffect配置中MMC界面来解释。如下图：
+
+![QQ20240313145154.png](Wiki%2FQQ20240313145154.png)
+
+MMC被存储在Modifier中，Modifier是GameplayEffect的一部分。
+Modifier包含了修改的属性，幅值（Magnitude），操作类型和MMC。
+- 修改的属性：指的是GameplayEffect作用对象被修改的属性。可以看到属性名是“AS_Fight.POSTURE”，这对应了上文的提到的属性识别是AttrSet和Attr组合而成的。
+- 幅值Magnitude：修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。
+- 操作类型：是对属性的操作类型，有3种：
+  - Add ： 加法（取值为负便是减法）
+  - Multiply： 乘法（除法取倒数即可）
+  - Override：覆写属性值
+- MMC：计算单位，Modifier的核心，是一个ScriptableObject。MMC的类别如下：
+  - ScalableFloatModCalculation：可缩放浮点数计算
+    - 该类型是根据Magnitude计算Modifier模值的，计算公式为：`ModifierMagnitude * k + b`
+      实际上就是一个线性函数，k和b为可编辑参数，可以在编辑器中设置。
+  - AttributeBasedModCalculation：基于属性的计算
+    - 该类型是根据属性值计算Modifier模值的，计算公式为：`AttributeValue * k + b`
+      计算逻辑与ScalableFloatModCalculation一致。
+    - 重点在于属性值的来源，确定属性值来源的参数有3个：
+      - attributeFromType：属性值从谁身上取？是从游戏效果的来源（创建者），还是目标（拥有者）。
+      - attributeName：属性值的名称，比如战斗属性集里的生命值：AS_Fight.Health
+      - captureType：属性值的捕获类型
+        - Track: 追踪,在Modifier被执行时，当场去取属性值
+        - SnapShot: 快照,在游戏效果被创建时会对来源和目标的属性进行快照。在Modifier被执行时，去取快照的属性值。
+  - SetByCallerModCalculation：由调用者设置的计算
+    - 不使用任何值计算模值，而是在执行时由调用者给出Modifier模值。
+    - 通过对GameplayEffectSpec注册数值来实现设置值。
+    - 设置数值映射有2种：
+      - 自定义键值：通过GameplayEffectSpec的RegisterValue(string key, float value)
+      - GameplayTag：通过GameplayEffectSpec的RegisterValue(GameplayTag tag, float value)
+  - CustomCalculation：自定义计算（必须继承自抽象基类ModifierMagnitudeCalculation）
+    - 上述3种类型显然不够方便且全面的满足游戏开发者的所有需求，所以提供了自定义计算类的功能。
+    - 允许开发者自由发挥给出各种各样的计算逻辑。
+
 ### 2.6 GameplayCue
+>目前EX-GAS的GameplayCue功能还未完善。功能相对简陋。
+- 【GameplayCue的作用】：GameplayCue是一个用于播放游戏提示的类，它的作用是在游戏运行时播放游戏效果，比如播放一个特效、播放一个音效等。
+- 【GameplayCue的原则】： Cue是游戏提示，他必须遵守以下原则：
+  - _**Cue不应该对游戏的数值体系产生影响，比如不应该对游戏的属性进行修改，不应该对游戏的Buff进行修改等。**_
+  - _**Cue不应该对游戏玩法产生实际影响，比如即时战斗类的游戏，Cue不应该影响角色的位移、攻击等。**_
+
+>第一条原则是所有类型游戏必须遵守的。
+>
+>而第二条原则就见仁见智了，因为游戏类型和玩法决定了cue的影响范围。
+比如即时战斗类游戏，cue对角色位移有操作显然就是干涉了战斗，但如果是回合制游戏，cue对角色位移的操作就可以被当成是动画表现。
+（甚至，即便是即时战斗类游戏，cue对角色位移的操作也可以被当成是动画表现，只要游戏开发人员认为cue的位移操作不影响游戏的战斗结果即可。）
+- 【GameplayCue的类型】 GameplayCue的类型分两大类：
+  - GameplayCueInstant：瞬时性的Cue，比如播放动画，伤害UI提示等
+  - GameplayCueDurational：持续性的Cue，比如持续性的特效、持续性的音效等
+>GameplayCueInstant和GameplayCueDurational都是抽象类，它们的子类才是真正的可使用Cue类。
+Cue是需要程序开发人员大量实现的，毕竟游戏不同导致游戏提示千变万化。
+
+- 【关于Cue的子类实现】： Cue的完整组成为GameplayCue和GameplayCueSpec：
+  - GameplayCue< T >（抽象基类,T为对应的Spec类）：Cue的数据实类，是一个可编辑类，开发人员可以在编辑器中设置Cue的各种参数。该类只可以被视作数据类。
+    - 必须实现CreateSpec方法：用于创建对应的Spec类
+  - GameplayCueSpec（抽象基类）：Cue的规格类，是Runtime下Cue的真正实例，Cue的具体逻辑在该类中实现。
+    - GameplayCueInstantSpec：瞬时性Cue的规格类
+      - Trigger(): 必须实现的方法，用于触发Cue
+    - GameplayCueDurationalSpec：持续性Cue的规格类
+      - OnAdd(): 必须实现的方法，用于Cue被添加时的逻辑
+      - OnRemove(): 必须实现的方法，用于Cue被移除时的逻辑
+      - OnGameplayEffectActivated(): 必须实现的方法，用于Cue所属的GameplayEffect被激活时的逻辑
+      - OnGameplayEffectDeactivated(): 必须实现的方法，用于Cue所属的GameplayEffect被移除时的逻辑
+      - OnTick(): 必须实现的方法，用于Cue的每帧更新逻辑
+
+- 【关于Cue的参数传递】： 目前EX-GAS的Cue参数传递非常简陋，依赖于结构体GameplayCueParameters，成员如下：
+  - GameplayEffectSpec sourceGameplayEffectSpec：Cue所属的GameplayEffect实例（如果是GE触发）
+  - AbilitySpec sourceAbilitySpec：Cue所属的Ability实例（如果是Ability触发）
+  - object[] customArguments：自定义参数，不同于GameplayCue中的数据。
+    customArguments是供程序开发人员在业务逻辑内自由传递参数的载体。
+>注意：customArguments是一个object数组，开发人员需要自己保证传递的参数类型正确，否则会导致运行时错误。
+customArguments是最暴力的设计，往后EX-GAS的Cue参数传递设计还会进行优化。
+- 【GameplayCue的使用】：
+GameplayCue的使用手段很多，最基础的是在GameplayEffect中使用，Cue最开始的设计基础也是依附于GameplayEffect。Ability也可以对Cue进行操作。
+除此之外，Cue的使用不限制于EX-GAS的体系内。开发者可以在任何地方使用Cue，只要能获取到GameplayCue的资源实例并且遵守Cue的原则即可。
+  - 在GameplayEffect中使用Cue 
+    - GameplayEffect中使用Cue会根据GameplayEffect执行策略产生变化。
+      - 即时执行的GameplayEffect: 提供以下选项
+        - CueOnExecute（Instant）：Cue都会在GameplayEffect执行时触发。
+      - 持续执行的GameplayEffect: 提供以下选项
+        - CueDurational（Durational）：生命周期完全和GameplayEffect同步
+        - CueOnAdd（Instant）：GameplayEffect添加时触发
+        - CueOnRemove（Instant）：GameplayEffect移除时触发
+        - CueOnActivate（Instant）：GameplayEffect激活时触发。
+        - CueOnDeactivate（Instant）：GameplayEffect失活时触发。
+
+  - 在Ability中使用Cue
+    - Ability种Cue的使用完全依赖于Ability自身的业务逻辑，因此程序开发者在AbilitySpec中实现Cue逻辑时一定要保证合理性。
+      特别是对于Durational类型的Cue，一定要保证Cue生命周期的合理性，切记不要出现遗漏销毁Cue的情况。
+    
 ### 2.7 GameplayEffect
+>GameplayEffect是EX-GAS的核心之一，一切的游戏数值体系交互基于GameplayEffect。
+
+GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它可以对游戏内元素的属性进行修改
+（这里指的是修改，数值的初始化不算是修改）。当然，实际情况下，游戏开发人员当然可以手动直接修改属性值。
+但是还是希望游戏开发者尽可能的不要打破EX-GAS的数值体系逻辑，因为过多的额外操作可能会导致游戏的数值体系变得混乱，难以追踪数值变化等等。
+
+另外GameplayEffect还可以触发Cue（游戏提示）完成游戏效果的表现，以及控制获取额外的能力等。
+
+> 由于GameplayEffect是被封装好的，程序开发者不会接触它的实现逻辑，所以本文Wiki将跳过对其接口以及代码逻辑的解析。
+> 后续，可能会完善代码接口的介绍。
+
+- GameplayEffect的使用
+![QQ20240313152015.png](Wiki%2FQQ20240313152015.png)
+
+GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义。
+  - Name：GameplayEffect的名称，纯粹用于显示，不会影响游戏逻辑。方便编辑者区分GameplayEffect。
+  - Description：GameplayEffect的描述，纯粹用于显示，不会影响游戏逻辑。方便编辑者阅读理解GameplayEffect。
+  - DurationPolicy：GameplayEffect的执行策略，有以下几种：
+      - Instant：即时执行，GameplayEffect被添加时立即执行，执行完毕后销毁自身。
+      - Duration：持续执行，GameplayEffect被添加时立即执行，持续时间结束后移除自身。
+      - Infinite：无限执行，GameplayEffect被添加时立即执行，执行完毕后不会移除，需要手动移除。
+      - None：无效果,这是默认占位符，因为GameplayEffect是结构体，None方便视作GameplayEffect的空值。
+        _**GameplayEffect配置的执行策略禁止使用None！！！**_
+  - Duration：持续时间，只有DurationPolicy为Duration时有效。
+  - Every(Period)：周期，只有DurationPolicy为Duration或者Infinite时有效。每隔Period时间执行一次PeriodExecution。
+  - PeriodExecution：周期执行的GameplayEffect，只有DurationPolicy为Duration或者Infinite，且Period>0时有效。每隔Period时间执行一次PeriodExecution。
+    _**PeriodExecution禁止为空!!**_PeriodExecution原则上只允许是Instant类型的GameplayEffect。但如果根据开发者需求，也可以使用其他类型的GameplayEffect。
+  - GrantedAbilities(**该功能目前尚未生效**)：授予的能力，只有DurationPolicy为Duration或者Infinite时有效。在GameplayEffect生命周期内，GameplayEffect的持有者会被授予这些能力。
+      GameplayEffect被移除时，这些能力也会被移除。
+  - Modifiers: 属性修改器。详见[MMC](#25-modifiermagnitudecalculation)
+- Tags：标签。Tag具有非常重要的作用，合适的tag可以处理GameplayEffect之间复杂的关系。
+  - AssetTags：描述性质的标签，用来描述GameplayEffect的特性表现，比如伤害、治疗、控制等。
+  - GrantedTags：GameplayEffect的持有者会获得这些标签，GameplayEffect被移除时，这些标签也会被移除。
+    Instant类型的GameplayEffect的GrantedTags是无效的。
+  - ApplicationRequiredTags：GameplayEffect的目标单位必须拥有 **【所有】** 这些标签，否则GameplayEffect无法被施加到目标身上。
+  - OngoingRequiredTags：GameplayEffect的目标单位必须拥有 **【所有】** 这些标签，否则GameplayEffect不会被激活（施加和激活是两个概念，
+    如果已经被施加的GameplayEffect持续过程中，目标的tag变化了，不满足，效果就会失活；满足了，就会被激活）。
+    Instant类型的GameplayEffect的OngoingRequiredTags是无效的。
+  - RemoveGameplayEffectsWithTags：GameplayEffect的目标单位当前持有的所有GameplayEffect中，拥有 **【任意】** 这些标签的GameplayEffect会被移除。
+  - Application Immunity Tags: GameplayEffect的目标单位拥有 **【任意】** 这些标签，就对该GameplayEffect免疫。
+- Cues：GameplayEffect的提示。GameplayEffect可以触发Cue（游戏提示）完成游戏效果的表现，以及控制获取额外的能力等。
+  - DurationPolicy为Instant时
+    - CueOnExecute（Instant）：GameplayEffect执行时触发。
+  - DurationPolicy为Duration或者Infinite时
+    - CueDurational（Durational）：生命周期完全和GameplayEffect同步
+    - CueOnAdd（Instant）：GameplayEffect添加时触发
+    - CueOnRemove（Instant）：GameplayEffect移除时触发
+    - CueOnActivate（Instant）：GameplayEffect激活时触发。
+    - CueOnDeactivate（Instant）：GameplayEffect失活时触发。
+
+- GameplayEffect的施加（Apply）和激活（Activate）
+  - GameplayEffect的施加（Apply）和激活（Activate）是两个概念，施加是指GameplayEffect被添加到目标身上，激活是指GameplayEffect实际生效。
+    - 为什么做区分？
+    - 举个例子：固有被动技能（Ability）是持续回血，被动技能的逻辑显然是永久激活的状态，而持续回血的效果（GameplayEffect）
+      来源于被动技能，那如果单位受到了外部的debuff禁止所有的回血效果，那么是不是被动技能被禁止？显然不是，被动技能还是会持续激活的。
+      那应该是移除回血效果吗？显然也不是，被动技能整个过程是不做任何变化，如果移除回血效果，那debuff一旦消失，谁再把回血效果加回来？
+      所以，这里需要区分施加和激活，被动技能的持续回血效果被施加到单位身上，而debuff做的是让回血效果失活，而不是移除回血效果，一旦debuff结束，
+      回血效果又被激活，而这个激活的操作可以理解为回血效果自己激活的（依赖于Tag系统）。
+    
 ### 2.8 Ability
+
+
 ### 2.9 AbilitySystemComponent
 
 ---
