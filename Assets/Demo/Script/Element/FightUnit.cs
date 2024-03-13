@@ -35,7 +35,7 @@ public abstract class FightUnit : MonoBehaviour
     public float VelocityX => _velocityX;
     private bool IsMoving => ASC.HasTag(GTagLib.Event_Moving);
     public Animator Animator => _animator;
-    private bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
+    private bool DoubleJumpValid => false; //_asc.HasTag(GTagLib.Event_DoubleJumpValid);
 
     protected virtual void Awake()
     {

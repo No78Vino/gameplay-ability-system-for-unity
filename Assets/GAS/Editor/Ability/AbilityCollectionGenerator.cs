@@ -76,7 +76,7 @@ namespace GAS.Editor.Ability
             writer.WriteLine("  }");
             writer.WriteLine("}");
             
-            Console.WriteLine($"Generated GameplayTagSumCollection at path: {filePath}");
+            Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
     }
 }

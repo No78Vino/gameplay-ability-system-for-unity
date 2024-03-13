@@ -39,7 +39,7 @@ namespace Demo.Script.GAS.TargetCatcher
         protected bool IsDefendSuccess(AbilitySystemComponent target)
         {
             return target.HasTag(GTagLib.Event_Defending);
-            // if (!target.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
+            // if (!target.HasTag(GTagLib.Event_Defending)) return false;
             // return target.transform.localScale.x * Owner.transform.localScale.x < 0;
         }
     }

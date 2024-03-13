@@ -149,10 +149,10 @@ namespace GAS.Runtime.Ability
         
         private static void SetTagChoices()
         {
-            Type gameplayTagSumCollectionType = Type.GetType($"GAS.Runtime.Tags.GameplayTagSumCollection, Assembly-CSharp");
+            Type gameplayTagSumCollectionType = Type.GetType($"GAS.Runtime.Tags.GTagLib, Assembly-CSharp");
             if(gameplayTagSumCollectionType == null)
             {
-                Debug.LogError("[EX] Type 'GameplayTagSumCollection' not found. Please generate the TAGS CODE first!");
+                Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");
                 TagChoices = new ValueDropdownList<GameplayTag>();
                 return;
             }
