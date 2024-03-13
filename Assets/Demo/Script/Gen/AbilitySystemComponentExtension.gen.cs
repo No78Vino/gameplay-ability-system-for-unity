@@ -15,7 +15,7 @@ namespace GAS.Runtime.Component
               if (asc.Preset == null) return null;
               var attrSetTypes = new Type[asc.Preset.AttributeSets.Length];
               for (var i = 0; i < asc.Preset.AttributeSets.Length; i++)
-                  attrSetTypes[i] = AttrSetUtil.AttrSetTypeDict[asc.Preset.AttributeSets[i]];
+                  attrSetTypes[i] = GAttrSetLib.AttrSetTypeDict[asc.Preset.AttributeSets[i]];
               return attrSetTypes;
           }
           public static AbilityInstanceInfo[] PresetAbilityInstanceInfos(this AbilitySystemComponent asc)
@@ -28,7 +28,7 @@ namespace GAS.Runtime.Component
                   infos[i] = new AbilityInstanceInfo()
                   {
                       abilityAsset =  abilityAsset,
-                      abilityType = AbilityCollection.AbilityMap[abilityAsset.UniqueName].AbilityClassType
+                      abilityType = GAbilityLib.AbilityMap[abilityAsset.UniqueName].AbilityClassType
                   };
               }
               return infos;

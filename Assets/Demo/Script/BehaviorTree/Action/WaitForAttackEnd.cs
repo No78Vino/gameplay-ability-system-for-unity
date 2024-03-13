@@ -7,7 +7,7 @@ namespace BehaviorDesigner.Runtime
     {
         public override TaskStatus OnUpdate()
         {
-            bool inAttack = _unit.Value.ASC.HasTag(GameplayTagSumCollection.Event_Attacking);
+            bool inAttack = _unit.Value.ASC.HasTag(GTagLib.Event_Attacking);
             return inAttack ? TaskStatus.Running : TaskStatus.Success;
         }
     }

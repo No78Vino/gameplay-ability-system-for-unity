@@ -4,7 +4,7 @@
 ///////////////////////////////////
 namespace GAS.Runtime.Attribute
 {
-public static class AttributeCollection
+public static class GAttrLib
 {
     public const string HP = "HP";
     public const string MP = "MP";

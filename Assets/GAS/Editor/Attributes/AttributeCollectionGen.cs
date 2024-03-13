@@ -16,7 +16,7 @@ namespace GAS.Editor.Attributes
         {
             var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME}";
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME}";
             var attributeNames = asset.AttributeNames;
             GenerateAttributeCollection(attributeNames, filePath);
         }
@@ -30,7 +30,7 @@ namespace GAS.Editor.Attributes
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("namespace GAS.Runtime.Attribute");
             writer.WriteLine("{");
-            writer.WriteLine("public static class AttributeCollection");
+            writer.WriteLine("public static class GAttrLib");
             writer.WriteLine("{");
 
             // Generate members for each ATTRIBUTE

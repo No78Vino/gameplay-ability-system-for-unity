@@ -14,7 +14,7 @@ namespace GAS.Editor.Ability
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ABILITY_COLLECTION_CSHARP_SCRIPT_NAME}";
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ABILITY_LIB_CSHARP_SCRIPT_NAME}";
             GenerateAbilityCollection(filePath);
         }
 

@@ -37,7 +37,7 @@ namespace GAS.Editor.GameplayAbilitySystem
             writer.WriteLine("              if (asc.Preset == null) return null;");
             writer.WriteLine("              var attrSetTypes = new Type[asc.Preset.AttributeSets.Length];");
             writer.WriteLine("              for (var i = 0; i < asc.Preset.AttributeSets.Length; i++)");
-            writer.WriteLine("                  attrSetTypes[i] = AttrSetUtil.AttrSetTypeDict[asc.Preset.AttributeSets[i]];");
+            writer.WriteLine("                  attrSetTypes[i] = GAttrSetLib.AttrSetTypeDict[asc.Preset.AttributeSets[i]];");
             writer.WriteLine("              return attrSetTypes;");
             writer.WriteLine("          }");
             writer.WriteLine("          public static GameplayTag[] PresetBaseTags(this AbilitySystemComponent asc)");

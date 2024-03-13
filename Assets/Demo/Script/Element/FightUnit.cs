@@ -33,7 +33,7 @@ public abstract class FightUnit : MonoBehaviour
     public Rigidbody2D Rb => _rb;
     public BoxCollider2D DefendArea => defendArea;
     public float VelocityX => _velocityX;
-    private bool IsMoving => ASC.HasTag(GameplayTagSumCollection.Event_Moving);
+    private bool IsMoving => ASC.HasTag(GTagLib.Event_Moving);
     public Animator Animator => _animator;
     private bool DoubleJumpValid => false; //_asc.HasTag(GameplayTagSumCollection.Event_DoubleJumpValid);
 
@@ -50,7 +50,7 @@ public abstract class FightUnit : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (!ASC.HasTag(GameplayTagSumCollection.Ban_Motion))
+        if (!ASC.HasTag(GTagLib.Ban_Motion))
         {
             if (Grounded || IsMoving)
             {
@@ -65,7 +65,7 @@ public abstract class FightUnit : MonoBehaviour
         // 设置动画机参数
         _animator.SetFloat(IsInAir, Grounded ? 0 : 1);
         _animator.SetFloat(UpOrDown, 0.5f * (1 - Mathf.Clamp(LastVelocityY, -1, 1)));
-        var isDefending = ASC.HasTag(GameplayTagSumCollection.Event_Defending);
+        var isDefending = ASC.HasTag(GTagLib.Event_Defending);
         _animator.SetFloat(Moving, IsMoving && !isDefending ? 1 : 0);
         _animator.SetBool(Defending, isDefending);
         
@@ -91,7 +91,7 @@ public abstract class FightUnit : MonoBehaviour
 
     protected bool InDeath()
     {
-        return ASC.HasTag(GameplayTagSumCollection.State_Debuff_Death);
+        return ASC.HasTag(GTagLib.State_Debuff_Death);
     }
     
     public abstract void InitAttribute();
@@ -101,9 +101,9 @@ public abstract class FightUnit : MonoBehaviour
         if (Grounded != grounded)
         {
             if (grounded)
-                ASC.RemoveFixedTag(GameplayTagSumCollection.Event_InAir);
+                ASC.RemoveFixedTag(GTagLib.Event_InAir);
             else
-                ASC.AddFixedTag(GameplayTagSumCollection.Event_InAir);
+                ASC.AddFixedTag(GTagLib.Event_InAir);
         }
 
         Grounded = grounded;
@@ -139,7 +139,7 @@ public abstract class FightUnit : MonoBehaviour
     {
         ASC.TryEndAbility(DefendName);
         // 移除防御Buff
-        ASC.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(new GameplayTagSet(GameplayTagSumCollection.State_Buff_DefendBuff));
+        ASC.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(new GameplayTagSet(GTagLib.State_Buff_DefendBuff));
     }
 
     public void Dodge()

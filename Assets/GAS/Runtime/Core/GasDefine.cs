@@ -9,15 +9,15 @@ namespace GAS.Core
 
         public const string GAS_ASSET_FOLDER_NAME = "GAS_Setting";
 
-        public const string GAS_TAG_COLLECTION_CSHARP_SCRIPT_NAME = "GameplayTagDefineCollection.gen.cs";
+        public const string GAS_TAG_LIB_CSHARP_SCRIPT_NAME = "GTagLib.gen.cs";
 
-        public const string GAS_ATTRIBUTE_COLLECTION_CSHARP_SCRIPT_NAME = "AttributeCollection.gen.cs";
+        public const string GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME = "GAttrLib.gen.cs";
 
-        public const string GAS_ATTRIBUTESET_CLASS_CSHARP_SCRIPT_NAME = "AttributeSetClass.gen.cs";
+        public const string GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME = "GAttrSetLib.gen.cs";
         
-        public const string GAS_ABILITY_COLLECTION_CSHARP_SCRIPT_NAME = "AbilityCollection.gen.cs";
+        public const string GAS_ABILITY_LIB_CSHARP_SCRIPT_NAME = "GAbilityLib.gen.cs";
         
-        public const string GAS_ASCUTIL_CSHARP_SCRIPT_NAME = "AbilitySystemComponentUtil.gen.cs";
+        public const string GAS_ASCUTIL_CSHARP_SCRIPT_NAME = "AbilitySystemComponentExtension.gen.cs";
 
         /// <summary>
         /// TODO

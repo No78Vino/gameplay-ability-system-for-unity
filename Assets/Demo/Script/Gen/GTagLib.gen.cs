@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 namespace GAS.Runtime.Tags
 {
-public static class GameplayTagSumCollection
+public static class GTagLib
 {
     public static GameplayTag Faction { get;} = new GameplayTag("Faction");
     public static GameplayTag Faction_Enemy { get;} = new GameplayTag("Faction.Enemy");

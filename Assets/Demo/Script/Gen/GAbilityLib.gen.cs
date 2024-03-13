@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace GAS.Runtime.Ability
 {
-  public static class AbilityCollection
+  public static class GAbilityLib
   {
       public struct AbilityInfo
       {

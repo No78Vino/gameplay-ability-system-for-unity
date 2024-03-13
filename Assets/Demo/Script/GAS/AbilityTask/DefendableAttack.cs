@@ -28,14 +28,14 @@ namespace Demo.Script.GAS.AbilityTask
 
         bool Defended(FightUnit target, Collider2D[] defendAreas)
         {
-            if (!target.ASC.HasTag(GameplayTagSumCollection.Event_Defending)) return false;
+            if (!target.ASC.HasTag(GTagLib.Event_Defending)) return false;
 
             return defendAreas.Any(defendArea => target.DefendArea == defendArea);
         }
 
         bool IsPerfectDefended(FightUnit target)
         {
-            return target.ASC.HasTag(GameplayTagSumCollection.Event_PerfectDefending);
+            return target.ASC.HasTag(GTagLib.Event_PerfectDefending);
         }
 
         public override void OnExecute()

@@ -157,7 +157,7 @@ namespace GAS.Editor.Tags
 
         void GenCode()
         {
-            GameplayTagSumCollectionGenerator.Gen();
+            GTagLibGenerator.Gen();
             AssetDatabase.Refresh();
         }
         

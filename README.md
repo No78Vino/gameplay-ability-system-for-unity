@@ -44,7 +44,7 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 2. 导入本插件，建议以下两种方式：
 - 使用Unity Package Manager安装
 在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS
-【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
+>【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
 - 使用git clone本仓库[镜像同上]，然后将Assets/GAS文件夹拷贝到你的项目中即可
 
 ### 使用
@@ -57,35 +57,31 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 
 在ProjectSetting中（或者Edit Menu栏入口：EX-GAS -> Setting），找到EX Gameplay Ability System的基本设置界面：
 
-![O`~ CLEHDMFE9O@M$5~`$1H](https://github.com/No78Vino/gameplay-ability-system-for-unity/assets/43328860/200ddd3c-e28c-4630-884b-e8fa165e7b5d)
+![S0X2@(E97LP_SWIJY2SJ@F3.png](Wiki%2FS0X2%40%28E97LP_SWIJY2SJ%40F3.png)
 
 设置好以下两个路径
-- Config Asset Path: 这是该项目有关GAS的配置的路径。
-- Code Gen Path: 这是GAS的生成脚本路径。GAS的基础配置（Tag，Attribute，AttributeSet）都会有对应的脚本生成。
+- 配置文件Asset路径: 这是该项目有关GAS的配置的路径，包括MMC,Cue,GameplayEffect,Ability,ASCPreset。
+- 脚本生成路径: GAS的基础配置（Tag，Attribute，AttributeSet）都会有对应的脚本生成。
 
-设置完路径后，点击保存（Save）按钮。
-
-
-2. 配置Tag
-
-Tag是GAS核心逻辑运作的依赖,非常重要。关于Tag的使用及运作逻辑详见章节([GameplayTag](#GameplayTag))
-
-3. 配置Attribute
-
-Attribute是GAS运行时数据单位。关于Attribute的使用及运作逻辑详见章节([Attribute](#Attribute))
-
-4. 配置AttributeSet
-
-AttributeSet是GAS运行时数据单位集合，合理的AttributeSet设计能够帮助程序解耦，提高开发效率。关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#AttributeSet))
-
-5. 设计MMC,Cue
+首次设置完路径后,点击检查子目录文件夹，确保必要的子文件夹都已生成。
+>【生成AbilitySystemComponentExtension类脚本】这个按钮，请在生成了Attribute，AttributeSet，Ability的Lib集合类之后再点击。特别提醒，AbilitySystemComponentExtension是工具类，理论上只生成一次即可。
 
 
-6. 设计Gameplay Effect
+2. 配置Tag:  Tag是GAS核心逻辑运作的依赖,非常重要。关于Tag的使用及运作逻辑详见章节([GameplayTag](#22-gameplaytag))
 
-7. 设计Ability
+3. 配置Attribute:  Attribute是GAS运行时数据单位。关于Attribute的使用及运作逻辑详见章节([Attribute](#Attribute))
 
-8. 设计ASC预设（可选）
+4. 配置AttributeSet:  AttributeSet是GAS运行时数据单位集合，合理的AttributeSet设计能够帮助程序解耦，提高开发效率。关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#AttributeSet))
+
+5. 设计MMC,Cue:  详见[MMC](#MMC), [GameplayCue](#GameplayCue)
+
+6. 设计Gameplay Effect:  详见 [Gameplay Effect](#GameplayEffect)
+
+7. 设计Ability:  详见 [Ability](#Ability)
+
+8. 设计ASC预设（可选）:  详见 [AbilitySystemComponent](#AbilitySystemComponent)
+
+
 ---
 ## 2.EX-GAS系统介绍
 ### 2.1 EX-GAS概述
@@ -140,6 +136,7 @@ GameplayTag自身可以作为一个独立的系统去使用。
 我在开发Demo的过程中就发现了GameplayTag的强大之处，他几乎替代了我的所有状态值。
 甚至我设计了一个全局ASC，专门用来管理全局状态，我不需要对每个系统的状态管理，转而维护一个ASC即可。（虽然最后并没有落地这个设计，因为DEMO没有那么复杂。）
 
+如何
 ### 2.3 Attribute
 >Attribute，属性，是GAS中的核心数据单位，用于描述角色的各种属性，如生命值，攻击力，防御力等。
 
@@ -203,13 +200,15 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 ## 5.如果...我想...,应该怎么做?
 ---
 ## 6.暂不支持的功能（可能有遗漏）
-1. GameplayEffect Stack， 同一游戏效果堆叠（如燃烧效果堆叠，伤害提升）
-2. RPC相关的GE复制广播
-3. GameplayEffect Execution，目前只有Modifier，没有Execution
-4. Ability的触发判断用的Source/Target Tag目前不生效
+- Granted Ability，GameplayEffect授予的能力。虽然面板显示了配置用的字段，但目前其实是不生效的
+- Derived Attribute，推论Attribute还未实现。
+- GameplayEffect Stack， 同一游戏效果堆叠（如燃烧效果堆叠，伤害提升）
+- RPC相关的GE复制广播
+- GameplayEffect Execution，目前只有Modifier，没有Execution
+- Ability的触发判断用的Source/Target Tag目前不生效
 
 ## 7.后续计划
-- 修复bug 
+- 修复bug ，性能优化
 - 补全遗漏的功能 
 - 优化Ability的编辑
 - 支持RPC的GE复制广播，网络同步 

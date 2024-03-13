@@ -19,12 +19,12 @@ public class Player : FightUnit
     [SerializeField] private GameplayEffectAsset GEBuffStaminaRecover;
     private DemoController _inputActionReference;
 
-    protected override string MoveName => AbilityCollection.Move_Info.Name;
-    protected override string JumpName => AbilityCollection.Jump_Info.Name;
-    protected override string AttackName => AbilityCollection.Attack_Info.Name;
-    protected override string DefendName => AbilityCollection.Defend_Info.Name;
-    protected override string DodgeName => AbilityCollection.DodgeStep_Info.Name;
-    protected override string DieName => AbilityCollection.Die_Info.Name;
+    protected override string MoveName => GAbilityLib.Move_Info.Name;
+    protected override string JumpName => GAbilityLib.Jump_Info.Name;
+    protected override string AttackName => GAbilityLib.Attack_Info.Name;
+    protected override string DefendName => GAbilityLib.Defend_Info.Name;
+    protected override string DodgeName => GAbilityLib.DodgeStep_Info.Name;
+    protected override string DieName => GAbilityLib.Die_Info.Name;
 
     protected override void Awake()
     {

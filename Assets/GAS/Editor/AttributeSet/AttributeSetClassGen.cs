@@ -18,7 +18,7 @@ namespace GAS.Editor.AttributeSet
         {
             var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_CLASS_CSHARP_SCRIPT_NAME}";
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
             GenerateAttributeCollection(asset.AttributeSetConfigs, filePath);
         }
 
@@ -94,7 +94,7 @@ namespace GAS.Editor.AttributeSet
                 writer.WriteLine("}");
             }
             
-            writer.WriteLine($"public static class AttrSetUtil");
+            writer.WriteLine($"public static class GAttrSetLib");
             writer.WriteLine("{");
             writer.WriteLine("    public static readonly Dictionary<string,Type> AttrSetTypeDict = new Dictionary<string, Type>()");
             writer.WriteLine("    {");

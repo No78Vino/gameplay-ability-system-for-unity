@@ -25,7 +25,7 @@ namespace Demo.Script.GAS.TargetCatcher
 
             var result = new List<AbilitySystemComponent>();
             foreach (var target in targets)
-                if (IsDefendSuccess(target) && !target.HasTag(GameplayTagSumCollection.Event_PerfectDefending))
+                if (IsDefendSuccess(target) && !target.HasTag(GTagLib.Event_PerfectDefending))
                     result.Add(target);
             return result;
         }

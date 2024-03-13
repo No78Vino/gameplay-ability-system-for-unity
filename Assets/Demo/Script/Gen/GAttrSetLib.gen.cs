@@ -134,7 +134,7 @@ public class AS_Fight:AttributeSet
           "SPEED",
       };
 }
-public static class AttrSetUtil
+public static class GAttrSetLib
 {
     public static readonly Dictionary<string,Type> AttrSetTypeDict = new Dictionary<string, Type>()
     {

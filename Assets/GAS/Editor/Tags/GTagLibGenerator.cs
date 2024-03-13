@@ -9,18 +9,18 @@ namespace GAS.Editor.Tags
     using UnityEditor;
     using UnityEngine;
     using GAS.Editor.GameplayAbilitySystem;
-    public static class GameplayTagSumCollectionGenerator
+    public static class GTagLibGenerator
     {
         public static void Gen()
         {
             var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_COLLECTION_CSHARP_SCRIPT_NAME}";
+            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_LIB_CSHARP_SCRIPT_NAME}";
             var tags = asset.Tags;
-            GenerateGameplayTagSumCollection(tags, filePath);
+            GenerateGTagLib(tags, filePath);
         }
 
-        private static void GenerateGameplayTagSumCollection(List<GameplayTag> tags, string filePath)
+        private static void GenerateGTagLib(List<GameplayTag> tags, string filePath)
         {
             using var writer = new StreamWriter(filePath);
             writer.WriteLine("///////////////////////////////////");
@@ -30,7 +30,7 @@ namespace GAS.Editor.Tags
             writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("namespace GAS.Runtime.Tags");
             writer.WriteLine("{");
-            writer.WriteLine("public static class GameplayTagSumCollection");
+            writer.WriteLine("public static class GTagLib");
             writer.WriteLine("{");
 
             // Generate members for each tag
@@ -54,7 +54,7 @@ namespace GAS.Editor.Tags
             writer.WriteLine("}");
             writer.WriteLine("}");
 
-            Console.WriteLine($"Generated GameplayTagSumCollection at path: {filePath}");
+            Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
 
         private static string MakeValidIdentifier(string name)

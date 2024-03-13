@@ -17,12 +17,12 @@ namespace Demo.Script.Element
         public const int ATK = 20;
         public const int Speed = 6;
 
-        protected override string MoveName => AbilityCollection.Move_Info.Name;
-        protected override string JumpName => AbilityCollection.Jump_Info.Name;
-        protected override string AttackName => AbilityCollection.BossAttack01_Info.Name;
-        protected override string DefendName => AbilityCollection.Defend_Info.Name;
-        protected override string DodgeName => AbilityCollection.DodgeStep_Info.Name;
-        protected override string DieName => AbilityCollection.BossDie_Info.Name;
+        protected override string MoveName => GAbilityLib.Move_Info.Name;
+        protected override string JumpName => GAbilityLib.Jump_Info.Name;
+        protected override string AttackName => GAbilityLib.BossAttack01_Info.Name;
+        protected override string DefendName => GAbilityLib.Defend_Info.Name;
+        protected override string DodgeName => GAbilityLib.DodgeStep_Info.Name;
+        protected override string DieName => GAbilityLib.BossDie_Info.Name;
 
         [SerializeField] private Player player;
         [SerializeField] private BossCore core;
@@ -59,10 +59,10 @@ namespace Demo.Script.Element
                 _bt.EnableBehavior();
             }
             
-            if( _outOfPosture != ASC.HasTag(GameplayTagSumCollection.State_Debuff_LoseBalance))
+            if( _outOfPosture != ASC.HasTag(GTagLib.State_Debuff_LoseBalance))
             {
                 _outOfPosture = !_outOfPosture;
-                _bt.SetVariableValue("outOfPosture", ASC.HasTag(GameplayTagSumCollection.State_Debuff_LoseBalance));
+                _bt.SetVariableValue("outOfPosture", ASC.HasTag(GTagLib.State_Debuff_LoseBalance));
                 _bt.DisableBehavior();
                 _bt.EnableBehavior();
             }
@@ -109,17 +109,17 @@ namespace Demo.Script.Element
 
         public bool FallDownAttack()
         {
-            return ASC.TryActivateAbility(AbilityCollection.BossAttack02_Info.Name);
+            return ASC.TryActivateAbility(GAbilityLib.BossAttack02_Info.Name);
         }
         
         public bool BeamAttack()
         {
-            return ASC.TryActivateAbility(AbilityCollection.BossAttack03_Info.Name);
+            return ASC.TryActivateAbility(GAbilityLib.BossAttack03_Info.Name);
         }
         
         public bool RoarAttack()
         {
-            return ASC.TryActivateAbility(AbilityCollection.BossAttack04_Info.Name);
+            return ASC.TryActivateAbility(GAbilityLib.BossAttack04_Info.Name);
         }
         
         private float OnPostureChangePre(AttributeBase attr, float newValue)

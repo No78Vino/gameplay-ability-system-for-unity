@@ -86,10 +86,10 @@ namespace GAS.Runtime.Component
         
         static void SetAttributeSetChoices()
         {
-            Type attributeSetUtil = Type.GetType($"GAS.Runtime.AttributeSet.AttrSetUtil, Assembly-CSharp");
+            Type attributeSetUtil = Type.GetType($"GAS.Runtime.AttributeSet.GAttrSetLib, Assembly-CSharp");
             if(attributeSetUtil == null)
             {
-                Debug.LogError("[EX] Type 'AttrSetUtil' not found. Please generate the AttributeSet CODE first!");
+                Debug.LogError("[EX] Type 'GAttrSetLib' not found. Please generate the AttributeSet CODE first!");
                 AttributeSetChoice = new ValueDropdownList<string>();
                 return;
             }
