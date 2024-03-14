@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Runtime.Ability.TimelineAbility;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System.Collections;
@@ -126,7 +128,7 @@ namespace GAS.Editor
             {
                 if (_targetCatcherInspectorTypes != null) return _targetCatcherInspectorTypes;
                 _targetCatcherInspectorTypes = TypeUtil.GetAllSonTypesOf(typeof(TargetCatcherInspector));
-                TargetCatcherSonTypeChoices = _targetCatcherInspectorTypes.Select(type => type.FullName).ToList();
+                TargetCatcherSonTypeChoices = ReleaseGameplayEffectMarkEvent.TargetCatcherSonTypes.Select(type => type.FullName).ToList();
                 return _targetCatcherInspectorTypes;
             }
         }
