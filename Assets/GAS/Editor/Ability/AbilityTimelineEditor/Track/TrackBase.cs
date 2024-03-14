@@ -19,7 +19,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         protected VisualElement MenuBox;
         protected VisualElement MenuParent;
         public VisualElement MenuRoot;
-        protected Label MenuText;
+        public Label MenuText;
         protected VisualElement TrackParent;
         public VisualElement TrackRoot;
         public List<TrackItemBase> TrackItems => _trackItems;
@@ -38,7 +38,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
 
         public abstract void TickView(int frameIndex, params object[] param);
-        public abstract VisualElement Inspector();
+        // public abstract VisualElement Inspector();
+
+        public virtual UnityEngine.Object DataInspector => null;
+
 
         public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
             TrackDataBase trackData)

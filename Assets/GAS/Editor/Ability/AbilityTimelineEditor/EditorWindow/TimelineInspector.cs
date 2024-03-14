@@ -40,7 +40,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                     _clipInspector.Add(trackClip.Inspector());
                     break;
                 case TrackBase track:
-                    _clipInspector.Add(track.Inspector());
+                    UnityEditor.Selection.activeObject = track.DataInspector;
+                    //_clipInspector.Add(track.Inspector());
                     break;
                 case TrackMarkBase mark:
                     _clipInspector.Add(mark.Inspector());

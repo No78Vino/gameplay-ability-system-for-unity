@@ -92,37 +92,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             MenuParent.Remove(MenuRoot);
             Debug.Log("[EX] Remove Task Clip Track");
         }
-
-
-        #region Inspector
         
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-            // track Name
-            var trackNameTextField =TrackInspectorUtil.CreateTextField("Name",_taskClipEventTrackData.trackName,
-                (evt =>
-                {
-                    // 修改数据
-                    TaskClipTrackDataForSave.trackName = evt.newValue;
-                    AbilityAsset.Save();
-                    // 修改显示
-                    MenuText.text = evt.newValue;
-                }));
-            inspector.Add(trackNameTextField);
-            
-            foreach (var clip in _taskClipEventTrackData.clipEvents)
-            {
-                var taskType = clip.ongoingTask.TaskData.Type;
-                var taskName = !string.IsNullOrEmpty(taskType) ? taskType : "Null!";
-                var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
-                var runInfo = TrackInspectorUtil.CreateLabel($"  [{shortName}] Run(f):{clip.startFrame}->{clip.EndFrame}");
-                inspector.Add(runInfo);
-            }
-            
-            return inspector;
-        }
-        #endregion
+        public override UnityEngine.Object DataInspector => TaskClipEventTrackEditor.Create(this);
     }
 }
 #endif

@@ -57,34 +57,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
         }
 
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-
-            var trackName = TrackInspectorUtil.CreateTextField("Name", _instantTasksTrackData.trackName,
-                evt =>
-                {
-                    _instantTasksTrackData.trackName = evt.newValue;
-                    MenuText.text = evt.newValue;
-                    AbilityTimelineEditorWindow.Instance.Save();
-                });
-            inspector.Add(trackName);
-
-            foreach (var mark in _instantTasksTrackData.markEvents)
-            {
-                var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{mark.startFrame}");
-                inspector.Add(markFrame);
-                foreach (var task in mark.InstantTasks)
-                {
-                    var taskName = task != null ? task.TaskData.Type : "Null!";
-                    var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
-                    var taskInfo = TrackInspectorUtil.CreateLabel($"    |-> {shortName}");
-                    inspector.Add(taskInfo);
-                }
-            }
-
-            return inspector;
-        }
+        public override UnityEngine.Object DataInspector => TaskMarkEventTrackEditor.Create(this);
 
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {

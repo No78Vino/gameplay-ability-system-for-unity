@@ -59,34 +59,34 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
         }
 
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-
-            var trackName =
-                TrackInspectorUtil.CreateTextField("Name", _instantCuesTrackData.trackName,
-                    e =>
-                    {
-                        _instantCuesTrackData.trackName = e.newValue;
-                        MenuText.text = _instantCuesTrackData.trackName;
-                        AbilityTimelineEditorWindow.Instance.Save();
-                    });
-            inspector.Add(trackName);
-
-            foreach (var mark in _instantCuesTrackData.markEvents)
-            {
-                var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{mark.startFrame}");
-                inspector.Add(markFrame);
-                foreach (var c in mark.cues)
-                {
-                    var cueName = c != null ? c.name : "NULL";
-                    var cueCount = TrackInspectorUtil.CreateLabel($"    |-> Cue:{cueName}");
-                    inspector.Add(cueCount);
-                }
-            }
-
-            return inspector;
-        }
+        // public override VisualElement Inspector()
+        // {
+        //     var inspector = TrackInspectorUtil.CreateTrackInspector();
+        //
+        //     var trackName =
+        //         TrackInspectorUtil.CreateTextField("Name", _instantCuesTrackData.trackName,
+        //             e =>
+        //             {
+        //                 _instantCuesTrackData.trackName = e.newValue;
+        //                 MenuText.text = _instantCuesTrackData.trackName;
+        //                 AbilityTimelineEditorWindow.Instance.Save();
+        //             });
+        //     inspector.Add(trackName);
+        //
+        //     foreach (var mark in _instantCuesTrackData.markEvents)
+        //     {
+        //         var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{mark.startFrame}");
+        //         inspector.Add(markFrame);
+        //         foreach (var c in mark.cues)
+        //         {
+        //             var cueName = c != null ? c.name : "NULL";
+        //             var cueCount = TrackInspectorUtil.CreateLabel($"    |-> Cue:{cueName}");
+        //             inspector.Add(cueCount);
+        //         }
+        //     }
+        //
+        //     return inspector;
+        // }
 
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
@@ -117,6 +117,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             MenuParent.Remove(MenuRoot);
             Debug.Log("[EX] Remove Instant Cue Track");
         }
+
+        public override UnityEngine.Object DataInspector => InstantCueTrackEditor.Create(this);
     }
 }
 #endif

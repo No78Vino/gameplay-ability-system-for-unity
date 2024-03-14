@@ -1,5 +1,8 @@
+using GAS.Editor.Ability;
+using GAS.Editor.Ability.AbilityTimelineEditor;
+
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using System;
     using System.Reflection;
@@ -25,6 +28,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         public TimelineInspector TimelineInspector { get; private set; }
 
+        private static EditorWindow _childInspector;
         public void CreateGUI()
         {
             Instance = this;
@@ -47,6 +51,13 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
             wnd.InitAbility(asset);
+
+            
+            // // 打开子Inspector
+            EditorApplication.delayCall += () =>
+            {
+                wnd.ShowChildInspector();
+            };
         }
 
         public void Save()
@@ -106,14 +117,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private void ShowAbilityAssetDetail()
         {
             if (AbilityAsset == null) return;
-            var inspectorType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.InspectorWindow");
-            var inspectorInstance = CreateInstance(inspectorType) as UnityEditor.EditorWindow;
-            var prevSelection = Selection.activeObject;
             Selection.activeObject = AbilityAsset;
-            var isLocked = inspectorType.GetProperty("isLocked", BindingFlags.Instance | BindingFlags.Public);
-            if (isLocked != null) isLocked.GetSetMethod().Invoke(inspectorInstance, new object[] { true });
-            Selection.activeObject = prevSelection;
-            if (inspectorInstance != null) inspectorInstance.Show();
+            // var inspectorType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.InspectorWindow");
+            // var inspectorInstance = CreateInstance(inspectorType) as UnityEditor.EditorWindow;
+            // var prevSelection = Selection.activeObject;
+            // Selection.activeObject = AbilityAsset;
+            // var isLocked = inspectorType.GetProperty("isLocked", BindingFlags.Instance | BindingFlags.Public);
+            // if (isLocked != null) isLocked.GetSetMethod().Invoke(inspectorInstance, new object[] { true });
+            // Selection.activeObject = prevSelection;
+            // if (inspectorInstance != null) inspectorInstance.Show();
         }
 
         #endregion
@@ -123,6 +135,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         private string _previousScenePath;
         private Button BtnLoadPreviewScene;
         private Button BtnBackToScene;
+        private Button BtnChildInspector;
         private ObjectField _previewObjectField;
         public GameObject PreviewObject => _previewObjectField.value as GameObject;
 
@@ -132,10 +145,24 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             BtnLoadPreviewScene.clickable.clicked += LoadPreviewScene;
             BtnBackToScene = _root.Q<Button>(nameof(BtnBackToScene));
             BtnBackToScene.clickable.clicked += BackToScene;
+            
+            BtnChildInspector = _root.Q<Button>(nameof(BtnChildInspector));
+            BtnChildInspector.clickable.clicked += ShowChildInspector;
+            
             _previewObjectField = _root.Q<ObjectField>("PreviewInstance");
             _previewObjectField.RegisterValueChangedCallback(OnPreviewObjectChanged);
         }
 
+        private void ShowChildInspector()
+        {
+            if(_childInspector==null)
+            {
+                _childInspector = GetInspectTarget();
+                _childInspector.Show();
+            }
+            DockUtilities.DockWindow(this, _childInspector, DockUtilities.DockPosition.Right);
+        }
+        
         private void OnPreviewObjectChanged(ChangeEvent<Object> evt)
         {
             // TODO : 在这里处理预览对象的变化
@@ -355,6 +382,20 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
             var canPlay = AbilityAsset != null && _previewObjectField.value != null;
             return canPlay;
+        }
+
+        #endregion
+
+
+        #region Another Inspector
+
+        
+        private static EditorWindow GetInspectTarget(Object targetGO=null)
+        {
+            Type inspectorType = typeof(Editor).Assembly.GetType("UnityEditor.InspectorWindow");
+            EditorWindow inspectorInstance = CreateInstance(inspectorType) as EditorWindow;
+            if(targetGO) Selection.activeObject = targetGO;
+            return inspectorInstance;
         }
 
         #endregion

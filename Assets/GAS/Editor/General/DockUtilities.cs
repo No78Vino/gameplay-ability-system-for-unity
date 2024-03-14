@@ -1,7 +1,7 @@
 
 
 #if UNITY_EDITOR
-namespace GAS.General
+namespace GAS.Editor
 {
 	using System.Reflection;
 	using UnityEditor;

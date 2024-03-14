@@ -82,11 +82,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         {
         }
 
-        public override VisualElement Inspector()
-        {
-            return new VisualElement();
-        }
-
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
         }

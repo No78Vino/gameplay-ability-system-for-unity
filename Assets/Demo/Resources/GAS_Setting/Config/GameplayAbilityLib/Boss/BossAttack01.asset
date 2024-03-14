@@ -39,7 +39,7 @@ MonoBehaviour:
   FrameCount: 162
   DurationalCues: []
   InstantCues:
-  - trackName: "\u52A8\u753B"
+  - trackName: "\u52A8\u753BA"
     markEvents:
     - startFrame: 1
       cues:

@@ -9,6 +9,7 @@
                 <ui:VisualElement name="Buttons" style="flex-grow: 1; flex-direction: row;">
                     <ui:Button text="预览场景" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnLoadPreviewScene" style="-unity-font-style: bold; width: 120px; height: 25px; align-self: auto; justify-content: flex-start; align-items: auto;" />
                     <ui:Button text="返回原场景" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnBackToScene" style="width: 120px; -unity-font-style: bold; height: 25px;" />
+                    <ui:Button text="显示子Inspector" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnChildInspector" enable-rich-text="true" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

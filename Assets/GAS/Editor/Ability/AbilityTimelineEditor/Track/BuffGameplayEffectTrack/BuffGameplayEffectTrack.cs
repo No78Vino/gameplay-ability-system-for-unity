@@ -87,28 +87,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
         }
 
 
-        #region Inspector
-
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-            // track Name
-            var trackNameTextField = TrackInspectorUtil.CreateTextField("轨道名", _buffGameplayEffectTrackData.trackName,
-                evt =>
-                {
-                    // 修改数据
-                    BuffTrackDataForSave.trackName = evt.newValue;
-                    AbilityAsset.Save();
-                    // 修改显示
-                    MenuText.text = evt.newValue;
-                });
-            inspector.Add(trackNameTextField);
-
-
-            return inspector;
-        }
-
-        #endregion
+        public override UnityEngine.Object DataInspector => BuffGameplayEffectTrackEditor.Create(this);
     }
 }
 #endif

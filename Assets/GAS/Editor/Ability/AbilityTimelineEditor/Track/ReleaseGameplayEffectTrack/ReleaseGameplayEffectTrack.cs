@@ -58,35 +58,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
         }
 
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-            
-            var trackName = TrackInspectorUtil.CreateTextField( "Name", _releaseGameplayEffectTrackData.trackName,
-                (evt) =>
-                {
-                    _releaseGameplayEffectTrackData.trackName = evt.newValue;
-                    MenuText.text = evt.newValue;
-                    AbilityTimelineEditorWindow.Instance.Save();
-                });
-            inspector.Add(trackName);
-
-            foreach (var mark in _releaseGameplayEffectTrackData.markEvents)
-            {
-                var markFrame =
-                    TrackInspectorUtil.CreateLabel(
-                        $"Trigger(f):{mark.startFrame}");
-                inspector.Add(markFrame);
-                foreach (var ge in mark.gameplayEffectAssets)
-                {
-                    var geName = ge != null ? ge.name : "NULL";
-                    var geNameLabel = TrackInspectorUtil.CreateLabel($"    |-> {geName}");
-                    inspector.Add(geNameLabel);
-                }
-            }
-
-            return inspector;
-        }
+        public override UnityEngine.Object DataInspector => ReleaseGameplayEffectTrackEditor.Create(this);
 
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
