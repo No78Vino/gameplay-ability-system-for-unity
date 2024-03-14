@@ -52,13 +52,9 @@ namespace GAS.Editor
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
             wnd.InitAbility(asset);
-
             
-            // // 打开子Inspector
-            EditorApplication.delayCall += () =>
-            {
-                wnd.ShowChildInspector();
-            };
+            // 打开子Inspector
+            EditorApplication.delayCall += () => wnd.ShowChildInspector();
         }
 
         public void Save()
@@ -109,6 +105,10 @@ namespace GAS.Editor
             {
                 MaxFrame.value = AbilityAsset.FrameCount;
             }
+            else
+            {
+                Selection.activeObject = null;
+            }
 
             CurrentSelectFrameIndex = 0;
             TimerShaftView.RefreshTimerDraw();
@@ -119,14 +119,6 @@ namespace GAS.Editor
         {
             if (AbilityAsset == null) return;
             Selection.activeObject = AbilityAsset;
-            // var inspectorType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.InspectorWindow");
-            // var inspectorInstance = CreateInstance(inspectorType) as UnityEditor.EditorWindow;
-            // var prevSelection = Selection.activeObject;
-            // Selection.activeObject = AbilityAsset;
-            // var isLocked = inspectorType.GetProperty("isLocked", BindingFlags.Instance | BindingFlags.Public);
-            // if (isLocked != null) isLocked.GetSetMethod().Invoke(inspectorInstance, new object[] { true });
-            // Selection.activeObject = prevSelection;
-            // if (inspectorInstance != null) inspectorInstance.Show();
         }
 
         #endregion
@@ -161,7 +153,9 @@ namespace GAS.Editor
                 _childInspector = GetInspectTarget();
                 _childInspector.Show();
             }
-            DockUtilities.DockWindow(this, _childInspector, DockUtilities.DockPosition.Right);
+
+            EditorApplication.delayCall += () =>
+                DockUtilities.DockWindow(this, _childInspector, DockUtilities.DockPosition.Right);
         }
         
         private void OnPreviewObjectChanged(ChangeEvent<Object> evt)
