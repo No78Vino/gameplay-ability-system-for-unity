@@ -3,8 +3,8 @@ using System;
 using GAS.Editor.Ability;
 #endif
 using GAS.Runtime.Ability;
+using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace Demo.Script.GAS.AbilityTask
@@ -30,34 +30,31 @@ namespace Demo.Script.GAS.AbilityTask
     }
 
 #if UNITY_EDITOR
-    public class TeleportToBeamPointInspector : InstantAbilityTaskInspector<TeleportToBeamPoint>
+    public class TeleportToBeamPointInspector : InstantTaskInspector<TeleportToBeamPoint>
     {
-        public TeleportToBeamPointInspector(AbilityTaskBase taskBase) : base(taskBase)
+        [Delayed] [LabelText("左侧发射激光位点")] [OnValueChanged("OnBeamPointLeftChanged")]
+        public Vector2 BeamPointLeft;
+
+        [Delayed] [LabelText("右侧发射激光位点")] [OnValueChanged("OnBeamPointRightChanged")]
+        public Vector2 BeamPointRight;
+
+        public override void Init(InstantAbilityTask task)
         {
+            base.Init(task);
+            BeamPointLeft = _task.BeamPointLeft;
+            BeamPointRight = _task.BeamPointRight;
         }
 
-        public override VisualElement Inspector()
+        void OnBeamPointLeftChanged()
         {
-            var inspector = TrackInspectorUtil.CreateSonInspector(false);
-            var left = TrackInspectorUtil.CreateVector2Field("Beam Point Left", _task.BeamPointLeft,
-                (oldValue, newValue) =>
-                {
-                    _task.BeamPointLeft = newValue;
-                    Save();
-                });
-            inspector.Add(left);
-            var right = TrackInspectorUtil.CreateVector2Field("Beam Point Right", _task.BeamPointRight,
-                (oldValue, newValue) =>
-                {
-                    _task.BeamPointRight = newValue;
-                    Save();
-                });
-            inspector.Add(right);
-            return inspector;
+            _task.BeamPointLeft = BeamPointLeft;
+            Save();
         }
 
-        public override void OnEditorPreview()
+        void OnBeamPointRightChanged()
         {
+            _task.BeamPointRight = BeamPointRight;
+            Save();
         }
     }
 #endif

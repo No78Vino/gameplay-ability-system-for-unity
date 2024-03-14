@@ -35,16 +35,16 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             switch (CurrentInspectorObject)
             {
                 case null:
+                    UnityEditor.Selection.activeObject = null;
                     return;
                 case TrackClipBase trackClip:
-                    _clipInspector.Add(trackClip.Inspector());
+                    UnityEditor.Selection.activeObject = trackClip.DataInspector;
                     break;
                 case TrackBase track:
                     UnityEditor.Selection.activeObject = track.DataInspector;
-                    //_clipInspector.Add(track.Inspector());
                     break;
                 case TrackMarkBase mark:
-                    _clipInspector.Add(mark.Inspector());
+                    UnityEditor.Selection.activeObject = mark.DataInspector;
                     break;
             }
         }

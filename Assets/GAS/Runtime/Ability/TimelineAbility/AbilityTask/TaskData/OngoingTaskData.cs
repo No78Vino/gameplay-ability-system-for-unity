@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GAS.General;
 using UnityEngine;
@@ -52,6 +53,13 @@ namespace GAS.Runtime.Ability
         public static Type[] OngoingTaskSonTypes =>
             _ongoingTaskSonTypes ??= TypeUtil.GetAllSonTypesOf(typeof(OngoingAbilityTask));
 
+        public static List<string> OngoingTaskSonTypeChoices
+        {
+            get
+            {
+                return OngoingTaskSonTypes.Select(sonType => sonType.FullName).ToList();
+            }
+        }
         #endregion
     }
 }

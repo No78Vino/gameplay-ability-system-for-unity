@@ -50,8 +50,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 OnUnSelect();
         }
 
-        public abstract VisualElement Inspector();
-
+        //public abstract VisualElement Inspector();
+        public abstract UnityEngine.Object DataInspector { get; }
+        
         public abstract void Delete();
         public abstract void Duplicate();
 

@@ -3,7 +3,14 @@
     public abstract class OngoingAbilityTask:AbilityTaskBase
     {
 #if UNITY_EDITOR
-        public virtual void OnEditorPreviewTick(int frameIndex,int startFrame,int endFrame)
+        /// <summary>
+        /// 编辑器预览用
+        /// 【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="startFrame"></param>
+        /// <param name="endFrame"></param>
+        public virtual void OnEditorPreview(int frame, int startFrame, int endFrame)
         {
         }
 #endif

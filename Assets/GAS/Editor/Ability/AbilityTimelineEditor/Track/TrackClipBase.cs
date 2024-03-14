@@ -41,7 +41,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 ClipVe.OnUnSelect();
         }
 
-        public abstract VisualElement Inspector();
+        //public abstract VisualElement Inspector();
+        public virtual UnityEngine.Object DataInspector=>null;
 
         public abstract void Delete();
 

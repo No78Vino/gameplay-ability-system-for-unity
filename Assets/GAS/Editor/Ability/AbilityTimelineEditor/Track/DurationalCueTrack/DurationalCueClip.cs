@@ -10,7 +10,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     public class DurationalCueClip : TrackClip<DurationalCueTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        private DurationalCueClipEvent DurationalCueClipData => clipData as DurationalCueClipEvent;
+        public DurationalCueClipEvent DurationalCueClipData => clipData as DurationalCueClipEvent;
 
         private DurationalCueClipEvent ClipDataForSave
         {
@@ -68,6 +68,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             AbilityTimelineEditorWindow.Instance.Save();
             clipData = updatedClip;
         }
+        
+        public void UpdateClipDataCue(GameplayCueDurational newCue)
+        {
+            var updatedClip = ClipDataForSave;
+            ClipDataForSave.cue = newCue;
+            AbilityTimelineEditorWindow.Instance.Save();
+            clipData = updatedClip;
+            RefreshShow(FrameUnitWidth);
+        }
 
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
@@ -98,65 +107,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
 
         #endregion
 
-
-        #region Inspector
-
-        private Label _startFrameLabel;
-        private IntegerField _durationField;
-
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-
-            // 运行帧
-            _startFrameLabel =
-                TrackInspectorUtil.CreateLabel(
-                    $"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
-            inspector.Add(_startFrameLabel);
-
-            // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)", DurationalCueClipData.durationFrame,
-                OnDurationFrameChanged);
-            inspector.Add(_durationField);
-
-            // cue Asset
-            var cue = TrackInspectorUtil.CreateObjectField("Cue", typeof(GameplayCueDurational),
-                DurationalCueClipData.cue,
-                evt =>
-                {
-                    // 修改数据
-                    ClipDataForSave.cue = evt.newValue as GameplayCueDurational;
-                    AbilityAsset.Save();
-                    clipData = ClipDataForSave;
-                    // 修改显示
-                    RefreshShow(FrameUnitWidth);
-                });
-            inspector.Add(cue);
-
-            // 删除按钮
-            var deleteButton = TrackInspectorUtil.CreateButton("DELETE", Delete);
-            deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
-            inspector.Add(deleteButton);
-
-            return inspector;
-        }
-
-        private void OnDurationFrameChanged(ChangeEvent<int> evt)
-        {
-            // 钳制
-            var max = AbilityAsset.FrameCount - DurationalCueClipData.startFrame;
-            var newValue = Mathf.Clamp(evt.newValue, 1, max);
-            // 保存数据
-            UpdateClipDataDurationFrame(newValue);
-            // 修改显示
-            RefreshShow(FrameUnitWidth);
-            _startFrameLabel =
-                TrackInspectorUtil.CreateLabel(
-                    $"Run(f):{DurationalCueClipData.startFrame}->{DurationalCueClipData.EndFrame}");
-            _durationField.value = newValue;
-        }
-
-        #endregion
+        public override Object DataInspector => DurationalCueClipEditor.Create(this);
     }
 }
 #endif

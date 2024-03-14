@@ -9,8 +9,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     
     public class BuffGameplayEffectClip : TrackClip<BuffGameplayEffectTrack>
     {
-        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        private BuffGameplayEffectClipEvent BuffGameplayEffectClipData => clipData as BuffGameplayEffectClipEvent;
+        public BuffGameplayEffectClipEvent BuffGameplayEffectClipData => clipData as BuffGameplayEffectClipEvent;
 
         private BuffGameplayEffectClipEvent ClipDataForSave
         {
@@ -62,68 +61,19 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             clipData = updatedClip;
         }
 
+        public void UpdateClipDataBuff(GameplayEffectAsset newBuff)
+        {
+            var updatedClip = ClipDataForSave;
+            ClipDataForSave.gameplayEffect = newBuff;
+            AbilityTimelineEditorWindow.Instance.Save();
+            clipData = updatedClip;
+        }
+        
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
         }
 
-        #region Inspector
-
-        private Label _startFrameLabel;
-        private IntegerField _durationField;
-
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-
-            // 运行帧
-            _startFrameLabel =
-                TrackInspectorUtil.CreateLabel(
-                    $"Run(f):{BuffGameplayEffectClipData.startFrame}->{BuffGameplayEffectClipData.EndFrame}");
-            inspector.Add(_startFrameLabel);
-
-            // 持续帧
-            _durationField = TrackInspectorUtil.CreateIntegerField("Duration(f)",
-                BuffGameplayEffectClipData.durationFrame,
-                OnDurationFrameChanged);
-            inspector.Add(_durationField);
-
-            // GameplayEffect Asset
-            var buff = TrackInspectorUtil.CreateObjectField("Buff GameplayEffect", typeof(GameplayEffectAsset),
-                BuffGameplayEffectClipData.gameplayEffect,
-                evt =>
-                {
-                    // 修改数据
-                    ClipDataForSave.gameplayEffect = evt.newValue as GameplayEffectAsset;
-                    AbilityAsset.Save();
-                    clipData = ClipDataForSave;
-                    // 修改显示
-                    RefreshShow(FrameUnitWidth);
-                });
-            inspector.Add(buff);
-
-            // 删除按钮
-            var deleteButton = TrackInspectorUtil.CreateButton("删除", Delete);
-            deleteButton.style.backgroundColor = new StyleColor(new Color(0.5f, 0, 0, 1f));
-            inspector.Add(deleteButton);
-
-            return inspector;
-        }
-
-        private void OnDurationFrameChanged(ChangeEvent<int> evt)
-        {
-            // 钳制
-            var max = AbilityAsset.FrameCount - BuffGameplayEffectClipData.startFrame;
-            var newValue = Mathf.Clamp(evt.newValue, 1, max);
-            // 保存数据
-            UpdateClipDataDurationFrame(newValue);
-            // 修改显示
-            RefreshShow(FrameUnitWidth);
-            _startFrameLabel.text =
-                $"Run(f):{BuffGameplayEffectClipData.startFrame}->{BuffGameplayEffectClipData.EndFrame}";
-            _durationField.value = newValue;
-        }
-
-        #endregion
+        public override Object DataInspector=> BuffGameplayEffectClipEditor.Create(this);
     }
 }
 #endif

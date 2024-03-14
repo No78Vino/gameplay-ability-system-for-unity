@@ -1,10 +1,11 @@
 ﻿using System;
+using GAS.Editor;
 #if UNITY_EDITOR
 using GAS.Editor.Ability;
 #endif
 using GAS.Runtime.Ability;
+using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Demo.Script.GAS.AbilityTask
 {
@@ -49,40 +50,61 @@ namespace Demo.Script.GAS.AbilityTask
         }
     }
 #if UNITY_EDITOR
-    public class DodgeTaskInspector : OngoingAbilityTaskInspector<DodgeTask>
+    
+    public class DodgeTaskInspector : OngoingTaskInspector<DodgeTask>
     {
-        private Vector3? _start;
+        [Delayed]
+        [LabelText("瞬步距离")]
+        [OnValueChanged("OnDodgeDistanceChanged")]
+        public float DodgeDistance;
 
-        public DodgeTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
+        public override void Init(OngoingAbilityTask task)
         {
+            base.Init(task);
+            DodgeDistance = _task.DodgeDistance;
         }
-
-        public override VisualElement Inspector()
+        
+        void OnDodgeDistanceChanged()
         {
-            var inspector = TrackInspectorUtil.CreateSonInspector(false);
-
-            var label = TrackInspectorUtil.CreateLabel("Dodge Task");
-            inspector.Add(label);
-
-            var dodgeDistance = TrackInspectorUtil.CreateFloatField("Dodge Distance", _task.DodgeDistance, evt =>
-            {
-                _task.SetDodgeDistance(evt.newValue);
-                Save();
-            });
-
-            inspector.Add(dodgeDistance);
-
-            return inspector;
-        }
-
-        public override void OnEditorPreview(int frame, int startFrame, int endFrame)
-        {
-            // _start ??= AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position;
-            // var endPos = _start.Value;
-            // endPos.x+=  _task.DodgeDistance;
-            // float t = (float)(frame - startFrame) / (endFrame - startFrame);
-            // AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position = (Vector3.Lerp(_start.Value, endPos, t));
+            _task.SetDodgeDistance(DodgeDistance);
+            Save();
         }
     }
+    
+    // public class DodgeTaskInspector : OngoingAbilityTaskInspector<DodgeTask>
+    // {
+    //     private Vector3? _start;
+    //
+    //     public DodgeTaskInspector(AbilityTaskBase taskBase) : base(taskBase)
+    //     {
+    //     }
+    //
+    //     public override VisualElement Inspector()
+    //     {
+    //         var inspector = TrackInspectorUtil.CreateSonInspector(false);
+    //
+    //         var label = TrackInspectorUtil.CreateLabel("Dodge Task");
+    //         inspector.Add(label);
+    //
+    //         var dodgeDistance = TrackInspectorUtil.CreateFloatField("Dodge Distance", _task.DodgeDistance, evt =>
+    //         {
+    //             _task.SetDodgeDistance(evt.newValue);
+    //             Save();
+    //         });
+    //
+    //         inspector.Add(dodgeDistance);
+    //
+    //         return inspector;
+    //     }
+    //
+    //     public override void OnEditorPreview(int frame, int startFrame, int endFrame)
+    //     {
+    //         // _start ??= AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position;
+    //         // var endPos = _start.Value;
+    //         // endPos.x+=  _task.DodgeDistance;
+    //         // float t = (float)(frame - startFrame) / (endFrame - startFrame);
+    //         // AbilityTimelineEditorWindow.Instance.PreviewObject.transform.position = (Vector3.Lerp(_start.Value, endPos, t));
+    //     }
+    // }
 #endif
 }

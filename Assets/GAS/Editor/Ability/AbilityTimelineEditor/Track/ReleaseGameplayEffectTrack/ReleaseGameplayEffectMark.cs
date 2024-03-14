@@ -78,59 +78,60 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             ItemLabel.text = MarkData.gameplayEffectAssets.Count.ToString();
         }
 
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-            var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
-            inspector.Add(markFrame);
+        public override Object DataInspector => ReleaseGameplayEffectMarkEditor.Create(this);
+        // public override VisualElement Inspector()
+        // {
+        //     var inspector = TrackInspectorUtil.CreateTrackInspector();
+        //     var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
+        //     inspector.Add(markFrame);
+        //
+        //     // 目标捕捉器
+        //     // 选择项：所有TargetCatcher子类
+        //     var targetCatcherSonTypes = ReleaseGameplayEffectMarkEvent.TargetCatcherSonTypes;
+        //     var targetCatcherSons = targetCatcherSonTypes.Select(sonType => sonType.FullName).ToList();
+        //     var catcherTypeSelector =
+        //         TrackInspectorUtil.CreateDropdownField("TargetCatcher", targetCatcherSons,
+        //             MarkData.jsonTargetCatcher.Type, OnTargetCatcherChanged);
+        //     inspector.Add(catcherTypeSelector);
+        //
+        //     // 根据选择的TargetCatcher子类，显示对应的属性
+        //     var targetCatcher = MarkData.LoadTargetCatcher();
+        //     if (TargetCatcherInspectorMap.TryGetValue(targetCatcher.GetType(), out var inspectorType))
+        //     {
+        //         var targetCatcherInspector =
+        //             (TargetCatcherInspector)Activator.CreateInstance(inspectorType, targetCatcher);
+        //         inspector.Add(targetCatcherInspector.Inspector());
+        //     }
+        //     else
+        //     {
+        //         Debug.LogError($"[EX] TargetCatcherInspector not found: {targetCatcher.GetType()}");
+        //     }
+        //
+        //     // GameplayEffects
+        //     var list = TrackInspectorUtil.CreateObjectListView("GameplayEffects", MarkData.gameplayEffectAssets,
+        //         OnGameplayEffectAssetChanged);
+        //     inspector.Add(list);
+        //
+        //     return inspector;
+        // }
 
-            // 目标捕捉器
-            // 选择项：所有TargetCatcher子类
-            var targetCatcherSonTypes = ReleaseGameplayEffectMarkEvent.TargetCatcherSonTypes;
-            var targetCatcherSons = targetCatcherSonTypes.Select(sonType => sonType.FullName).ToList();
-            var catcherTypeSelector =
-                TrackInspectorUtil.CreateDropdownField("TargetCatcher", targetCatcherSons,
-                    MarkData.jsonTargetCatcher.Type, OnTargetCatcherChanged);
-            inspector.Add(catcherTypeSelector);
-
-            // 根据选择的TargetCatcher子类，显示对应的属性
-            var targetCatcher = MarkData.LoadTargetCatcher();
-            if (TargetCatcherInspectorMap.TryGetValue(targetCatcher.GetType(), out var inspectorType))
-            {
-                var targetCatcherInspector =
-                    (TargetCatcherInspector)Activator.CreateInstance(inspectorType, targetCatcher);
-                inspector.Add(targetCatcherInspector.Inspector());
-            }
-            else
-            {
-                Debug.LogError($"[EX] TargetCatcherInspector not found: {targetCatcher.GetType()}");
-            }
-
-            // GameplayEffects
-            var list = TrackInspectorUtil.CreateObjectListView("GameplayEffects", MarkData.gameplayEffectAssets,
-                OnGameplayEffectAssetChanged);
-            inspector.Add(list);
-
-            return inspector;
-        }
-
-        private void OnTargetCatcherChanged(ChangeEvent<string> evt)
-        {
-            MarkDataForSave.jsonTargetCatcher.Type = evt.newValue;
-            MarkDataForSave.jsonTargetCatcher.Data = null;
-            AbilityTimelineEditorWindow.Instance.Save();
-
-            AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
-        }
-
-        private void OnGameplayEffectAssetChanged(int index, ChangeEvent<Object> evt)
-        {
-            var gameplayEffectAsset = evt.newValue as GameplayEffectAsset;
-            MarkDataForSave.gameplayEffectAssets[index] = gameplayEffectAsset;
-            AbilityTimelineEditorWindow.Instance.Save();
-
-            RefreshShow(FrameUnitWidth);
-        }
+        // private void OnTargetCatcherChanged(ChangeEvent<string> evt)
+        // {
+        //     MarkDataForSave.jsonTargetCatcher.Type = evt.newValue;
+        //     MarkDataForSave.jsonTargetCatcher.Data = null;
+        //     AbilityTimelineEditorWindow.Instance.Save();
+        //
+        //     AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
+        // }
+        //
+        // private void OnGameplayEffectAssetChanged(int index, ChangeEvent<Object> evt)
+        // {
+        //     var gameplayEffectAsset = evt.newValue as GameplayEffectAsset;
+        //     MarkDataForSave.gameplayEffectAssets[index] = gameplayEffectAsset;
+        //     AbilityTimelineEditorWindow.Instance.Save();
+        //
+        //     RefreshShow(FrameUnitWidth);
+        // }
 
         public override void Delete()
         {

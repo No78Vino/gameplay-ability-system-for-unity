@@ -20,7 +20,7 @@ namespace GAS.Editor
             return window;
         }
         
-        
+        [Delayed]
         [BoxGroup]
         [LabelText("Name")]
         [OnValueChanged("OnTrackNameChanged")]

@@ -9,9 +9,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     
     public class InstantCueMark : TrackMark<InstantCueTrack>
     {
-        private InstantCueMarkEvent InstantCueMarkData => markData as InstantCueMarkEvent;
+        public InstantCueMarkEvent InstantCueMarkData => markData as InstantCueMarkEvent;
 
-        private InstantCueMarkEvent MarkDataForSave
+        public InstantCueMarkEvent MarkDataForSave
         {
             get
             {
@@ -50,26 +50,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             ItemLabel.text = InstantCueMarkData.cues.Count.ToString();
         }
 
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-            var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
-            inspector.Add(markFrame);
-
-            var list = TrackInspectorUtil.CreateObjectListView("Cue", InstantCueMarkData.cues, OnCueAssetChanged);
-            inspector.Add(list);
-
-            return inspector;
-        }
-
-        private void OnCueAssetChanged(int index, ChangeEvent<Object> evt)
-        {
-            var cue = evt.newValue as GameplayCueInstant;
-            MarkDataForSave.cues[index] = cue;
-            AbilityTimelineEditorWindow.Instance.Save();
-
-            RefreshShow(FrameUnitWidth);
-        }
+        public override Object DataInspector => InstantCueMarkEditor.Create(this);
 
         public override void Delete()
         {

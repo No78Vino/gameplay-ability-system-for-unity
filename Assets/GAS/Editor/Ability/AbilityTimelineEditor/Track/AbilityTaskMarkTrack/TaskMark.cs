@@ -13,9 +13,9 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     
     public class TaskMark : TrackMark<TaskMarkEventTrack>
     {
-        private TaskMarkEvent MarkData => markData as TaskMarkEvent;
+        public TaskMarkEvent MarkData => markData as TaskMarkEvent;
 
-        private TaskMarkEvent MarkDataForSave
+        public TaskMarkEvent MarkDataForSave
         {
             get
             {
@@ -26,28 +26,8 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
                 return null;
             }
         }
-
-        private static Type[] _instantTaskInspectorTypes;
-
-        public static Type[] InstantTaskInspectorTypes =>
-            _instantTaskInspectorTypes ??= TypeUtil.GetAllSonTypesOf(typeof(InstantAbilityTaskInspector));
         
-        private static Dictionary<Type, Type> _instantTaskInspectorMap;
-        private static Dictionary<Type, Type> InstantTaskInspectorMap
-        {
-            get
-            {
-                if (_instantTaskInspectorMap != null) return _instantTaskInspectorMap;
-                _instantTaskInspectorMap = new Dictionary<Type, Type>();
-                foreach (var inspectorType in InstantTaskInspectorTypes)
-                {
-                    var taskType = inspectorType.BaseType.GetGenericArguments()[0];
-                    _instantTaskInspectorMap.Add(taskType, inspectorType);
-                }
-
-                return _instantTaskInspectorMap;
-            }
-        }
+        public override UnityEngine.Object DataInspector => TaskMarkEditor.Create(this);
 
         public override void Duplicate()
         {
@@ -76,113 +56,117 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             ItemLabel.text = "";
         }
 
-        #region Inspector
+        // #region Inspector
+        //
+        // private VisualElement taskSonInspector;
+        // private ListView taskList;
+        //
+        // public override VisualElement Inspector()
+        // {
+        //     var inspector = TrackInspectorUtil.CreateTrackInspector();
+        //     var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
+        //     inspector.Add(markFrame);
+        //     
+        //     taskSonInspector = TrackInspectorUtil.CreateSonInspector();
+        //     inspector.Add(taskSonInspector);
+        //     
+        //     // task列表
+        //     taskList = TrackInspectorUtil.CreateListView<InstantTaskData>("Task", MarkData.InstantTasks,
+        //         MakeInstantTaskData,BindInstantTaskData, OnSelectionChanged,OnItemAdded,OnItemRemoved);
+        //     inspector.Add(taskList);
+        //     taskList.SetSelection(0);
+        //
+        //     // InstantTask面板渲染
+        //     DrawTaskSonInspector(taskSonInspector);
+        //     
+        //     return inspector;
+        // }
+        //
+        // private void OnItemRemoved(IEnumerable<int> obj)
+        // {
+        //     if (taskList.childCount == 0)
+        //     {
+        //         taskSonInspector.Clear();
+        //     }
+        // }
+        //
+        // private void OnItemAdded(IEnumerable<int> obj)
+        // {
+        //     if (taskList.childCount == 1)
+        //     {
+        //         taskList.SetSelection(0);
+        //         DrawTaskSonInspector(taskSonInspector);
+        //     }
+        // }
+        //
+        // private void OnSelectionChanged(IEnumerable<object> obj)
+        // {
+        //     DrawTaskSonInspector(taskSonInspector);
+        // }
+        //
+        // private void DrawTaskSonInspector(VisualElement parent)
+        // {
+        //     parent.Clear();
+        //     
+        //     // 选择项：所有InstantAbilityTask子类
+        //     if (taskList.selectedIndex < MarkData.InstantTasks.Count && taskList.selectedIndex >= 0)
+        //     {
+        //         taskList.SetSelection(0);
+        //         var taskSonTypes = InstantTaskData.InstantTaskSonTypes;
+        //         List<string> taskSons = taskSonTypes.Select(sonType => sonType.FullName).ToList();
+        //         var initValue = MarkData.InstantTasks[taskList.selectedIndex].TaskData.Type;
+        //         var typeSelector =
+        //             TrackInspectorUtil.CreateDropdownField("", taskSons, initValue, (evt) =>
+        //             {
+        //                 MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Type = evt.newValue;
+        //                 MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Data = null;
+        //                 AbilityTimelineEditorWindow.Instance.Save();
+        //                 AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
+        //             });
+        //         parent.Add(typeSelector);
+        //         
+        //         // 根据选择的InstantAbilityTask子类，显示对应的属性
+        //         var task = MarkDataForSave.InstantTasks[taskList.selectedIndex].Load();
+        //         if(InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
+        //         {
+        //             var taskInspector = (InstantTaskInspector)Activator.CreateInstance(inspectorType, task);
+        //             parent.Add(taskInspector.Inspector());
+        //         }
+        //         else
+        //         {
+        //             parent.Add(TrackInspectorUtil.CreateLabel($"{task.GetType()}'s Inspector not found!"));
+        //         }
+        //     }
+        //     
+        //     parent.MarkDirtyRepaint();
+        // }
+        //
+        // private void BindInstantTaskData(VisualElement root, int i)
+        // {
+        //     MarkData.InstantTasks[i] ??= new InstantTaskData();
+        //     var taskValue = MarkData.InstantTasks[i];
+        //     var label = (Label)root;
+        //     var shotName = taskValue.TaskData.Type.Split('.').Last();
+        //     label.text = shotName;
+        //
+        //     // taskValue.Task.l
+        //     //     
+        //     // var textField = (TextField)e;
+        //     // textField.value = list[i];
+        //     // textField.RegisterValueChangedCallback(evt =>
+        //     // {
+        //     //     onItemValueChanged(i, evt);
+        //     // });
+        // }
+        //
+        // private VisualElement MakeInstantTaskData()
+        // {
+        //     return TrackInspectorUtil.CreateLabel("");
+        // }
+        //
 
-        private VisualElement taskSonInspector;
-        private ListView taskList;
-        
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateTrackInspector();
-            var markFrame = TrackInspectorUtil.CreateLabel($"Trigger(f):{markData.startFrame}");
-            inspector.Add(markFrame);
-            
-            taskSonInspector = TrackInspectorUtil.CreateSonInspector();
-            inspector.Add(taskSonInspector);
-            
-            // task列表
-            taskList = TrackInspectorUtil.CreateListView<InstantTaskData>("Task", MarkData.InstantTasks,
-                MakeInstantTaskData,BindInstantTaskData, OnSelectionChanged,OnItemAdded,OnItemRemoved);
-            inspector.Add(taskList);
-            taskList.SetSelection(0);
-
-            // InstantTask面板渲染
-            DrawTaskSonInspector(taskSonInspector);
-            
-            return inspector;
-        }
-
-        private void OnItemRemoved(IEnumerable<int> obj)
-        {
-            if (taskList.childCount == 0)
-            {
-                taskSonInspector.Clear();
-            }
-        }
-
-        private void OnItemAdded(IEnumerable<int> obj)
-        {
-            if (taskList.childCount == 1)
-            {
-                taskList.SetSelection(0);
-                DrawTaskSonInspector(taskSonInspector);
-            }
-        }
-
-        private void OnSelectionChanged(IEnumerable<object> obj)
-        {
-            DrawTaskSonInspector(taskSonInspector);
-        }
-
-        private void DrawTaskSonInspector(VisualElement parent)
-        {
-            parent.Clear();
-            
-            // 选择项：所有InstantAbilityTask子类
-            if (taskList.selectedIndex < MarkData.InstantTasks.Count && taskList.selectedIndex >= 0)
-            {
-                taskList.SetSelection(0);
-                var taskSonTypes = InstantTaskData.InstantTaskSonTypes;
-                List<string> taskSons = taskSonTypes.Select(sonType => sonType.FullName).ToList();
-                var initValue = MarkData.InstantTasks[taskList.selectedIndex].TaskData.Type;
-                var typeSelector =
-                    TrackInspectorUtil.CreateDropdownField("", taskSons, initValue, (evt) =>
-                    {
-                        MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Type = evt.newValue;
-                        MarkDataForSave.InstantTasks[taskList.selectedIndex].TaskData.Data = null;
-                        AbilityTimelineEditorWindow.Instance.Save();
-                        AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
-                    });
-                parent.Add(typeSelector);
-                
-                // 根据选择的InstantAbilityTask子类，显示对应的属性
-                var task = MarkDataForSave.InstantTasks[taskList.selectedIndex].Load();
-                if(InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
-                {
-                    var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
-                    parent.Add(taskInspector.Inspector());
-                }
-                else
-                {
-                    parent.Add(TrackInspectorUtil.CreateLabel($"{task.GetType()}'s Inspector not found!"));
-                }
-            }
-            
-            parent.MarkDirtyRepaint();
-        }
-        
-        private void BindInstantTaskData(VisualElement root, int i)
-        {
-            MarkData.InstantTasks[i] ??= new InstantTaskData();
-            var taskValue = MarkData.InstantTasks[i];
-            var label = (Label)root;
-            var shotName = taskValue.TaskData.Type.Split('.').Last();
-            label.text = shotName;
-
-            // taskValue.Task.l
-            //     
-            // var textField = (TextField)e;
-            // textField.value = list[i];
-            // textField.RegisterValueChangedCallback(evt =>
-            // {
-            //     onItemValueChanged(i, evt);
-            // });
-        }
-        
-        private VisualElement MakeInstantTaskData()
-        {
-            return TrackInspectorUtil.CreateLabel("");
-        }
+        //
+        // #endregion
         
         public override void Delete()
         {
@@ -192,8 +176,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();
         }
-        
-        #endregion
         
         public override void UpdateMarkDataFrame(int newStartFrame)
         {
@@ -209,19 +191,15 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             {
                 foreach (var t in MarkData.InstantTasks)
                 {
-                    var task = t.Load();
-                    if (InstantTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
-                    {
-                        var taskInspector = (InstantAbilityTaskInspector)Activator.CreateInstance(inspectorType, task);
-                        taskInspector.OnEditorPreview();
-                    }
+                    var task = t.Load() as InstantAbilityTask;
+                    task?.OnEditorPreview();
                 }
             }
         }
 
         public void SaveCurrentTask(InstantAbilityTask task)
         {
-            MarkDataForSave.InstantTasks[taskList.selectedIndex].Save(task);
+            //MarkDataForSave.InstantTasks[taskList.selectedIndex].Save(task);
         }
     }
 }

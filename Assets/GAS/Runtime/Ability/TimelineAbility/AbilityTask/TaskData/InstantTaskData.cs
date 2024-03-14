@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GAS.General;
 using UnityEngine;
@@ -52,6 +53,13 @@ namespace GAS.Runtime.Ability
         public static Type[] InstantTaskSonTypes =>
             _instantTaskSonTypes ??= TypeUtil.GetAllSonTypesOf(typeof(InstantAbilityTask));
 
+        public static List<string> InstantTaskSonTypeChoices
+        {
+            get
+            {
+                return InstantTaskSonTypes.Select(sonType => sonType.FullName).ToList();
+            }
+        }
         #endregion
     }
 }

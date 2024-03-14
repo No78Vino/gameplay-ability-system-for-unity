@@ -85,7 +85,7 @@ MonoBehaviour:
       InstantTasks:
       - TaskData:
           Type: Demo.Script.GAS.AbilityTask.TeleportAbovePlayer
-          Data: 
+          Data: '{"TeleportHeight":6.0}'
   OngoingTasks:
   - trackName: Task Clips
     clipEvents:
