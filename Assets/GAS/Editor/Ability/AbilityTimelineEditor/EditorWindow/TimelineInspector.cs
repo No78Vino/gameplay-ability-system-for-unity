@@ -5,12 +5,10 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     public class TimelineInspector
     {
         private VisualElement _root;
-        private VisualElement _clipInspector;
         public object CurrentInspectorObject;
         public TimelineInspector(VisualElement root)
         {
             _root = root;
-            _clipInspector = _root.Q<VisualElement>("ClipInspector");
             SetInspector();
         }
 
@@ -31,7 +29,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             }
 
             CurrentInspectorObject = target;
-            _clipInspector.Clear();
             switch (CurrentInspectorObject)
             {
                 case null:
