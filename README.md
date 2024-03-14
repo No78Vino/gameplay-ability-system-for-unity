@@ -117,7 +117,7 @@ Ability，Cue，MMC等都是必须根据游戏类型和内容玩法而定的。
 - 通常将Gameplay Tag添加到AbilitySystemComponent（ASC）以与系统（GameplayEffect，GameplayCue,Ability）交互。
 
 Gameplay Tag在GAS中的使用涉及到标签的添加、移除以及对标签变化的响应。
-开发者可以通过[GameplayTag Manager](#a.GameplayTag Manager)在项目设置中管理这些标签，无需手动编辑配置文件。
+开发者可以通过[GameplayTag Manager](#22a-gameplaytag-manager)在项目设置中管理这些标签，无需手动编辑配置文件。
 Gameplay Tag的灵活性和高效性使其成为GAS中控制游戏逻辑的重要工具。
 它不仅可以用于简单的状态描述，还可以用于复杂的游戏逻辑和事件触发。
 
@@ -252,14 +252,14 @@ Cue是需要程序开发人员大量实现的，毕竟游戏不同导致游戏�
   - GameplayCue< T >（抽象基类,T为对应的Spec类）：Cue的数据实类，是一个可编辑类，开发人员可以在编辑器中设置Cue的各种参数。该类只可以被视作数据类。
     - 必须实现CreateSpec方法：用于创建对应的Spec类
   - GameplayCueSpec（抽象基类）：Cue的规格类，是Runtime下Cue的真正实例，Cue的具体逻辑在该类中实现。
-    - GameplayCueInstantSpec：瞬时性Cue的规格类
-      - Trigger(): 必须实现的方法，用于触发Cue
-    - GameplayCueDurationalSpec：持续性Cue的规格类
-      - OnAdd(): 必须实现的方法，用于Cue被添加时的逻辑
-      - OnRemove(): 必须实现的方法，用于Cue被移除时的逻辑
-      - OnGameplayEffectActivated(): 必须实现的方法，用于Cue所属的GameplayEffect被激活时的逻辑
-      - OnGameplayEffectDeactivated(): 必须实现的方法，用于Cue所属的GameplayEffect被移除时的逻辑
-      - OnTick(): 必须实现的方法，用于Cue的每帧更新逻辑
+    - | Spec类|需要实现的方法| 方法触发时机   |
+      |---|---|----------|
+      |GameplayCueInstantSpec<br/>瞬时性Cue的规格类|Trigger()| 执行时触发|
+      |GameplayCueDurationalSpec<br/>持续性Cue的规格类|OnAdd()| Cue被添加时触发|
+      |GameplayCueDurationalSpec|OnRemove()| Cue被移除时触发|
+      |GameplayCueDurationalSpec|OnGameplayEffectActivated()| Cue所属的GameplayEffect被激活时触发|
+      |GameplayCueDurationalSpec|OnGameplayEffectDeactivated()| Cue所属的GameplayEffect被移除时触发|
+      |GameplayCueDurationalSpec|OnTick()| Cue的每帧更新逻辑|
 
 - 【关于Cue的参数传递】： 目前EX-GAS的Cue参数传递非常简陋，依赖于结构体GameplayCueParameters，成员如下：
   - GameplayEffectSpec sourceGameplayEffectSpec：Cue所属的GameplayEffect实例（如果是GE触发）
@@ -273,14 +273,14 @@ GameplayCue的使用手段很多，最基础的是在GameplayEffect中使用，C
 除此之外，Cue的使用不限制于EX-GAS的体系内。开发者可以在任何地方使用Cue，只要能获取到GameplayCue的资源实例并且遵守Cue的原则即可。
   - 在GameplayEffect中使用Cue 
     - GameplayEffect中使用Cue会根据GameplayEffect执行策略产生变化。
-      - 即时执行的GameplayEffect: 提供以下选项
-        - CueOnExecute（Instant）：Cue都会在GameplayEffect执行时触发。
-      - 持续执行的GameplayEffect: 提供以下选项
-        - CueDurational（Durational）：生命周期完全和GameplayEffect同步
-        - CueOnAdd（Instant）：GameplayEffect添加时触发
-        - CueOnRemove（Instant）：GameplayEffect移除时触发
-        - CueOnActivate（Instant）：GameplayEffect激活时触发。
-        - CueOnDeactivate（Instant）：GameplayEffect失活时触发。
+      - | GameplayEffect类型 |Cue名称|Cue类别| 执行时机                    |
+        |------------------|---|---|-------------------------|
+        | Instant          |CueOnExecute|Instant| GameplayEffect执行时触发     |
+        | Durational       |CueDurational|Durational| 生命周期完全和GameplayEffect同步 |
+        | Durational       |CueOnAdd|Instant| GameplayEffect添加时触发     |
+        | Durational       |CueOnRemove|Instant| GameplayEffect移除时触发     |
+        | Durational       |CueOnActivate|Instant| GameplayEffect激活时触发     |
+        | Durational       |CueOnDeactivate|Instant| GameplayEffect失活时触发     |
 
   - 在Ability中使用Cue
     - Ability种Cue的使用完全依赖于Ability自身的业务逻辑，因此程序开发者在AbilitySpec中实现Cue逻辑时一定要保证合理性。
@@ -295,39 +295,42 @@ GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它
 
 另外GameplayEffect还可以触发Cue（游戏提示）完成游戏效果的表现，以及控制获取额外的能力等。
 
-> 由于GameplayEffect是被封装好的，程序开发者不会接触它的实现逻辑，所以本文Wiki将跳过对其接口以及代码逻辑的解析。
-> 后续，可能会完善代码接口的介绍。
-
 - GameplayEffect的使用
 ![QQ20240313152015.png](Wiki%2FQQ20240313152015.png)
 
 GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义。
-  - Name：GameplayEffect的名称，纯粹用于显示，不会影响游戏逻辑。方便编辑者区分GameplayEffect。
-  - Description：GameplayEffect的描述，纯粹用于显示，不会影响游戏逻辑。方便编辑者阅读理解GameplayEffect。
+  - Name
+    - GameplayEffect的名称，纯粹用于显示，不会影响游戏逻辑。方便编辑者区分GameplayEffect。
+  - Description
+    - GameplayEffect的描述，纯粹用于显示，不会影响游戏逻辑。方便编辑者阅读理解GameplayEffect。
   - DurationPolicy：GameplayEffect的执行策略，有以下几种：
-      - Instant：即时执行，GameplayEffect被添加时立即执行，执行完毕后销毁自身。
-      - Duration：持续执行，GameplayEffect被添加时立即执行，持续时间结束后移除自身。
-      - Infinite：无限执行，GameplayEffect被添加时立即执行，执行完毕后不会移除，需要手动移除。
-      - None：无效果,这是默认占位符，因为GameplayEffect是结构体，None方便视作GameplayEffect的空值。
-        _**GameplayEffect配置的执行策略禁止使用None！！！**_
-  - Duration：持续时间，只有DurationPolicy为Duration时有效。
-  - Every(Period)：周期，只有DurationPolicy为Duration或者Infinite时有效。每隔Period时间执行一次PeriodExecution。
-  - PeriodExecution：周期执行的GameplayEffect，只有DurationPolicy为Duration或者Infinite，且Period>0时有效。每隔Period时间执行一次PeriodExecution。
-    _**PeriodExecution禁止为空!!**_PeriodExecution原则上只允许是Instant类型的GameplayEffect。但如果根据开发者需求，也可以使用其他类型的GameplayEffect。
-  - GrantedAbilities(**该功能目前尚未生效**)：授予的能力，只有DurationPolicy为Duration或者Infinite时有效。在GameplayEffect生命周期内，GameplayEffect的持有者会被授予这些能力。
-      GameplayEffect被移除时，这些能力也会被移除。
+    - | 策略类型 | 执行逻辑                                                                                                | 
+        |---|-----------------------------------------------------------------------------------------------------|
+        | Instant | 即时执行，GameplayEffect被添加时立即执行，执行完毕后销毁自身。                                                              |
+        | Duration | 持续执行，GameplayEffect被添加时立即执行，持续时间结束后移除自身。                                                            |
+        | Infinite | 无限执行，GameplayEffect被添加时立即执行，执行完毕后不会移除，需要手动移除。                                                       |
+        | None | 无效果,这是默认占位符，因为GameplayEffect是结构体，None方便视作GameplayEffect的空值。_**【GameplayEffect配置的执行策略禁止使用None！！！】**_ |
+    
+  - Duration
+    - 持续时间，只有DurationPolicy为Duration时有效。
+  - Every(Period)
+    - 周期，只有DurationPolicy为Duration或者Infinite时有效。每隔Period时间执行一次PeriodExecution。
+  - PeriodExecution
+    - 周期执行的GameplayEffect，只有DurationPolicy为Duration或者Infinite，且Period>0时有效。每隔Period时间执行一次PeriodExecution。
+      _**PeriodExecution禁止为空!!**_PeriodExecution原则上只允许是Instant类型的GameplayEffect。但如果根据开发者需求，也可以使用其他类型的GameplayEffect。
+  - GrantedAbilities(**该功能目前尚未生效**)
+    - 授予的能力，只有DurationPolicy为Duration或者Infinite时有效。在GameplayEffect生命周期内，GameplayEffect的持有者会被授予这些能力。
+        GameplayEffect被移除时，这些能力也会被移除。
   - Modifiers: 属性修改器。详见[MMC](#25-modifiermagnitudecalculation)
 - Tags：标签。Tag具有非常重要的作用，合适的tag可以处理GameplayEffect之间复杂的关系。
-  - AssetTags：描述性质的标签，用来描述GameplayEffect的特性表现，比如伤害、治疗、控制等。
-  - GrantedTags：GameplayEffect的持有者会获得这些标签，GameplayEffect被移除时，这些标签也会被移除。
-    Instant类型的GameplayEffect的GrantedTags是无效的。
-  - ApplicationRequiredTags：GameplayEffect的目标单位必须拥有 **【所有】** 这些标签，否则GameplayEffect无法被施加到目标身上。
-  - OngoingRequiredTags：GameplayEffect的目标单位必须拥有 **【所有】** 这些标签，否则GameplayEffect不会被激活（施加和激活是两个概念，
-    如果已经被施加的GameplayEffect持续过程中，目标的tag变化了，不满足，效果就会失活；满足了，就会被激活）。
-    Instant类型的GameplayEffect的OngoingRequiredTags是无效的。
-  - RemoveGameplayEffectsWithTags：GameplayEffect的目标单位当前持有的所有GameplayEffect中，拥有 **【任意】** 这些标签的GameplayEffect会被移除。
-  - Application Immunity Tags: GameplayEffect的目标单位拥有 **【任意】** 这些标签，就对该GameplayEffect免疫。
-- Cues：GameplayEffect的提示。GameplayEffect可以触发Cue（游戏提示）完成游戏效果的表现，以及控制获取额外的能力等。
+  - | Tag类型 | 作用                                                                                   |
+    |---|----------------------------------------------------------------------------------------|
+    | AssetTags | 描述性质的标签，用来描述GameplayEffect的特性表现，比如伤害、治疗、控制等。 |
+    | GrantedTags | GameplayEffect的持有者会获得这些标签，GameplayEffect被移除时，这些标签也会被移除。Instant类型的GameplayEffect的GrantedTags是无效的。 |
+    | ApplicationRequiredTags | GameplayEffect的目标单位必须拥有【所有】这些标签，否则GameplayEffect无法被施加到目标身上。 |
+    | OngoingRequiredTags | GameplayEffect的目标单位必须拥有【所有】这些标签，否则GameplayEffect不会被激活。 （施加和激活是两个概念，如果已经被施加的GameplayEffect持续过程中，目标的tag变化了，不满足，效果就会失活；满足了，就会被激活）。Instant类型的GameplayEffect的OngoingRequiredTags是无效的。|
+    | RemoveGameplayEffectsWithTags | GameplayEffect的目标单位当前持有的所有GameplayEffect中，拥有【任意】这些标签的GameplayEffect会被移除。 |
+    | Application Immunity Tags | GameplayEffect的目标单位拥有【任意】这些标签，就对该GameplayEffect免疫。 |
   - DurationPolicy为Instant时
     - CueOnExecute（Instant）：GameplayEffect执行时触发。
   - DurationPolicy为Duration或者Infinite时
@@ -336,16 +339,15 @@ GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义
     - CueOnRemove（Instant）：GameplayEffect移除时触发
     - CueOnActivate（Instant）：GameplayEffect激活时触发。
     - CueOnDeactivate（Instant）：GameplayEffect失活时触发。
+> GameplayEffect的施加（Apply）和激活（Activate）
+>   - GameplayEffect的施加（Apply）和激活（Activate）是两个概念，施加是指GameplayEffect被添加到目标身上，激活是指GameplayEffect实际生效。
+>      - 为什么做区分？
+>      - 举个例子：固有被动技能（Ability）是持续回血，被动技能的逻辑显然是永久激活的状态，而持续回血的效果（GameplayEffect）
+>        来源于被动技能，那如果单位受到了外部的debuff禁止所有的回血效果，那么是不是被动技能被禁止？显然不是，被动技能还是会持续激活的。
+>        那应该是移除回血效果吗？显然也不是，被动技能整个过程是不做任何变化，如果移除回血效果，那debuff一旦消失，谁再把回血效果加回来？
+>        所以，这里需要区分施加和激活，被动技能的持续回血效果被施加到单位身上，而debuff做的是让回血效果失活，而不是移除回血效果，一旦debuff结束，
+>        回血效果又被激活，而这个激活的操作可以理解为回血效果自己激活的（依赖于Tag系统）。
 
-- GameplayEffect的施加（Apply）和激活（Activate）
-  - GameplayEffect的施加（Apply）和激活（Activate）是两个概念，施加是指GameplayEffect被添加到目标身上，激活是指GameplayEffect实际生效。
-    - 为什么做区分？
-    - 举个例子：固有被动技能（Ability）是持续回血，被动技能的逻辑显然是永久激活的状态，而持续回血的效果（GameplayEffect）
-      来源于被动技能，那如果单位受到了外部的debuff禁止所有的回血效果，那么是不是被动技能被禁止？显然不是，被动技能还是会持续激活的。
-      那应该是移除回血效果吗？显然也不是，被动技能整个过程是不做任何变化，如果移除回血效果，那debuff一旦消失，谁再把回血效果加回来？
-      所以，这里需要区分施加和激活，被动技能的持续回血效果被施加到单位身上，而debuff做的是让回血效果失活，而不是移除回血效果，一旦debuff结束，
-      回血效果又被激活，而这个激活的操作可以理解为回血效果自己激活的（依赖于Tag系统）。
-    
 ### 2.8 Ability
 > Ability是EX-GAS的核心类之一，它是游戏中的所有能力基础。
 >
@@ -408,10 +410,22 @@ Ability运作逻辑的组成可以拆成两部分：
   游戏运行时生成Ability依赖于AbilityLib，如果没有保持同步，会导致游戏运行时找不到Ability。**
   - Ability汇总界面入口：在菜单栏EX-GAS -> Asset Aggregator -> 左侧菜单列点击 C-Ability
 ![QQ20240313175247.png](Wiki%2FQQ20240313175247.png)
+  
 #### 2.8.b TimelineAbility 通用性Ability（W.I.P TimelineAbility还在完善中）
 在实际的开发过程中，我发现，许多的Ability都有顺序和时限两个特点。
 每次都新写一个Ability类来实现某个指定技能让我十分烦躁，于是我制作了TimelineAbility，一个极具通用性的顺序，时限Ability。
+![TimelineAbilityAsset.png](Wiki%2FTimelineAbilityAsset.png)
+>这是TimelineAbilityAsset的面板。
 
+TimelineAbilityAsset的大多数表现逻辑参数在AbilityAsset面板都是隐藏的（HideInInspector）。
+转而都是在TimelineAbilityEditor面板中可视化编辑。
+唯一在AbilityAsset面板中可见的参数是【手动结束能力】的bool值选项。这个选项决定Ability是手动结束还是播放完成后自动结束。
+
+通过点击【查看/编辑能力时间轴】按钮，可以打开TimelineAbilityEditor面板。
+![TimelineAbilityEditor.png](Wiki%2FTimelineAbilityEditor.png)
+>这是TimelineAbilityEditor的面板。
+
+接下来详细介绍TimelineAbilityEditor的面板参数含义及操作逻辑。
 
 ### 2.9 AbilitySystemComponent
 > AbilitySystemComponent是EX-GAS的核心之一，它是GAS的基本运行单位。
