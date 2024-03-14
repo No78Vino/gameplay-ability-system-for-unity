@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Runtime;
+
+#if UNITY_EDITOR
 
 namespace GAS.Editor.Ability.AbilityTimelineEditor
 {

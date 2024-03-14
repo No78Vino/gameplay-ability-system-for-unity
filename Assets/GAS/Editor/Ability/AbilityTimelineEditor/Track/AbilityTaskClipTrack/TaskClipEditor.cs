@@ -1,3 +1,5 @@
+using GAS.Runtime;
+
 #if UNITY_EDITOR
 namespace GAS.Editor
 {

@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
+using GAS.General.Util;
 using GAS.Runtime.Component;
 using UnityEngine;
 
 namespace GAS.Runtime.Ability.TargetCatcher
 {
-    public class CatchAreaCircle2D: CatchAreaBase
+    public class CatchAreaCircle2D : CatchAreaBase
     {
         public float radius;
         public Vector2 offset;
         public EffectCenterType centerType;
-        
+
         public void Init(AbilitySystemComponent owner, LayerMask tCheckLayer, Vector2 offset, float radius)
         {
             base.Init(owner, tCheckLayer);
             this.offset = offset;
             this.radius = radius;
         }
-        
+
         public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
         {
             var result = new List<AbilitySystemComponent>();
@@ -38,5 +39,31 @@ namespace GAS.Runtime.Ability.TargetCatcher
 
             return result;
         }
+#if UNITY_EDITOR
+        public override void OnEditorPreview(GameObject previewObject)
+        {
+            // 使用Debug 绘制box预览
+            float showTime = 1;
+            Color color = Color.green;
+            var relativeTransform = previewObject.transform;
+            var center = offset;
+            switch (centerType)
+            {
+                case EffectCenterType.SelfOffset:
+                    center = relativeTransform.position;
+                    center.y += relativeTransform.lossyScale.y > 0 ? offset.y : -offset.y;
+                    center.x += relativeTransform.lossyScale.x > 0 ? offset.x : -offset.x;
+                    break;
+                case EffectCenterType.WorldSpace:
+                    center = offset;
+                    break;
+                case EffectCenterType.TargetOffset:
+                    //center = _targetCatcher.Target.transform.position;
+                    break;
+            }
+
+            DebugExtension.DebugDrawCircle(center, radius, color, showTime);
+        }
+#endif
     }
 }

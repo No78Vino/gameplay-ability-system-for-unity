@@ -10,6 +10,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TargetCatcher;
 using GAS.Runtime.Component;
 using GAS.Runtime.Tags;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -43,71 +44,25 @@ namespace Demo.Script.GAS.TargetCatcher
             // if (!target.HasTag(GTagLib.Event_Defending)) return false;
             // return target.transform.localScale.x * Owner.transform.localScale.x < 0;
         }
-    }
+        
 #if UNITY_EDITOR
-    public class CatchUndefendingInspector : TargetCatcherInspector<CatchUndefending>
-    {
-        public CatchUndefendingInspector(CatchUndefending targetCatcherBase) : base(targetCatcherBase)
-        {
-
-        }
-
-        public override VisualElement Inspector()
-        {
-            var inspector = TrackInspectorUtil.CreateSonInspector();
-            inspector.Add(TrackInspectorUtil.CreateVector2Field("Offset", _targetCatcher.offset,
-                (oldValue, newValue) =>
-                {
-                    _targetCatcher.offset = newValue;
-                    Save();
-                }));
-            inspector.Add(TrackInspectorUtil.CreateVector2Field("Size", _targetCatcher.size,
-                (oldValue, newValue) =>
-                {
-                    _targetCatcher.size = newValue;
-                    Save();
-                }));
-            inspector.Add(TrackInspectorUtil.CreateFloatField("Rotation", _targetCatcher.rotation,
-                (evt) =>
-                {
-                    _targetCatcher.rotation = evt.newValue;
-                    Save();
-                }));
-            inspector.Add(TrackInspectorUtil.CreateLayerMaskField("Layer", _targetCatcher.checkLayer,
-                (evt) =>
-                {
-                    _targetCatcher.checkLayer = evt.newValue;
-                    Save();
-                }));
-
-            var centerType = TrackInspectorUtil.CreateEnumField("CenterType", _targetCatcher.centerType, (evt) =>
-            {
-                _targetCatcher.centerType = (EffectCenterType)(evt.newValue);
-                Save();
-            });
-            inspector.Add(centerType);
-
-            return inspector;
-        }
-
-        public override void OnTargetCatcherPreview(GameObject obj)
+        public override void OnEditorPreview(GameObject obj)
         {
             // 使用Debug 绘制box预览
             float showTime = 1;
-            Color color = Color.green;
+            var color = Color.green;
             var relativeTransform = AbilityTimelineEditorWindow.Instance.PreviewObject.transform;
-            var center = _targetCatcher.offset;
-            var size = _targetCatcher.size;
-            var angle = _targetCatcher.rotation + relativeTransform.eulerAngles.z;
-            switch (_targetCatcher.centerType)
+            var center = offset;
+            var angle = rotation + relativeTransform.eulerAngles.z;
+            switch (centerType)
             {
                 case EffectCenterType.SelfOffset:
                     center = relativeTransform.position;
-                    center.y += relativeTransform.lossyScale.y > 0 ? _targetCatcher.offset.y : -_targetCatcher.offset.y;
-                    center.x += relativeTransform.lossyScale.x > 0 ? _targetCatcher.offset.x : -_targetCatcher.offset.x;
+                    center.y += relativeTransform.lossyScale.y > 0 ? offset.y : -offset.y;
+                    center.x += relativeTransform.lossyScale.x > 0 ? offset.x : -offset.x;
                     break;
                 case EffectCenterType.WorldSpace:
-                    center = _targetCatcher.offset;
+                    center = offset;
                     break;
                 case EffectCenterType.TargetOffset:
                     //center = _spec.Target.transform.position + (Vector3)_task.Offset;
@@ -115,6 +70,44 @@ namespace Demo.Script.GAS.TargetCatcher
             }
 
             DebugExtension.DebugBox(center, size, angle, color, showTime);
+        }
+#endif
+    }
+#if UNITY_EDITOR
+    public class CatchUndefendingInspector : TargetCatcherInspector<CatchUndefending>
+    {
+        [BoxGroup] [Delayed] [OnValueChanged("OnCatcherChanged")]
+        public Vector2 Offset;
+        
+        [BoxGroup] [Delayed] [OnValueChanged("OnCatcherChanged")]
+        public Vector2 Size;
+        
+        [BoxGroup] [Delayed] [LabelText("Rotation")] [OnValueChanged("OnCatcherChanged")]
+        public float Rotation;
+        
+        [BoxGroup] [Delayed] [LabelText("Detect Layer")] [OnValueChanged("OnCatcherChanged")]
+        public LayerMask Layer;
+        
+        [BoxGroup] [Delayed] [LabelText("Center Type")] [OnValueChanged("OnCatcherChanged")]
+        public EffectCenterType CenterType;
+        
+        public CatchUndefendingInspector(CatchUndefending targetCatcherBase) : base(targetCatcherBase)
+        {
+            Offset = targetCatcherBase.offset;
+            Size = targetCatcherBase.size;
+            Rotation = targetCatcherBase.rotation;
+            Layer = targetCatcherBase.checkLayer;
+            CenterType = targetCatcherBase.centerType;
+        }
+        
+        public void OnCatcherChanged()
+        {
+            _targetCatcher.offset = Offset;
+            _targetCatcher.size = Size;
+            _targetCatcher.rotation = Rotation;
+            _targetCatcher.checkLayer = Layer;
+            _targetCatcher.centerType = CenterType;
+            Save();
         }
     }
 #endif

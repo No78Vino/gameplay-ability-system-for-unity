@@ -13,30 +13,6 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
     
     public class ReleaseGameplayEffectMark : TrackMark<ReleaseGameplayEffectTrack>
     {
-        private static Type[] _targetCatcherInspectorTypes;
-
-
-        private static Dictionary<Type, Type> _targetCatcherInspectorMap;
-
-        public static Type[] TargetCatcherInspectorTypes =>
-            _targetCatcherInspectorTypes ??= TypeUtil.GetAllSonTypesOf(typeof(TargetCatcherInspector));
-
-        private static Dictionary<Type, Type> TargetCatcherInspectorMap
-        {
-            get
-            {
-                if (_targetCatcherInspectorMap != null) return _targetCatcherInspectorMap;
-                _targetCatcherInspectorMap = new Dictionary<Type, Type>();
-                foreach (var catcherInspectorType in TargetCatcherInspectorTypes)
-                {
-                    var targetCatcherType = catcherInspectorType.BaseType.GetGenericArguments()[0];
-                    _targetCatcherInspectorMap.Add(targetCatcherType, catcherInspectorType);
-                }
-
-                return _targetCatcherInspectorMap;
-            }
-        }
-
         private ReleaseGameplayEffectMarkEvent MarkData => markData as ReleaseGameplayEffectMarkEvent;
 
         public ReleaseGameplayEffectMarkEvent MarkDataForSave
@@ -155,11 +131,7 @@ namespace GAS.Editor.Ability.AbilityTimelineEditor
             if (frameIndex == StartFrameIndex)
             {
                 var targetCatcher = MarkData.LoadTargetCatcher();
-                if (TargetCatcherInspectorMap.TryGetValue(targetCatcher.GetType(), out var inspectorType))
-                {
-                    var inspector = (TargetCatcherInspector)Activator.CreateInstance(inspectorType, targetCatcher);
-                    inspector.OnTargetCatcherPreview(AbilityTimelineEditorWindow.Instance.PreviewObject);
-                }
+                targetCatcher.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject);
             }
         }
     }

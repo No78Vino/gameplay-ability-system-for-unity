@@ -15,18 +15,17 @@ namespace GAS.Editor.Ability
             _targetCatcherBase = targetCatcherBase;
         }
 
-        protected void Save()
-        {
-            var currentInspectorObject = AbilityTimelineEditorWindow.Instance.CurrentInspectorObject;
-            (currentInspectorObject as ReleaseGameplayEffectMark)?.MarkDataForSave
-                .SaveTargetCatcher(_targetCatcherBase);
-            
-            AbilityTimelineEditorWindow.Instance.Save();
-        }
+        // protected void Save()
+        // {
+        //     var currentInspectorObject = AbilityTimelineEditorWindow.Instance.CurrentInspectorObject;
+        //     (currentInspectorObject as ReleaseGameplayEffectMark)?.MarkDataForSave
+        //         .SaveTargetCatcher(_targetCatcherBase);
+        //     
+        //     AbilityTimelineEditorWindow.Instance.Save();
+        // }
         
-        public abstract VisualElement Inspector();
-
-        public abstract void OnTargetCatcherPreview(GameObject obj);
+        //public abstract VisualElement Inspector();
+        //public abstract void OnTargetCatcherPreview(GameObject obj);
     }
     
     public abstract class TargetCatcherInspector<T>:TargetCatcherInspector where T : TargetCatcherBase
@@ -36,6 +35,15 @@ namespace GAS.Editor.Ability
         protected TargetCatcherInspector(TargetCatcherBase targetCatcherBase) : base(targetCatcherBase)
         {
             _targetCatcher = (T) targetCatcherBase;
+        }
+        
+        protected void Save()
+        {
+            var currentInspectorObject = AbilityTimelineEditorWindow.Instance.CurrentInspectorObject;
+            (currentInspectorObject as ReleaseGameplayEffectMark)?.MarkDataForSave
+                .SaveTargetCatcher(_targetCatcher);
+            
+            AbilityTimelineEditorWindow.Instance.Save();
         }
     }
 }

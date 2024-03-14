@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using GAS.Editor.Ability;
-using GAS.Editor.Ability.AbilityTimelineEditor;
-using GAS.General;
-using GAS.Runtime.Ability;
-using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
-using UnityEditor;
-using UnityEngine;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using GAS.Editor.Ability;
+    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using GAS.General;
+    using GAS.Runtime.Ability;
+    using Sirenix.OdinInspector;
+    using Sirenix.OdinInspector.Editor;
+    using UnityEditor;
+    using UnityEngine;
+    
     public class TaskMarkEditor : OdinEditorWindow
     {
         [BoxGroup] [HideLabel] [DisplayAsString(TextAlignment.Left, true)]
