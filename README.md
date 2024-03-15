@@ -558,11 +558,31 @@ ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，Att
 ASC是GAS中最复杂，且操作空间最多的组件。对ASC的良好管理和操作就是程序开发人员的重任了。
 GAS本身是被动的，而让推动和改变GAS的是ASC。换言之，Runtime下开发者其实是在操作ASC，而不是GAS。
 增删管理ASC，调用ASC的Ability执行，以及ASC的体系外Tag，Effect管理才是Runtime下开发者的主要工作。
-这之外的GAS配置和拓展，应该由策划承担大部分工作。（但实际上对于须臾中小型团队，程序开发人员还是在做GAS配置的维护工作。）
+这之外的GAS配置和拓展，应该由策划承担大部分工作。（但实际上对于中小型团队，程序开发人员还是在做GAS配置的维护工作。）
 
 #### 2.9.a AbilitySystemComponent Preset
 AbilitySystemComponent Preset是ASC的预设，用于方便初始化ASC的数据。
 ![QQ20240315172608.png](Wiki%2FQQ20240315172608.png)
+ASC预设是为了可视化角色（单位）的参数。
+- 基本信息：ASC的基本信息，仅用于显示，方便配置人员阅读，Runtime不会用到这些参数。
+- 属性集：上文提到过，ASC的属性集设计建议只有一个属性集。不建议多个。
+- 固有Tag：ASC的基础Tag，通常会把描述性的Tag作为固有Tag，
+  比如种族（Race.Human,Race.Monster ）,职业（Job.Wizard,Job.Archer）,阵营（Camp.Good,Camp.Evil）等等。
+  当然Tag本身是不做任何限制的，但从Gameplay设计的角度上，状态性质的Tag不建议作为固有Tag。就算设计一个绝对无敌的
+  角色，那也应该是把无敌的Tag放在一个永久GameplayEffect上，然后挂到ASC上。而不是把无敌Tag直接当作固有Tag。
+- 固有能力：Abilities，单位的基础能力。通常会把单位的基础能力放在这里，比如攻击，防御，跳跃等等。
+
+>如何使用ASC预设？
+> 
+> 1.AbilitySystemComponent组件自带了序列化的ASC预设字段，可以通过预制体添加，也可以实例化添加。
+> 2.依赖ASC预设的初始化，通过AbilitySystemComponentExtension中的静态扩展方法InitWithPreset即可。
+> 
+> InitWithPreset的参数：
+>  - AbilitySystemComponent asc：初始化的ASC，
+>  - int level：初始等级
+>  - AbilitySystemComponentPreset preset：初始化用的ASC预设
+>  - 
+> 示例： asc.InitWithPreset(1,ascPreset); // 如果预制体已经设置了参数，那么可以不传ascPreset。
 
 ---
 ## 3.API(W.I.P)
