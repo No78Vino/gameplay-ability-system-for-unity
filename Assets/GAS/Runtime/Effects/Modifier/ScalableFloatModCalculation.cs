@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
-namespace GAS.Runtime.Effects.Modifier
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "ScalableFloatModCalculation", menuName = "GAS/MMC/ScalableFloatModCalculation")]
     public class ScalableFloatModCalculation:ModifierMagnitudeCalculation

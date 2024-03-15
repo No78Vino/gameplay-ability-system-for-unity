@@ -1,4 +1,4 @@
-﻿using GAS.Core;
+﻿using GAS;
 using GAS.General;
 using UnityEngine;
 

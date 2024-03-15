@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS.Core;
+    using GAS;
     using UnityEditor;
     using UnityEngine;
     

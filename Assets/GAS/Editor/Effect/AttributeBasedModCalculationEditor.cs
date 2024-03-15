@@ -3,9 +3,9 @@ namespace GAS.Editor
 {
     using System.Collections.Generic;
     using System.Linq;
-    using GAS.Core;
+    using GAS;
     using Editor;
-    using GAS.Runtime.Effects.Modifier;
+    using Runtime;
     using UnityEditor;
     using UnityEngine;
 

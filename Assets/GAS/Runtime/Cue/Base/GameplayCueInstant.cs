@@ -1,9 +1,6 @@
-using GAS.Runtime;
-using GAS.Runtime.Component;
-using GAS.Runtime.Effects;
 using UnityEngine;
 
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     public enum InstantCueApplyTarget
     {

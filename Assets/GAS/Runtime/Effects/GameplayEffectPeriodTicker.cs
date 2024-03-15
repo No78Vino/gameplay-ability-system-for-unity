@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GAS.Runtime.Effects
+namespace GAS.Runtime
 {
     public class GameplayEffectPeriodTicker
     {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GAS.General;
 using GAS.Runtime;
-using GAS.Runtime.Effects;
 using UnityEngine;
 
 namespace GAS.Runtime

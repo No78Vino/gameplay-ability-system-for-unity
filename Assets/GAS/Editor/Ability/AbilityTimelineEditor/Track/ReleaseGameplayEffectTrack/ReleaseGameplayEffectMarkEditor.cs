@@ -3,7 +3,6 @@ namespace GAS.Editor
 {
     using System.Collections;
     using System.Linq;
-    using GAS.Runtime.Effects;
     using UnityEngine.Serialization;
     using System;
     using System.Collections.Generic;

@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using GAS.Core;
 using GAS.Runtime.AttributeSet;
-using GAS.Runtime.Effects;
-using GAS.Runtime.Effects.Modifier;
 using UnityEngine;
 
-namespace GAS.Runtime.Component
+namespace GAS.Runtime
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {

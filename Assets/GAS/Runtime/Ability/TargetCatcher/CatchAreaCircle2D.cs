@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using GAS.General;
 using GAS.Runtime;
-using GAS.Runtime.Component;
 using UnityEngine;
 
 namespace GAS.Runtime

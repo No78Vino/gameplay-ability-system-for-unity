@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime.Attribute;
-using GAS.Runtime.Component;
 
 namespace GAS.Runtime.AttributeSet
 {

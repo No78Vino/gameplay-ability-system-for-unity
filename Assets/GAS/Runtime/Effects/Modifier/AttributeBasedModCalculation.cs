@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GAS.Runtime.Effects.Modifier
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "AttributeBasedModCalculation", menuName = "GAS/MMC/AttributeBasedModCalculation")]
     public class AttributeBasedModCalculation : ModifierMagnitudeCalculation

@@ -1,7 +1,5 @@
 ﻿using System;
-using GAS.Runtime.Attribute.Value;
-
-namespace GAS.Runtime.Attribute
+namespace GAS.Runtime
 {
     public class AttributeBase
     {

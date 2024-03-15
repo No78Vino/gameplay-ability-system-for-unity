@@ -2,7 +2,7 @@
 namespace GAS.Editor
 {
     using System.Collections.Generic;
-    using GAS.Runtime.Cue;
+    using Runtime;
     using UnityEditor;
     using Editor;
     using UnityEngine;

@@ -5,7 +5,7 @@ namespace GAS.Editor
     using UnityEditor;
     using System;
     using System.IO;
-    using GAS.Core;
+    using GAS;
     using Editor;
     using UnityEngine;
     

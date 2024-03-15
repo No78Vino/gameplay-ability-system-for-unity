@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Effects
+﻿namespace GAS.Runtime
 {
     public struct CooldownTimer
     {

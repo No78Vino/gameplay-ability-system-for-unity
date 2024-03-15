@@ -3,12 +3,12 @@
 ////     Do not modify it.     ////
 ///////////////////////////////////
 
-using GAS.Runtime.Attribute;
 using System;
 using System.Collections.Generic;
-namespace GAS.Runtime.AttributeSet
+using GAS.Runtime.AttributeSet;
+namespace GAS.Runtime
 {
-public class AS_Fight:AttributeSet
+public class AS_Fight:AttributeSet.AttributeSet
 {
     private AttributeBase _HP = new AttributeBase("AS_Fight","HP");
     public AttributeBase HP => _HP;

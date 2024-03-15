@@ -1,4 +1,4 @@
-﻿using GAS.Runtime.Cue;
+﻿using GAS.Runtime;
 using UnityEngine;
 
 namespace GAS.Cue

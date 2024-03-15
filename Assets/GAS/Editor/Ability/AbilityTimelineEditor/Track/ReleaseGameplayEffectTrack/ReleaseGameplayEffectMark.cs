@@ -6,7 +6,6 @@ namespace GAS.Editor
     using System.Linq;
     using GAS.General;
     using Runtime;
-    using GAS.Runtime.Effects;
     using UnityEngine;
     using UnityEngine.UIElements;
     using Object = UnityEngine.Object;

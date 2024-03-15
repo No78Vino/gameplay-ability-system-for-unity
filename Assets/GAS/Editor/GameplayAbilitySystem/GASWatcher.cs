@@ -3,12 +3,10 @@ namespace GAS.Editor
 {
     using System.Collections.Generic;
     using Runtime;
-    using GAS.Runtime.Effects;
     using Sirenix.OdinInspector;
     using Sirenix.OdinInspector.Editor;
     using UnityEditor;
     using UnityEngine;
-    using GAS.Runtime.Component;
     using GAS.General;
 
     public class GASWatcher : OdinEditorWindow
@@ -123,8 +121,8 @@ namespace GAS.Editor
             {
                 if (_selected == null || _selected.gameObject == null)
                 {
-                    _selected = Core.GameplayAbilitySystem.GAS.AbilitySystemComponents.Count > 0
-                        ? Core.GameplayAbilitySystem.GAS.AbilitySystemComponents[0] as AbilitySystemComponent
+                    _selected = GAS.GameplayAbilitySystem.GAS.AbilitySystemComponents.Count > 0
+                        ? GAS.GameplayAbilitySystem.GAS.AbilitySystemComponents[0] as AbilitySystemComponent
                         : null;
                 }
                 RefreshAscInfo();
@@ -145,7 +143,7 @@ namespace GAS.Editor
             if (!IsPlaying) return;
             
             menuScrollPos = EditorGUILayout.BeginScrollView(menuScrollPos, GUI.skin.box);
-            foreach (var iasc in Core.GameplayAbilitySystem.GAS.AbilitySystemComponents)
+            foreach (var iasc in GAS.GameplayAbilitySystem.GAS.AbilitySystemComponents)
             {
                 var asc = (AbilitySystemComponent)iasc;
                 if (GUILayout.Button($"{asc.GetInstanceID()}"))

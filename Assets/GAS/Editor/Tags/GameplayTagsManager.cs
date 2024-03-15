@@ -2,7 +2,7 @@
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using Core;
+    using GAS;
     using UnityEditor;
     using UnityEngine;
     using Editor;

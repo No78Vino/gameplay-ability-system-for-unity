@@ -1,6 +1,5 @@
-﻿using GAS.Runtime.Component;
-
-namespace GAS.Runtime.Cue
+﻿
+namespace GAS.Runtime
 {
     public abstract class GameplayCueSpec
     {

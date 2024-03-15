@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Attribute.Value
+﻿namespace GAS.Runtime
 {
     public struct AttributeValue
     {

@@ -1,7 +1,4 @@
-using GAS.Runtime;
-using GAS.Runtime.Effects;
-
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     public struct GameplayCueParameters
     {

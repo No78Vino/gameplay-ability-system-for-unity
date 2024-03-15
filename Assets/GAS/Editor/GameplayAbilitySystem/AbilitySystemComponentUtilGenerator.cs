@@ -3,7 +3,7 @@ namespace GAS.Editor
 {
     using System;
     using System.IO;
-    using GAS.Core;
+    using GAS;
     using UnityEngine;
     
     

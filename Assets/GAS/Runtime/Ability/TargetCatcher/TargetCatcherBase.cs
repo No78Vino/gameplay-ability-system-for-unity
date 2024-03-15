@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GAS.Runtime.Component;
+using GAS.Runtime;
 using UnityEngine;
 
 namespace GAS.Runtime

@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GAS.Runtime.Component;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     public abstract class GameplayCue : ScriptableObject
     {

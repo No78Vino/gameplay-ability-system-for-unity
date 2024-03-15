@@ -1,7 +1,6 @@
 using System;
-using GAS.Runtime.Effects;
 
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     public class CuePlaySound : GameplayCueInstant
     {

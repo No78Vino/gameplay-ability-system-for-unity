@@ -1,6 +1,4 @@
-﻿using GAS.Runtime.Attribute.Value;
-
-namespace GAS.Runtime.Effects.Execution
+﻿namespace GAS.Runtime
 {
     public class ExecutionCalculation
     {

@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Attribute
+﻿namespace GAS.Runtime
 {
     public class DerivedAttribute:AttributeBase
     {

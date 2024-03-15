@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GAS.Runtime.Effects.Modifier
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "SetByCallerFromTag", menuName = "GAS/MMC/SetByCallerFromTagModCalculation")]
     public class SetByCallerFromTagModCalculation:ModifierMagnitudeCalculation

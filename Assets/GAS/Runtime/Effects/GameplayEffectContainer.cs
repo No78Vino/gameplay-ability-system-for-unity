@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime.Component;
+using GAS.Runtime;
 
-namespace GAS.Runtime.Effects
+namespace GAS.Runtime
 {
     public class GameplayEffectContainer
     {

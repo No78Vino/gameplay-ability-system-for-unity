@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GAS.Runtime.Component;
-using GAS.Runtime.Effects;
-using GAS.Runtime.Effects.Modifier;
+using GAS.Runtime;
 
-namespace GAS.Runtime.Attribute
+namespace GAS.Runtime
 {
     public class AttributeAggregator
     {

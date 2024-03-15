@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace GAS.Core
+namespace GAS
 {
     public static class GasDefine
     {

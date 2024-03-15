@@ -2,7 +2,6 @@
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS.Runtime.Cue;
     using UnityEditor;
     using Editor;
     using UnityEngine;

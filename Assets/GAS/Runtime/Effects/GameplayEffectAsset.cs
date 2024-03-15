@@ -3,14 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GAS.Runtime.Cue;
-using GAS.Runtime.Effects.Execution;
-using GAS.Runtime.Effects.Modifier;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.Runtime.Effects
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "GameplayEffect", menuName = "GAS/GameplayEffect")]
     public class GameplayEffectAsset : ScriptableObject

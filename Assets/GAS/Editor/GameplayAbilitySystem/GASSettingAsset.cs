@@ -2,7 +2,7 @@
 namespace GAS.Editor
 {
     using System;
-    using GAS.Core;
+    using GAS;
     using Editor;
     using GAS.General;
     using Sirenix.OdinInspector;

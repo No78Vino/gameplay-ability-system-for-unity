@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.General;
-using GAS.Runtime.Component;
-using GAS.Runtime.Cue;
 using UnityEngine;
 
-namespace GAS.Runtime.Effects
+namespace GAS.Runtime
 {
     public class GameplayEffectSpec
     {

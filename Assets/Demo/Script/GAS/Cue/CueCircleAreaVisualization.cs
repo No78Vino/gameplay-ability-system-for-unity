@@ -1,5 +1,5 @@
 ﻿using GAS.General;
-using GAS.Runtime.Cue;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using GAS.General;
-using GAS.Runtime.Component;
+using GAS.Runtime;
 using UnityEngine;
 
-namespace GAS.Core
+namespace GAS
 {
     public class GameplayAbilitySystem
     {

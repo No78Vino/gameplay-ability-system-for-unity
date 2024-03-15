@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime.Effects;
 
-namespace GAS.Runtime.Component
+namespace GAS.Runtime
 {
     public interface IAbilitySystemComponent
     {

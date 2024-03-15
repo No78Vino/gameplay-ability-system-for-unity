@@ -1,9 +1,5 @@
-﻿using GAS.Runtime.Component;
-using GAS.Runtime.Cue;
-using GAS.Runtime.Effects.Execution;
-using GAS.Runtime.Effects.Modifier;
-
-namespace GAS.Runtime.Effects
+﻿
+namespace GAS.Runtime
 {
     public enum EffectsDurationPolicy
     {

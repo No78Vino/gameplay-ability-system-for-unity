@@ -1,7 +1,6 @@
-using GAS.Runtime.Effects;
 using UnityEngine;
 
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     public class CueVFX : GameplayCueDurational
     {

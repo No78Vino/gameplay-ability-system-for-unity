@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Effects
+﻿namespace GAS.Runtime
 {
     /// <summary>
     /// https://github.com/BillEliot/GASDocumentation_Chinese?tab=readme-ov-file#457-gameplayeffect%E6%A0%87%E7%AD%BE

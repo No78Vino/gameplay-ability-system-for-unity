@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace GAS.Runtime.Effects.Modifier
+namespace GAS.Runtime
 {
     public abstract class ModifierMagnitudeCalculation : ScriptableObject
     {

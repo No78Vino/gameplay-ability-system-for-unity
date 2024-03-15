@@ -4,7 +4,7 @@ namespace GAS.Editor
     using System;
     using System.Collections.Generic;
     using Editor;
-    using GAS.Runtime.Effects.Modifier;
+    using Runtime;
     using UnityEditor;
     using UnityEngine;
 

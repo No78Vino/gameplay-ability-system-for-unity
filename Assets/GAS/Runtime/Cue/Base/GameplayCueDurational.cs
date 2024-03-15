@@ -1,8 +1,4 @@
-using GAS.Runtime;
-using GAS.Runtime.Component;
-using GAS.Runtime.Effects;
-
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     public abstract class GameplayCueDurational : GameplayCue<GameplayCueDurationalSpec>
     {

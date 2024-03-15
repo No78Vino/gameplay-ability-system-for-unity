@@ -7,7 +7,7 @@ using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.Runtime.Component
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "AbilitySystemComponentPreset", menuName = "GAS/AbilitySystemComponentPreset")]
     public class AbilitySystemComponentPreset : ScriptableObject
@@ -85,7 +85,7 @@ namespace GAS.Runtime.Component
         
         static void SetAttributeSetChoices()
         {
-            Type attributeSetUtil = Type.GetType($"GAS.Runtime.AttributeSet.GAttrSetLib, Assembly-CSharp");
+            Type attributeSetUtil = Type.GetType($"GAS.Runtime.GAttrSetLib, Assembly-CSharp");
             if(attributeSetUtil == null)
             {
                 Debug.LogError("[EX] Type 'GAttrSetLib' not found. Please generate the AttributeSet CODE first!");

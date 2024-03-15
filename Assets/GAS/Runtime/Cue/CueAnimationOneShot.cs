@@ -2,7 +2,7 @@ using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "CuePlayAnimation", menuName = "GAS/Cue/CuePlayAnimation")]
     public class CueAnimationOneShot : GameplayCueInstant

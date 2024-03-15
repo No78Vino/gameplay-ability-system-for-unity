@@ -1,6 +1,6 @@
 ﻿using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
-using GAS.Runtime.Cue;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

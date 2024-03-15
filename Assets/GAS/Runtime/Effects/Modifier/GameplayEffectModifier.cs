@@ -5,7 +5,7 @@ using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.Runtime.Effects.Modifier
+namespace GAS.Runtime
 {
     public enum GEOperation
     {
@@ -88,7 +88,7 @@ namespace GAS.Runtime.Effects.Modifier
         
         public static void SetAttributeChoices()
         {
-            Type attributeSetUtil = Type.GetType($"GAS.Runtime.AttributeSet.GAttrSetLib, Assembly-CSharp");
+            Type attributeSetUtil = Type.GetType($"GAS.Runtime.GAttrSetLib, Assembly-CSharp");
             if(attributeSetUtil == null)
             {
                 Debug.LogError("[EX] Type 'GAttrSetLib' not found. Please generate the AttributeSet CODE first!");
