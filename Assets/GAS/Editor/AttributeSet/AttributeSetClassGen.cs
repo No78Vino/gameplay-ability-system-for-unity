@@ -9,7 +9,7 @@ namespace GAS.Editor
     using GAS.Runtime.AttributeSet;
     using UnityEditor;
     using UnityEngine;
-    using GAS.Editor.GameplayAbilitySystem;
+    using Editor;
 
     
     public static class AttributeSetClassGen

@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-namespace GAS.Editor.Effect
+namespace GAS.Editor
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -8,7 +8,6 @@ namespace GAS.Editor.Effect
     using GAS.Runtime.Effects.Modifier;
     using UnityEditor;
     using UnityEngine;
-    using GAS.Editor.GameplayAbilitySystem;
 
     [CustomEditor(typeof(AttributeBasedModCalculation))]
     public class AttributeBasedModCalculationEditor : UnityEditor.Editor

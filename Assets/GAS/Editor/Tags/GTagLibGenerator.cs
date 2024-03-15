@@ -8,7 +8,7 @@ namespace GAS.Editor.Tags
     using GAS.Runtime.Tags;
     using UnityEditor;
     using UnityEngine;
-    using GAS.Editor.GameplayAbilitySystem;
+    using Editor;
     public static class GTagLibGenerator
     {
         public static void Gen()

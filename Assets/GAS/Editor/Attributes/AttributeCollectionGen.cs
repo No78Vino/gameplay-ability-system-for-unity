@@ -7,7 +7,7 @@ namespace GAS.Editor
     using GAS.Core;
     using UnityEditor;
     using UnityEngine;
-    using GAS.Editor.GameplayAbilitySystem;
+    using Editor;
     
     public static class AttributeCollectionGen
     {

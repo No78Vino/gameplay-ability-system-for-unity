@@ -6,7 +6,6 @@ namespace GAS.Editor
     using System.Collections.Generic;
     using System.Linq;
     using Editor;
-    using GAS.Editor.GameplayAbilitySystem;
     using GAS.General;
     using GAS.Editor.General;
     using Sirenix.OdinInspector;

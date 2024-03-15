@@ -8,7 +8,6 @@ namespace GAS.Editor
     using GAS.Runtime.AttributeSet;
     using UnityEditor;
     using UnityEngine;
-    using GAS.Editor.GameplayAbilitySystem;
 
     public class AttributeSetConfigEditorWindow : EditorWindow
     {

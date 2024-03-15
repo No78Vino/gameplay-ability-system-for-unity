@@ -6,9 +6,8 @@ namespace GAS.Editor
     using GAS.Core;
     using Editor;
     using UnityEditor;
-    using GAS.Editor.GameplayAbilitySystem;
 
-    
+
     public static class AttributeEditorUtil
     {
         public static List<string> GetAttributeNameChoices()

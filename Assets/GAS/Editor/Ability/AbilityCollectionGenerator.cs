@@ -6,7 +6,7 @@ namespace GAS.Editor
     using System;
     using System.IO;
     using GAS.Core;
-    using GAS.Editor.GameplayAbilitySystem;
+    using Editor;
     using UnityEngine;
     
     public class AbilityCollectionGenerator

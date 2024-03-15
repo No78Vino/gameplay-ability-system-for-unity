@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.GameplayAbilitySystem
+namespace GAS.Editor
 {
     using System;
     using GAS.Core;

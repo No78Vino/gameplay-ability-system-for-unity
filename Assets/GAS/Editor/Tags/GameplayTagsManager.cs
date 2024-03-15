@@ -6,7 +6,7 @@ namespace GAS.Editor.Tags
     using GAS.Runtime.Tags;
     using UnityEditor;
     using UnityEngine;
-    using GameplayAbilitySystem;
+    using Editor;
 
     public class GameplayTagsManager
     {

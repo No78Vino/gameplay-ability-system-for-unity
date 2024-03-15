@@ -3,7 +3,7 @@ namespace GAS.Editor
 {
     using UnityEditor;
     using UnityEngine;
-    using GAS.Editor.GameplayAbilitySystem;
+    using Editor;
 
     public class AttributesManager
     {

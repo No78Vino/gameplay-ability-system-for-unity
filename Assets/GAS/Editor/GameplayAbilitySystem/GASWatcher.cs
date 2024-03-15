@@ -1,8 +1,5 @@
-﻿
-using GAS.General;
-
-#if UNITY_EDITOR
-namespace GAS.Editor.GameplayAbilitySystem
+﻿#if UNITY_EDITOR
+namespace GAS.Editor
 {
     using System.Collections.Generic;
     using GAS.Runtime.Ability;
@@ -12,6 +9,7 @@ namespace GAS.Editor.GameplayAbilitySystem
     using UnityEditor;
     using UnityEngine;
     using GAS.Runtime.Component;
+    using GAS.General;
 
     public class GASWatcher : OdinEditorWindow
     {

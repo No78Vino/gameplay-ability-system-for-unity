@@ -5,7 +5,7 @@ namespace GAS.Editor.Tags
     using GAS.Core;
     using GAS.Runtime.Tags;
     using UnityEditor;
-    using GAS.Editor.GameplayAbilitySystem;
+    using Editor;
 
     
     public static class TagEditorUntil
