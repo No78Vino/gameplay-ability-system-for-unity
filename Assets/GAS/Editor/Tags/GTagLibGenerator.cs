@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using GAS.Runtime;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -27,7 +28,7 @@ namespace GAS.Editor
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("using System.Collections.Generic;");
-            writer.WriteLine("namespace GAS.Runtime.Tags");
+            writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
             writer.WriteLine("public static class GTagLib");
             writer.WriteLine("{");

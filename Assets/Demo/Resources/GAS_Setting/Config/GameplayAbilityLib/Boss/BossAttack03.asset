@@ -55,7 +55,7 @@ MonoBehaviour:
     markEvents:
     - startFrame: 120
       jsonTargetCatcher:
-        Type: GAS.Runtime.Ability.TargetCatcher.CatchAreaBox2D
+        Type: GAS.Runtime.CatchAreaBox2D
         Data: '{"Owner":{"instanceID":0},"checkLayer":{"serializedVersion":"2","m_Bits":256},"offset":{"x":15.0,"y":2.0},"rotation":0.0,"size":{"x":30.0,"y":4.0},"centerType":0}'
       gameplayEffectAssets:
       - {fileID: 11400000, guid: a3bcb7d47d928594ebb6db5c1d65e027, type: 2}

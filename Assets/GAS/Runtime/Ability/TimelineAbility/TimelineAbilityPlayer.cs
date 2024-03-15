@@ -5,7 +5,7 @@ using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     internal abstract class RuntimeClipInfo
     {

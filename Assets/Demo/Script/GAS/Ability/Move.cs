@@ -1,7 +1,7 @@
 ﻿using GAS.Runtime.Component;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     public class Move:AbstractAbility<AAMove>
     {

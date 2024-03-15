@@ -30,10 +30,10 @@ namespace GAS.Editor
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("");
-            writer.WriteLine("using GAS.Runtime.Attribute;");
+            writer.WriteLine("using GAS.Runtime;");
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Collections.Generic;");
-            writer.WriteLine("namespace GAS.Runtime.AttributeSet");
+            writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
 
             foreach (var attributeSet in attributeSetConfigs)

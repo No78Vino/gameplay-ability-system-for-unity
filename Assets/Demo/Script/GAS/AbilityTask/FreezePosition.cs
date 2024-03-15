@@ -1,4 +1,4 @@
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 using UnityEngine;
 
 namespace Demo.Script.GAS.AbilityTask

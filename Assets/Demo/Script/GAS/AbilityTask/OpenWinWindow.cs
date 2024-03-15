@@ -1,6 +1,6 @@
 ﻿using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 
 namespace Demo.Script.GAS.AbilityTask
 {

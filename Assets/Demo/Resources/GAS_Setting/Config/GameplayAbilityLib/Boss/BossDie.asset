@@ -49,7 +49,7 @@ MonoBehaviour:
     markEvents:
     - startFrame: 0
       jsonTargetCatcher:
-        Type: GAS.Runtime.Ability.TargetCatcher.CatchSelf
+        Type: GAS.Runtime.CatchSelf
         Data: 
       gameplayEffectAssets:
       - {fileID: 11400000, guid: 69acc751f2f4ecd48a5c754fe25692ee, type: 2}

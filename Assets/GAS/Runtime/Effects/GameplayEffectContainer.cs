@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.Runtime.Component;
-using GAS.Editor;
 
 namespace GAS.Runtime.Effects
 {

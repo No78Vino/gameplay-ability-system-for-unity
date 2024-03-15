@@ -3,9 +3,9 @@ namespace GAS.Editor.General
 {
     using System;
     using System.Collections.Generic;
-    using Editor;
     using UnityEditor;
     using UnityEngine;
+    using GAS.Runtime;
     
     public class ArraySetFromChoicesAsset<T>
     {

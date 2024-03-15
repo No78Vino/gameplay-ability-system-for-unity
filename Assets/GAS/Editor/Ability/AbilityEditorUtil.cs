@@ -4,7 +4,7 @@ namespace GAS.Editor
     using System.Collections.Generic;
     using System;
     using System.Reflection;
-    using GAS.Runtime.Ability;
+    using Runtime;
 
     public static class AbilityEditorUtil
     {

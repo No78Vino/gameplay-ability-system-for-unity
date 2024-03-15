@@ -2,7 +2,7 @@
 using GAS.Runtime.Component;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     public enum EffectCenterType
     {

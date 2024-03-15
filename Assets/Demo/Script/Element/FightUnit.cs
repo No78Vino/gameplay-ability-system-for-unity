@@ -5,6 +5,7 @@ using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 using GAS.Editor;
 using UnityEngine;
+using GAS.Runtime;
 
 public abstract class FightUnit : MonoBehaviour
 {

@@ -94,7 +94,7 @@ MonoBehaviour:
     - startFrame: 0
       InstantTasks:
       - TaskData:
-          Type: GAS.Runtime.Ability.ApplyCostAndCoolDown
+          Type: GAS.Runtime.ApplyCostAndCoolDown
           Data: 
   OngoingTasks:
   - trackName: Task Clips

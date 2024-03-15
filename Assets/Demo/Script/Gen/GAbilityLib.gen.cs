@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
   public static class GAbilityLib
   {
@@ -28,9 +28,9 @@ namespace GAS.Runtime.Ability
 
     public static AbilityInfo Die_Info = new AbilityInfo { Name = "Die", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Die.asset",AbilityClassType = typeof(Runtime.TimelineAbility) };
 
-    public static AbilityInfo Jump_Info = new AbilityInfo { Name = "Jump", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Jump.asset",AbilityClassType = typeof(GAS.Runtime.Ability.Jump) };
+    public static AbilityInfo Jump_Info = new AbilityInfo { Name = "Jump", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Jump.asset",AbilityClassType = typeof(Jump) };
 
-    public static AbilityInfo Move_Info = new AbilityInfo { Name = "Move", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Move.asset",AbilityClassType = typeof(GAS.Runtime.Ability.Move) };
+    public static AbilityInfo Move_Info = new AbilityInfo { Name = "Move", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Move.asset",AbilityClassType = typeof(Move) };
 
     public static AbilityInfo Attack_Info = new AbilityInfo { Name = "Attack", AssetPath = "Assets/Demo/Resources/GAS_Setting/Config/GameplayAbilityLib/Player/Attack.asset",AbilityClassType = typeof(Runtime.TimelineAbility) };
 

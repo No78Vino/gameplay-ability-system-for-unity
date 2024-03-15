@@ -1,5 +1,4 @@
-﻿using GAS.Editor;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace GAS.Runtime.Effects.Modifier

@@ -4,7 +4,7 @@ using Demo.Script.Element;
 using Sirenix.OdinInspector;
 using GAS.Editor;
 #endif
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 using UnityEngine;
 
 namespace Demo.Script.GAS.AbilityTask

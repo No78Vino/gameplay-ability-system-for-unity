@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS.Runtime.Ability;
+    using Runtime;
     using UnityEngine.UIElements;
     
     public abstract class TrackClipBase : TrackItemBase

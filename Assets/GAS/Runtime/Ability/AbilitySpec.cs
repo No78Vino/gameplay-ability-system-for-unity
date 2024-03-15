@@ -2,7 +2,7 @@
 using GAS.Runtime.Effects;
 using GAS.Runtime.Effects.Modifier;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     public abstract class AbilitySpec
     {

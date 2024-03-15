@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS.Runtime.Ability;
+    using Runtime;
     using UnityEditor;
     using System;
     using System.IO;
@@ -28,7 +28,7 @@ namespace GAS.Editor
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("");
-            writer.WriteLine("namespace GAS.Runtime.Ability");
+            writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
             writer.WriteLine("  public static class AbilityCollection");
             writer.WriteLine("  {");

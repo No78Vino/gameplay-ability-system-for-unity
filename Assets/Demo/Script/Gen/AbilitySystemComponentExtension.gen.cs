@@ -3,7 +3,7 @@
 ////     Do not modify it.     ////
 ///////////////////////////////////
 using System;
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 using GAS.Runtime.AttributeSet;
 using GAS.Editor;
 namespace GAS.Runtime.Component

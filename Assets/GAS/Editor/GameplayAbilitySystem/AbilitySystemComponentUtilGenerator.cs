@@ -25,10 +25,7 @@ namespace GAS.Editor
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("using System;");
-            writer.WriteLine("using GAS.Runtime.Ability;");
-            writer.WriteLine("using GAS.Runtime.AttributeSet;");
-            writer.WriteLine("using GAS.Runtime.Tags;");
-            writer.WriteLine("namespace GAS.Runtime.Component");
+            writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
             writer.WriteLine("      public static class AbilitySystemComponentExtension");
             writer.WriteLine("      {");

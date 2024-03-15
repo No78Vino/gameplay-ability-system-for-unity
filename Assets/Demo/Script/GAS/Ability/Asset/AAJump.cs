@@ -2,7 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     public class AAJump:AbilityAsset
     {

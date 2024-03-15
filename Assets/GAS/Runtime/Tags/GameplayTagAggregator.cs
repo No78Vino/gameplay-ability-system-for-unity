@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 
-namespace GAS.Editor
+namespace GAS.Runtime
 {
     public class GameplayTagAggregator
     {

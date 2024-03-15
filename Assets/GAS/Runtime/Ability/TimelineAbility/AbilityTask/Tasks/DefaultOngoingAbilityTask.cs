@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.Ability
+﻿namespace GAS.Runtime
 {
     public class DefaultOngoingAbilityTask:OngoingAbilityTask 
     {

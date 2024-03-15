@@ -2,7 +2,7 @@ using System;
 using GAS.General;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     [Serializable]
     public abstract class AbilityTaskData

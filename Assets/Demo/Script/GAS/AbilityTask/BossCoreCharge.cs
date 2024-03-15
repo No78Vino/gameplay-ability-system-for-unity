@@ -1,5 +1,5 @@
 ﻿using Demo.Script.Element;
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 
 namespace Demo.Script.GAS.AbilityTask
 {

@@ -1,6 +1,6 @@
 ﻿using GAS.Runtime.Component;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     public class Jump:AbstractAbility<AAJump>
     {

@@ -8,7 +8,6 @@ namespace GAS.Editor
     using Sirenix.OdinInspector.Editor;
     using Sirenix.OdinInspector;
     using System.Linq;
-    using GAS.Runtime.Ability;
     using System.Collections;
     using GAS.General;
     using System;

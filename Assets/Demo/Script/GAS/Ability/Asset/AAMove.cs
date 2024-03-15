@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "Move", menuName = "GAS/Ability/Move")]
     public class AAMove: AbilityAsset

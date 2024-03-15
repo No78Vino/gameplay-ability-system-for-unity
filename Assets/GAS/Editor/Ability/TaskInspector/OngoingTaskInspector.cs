@@ -2,7 +2,7 @@
 namespace GAS.Editor
 {
     using Editor;
-    using GAS.Runtime.Ability;
+    using Runtime;
     
     public abstract class OngoingTaskInspector
     {

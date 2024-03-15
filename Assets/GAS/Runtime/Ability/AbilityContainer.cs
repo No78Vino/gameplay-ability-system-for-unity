@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GAS.Runtime.Component;
-using GAS.Editor;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     public class AbilityContainer
     {

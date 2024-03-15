@@ -2,7 +2,7 @@
 using GAS.Editor;
 #if UNITY_EDITOR
 #endif
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GAS.Runtime.Ability;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects.Execution;
 using GAS.Runtime.Effects.Modifier;
-using GAS.Editor;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -242,7 +240,7 @@ namespace GAS.Runtime.Effects
         
         private static void SetTagChoices()
         {
-            Type gameplayTagSumCollectionType = Type.GetType($"GAS.Runtime.Tags.GTagLib, Assembly-CSharp");
+            Type gameplayTagSumCollectionType = Type.GetType($"GAS.Runtime.GTagLib, Assembly-CSharp");
             if(gameplayTagSumCollectionType == null)
             {
                 Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");

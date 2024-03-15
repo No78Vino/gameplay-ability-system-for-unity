@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     [Serializable]
     public class ApplyCostAndCoolDown:InstantAbilityTask

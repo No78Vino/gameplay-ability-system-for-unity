@@ -1,8 +1,6 @@
 ﻿using System;
-using GAS.Editor;
-using UnityEngine;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     /// <summary>
     /// https://github.com/BillEliot/GASDocumentation_Chinese?tab=readme-ov-file#4610-gameplay-ability-spec

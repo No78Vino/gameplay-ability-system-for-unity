@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 using UnityEngine.Serialization;
 
 namespace GAS.Runtime

@@ -3,7 +3,7 @@
 ////     Do not modify it.     ////
 ///////////////////////////////////
 using System.Collections.Generic;
-namespace GAS.Editor
+namespace GAS.Runtime
 {
 public static class GTagLib
 {

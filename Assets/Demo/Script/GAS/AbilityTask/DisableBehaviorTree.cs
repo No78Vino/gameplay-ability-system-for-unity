@@ -1,5 +1,5 @@
 using BehaviorDesigner.Runtime;
-using GAS.Runtime.Ability;
+using GAS.Runtime;
 
 namespace Demo.Script.GAS.AbilityTask
 {

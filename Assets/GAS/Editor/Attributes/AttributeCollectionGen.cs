@@ -27,7 +27,7 @@ namespace GAS.Editor
             writer.WriteLine("//// This is a generated file. ////");
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
-            writer.WriteLine("namespace GAS.Runtime.Attribute");
+            writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
             writer.WriteLine("public static class GAttrLib");
             writer.WriteLine("{");

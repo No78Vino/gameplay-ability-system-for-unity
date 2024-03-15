@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Serialization;
 
-namespace GAS.Runtime.Ability
+namespace GAS.Runtime
 {
     [Serializable]
     public abstract class TrackEventBase
