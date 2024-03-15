@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GAS.Editor;
 #if UNITY_EDITOR
 #endif
-using GAS.General.Util;
+using GAS.General;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TargetCatcher;
 using GAS.Runtime.Component;

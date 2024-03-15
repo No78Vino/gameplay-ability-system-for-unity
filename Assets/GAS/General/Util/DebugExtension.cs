@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GAS.General.Util
+namespace GAS.General
 {
     public static class DebugExtension
     {

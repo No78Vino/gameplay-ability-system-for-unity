@@ -1,11 +1,9 @@
-#if UNITY_EDITOR
-namespace GAS.General.Util
+namespace GAS.General
 {
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditor.Animations;
     using UnityEngine;
-
     
     public static class GASAnimatorUtil
     {
@@ -17,6 +15,7 @@ namespace GAS.General.Util
         /// <returns></returns>
         public static Dictionary<string, AnimationClip> GetAllAnimationState(this Animator animator, int layerIndex = 0)
         {
+#if UNITY_EDITOR
             var result = new Dictionary<string, AnimationClip>();
 
             var runtimeController = animator.runtimeAnimatorController;
@@ -80,7 +79,8 @@ namespace GAS.General.Util
             }
 
             return result;
+#endif
+            return null;
         }
     }
 }
-#endif

@@ -1,4 +1,4 @@
-using GAS.General.Util;
+using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
