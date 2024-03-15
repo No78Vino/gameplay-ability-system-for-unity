@@ -3,8 +3,6 @@
 ////     Do not modify it.     ////
 ///////////////////////////////////
 using System;
-using GAS.Runtime;
-using GAS.Editor;
 namespace GAS.Runtime
 {
       public static class AbilitySystemComponentExtension

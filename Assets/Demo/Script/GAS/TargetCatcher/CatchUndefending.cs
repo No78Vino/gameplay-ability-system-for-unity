@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Editor;
 #if UNITY_EDITOR
+using GAS.Editor;
 #endif
 using GAS.General;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Demo.Script.GAS.TargetCatcher
 {

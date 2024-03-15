@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Demo.Script.GAS.TargetCatcher;
-using GAS.Editor;
 #if UNITY_EDITOR
+using GAS.Editor;
 using Sirenix.OdinInspector;
 #endif
 using GAS.General;

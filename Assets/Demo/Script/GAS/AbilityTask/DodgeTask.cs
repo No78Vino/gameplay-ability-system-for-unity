@@ -1,6 +1,6 @@
 ﻿using System;
-using GAS.Editor;
 #if UNITY_EDITOR
+using GAS.Editor;
 #endif
 using GAS.Runtime;
 using Sirenix.OdinInspector;
