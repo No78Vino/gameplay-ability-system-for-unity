@@ -2,7 +2,7 @@
 namespace GAS.Editor
 {
     using Editor;
-    using GAS.Runtime.Ability.TargetCatcher;
+    using Runtime;
     using UnityEngine;
     using UnityEngine.UIElements;
     

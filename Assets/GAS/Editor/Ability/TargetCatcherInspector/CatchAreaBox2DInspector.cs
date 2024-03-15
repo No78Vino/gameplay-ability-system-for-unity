@@ -6,7 +6,7 @@ namespace GAS.Editor
     using Editor;
     using GAS.General;
     using GAS.Runtime.Ability;
-    using GAS.Runtime.Ability.TargetCatcher;
+    using Runtime;
     using UnityEngine;
     using UnityEngine.UIElements;
     using Sirenix.OdinInspector;

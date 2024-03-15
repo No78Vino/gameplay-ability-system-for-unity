@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GAS.Runtime.Component;
 
-namespace GAS.Runtime.Ability.TargetCatcher
+namespace GAS.Runtime
 {
     public class CatchTarget : TargetCatcherBase
     {

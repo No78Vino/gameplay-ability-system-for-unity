@@ -2,7 +2,7 @@
 using GAS.Runtime.Component;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability.TargetCatcher
+namespace GAS.Runtime
 {
     [Serializable]
     public abstract class CatchAreaBase : TargetCatcherBase

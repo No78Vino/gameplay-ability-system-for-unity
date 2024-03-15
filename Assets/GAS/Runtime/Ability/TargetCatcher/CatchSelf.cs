@@ -2,7 +2,7 @@
 using GAS.Runtime.Component;
 using UnityEngine.UIElements;
 
-namespace GAS.Runtime.Ability.TargetCatcher
+namespace GAS.Runtime
 {
     public class CatchSelf : TargetCatcherBase
     {

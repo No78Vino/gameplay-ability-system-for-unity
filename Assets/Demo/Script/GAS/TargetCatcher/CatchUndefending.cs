@@ -5,7 +5,7 @@ using GAS.Editor;
 #endif
 using GAS.General;
 using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TargetCatcher;
+using GAS.Runtime;
 using GAS.Runtime.Component;
 using Sirenix.OdinInspector;
 using UnityEngine;

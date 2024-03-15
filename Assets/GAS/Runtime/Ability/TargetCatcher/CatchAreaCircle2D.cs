@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using GAS.General;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability.TargetCatcher
+namespace GAS.Runtime
 {
     public class CatchAreaCircle2D : CatchAreaBase
     {

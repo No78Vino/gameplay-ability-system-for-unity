@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.General;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GAS.Runtime.Ability.TargetCatcher
+namespace GAS.Runtime
 {
     [Serializable]
     public class CatchAreaBox2D : CatchAreaBase

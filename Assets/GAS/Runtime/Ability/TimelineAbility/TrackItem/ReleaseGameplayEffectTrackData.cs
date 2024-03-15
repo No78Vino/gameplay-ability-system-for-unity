@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GAS.General;
 using GAS.Runtime.Ability;
-using GAS.Runtime.Ability.TargetCatcher;
+using GAS.Runtime;
 using GAS.Runtime.Effects;
 using UnityEngine;
 

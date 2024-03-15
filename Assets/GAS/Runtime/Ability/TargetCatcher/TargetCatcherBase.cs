@@ -3,7 +3,7 @@ using GAS.Runtime.Component;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GAS.Runtime.Ability.TargetCatcher
+namespace GAS.Runtime
 {
     public abstract class TargetCatcherBase
     {
