@@ -535,9 +535,34 @@ ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，Att
 - 处理标签（Tags）： ASC 负责管理角色身上的标签。标签用于标识角色的状态、属性或其他特征，以便在能力和效果中进行条件检查和过滤。
 - 处理属性（Attributes）： ASC 负责管理角色的属性。属性通常表示角色的状态，如生命值、能量值等。ASC 能够增减、修改和监听这些属性的变化。
 
+整个GAS的运作都是围绕着ASC的，所有的Tag，GameplayEffect的作用对象最后都是ASC。而Ability也必须依赖ASC来执行。
+为了直观的理解ASC，接下来参考GAS Watcher的监视器界面：
+![QQ20240313180923.png](Wiki%2FQQ20240313180923.png)
+
+- ID Mark:这部分可以忽略，只是Unity运行时的Gameobject的标识符相关
+- Ability： 图中显示了这个单位有6个Ability。Ability表示了单位的持有能力，但不代表所有的单位能力都要由Ability来做。
+    虽然我把Move作为Ability了，但是在FPS,MOBA等类型的游戏中，像Move移动这种强Input关联的行为是不建议用Ability来做的。
+- Attribute：单位持有的属性。
+  ASC的属性是以AttributeSet为集合，通常ASC的属性集，只加不减。
+  因为删除属性集存在很大的隐患，在GAS体系运作时，属性相当于串联GAS运行的线，线上挂着许多GameplayEffect，贸然删除属性集可能会导致线断裂，GameplayEffect运行逻辑失效甚至崩溃。
+- GameplayEffects：单位当前持有的GameplayEffect。这里可以直接将GameplayEffect理解为Buff。
+  GAS体系内，ASC之间是通过GameplayEffect来交互。
+   比如A单位对B单位施法，那么A单位会通过施法（Ability）对B施加一个效果（GameplayEffect），效果如果是持续性的就会被留在B身上（Buff）。
+    当然，GAS体系外时，可以通过接口对ASC单位添加/移除GameplayEffect。通常这种情况下，Effect的来源和目标都是指定的那个ASC。
+- Tags：单位当前持有的Tag。标签的价值只有在被挂载到ASC时才会体现出来。所有Tag的比较逻辑都直接或间接依赖于ASC。
+  - Fixed Tag：固有标签，这些标签是ASC固有的。GAS体系内是不会对FixedTag做任何增减的。
+    只有GAS体系外的才会对FixedTag有影响。FixedTag通常是在ASC初始化的时候设置好，之后就尽可能不动。
+  - Dynamic Tag：动态标签，这些标签是ASC动态增减的。GAS体系只会对DynamicTag做增减，且只有GAS体系可以管理。
+    GAS体系外只能通过GameplayEffect的一些指定接口，间接对DynamicTag进行操作。
+
+ASC是GAS中最复杂，且操作空间最多的组件。对ASC的良好管理和操作就是程序开发人员的重任了。
+GAS本身是被动的，而让推动和改变GAS的是ASC。换言之，Runtime下开发者其实是在操作ASC，而不是GAS。
+增删管理ASC，调用ASC的Ability执行，以及ASC的体系外Tag，Effect管理才是Runtime下开发者的主要工作。
+这之外的GAS配置和拓展，应该由策划承担大部分工作。（但实际上对于须臾中小型团队，程序开发人员还是在做GAS配置的维护工作。）
+
 #### 2.9.a AbilitySystemComponent Preset
 AbilitySystemComponent Preset是ASC的预设，用于方便初始化ASC的数据。
-
+![QQ20240315172608.png](Wiki%2FQQ20240315172608.png)
 
 ---
 ## 3.API(W.I.P)
