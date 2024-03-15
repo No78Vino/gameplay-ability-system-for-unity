@@ -453,30 +453,77 @@ TimelineAbilityAsset的大多数表现逻辑参数在AbilityAsset面板都是隐
          - 扩展：详见上文中提到的Instant Cue自定义实现
       2. Release Effect【GameplayEffect释放轨道】
          - 轨道Item类型：Mark
-           - 一个Mark持有一个TargetCatcher和数个GameplayEffectAsset
-             ![QQ20240315153247.png](Wiki%2FQQ20240315153247.png)
-             -  TargetCatcher：GameplayEffect释放需要对象，而TargetCatcher的作用就是找到这些对象。
-                TargetCatcher固有初始化会获取Owner（ASC），核心是方法CatchTargets()。 基类如下：
-             ```
-               public abstract class TargetCatcherBase
-               {
-                  public AbilitySystemComponent Owner;
-                  public TargetCatcherBase()
-                  {
-                  }
-                  public virtual void Init(AbilitySystemComponent owner)
-                  {
-                      Owner = owner;
-                  }
-
-                  public abstract List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget);
-               }
-             ```
-               我提供了几个基础TargetCatcher：
+         - 一个Mark持有一个TargetCatcher和数个GameplayEffectAsset
+           ![QQ20240315153247.png](Wiki%2FQQ20240315153247.png)
+           -  TargetCatcher：GameplayEffect释放需要对象，而TargetCatcher的作用就是找到这些对象。
+              TargetCatcher固有初始化会获取Owner（ASC），核心是方法CatchTargets()。 基类如下：
+           ```
+             public abstract class TargetCatcherBase
+             {
+                public AbilitySystemComponent Owner;
+                public TargetCatcherBase()
+                {
+                }
+                public virtual void Init(AbilitySystemComponent owner)
+                {
+                    Owner = owner;
+                }
+                // mainTarget为TimelineAbility的指向性目标单位，为可选参数。具体在API中会介绍。
+                public abstract List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget);
+             }
+           ```
+             我提供了几个基础TargetCatcher（后续会陆续添加常用的Catcher）
+         
            - 
-           |Catcher名|作用|
-           |---|--|
-           |
+            | Catcher名          | 作用                 |
+            |-------------------|--------------------|
+            | CatchSelf         | 捕捉自己               |
+            | CatchTarget       | 捕捉指向性目标            |
+            | CatchAreaBox2D    | 捕捉2d矩形内的目标（适用2D游戏） |
+            | CatchAreaCircle2D | 捕捉2d圆形内的目标（适用2D游戏） |
+           - TargetCatcher的UI面板绘制：
+            自定义TargetCatcher的UI面板需要继承自TargetCatcherInspector<T> T为TargetCatcher类
+            **（必须直接继承，不可以多级继承，因为Inspector的Type查找规则依赖第一泛型类做匹配）**
+         - Release Effect的执行逻辑：先调用TargetCatcher的CatchTargets()方法，然后对捕获的目标单位施加所有指定GameplayEffect。
+      3. Instant Task 【即时Task轨道】
+         - 轨道Item类型：Mark
+         - 一个Mark可以挂载复数的Instant Task。 关于Ability Task的详细介绍见[下文](#)。
+           ![QQ20240315170234.png](Wiki%2FQQ20240315170234.png)
+         - Task是自定义事件，可以是任何游戏逻辑，纯粹由开发者决定。
+         - Instant Task的面板绘制：自定义Task的UI面板需要继承自InstantTaskInspector<T> T为InstantAbilityTask类
+           **（必须直接继承，不可以多级继承，因为Inspector的Type查找规则依赖第一泛型类做匹配）**
+      4. Durational Cue【持续GameplayCue轨道】
+         - 轨道Item类型：Clip ![QQ20240315164448.png](Wiki%2FQQ20240315164448.png)
+         - 每段Clip只含一个Duration Cue ![QQ20240315164632.png](Wiki%2FQQ20240315164632.png)
+         - **注意！！ TimelineAbility下的持续性Cue，
+           只会执行OnAdd（Cue播放的第一帧），OnRemove（Cue播放的最后一帧），OnTick，和GameplayEffect相关的方法不会被执行**
+      5. Buff【Buff轨道】
+         - 轨道Item类型：Clip
+         - 每段Clip只含一个Buff（GameplayEffect），且Buff的作用对象只会是Ability的持有者自己。
+           ![QQ20240315165106.png](Wiki%2FQQ20240315165106.png)
+         - **【注意！！】请确保设置的GameplayEffect类型为Durational或Infinite。
+            非持续类型的GameplayEffect不会生效。且GameplayEffect执行时会设置为Infinite执行策略，
+            生命周期由Clip长度（Duration）决定。**
+      6. Ongoing Task【持续Task轨道】
+         - 轨道Item类型：Clip
+         - 每段Clip只含一个Ongoing Task。 关于Ability Task的详细介绍见[下文](#)。
+           ![QQ20240315170648.png](Wiki%2FQQ20240315170648.png)
+         - Ongoing Task的面板绘制：自定义Task的UI面板需要继承自OngoingTaskInspector<T> T为OngoingAbilityTask类
+           **（必须直接继承，不可以多级继承，因为Inspector的Type查找规则依赖第一泛型类做匹配）**
+      
+  - 右侧Inspector
+    - 所有Track，TrackItem参数在点击后都会显示在Inspector上
+
+TimelineAbility的执行逻辑很直观，就是沿着时间轴从左往右执行，每个轨道的Item都会在对应的时间点执行。
+所有事件的执行，都遵照时间轴的顺序，以及Mark内参数排列顺序。如果存在前后逻辑关系，那么配置的时候请务必注意顺序。
+最大帧数决定了Ability的执行时间，如果【手动结束能力】设置为false，那么在播放完TimelineAbility后，会自动调用TryEndAbility()，
+反之，需要开发人员在代码中决定调用TryEndAbility()的时机。
+
+TimelineAbility的配置可能还满足不了一些设计时，程序开发人员可以对TimelineAbility进行继承，拓展功能需求。
+> 特别是在TargetCatcher，AbilityTask的自定义上，还是很可能遇到这个问题。
+> 因为TargetCatcher和AbilityTask的持续化存储是以JsonData的格式，ScriptableObject类型参数的Json存储是存在GUID不匹配问题的。
+> 所以，TargetCatcher和AbilityTask的参数中，不建议出现ScriptableObject类型的参数。
+
 ---
 ### 2.9 AbilitySystemComponent
 > AbilitySystemComponent是EX-GAS的核心之一，它是GAS的基本运行单位。
@@ -488,9 +535,13 @@ ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，Att
 - 处理标签（Tags）： ASC 负责管理角色身上的标签。标签用于标识角色的状态、属性或其他特征，以便在能力和效果中进行条件检查和过滤。
 - 处理属性（Attributes）： ASC 负责管理角色的属性。属性通常表示角色的状态，如生命值、能量值等。ASC 能够增减、修改和监听这些属性的变化。
 
+#### 2.9.a AbilitySystemComponent Preset
+AbilitySystemComponent Preset是ASC的预设，用于方便初始化ASC的数据。
+
+
 ---
 ## 3.API(W.I.P)
-
+### 3.1 
 ---
 ## 4.可视化功能
 ### 1. GAS Setting Manager (GAS基础配置管理器)
