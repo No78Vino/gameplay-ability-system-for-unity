@@ -30,11 +30,11 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
   - [2.7 GameplayEffect](#27-gameplayeffect)
   - [2.8 Ability](#28-ability)
   - [2.9 AbilitySystemComponent](#29-abilitysystemcomponent)
-- 3.[可视化功能](#3可视化功能)
+- 3.[API(W.I.P 施工中)](#3apiwip)
+- 4.[可视化功能](#4可视化功能)
   - [GAS Base Manager (GAS基础配置管理器)](#1-gas-base-manager-gas基础配置管理器)
   - [GAS Asset Aggregator (GAS配置资源聚合器)](#2-gas-asset-aggregator-gas配置资源聚合器)
   - [GAS Runtime Watcher (GAS运行时监视器)](#3-gas-runtime-watcher-gas运行时监视器)
-- 4.[API(W.I.P 施工中)](#4apiwip)
 - 5.[如果...我想...,应该怎么做?(持续补充)](#5如果我想应该怎么做wip)
 - 6.[暂不支持的功能（可能有遗漏）](#6暂不支持的功能可能有遗漏)
 - 7.[后续计划](#7后续计划)
@@ -426,7 +426,58 @@ TimelineAbilityAsset的大多数表现逻辑参数在AbilityAsset面板都是隐
 >这是TimelineAbilityEditor的面板。
 
 接下来详细介绍TimelineAbilityEditor的面板参数含义及操作逻辑。
+- 顶部菜单栏
+    ![QQ20240315133711.png](Wiki%2FQQ20240315133711.png)
+    - Ability配置 ： 当前编辑的TimelineAbilityAsset
+    - 查看能力基本信息：点击按钮后，右侧的子Inspector会显示TimelineAbilityAsset的面板信息，和Asset Aggregator中的AbilityAsset面板一致。
+    - 预览实例：场景内的GameObject. 选取后，TimelineAbility会以该GameObject为参照物，预览TimelineAbility的表现逻辑。
+      用到的常见预览有Animation，特效，物体挂载，伤害碰撞盒等等。
+    - 预览场景：点击该按钮后会，进入空场景。目前还没有自定义LookDev场景，所以只是一个临时创建空场景。
+    - 返回旧场景：点击该按钮后会，返回到原来的场景。
+    - 显示子Inspector：点击该按钮后会，刷新显示右侧的子Inspector的布局。
+- 时间轴编辑部分
+  - 左侧播放栏
+    ![QQ20240315143604.png](Wiki%2FQQ20240315143604.png)
+    - 【<】:上一帧，只有当预览实例不为空时，才会生效。
+    - 【>】:下一帧，只有当预览实例不为空时，才会生效。
+    - 【▶】：播放/暂停 ，只有当预览实例不为空时，才会生效。
+    - 左侧帧数：当前预览帧数，只有当预览实例不为空时，才会生效。
+    - 右侧帧数：Ability执行总帧数
+  - 左侧轨道菜单栏
+    - ![QQ20240315144012.png](Wiki%2FQQ20240315144012.png)
+    - TimelineAbility基础轨道有6种。【添加轨道只需点击右侧的‘+’，删除轨道只需右键对应轨道选择Delete Track即可】
+      1. Instant Cue 【即时Cue轨道】
+         - 轨道Item类型：Mark ![QQ20240315151141.png](Wiki%2FQQ20240315151141.png)
+         - 一个Mark可以挂多个Cue。理论上，一个TimelineAbility只需要一条Instant Cue轨道。
+         ![QQ20240315152528.png](Wiki%2FQQ20240315152528.png)
+         - 扩展：详见上文中提到的Instant Cue自定义实现
+      2. Release Effect【GameplayEffect释放轨道】
+         - 轨道Item类型：Mark
+           - 一个Mark持有一个TargetCatcher和数个GameplayEffectAsset
+             ![QQ20240315153247.png](Wiki%2FQQ20240315153247.png)
+             -  TargetCatcher：GameplayEffect释放需要对象，而TargetCatcher的作用就是找到这些对象。
+                TargetCatcher固有初始化会获取Owner（ASC），核心是方法CatchTargets()。 基类如下：
+             ```
+               public abstract class TargetCatcherBase
+               {
+                  public AbilitySystemComponent Owner;
+                  public TargetCatcherBase()
+                  {
+                  }
+                  public virtual void Init(AbilitySystemComponent owner)
+                  {
+                      Owner = owner;
+                  }
 
+                  public abstract List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget);
+               }
+             ```
+               我提供了几个基础TargetCatcher：
+           - 
+           |Catcher名|作用|
+           |---|--|
+           |
+---
 ### 2.9 AbilitySystemComponent
 > AbilitySystemComponent是EX-GAS的核心之一，它是GAS的基本运行单位。
 
@@ -438,7 +489,10 @@ ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，Att
 - 处理属性（Attributes）： ASC 负责管理角色的属性。属性通常表示角色的状态，如生命值、能量值等。ASC 能够增减、修改和监听这些属性的变化。
 
 ---
-## 3.可视化功能
+## 3.API(W.I.P)
+
+---
+## 4.可视化功能
 ### 1. GAS Setting Manager (GAS基础配置管理器)
 ![QQ20240313174500.png](Wiki%2FQQ20240313174500.png)
 基础配置是与项目工程唯一对应的，所以入口放在了ProjectSetting，另外还有Edit Menu栏入口：EX-GAS -> Setting
@@ -472,9 +526,6 @@ ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，Att
 __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在明显的性能问题。监视器只是为了方便调试，所以建议不要一直后台挂着监视器，有需要时再打开。*__
 
 >目前监视器较为简陋，以后可能会优化监视器。
-
----
-## 4.API(W.I.P)
 
 ---
 
