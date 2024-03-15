@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.Attribute
+namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,6 @@ namespace GAS.Editor.Attribute
     using UnityEditor;
     using UnityEngine;
     using GAS.General;
-    using GAS.Editor.Attributes;
     
     public class AttributeAsset : ScriptableObject
     {

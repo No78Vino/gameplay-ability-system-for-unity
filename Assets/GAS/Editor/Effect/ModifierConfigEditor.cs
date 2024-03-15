@@ -3,7 +3,7 @@ namespace GAS.Editor.Effect
 {
     using System;
     using System.Collections.Generic;
-    using GAS.Editor.Attributes;
+    using Editor;
     using GAS.Runtime.Effects.Modifier;
     using UnityEditor;
     using UnityEngine;

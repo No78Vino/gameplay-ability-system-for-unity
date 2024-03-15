@@ -2,8 +2,7 @@
 namespace GAS.Editor.GameplayAbilitySystem
 {
     using GAS.Core;
-    using GAS.Editor.Attribute;
-    using GAS.Editor.AttributeSet;
+    using Editor;
     using GAS.Runtime.Tags;
     using Sirenix.OdinInspector.Editor;
     using Sirenix.Utilities;

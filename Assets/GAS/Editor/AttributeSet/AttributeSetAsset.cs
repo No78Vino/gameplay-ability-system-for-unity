@@ -1,11 +1,11 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.AttributeSet
+namespace GAS.Editor
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using GAS.Editor.Attribute;
+    using Editor;
     using GAS.Editor.GameplayAbilitySystem;
     using GAS.General;
     using GAS.Editor.General;

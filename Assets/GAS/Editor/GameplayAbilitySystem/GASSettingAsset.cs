@@ -4,8 +4,7 @@ namespace GAS.Editor.GameplayAbilitySystem
     using System;
     using GAS.Core;
     using GAS.Runtime.Tags;
-    using GAS.Editor.Attribute;
-    using GAS.Editor.AttributeSet;
+    using Editor;
     using GAS.General;
     using Sirenix.OdinInspector;
     using UnityEditor;

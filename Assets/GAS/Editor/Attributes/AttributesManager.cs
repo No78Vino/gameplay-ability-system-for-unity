@@ -1,8 +1,6 @@
 ﻿#if  UNITY_EDITOR
-namespace GAS.Editor.Attributes
+namespace GAS.Editor
 {
-    using GAS.Core;
-    using GAS.Editor.Attribute;
     using UnityEditor;
     using UnityEngine;
     using GAS.Editor.GameplayAbilitySystem;

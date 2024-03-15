@@ -1,6 +1,6 @@
 
 #if UNITY_EDITOR
-namespace GAS.Editor.AttributeSet
+namespace GAS.Editor
 {
     using System.Collections.Generic;
     using GAS.Core;
