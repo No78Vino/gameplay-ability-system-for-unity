@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
-namespace GAS.Runtime.Tags
+namespace GAS.Editor
 {
 	using System.Collections.Generic;
-	using GAS.Editor.Tags;
+	using Editor;
 	using UnityEditor.TreeDataModel;
 	using UnityEngine;
 	

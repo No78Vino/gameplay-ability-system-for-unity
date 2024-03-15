@@ -1,5 +1,5 @@
 ﻿using BehaviorDesigner.Runtime.Tasks;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 
 namespace BehaviorDesigner.Runtime
 {

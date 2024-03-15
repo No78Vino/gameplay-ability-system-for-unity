@@ -1,5 +1,5 @@
 ﻿using System;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using UnityEngine;
 
 namespace GAS.Runtime.Ability

@@ -5,7 +5,7 @@ using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Attribute;
 using GAS.Runtime.AttributeSet;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

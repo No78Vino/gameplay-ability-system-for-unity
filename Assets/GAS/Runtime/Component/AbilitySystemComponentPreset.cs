@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using GAS.General;
 using GAS.Runtime.Ability;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;

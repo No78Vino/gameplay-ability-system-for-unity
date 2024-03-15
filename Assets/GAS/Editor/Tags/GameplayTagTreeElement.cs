@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-namespace GAS.Editor.Tags
+namespace GAS.Editor
 {
 	using System;
 	using UnityEditor.TreeDataModel;

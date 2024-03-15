@@ -1,4 +1,4 @@
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using UnityEngine;
 
 namespace GAS.Runtime.Effects.Modifier

@@ -5,7 +5,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.Component;
 using GAS.Runtime.Effects;
 
-namespace GAS.Runtime.Tags
+namespace GAS.Editor
 {
     public class GameplayTagAggregator
     {

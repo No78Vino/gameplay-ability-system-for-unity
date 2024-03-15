@@ -6,7 +6,7 @@ using System.Reflection;
 using GAS.General;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

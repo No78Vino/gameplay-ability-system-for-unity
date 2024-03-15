@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace GAS.Runtime.Tags
+namespace GAS.Editor
 {
     [Serializable]
     public struct GameplayTag

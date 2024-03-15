@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GAS.General;
 using GAS.Runtime.Component;
 using GAS.Runtime.Cue;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using UnityEngine;
 
 namespace GAS.Runtime.Effects

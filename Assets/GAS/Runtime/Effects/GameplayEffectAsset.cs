@@ -7,7 +7,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.Cue;
 using GAS.Runtime.Effects.Execution;
 using GAS.Runtime.Effects.Modifier;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;

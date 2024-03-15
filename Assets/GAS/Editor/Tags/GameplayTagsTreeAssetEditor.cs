@@ -1,9 +1,9 @@
 #if UNITY_EDITOR
-namespace GAS.Editor.Tags
+namespace GAS.Editor
 {
     using System.Collections.Generic;
     using GAS.Editor.General;
-    using GAS.Runtime.Tags;
+    using Editor;
     using GAS.General;
     using UnityEditor;
     using UnityEditor.IMGUI.Controls;

@@ -5,7 +5,7 @@
 using System;
 using GAS.Runtime.Ability;
 using GAS.Runtime.AttributeSet;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 namespace GAS.Runtime.Component
 {
       public static class AbilitySystemComponentExtension

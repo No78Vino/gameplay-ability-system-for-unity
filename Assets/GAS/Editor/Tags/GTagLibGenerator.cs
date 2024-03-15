@@ -1,11 +1,10 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.Tags
+namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using GAS.Core;
-    using GAS.Runtime.Tags;
     using UnityEditor;
     using UnityEngine;
     using Editor;

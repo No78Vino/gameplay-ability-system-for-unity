@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace GAS.Runtime.Tags
+namespace GAS.Editor
 {
     /// <summary>
     /// If the collection of tags is stable and unchangable, use this class to improve performance.

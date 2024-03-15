@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GAS.Runtime.Ability;
 using GAS.Runtime.Effects;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 
 namespace GAS.Runtime.Component
 {

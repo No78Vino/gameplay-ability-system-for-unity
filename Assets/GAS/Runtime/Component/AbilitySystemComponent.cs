@@ -5,7 +5,7 @@ using GAS.Runtime.Ability;
 using GAS.Runtime.AttributeSet;
 using GAS.Runtime.Effects;
 using GAS.Runtime.Effects.Modifier;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using UnityEngine;
 
 namespace GAS.Runtime.Component

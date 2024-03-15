@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GAS.Runtime.Attribute;
-using GAS.Runtime.Tags;
+using GAS.Editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

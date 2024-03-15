@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace GAS.Runtime.Tags
+namespace GAS.Editor
 {
     /// <summary>
     ///     If the collection of tags is unstable and changable, use this class.
