@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using GAS.General;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Ability.TargetCatcher;
 using GAS.Runtime.Effects;
 using UnityEngine;
 
-namespace GAS.Runtime.Ability.TimelineAbility
+namespace GAS.Runtime
 {
     [Serializable]
     public class ReleaseGameplayEffectTrackData : TrackDataBase

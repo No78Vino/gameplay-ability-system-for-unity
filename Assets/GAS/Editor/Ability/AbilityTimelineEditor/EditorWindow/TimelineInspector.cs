@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using UnityEngine.UIElements;
     public class TimelineInspector

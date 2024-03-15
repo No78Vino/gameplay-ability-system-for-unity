@@ -7,6 +7,6 @@
         <ui:VisualElement name="OverLine" style="flex-grow: 0; width: 2px; height: 100%; min-height: 100%; max-height: 100%; align-items: auto; align-self: flex-start; min-width: 2px; max-width: 2px; background-color: rgb(85, 255, 0); justify-content: center; flex-shrink: 0; position: absolute; left: 0; display: none;" />
         <ui:VisualElement name="Main" style="flex-grow: 0; width: 100%; height: 100%; min-width: 100%; min-height: 100%; max-width: 100%; max-height: 100%; align-items: auto; align-self: auto; justify-content: space-between; flex-shrink: 0; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;" />
         <ui:IMGUIContainer name="RightResizeArea" style="position: absolute; top: 0; right: 0; flex-grow: 1; width: 3px; max-width: 3px; min-width: 3px; height: 100%; min-height: 100%; max-height: 100%;" />
-        <GAS.Editor.Ability.PointerIMGUIContainer name="LeftResizeArea" style="width: 3px; max-width: 3px; min-width: 3px; height: 100%; max-height: 100%; min-height: 100%; position: absolute; left: 0; flex-grow: 1;" />
+        <GAS.Editor.PointerIMGUIContainer name="LeftResizeArea" style="width: 3px; max-width: 3px; height: 100%; max-height: 100%; min-height: 100%; position: absolute; left: 0; flex-shrink: 0; flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

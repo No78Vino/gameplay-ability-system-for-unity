@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Cue;
 
-namespace GAS.Runtime.Ability.TimelineAbility
+namespace GAS.Runtime
 {
     [Serializable]
     public class DurationalCueTrackData:TrackDataBase

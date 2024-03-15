@@ -1,7 +1,5 @@
-
-
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using System;
     using UnityEditor;

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.Runtime.Ability;
 using GAS.Runtime.Effects;
 using UnityEngine.Serialization;
 
-namespace GAS.Runtime.Ability.TimelineAbility
+namespace GAS.Runtime
 {
     [Serializable]
     public class BuffGameplayEffectTrackData:TrackDataBase

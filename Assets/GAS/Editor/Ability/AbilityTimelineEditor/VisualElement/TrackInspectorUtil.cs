@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.Ability
+namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;

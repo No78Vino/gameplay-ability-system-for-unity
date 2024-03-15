@@ -1,15 +1,13 @@
-﻿using GAS.General;
-using GAS.Runtime;
-
+﻿
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability
+namespace GAS.Editor
 {
-    using GAS.Editor.Ability.AbilityTimelineEditor;
-    using GAS.Runtime.Ability.TimelineAbility;
+    using Runtime;
     using Sirenix.OdinInspector.Editor;
     using UnityEditor;
     using UnityEngine;
-    
+    using GAS.General;
+
     [CustomEditor(typeof(TimelineAbilityAsset))]
     public class TimelineAbilityEditorWindow : OdinEditor
     {

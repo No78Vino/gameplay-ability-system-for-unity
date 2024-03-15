@@ -1,14 +1,13 @@
-﻿using GAS.Runtime;
-
+﻿
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using GAS.Runtime.Ability;
-    using GAS.Runtime.Ability.TimelineAbility;
     using GAS.Runtime.Cue;
     using UnityEngine;
     using UnityEngine.UIElements;
-    
+    using GAS.Runtime;
+
     public class DurationalCueClip : TrackClip<DurationalCueTrack>
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;

@@ -1,8 +1,8 @@
 ﻿
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
-    using GAS.Runtime.Ability.TimelineAbility;
+    using Runtime;
     using GAS.Runtime.Cue;
     using UnityEngine;
     using UnityEngine.UIElements;

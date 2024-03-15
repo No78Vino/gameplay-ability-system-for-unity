@@ -5,7 +5,7 @@ namespace GAS.Editor.GameplayAbilitySystem
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using GAS.Editor.Ability;
+    using Editor;
     using General;
     using GAS.Runtime.Ability;
     using Runtime.Component;

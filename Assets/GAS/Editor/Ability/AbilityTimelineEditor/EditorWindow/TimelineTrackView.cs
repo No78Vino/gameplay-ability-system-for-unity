@@ -1,14 +1,13 @@
-﻿using GAS.Runtime;
-
+﻿
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;
-    using GAS.Runtime.Ability.TimelineAbility;
     using UnityEngine;
     using UnityEngine.UIElements;
-    
+    using GAS.Runtime;
+
     public class TimelineTrackView
     {
         private static List<Type> _trackTypeList;

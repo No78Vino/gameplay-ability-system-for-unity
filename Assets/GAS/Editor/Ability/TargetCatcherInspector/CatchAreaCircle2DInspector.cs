@@ -1,14 +1,14 @@
-﻿using Sirenix.OdinInspector;
-
+﻿
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability
+namespace GAS.Editor
 {
-    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using Editor;
     using GAS.General.Util;
     using GAS.Runtime.Ability;
     using GAS.Runtime.Ability.TargetCatcher;
     using UnityEngine;
     using UnityEngine.UIElements;
+    using Sirenix.OdinInspector;
 
     public class CatchAreaCircle2DInspector : TargetCatcherInspector<CatchAreaCircle2D>
     {

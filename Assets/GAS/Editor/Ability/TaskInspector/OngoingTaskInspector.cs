@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using Editor;
     using GAS.Runtime.Ability;
     
     public abstract class OngoingTaskInspector

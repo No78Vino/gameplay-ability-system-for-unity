@@ -1,16 +1,10 @@
-﻿using GAS.Runtime;
-
+﻿
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using GAS.General;
-    using GAS.Runtime.Ability;
-    using GAS.Runtime.Ability.TimelineAbility;
-    using UnityEngine;
-    using UnityEngine.UIElements;
+    using GAS.Runtime;
+
     
     public class TaskClip : TrackClip<TaskClipEventTrack>
     {

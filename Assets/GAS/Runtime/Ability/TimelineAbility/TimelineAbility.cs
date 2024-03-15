@@ -1,6 +1,7 @@
-﻿using GAS.Runtime.Component;
+﻿using GAS.Runtime.Ability;
+using GAS.Runtime.Component;
 
-namespace GAS.Runtime.Ability.TimelineAbility
+namespace GAS.Runtime
 {
     public class TimelineAbility:AbstractAbility
     {

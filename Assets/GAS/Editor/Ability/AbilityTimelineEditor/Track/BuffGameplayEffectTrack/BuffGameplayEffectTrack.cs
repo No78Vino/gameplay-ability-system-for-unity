@@ -1,14 +1,11 @@
-﻿
-using GAS.Runtime;
-
-#if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+﻿#if UNITY_EDITOR
+namespace GAS.Editor
 {
     using System;
-    using GAS.Runtime.Ability.TimelineAbility;
     using UnityEngine;
     using UnityEngine.UIElements;
-    
+    using GAS.Runtime;
+
     public class BuffGameplayEffectTrack : TrackBase
     {
         private BuffGameplayEffectTrackData _buffGameplayEffectTrackData;

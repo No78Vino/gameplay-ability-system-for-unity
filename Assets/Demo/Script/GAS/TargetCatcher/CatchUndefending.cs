@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using GAS.Editor;
 #if UNITY_EDITOR
-using GAS.Editor.Ability;
-using GAS.Editor.Ability.AbilityTimelineEditor;
 #endif
 using GAS.General.Util;
 using GAS.Runtime.Ability;

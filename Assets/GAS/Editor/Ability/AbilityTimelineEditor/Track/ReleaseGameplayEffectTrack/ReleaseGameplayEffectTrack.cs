@@ -1,11 +1,9 @@
-﻿using GAS.Runtime;
-
-#if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+﻿#if UNITY_EDITOR
+namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;
-    using GAS.Runtime.Ability.TimelineAbility;
+    using Runtime;
     using GAS.Runtime.Effects;
     using UnityEngine;
     using UnityEngine.UIElements;

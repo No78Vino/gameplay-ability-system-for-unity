@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
-namespace GAS.Editor.Ability
+namespace GAS.Editor
 {
-    using GAS.Editor.Ability.AbilityTimelineEditor;
+    using Editor;
     using GAS.Runtime.Ability.TargetCatcher;
     using UnityEngine;
     using UnityEngine.UIElements;

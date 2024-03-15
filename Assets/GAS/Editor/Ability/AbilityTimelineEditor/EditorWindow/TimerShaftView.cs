@@ -1,6 +1,6 @@
 
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using UnityEditor;
     using UnityEngine;

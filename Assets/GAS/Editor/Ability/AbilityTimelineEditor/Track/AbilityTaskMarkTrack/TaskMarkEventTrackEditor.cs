@@ -2,7 +2,7 @@
 namespace GAS.Editor
 {
     using UnityEditor;
-    using Ability.AbilityTimelineEditor;
+    using Editor;
     using UnityEngine;
     using Sirenix.OdinInspector.Editor;
     using Sirenix.OdinInspector;

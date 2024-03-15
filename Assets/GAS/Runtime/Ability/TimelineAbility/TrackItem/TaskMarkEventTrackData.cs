@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.Runtime.Ability;
 
-namespace GAS.Runtime.Ability.TimelineAbility
+namespace GAS.Runtime
 {
     [Serializable]
     public class TaskMarkEventTrackData : TrackDataBase

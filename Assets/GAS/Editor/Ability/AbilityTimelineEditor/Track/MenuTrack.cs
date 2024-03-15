@@ -1,10 +1,8 @@
-using GAS.Runtime;
-
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability.AbilityTimelineEditor
+namespace GAS.Editor
 {
     using System;
-    using GAS.Runtime.Ability.TimelineAbility;
+    using Runtime;
     using UnityEngine;
     using UnityEngine.UIElements;
     

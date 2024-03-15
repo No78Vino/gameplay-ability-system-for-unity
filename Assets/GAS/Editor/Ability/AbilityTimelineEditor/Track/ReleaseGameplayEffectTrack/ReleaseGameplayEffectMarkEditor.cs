@@ -1,6 +1,4 @@
-﻿using GAS.Runtime.Ability.TimelineAbility;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System.Collections;
@@ -11,13 +9,12 @@ namespace GAS.Editor
     using System;
     using System.Collections.Generic;
     using UnityEditor;
-    using Ability.AbilityTimelineEditor;
+    using Editor;
     using UnityEngine;
     using Sirenix.OdinInspector.Editor;
     using Sirenix.OdinInspector;
     using GAS.General;
-    using GAS.Editor.Ability;
-    
+    using GAS.Runtime;
     public class ReleaseGameplayEffectMarkEditor:OdinEditorWindow
     {
         private const string GRP_BOX = "GRP_BOX";

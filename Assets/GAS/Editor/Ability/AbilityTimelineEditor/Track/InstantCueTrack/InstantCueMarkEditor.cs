@@ -4,7 +4,7 @@ namespace GAS.Editor
     using System.Collections.Generic;
     using GAS.Runtime.Cue;
     using UnityEditor;
-    using Ability.AbilityTimelineEditor;
+    using Editor;
     using UnityEngine;
     using Sirenix.OdinInspector.Editor;
     using Sirenix.OdinInspector;

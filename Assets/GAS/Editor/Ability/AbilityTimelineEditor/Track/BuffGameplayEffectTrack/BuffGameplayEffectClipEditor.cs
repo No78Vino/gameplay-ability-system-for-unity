@@ -1,16 +1,15 @@
-using GAS.Runtime;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
     using GAS.Runtime.Effects;
     using UnityEditor;
-    using Ability.AbilityTimelineEditor;
+    using Editor;
     using UnityEngine;
     using Sirenix.OdinInspector.Editor;
     using Sirenix.OdinInspector;
-    using GAS.Runtime.Ability.TimelineAbility;
-    
+    using GAS.Runtime;
+
     public class BuffGameplayEffectClipEditor:OdinEditorWindow
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;

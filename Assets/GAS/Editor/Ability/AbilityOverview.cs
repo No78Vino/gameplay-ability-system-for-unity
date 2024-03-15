@@ -1,7 +1,6 @@
-using UnityEditor;
 
 #if UNITY_EDITOR
-namespace GAS.Editor.Ability
+namespace GAS.Editor
 {
     using Sirenix.OdinInspector;
     using System.Collections.Generic;
@@ -9,7 +8,8 @@ namespace GAS.Editor.Ability
     using GAS.Runtime.Ability;
     using UnityEngine;
     using System.Linq;
-    
+    using UnityEditor;
+
     public class AbilityOverview
     {
         [BoxGroup("Warning",order:-1)]
