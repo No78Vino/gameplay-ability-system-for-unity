@@ -1,6 +1,8 @@
 # EX Gameplay Ability System For Unity(W.I.P 文档还在施工中)
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
+
+该项目完全开源，欢迎大家一起参与开发，提出建议，共同完善。可以基于该项目进行二次开发。
 ## ！！提醒！！请注意！！
 __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 
@@ -585,8 +587,19 @@ ASC预设是为了可视化角色（单位）的参数。
 > 示例： asc.InitWithPreset(1,ascPreset); // 如果预制体已经设置了参数，那么可以不传ascPreset。
 
 ---
-## 3.API(W.I.P)
-### 3.1 
+## 3.API && Source Code Documentation
+本章节会在介绍API和源码的同时，从代码的角度来理解GAS的运作逻辑。
+![GAS_IMG_Intro.png](Wiki%2FGAS_IMG_Intro.png)
+> 该图简单的解释了GAS的运作逻辑。GAS其实简单的只干一件事：ASC使用Ability对指定的（可以包括自己）ASC释放GameplayEffect。
+>
+> GAS的推进和运行，就是在不断的重复这件事。
+> 体系外的脚本不断的拨动ASC的Ability，而GAS内部会对Ability的运行结果自行消化。
+
+### 3.1 Genral 
+#### 3.1.1 GameplayAbilitySystem
+#### 3.1.2 GASTimer
+#### 3.1.3 GasHost
+### 3.2
 ---
 ## 4.可视化功能
 ### 1. GAS Setting Manager (GAS基础配置管理器)
