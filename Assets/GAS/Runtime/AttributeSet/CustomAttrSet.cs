@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GAS.Runtime.AttributeSet
+namespace GAS.Runtime
 {
     public class CustomAttrSet:AttributeSet
     {

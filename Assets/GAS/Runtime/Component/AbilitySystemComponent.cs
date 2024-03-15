@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GAS.Runtime.AttributeSet;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -212,7 +211,7 @@ namespace GAS.Runtime
             return GameplayEffectContainer.CheckCooldownFromTags(tags);
         }
 
-        public T AttrSet<T>() where T : AttributeSet.AttributeSet
+        public T AttrSet<T>() where T : Runtime.AttributeSet
         {
             AttributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
             return attrSet;

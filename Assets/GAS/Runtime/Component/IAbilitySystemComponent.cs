@@ -47,7 +47,7 @@ namespace GAS.Runtime
 
         CooldownTimer CheckCooldownFromTags(GameplayTagSet tags);
         
-        T AttrSet<T>() where T : AttributeSet.AttributeSet;
+        T AttrSet<T>() where T : AttributeSet;
 
         void ClearGameplayEffect();
     }

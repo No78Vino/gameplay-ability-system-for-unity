@@ -1,5 +1,4 @@
 ﻿using BehaviorDesigner.Runtime;
-using GAS.Runtime.AttributeSet;
 using GAS.Editor;
 using UnityEngine;
 using GAS.Runtime;

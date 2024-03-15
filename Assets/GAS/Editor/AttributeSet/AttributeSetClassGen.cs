@@ -6,7 +6,7 @@ namespace GAS.Editor
     using System.Collections.Generic;
     using System.IO;
     using GAS;
-    using GAS.Runtime.AttributeSet;
+    using Runtime;
     using UnityEditor;
     using UnityEngine;
     using Editor;
@@ -30,7 +30,6 @@ namespace GAS.Editor
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("");
-            writer.WriteLine("using GAS.Runtime;");
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("namespace GAS.Runtime");

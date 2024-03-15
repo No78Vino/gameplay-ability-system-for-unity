@@ -1,4 +1,4 @@
-﻿namespace GAS.Runtime.AttributeSet
+﻿namespace GAS.Runtime
 {
     public abstract class AttributeSet
     {

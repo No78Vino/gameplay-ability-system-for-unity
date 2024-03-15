@@ -5,10 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using GAS.Runtime.AttributeSet;
 namespace GAS.Runtime
 {
-public class AS_Fight:AttributeSet.AttributeSet
+public class AS_Fight:AttributeSet
 {
     private AttributeBase _HP = new AttributeBase("AS_Fight","HP");
     public AttributeBase HP => _HP;

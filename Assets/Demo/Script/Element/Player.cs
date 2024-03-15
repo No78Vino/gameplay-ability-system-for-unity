@@ -2,7 +2,6 @@ using System;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime;
-using GAS.Runtime.AttributeSet;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

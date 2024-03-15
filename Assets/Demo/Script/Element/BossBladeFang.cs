@@ -3,7 +3,6 @@ using BehaviorDesigner.Runtime;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime;
-using GAS.Runtime.AttributeSet;
 using GAS.Editor;
 using UnityEngine;
 using Object = UnityEngine.Object;
