@@ -595,11 +595,75 @@ ASC预设是为了可视化角色（单位）的参数。
 > GAS的推进和运行，就是在不断的重复这件事。
 > 体系外的脚本不断的拨动ASC的Ability，而GAS内部会对Ability的运行结果自行消化。
 
-### 3.1 Genral 
+### 3.1 Core 
 #### 3.1.1 GameplayAbilitySystem
 #### 3.1.2 GASTimer
 #### 3.1.3 GasHost
-### 3.2
+
+### 3.2 AbilitySystemComponent
+#### 3.2.1 AbilitySystemComponent
+#### 3.2.2 AbilitySystemComponentPreset
+#### 3.2.3 AbilitySystemComponentExtension
+
+### 3.3 GameplayTag
+#### 3.3.1 GameplayTag
+#### 3.3.2 GameplayTagContainer
+#### 3.3.3 GameplayTagSet
+#### 3.3.4 GameplayTagAggregator
+#### 3.3.5 GTagLib(Script-Generated Code)
+
+### 3.4 Attribute
+#### 3.4.1 AttributeBase
+#### 3.4.2 AttributeValue
+#### 3.4.3 AttributeAggregator
+#### 3.4.4 DerivedAttribute(W.I.P)
+
+### 3.5 AttributeSet
+#### 3.5.1 AttributeSet
+#### 3.5.2 AttributeSetContainer
+#### 3.5.3 CustomAttrSet
+
+### 3.6 GameplayEffect
+#### 3.6.1 GameplayEffectAsset
+#### 3.6.2 GameplayEffect
+#### 3.6.3 GameplayEffectSpec
+#### 3.6.4 GameplayEffectContainer
+#### 3.6.5 GameplayEffectTagContainer
+#### 3.6.6 CooldownTimer
+#### 3.6.7 GameplayEffectModifier
+##### 3.6.7.0 ModifierMagnitudeCalculation
+##### 3.6.7.1 ScalableFloatModCalculation
+##### 3.6.7.2 AttributeBasedModCalculation
+##### 3.6.7.3 SetByCallerFromNameModCalculation
+##### 3.6.7.4 SetByCallerFromTagModCalculation
+
+### 3.7 Ability
+#### 3.7.1 AbilityAsset
+#### 3.7.2 AbstractAbility
+#### 3.7.3 AbilitySpec
+#### 3.7.4 AbilityTagContainer
+#### 3.7.5 AbilityContainer
+#### 3.7.6 AbilityTask
+
+### 3.7.EX  Timeline Ability
+#### 3.7.EX.1 TimelineAbilityAsset
+#### 3.7.EX.2 TimelineAbility
+#### 3.7.EX.3 TimelineAbilitySpec
+#### 3.7.EX.4 TimelineAbilityPlayer
+#### 3.7.EX.5 Target Catcher
+##### 3.7.EX.5.1 TargetCatcherBase
+##### 3.7.EX.5.2 CatchSelf
+##### 3.7.EX.5.3 CatchTarget
+##### 3.7.EX.5.4 CatchAreaBox2D
+##### 3.7.EX.5.5 CatchAreaCircle2D
+
+### 3.8 GameplayCue
+#### 3.8.1 GameplayCue
+#### 3.8.2 GameplayCueSpec
+#### 3.8.3 GameplayCueParameters
+#### 3.8.4 GameplayCueInstant
+#### 3.8.5 GameplayCueDuration
+
 ---
 ## 4.可视化功能
 ### 1. GAS Setting Manager (GAS基础配置管理器)

@@ -30,9 +30,7 @@ namespace GAS.Runtime
             DurationPolicy = GameplayEffect.DurationPolicy;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
-                PeriodExecution = GameplayEffect.Asset.PeriodExecution != null
-                    ? new GameplayEffect(GameplayEffect.Asset.PeriodExecution).CreateSpec(source, owner)
-                    : null;
+                PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
             }
 

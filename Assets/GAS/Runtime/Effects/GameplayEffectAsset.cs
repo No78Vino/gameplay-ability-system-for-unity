@@ -61,7 +61,6 @@ namespace GAS.Runtime
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelText(GASTextDefine.LABLE_GE_POLICY)]
         [LabelWidth(WIDTH_LABLE)]
-        [InfoBox(ERROR_POLICY,InfoMessageType.Error, VisibleIf = "IsDurationPolicyNone")]
         [InfoBox(ERROR_PERIODGE_NONE,InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
         [InfoBox(GASTextDefine.TIP_GE_POLICY)]
         public EffectsDurationPolicy DurationPolicy;
@@ -214,8 +213,6 @@ namespace GAS.Runtime
         {
             return DurationPolicy == EffectsDurationPolicy.Duration || DurationPolicy == EffectsDurationPolicy.Infinite;
         }
-
-        bool IsDurationPolicyNone() => DurationPolicy == EffectsDurationPolicy.None;
         
         bool IsInstantPolicy() => DurationPolicy == EffectsDurationPolicy.Instant;
 

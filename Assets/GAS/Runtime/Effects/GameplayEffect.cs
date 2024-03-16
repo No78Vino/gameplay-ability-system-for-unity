@@ -3,18 +3,18 @@ namespace GAS.Runtime
 {
     public enum EffectsDurationPolicy
     {
-        None,
-        Instant,
+        Instant = 1,
         Infinite,
         Duration
     }
 
-    public readonly struct GameplayEffect
+    public class GameplayEffect
     {
-        public readonly GameplayEffectAsset Asset;
+        public readonly string GameplayEffectName;
         public readonly EffectsDurationPolicy DurationPolicy;
         public readonly float Duration; // -1 represents infinite duration
         public readonly float Period;
+        public readonly GameplayEffect PeriodExecution;
         public readonly GameplayEffectTagContainer TagContainer;
 
         // Cues
@@ -38,7 +38,7 @@ namespace GAS.Runtime
 
         public GameplayEffect(GameplayEffectAsset asset)
         {
-            Asset = asset;
+            GameplayEffectName = asset.name;
             DurationPolicy = asset.DurationPolicy;
             Duration = asset.Duration;
             Period = asset.Period;
@@ -49,7 +49,7 @@ namespace GAS.Runtime
                 asset.OngoingRequiredTags,
                 asset.RemoveGameplayEffectsWithTags,
                 asset.ApplicationImmunityTags);
-
+            PeriodExecution = asset.PeriodExecution != null ? new GameplayEffect(asset.PeriodExecution) : null;
             CueOnExecute = asset.CueOnExecute;
             CueOnRemove = asset.CueOnRemove;
             CueOnAdd = asset.CueOnAdd;
@@ -64,6 +64,7 @@ namespace GAS.Runtime
             EffectsDurationPolicy durationPolicy,
             float duration,
             float period,
+            GameplayEffect periodExecution,
             GameplayEffectTagContainer tagContainer,
             GameplayCueInstant[] cueOnExecute,
             GameplayCueInstant[] cueOnAdd,
@@ -74,10 +75,11 @@ namespace GAS.Runtime
             GameplayEffectModifier[] modifiers,
             ExecutionCalculation[] executions)
         {
-            Asset = null;
+            GameplayEffectName = null;
             DurationPolicy = durationPolicy;
             Duration = duration;
             Period = period;
+            PeriodExecution = periodExecution;
             TagContainer = tagContainer;
             CueOnExecute = cueOnExecute;
             CueOnRemove = cueOnRemove;
@@ -93,7 +95,5 @@ namespace GAS.Runtime
         {
             return target.HasAllTags(TagContainer.ApplicationRequiredTags);
         }
-
-        public bool NULL => DurationPolicy == EffectsDurationPolicy.None;
     }
 }

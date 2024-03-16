@@ -197,7 +197,7 @@ namespace GAS.Editor
             var activeGE = _selected.GameplayEffectContainer.GetActiveGameplayEffects();
             foreach (var ge in activeGE)
             {
-                string geState = $"{ge.GameplayEffect.Asset.Name};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
+                string geState = $"{ge.GameplayEffect.GameplayEffectName};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
                 Effects.Add(geState);
             }
             
@@ -217,7 +217,7 @@ namespace GAS.Editor
                     if (obj is GameplayEffectSpec spec)
                     {
                         var owner = spec.Owner;
-                        DynamicTag.Add($"--From:{owner.GetInstanceID()}-GE:{spec.GameplayEffect.Asset.Name}"); 
+                        DynamicTag.Add($"--From:{owner.GetInstanceID()}-GE:{spec.GameplayEffect.GameplayEffectName}"); 
                     }
                     else if (obj is AbilitySpec ability)
                     {

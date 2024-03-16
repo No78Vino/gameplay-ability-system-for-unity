@@ -52,7 +52,7 @@ namespace GAS.Runtime
 
         protected virtual bool CheckCost()
         {
-            if (Ability.Cost.NULL) return true;
+            if (Ability.Cost == null) return true;
             var costSpec = Ability.Cost.CreateSpec(Owner, Owner, Level);
             if (costSpec == null) return false;
 
@@ -74,7 +74,7 @@ namespace GAS.Runtime
 
         protected virtual CooldownTimer CheckCooldown()
         {
-            return Ability.Cooldown.NULL
+            return Ability.Cooldown == null
                 ? new CooldownTimer { TimeRemaining = 0, Duration = Ability.CooldownTime }
                 : Owner.CheckCooldownFromTags(Ability.Cooldown.TagContainer.GrantedTags);
         }
@@ -86,9 +86,9 @@ namespace GAS.Runtime
         /// </summary>
         public void DoCost()
         {
-            if (!Ability.Cost.NULL) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
+            if (Ability.Cost!=null) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
 
-            if (!Ability.Cooldown.NULL)
+            if (Ability.Cooldown != null)
             {
                 var cdSpec = Owner.ApplyGameplayEffectToSelf(Ability.Cooldown);
                 cdSpec.SetDuration(Ability.CooldownTime); // Actually, it should be set by the ability's cooldown time.

@@ -121,7 +121,7 @@ namespace GAS.Runtime
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
 #if UNITY_EDITOR
-            if (gameplayEffect.NULL)
+            if (gameplayEffect == null)
             {
                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
                 return null;
