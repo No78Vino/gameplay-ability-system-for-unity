@@ -311,8 +311,6 @@ GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义
         | Instant | 即时执行，GameplayEffect被添加时立即执行，执行完毕后销毁自身。                                                              |
         | Duration | 持续执行，GameplayEffect被添加时立即执行，持续时间结束后移除自身。                                                            |
         | Infinite | 无限执行，GameplayEffect被添加时立即执行，执行完毕后不会移除，需要手动移除。                                                       |
-        | None | 无效果,这是默认占位符，因为GameplayEffect是结构体，None方便视作GameplayEffect的空值。_**【GameplayEffect配置的执行策略禁止使用None！！！】**_ |
-    
   - Duration
     - 持续时间，只有DurationPolicy为Duration时有效。
   - Every(Period)
@@ -596,8 +594,24 @@ ASC预设是为了可视化角色（单位）的参数。
 > 体系外的脚本不断的拨动ASC的Ability，而GAS内部会对Ability的运行结果自行消化。
 
 ### 3.1 Core 
+GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制GAS的运行与否。
 #### 3.1.1 GameplayAbilitySystem
+- ` static GameplayAbilitySystem GAS`
+  - GAS的单例，所有的GAS操作都是通过GAS单例来进行的。
+- ` List<AbilitySystemComponent> AbilitySystemComponents { get; } `
+  - GAS当前运行的所有AbilitySystemComponent的集合。
+- `void Register(AbilitySystemComponent abilitySystemComponent)`
+  -  注册ASC到GAS中。
+- `void UnRegister(AbilitySystemComponent abilitySystemComponent)`
+  -  从GAS中注销ASC。
+- `bool IsPaused`
+  - GAS是否暂停运行。
+- ` void Pause()`
+  - 暂停GAS运行。 
+- ` void Unpause()`
+  - 恢复GAS运行。 
 #### 3.1.2 GASTimer
+
 #### 3.1.3 GasHost
 
 ### 3.2 AbilitySystemComponent
