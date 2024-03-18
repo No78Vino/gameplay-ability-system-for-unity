@@ -594,8 +594,9 @@ ASC预设是为了可视化角色（单位）的参数。
 > 体系外的脚本不断的拨动ASC的Ability，而GAS内部会对Ability的运行结果自行消化。
 
 ### 3.1 Core 
-GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制GAS的运行与否。
+
 #### 3.1.1 GameplayAbilitySystem
+GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制GAS的运行与否。
 - ` static GameplayAbilitySystem GAS`
   - GAS的单例，所有的GAS操作都是通过GAS单例来进行的。
 - ` List<AbilitySystemComponent> AbilitySystemComponents { get; } `
@@ -611,12 +612,31 @@ GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制G
 - ` void Unpause()`
   - 恢复GAS运行。 
 #### 3.1.2 GASTimer
-
+GASTimer是GAS的计时器，它是GAS的时间基准。
+- `static long Timestamp()`
+  - GAS当前时间戳（毫秒）
+- `static long TimestampSeconds()`
+  - GAS当前时间戳（秒）
+- `static int CurrentFrameCount`
+  - GAS当前运行帧数
+- `static long StartTimestamp`
+  - GAS启动时间戳
+- `static void InitStartTimestamp()`
+  - GAS初始化启动时间戳
+- `static void Pause()`
+  - 暂停GASTimer计时 
+- `static void Unpause()`
+  - 恢复GASTimer计时 
+- `static int FrameRate`
+  - GAS帧率
 #### 3.1.3 GasHost
+GasHost是GAS的宿主，它是GAS的运行机器和环境，GasHost没有API可以从外部干涉。
 
 ### 3.2 AbilitySystemComponent
 #### 3.2.1 AbilitySystemComponent
+AbilitySystemComponent是GAS的基本运行单位，它是GAS的核心类。
 #### 3.2.2 AbilitySystemComponentPreset
+AbilitySystemComponentPreset是ASC的预设，用于方便初始化ASC的数据。
 #### 3.2.3 AbilitySystemComponentExtension
 
 ### 3.3 GameplayTag
