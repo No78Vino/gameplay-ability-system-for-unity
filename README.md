@@ -32,7 +32,7 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
   - [2.7 GameplayEffect](#27-gameplayeffect)
   - [2.8 Ability](#28-ability)
   - [2.9 AbilitySystemComponent](#29-abilitysystemcomponent)
-- 3.[API(W.I.P 施工中)](#3apiwip)
+- 3.[API && Source Code Documentation (W.I.P 施工中)](#3api--source-code-documentation)
 - 4.[可视化功能](#4可视化功能)
   - [GAS Base Manager (GAS基础配置管理器)](#1-gas-base-manager-gas基础配置管理器)
   - [GAS Asset Aggregator (GAS配置资源聚合器)](#2-gas-asset-aggregator-gas配置资源聚合器)
@@ -895,13 +895,107 @@ GTagLib不是EX-GAS框架内脚本的，需要EX-GAS框架Tag配置改动后，�
   - GTagLib还包含了一个TagMap，方便外部通过Tag的字符串名来获取Tag。
 
 ### 3.4 Attribute
-#### 3.4.1 AttributeBase
-#### 3.4.2 AttributeValue
+#### 3.4.1 AttributeValue
+AttributeValue是一个数据结构体。是实际存储Attribute的值的单位。
+- `float BaseValue => _baseValue;`
+    - Attribute的基础值，是属性，只读。修改baseValue需要通过AttributeBase的SetBaseValue方法
+- `float CurrentValue => _currentValue;`
+    - Attribute的当前值，是属性，只读。修改currentValue需要通过AttributeBase的SetCurrentValue方法
+- `void SetBaseValue(float value)`
+    - 设置Attribute的基础值
+    - value：指定的值
+- `void SetCurrentValue(float value)`
+    - 设置Attribute的当前值
+    - value：指定的值
+#### 3.4.2 AttributeBase
+AttributeBase是GAS的属性基类，它是GAS的核心类之一。
+负责管理AttributeValue的值变化，已经Attribute相关回调处理。
+- `readonly string Name`
+  - Attribute的名字(完整)
+- `readonly string ShortName`
+  - Attribute的短名
+- `readonly string SetName`
+  - Attribute所属的AttributeSet的名字
+- `AttributeValue Value => _value;`
+  - Attribute的值类，数据类
+- `float BaseValue => _value.BaseValue;`
+  - Attribute的基础值
+- `float CurrentValue => _value.CurrentValue;`
+  - Attribute的当前值
+- `void SetCurrentValue(float value)`
+  - 设置Attribute的当前值,会触发_onPreCurrentValueChange和_onPostCurrentValueChange回调
+  - value：指定的值
+- `void SetBaseValue(float value)`
+  - 设置Attribute的基础值,会触发_onPreBaseValueChange和_onPostBaseValueChange回调
+  - value：指定的值
+- `void SetCurrentValueWithoutEvent(float value)`
+  - 设置Attribute的当前值,但不会触发_onPreCurrentValueChange和_onPostCurrentValueChange回调 
+  - value：指定的值
+- `void SetBaseValueWithoutEvent(float value)`
+  - 设置Attribute的基础值,但不会触发_onPreBaseValueChange和_onPostBaseValueChange回调
+  - value：指定的值
+- `void RegisterPreBaseValueChange(Func<AttributeBase, float,float> func)`
+  - 注册Attribute的基础值变化前回调
+  - func：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：准备变化的值
+    - 返回值：回调处理完的变化值
+- `void RegisterPostBaseValueChange(Action<AttributeBase, float, float> action)`
+  - 注册Attribute的基础值变化后回调
+  - action：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：变化后的实际值
+- `void RegisterPreCurrentValueChange(Func<AttributeBase, float, float> func)`
+  - 注册Attribute的当前值变化前回调
+  - func：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：准备变化的值
+    - 返回值：回调处理完的变化值
+- `void RegisterPostCurrentValueChange(Action<AttributeBase, float, float> action)`
+  - 注册Attribute的当前值变化后回调
+  - action：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：变化后的实际值
+- `void UnregisterPreBaseValueChange(Func<AttributeBase, float,float> func)`
+  - 注销Attribute的基础值变化前回调
+  - func：注销的回调函数
+- `void UnregisterPostBaseValueChange(Action<AttributeBase, float, float> action)`
+  - 注销Attribute的基础值变化后回调
+  - action：注销的回调函数
+- `void UnregisterPreCurrentValueChange(Func<AttributeBase, float, float> func)`
+  - 注销Attribute的当前值变化前回调
+  - func：注销的回调函数
+- `void UnregisterPostCurrentValueChange(Action<AttributeBase, float, float> action)`
+  - 注销Attribute的当前值变化后回调
+  - action：注销的回调函数
+
 #### 3.4.3 AttributeAggregator
+AttributeAggregator是Attribute的单位性质的聚合器，每个AttributeBase会对应一个AttributeAggregator。
+AttributeAggregator是完全闭合独立运作，除了构造函数外不提供任何对外方法。
+每当AttributeBase的BaseValue变化时，AttributeAggregator会自动更新自己的CurrentValue。
+
 #### 3.4.4 DerivedAttribute(W.I.P)
+推导性质的Attribute，理论上不是一个类，而是一个Attribute的设计策略。
 
 ### 3.5 AttributeSet
 #### 3.5.1 AttributeSet
+AttributeSet是一个抽象基类。
+- `public abstract AttributeBase this[int index] { get; }`
+  - 通过AttributeBase的短名作为索引获取AttributeBase
+- `public abstract string[] AttributeNames { get; }`
+  - AttributeSet的所有Attribute的短名 
+- `public void ChangeAttributeBase(string attributeShortName, float value)`
+    - 修改AttributeBase的基础值
+    - attributeShortName：Attribute的短名
+    - value：指定的值
+##### 3.5.1.a GAttrSetLib.gen( Script-Generated Code)
+GAttrSetLib.gen是便于读取，管理AttributeSet工具脚本。
+GAttrSetLib.gen不是EX-GAS框架内脚本的，需要EX-GAS框架AttributeSet配置改动后，通过生成脚本生成。
+
 #### 3.5.2 AttributeSetContainer
 #### 3.5.3 CustomAttrSet
 
