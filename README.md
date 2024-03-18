@@ -803,7 +803,7 @@ GameplayTagSet是Tag集合类之一。GameplayTagSet适用于稳定不会改变�
   - 返回值：是否不持有
 
 #### 3.3.3 GameplayTagContainer
-GameplayTagContainer是Tag集合类之一。GGameplayTagContainer适用于经常改变的Tag集合。ASC的Tag集合都用GameplayTagContainer。
+GameplayTagContainer是Tag集合类之一。GameplayTagContainer适用于经常改变的Tag集合。
 - `List<GameplayTag> Tags { get; }`
   - Tag数据
 - `void AddTag(GameplayTag tag)`
@@ -835,7 +835,64 @@ GameplayTagContainer是Tag集合类之一。GGameplayTagContainer适用于经常
   - 返回值：是否不持有
 
 #### 3.3.4 GameplayTagAggregator
+GameplayTagAggregator是专门针对ASC的Tag管理类，会针对固有Tag和动态Tag做不同的处理。
+- `void Init(GameplayTag[] tags)`
+  - 初始化
+  - tags：初始化的固有Tag
+- `void AddFixedTag(GameplayTag tag)`
+  - 添加固有Tag
+  - tag：添加的Tag
+- `void AddFixedTag(GameplayTagSet tagSet)`
+  - 添加固有Tag集合
+  - tagSet：添加的Tag集合
+- `void RemoveFixedTag(GameplayTag tag)`
+  - 移除固有Tag
+  - tag：移除的Tag
+- `void RemoveFixedTag(GameplayTagSet tagSet)`
+  - 移除固有Tag集合
+  - tagSet：移除的Tag集合
+- `void ApplyGameplayEffectDynamicTag(GameplayEffectSpec source)`
+  - 从GameplayEffect中应用动态Tag（Granted Tags）
+  - source：GameplayEffect的规格类实例
+- `void ApplyGameplayAbilityDynamicTag(AbilitySpec source)`
+  - 从Ability中应用动态Tag（Activation Owned Tags）
+  - source：Ability的规格类实例
+- `RestoreGameplayEffectDynamicTags(GameplayEffectSpec effectSpec)`
+  - 从GameplayEffect中恢复动态Tag（Granted Tags）
+  - effectSpec：GameplayEffect的规格类实例
+- `RestoreGameplayAbilityDynamicTags(AbilitySpec abilitySpec)`
+  - 从Ability中恢复动态Tag（Activation Owned Tags）
+  - abilitySpec：Ability的规格类实例
+- `bool HasTag(GameplayTag tag)` 
+  - TagAggregator是否持有指定Tag
+  - tag：指定Tag
+  - 返回值：是否持有
+- `bool HasAllTags(GameplayTagSet other) / bool HasAllTags(params GameplayTag[] tags)`
+  - TagAggregator是否持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet other) / bool HasAnyTags(params GameplayTag[] tags)`
+  - TagAggregator是否持有指定Tag集合中的任意一个Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasNoneTags(GameplayTagSet other) / bool HasNoneTags(params GameplayTag[] tags)`
+  - TagAggregator是否不持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否不持有 
 #### 3.3.5 GTagLib(Script-Generated Code)
+GTagLib是GAS的标签库，它是GAS的标签管理类。
+GTagLib不是EX-GAS框架内脚本的，需要EX-GAS框架Tag配置改动后，通过生成脚本生成。
+- `public static GameplayTag XXX { get;} = new GameplayTag("XXX");`
+- `public static GameplayTag XXX_YYY { get;} = new GameplayTag("XXX.YYY");`
+  - GTagLib会把所有的Tag都生成为静态字段，方便外部调用。格式如上所示。
+  - A.B.C的Tag会生成为A_B_C的静态字段。
+- `public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
+  {
+  ["A"] = A,
+  ["A.B"] = A_B,
+  ["A.C"] = A_C,
+  };`
+  - GTagLib还包含了一个TagMap，方便外部通过Tag的字符串名来获取Tag。
 
 ### 3.4 Attribute
 #### 3.4.1 AttributeBase
