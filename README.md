@@ -1349,9 +1349,8 @@ AbilitySpec是GAS的游戏能力规格类，用于实现对Ability的实例化�
 AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
 
 
-#### 3.7.4 AbilityTagContainer
-#### 3.7.5 AbilityContainer
-#### 3.7.6 AbilityTask
+#### 3.7.4 AbilityContainer
+#### 3.7.5 AbilityTask
 
 ---
 ### 3.7.EX  Timeline Ability
@@ -1369,8 +1368,34 @@ AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
 ---
 ### 3.8 GameplayCue
 #### 3.8.1 GameplayCue
+GameplayCue是GAS的游戏提示配置类，用于实现对游戏效果的提示。他本身是一个抽象基类，所有的GameplayCue都必须继承自他。
+- `public GameplayTag[] RequiredTags;` :GameplayCue的要求标签,持有【所有】RequiredTags才可触发
+- `public GameplayTag[] ImmunityTags;` :GameplayCue的免疫标签,持有【任意】ImmunityTags不可触发
+##### 3.8.1.a public abstract class GameplayCue<T> : GameplayCue where T : GameplayCueSpec
+这个泛型类是为了方便对应的GameplayCueSpec和GameplayCue一一匹配，方便使用。
 #### 3.8.2 GameplayCueSpec
+GameplayCueSpec是GAS的游戏提示规格类，用于实现对GameplayCue的实例化。本身是一个抽象基类，所有的GameplayCueSpec都必须继承自他。
+GameplayCueSpec内实现GameplayCue游戏内实际的表现逻辑。
+-  
+```
+        public virtual bool Triggerable()
+        {
+            return _cue.Triggerable(Owner);
+        }
+``` 
+- Triggerable()：检查是否可以触发游戏提示的方法。
+
 #### 3.8.3 GameplayCueParameters
+GameplayCueParameters是GAS的游戏提示参数结构体，用于实现对GameplayCue的参数化。
+目前逻辑简单粗暴，存在拆装箱过程。
+```
+    public struct GameplayCueParameters
+    {
+        public GameplayEffectSpec sourceGameplayEffectSpec; 
+        public AbilitySpec sourceAbilitySpec;
+        public object[] customArguments;
+    }
+```
 #### 3.8.4 GameplayCueInstant
 #### 3.8.5 GameplayCueDuration
 
