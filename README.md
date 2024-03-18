@@ -1397,7 +1397,59 @@ GameplayCueParameters是GAS的游戏提示参数结构体，用于实现对Gamep
     }
 ```
 #### 3.8.4 GameplayCueInstant
+GameplayCueInstant是GAS的GameplayCue中的一大类,属于OneShot类型的Cue。
+##### 3.8.4.a GameplayCueInstant
+- `InstantCueApplyTarget applyTarget`：立即提示应用目标，指示立即提示的应用目标类型。
+- `virtual void ApplyFrom(GameplayEffectSpec gameplayEffectSpec)`：从GameplayEffectSpec应用InstantCue。
+  - `gameplayEffectSpec`：游戏效果规格，触发立即提示的游戏效果规格实例。
+- `virtual void ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)`：从AbilitySpec应用InstantCue。
+  - `abilitySpec`：能力规格，触发立即提示的能力规格实例。
+  - `customArguments`：自定义参数，自定义参数数组。
+
+##### 3.8.4.b GameplayCueInstantSpec
+GameplayCueInstantSpec必须覆写Trigger()方法，用于实现对GameplayCueInstant触发。
+```
+public abstract class GameplayCueInstantSpec : GameplayCueSpec
+    {
+        public GameplayCueInstantSpec(GameplayCueInstant cue, GameplayCueParameters parameters) : base(cue,
+            parameters)
+        {
+        }
+        
+        public abstract void Trigger();
+    }
+```
 #### 3.8.5 GameplayCueDuration
+GameplayCueDuration是GAS的GameplayCue中的一大类,属于持续类型的Cue。
+##### 3.8.5.a GameplayCueDurational
+- `public GameplayCueDurationalSpec ApplyFrom(GameplayEffectSpec gameplayEffectSpec)`: 从GameplayEffectSpec应用DurationalCue。
+  - `gameplayEffectSpec`：游戏效果规格，触发持续提示的游戏效果规格实例。
+- `public GameplayCueDurationalSpec ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)`: 从AbilitySpec应用DurationalCue。
+  - `abilitySpec`：能力规格，触发持续提示的能力规格实例。
+  - `customArguments`：自定义参数，自定义参数数组。 
+##### 3.8.5.b GameplayCueDurationalSpec
+GameplayCueDurationalSpec必须覆写
+OnAdd()，
+OnRemove()，
+OnGameplayEffectActivate()，
+OnGameplayEffectDeactivate()，
+OnTick()方法，
+用于实现对GameplayCueDurational触发和运作。
+```
+    public abstract class GameplayCueDurationalSpec : GameplayCueSpec
+    {
+        protected GameplayCueDurationalSpec(GameplayCueDurational cue, GameplayCueParameters parameters) : 
+            base(cue, parameters)
+        {
+        }
+
+        public abstract void OnAdd();
+        public abstract void OnRemove();
+        public abstract void OnGameplayEffectActivate();
+        public abstract void OnGameplayEffectDeactivate();
+        public abstract void OnTick();
+    }
+```
 
 ---
 ## 4.可视化功能
