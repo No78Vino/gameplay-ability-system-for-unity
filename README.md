@@ -1190,16 +1190,165 @@ GameplayEffectModifier是游戏效果修改器类，用于实现对Attribute的�
 - `string AttributeShortName`：属性短名称，用于标识游戏效果修改器所影响的属性的简短版本。
 
 ##### 3.6.6.0 ModifierMagnitudeCalculation
+ModifierMagnitudeCalculation是一个抽象基类，所有MMC必须继承自他。
+- `public abstract float CalculateMagnitude(GameplayEffectSpec spec, AttributeBase attribute, float value)`：计算修改器的幅度值方法是MMC的根本。
+    - `spec`：游戏效果规范。
+    - `attribute`：属性基类。
+    - `value`：指定的值。
+    - 返回值：修改器的幅度值。
 ##### 3.6.6.1 ScalableFloatModCalculation
+ScalableFloatModCalculation是一个MMC的实现类，用于实现可缩放的浮点数修改器。
+```
+    public class ScalableFloatModCalculation:ModifierMagnitudeCalculation
+    {
+        [SerializeField] private float k;
+        [SerializeField] private float b;
+
+        public override float CalculateMagnitude(GameplayEffectSpec spec,float input)
+        {
+            return input * k + b;
+        }
+    }
+```
+- `float k`：缩放系数。
+- `float b`：偏移量。
+- 执行逻辑：`input * k + b`。线性缩放。
 ##### 3.6.6.2 AttributeBasedModCalculation
+AttributeBasedModCalculation是一个MMC的实现类，用于实现基于属性的修改器。
+```
+    public class AttributeBasedModCalculation : ModifierMagnitudeCalculation
+    {
+        public enum AttributeFrom
+        {
+            Source,
+            Target
+        }
+
+        public enum GEAttributeCaptureType
+        {
+            SnapShot,
+            Track
+        }
+
+        public string attributeName;
+        public string attributeSetName;
+        public string attributeShortName;
+        public AttributeFrom attributeFromType;
+        public GEAttributeCaptureType captureType;
+        public float k = 1;
+        public float b = 0;
+
+        public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
+        {
+            if (attributeFromType == AttributeFrom.Source)
+            {
+                if (captureType == GEAttributeCaptureType.SnapShot)
+                {
+                    var snapShot = spec.Source.DataSnapshot();
+                    var attribute = snapShot[attributeName];
+                    return attribute * k + b;
+                }
+                else
+                {
+                    var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                    return (attribute ?? 1) * k + b;
+                }
+            }
+
+            if (captureType == GEAttributeCaptureType.SnapShot)
+            {
+                var attribute = spec.Owner.DataSnapshot()[attributeName];
+                return attribute * k + b;
+            }
+            else
+            {
+                var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                return (attribute ?? 1) * k + b;
+            }
+        }
+    }
+```
+- `string attributeName`：属性名称。
+- `string attributeSetName`：属性集名称。
+- `string attributeShortName`：属性短名称。
+- `AttributeFrom attributeFromType`：属性来源类型。
+- `GEAttributeCaptureType captureType`：游戏效果属性捕获类型。
+- `float k`：缩放系数。
+- `float b`：偏移量。
+- 执行逻辑：根据属性来源类型和游戏效果属性捕获类型，获取属性的当前值或快照值，并进行线性缩放。
+
 ##### 3.6.6.3 SetByCallerFromNameModCalculation
+SetByCallerFromNameModCalculation是一个MMC的实现类，用于实现根据名称设置的修改器。
+```
+    public class SetByCallerFromNameModCalculation : ModifierMagnitudeCalculation
+    {
+        [SerializeField] private string valueName;
+        public override float CalculateMagnitude(GameplayEffectSpec spec,float input)
+        {
+            var value = spec.GetMapValue(valueName);
+            return value ?? 0;
+        }
+    }
+```
+- `string valueName`：键值值名称。
+- 执行逻辑：根据值名称获取与名称关联的值。
 ##### 3.6.6.4 SetByCallerFromTagModCalculation
+SetByCallerFromTagModCalculation是一个MMC的实现类，用于实现根据标签设置的修改器。
+```
+public class SetByCallerFromTagModCalculation:ModifierMagnitudeCalculation
+    {
+        [SerializeField] private GameplayTag _tag;
+        public override float CalculateMagnitude(GameplayEffectSpec spec  ,float input)
+        {
+            var value = spec.GetMapValue(_tag);
+            return value ?? 0;
+        }
+    }
+```
+- `GameplayTag _tag`：键值标签。
+- 执行逻辑：根据游戏标签获取与游戏标签关联的值。
 
 ---
 ### 3.7 Ability
 #### 3.7.1 AbilityAsset
+AbilityAsset是GAS的游戏能力配置类，是预设用ScriptableObject。他本身是一个抽象基类，所有的AbilityAsset都必须继承自他。
+- `abstract Type AbilityType()`：能力的类型。用于把AbilityAsset和Ability类一一匹配。
+    - 返回值：能力的类型。
+- `string UniqueName`：唯一名称，用于标识该能力。
+- `GameplayEffectAsset Cost`：花费效果，该能力的消耗效果。
+- `GameplayEffectAsset Cooldown`：冷却效果，该能力的冷却效果。如果为空，冷却时间也不会生效。
+- `float CooldownTime`：冷却时间，该能力的冷却时间长度。
+- `GameplayTag[] AssetTag`：资产标签，该能力的标签。
+- `GameplayTag[] CancelAbilityTags`：取消能力标签，用于取消该能力的标签。
+- `GameplayTag[] BlockAbilityTags`：阻止能力标签，用于阻止该能力的标签。
+- `GameplayTag[] ActivationOwnedTag`：激活所需标签，该能力激活所需的标签。
+- `GameplayTag[] ActivationRequiredTags`：激活要求标签，该能力激活所需的标签。
+- `GameplayTag[] ActivationBlockedTags`：激活阻止标签，用于阻止该能力的激活标签。
+
 #### 3.7.2 AbstractAbility
+AbstractAbility是GAS的游戏能力数据基类，他本身是一个抽象基类，所有的Ability都必须继承自他。
+- `string Name`：名称，表示能力的名称。
+- `AbilityAsset DataReference`：数据引用，指向与该能力相关联的能力资产。
+- `AbilityTagContainer Tag`：标签，该能力的标签容器。
+- `GameplayEffect Cooldown`：冷却效果，该能力的冷却效果。
+- `float CooldownTime`：冷却时间，该能力的冷却时间长度。
+- `GameplayEffect Cost`：花费效果，该能力的消耗效果。
+- `AbstractAbility(AbilityAsset abilityAsset)`：抽象能力构造函数，初始化抽象能力实例。
+  - `abilityAsset`：能力资产，与该能力相关联的能力资产。
+- `abstract AbilitySpec CreateSpec(AbilitySystemComponent owner)`：创建能力规格的抽象方法，用于生成能力的规格实例。
+  - `owner`：所有者，拥有该能力的实体。
+- `void SetCooldown(GameplayEffect coolDown)`：设置冷却效果的方法。
+  - `coolDown`：冷却效果，要设置的冷却效果。
+- `void SetCost(GameplayEffect cost)`：设置花费效果的方法。
+  - `cost`：花费效果，要设置的花费效果。
+#### 3.7.2.a AbstractAbility<T> :AbstractAbility where T : AbilityAsset
+AbstractAbility<T>是AbstractAbility的泛型子类，用于实现AbstractAbility的泛型版本。
+通常Ability都继承自他。方便对应的AbilityAsset和Ability一一匹配。
 #### 3.7.3 AbilitySpec
+AbilitySpec是GAS的游戏能力规格类，用于实现对Ability的实例化。本身是一个抽象基类，所有的AbilitySpec都必须继承自他。
+AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
+
+
 #### 3.7.4 AbilityTagContainer
 #### 3.7.5 AbilityContainer
 #### 3.7.6 AbilityTask
