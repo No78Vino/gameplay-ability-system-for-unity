@@ -995,9 +995,105 @@ AttributeSet是一个抽象基类。
 ##### 3.5.1.a GAttrSetLib.gen( Script-Generated Code)
 GAttrSetLib.gen是便于读取，管理AttributeSet工具脚本。
 GAttrSetLib.gen不是EX-GAS框架内脚本的，需要EX-GAS框架AttributeSet配置改动后，通过生成脚本生成。
+- 脚本内包含如下静态工具类
+- ```
+  public static class GAttrSetLib
+  {
+     public static readonly Dictionary<string,Type> AttrSetTypeDict = new Dictionary<string, Type>()
+     {
+        {"Fight",typeof(AS_Fight)},
+     };
+  
+     public static List<string> AttributeFullNames=new List<string>()
+     {
+       "AS_Fight.HP",
+       "AS_Fight.MP",
+       "AS_Fight.STAMINA",
+       "AS_Fight.POSTURE",
+       "AS_Fight.ATK",
+       "AS_Fight.SPEED",
+     };
+  }
+  ```
+- AttrSetTypeDict：AttributeSet的类型字典，方便外部通过字符串名获取AttributeSet的类型。
+- AttributeFullNames：所有AttributeSet的所有Attribute的完整名
+
+- 举例:由脚本生成的AttributeSet类
+```
+public class AS_XXX:AttributeSet
+{
+    private AttributeBase _A = new AttributeBase("AS_XXX","A");
+    public AttributeBase A => _A;
+    public void InitA(float value)
+    {
+        _A.SetBaseValue(value);
+        _A.SetCurrentValue(value);
+    }
+      public void SetCurrentA(float value)
+    {
+        _A.SetCurrentValue(value);
+    }
+      public void SetBaseA(float value)
+    {
+        _A.SetBaseValue(value);
+    }
+    
+      public override AttributeBase this[string key]
+      {
+          get
+          {
+              switch (key)
+              {
+                 case "A":
+                    return _A;
+              }
+              return null;
+          }
+      }
+
+      public override string[] AttributeNames { get; } =
+      {
+          "A",
+      };
+}
+``` 
+- 配置的AttributeSet名为XXX，包含一个Attribute名为A。
 
 #### 3.5.2 AttributeSetContainer
+AttributeSetContainer是AttributeSet的容器类，用于ASC管理AttributeSet。
+- `Dictionary<string,AttributeSet> Sets => _attributeSets;`
+  - AttributeSet的集合,为属性，只读。
+- `void AddAttributeSet<T>() where T : AttributeSet` 
+  - 添加AttributeSet
+  - T：指定的AttributeSet类
+- `void AddAttributeSet(Type attrSetType)`
+  - 添加AttributeSet
+  - attrSetType：指定的AttributeSet类型
+- `bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet`
+  - 尝试获取AttributeSet
+  - attributeSet：获取的AttributeSet
+  - 返回值：是否获取成功
+- `float? GetAttributeBaseValue(string attrSetName,string attrShortName)`
+  - 获取指定Attribute的基础值
+  - attrSetName：AttributeSet的名字
+  - attrShortName：Attribute的短名
+  - 返回值：Attribute的基础值
+- `float? GetAttributeCurrentValue(string attrSetName,string attrShortName)`
+  - 获取指定Attribute的当前值
+  - attrSetName：AttributeSet的名字
+  - attrShortName：Attribute的短名
+  - 返回值：Attribute的当前值
+- `Dictionary<string, float> Snapshot()`
+  - 获取AttributeSetContainer的数据快照
+  - 返回值：数据快照
 #### 3.5.3 CustomAttrSet
+CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成AttributeSet。
+- `void AddAttribute(AttributeBase attribute)`
+  - 添加Attribute
+  - attribute：添加的Attribute
+- `void RemoveAttribute(string attributeName)`
+  - 移除Attribute
+  - attributeName：移除的Attribute的短名
 
 ### 3.6 GameplayEffect
 #### 3.6.1 GameplayEffectAsset
