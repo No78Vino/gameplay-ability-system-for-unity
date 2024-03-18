@@ -632,6 +632,7 @@ GASTimer是GAS的计时器，它是GAS的时间基准。
 #### 3.1.3 GasHost
 GasHost是GAS的宿主，它是GAS的运行机器和环境，GasHost没有API可以从外部干涉。
 
+---
 ### 3.2 AbilitySystemComponent
 #### 3.2.1 AbilitySystemComponent
 AbilitySystemComponent是GAS的基本运行单位，它是GAS的核心类。
@@ -894,6 +895,7 @@ GTagLib不是EX-GAS框架内脚本的，需要EX-GAS框架Tag配置改动后，�
   };`
   - GTagLib还包含了一个TagMap，方便外部通过Tag的字符串名来获取Tag。
 
+---
 ### 3.4 Attribute
 #### 3.4.1 AttributeValue
 AttributeValue是一个数据结构体。是实际存储Attribute的值的单位。
@@ -981,6 +983,7 @@ AttributeAggregator是完全闭合独立运作，除了构造函数外不提供�
 #### 3.4.4 DerivedAttribute(W.I.P)
 推导性质的Attribute，理论上不是一个类，而是一个Attribute的设计策略。
 
+---
 ### 3.5 AttributeSet
 #### 3.5.1 AttributeSet
 AttributeSet是一个抽象基类。
@@ -1095,9 +1098,49 @@ CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成Att
   - 移除Attribute
   - attributeName：移除的Attribute的短名
 
+---
 ### 3.6 GameplayEffect
 #### 3.6.1 GameplayEffectAsset
+GameplayEffectAsset是GAS的游戏效配置类，是预设用ScriptableObject。
+- `EffectsDurationPolicy DurationPolicy;`
+  - GameplayEffect的持续时间策略
+- `float Duration`
+  - GameplayEffect的持续时间 
+- `float Period`
+  - GameplayEffect的周期
+- `GameplayEffectAsset PeriodExecution`
+  - GameplayEffect的周期执行的GameplayEffect
+- `GameplayEffectModifier[] Modifiers`
+  - GameplayEffect修改器
+-  `GameplayTag[] AssetTags`
+  - GameplayEffect的描述标签
+- `GameplayTag[] GrantedTags`
+  - GameplayEffect的授予标签，GameplayEffect生效时会授予目标ASC这些标签，失效时会移除这些标签
+- `GameplayTag[] ApplicationRequiredTags`
+  - GameplayEffect的应用要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会生效 
+- `GameplayTag[] OngoingRequiredTags`
+  - GameplayEffect的持续要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会持续生效
+- `GameplayTag[] RemoveGameplayEffectsWithTags`
+  - GameplayEffect的移除标签，只要目标ASC的GameplayEffect持有【任意】这些标签时，这些GameplayEffect就会被移除
+- `GameplayTag[] ApplicationImmunityTags` 
+  - GameplayEffect的免疫标签，只要目标ASC持有【任意】这些标签时，这个GameplayEffect就不会生效
+- `GameplayCueInstant[] CueOnExecute;`
+  - GameplayEffect执行时触发的GameplayCue
+- `GameplayCueDurational[] CueDurational`
+  - GameplayEffect持续时触发的GameplayCue
+- `GameplayCueInstant[] CueOnAdd`
+  - GameplayEffect添加时触发的GameplayCue
+- `GameplayCueInstant[] CueOnRemove`
+  - GameplayEffect移除时触发的GameplayCue
+- `GameplayCueInstant[] CueOnActivate`
+  - GameplayEffect激活时触发的GameplayCue
+- `GameplayCueInstant[] CueOnDeactivate`
+  - GameplayEffect失效时触发的GameplayCue
+
 #### 3.6.2 GameplayEffect
+GameplayEffect是GAS的Runtime的游戏效果数据类.运行游戏运行时动态生成GameplayEffect。
+- GameplayEffect的数据结构与GameplayEffectAsset几乎一致。这里就不再多赘述数据变量了。
+- 
 #### 3.6.3 GameplayEffectSpec
 #### 3.6.4 GameplayEffectContainer
 #### 3.6.5 GameplayEffectTagContainer
@@ -1109,6 +1152,7 @@ CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成Att
 ##### 3.6.7.3 SetByCallerFromNameModCalculation
 ##### 3.6.7.4 SetByCallerFromTagModCalculation
 
+---
 ### 3.7 Ability
 #### 3.7.1 AbilityAsset
 #### 3.7.2 AbstractAbility
@@ -1117,6 +1161,7 @@ CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成Att
 #### 3.7.5 AbilityContainer
 #### 3.7.6 AbilityTask
 
+---
 ### 3.7.EX  Timeline Ability
 #### 3.7.EX.1 TimelineAbilityAsset
 #### 3.7.EX.2 TimelineAbility
@@ -1129,6 +1174,7 @@ CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成Att
 ##### 3.7.EX.5.4 CatchAreaBox2D
 ##### 3.7.EX.5.5 CatchAreaCircle2D
 
+---
 ### 3.8 GameplayCue
 #### 3.8.1 GameplayCue
 #### 3.8.2 GameplayCueSpec
