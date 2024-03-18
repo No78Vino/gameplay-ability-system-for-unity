@@ -1353,7 +1353,7 @@ AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
 #### 3.7.5 AbilityTask
 
 ---
-### 3.7.EX  Timeline Ability
+### 3.7.EX  Timeline Ability（W.I.P）
 #### 3.7.EX.1 TimelineAbilityAsset
 #### 3.7.EX.2 TimelineAbility
 #### 3.7.EX.3 TimelineAbilitySpec
@@ -1376,6 +1376,7 @@ GameplayCue是GAS的游戏提示配置类，用于实现对游戏效果的提示
 #### 3.8.2 GameplayCueSpec
 GameplayCueSpec是GAS的游戏提示规格类，用于实现对GameplayCue的实例化。本身是一个抽象基类，所有的GameplayCueSpec都必须继承自他。
 GameplayCueSpec内实现GameplayCue游戏内实际的表现逻辑。
+
 -  
 ```
         public virtual bool Triggerable()
