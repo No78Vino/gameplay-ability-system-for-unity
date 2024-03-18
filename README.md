@@ -1,4 +1,4 @@
-# EX Gameplay Ability System For Unity(W.I.P 文档还在施工中)
+# EX Gameplay Ability System For Unity
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
 
@@ -1347,8 +1347,6 @@ AbstractAbility<T>是AbstractAbility的泛型子类，用于实现AbstractAbilit
 #### 3.7.3 AbilitySpec
 AbilitySpec是GAS的游戏能力规格类，用于实现对Ability的实例化。本身是一个抽象基类，所有的AbilitySpec都必须继承自他。
 AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
-
-
 #### 3.7.4 AbilityContainer
 #### 3.7.5 AbilityTask
 
