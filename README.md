@@ -1064,17 +1064,13 @@ public class AS_XXX:AttributeSet
 
 #### 3.5.2 AttributeSetContainer
 AttributeSetContainer是AttributeSet的容器类，用于ASC管理AttributeSet。
-- `Dictionary<string,AttributeSet> Sets => _attributeSets;`
-  - AttributeSet的集合,为属性，只读。
-- `void AddAttributeSet<T>() where T : AttributeSet` 
-  - 添加AttributeSet
-  - T：指定的AttributeSet类
-- `void AddAttributeSet(Type attrSetType)`
-  - 添加AttributeSet
-  - attrSetType：指定的AttributeSet类型
-- `bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet`
-  - 尝试获取AttributeSet
-  - attributeSet：获取的AttributeSet
+- `Dictionary<string,AttributeSet> Sets => _attributeSets;` :AttributeSet的集合,为属性，只读。
+- `void AddAttributeSet<T>() where T : AttributeSet`:添加AttributeSet
+  - `T`：指定的AttributeSet类
+- `void AddAttributeSet(Type attrSetType)`:添加AttributeSet
+  - `attrSetType`：指定的AttributeSet类型
+- `bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet` :尝试获取AttributeSet
+  - `attributeSet`：获取的AttributeSet
   - 返回值：是否获取成功
 - `float? GetAttributeBaseValue(string attrSetName,string attrShortName)`
   - 获取指定Attribute的基础值
@@ -1102,55 +1098,102 @@ CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成Att
 ### 3.6 GameplayEffect
 #### 3.6.1 GameplayEffectAsset
 GameplayEffectAsset是GAS的游戏效配置类，是预设用ScriptableObject。
-- `EffectsDurationPolicy DurationPolicy;`
-  - GameplayEffect的持续时间策略
-- `float Duration`
-  - GameplayEffect的持续时间 
-- `float Period`
-  - GameplayEffect的周期
-- `GameplayEffectAsset PeriodExecution`
-  - GameplayEffect的周期执行的GameplayEffect
-- `GameplayEffectModifier[] Modifiers`
-  - GameplayEffect修改器
--  `GameplayTag[] AssetTags`
-  - GameplayEffect的描述标签
-- `GameplayTag[] GrantedTags`
-  - GameplayEffect的授予标签，GameplayEffect生效时会授予目标ASC这些标签，失效时会移除这些标签
-- `GameplayTag[] ApplicationRequiredTags`
-  - GameplayEffect的应用要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会生效 
-- `GameplayTag[] OngoingRequiredTags`
-  - GameplayEffect的持续要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会持续生效
-- `GameplayTag[] RemoveGameplayEffectsWithTags`
-  - GameplayEffect的移除标签，只要目标ASC的GameplayEffect持有【任意】这些标签时，这些GameplayEffect就会被移除
-- `GameplayTag[] ApplicationImmunityTags` 
-  - GameplayEffect的免疫标签，只要目标ASC持有【任意】这些标签时，这个GameplayEffect就不会生效
-- `GameplayCueInstant[] CueOnExecute;`
-  - GameplayEffect执行时触发的GameplayCue
-- `GameplayCueDurational[] CueDurational`
-  - GameplayEffect持续时触发的GameplayCue
-- `GameplayCueInstant[] CueOnAdd`
-  - GameplayEffect添加时触发的GameplayCue
-- `GameplayCueInstant[] CueOnRemove`
-  - GameplayEffect移除时触发的GameplayCue
-- `GameplayCueInstant[] CueOnActivate`
-  - GameplayEffect激活时触发的GameplayCue
-- `GameplayCueInstant[] CueOnDeactivate`
-  - GameplayEffect失效时触发的GameplayCue
+- `EffectsDurationPolicy DurationPolicy;` :GameplayEffect的持续时间策略
+- `float Duration` :GameplayEffect的持续时间 
+- `float Period` : GameplayEffect的周期
+- `GameplayEffectAsset PeriodExecution` :GameplayEffect的周期执行的GameplayEffect
+- `GameplayEffectModifier[] Modifiers`:GameplayEffect修改器
+-  `GameplayTag[] AssetTags` :GameplayEffect的描述标签
+- `GameplayTag[] GrantedTags` :GameplayEffect的授予标签，GameplayEffect生效时会授予目标ASC这些标签，失效时会移除这些标签
+- `GameplayTag[] ApplicationRequiredTags`:GameplayEffect的应用要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会生效 
+- `GameplayTag[] OngoingRequiredTags`: GameplayEffect的持续要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会持续生效
+- `GameplayTag[] RemoveGameplayEffectsWithTags` :GameplayEffect的移除标签，只要目标ASC的GameplayEffect持有【任意】这些标签时，这些GameplayEffect就会被移除
+- `GameplayTag[] ApplicationImmunityTags`:GameplayEffect的免疫标签，只要目标ASC持有【任意】这些标签时，这个GameplayEffect就不会生效
+- `GameplayCueInstant[] CueOnExecute;` :GameplayEffect执行时触发的GameplayCue
+- `GameplayCueDurational[] CueDurational` :GameplayEffect持续时触发的GameplayCue
+- `GameplayCueInstant[] CueOnAdd`:GameplayEffect添加时触发的GameplayCue
+- `GameplayCueInstant[] CueOnRemove`:GameplayEffect移除时触发的GameplayCue
+- `GameplayCueInstant[] CueOnActivate`:GameplayEffect激活时触发的GameplayCue
+- `GameplayCueInstant[] CueOnDeactivate`:GameplayEffect失效时触发的GameplayCue
 
 #### 3.6.2 GameplayEffect
 GameplayEffect是GAS的Runtime的游戏效果数据类.运行游戏运行时动态生成GameplayEffect。
 - GameplayEffect的数据结构与GameplayEffectAsset几乎一致。这里就不再多赘述数据变量了。
 - 
 #### 3.6.3 GameplayEffectSpec
+- `void Apply()`：应用游戏效果。
+- `void DisApply()`：取消游戏效果的应用。
+- `void Activate()`：激活游戏效果。
+- `void Deactivate()`：停用游戏效果。
+- `bool CanRunning()`：检查游戏效果是否可以运行。
+- `void Tick()`：更新游戏效果的周期性行为。
+- `void TriggerOnExecute()`：触发游戏效果执行时的事件。
+- `void TriggerOnAdd()`：触发游戏效果添加时的事件。
+- `void TriggerOnRemove()`：触发游戏效果移除时的事件。
+- `void TriggerOnTick()`：触发游戏效果进行周期性更新时的事件。
+- `void TriggerOnImmunity()`：触发游戏效果免疫时的事件。
+- `void RemoveSelf()`：移除游戏效果自身。
+- `void RegisterValue(GameplayTag tag, float value)`：注册与游戏标签关联的值。
+  - `tag`：游戏标签。
+  - `value`：与游戏标签关联的值。
+- `void RegisterValue(string name, float value)`：注册与名称关联的值。
+  - `name`：名称。
+  - `value`：与名称关联的值。
+- `bool UnregisterValue(GameplayTag tag)`：取消注册与游戏标签关联的值。
+    - `tag`：游戏标签。
+    - 返回值：如果成功取消注册，则返回 `true`，否则返回 `false`。
+- `bool UnregisterValue(string name)`：取消注册与名称关联的值。
+    - `name`：名称。
+    - 返回值：如果成功取消注册，则返回 `true`，否则返回 `false`。
+- `float? GetMapValue(GameplayTag tag)`：获取与游戏标签关联的值。
+    - `tag`：游戏标签。
+    - 返回值：如果找到与指定游戏标签关联的值，则返回该值；否则返回 `null`。
+- `float? GetMapValue(string name)`：获取与名称关联的值。
+    - `name`：名称。
+    - 返回值：如果找到与指定名称关联的值，则返回该值；否则返回 `null`。
+  
 #### 3.6.4 GameplayEffectContainer
-#### 3.6.5 GameplayEffectTagContainer
-#### 3.6.6 CooldownTimer
-#### 3.6.7 GameplayEffectModifier
-##### 3.6.7.0 ModifierMagnitudeCalculation
-##### 3.6.7.1 ScalableFloatModCalculation
-##### 3.6.7.2 AttributeBasedModCalculation
-##### 3.6.7.3 SetByCallerFromNameModCalculation
-##### 3.6.7.4 SetByCallerFromTagModCalculation
+GameplayEffectContainer是GameplayEffect的容器类，用于ASC管理GameplayEffect。
+- `List<GameplayEffectSpec> GetActiveGameplayEffects()`：获取当前生效的游戏效果列表。
+- `void Tick()`：处理所有生效游戏效果的周期性更新。
+- `void RegisterOnGameplayEffectContainerIsDirty(Action action)`：注册效果容器变为脏状态时的回调函数。
+  - `action`：回调函数。 
+- `void UnregisterOnGameplayEffectContainerIsDirty(Action action)`：取消注册效果容器变为脏状态时的回调函数。
+  - `action`：回调函数。 
+- `void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)`：移除具有指定标签的游戏效果。
+  - `tags`：指定的标签。 
+- `bool AddGameplayEffectSpec(GameplayEffectSpec spec)`：添加一个游戏效果实例。
+  - `spec`：指定的游戏效果规范。 
+- `void RemoveGameplayEffectSpec(GameplayEffectSpec spec)`：移除指定的游戏效果实例。
+  - `spec`：指定的游戏效果规范。 
+- `void RefreshGameplayEffectState()`：刷新游戏效果的状态，包括激活新效果和移除已停用的效果。
+- `CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)`：检查指定标签的冷却状态。
+  - `tags`：指定的标签。 
+  - 返回值：冷却计时器。
+- `void ClearGameplayEffect()`：清除所有游戏效果，包括移除已应用的效果和停用的效果。
+
+#### 3.6.5 CooldownTimer
+CooldownTimer是冷却计时结构体，用于保存冷却时间数据。
+- `public float TimeRemaining;` : 剩余时间
+- `public float Duration;` : 总时间
+#### 3.6.6 GameplayEffectModifier
+GameplayEffectModifier是游戏效果修改器类，用于实现对Attribute的修改。
+- `string AttributeName`：属性名称，用于标识游戏效果修改器所影响的属性。
+- `float ModiferMagnitude`：修改器的幅度值，用于指定属性修改的具体数值。
+- `GEOperation Operation`：修改器的操作类型，指定属性修改的方式，如增加、减少等。
+- `ModifierMagnitudeCalculation MMC`：修改器的计算方式，用于指定如何计算修改的幅度值。
+- `void SetModiferMagnitude(float value)`：设置修改器的幅度值。
+    - `value`：修改器的新幅度值。
+- `void OnAttributeChanged()`：当属性名称发生变化时调用的方法，用于更新相关字段的值。
+- `static void SetAttributeChoices()`：设置属性选择列表。
+- `string AttributeSetName`：属性集名称，用于标识游戏效果修改器所影响的属性集。
+- `string AttributeShortName`：属性短名称，用于标识游戏效果修改器所影响的属性的简短版本。
+
+##### 3.6.6.0 ModifierMagnitudeCalculation
+##### 3.6.6.1 ScalableFloatModCalculation
+##### 3.6.6.2 AttributeBasedModCalculation
+##### 3.6.6.3 SetByCallerFromNameModCalculation
+##### 3.6.6.4 SetByCallerFromTagModCalculation
 
 ---
 ### 3.7 Ability
