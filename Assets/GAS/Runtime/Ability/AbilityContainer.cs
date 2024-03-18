@@ -65,6 +65,12 @@ namespace GAS.Runtime
             _abilities[abilityName].TryEndAbility();
         }
         
+        public void CancelAbility(string abilityName)
+        {
+            if (!_abilities.ContainsKey(abilityName)) return;
+            _abilities[abilityName].TryCancelAbility();
+        }
+        
         void CancelAbilitiesByTag(GameplayTagSet tags)
         {
             foreach (var kv in _abilities)

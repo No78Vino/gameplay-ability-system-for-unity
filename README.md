@@ -635,14 +635,205 @@ GasHost是GAS的宿主，它是GAS的运行机器和环境，GasHost没有API可
 ### 3.2 AbilitySystemComponent
 #### 3.2.1 AbilitySystemComponent
 AbilitySystemComponent是GAS的基本运行单位，它是GAS的核心类。
+ASC的public方法和属性就是外部干涉GAS的唯一手段。
+- `AbilitySystemComponentPreset Preset`
+  - ASC的预设。外部读取用，修改preset需要通过SetPreset方法
+- `void SetPreset(AbilitySystemComponentPreset preset)`
+  - 修改ASC的预设。 
+- `int Level { get; protected set; }`
+  - ASC的等级
+- `GameplayEffectContainer GameplayEffectContainer { get; private set; } `
+  - ASC当前所有GameplayEffect的容器，可以通过GameplayEffectContainer对GameplayEffect进行一定的外部干涉。
+- `GameplayTagAggregator GameplayTagAggregator { get; private set;} `
+  - ASC的GameplayTag聚合器，单位的Tag全部都由聚合器管理，外部可以通过聚合器对Tag进行一定的外部干涉。
+- `AbilityContainer AbilityContainer { get; private set;}`
+  - ASC的Ability容器，可以通过AbilityContainer对Ability进行一定的外部干涉。 
+- `AttributeSetContainer AttributeSetContainer { get; private set;}`
+  - ASC的AttributeSet容器，可以通过AttributeSetContainer对AttributeSet进行一定的外部干涉。
+- `void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities,int level)`
+  - 初始化ASC
+  - baseTags：ASC的基础Tag
+  - attrSetTypes：ASC的初始化AttributeSet类型
+  - baseAbilities：ASC的初始化Ability
+  - level：ASC的初始化等级
+- `void SetLevel(int level)`
+  - 设置ASC的等级
+- `bool HasTag(GameplayTag gameplayTag)`
+  - 判断ASC是否持有指定Tag
+  - gameplayTag：指定Tag
+  - 返回值：是否持有
+- `bool HasAllTags(GameplayTagSet tags)`
+  - 判断ASC是否持有指定Tag集合中的所有Tag
+  - tags：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet tags)`
+  - 判断ASC是否持有指定Tag集合中的任意一个Tag
+  - tags：指定Tag集合
+  - 返回值：是否持有
+- `void AddFixedTags(GameplayTagSet tags)`
+  - 添加固有Tag
+  - tags：添加的Tag集合
+- `void RemoveFixedTags(GameplayTagSet tags)`
+  - 移除固有Tag
+  - tags：移除的Tag集合
+- `void AddFixedTag(GameplayTag tag)`
+  - 添加固有Tag
+  - tag：添加的Tag
+-  `void RemoveFixedTag(GameplayTag tag)`
+  - 移除固有Tag
+  - tag：移除的Tag
+- `void RemoveGameplayEffect(GameplayEffectSpec spec)`
+  - 移除指定的GameplayEffect
+  - spec：指定的GameplayEffect的规格类实例
+- `GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)`
+  - 对指定的ASC施加指定的GameplayEffect
+  - gameplayEffect：指定的GameplayEffect
+  - target：目标ASC
+  - 返回值：施加的GameplayEffect的规格类实例
+- `GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)`
+  - 对自己施加指定的GameplayEffect
+  - gameplayEffect：指定的GameplayEffect
+  - 返回值：施加的GameplayEffect的规格类实例
+- `void GrantAbility(AbstractAbility ability)`
+  - 获得指定的Ability
+  - ability：指定的Ability
+- `void RemoveAbility(string abilityName)`
+  - 移除指定的Ability
+  - abilityName：指定的Ability的U-Name
+- `float? GetAttributeCurrentValue(string setName, string attributeShortName)`
+  - 获取指定Attribute的当前值 
+  - setName：AttributeSet的名字
+  - attributeShortName：Attribute的短名
+  - 返回值：Attribute的当前值
+- `float? GetAttributeBaseValue(string setName, string attributeShortName)`
+  - 获取指定Attribute的基础值 
+  - setName：AttributeSet的名字
+  - attributeShortName：Attribute的短名
+  - 返回值：Attribute的基础值
+- `Dictionary<string, float> DataSnapshot()`
+  - 获取ASC的数据快照
+  - 返回值：ASC的数据快照
+- ` bool TryActivateAbility(string abilityName, params object[] args)`
+  - 尝试激活指定的Ability
+  - abilityName：指定的Ability的U-Name
+  - args：激活Ability的参数
+  - 返回值：是否激活成功
+- `void TryEndAbility(string abilityName)`
+  - 尝试结束指定的Ability
+  - abilityName：指定的Ability的U-Name
+- `void TryCancelAbility(string abilityName)`
+  - 尝试取消指定的Ability
+  - abilityName：指定的Ability的U-Name
+- `void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)`
+  - 从Instant GameplayEffect中应用Mod
+  - spec：Instant GameplayEffect的规格类实例
+- `CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)`
+  - 通过Tag检查冷却时间
+  - tags：指定的Tag集合
+  - 返回值：冷却计时器
+- `T AttrSet<T>() where T : AttributeSet`
+  - 获取指定类的AttributeSet
+  - 返回值：指定类的AttributeSet
+- `void ClearGameplayEffect()`
+  - 清空ASC的所有GameplayEffect
+ 
 #### 3.2.2 AbilitySystemComponentPreset
 AbilitySystemComponentPreset是ASC的预设，用于方便初始化ASC的数据。
+- `string[] AttributeSets`
+  - ASC的初始化AttributeSet类型 
+- `GameplayTag[] BaseTags` 
+  - ASC的基础Tag
+- `AbilityAsset[] BaseAbilities`
+  - ASC的初始化Ability
+  
 #### 3.2.3 AbilitySystemComponentExtension
+AbilitySystemComponentExtension是ASC的扩展方法类，用于方便ASC的初始化和操作。
+AbilitySystemComponentExtension不是EX-GAS框架内脚本的，需要EX-GAS框架基础配置完成后，通过生成脚本生成。
+- `static Type[] PresetAttributeSetTypes(this AbilitySystemComponent asc)`
+  - 获取ASC的预设AttributeSet类型
+  - 返回值：ASC的预设AttributeSet类型
+- `static GameplayTag[] PresetBaseTags(this AbilitySystemComponent asc)`
+  - 获取ASC的预设基础Tag
+  - 返回值：ASC的预设基础Tag
+- `static void InitWithPreset(this AbilitySystemComponent asc,int level, AbilitySystemComponentPreset preset = null)`
+  - 通过预设初始化ASC
+  - level：ASC的初始化等级
+  - preset：ASC的预设
 
 ### 3.3 GameplayTag
 #### 3.3.1 GameplayTag
-#### 3.3.2 GameplayTagContainer
-#### 3.3.3 GameplayTagSet
+GameplayTag是GAS的标签类，它是GAS的核心类。Tag的设计结构虽然简单，但是在实际应用中十分高效有用。
+- `int HashCode => _hashCode;`
+  - Tag的HashCode
+- `string[] AncestorNames => _ancestorNames;`
+  - Tag的父级名 
+- `int[] AncestorHashCodes => _ancestorHashCodes;`
+  - Tag的父级HashCode集合
+- `bool Root => _ancestorHashCodes.Length == 0;`
+  - Tag是否是根Tag 
+- `bool IsDescendantOf(GameplayTag other)`
+  - Tag是否是指定Tag的子Tag
+  - other：指定Tag
+  - 返回值：是否是子Tag
+- `bool HasTag(GameplayTag tag)`
+  - Tag是否持有指定Tag,比如‘Buff.Burning’ 持有 ‘Buff’
+  - tag：指定Tag
+  - 返回值：是否持有
+#### 3.3.2 GameplayTagSet
+GameplayTagSet是Tag集合类之一。GameplayTagSet适用于稳定不会改变的Tag集合。通常数据类的Tag集合都用GameplayTagSet。
+- `readonly GameplayTag[] Tags`
+  - Tag数据
+- `bool Empty => Tags.Length == 0;`
+  - Tag集合是否为空
+- `bool HasTag(GameplayTag tag)`
+  - TagSet是否持有指定Tag
+  - tag：指定Tag
+  - 返回值：是否持有
+- `bool HasAllTags(GameplayTagSet other) / bool HasAllTags(params GameplayTag[] tags)`
+  - TagSet是否持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet other) / bool HasAnyTags(params GameplayTag[] tags)`
+  - TagSet是否持有指定Tag集合中的任意一个Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasNoneTags(GameplayTagSet other) / bool HasNoneTags(params GameplayTag[] tags)`
+  - TagSet是否不持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否不持有
+
+#### 3.3.3 GameplayTagContainer
+GameplayTagContainer是Tag集合类之一。GGameplayTagContainer适用于经常改变的Tag集合。ASC的Tag集合都用GameplayTagContainer。
+- `List<GameplayTag> Tags { get; }`
+  - Tag数据
+- `void AddTag(GameplayTag tag)`
+  - 添加Tag
+  - tag：指定Tag
+- `void AddTag(GameplayTagSet tagSet)`
+  - 添加Tag集合
+  - tagSet：要添加的Tag集合
+- `void RemoveTag(GameplayTag tag)` 
+  - 移除Tag
+  - tag：指定Tag
+- `void RemoveTag(GameplayTagSet tagSet)`
+  - 移除Tag集合
+  - tagSet：要移除的Tag集合
+- `bool HasTag(GameplayTag tag)`
+  - TagContainer是否持有指定Tag
+  - tag：指定Tag
+- `bool HasAllTags(GameplayTagSet other) / bool HasAllTags(params GameplayTag[] tags)`
+  - TagContainer是否持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet other) / bool HasAnyTags(params GameplayTag[] tags)`
+  - TagContainer是否持有指定Tag集合中的任意一个Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasNoneTags(GameplayTagSet other) / bool HasNoneTags(params GameplayTag[] tags)`
+  - TagContainer是否不持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否不持有
+
 #### 3.3.4 GameplayTagAggregator
 #### 3.3.5 GTagLib(Script-Generated Code)
 
