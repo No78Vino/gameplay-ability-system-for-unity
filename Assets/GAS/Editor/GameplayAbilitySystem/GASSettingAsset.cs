@@ -21,7 +21,6 @@ namespace GAS.Editor
         [LabelText(GASTextDefine.LABLE_OF_CodeGeneratePath)]
         [LabelWidth(LABLE_WIDTH)]
         [FolderPath]
-        [Delayed]
         [OnValueChanged("Save")]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
 
@@ -29,7 +28,6 @@ namespace GAS.Editor
         [LabelText(GASTextDefine.LABLE_OF_GASConfigAssetPath)] 
         [LabelWidth(LABLE_WIDTH)]
         [FolderPath]
-        [Delayed]
         [OnValueChanged("Save")]
         public string GASConfigAssetPath = "Assets/GAS/Config";
         
