@@ -21,13 +21,17 @@ namespace GAS.Editor
         [LabelText(GASTextDefine.LABLE_OF_CodeGeneratePath)]
         [LabelWidth(LABLE_WIDTH)]
         [FolderPath]
+        [Delayed]
+        [OnValueChanged("Save")]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
 
         [BoxGroup("A")] 
         [LabelText(GASTextDefine.LABLE_OF_GASConfigAssetPath)] 
         [LabelWidth(LABLE_WIDTH)]
         [FolderPath]
-        public string GASConfigAssetPath = "Assets/GAS_Setting/Config";
+        [Delayed]
+        [OnValueChanged("Save")]
+        public string GASConfigAssetPath = "Assets/GAS/Config";
         
         public static GASSettingAsset Setting
         {
@@ -221,6 +225,12 @@ namespace GAS.Editor
             AssetDatabase.CreateAsset(a, GAS_ATTRIBUTESET_ASSET_PATH);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        void Save()
+        {
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssetIfDirty(this);
         }
     }
 }
