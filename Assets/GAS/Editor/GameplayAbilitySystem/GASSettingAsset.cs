@@ -124,7 +124,7 @@ namespace GAS.Editor
                 AssetDatabase.CreateAsset(a, GasDefine.GAS_SYSTEM_ASSET_PATH);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                asset = CreateInstance<GASSettingAsset>();
+                asset = AssetDatabase.LoadAssetAtPath<GASSettingAsset>(GasDefine.GAS_SYSTEM_ASSET_PATH);
             }
 
             return asset;
