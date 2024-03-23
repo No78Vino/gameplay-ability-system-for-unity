@@ -179,6 +179,11 @@ namespace GAS.Runtime
         {
             AbilityContainer.EndAbility(abilityName);
         }
+        
+        public void TryCancelAbility(string abilityName)
+        {
+            AbilityContainer.CancelAbility(abilityName);
+        }
 
         public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
         {
@@ -211,7 +216,7 @@ namespace GAS.Runtime
             return GameplayEffectContainer.CheckCooldownFromTags(tags);
         }
 
-        public T AttrSet<T>() where T : Runtime.AttributeSet
+        public T AttrSet<T>() where T : AttributeSet
         {
             AttributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
             return attrSet;

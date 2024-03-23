@@ -33,7 +33,7 @@ namespace GAS.General
             _pauseTimestamp = Timestamp();
         }
         
-        public static void Resume()
+        public static void Unpause()
         {
             _deltaTime -= (int)(Timestamp() - _pauseTimestamp);
         }

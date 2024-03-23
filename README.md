@@ -1,4 +1,4 @@
-# EX Gameplay Ability System For Unity(W.I.P 文档还在施工中)
+# EX Gameplay Ability System For Unity
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
 
@@ -32,7 +32,7 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
   - [2.7 GameplayEffect](#27-gameplayeffect)
   - [2.8 Ability](#28-ability)
   - [2.9 AbilitySystemComponent](#29-abilitysystemcomponent)
-- 3.[API(W.I.P 施工中)](#3apiwip)
+- 3.[API && Source Code Documentation (W.I.P 施工中)](#3api--source-code-documentation)
 - 4.[可视化功能](#4可视化功能)
   - [GAS Base Manager (GAS基础配置管理器)](#1-gas-base-manager-gas基础配置管理器)
   - [GAS Asset Aggregator (GAS配置资源聚合器)](#2-gas-asset-aggregator-gas配置资源聚合器)
@@ -594,8 +594,9 @@ ASC预设是为了可视化角色（单位）的参数。
 > 体系外的脚本不断的拨动ASC的Ability，而GAS内部会对Ability的运行结果自行消化。
 
 ### 3.1 Core 
-GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制GAS的运行与否。
+
 #### 3.1.1 GameplayAbilitySystem
+GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制GAS的运行与否。
 - ` static GameplayAbilitySystem GAS`
   - GAS的单例，所有的GAS操作都是通过GAS单例来进行的。
 - ` List<AbilitySystemComponent> AbilitySystemComponents { get; } `
@@ -611,55 +612,746 @@ GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制G
 - ` void Unpause()`
   - 恢复GAS运行。 
 #### 3.1.2 GASTimer
-
+GASTimer是GAS的计时器，它是GAS的时间基准。
+- `static long Timestamp()`
+  - GAS当前时间戳（毫秒）
+- `static long TimestampSeconds()`
+  - GAS当前时间戳（秒）
+- `static int CurrentFrameCount`
+  - GAS当前运行帧数
+- `static long StartTimestamp`
+  - GAS启动时间戳
+- `static void InitStartTimestamp()`
+  - GAS初始化启动时间戳
+- `static void Pause()`
+  - 暂停GASTimer计时 
+- `static void Unpause()`
+  - 恢复GASTimer计时 
+- `static int FrameRate`
+  - GAS帧率
 #### 3.1.3 GasHost
+GasHost是GAS的宿主，它是GAS的运行机器和环境，GasHost没有API可以从外部干涉。
 
+---
 ### 3.2 AbilitySystemComponent
 #### 3.2.1 AbilitySystemComponent
+AbilitySystemComponent是GAS的基本运行单位，它是GAS的核心类。
+ASC的public方法和属性就是外部干涉GAS的唯一手段。
+- `AbilitySystemComponentPreset Preset`
+  - ASC的预设。外部读取用，修改preset需要通过SetPreset方法
+- `void SetPreset(AbilitySystemComponentPreset preset)`
+  - 修改ASC的预设。 
+- `int Level { get; protected set; }`
+  - ASC的等级
+- `GameplayEffectContainer GameplayEffectContainer { get; private set; } `
+  - ASC当前所有GameplayEffect的容器，可以通过GameplayEffectContainer对GameplayEffect进行一定的外部干涉。
+- `GameplayTagAggregator GameplayTagAggregator { get; private set;} `
+  - ASC的GameplayTag聚合器，单位的Tag全部都由聚合器管理，外部可以通过聚合器对Tag进行一定的外部干涉。
+- `AbilityContainer AbilityContainer { get; private set;}`
+  - ASC的Ability容器，可以通过AbilityContainer对Ability进行一定的外部干涉。 
+- `AttributeSetContainer AttributeSetContainer { get; private set;}`
+  - ASC的AttributeSet容器，可以通过AttributeSetContainer对AttributeSet进行一定的外部干涉。
+- `void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities,int level)`
+  - 初始化ASC
+  - baseTags：ASC的基础Tag
+  - attrSetTypes：ASC的初始化AttributeSet类型
+  - baseAbilities：ASC的初始化Ability
+  - level：ASC的初始化等级
+- `void SetLevel(int level)`
+  - 设置ASC的等级
+- `bool HasTag(GameplayTag gameplayTag)`
+  - 判断ASC是否持有指定Tag
+  - gameplayTag：指定Tag
+  - 返回值：是否持有
+- `bool HasAllTags(GameplayTagSet tags)`
+  - 判断ASC是否持有指定Tag集合中的所有Tag
+  - tags：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet tags)`
+  - 判断ASC是否持有指定Tag集合中的任意一个Tag
+  - tags：指定Tag集合
+  - 返回值：是否持有
+- `void AddFixedTags(GameplayTagSet tags)`
+  - 添加固有Tag
+  - tags：添加的Tag集合
+- `void RemoveFixedTags(GameplayTagSet tags)`
+  - 移除固有Tag
+  - tags：移除的Tag集合
+- `void AddFixedTag(GameplayTag tag)`
+  - 添加固有Tag
+  - tag：添加的Tag
+-  `void RemoveFixedTag(GameplayTag tag)`
+  - 移除固有Tag
+  - tag：移除的Tag
+- `void RemoveGameplayEffect(GameplayEffectSpec spec)`
+  - 移除指定的GameplayEffect
+  - spec：指定的GameplayEffect的规格类实例
+- `GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)`
+  - 对指定的ASC施加指定的GameplayEffect
+  - gameplayEffect：指定的GameplayEffect
+  - target：目标ASC
+  - 返回值：施加的GameplayEffect的规格类实例
+- `GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)`
+  - 对自己施加指定的GameplayEffect
+  - gameplayEffect：指定的GameplayEffect
+  - 返回值：施加的GameplayEffect的规格类实例
+- `void GrantAbility(AbstractAbility ability)`
+  - 获得指定的Ability
+  - ability：指定的Ability
+- `void RemoveAbility(string abilityName)`
+  - 移除指定的Ability
+  - abilityName：指定的Ability的U-Name
+- `float? GetAttributeCurrentValue(string setName, string attributeShortName)`
+  - 获取指定Attribute的当前值 
+  - setName：AttributeSet的名字
+  - attributeShortName：Attribute的短名
+  - 返回值：Attribute的当前值
+- `float? GetAttributeBaseValue(string setName, string attributeShortName)`
+  - 获取指定Attribute的基础值 
+  - setName：AttributeSet的名字
+  - attributeShortName：Attribute的短名
+  - 返回值：Attribute的基础值
+- `Dictionary<string, float> DataSnapshot()`
+  - 获取ASC的数据快照
+  - 返回值：ASC的数据快照
+- ` bool TryActivateAbility(string abilityName, params object[] args)`
+  - 尝试激活指定的Ability
+  - abilityName：指定的Ability的U-Name
+  - args：激活Ability的参数
+  - 返回值：是否激活成功
+- `void TryEndAbility(string abilityName)`
+  - 尝试结束指定的Ability
+  - abilityName：指定的Ability的U-Name
+- `void TryCancelAbility(string abilityName)`
+  - 尝试取消指定的Ability
+  - abilityName：指定的Ability的U-Name
+- `void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)`
+  - 从Instant GameplayEffect中应用Mod
+  - spec：Instant GameplayEffect的规格类实例
+- `CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)`
+  - 通过Tag检查冷却时间
+  - tags：指定的Tag集合
+  - 返回值：冷却计时器
+- `T AttrSet<T>() where T : AttributeSet`
+  - 获取指定类的AttributeSet
+  - 返回值：指定类的AttributeSet
+- `void ClearGameplayEffect()`
+  - 清空ASC的所有GameplayEffect
+ 
 #### 3.2.2 AbilitySystemComponentPreset
+AbilitySystemComponentPreset是ASC的预设，用于方便初始化ASC的数据。
+- `string[] AttributeSets`
+  - ASC的初始化AttributeSet类型 
+- `GameplayTag[] BaseTags` 
+  - ASC的基础Tag
+- `AbilityAsset[] BaseAbilities`
+  - ASC的初始化Ability
+  
 #### 3.2.3 AbilitySystemComponentExtension
+AbilitySystemComponentExtension是ASC的扩展方法类，用于方便ASC的初始化和操作。
+AbilitySystemComponentExtension不是EX-GAS框架内脚本的，需要EX-GAS框架基础配置完成后，通过生成脚本生成。
+- `static Type[] PresetAttributeSetTypes(this AbilitySystemComponent asc)`
+  - 获取ASC的预设AttributeSet类型
+  - 返回值：ASC的预设AttributeSet类型
+- `static GameplayTag[] PresetBaseTags(this AbilitySystemComponent asc)`
+  - 获取ASC的预设基础Tag
+  - 返回值：ASC的预设基础Tag
+- `static void InitWithPreset(this AbilitySystemComponent asc,int level, AbilitySystemComponentPreset preset = null)`
+  - 通过预设初始化ASC
+  - level：ASC的初始化等级
+  - preset：ASC的预设
 
 ### 3.3 GameplayTag
 #### 3.3.1 GameplayTag
-#### 3.3.2 GameplayTagContainer
-#### 3.3.3 GameplayTagSet
+GameplayTag是GAS的标签类，它是GAS的核心类。Tag的设计结构虽然简单，但是在实际应用中十分高效有用。
+- `int HashCode => _hashCode;`
+  - Tag的HashCode
+- `string[] AncestorNames => _ancestorNames;`
+  - Tag的父级名 
+- `int[] AncestorHashCodes => _ancestorHashCodes;`
+  - Tag的父级HashCode集合
+- `bool Root => _ancestorHashCodes.Length == 0;`
+  - Tag是否是根Tag 
+- `bool IsDescendantOf(GameplayTag other)`
+  - Tag是否是指定Tag的子Tag
+  - other：指定Tag
+  - 返回值：是否是子Tag
+- `bool HasTag(GameplayTag tag)`
+  - Tag是否持有指定Tag,比如‘Buff.Burning’ 持有 ‘Buff’
+  - tag：指定Tag
+  - 返回值：是否持有
+#### 3.3.2 GameplayTagSet
+GameplayTagSet是Tag集合类之一。GameplayTagSet适用于稳定不会改变的Tag集合。通常数据类的Tag集合都用GameplayTagSet。
+- `readonly GameplayTag[] Tags`
+  - Tag数据
+- `bool Empty => Tags.Length == 0;`
+  - Tag集合是否为空
+- `bool HasTag(GameplayTag tag)`
+  - TagSet是否持有指定Tag
+  - tag：指定Tag
+  - 返回值：是否持有
+- `bool HasAllTags(GameplayTagSet other) / bool HasAllTags(params GameplayTag[] tags)`
+  - TagSet是否持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet other) / bool HasAnyTags(params GameplayTag[] tags)`
+  - TagSet是否持有指定Tag集合中的任意一个Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasNoneTags(GameplayTagSet other) / bool HasNoneTags(params GameplayTag[] tags)`
+  - TagSet是否不持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否不持有
+
+#### 3.3.3 GameplayTagContainer
+GameplayTagContainer是Tag集合类之一。GameplayTagContainer适用于经常改变的Tag集合。
+- `List<GameplayTag> Tags { get; }`
+  - Tag数据
+- `void AddTag(GameplayTag tag)`
+  - 添加Tag
+  - tag：指定Tag
+- `void AddTag(GameplayTagSet tagSet)`
+  - 添加Tag集合
+  - tagSet：要添加的Tag集合
+- `void RemoveTag(GameplayTag tag)` 
+  - 移除Tag
+  - tag：指定Tag
+- `void RemoveTag(GameplayTagSet tagSet)`
+  - 移除Tag集合
+  - tagSet：要移除的Tag集合
+- `bool HasTag(GameplayTag tag)`
+  - TagContainer是否持有指定Tag
+  - tag：指定Tag
+- `bool HasAllTags(GameplayTagSet other) / bool HasAllTags(params GameplayTag[] tags)`
+  - TagContainer是否持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet other) / bool HasAnyTags(params GameplayTag[] tags)`
+  - TagContainer是否持有指定Tag集合中的任意一个Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasNoneTags(GameplayTagSet other) / bool HasNoneTags(params GameplayTag[] tags)`
+  - TagContainer是否不持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否不持有
+
 #### 3.3.4 GameplayTagAggregator
+GameplayTagAggregator是专门针对ASC的Tag管理类，会针对固有Tag和动态Tag做不同的处理。
+- `void Init(GameplayTag[] tags)`
+  - 初始化
+  - tags：初始化的固有Tag
+- `void AddFixedTag(GameplayTag tag)`
+  - 添加固有Tag
+  - tag：添加的Tag
+- `void AddFixedTag(GameplayTagSet tagSet)`
+  - 添加固有Tag集合
+  - tagSet：添加的Tag集合
+- `void RemoveFixedTag(GameplayTag tag)`
+  - 移除固有Tag
+  - tag：移除的Tag
+- `void RemoveFixedTag(GameplayTagSet tagSet)`
+  - 移除固有Tag集合
+  - tagSet：移除的Tag集合
+- `void ApplyGameplayEffectDynamicTag(GameplayEffectSpec source)`
+  - 从GameplayEffect中应用动态Tag（Granted Tags）
+  - source：GameplayEffect的规格类实例
+- `void ApplyGameplayAbilityDynamicTag(AbilitySpec source)`
+  - 从Ability中应用动态Tag（Activation Owned Tags）
+  - source：Ability的规格类实例
+- `RestoreGameplayEffectDynamicTags(GameplayEffectSpec effectSpec)`
+  - 从GameplayEffect中恢复动态Tag（Granted Tags）
+  - effectSpec：GameplayEffect的规格类实例
+- `RestoreGameplayAbilityDynamicTags(AbilitySpec abilitySpec)`
+  - 从Ability中恢复动态Tag（Activation Owned Tags）
+  - abilitySpec：Ability的规格类实例
+- `bool HasTag(GameplayTag tag)` 
+  - TagAggregator是否持有指定Tag
+  - tag：指定Tag
+  - 返回值：是否持有
+- `bool HasAllTags(GameplayTagSet other) / bool HasAllTags(params GameplayTag[] tags)`
+  - TagAggregator是否持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasAnyTags(GameplayTagSet other) / bool HasAnyTags(params GameplayTag[] tags)`
+  - TagAggregator是否持有指定Tag集合中的任意一个Tag
+  - other：指定Tag集合
+  - 返回值：是否持有
+- `bool HasNoneTags(GameplayTagSet other) / bool HasNoneTags(params GameplayTag[] tags)`
+  - TagAggregator是否不持有指定Tag集合中的所有Tag
+  - other：指定Tag集合
+  - 返回值：是否不持有 
 #### 3.3.5 GTagLib(Script-Generated Code)
+GTagLib是GAS的标签库，它是GAS的标签管理类。
+GTagLib不是EX-GAS框架内脚本的，需要EX-GAS框架Tag配置改动后，通过生成脚本生成。
+- `public static GameplayTag XXX { get;} = new GameplayTag("XXX");`
+- `public static GameplayTag XXX_YYY { get;} = new GameplayTag("XXX.YYY");`
+  - GTagLib会把所有的Tag都生成为静态字段，方便外部调用。格式如上所示。
+  - A.B.C的Tag会生成为A_B_C的静态字段。
+- `public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
+  {
+  ["A"] = A,
+  ["A.B"] = A_B,
+  ["A.C"] = A_C,
+  };`
+  - GTagLib还包含了一个TagMap，方便外部通过Tag的字符串名来获取Tag。
 
+---
 ### 3.4 Attribute
-#### 3.4.1 AttributeBase
-#### 3.4.2 AttributeValue
-#### 3.4.3 AttributeAggregator
-#### 3.4.4 DerivedAttribute(W.I.P)
+#### 3.4.1 AttributeValue
+AttributeValue是一个数据结构体。是实际存储Attribute的值的单位。
+- `float BaseValue => _baseValue;`
+    - Attribute的基础值，是属性，只读。修改baseValue需要通过AttributeBase的SetBaseValue方法
+- `float CurrentValue => _currentValue;`
+    - Attribute的当前值，是属性，只读。修改currentValue需要通过AttributeBase的SetCurrentValue方法
+- `void SetBaseValue(float value)`
+    - 设置Attribute的基础值
+    - value：指定的值
+- `void SetCurrentValue(float value)`
+    - 设置Attribute的当前值
+    - value：指定的值
+#### 3.4.2 AttributeBase
+AttributeBase是GAS的属性基类，它是GAS的核心类之一。
+负责管理AttributeValue的值变化，已经Attribute相关回调处理。
+- `readonly string Name`
+  - Attribute的名字(完整)
+- `readonly string ShortName`
+  - Attribute的短名
+- `readonly string SetName`
+  - Attribute所属的AttributeSet的名字
+- `AttributeValue Value => _value;`
+  - Attribute的值类，数据类
+- `float BaseValue => _value.BaseValue;`
+  - Attribute的基础值
+- `float CurrentValue => _value.CurrentValue;`
+  - Attribute的当前值
+- `void SetCurrentValue(float value)`
+  - 设置Attribute的当前值,会触发_onPreCurrentValueChange和_onPostCurrentValueChange回调
+  - value：指定的值
+- `void SetBaseValue(float value)`
+  - 设置Attribute的基础值,会触发_onPreBaseValueChange和_onPostBaseValueChange回调
+  - value：指定的值
+- `void SetCurrentValueWithoutEvent(float value)`
+  - 设置Attribute的当前值,但不会触发_onPreCurrentValueChange和_onPostCurrentValueChange回调 
+  - value：指定的值
+- `void SetBaseValueWithoutEvent(float value)`
+  - 设置Attribute的基础值,但不会触发_onPreBaseValueChange和_onPostBaseValueChange回调
+  - value：指定的值
+- `void RegisterPreBaseValueChange(Func<AttributeBase, float,float> func)`
+  - 注册Attribute的基础值变化前回调
+  - func：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：准备变化的值
+    - 返回值：回调处理完的变化值
+- `void RegisterPostBaseValueChange(Action<AttributeBase, float, float> action)`
+  - 注册Attribute的基础值变化后回调
+  - action：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：变化后的实际值
+- `void RegisterPreCurrentValueChange(Func<AttributeBase, float, float> func)`
+  - 注册Attribute的当前值变化前回调
+  - func：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：准备变化的值
+    - 返回值：回调处理完的变化值
+- `void RegisterPostCurrentValueChange(Action<AttributeBase, float, float> action)`
+  - 注册Attribute的当前值变化后回调
+  - action：回调函数
+    - AttributeBase：AttributeBase实例
+    - float：变化前的值
+    - float：变化后的实际值
+- `void UnregisterPreBaseValueChange(Func<AttributeBase, float,float> func)`
+  - 注销Attribute的基础值变化前回调
+  - func：注销的回调函数
+- `void UnregisterPostBaseValueChange(Action<AttributeBase, float, float> action)`
+  - 注销Attribute的基础值变化后回调
+  - action：注销的回调函数
+- `void UnregisterPreCurrentValueChange(Func<AttributeBase, float, float> func)`
+  - 注销Attribute的当前值变化前回调
+  - func：注销的回调函数
+- `void UnregisterPostCurrentValueChange(Action<AttributeBase, float, float> action)`
+  - 注销Attribute的当前值变化后回调
+  - action：注销的回调函数
 
+#### 3.4.3 AttributeAggregator
+AttributeAggregator是Attribute的单位性质的聚合器，每个AttributeBase会对应一个AttributeAggregator。
+AttributeAggregator是完全闭合独立运作，除了构造函数外不提供任何对外方法。
+每当AttributeBase的BaseValue变化时，AttributeAggregator会自动更新自己的CurrentValue。
+
+#### 3.4.4 DerivedAttribute(W.I.P)
+推导性质的Attribute，理论上不是一个类，而是一个Attribute的设计策略。
+
+---
 ### 3.5 AttributeSet
 #### 3.5.1 AttributeSet
-#### 3.5.2 AttributeSetContainer
-#### 3.5.3 CustomAttrSet
+AttributeSet是一个抽象基类。
+- `public abstract AttributeBase this[int index] { get; }`
+  - 通过AttributeBase的短名作为索引获取AttributeBase
+- `public abstract string[] AttributeNames { get; }`
+  - AttributeSet的所有Attribute的短名 
+- `public void ChangeAttributeBase(string attributeShortName, float value)`
+    - 修改AttributeBase的基础值
+    - attributeShortName：Attribute的短名
+    - value：指定的值
+##### 3.5.1.a GAttrSetLib.gen( Script-Generated Code)
+GAttrSetLib.gen是便于读取，管理AttributeSet工具脚本。
+GAttrSetLib.gen不是EX-GAS框架内脚本的，需要EX-GAS框架AttributeSet配置改动后，通过生成脚本生成。
+- 脚本内包含如下静态工具类
+- ```
+  public static class GAttrSetLib
+  {
+     public static readonly Dictionary<string,Type> AttrSetTypeDict = new Dictionary<string, Type>()
+     {
+        {"Fight",typeof(AS_Fight)},
+     };
+  
+     public static List<string> AttributeFullNames=new List<string>()
+     {
+       "AS_Fight.HP",
+       "AS_Fight.MP",
+       "AS_Fight.STAMINA",
+       "AS_Fight.POSTURE",
+       "AS_Fight.ATK",
+       "AS_Fight.SPEED",
+     };
+  }
+  ```
+- AttrSetTypeDict：AttributeSet的类型字典，方便外部通过字符串名获取AttributeSet的类型。
+- AttributeFullNames：所有AttributeSet的所有Attribute的完整名
 
+- 举例:由脚本生成的AttributeSet类
+```
+public class AS_XXX:AttributeSet
+{
+    private AttributeBase _A = new AttributeBase("AS_XXX","A");
+    public AttributeBase A => _A;
+    public void InitA(float value)
+    {
+        _A.SetBaseValue(value);
+        _A.SetCurrentValue(value);
+    }
+      public void SetCurrentA(float value)
+    {
+        _A.SetCurrentValue(value);
+    }
+      public void SetBaseA(float value)
+    {
+        _A.SetBaseValue(value);
+    }
+    
+      public override AttributeBase this[string key]
+      {
+          get
+          {
+              switch (key)
+              {
+                 case "A":
+                    return _A;
+              }
+              return null;
+          }
+      }
+
+      public override string[] AttributeNames { get; } =
+      {
+          "A",
+      };
+}
+``` 
+- 配置的AttributeSet名为XXX，包含一个Attribute名为A。
+
+#### 3.5.2 AttributeSetContainer
+AttributeSetContainer是AttributeSet的容器类，用于ASC管理AttributeSet。
+- `Dictionary<string,AttributeSet> Sets => _attributeSets;` :AttributeSet的集合,为属性，只读。
+- `void AddAttributeSet<T>() where T : AttributeSet`:添加AttributeSet
+  - `T`：指定的AttributeSet类
+- `void AddAttributeSet(Type attrSetType)`:添加AttributeSet
+  - `attrSetType`：指定的AttributeSet类型
+- `bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet` :尝试获取AttributeSet
+  - `attributeSet`：获取的AttributeSet
+  - 返回值：是否获取成功
+- `float? GetAttributeBaseValue(string attrSetName,string attrShortName)`
+  - 获取指定Attribute的基础值
+  - attrSetName：AttributeSet的名字
+  - attrShortName：Attribute的短名
+  - 返回值：Attribute的基础值
+- `float? GetAttributeCurrentValue(string attrSetName,string attrShortName)`
+  - 获取指定Attribute的当前值
+  - attrSetName：AttributeSet的名字
+  - attrShortName：Attribute的短名
+  - 返回值：Attribute的当前值
+- `Dictionary<string, float> Snapshot()`
+  - 获取AttributeSetContainer的数据快照
+  - 返回值：数据快照
+#### 3.5.3 CustomAttrSet
+CustomAttrSet是AttributeSet的自定义类，适用于Runtime时动态生成AttributeSet。
+- `void AddAttribute(AttributeBase attribute)`
+  - 添加Attribute
+  - attribute：添加的Attribute
+- `void RemoveAttribute(string attributeName)`
+  - 移除Attribute
+  - attributeName：移除的Attribute的短名
+
+---
 ### 3.6 GameplayEffect
 #### 3.6.1 GameplayEffectAsset
-#### 3.6.2 GameplayEffect
-#### 3.6.3 GameplayEffectSpec
-#### 3.6.4 GameplayEffectContainer
-#### 3.6.5 GameplayEffectTagContainer
-#### 3.6.6 CooldownTimer
-#### 3.6.7 GameplayEffectModifier
-##### 3.6.7.0 ModifierMagnitudeCalculation
-##### 3.6.7.1 ScalableFloatModCalculation
-##### 3.6.7.2 AttributeBasedModCalculation
-##### 3.6.7.3 SetByCallerFromNameModCalculation
-##### 3.6.7.4 SetByCallerFromTagModCalculation
+GameplayEffectAsset是GAS的游戏效配置类，是预设用ScriptableObject。
+- `EffectsDurationPolicy DurationPolicy;` :GameplayEffect的持续时间策略
+- `float Duration` :GameplayEffect的持续时间 
+- `float Period` : GameplayEffect的周期
+- `GameplayEffectAsset PeriodExecution` :GameplayEffect的周期执行的GameplayEffect
+- `GameplayEffectModifier[] Modifiers`:GameplayEffect修改器
+-  `GameplayTag[] AssetTags` :GameplayEffect的描述标签
+- `GameplayTag[] GrantedTags` :GameplayEffect的授予标签，GameplayEffect生效时会授予目标ASC这些标签，失效时会移除这些标签
+- `GameplayTag[] ApplicationRequiredTags`:GameplayEffect的应用要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会生效 
+- `GameplayTag[] OngoingRequiredTags`: GameplayEffect的持续要求标签，只有目标ASC持有【所有】这些标签时，GameplayEffect才会持续生效
+- `GameplayTag[] RemoveGameplayEffectsWithTags` :GameplayEffect的移除标签，只要目标ASC的GameplayEffect持有【任意】这些标签时，这些GameplayEffect就会被移除
+- `GameplayTag[] ApplicationImmunityTags`:GameplayEffect的免疫标签，只要目标ASC持有【任意】这些标签时，这个GameplayEffect就不会生效
+- `GameplayCueInstant[] CueOnExecute;` :GameplayEffect执行时触发的GameplayCue
+- `GameplayCueDurational[] CueDurational` :GameplayEffect持续时触发的GameplayCue
+- `GameplayCueInstant[] CueOnAdd`:GameplayEffect添加时触发的GameplayCue
+- `GameplayCueInstant[] CueOnRemove`:GameplayEffect移除时触发的GameplayCue
+- `GameplayCueInstant[] CueOnActivate`:GameplayEffect激活时触发的GameplayCue
+- `GameplayCueInstant[] CueOnDeactivate`:GameplayEffect失效时触发的GameplayCue
 
+#### 3.6.2 GameplayEffect
+GameplayEffect是GAS的Runtime的游戏效果数据类.运行游戏运行时动态生成GameplayEffect。
+- GameplayEffect的数据结构与GameplayEffectAsset几乎一致。这里就不再多赘述数据变量了。
+- 
+#### 3.6.3 GameplayEffectSpec
+- `void Apply()`：应用游戏效果。
+- `void DisApply()`：取消游戏效果的应用。
+- `void Activate()`：激活游戏效果。
+- `void Deactivate()`：停用游戏效果。
+- `bool CanRunning()`：检查游戏效果是否可以运行。
+- `void Tick()`：更新游戏效果的周期性行为。
+- `void TriggerOnExecute()`：触发游戏效果执行时的事件。
+- `void TriggerOnAdd()`：触发游戏效果添加时的事件。
+- `void TriggerOnRemove()`：触发游戏效果移除时的事件。
+- `void TriggerOnTick()`：触发游戏效果进行周期性更新时的事件。
+- `void TriggerOnImmunity()`：触发游戏效果免疫时的事件。
+- `void RemoveSelf()`：移除游戏效果自身。
+- `void RegisterValue(GameplayTag tag, float value)`：注册与游戏标签关联的值。
+  - `tag`：游戏标签。
+  - `value`：与游戏标签关联的值。
+- `void RegisterValue(string name, float value)`：注册与名称关联的值。
+  - `name`：名称。
+  - `value`：与名称关联的值。
+- `bool UnregisterValue(GameplayTag tag)`：取消注册与游戏标签关联的值。
+    - `tag`：游戏标签。
+    - 返回值：如果成功取消注册，则返回 `true`，否则返回 `false`。
+- `bool UnregisterValue(string name)`：取消注册与名称关联的值。
+    - `name`：名称。
+    - 返回值：如果成功取消注册，则返回 `true`，否则返回 `false`。
+- `float? GetMapValue(GameplayTag tag)`：获取与游戏标签关联的值。
+    - `tag`：游戏标签。
+    - 返回值：如果找到与指定游戏标签关联的值，则返回该值；否则返回 `null`。
+- `float? GetMapValue(string name)`：获取与名称关联的值。
+    - `name`：名称。
+    - 返回值：如果找到与指定名称关联的值，则返回该值；否则返回 `null`。
+  
+#### 3.6.4 GameplayEffectContainer
+GameplayEffectContainer是GameplayEffect的容器类，用于ASC管理GameplayEffect。
+- `List<GameplayEffectSpec> GetActiveGameplayEffects()`：获取当前生效的游戏效果列表。
+- `void Tick()`：处理所有生效游戏效果的周期性更新。
+- `void RegisterOnGameplayEffectContainerIsDirty(Action action)`：注册效果容器变为脏状态时的回调函数。
+  - `action`：回调函数。 
+- `void UnregisterOnGameplayEffectContainerIsDirty(Action action)`：取消注册效果容器变为脏状态时的回调函数。
+  - `action`：回调函数。 
+- `void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)`：移除具有指定标签的游戏效果。
+  - `tags`：指定的标签。 
+- `bool AddGameplayEffectSpec(GameplayEffectSpec spec)`：添加一个游戏效果实例。
+  - `spec`：指定的游戏效果规范。 
+- `void RemoveGameplayEffectSpec(GameplayEffectSpec spec)`：移除指定的游戏效果实例。
+  - `spec`：指定的游戏效果规范。 
+- `void RefreshGameplayEffectState()`：刷新游戏效果的状态，包括激活新效果和移除已停用的效果。
+- `CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)`：检查指定标签的冷却状态。
+  - `tags`：指定的标签。 
+  - 返回值：冷却计时器。
+- `void ClearGameplayEffect()`：清除所有游戏效果，包括移除已应用的效果和停用的效果。
+
+#### 3.6.5 CooldownTimer
+CooldownTimer是冷却计时结构体，用于保存冷却时间数据。
+- `public float TimeRemaining;` : 剩余时间
+- `public float Duration;` : 总时间
+#### 3.6.6 GameplayEffectModifier
+GameplayEffectModifier是游戏效果修改器类，用于实现对Attribute的修改。
+- `string AttributeName`：属性名称，用于标识游戏效果修改器所影响的属性。
+- `float ModiferMagnitude`：修改器的幅度值，用于指定属性修改的具体数值。
+- `GEOperation Operation`：修改器的操作类型，指定属性修改的方式，如增加、减少等。
+- `ModifierMagnitudeCalculation MMC`：修改器的计算方式，用于指定如何计算修改的幅度值。
+- `void SetModiferMagnitude(float value)`：设置修改器的幅度值。
+    - `value`：修改器的新幅度值。
+- `void OnAttributeChanged()`：当属性名称发生变化时调用的方法，用于更新相关字段的值。
+- `static void SetAttributeChoices()`：设置属性选择列表。
+- `string AttributeSetName`：属性集名称，用于标识游戏效果修改器所影响的属性集。
+- `string AttributeShortName`：属性短名称，用于标识游戏效果修改器所影响的属性的简短版本。
+
+##### 3.6.6.0 ModifierMagnitudeCalculation
+ModifierMagnitudeCalculation是一个抽象基类，所有MMC必须继承自他。
+- `public abstract float CalculateMagnitude(GameplayEffectSpec spec, AttributeBase attribute, float value)`：计算修改器的幅度值方法是MMC的根本。
+    - `spec`：游戏效果规范。
+    - `attribute`：属性基类。
+    - `value`：指定的值。
+    - 返回值：修改器的幅度值。
+##### 3.6.6.1 ScalableFloatModCalculation
+ScalableFloatModCalculation是一个MMC的实现类，用于实现可缩放的浮点数修改器。
+```
+    public class ScalableFloatModCalculation:ModifierMagnitudeCalculation
+    {
+        [SerializeField] private float k;
+        [SerializeField] private float b;
+
+        public override float CalculateMagnitude(GameplayEffectSpec spec,float input)
+        {
+            return input * k + b;
+        }
+    }
+```
+- `float k`：缩放系数。
+- `float b`：偏移量。
+- 执行逻辑：`input * k + b`。线性缩放。
+##### 3.6.6.2 AttributeBasedModCalculation
+AttributeBasedModCalculation是一个MMC的实现类，用于实现基于属性的修改器。
+```
+    public class AttributeBasedModCalculation : ModifierMagnitudeCalculation
+    {
+        public enum AttributeFrom
+        {
+            Source,
+            Target
+        }
+
+        public enum GEAttributeCaptureType
+        {
+            SnapShot,
+            Track
+        }
+
+        public string attributeName;
+        public string attributeSetName;
+        public string attributeShortName;
+        public AttributeFrom attributeFromType;
+        public GEAttributeCaptureType captureType;
+        public float k = 1;
+        public float b = 0;
+
+        public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
+        {
+            if (attributeFromType == AttributeFrom.Source)
+            {
+                if (captureType == GEAttributeCaptureType.SnapShot)
+                {
+                    var snapShot = spec.Source.DataSnapshot();
+                    var attribute = snapShot[attributeName];
+                    return attribute * k + b;
+                }
+                else
+                {
+                    var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                    return (attribute ?? 1) * k + b;
+                }
+            }
+
+            if (captureType == GEAttributeCaptureType.SnapShot)
+            {
+                var attribute = spec.Owner.DataSnapshot()[attributeName];
+                return attribute * k + b;
+            }
+            else
+            {
+                var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                return (attribute ?? 1) * k + b;
+            }
+        }
+    }
+```
+- `string attributeName`：属性名称。
+- `string attributeSetName`：属性集名称。
+- `string attributeShortName`：属性短名称。
+- `AttributeFrom attributeFromType`：属性来源类型。
+- `GEAttributeCaptureType captureType`：游戏效果属性捕获类型。
+- `float k`：缩放系数。
+- `float b`：偏移量。
+- 执行逻辑：根据属性来源类型和游戏效果属性捕获类型，获取属性的当前值或快照值，并进行线性缩放。
+
+##### 3.6.6.3 SetByCallerFromNameModCalculation
+SetByCallerFromNameModCalculation是一个MMC的实现类，用于实现根据名称设置的修改器。
+```
+    public class SetByCallerFromNameModCalculation : ModifierMagnitudeCalculation
+    {
+        [SerializeField] private string valueName;
+        public override float CalculateMagnitude(GameplayEffectSpec spec,float input)
+        {
+            var value = spec.GetMapValue(valueName);
+            return value ?? 0;
+        }
+    }
+```
+- `string valueName`：键值值名称。
+- 执行逻辑：根据值名称获取与名称关联的值。
+##### 3.6.6.4 SetByCallerFromTagModCalculation
+SetByCallerFromTagModCalculation是一个MMC的实现类，用于实现根据标签设置的修改器。
+```
+public class SetByCallerFromTagModCalculation:ModifierMagnitudeCalculation
+    {
+        [SerializeField] private GameplayTag _tag;
+        public override float CalculateMagnitude(GameplayEffectSpec spec  ,float input)
+        {
+            var value = spec.GetMapValue(_tag);
+            return value ?? 0;
+        }
+    }
+```
+- `GameplayTag _tag`：键值标签。
+- 执行逻辑：根据游戏标签获取与游戏标签关联的值。
+
+---
 ### 3.7 Ability
 #### 3.7.1 AbilityAsset
-#### 3.7.2 AbstractAbility
-#### 3.7.3 AbilitySpec
-#### 3.7.4 AbilityTagContainer
-#### 3.7.5 AbilityContainer
-#### 3.7.6 AbilityTask
+AbilityAsset是GAS的游戏能力配置类，是预设用ScriptableObject。他本身是一个抽象基类，所有的AbilityAsset都必须继承自他。
+- `abstract Type AbilityType()`：能力的类型。用于把AbilityAsset和Ability类一一匹配。
+    - 返回值：能力的类型。
+- `string UniqueName`：唯一名称，用于标识该能力。
+- `GameplayEffectAsset Cost`：花费效果，该能力的消耗效果。
+- `GameplayEffectAsset Cooldown`：冷却效果，该能力的冷却效果。如果为空，冷却时间也不会生效。
+- `float CooldownTime`：冷却时间，该能力的冷却时间长度。
+- `GameplayTag[] AssetTag`：资产标签，该能力的标签。
+- `GameplayTag[] CancelAbilityTags`：取消能力标签，用于取消该能力的标签。
+- `GameplayTag[] BlockAbilityTags`：阻止能力标签，用于阻止该能力的标签。
+- `GameplayTag[] ActivationOwnedTag`：激活所需标签，该能力激活所需的标签。
+- `GameplayTag[] ActivationRequiredTags`：激活要求标签，该能力激活所需的标签。
+- `GameplayTag[] ActivationBlockedTags`：激活阻止标签，用于阻止该能力的激活标签。
 
-### 3.7.EX  Timeline Ability
+#### 3.7.2 AbstractAbility
+AbstractAbility是GAS的游戏能力数据基类，他本身是一个抽象基类，所有的Ability都必须继承自他。
+- `string Name`：名称，表示能力的名称。
+- `AbilityAsset DataReference`：数据引用，指向与该能力相关联的能力资产。
+- `AbilityTagContainer Tag`：标签，该能力的标签容器。
+- `GameplayEffect Cooldown`：冷却效果，该能力的冷却效果。
+- `float CooldownTime`：冷却时间，该能力的冷却时间长度。
+- `GameplayEffect Cost`：花费效果，该能力的消耗效果。
+- `AbstractAbility(AbilityAsset abilityAsset)`：抽象能力构造函数，初始化抽象能力实例。
+  - `abilityAsset`：能力资产，与该能力相关联的能力资产。
+- `abstract AbilitySpec CreateSpec(AbilitySystemComponent owner)`：创建能力规格的抽象方法，用于生成能力的规格实例。
+  - `owner`：所有者，拥有该能力的实体。
+- `void SetCooldown(GameplayEffect coolDown)`：设置冷却效果的方法。
+  - `coolDown`：冷却效果，要设置的冷却效果。
+- `void SetCost(GameplayEffect cost)`：设置花费效果的方法。
+  - `cost`：花费效果，要设置的花费效果。
+#### 3.7.2.a AbstractAbility<T> :AbstractAbility where T : AbilityAsset
+AbstractAbility<T>是AbstractAbility的泛型子类，用于实现AbstractAbility的泛型版本。
+通常Ability都继承自他。方便对应的AbilityAsset和Ability一一匹配。
+#### 3.7.3 AbilitySpec
+AbilitySpec是GAS的游戏能力规格类，用于实现对Ability的实例化。本身是一个抽象基类，所有的AbilitySpec都必须继承自他。
+AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
+#### 3.7.4 AbilityContainer
+#### 3.7.5 AbilityTask
+
+---
+### 3.7.EX  Timeline Ability（W.I.P）
 #### 3.7.EX.1 TimelineAbilityAsset
 #### 3.7.EX.2 TimelineAbility
 #### 3.7.EX.3 TimelineAbilitySpec
@@ -671,12 +1363,92 @@ GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制G
 ##### 3.7.EX.5.4 CatchAreaBox2D
 ##### 3.7.EX.5.5 CatchAreaCircle2D
 
+---
 ### 3.8 GameplayCue
 #### 3.8.1 GameplayCue
+GameplayCue是GAS的游戏提示配置类，用于实现对游戏效果的提示。他本身是一个抽象基类，所有的GameplayCue都必须继承自他。
+- `public GameplayTag[] RequiredTags;` :GameplayCue的要求标签,持有【所有】RequiredTags才可触发
+- `public GameplayTag[] ImmunityTags;` :GameplayCue的免疫标签,持有【任意】ImmunityTags不可触发
+##### 3.8.1.a public abstract class GameplayCue<T> : GameplayCue where T : GameplayCueSpec
+这个泛型类是为了方便对应的GameplayCueSpec和GameplayCue一一匹配，方便使用。
 #### 3.8.2 GameplayCueSpec
+GameplayCueSpec是GAS的游戏提示规格类，用于实现对GameplayCue的实例化。本身是一个抽象基类，所有的GameplayCueSpec都必须继承自他。
+GameplayCueSpec内实现GameplayCue游戏内实际的表现逻辑。
+
+-  
+```
+        public virtual bool Triggerable()
+        {
+            return _cue.Triggerable(Owner);
+        }
+``` 
+- Triggerable()：检查是否可以触发游戏提示的方法。
+
 #### 3.8.3 GameplayCueParameters
+GameplayCueParameters是GAS的游戏提示参数结构体，用于实现对GameplayCue的参数化。
+目前逻辑简单粗暴，存在拆装箱过程。
+```
+    public struct GameplayCueParameters
+    {
+        public GameplayEffectSpec sourceGameplayEffectSpec; 
+        public AbilitySpec sourceAbilitySpec;
+        public object[] customArguments;
+    }
+```
 #### 3.8.4 GameplayCueInstant
+GameplayCueInstant是GAS的GameplayCue中的一大类,属于OneShot类型的Cue。
+##### 3.8.4.a GameplayCueInstant
+- `InstantCueApplyTarget applyTarget`：立即提示应用目标，指示立即提示的应用目标类型。
+- `virtual void ApplyFrom(GameplayEffectSpec gameplayEffectSpec)`：从GameplayEffectSpec应用InstantCue。
+  - `gameplayEffectSpec`：游戏效果规格，触发立即提示的游戏效果规格实例。
+- `virtual void ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)`：从AbilitySpec应用InstantCue。
+  - `abilitySpec`：能力规格，触发立即提示的能力规格实例。
+  - `customArguments`：自定义参数，自定义参数数组。
+
+##### 3.8.4.b GameplayCueInstantSpec
+GameplayCueInstantSpec必须覆写Trigger()方法，用于实现对GameplayCueInstant触发。
+```
+public abstract class GameplayCueInstantSpec : GameplayCueSpec
+    {
+        public GameplayCueInstantSpec(GameplayCueInstant cue, GameplayCueParameters parameters) : base(cue,
+            parameters)
+        {
+        }
+        
+        public abstract void Trigger();
+    }
+```
 #### 3.8.5 GameplayCueDuration
+GameplayCueDuration是GAS的GameplayCue中的一大类,属于持续类型的Cue。
+##### 3.8.5.a GameplayCueDurational
+- `public GameplayCueDurationalSpec ApplyFrom(GameplayEffectSpec gameplayEffectSpec)`: 从GameplayEffectSpec应用DurationalCue。
+  - `gameplayEffectSpec`：游戏效果规格，触发持续提示的游戏效果规格实例。
+- `public GameplayCueDurationalSpec ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)`: 从AbilitySpec应用DurationalCue。
+  - `abilitySpec`：能力规格，触发持续提示的能力规格实例。
+  - `customArguments`：自定义参数，自定义参数数组。 
+##### 3.8.5.b GameplayCueDurationalSpec
+GameplayCueDurationalSpec必须覆写
+OnAdd()，
+OnRemove()，
+OnGameplayEffectActivate()，
+OnGameplayEffectDeactivate()，
+OnTick()方法，
+用于实现对GameplayCueDurational触发和运作。
+```
+    public abstract class GameplayCueDurationalSpec : GameplayCueSpec
+    {
+        protected GameplayCueDurationalSpec(GameplayCueDurational cue, GameplayCueParameters parameters) : 
+            base(cue, parameters)
+        {
+        }
+
+        public abstract void OnAdd();
+        public abstract void OnRemove();
+        public abstract void OnGameplayEffectActivate();
+        public abstract void OnGameplayEffectDeactivate();
+        public abstract void OnTick();
+    }
+```
 
 ---
 ## 4.可视化功能
