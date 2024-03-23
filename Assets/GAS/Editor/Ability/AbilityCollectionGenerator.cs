@@ -30,7 +30,7 @@ namespace GAS.Editor
             writer.WriteLine("");
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
-            writer.WriteLine("  public static class AbilityCollection");
+            writer.WriteLine("  public static class GAbilityLib");
             writer.WriteLine("  {");
             
             writer.WriteLine("      public struct AbilityInfo");
