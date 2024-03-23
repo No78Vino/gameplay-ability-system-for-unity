@@ -128,7 +128,7 @@ namespace GAS.Editor
         {
             List<T> assets = new List<T>();
 
-            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name, new string[] { folderPath });
+            string[] guids = AssetDatabase.FindAssets("", new string[] { folderPath });
 
             foreach (string guid in guids)
             {
