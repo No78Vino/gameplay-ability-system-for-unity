@@ -141,4 +141,13 @@ namespace GAS.Runtime
 
         public abstract void EndAbility();
     }
+    
+    public abstract class AbilitySpec<T>:AbilitySpec where T:AbstractAbility
+    {
+        protected T data;
+        protected AbilitySpec(T ability, AbilitySystemComponent owner) : base(ability, owner)
+        {
+            data = ability;
+        }
+    }
 }
