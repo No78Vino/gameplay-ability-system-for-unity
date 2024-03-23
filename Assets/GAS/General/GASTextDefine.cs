@@ -64,7 +64,7 @@
         #region GameplayEffect
         
         public const string TIP_BASEINFO="基本信息只用于描述这个GameplayEffect，方便策划阅读理解该Effect。";
-        public const string TIP_GE_POLICY="None=空，Instant=瞬时，Duration=持续性，Infinite=永久";
+        public const string TIP_GE_POLICY="Instant=瞬时，Duration=持续性，Infinite=永久";
         public const string LABLE_GE_NAME = "效果名";
         public const string TITLE_GE_POLICY="Gameplay Effect实施策略";
         public const string LABLE_GE_POLICY = "执行策略";

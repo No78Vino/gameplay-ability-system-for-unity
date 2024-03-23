@@ -54,16 +54,16 @@ namespace GAS.Runtime
         [HideLabel]
         [MultiLineProperty(5)]
         public string Description;
-        
-        
+
+
         [Title(GASTextDefine.TITLE_GE_POLICY, bold: true)]
-        [HorizontalGroup(GRP_BASE_H,PaddingLeft = 0.025f)]
+        [HorizontalGroup(GRP_BASE_H, PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelText(GASTextDefine.LABLE_GE_POLICY)]
         [LabelWidth(WIDTH_LABLE)]
-        [InfoBox(ERROR_PERIODGE_NONE,InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
+        [InfoBox(ERROR_PERIODGE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
         [InfoBox(GASTextDefine.TIP_GE_POLICY)]
-        public EffectsDurationPolicy DurationPolicy;
+        public EffectsDurationPolicy DurationPolicy = EffectsDurationPolicy.Instant;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelWidth(WIDTH_LABLE)]
