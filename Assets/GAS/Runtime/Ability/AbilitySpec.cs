@@ -1,11 +1,15 @@
-﻿using GAS.Runtime;
+﻿using System;
 
 namespace GAS.Runtime
 {
     public abstract class AbilitySpec
     {
         protected object[] _abilityArguments;
-
+        protected Action _onActivateFailed;
+        protected Action _onActivateSucceed;
+        protected Action _onEndAbility;
+        protected Action _onCancelAbility;
+        
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
             Ability = ability;
