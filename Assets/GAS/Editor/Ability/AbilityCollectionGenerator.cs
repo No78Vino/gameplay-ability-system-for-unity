@@ -52,7 +52,7 @@ namespace GAS.Editor
             {
                 var path = AssetDatabase.GetAssetPath(ability);
                 writer.WriteLine(
-                    $"    public static AbilityInfo {ability.UniqueName}_Info = " +
+                    $"    public static AbilityInfo {ability.UniqueName} = " +
                     $"new AbilityInfo {{ " +
                     $"Name = \"{ability.UniqueName}\", " +
                     $"AssetPath = \"{path}\"," +
