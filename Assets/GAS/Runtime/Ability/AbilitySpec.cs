@@ -5,11 +5,7 @@ namespace GAS.Runtime
     public abstract class AbilitySpec
     {
         protected object[] _abilityArguments;
-        protected Action _onActivateFailed;
-        protected Action _onActivateSucceed;
-        protected Action _onEndAbility;
-        protected Action _onCancelAbility;
-        
+
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
             Ability = ability;
@@ -25,13 +21,48 @@ namespace GAS.Runtime
         public bool IsActive { get; private set; }
 
         public int ActiveCount { get; private set; }
+        protected event Action<AbilityActivateResult> _onActivateResult;
+        protected event Action _onEndAbility;
+        protected event Action _onCancelAbility;
 
-        public virtual bool CanActivate()
+        public void RegisterActivateResult(Action<AbilityActivateResult> onActivateResult)
         {
-            return !IsActive
-                   && CheckGameplayTagsValidTpActivate()
-                   && CheckCost()
-                   && CheckCooldown().TimeRemaining <= 0;
+            _onActivateResult += onActivateResult;
+        }
+        
+        public void UnregisterActivateResult(Action<AbilityActivateResult> onActivateResult)
+        {
+            _onActivateResult -= onActivateResult;
+        }
+
+        public void RegisterEndAbility(Action onEndAbility)
+        {
+            _onEndAbility += onEndAbility;
+        }
+        
+        public void UnregisterEndAbility(Action onEndAbility)
+        {
+            _onEndAbility -= onEndAbility;
+        }
+        
+        public void RegisterCancelAbility(Action onCancelAbility)
+        {
+            _onCancelAbility += onCancelAbility;
+        }
+        
+        public void UnregisterCancelAbility(Action onCancelAbility)
+        {
+            _onCancelAbility -= onCancelAbility;
+        }
+        
+        public virtual AbilityActivateResult CanActivate()
+        {
+            if (IsActive) return AbilityActivateResult.FailHasActivated;
+            if (!CheckGameplayTagsValidTpActivate()) return AbilityActivateResult.FailTagRequirement;
+            if (!CheckCost()) return AbilityActivateResult.FailCost;
+            if (CheckCooldown().TimeRemaining > 0) return AbilityActivateResult.FailCooldown;
+
+            return AbilityActivateResult.Success;
         }
 
         private bool CheckGameplayTagsValidTpActivate()
@@ -84,13 +115,15 @@ namespace GAS.Runtime
         }
 
         /// <summary>
-        /// Some skills include wind-up and follow-through, where the wind-up may be interrupted, causing the skill not to be successfully released.
-        /// Therefore, the actual timing and logic of skill release (triggering costs and initiating cooldown) should be determined by developers within the AbilitySpec,
-        /// rather than being systematically standardized.
+        ///     Some skills include wind-up and follow-through, where the wind-up may be interrupted, causing the skill not to be
+        ///     successfully released.
+        ///     Therefore, the actual timing and logic of skill release (triggering costs and initiating cooldown) should be
+        ///     determined by developers within the AbilitySpec,
+        ///     rather than being systematically standardized.
         /// </summary>
         public void DoCost()
         {
-            if (Ability.Cost!=null) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
+            if (Ability.Cost != null) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
 
             if (Ability.Cooldown != null)
             {
@@ -102,12 +135,16 @@ namespace GAS.Runtime
         public virtual bool TryActivateAbility(params object[] args)
         {
             _abilityArguments = args;
-            if (!CanActivate()) return false;
-            IsActive = true;
-            ActiveCount++;
+            var result = CanActivate();
+            if (result == AbilityActivateResult.Success)
+            {
+                IsActive = true;
+                ActiveCount++;
+                Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
+                ActivateAbility(_abilityArguments);
+            }
 
-            Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
-            ActivateAbility(_abilityArguments);
+            _onActivateResult?.Invoke(result);
             return true;
         }
 
@@ -118,15 +155,17 @@ namespace GAS.Runtime
 
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             EndAbility();
+            _onEndAbility?.Invoke();
         }
 
         public virtual void TryCancelAbility()
         {
             if (!IsActive) return;
             IsActive = false;
-            
+
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
+            _onCancelAbility?.Invoke();
         }
 
         public void Tick()
@@ -145,10 +184,11 @@ namespace GAS.Runtime
 
         public abstract void EndAbility();
     }
-    
-    public abstract class AbilitySpec<T>:AbilitySpec where T:AbstractAbility
+
+    public abstract class AbilitySpec<T> : AbilitySpec where T : AbstractAbility
     {
         protected T data;
+
         protected AbilitySpec(T ability, AbilitySystemComponent owner) : base(ability, owner)
         {
             data = ability;
