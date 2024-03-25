@@ -79,7 +79,6 @@ namespace GAS.Editor
             tree.Config.AutoScrollOnSelectionChanged = true;
             tree.Config.DrawScrollView = true;
             tree.Config.AutoHandleKeyboardNavigation = true;
-
             return tree;
         }
     }

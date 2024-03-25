@@ -10,10 +10,10 @@ namespace GAS.Runtime
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if(Application.isPlaying) return;
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            // if(Application.isPlaying) return;
+            // EditorUtility.SetDirty(this);
+            // AssetDatabase.SaveAssets();
+            // AssetDatabase.Refresh();
         }
 #endif
     }
