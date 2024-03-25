@@ -70,7 +70,7 @@ namespace GAS.Editor
             writer.WriteLine("  {");
             foreach (var ability in abilityAssets)
             {
-                writer.WriteLine($"      [\"{ability.UniqueName}\"] = {ability.UniqueName}_Info,");
+                writer.WriteLine($"      [\"{ability.UniqueName}\"] = {ability.UniqueName},");
             }
             writer.WriteLine("  };");
             writer.WriteLine("  }");
