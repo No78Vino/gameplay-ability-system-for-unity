@@ -19,12 +19,10 @@ namespace GAS.Runtime
         public CuePlaySoundSpec(CuePlaySound cue, GameplayCueParameters parameters) : base(cue,
             parameters)
         {
-            throw new NotImplementedException();
         }
 
         public override void Trigger()
         {
-            throw new NotImplementedException();
         }
     }
 }
