@@ -53,7 +53,6 @@ namespace GAS.Runtime
                 {
                     var t = (frameIndex - startFrame) / GASTimer.FrameRate;
                     ps.Simulate(t);
-                    ps.Play();
                 }
             }
             else
