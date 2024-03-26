@@ -17,8 +17,14 @@ MonoBehaviour:
     HP </color></b></size>.</color></size>"
   attributes:
   - Name: HP
+    Comment: 
   - Name: MP
+    Comment: 
   - Name: STAMINA
+    Comment: 
   - Name: POSTURE
+    Comment: 
   - Name: ATK
+    Comment: "\u653B\u51FB\u529B"
   - Name: SPEED
+    Comment: 
