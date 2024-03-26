@@ -191,7 +191,7 @@ namespace GAS.Runtime
             {
                 var attributeBaseValue = GetAttributeBaseValue(modifier.AttributeSetName, modifier.AttributeShortName);
                 if (attributeBaseValue == null) continue;
-                var magnitude = modifier.MMC.CalculateMagnitude(spec, modifier.ModiferMagnitude);
+                var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
                 var baseValue = attributeBaseValue.Value;
                 switch (modifier.Operation)
                 {

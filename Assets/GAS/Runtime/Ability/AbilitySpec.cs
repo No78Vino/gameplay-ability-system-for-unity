@@ -97,7 +97,7 @@ namespace GAS.Runtime
             {
                 if (modifier.Operation != GEOperation.Add) continue;
 
-                var costValue = modifier.MMC.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
+                var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
                 var attributeCurrentValue =
                     Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
 
