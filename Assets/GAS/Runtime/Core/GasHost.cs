@@ -11,7 +11,8 @@ namespace GAS
         private void Update()
         {
             GASTimer.UpdateCurrentFrameCount();
-            foreach (var abilitySystemComponent in _gas.AbilitySystemComponents) abilitySystemComponent.Tick();
+            var snapshot = _gas.AbilitySystemComponents.ToArray();
+            foreach (var abilitySystemComponent in snapshot) abilitySystemComponent.Tick();
         }
     }
 }
