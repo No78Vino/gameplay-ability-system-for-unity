@@ -1,11 +1,10 @@
-using GAS.General;
+﻿using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
-    [CreateAssetMenu(fileName = "CuePlayAnimation", menuName = "GAS/Cue/CuePlayAnimation")]
-    public class CueAnimationOneShot : GameplayCueInstant
+    public class CueAnimation:GameplayCueDurational
     {
         [BoxGroup]
         [InfoBox(GASTextDefine.CUE_ANIMATION_PATH_TIP)]
@@ -20,15 +19,15 @@ namespace GAS.Runtime
         public string StateName => _stateName;
 
 
-        public override GameplayCueInstantSpec CreateSpec(GameplayCueParameters parameters)
+        public override GameplayCueDurationalSpec CreateSpec(GameplayCueParameters parameters)
         {
-            return new CueAnimationOneShotSpec(this, parameters);
+            return new CueAnimationSpec(this, parameters);
         }
-
+        
 #if UNITY_EDITOR
-        public override void OnEditorPreview(GameObject previewObject, int frame, int startFrame)
+        public override void OnEditorPreview(GameObject previewObject, int frame, int startFrame,int endFrame)
         {
-            if (startFrame <= frame)
+            if (startFrame <= frame && frame <= endFrame)
             {
                 var animatorObject = previewObject.transform.Find(AnimatorRelativePath);
                 var animator = animatorObject.GetComponent<Animator>();
@@ -47,21 +46,37 @@ namespace GAS.Runtime
         }
 #endif
     }
-
-    public class CueAnimationOneShotSpec : GameplayCueInstantSpec<CueAnimationOneShot>
+    
+    public class CueAnimationSpec : GameplayCueDurationalSpec<CueAnimation>
     {
         private readonly Animator _animator;
 
-        public CueAnimationOneShotSpec(CueAnimationOneShot cue, GameplayCueParameters parameters) : base(cue,
+        public CueAnimationSpec(CueAnimation cue, GameplayCueParameters parameters) : base(cue,
             parameters)
         {
             var animatorTransform = Owner.transform.Find(cue.AnimatorRelativePath);
             _animator = animatorTransform.GetComponent<Animator>();
         }
 
-        public override void Trigger()
+        public override void OnAdd()
         {
             _animator.Play(cue.StateName);
+        }
+
+        public override void OnRemove()
+        {
+        }
+
+        public override void OnGameplayEffectActivate()
+        {
+        }
+
+        public override void OnGameplayEffectDeactivate()
+        {
+        }
+
+        public override void OnTick()
+        {
         }
     }
 }

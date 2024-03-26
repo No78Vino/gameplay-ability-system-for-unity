@@ -22,19 +22,21 @@ namespace GAS.Runtime
             }
         }
 
-        public virtual void ApplyFrom(AbilitySpec abilitySpec,params object[] customArguments)
+        public virtual void ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)
         {
             if (Triggerable(abilitySpec.Owner))
             {
                 var instantCue = CreateSpec(new GameplayCueParameters
-                    { sourceAbilitySpec = abilitySpec, customArguments = customArguments});
+                    { sourceAbilitySpec = abilitySpec, customArguments = customArguments });
                 instantCue?.Trigger();
             }
         }
-        
-        public virtual void OnEditorPreview(GameObject previewObject,int frame,int startFrame)
+
+#if UNITY_EDITOR
+        public virtual void OnEditorPreview(GameObject previewObject, int frame, int startFrame)
         {
         }
+#endif
     }
 
     public abstract class GameplayCueInstantSpec : GameplayCueSpec

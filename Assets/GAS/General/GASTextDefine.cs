@@ -110,5 +110,21 @@
             "<size=20><b><color=yellow>监视器只在游戏运行时可用.</color></b></size>";
 
         #endregion
+
+        #region Gameplay Cue
+
+        public const string CUE_ANIMATION_PATH = "动画机相对路径";
+        public const string CUE_ANIMATION_STATE = "Animation State名";
+        public const string CUE_ANIMATION_PATH_TIP = "为空表示物体根节点,示例：'A'=根节点下名为'A'的子物体,'A/B'='A'节点下名为'B'的子物体";
+
+        public const string CUE_SOUND_EFFECT = "音效源";
+        public const string CUE_ATTACH_TO_OWNER = "是否附加到Owner";
+        
+        public const string CUE_VFX_PREFAB = "特效预制体";
+        public const string CUE_VFX_OFFSET = "特效偏移";
+        public const string CUE_VFX_ROTATION = "特效旋转";
+        public const string CUE_VFX_SCALE = "特效缩放";
+
+        #endregion
     }
 }
