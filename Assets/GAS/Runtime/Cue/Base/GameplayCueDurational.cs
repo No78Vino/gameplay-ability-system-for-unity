@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace GAS.Runtime
 {
     public abstract class GameplayCueDurational : GameplayCue<GameplayCueDurationalSpec>
@@ -19,7 +21,7 @@ namespace GAS.Runtime
         }
         
 #if UNITY_EDITOR
-        public virtual void OnEditorPreviewTick(int frameIndex,int startFrame,int endFrame)
+        public virtual void OnEditorPreview(GameObject previewObject,int frameIndex,int startFrame,int endFrame)
         {
         }
 #endif

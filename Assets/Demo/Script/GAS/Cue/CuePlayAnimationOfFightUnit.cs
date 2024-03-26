@@ -14,9 +14,9 @@ namespace GAS.Cue
             return new CuePlayAnimationOfFightUnitSpec(this, parameters);
         }
 
+#if UNITY_EDITOR
         public override void OnEditorPreview(GameObject preview, int frame, int startFrame)
         {
-#if UNITY_EDITOR
             var unit = preview.GetComponent<FightUnit>();
             if (startFrame <= frame)
             {
@@ -34,8 +34,8 @@ namespace GAS.Cue
                     }
                 }
             }
-#endif
         }
+#endif
     }
 
     public class CuePlayAnimationOfFightUnitSpec : GameplayCueInstantSpec

@@ -79,7 +79,8 @@ namespace GAS.Editor
 
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
-            // TODO
+            DurationalCueClipData.cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
+                startFrame, endFrame);
         }
 
         #region Clip Visual Element Event

@@ -28,6 +28,12 @@ namespace GAS.Editor
 
         public override void TickView(int frameIndex, params object[] param)
         {
+            foreach (var item in _trackItems)
+            {
+                var durationalCueClip = item as DurationalCueClip;
+                durationalCueClip?.OnTickView(frameIndex, durationalCueClip.StartFrameIndex,
+                    durationalCueClip.EndFrameIndex);
+            }
         }
 
         public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
