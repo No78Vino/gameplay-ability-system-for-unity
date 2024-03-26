@@ -68,7 +68,7 @@ namespace GAS.Runtime
             {
                 var spec = tuple.Item1;
                 var modifier = tuple.Item2;
-                var magnitude = modifier.MMC.CalculateMagnitude(spec,modifier.ModiferMagnitude);
+                var magnitude = modifier.CalculateMagnitude(spec,modifier.ModiferMagnitude);
                 switch (modifier.Operation)
                 {
                     case GEOperation.Add:

@@ -1347,28 +1347,142 @@ AbstractAbility<T>是AbstractAbility的泛型子类，用于实现AbstractAbilit
 #### 3.7.3 AbilitySpec
 AbilitySpec是GAS的游戏能力规格类，用于实现对Ability的实例化。本身是一个抽象基类，所有的AbilitySpec都必须继承自他。
 AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
+- `AbstractAbility Ability`：能力，与该能力规格类相关联的能力实例。
+- `AbilitySystemComponent Owner`：所有者，拥有该能力规格的单位。
+- `float Level`：等级，该能力的等级。
+- `bool IsActive`：是否激活，表示该能力当前是否处于激活状态。
+- `int ActiveCount`：激活计数，记录该能力被激活的次数。
+- ` void RegisterActivateResult(Action<AbilityActivateResult> onActivateResult)`：注册激活结果的方法，用于注册激活结果的回调函数。
+- ` void UnregisterActivateResult(Action<AbilityActivateResult> onActivateResult)`：注销激活结果的方法，用于注销激活结果的回调函数。
+- ` void RegisterEndAbility(Action onEndAbility)`：注册结束能力的方法，用于注册结束能力的回调函数。
+- ` void UnregisterEndAbility(Action onEndAbility)`：注销结束能力的方法，用于注销结束能力的回调函数。
+- ` void RegisterCancelAbility(Action onCancelAbility)`：注册取消能力的方法，用于注册取消能力的回调函数。
+- ` void UnregisterCancelAbility(Action onCancelAbility)`：注销取消能力的方法，用于注销取消能力的回调函数。
+- ` virtual AbilityActivateResult CanActivate()`：检查能力规格是否可以被激活。
+  - 返回值：激活结果：
+    - Success：成功
+    - FailHasActivated：失败，已经激活
+    - FailTagRequirement：失败，Tag要求不满足
+    - FailCost： 失败，消耗不足
+    - FailCooldown： 失败，还在冷却
+    - FailOtherReason： 失败，其他原因
+- ` void DoCost()`：执行花费的方法，用于执行激活该能力规格的花费操作。
+- ` virtual bool TryActivateAbility(params object[] args)`：尝试激活能力
+- ` virtual void TryEndAbility()`：尝试结束能力
+- ` virtual void TryCancelAbility()`：尝试取消能力
+- ` void Tick()`：处理能力的帧更新。
+- ` abstract void ActivateAbility(params object[] args)`：激活能力的抽象方法，用于执行激活该能力的操作。
+- ` abstract void CancelAbility()`：取消能力的抽象方法，用于执行取消该能力的操作。
+- ` abstract void EndAbility()`：结束能力的抽象方法，用于执行结束该能力的操作。
 #### 3.7.4 AbilityContainer
-#### 3.7.5 AbilityTask
+能力容器，是ASC的间接管理能力的对象。
+- `void Tick()`：处理的方法，用于处理能力容器中所有能力的Tick逻辑。
+- ` void GrantAbility(AbstractAbility ability)`：授予能力的方法，用于向能力容器中添加新的能力。
+  - `ability`：能力，要添加的新能力实例。
+- `void RemoveAbility(AbstractAbility ability)`：移除能力的方法，根据能力实例从能力容器中移除能力规格。
+  - `ability`：能力，要移除的能力实例。
+- `public void RemoveAbility(string abilityName)`：移除能力的方法，根据能力名称从能力容器中移除能力规格。
+  - `abilityName`：能力名称，要移除的能力名称。
+- `bool TryActivateAbility(string abilityName, params object[] args)`：尝试激活能力的方法
+  - `abilityName`：能力名称，要激活的能力名称。
+  - `args`：参数，激活能力所需的额外参数。
+  - 返回值：布尔值，表示能否成功激活能力。
+- `void EndAbility(string abilityName)`：结束能力
+  - `abilityName`：能力名称，要结束的能力名称。
+- `void CancelAbility(string abilityName)`：取消能力
+  - `abilityName`：能力名称，要取消的能力名称。
+- `Dictionary<string, AbilitySpec> AbilitySpecs()`：获取容器内所有能力字典
+  - 返回值：包含所有能力规格的能力名称与对应的能力规格实例。
+#### 3.7.5 AbilityTask(W.I.P)
+Ability我们只能控制他的激活，结束等，并且这些接口都是功能性的即时方法，不存在异步，持续管理的说法。
 
+但是Ability不可能都是瞬时逻辑，因此在Ability的逻辑实现中需要开发者对Tick处理，或者使用异步自行实现逻辑。
+而在UE的GAS中，为了解决这个问题，设计团队创造了AbilityTask的概念，他们让AbilityTask来承载实现Ability
+逻辑的任务。在UE版本的GAS中，AbilityTask的种类很多，他们能实现即时/异步/持续/等待的逻辑处理。功能非常强大。
+
+因此，我也试着模仿了这个概念，但目前的版本来说，AbilityTask的功能和目的性还很弱。在之后的版本迭代中，我会慢慢完善
+AbilityTask，以此来强化GAS中的Ability的逻辑处理能力和可编辑性。
+- AbilityTaskBase:基类，Task是依附于Ability的存在，因此他的初始化必须依赖于AbilitySpec。
+  - ```
+    public abstract class AbilityTaskBase
+    {
+        protected AbilitySpec _spec;
+        public AbilitySpec Spec => _spec;
+        public virtual void Init(AbilitySpec spec)
+        {
+            _spec = spec;
+        }
+    }
+    ```
+- InstantAbilityTask: 即时类型的Task，最为常见的Task之一。
+  - ```
+    public abstract class InstantAbilityTask:AbilityTaskBase
+    {
+        #if UNITY_EDITOR
+        /// <summary>
+        ///  编辑器预览用
+        ///  【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
+        /// </summary>
+        public virtual void OnEditorPreview()
+        {
+        }
+        #endif
+        public abstract void OnExecute();
+    }
+    ``` 
+- OngoingAbilityTask: 持续类型的Task，目前这类Task和TimelineAbility强关联，往后的设计里会抽象出来，让Task更加灵活。
+  - ```
+    public abstract class OngoingAbilityTask:AbilityTaskBase
+    {
+        #if UNITY_EDITOR
+        /// <summary>
+        /// 编辑器预览用
+        /// 【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="startFrame"></param>
+        /// <param name="endFrame"></param>
+        public virtual void OnEditorPreview(int frame, int startFrame, int endFrame)
+        {
+        }
+        #endif
+        public abstract void OnStart(int startFrame);
+
+        public abstract void OnEnd(int endFrame);
+
+        public abstract void OnTick(int frameIndex,int startFrame,int endFrame);
+    }
+    ```     
 ---
-### 3.7.EX  Timeline Ability（W.I.P）
-#### 3.7.EX.1 TimelineAbilityAsset
-#### 3.7.EX.2 TimelineAbility
-#### 3.7.EX.3 TimelineAbilitySpec
-#### 3.7.EX.4 TimelineAbilityPlayer
-#### 3.7.EX.5 Target Catcher
-##### 3.7.EX.5.1 TargetCatcherBase
-##### 3.7.EX.5.2 CatchSelf
-##### 3.7.EX.5.3 CatchTarget
-##### 3.7.EX.5.4 CatchAreaBox2D
-##### 3.7.EX.5.5 CatchAreaCircle2D
+
+[//]: # (### 3.7.EX Timeline Ability（W.I.P）)
+
+[//]: # (#### 3.7.EX.1 TimelineAbilityAsset)
+
+[//]: # (#### 3.7.EX.2 TimelineAbility)
+
+[//]: # (#### 3.7.EX.3 TimelineAbilitySpec)
+
+[//]: # (#### 3.7.EX.4 TimelineAbilityPlayer)
+
+[//]: # (#### 3.7.EX.5 Target Catcher)
+
+[//]: # (##### 3.7.EX.5.1 TargetCatcherBase)
+
+[//]: # (##### 3.7.EX.5.2 CatchSelf)
+
+[//]: # (##### 3.7.EX.5.3 CatchTarget)
+
+[//]: # (##### 3.7.EX.5.4 CatchAreaBox2D)
+
+[//]: # (##### 3.7.EX.5.5 CatchAreaCircle2D)
 
 ---
 ### 3.8 GameplayCue
 #### 3.8.1 GameplayCue
 GameplayCue是GAS的游戏提示配置类，用于实现对游戏效果的提示。他本身是一个抽象基类，所有的GameplayCue都必须继承自他。
-- `public GameplayTag[] RequiredTags;` :GameplayCue的要求标签,持有【所有】RequiredTags才可触发
-- `public GameplayTag[] ImmunityTags;` :GameplayCue的免疫标签,持有【任意】ImmunityTags不可触发
+- `GameplayTag[] RequiredTags;` :GameplayCue的要求标签,持有【所有】RequiredTags才可触发
+- `GameplayTag[] ImmunityTags;` :GameplayCue的免疫标签,持有【任意】ImmunityTags不可触发
 ##### 3.8.1.a public abstract class GameplayCue<T> : GameplayCue where T : GameplayCueSpec
 这个泛型类是为了方便对应的GameplayCueSpec和GameplayCue一一匹配，方便使用。
 #### 3.8.2 GameplayCueSpec
