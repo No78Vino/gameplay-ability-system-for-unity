@@ -1,47 +1,75 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using GAS;
-    using UnityEditor;
-    using UnityEngine;
-    using Editor;
-    
     public static class AttributeCollectionGen
     {
+        private sealed class AttributeInfo
+        {
+            public string Name;
+            public string Comment;
+        }
+
         public static void Gen()
         {
             var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME}";
-            var attributeNames = asset.AttributeNames;
-            GenerateAttributeCollection(attributeNames, filePath);
+            var filePath =
+                $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME}";
+
+
+            var attributeInfos = (from t in asset.attributes
+                where !string.IsNullOrWhiteSpace(t.Name)
+                select new AttributeInfo { Name = t.Name, Comment = t.Comment }).ToList();
+
+
+            GenerateAttributeCollection(attributeInfos, filePath);
         }
 
-        private static void GenerateAttributeCollection(List<string> attributes, string filePath)
+        private static void GenerateAttributeCollection(IEnumerable<AttributeInfo> attributes, string filePath)
         {
-            using var writer = new StreamWriter(filePath);
+            using var writer = new IndentedWriter(new StreamWriter(filePath));
+
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("//// This is a generated file. ////");
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
+
+            writer.WriteLine("");
+
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
-            writer.WriteLine("public static class GAttrLib");
-            writer.WriteLine("{");
-
-            // Generate members for each ATTRIBUTE
-            foreach (var attr in attributes)
+            writer.Indent++;
             {
-                var validName = EditorUtil.MakeValidIdentifier(attr);
-                writer.WriteLine(
-                    $"    public const string {validName} = \"{attr}\";");
-            }
+                writer.WriteLine("public static class GAttrLib");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    bool skippedFirst = false;
+                    // Generate members for each ATTRIBUTE
+                    foreach (var attr in attributes)
+                    {
+                        if (!skippedFirst) skippedFirst = true;
+                        else writer.WriteLine();
 
-            writer.WriteLine("}");
-            writer.WriteLine("}");
+                        var validName = EditorUtil.MakeValidIdentifier(attr.Name);
+                        writer.WriteLine("/// <summary>");
+                        writer.WriteLine($"/// {attr.Comment}");
+                        writer.WriteLine("/// </summary>");
+                        writer.WriteLine($"public const string {validName} = \"{attr.Name}\";");
+                    }
+                }
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.Write("}");
 
             Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }

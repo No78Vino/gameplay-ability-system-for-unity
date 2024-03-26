@@ -13,12 +13,12 @@ namespace Demo.Script.Element
         public const int ATK = 20;
         public const int Speed = 6;
 
-        protected override string MoveName => GAbilityLib.Move_Info.Name;
-        protected override string JumpName => GAbilityLib.Jump_Info.Name;
-        protected override string AttackName => GAbilityLib.BossAttack01_Info.Name;
-        protected override string DefendName => GAbilityLib.Defend_Info.Name;
-        protected override string DodgeName => GAbilityLib.DodgeStep_Info.Name;
-        protected override string DieName => GAbilityLib.BossDie_Info.Name;
+        protected override string MoveName => GAbilityLib.Move.Name;
+        protected override string JumpName => GAbilityLib.Jump.Name;
+        protected override string AttackName => GAbilityLib.BossAttack01.Name;
+        protected override string DefendName => GAbilityLib.Defend.Name;
+        protected override string DodgeName => GAbilityLib.DodgeStep.Name;
+        protected override string DieName => GAbilityLib.BossDie.Name;
 
         [SerializeField] private Player player;
         [SerializeField] private BossCore core;
@@ -105,17 +105,17 @@ namespace Demo.Script.Element
 
         public bool FallDownAttack()
         {
-            return ASC.TryActivateAbility(GAbilityLib.BossAttack02_Info.Name);
+            return ASC.TryActivateAbility(GAbilityLib.BossAttack02.Name);
         }
         
         public bool BeamAttack()
         {
-            return ASC.TryActivateAbility(GAbilityLib.BossAttack03_Info.Name);
+            return ASC.TryActivateAbility(GAbilityLib.BossAttack03.Name);
         }
         
         public bool RoarAttack()
         {
-            return ASC.TryActivateAbility(GAbilityLib.BossAttack04_Info.Name);
+            return ASC.TryActivateAbility(GAbilityLib.BossAttack04.Name);
         }
         
         private float OnPostureChangePre(AttributeBase attr, float newValue)

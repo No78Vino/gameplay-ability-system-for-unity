@@ -130,22 +130,42 @@ namespace GAS.Editor
             [DisplayAsString] [HideLabel]
             public string Name;
 
-            public AttributeAccessor(string attributeName)
+            [HorizontalGroup("A")] 
+            [HorizontalGroup("A/R", order: 3)]
+            [DisplayAsString] [HideLabel]
+            public string Comment;
+
+            public AttributeAccessor(string attributeName, string attributeComment = "")
             {
                 Name = attributeName;
+                Comment = attributeComment;
             }
 
             [HorizontalGroup("A", Width = 50)]
-            [HorizontalGroup("A/L", order:0,Width = 50)]
-            [Button(SdfIconType.Brush,"",ButtonHeight = 25)]
+            [HorizontalGroup("A/L", order: 0, Width = 50)]
+            [Button(SdfIconType.Brush, "", ButtonHeight = 25)]
             public void Edit()
             {
-                StringEditWindow.OpenWindow(Name, OnEditSuccess, "Attribute");
+                StringEditWindow.OpenWindow(Name, OnEditSuccess, "Attribute Name");
             }
 
             private void OnEditSuccess(string newName)
             {
                 Name = newName;
+                ParentAsset?.Save();
+            }
+
+            [HorizontalGroup("A", Width = 50)]
+            [HorizontalGroup("A/R/G", order: 1, Width = 50)]
+            [Button(SdfIconType.ChatText, "", ButtonHeight = 25)]
+            public void EditComment()
+            {
+                StringEditWindow.OpenWindow(Comment, OnCommentEditSuccess, "Attribute Comment");
+            }
+
+            private void OnCommentEditSuccess(string newComment)
+            {
+                Comment = newComment;
                 ParentAsset?.Save();
             }
         }
