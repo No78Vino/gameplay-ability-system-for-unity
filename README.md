@@ -1393,20 +1393,89 @@ AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
   - `abilityName`：能力名称，要取消的能力名称。
 - `Dictionary<string, AbilitySpec> AbilitySpecs()`：获取容器内所有能力字典
   - 返回值：包含所有能力规格的能力名称与对应的能力规格实例。
-#### 3.7.5 AbilityTask
+#### 3.7.5 AbilityTask(W.I.P)
+Ability我们只能控制他的激活，结束等，并且这些接口都是功能性的即时方法，不存在异步，持续管理的说法。
 
+但是Ability不可能都是瞬时逻辑，因此在Ability的逻辑实现中需要开发者对Tick处理，或者使用异步自行实现逻辑。
+而在UE的GAS中，为了解决这个问题，设计团队创造了AbilityTask的概念，他们让AbilityTask来承载实现Ability
+逻辑的任务。在UE版本的GAS中，AbilityTask的种类很多，他们能实现即时/异步/持续/等待的逻辑处理。功能非常强大。
+
+因此，我也试着模仿了这个概念，但目前的版本来说，AbilityTask的功能和目的性还很弱。在之后的版本迭代中，我会慢慢完善
+AbilityTask，以此来强化GAS中的Ability的逻辑处理能力和可编辑性。
+- AbilityTaskBase:基类，Task是依附于Ability的存在，因此他的初始化必须依赖于AbilitySpec。
+  - ```
+    public abstract class AbilityTaskBase
+    {
+        protected AbilitySpec _spec;
+        public AbilitySpec Spec => _spec;
+        public virtual void Init(AbilitySpec spec)
+        {
+            _spec = spec;
+        }
+    }
+    ```
+- InstantAbilityTask: 即时类型的Task，最为常见的Task之一。
+  - ```
+    public abstract class InstantAbilityTask:AbilityTaskBase
+    {
+        #if UNITY_EDITOR
+        /// <summary>
+        ///  编辑器预览用
+        ///  【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
+        /// </summary>
+        public virtual void OnEditorPreview()
+        {
+        }
+        #endif
+        public abstract void OnExecute();
+    }
+    ``` 
+- OngoingAbilityTask: 持续类型的Task，目前这类Task和TimelineAbility强关联，往后的设计里会抽象出来，让Task更加灵活。
+  - ```
+    public abstract class OngoingAbilityTask:AbilityTaskBase
+    {
+        #if UNITY_EDITOR
+        /// <summary>
+        /// 编辑器预览用
+        /// 【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="startFrame"></param>
+        /// <param name="endFrame"></param>
+        public virtual void OnEditorPreview(int frame, int startFrame, int endFrame)
+        {
+        }
+        #endif
+        public abstract void OnStart(int startFrame);
+
+        public abstract void OnEnd(int endFrame);
+
+        public abstract void OnTick(int frameIndex,int startFrame,int endFrame);
+    }
+    ```     
 ---
-### 3.7.EX  Timeline Ability（W.I.P）
-#### 3.7.EX.1 TimelineAbilityAsset
-#### 3.7.EX.2 TimelineAbility
-#### 3.7.EX.3 TimelineAbilitySpec
-#### 3.7.EX.4 TimelineAbilityPlayer
-#### 3.7.EX.5 Target Catcher
-##### 3.7.EX.5.1 TargetCatcherBase
-##### 3.7.EX.5.2 CatchSelf
-##### 3.7.EX.5.3 CatchTarget
-##### 3.7.EX.5.4 CatchAreaBox2D
-##### 3.7.EX.5.5 CatchAreaCircle2D
+
+[//]: # (### 3.7.EX Timeline Ability（W.I.P）)
+
+[//]: # (#### 3.7.EX.1 TimelineAbilityAsset)
+
+[//]: # (#### 3.7.EX.2 TimelineAbility)
+
+[//]: # (#### 3.7.EX.3 TimelineAbilitySpec)
+
+[//]: # (#### 3.7.EX.4 TimelineAbilityPlayer)
+
+[//]: # (#### 3.7.EX.5 Target Catcher)
+
+[//]: # (##### 3.7.EX.5.1 TargetCatcherBase)
+
+[//]: # (##### 3.7.EX.5.2 CatchSelf)
+
+[//]: # (##### 3.7.EX.5.3 CatchTarget)
+
+[//]: # (##### 3.7.EX.5.4 CatchAreaBox2D)
+
+[//]: # (##### 3.7.EX.5.5 CatchAreaCircle2D)
 
 ---
 ### 3.8 GameplayCue
