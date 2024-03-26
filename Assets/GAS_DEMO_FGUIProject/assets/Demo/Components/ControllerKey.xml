@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="537,68">
-  <displayList>
-    <text id="n0_rfg0" name="action" xy="0,2" size="185,66" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" strokeColor="#000000" text="移动：向左"/>
-    <text id="n1_rfg0" name="key" xy="216,3" size="321,65" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" strokeColor="#000000" text="A"/>
-  </displayList>
-</component>
