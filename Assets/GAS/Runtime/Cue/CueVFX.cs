@@ -52,7 +52,7 @@ namespace GAS.Runtime
                 foreach (var ps in particleSystems)
                 {
                     var t = (frameIndex - startFrame) / GASTimer.FrameRate;
-                    ps.Simulate(t, true, false);
+                    ps.Simulate(t);
                     ps.Play();
                 }
             }
