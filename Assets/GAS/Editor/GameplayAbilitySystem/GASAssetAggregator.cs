@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Editor.Validation;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -15,7 +17,7 @@ namespace GAS.Editor
     using UnityEngine;
     using GAS.General;
     using Debug = UnityEngine.Debug;
-    
+
     public class GASAssetAggregator : OdinMenuEditorWindow
     {
         private static readonly Type[] _types = new Type[5]
@@ -28,6 +30,7 @@ namespace GAS.Editor
         };
 
         private static string[] _libPaths;
+
         static string[] LibPaths
         {
             get
@@ -91,8 +94,9 @@ namespace GAS.Editor
                 tree.Add(menuName, _directoryInfos[i]);
                 if (menuName == MenuNames[3])
                 {
-                    tree.Add(menuName,new AbilityOverview());
+                    tree.Add(menuName, new AbilityOverview());
                 }
+
                 tree.AddAllAssetsAtPath(menuName, libPath, type, true)
                     .AddThumbnailIcons();
             }
@@ -105,7 +109,7 @@ namespace GAS.Editor
             tree.Config.DrawScrollView = true;
             tree.Config.AutoHandleKeyboardNavigation = true;
             tree.SortMenuItemsByName(true);
-            
+
             return tree;
         }
 
@@ -119,12 +123,12 @@ namespace GAS.Editor
             {
                 if (selected != null) GUILayout.Label(selected.Name);
 
-                if (selected != null && (selected.Value is DirectoryInfo  || selected.Value is  AbilityOverview))
+                if (selected != null && (selected.Value is DirectoryInfo || selected.Value is AbilityOverview))
                 {
                     DirectoryInfo directoryInfo = selected.Value is AbilityOverview
                         ? _directoryInfos[3]
                         : selected.Value as DirectoryInfo;
-                    
+
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
                         OpenDirectoryInExplorer(directoryInfo);
 
@@ -172,21 +176,24 @@ namespace GAS.Editor
 
         private void CreateNewSubDirectory(DirectoryInfo directoryInfo)
         {
-            StringEditWindow.OpenWindow("", s =>
-            {
-                var newPath = directoryInfo.Directory + "/" + s;
-                if (!AssetDatabase.IsValidFolder(newPath))
+            StringEditWindow.OpenWindow("Sub Directory Name", "",
+                s =>
                 {
+                    var newPath = directoryInfo.Directory + "/" + s;
+                    if (!AssetDatabase.IsValidFolder(newPath))
+                    {
+                        return ValidationResult.Invalid("Folder already exists!");
+                    }
+
+                    return ValidationResult.Valid;
+                },
+                s =>
+                {
+                    var newPath = directoryInfo.Directory + "/" + s;
                     AssetDatabase.CreateFolder(directoryInfo.Directory, s);
                     Refresh();
                     Debug.Log($"[EX] {newPath} folder created!");
-                }
-                else
-                {
-                    Debug.Log($"[EX] {newPath} folder already exists!");
-                    EditorUtility.DisplayDialog("Error", "Folder already exists!", "OK");
-                }
-            }, "Sub Directory Name");
+                });
         }
 
         private void RemoveSubDirectory(DirectoryInfo directoryInfo)

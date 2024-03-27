@@ -1,3 +1,5 @@
+using GAS.Editor.Validation;
+
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
@@ -9,7 +11,7 @@ namespace GAS.Editor
     using UnityEditor.IMGUI.Controls;
     using UnityEditor.TreeDataModel;
     using UnityEngine;
-    
+
     [CustomEditor(typeof(GameplayTagsAsset))]
     public class GameplayTagsTreeAssetEditor : UnityEditor.Editor
     {
@@ -102,7 +104,7 @@ namespace GAS.Editor
                 if (GUILayout.Button(GASTextDefine.BUTTON_AddTag, style)) CreateTag();
 
                 if (GUILayout.Button(GASTextDefine.BUTTON_RemoveTag, style)) RemoveTags();
-                
+
                 if (GUILayout.Button(GASTextDefine.BUTTON_GenTagCode, style)) GenCode();
             }
         }
@@ -126,7 +128,7 @@ namespace GAS.Editor
         public void CreateTag()
         {
             Undo.RecordObject(Asset, "Add Item To Asset");
-            StringEditWindow.OpenWindow("",AddTag,"Tag");
+            StringEditWindow.OpenWindow("Tag", "", Validations.ValidateVariableName, AddTag, "Create new Tag");
         }
 
         public void RemoveTags()
@@ -160,7 +162,7 @@ namespace GAS.Editor
             GTagLibGenerator.Gen();
             AssetDatabase.Refresh();
         }
-        
+
         private class GameplayTagTreeView : TreeViewWithTreeModel<GameplayTagTreeElement>
         {
             private readonly GameplayTagsAsset _asset;

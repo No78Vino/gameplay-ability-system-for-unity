@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Editor.Validation;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -11,57 +13,60 @@ namespace GAS.Editor
     using Sirenix.OdinInspector;
     using UnityEditor;
     using UnityEngine;
-    
+
     [Serializable]
     public class AttributeSetConfig
     {
         public static AttributeSetAsset ParentAsset;
 
         private static IEnumerable AttributeChoices = new ValueDropdownList<string>();
-        
+
         [HorizontalGroup("A")]
-        [HorizontalGroup("A/R", order:1)]
-        [DisplayAsString(TextAlignment.Left,FontSize = 18)]
+        [HorizontalGroup("A/R", order: 1)]
+        [DisplayAsString(TextAlignment.Left, FontSize = 18)]
         [HideLabel]
-        [InfoBox(GASTextDefine.ERROR_DuplicatedAttribute,InfoMessageType.Error,VisibleIf = "ExistDuplicatedAttribute")]
-        [InfoBox(GASTextDefine.ERROR_Empty,InfoMessageType.Error,VisibleIf = "EmptyAttribute")]
-        [InfoBox(GASTextDefine.ERROR_EmptyName,InfoMessageType.Error,VisibleIf = "EmptyAttributeSetName")]
-        public string Name;
-        
+        [InfoBox(GASTextDefine.ERROR_DuplicatedAttribute, InfoMessageType.Error,
+            VisibleIf = "ExistDuplicatedAttribute")]
+        [InfoBox(GASTextDefine.ERROR_Empty, InfoMessageType.Error, VisibleIf = "EmptyAttribute")]
+        [InfoBox(GASTextDefine.ERROR_EmptyName, InfoMessageType.Error, VisibleIf = "EmptyAttributeSetName")]
+        public string Name = "Unnamed";
+
         [Space]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,ShowPaging = false)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false)]
         [ValueDropdown("AttributeChoices")]
         [LabelText("Attributes")]
         [Searchable]
-        public List<string> AttributeNames;
+        public List<string> AttributeNames = new List<string>();
 
         [HorizontalGroup("A", Width = 50)]
-        [HorizontalGroup("A/L", order:0,Width = 50)]
-        [Button(SdfIconType.Brush,"",ButtonHeight = 25)]
+        [HorizontalGroup("A/L", order: 0, Width = 50)]
+        [Button(SdfIconType.Brush, "", ButtonHeight = 25)]
         public void EditName()
         {
-            StringEditWindow.OpenWindow(Name, OnEditNameSuccess, "AttributeSet Name");
+            StringEditWindow.OpenWindow("AttributeSet Name", Name, Validations.ValidateVariableName, OnEditNameSuccess,
+                "Edit AttributeSet Name");
         }
-        
+
         private void OnEditNameSuccess(string newName)
         {
             Name = newName;
             ParentAsset.Save();
         }
-        
+
         public static void SetAttributeChoices(List<string> attributeChoices)
         {
             var choices = new ValueDropdownList<string>();
             foreach (var attribute in attributeChoices)
             {
-                choices.Add(attribute,attribute);
+                choices.Add(attribute, attribute);
             }
+
             AttributeChoices = choices;
         }
 
         public bool EmptyAttribute()
         {
-            return AttributeNames==null || AttributeNames.Count == 0;
+            return AttributeNames.Count == 0;
         }
 
         public bool EmptyAttributeSetName()
@@ -88,13 +93,14 @@ namespace GAS.Editor
         [ShowIf("ExistDuplicatedAttributeSetName")]
         [DisplayAsString(TextAlignment.Left, true)]
         public string ERROR_DuplicatedAttributeSet = "";
-        
-        [VerticalGroup("AttributeSetConfigs",order:1)]
-        [ListDrawerSettings( Expanded = true,
+
+        [VerticalGroup("AttributeSetConfigs", order: 1)]
+        [ListDrawerSettings(Expanded = true,
+            CustomAddFunction = "OnAddAttributeSet",
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex")]
         [Searchable]
-        public List<AttributeSetConfig> AttributeSetConfigs;
+        public List<AttributeSetConfig> AttributeSetConfigs = new List<AttributeSetConfig>();
 
         private void OnEnable()
         {
@@ -109,20 +115,20 @@ namespace GAS.Editor
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
-        
-        [VerticalGroup("Generate AttributeSet Code",order:0)]
-        [GUIColor(0,0.9f,0)]
-        [Button(SdfIconType.Upload,GASTextDefine.BUTTON_GenerateAttributeSetCode,ButtonHeight = 30, Expanded = true)]
-        [InfoBox(GASTextDefine.ERROR_InElements,InfoMessageType.Error,VisibleIf = "ErrorInElements")]
+
+        [VerticalGroup("Generate AttributeSet Code", order: 0)]
+        [GUIColor(0, 0.9f, 0)]
+        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeSetCode, ButtonHeight = 30, Expanded = true)]
+        [InfoBox(GASTextDefine.ERROR_InElements, InfoMessageType.Error, VisibleIf = "ErrorInElements")]
         private void GenCode()
         {
-            if(ExistDuplicatedAttributeSetName() || ErrorInElements())
+            if (ExistDuplicatedAttributeSetName() || ErrorInElements())
             {
                 EditorUtility.DisplayDialog("Warning", "Please check the warning message!\n" +
                                                        "Fix the AttributeSet Error!\n", "OK");
                 return;
             }
-            
+
             Save();
             AttributeSetClassGen.Gen();
             AssetDatabase.Refresh();
@@ -131,7 +137,7 @@ namespace GAS.Editor
         bool ErrorInElements()
         {
             return AttributeSetConfigs.Any(attribute =>
-                attribute.EmptyAttribute() || 
+                attribute.EmptyAttribute() ||
                 attribute.ExistDuplicatedAttribute() ||
                 attribute.EmptyAttributeSetName());
         }
@@ -148,12 +154,34 @@ namespace GAS.Editor
             {
                 var duplicatedAttributeSets = duplicates.Aggregate("", (current, d) => current + d + ",");
                 duplicatedAttributeSets = duplicatedAttributeSets.Remove(duplicatedAttributeSets.Length - 1, 1);
-                ERROR_DuplicatedAttributeSet = 
+                ERROR_DuplicatedAttributeSet =
                     string.Format(GASTextDefine.ERROR_DuplicatedAttributeSet, duplicatedAttributeSets);
             }
             return duplicates.Count > 0;
         }
-        
+
+        private void OnAddAttributeSet()
+        {
+            StringEditWindow.OpenWindow("AttributeSet Name", "", (newName) =>
+                {
+                    var validateVariableName = Validations.ValidateVariableName(newName);
+
+                    if (!validateVariableName.IsValid)
+                    {
+                        return validateVariableName;
+                    }
+
+                    if (AttributeSetConfigs.Exists(x => x.Name == newName))
+                    {
+                        return ValidationResult.Invalid($"The name(\"{newName}\") already exists!");
+                    }
+
+                    return ValidationResult.Valid;
+                },
+                attributeSetName => AttributeSetConfigs.Add(new AttributeSetConfig() { Name = attributeSetName }),
+                "Create new AttributeSet");
+        }
+
         private int OnRemoveElement(AttributeSetConfig attributeSet)
         {
             var result = EditorUtility.DisplayDialog("Confirmation",
