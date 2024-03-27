@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.Linq;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -15,11 +17,32 @@ namespace GAS.Editor
     {
         public static void Gen()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
+            var attributeSetAsset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
+            
+            var attributeAsset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+            var attributeNames = (from t in attributeAsset.attributes where !string.IsNullOrWhiteSpace(t.Name) select t.Name)
+                .ToList();
+
+            // Check if AttributeSet contains attribute that is not defined in AttributeAsset
+            foreach (var attributeSetConfig in attributeSetAsset.AttributeSetConfigs)
+            {
+                foreach (var attributeName in attributeSetConfig.AttributeNames)
+                {
+                    if (!attributeNames.Contains(attributeName))
+                    {
+                        var msg =
+                            $"Invalid Attribute(\"{attributeName}\") in AttributeSet(\"{attributeSetConfig.Name}\"), \"{attributeName}\" is not defined in AttributeAsset!";
+                        Debug.LogError(msg);
+                        EditorUtility.DisplayDialog("Error", msg, "OK");
+                        return;
+                    }
+                }
+            }
+
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             var filePath =
                 $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
-            GenerateAttributeCollection(asset.AttributeSetConfigs, filePath);
+            GenerateAttributeCollection(attributeSetAsset.AttributeSetConfigs, filePath);
         }
 
         private static void GenerateAttributeCollection(List<AttributeSetConfig> attributeSetConfigs, string filePath)
