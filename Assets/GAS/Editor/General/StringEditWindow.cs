@@ -1,43 +1,63 @@
+using GAS.Editor.Validation;
+
 #if UNITY_EDITOR
 namespace GAS.Editor.General
 {
-    using System;
     using UnityEditor;
     using UnityEngine;
-    
+
     public class StringEditWindow : EditorWindow
     {
-        private Action<string> callback;
-        private string editedString = "";
-        private string tip;
-        public static void OpenWindow(string initialString, Action<string> callback,string tip)
+        private string _tip;
+        private string _editedString = "";
+        private ValidationDelegate _validator;
+        private System.Action<string> _callback;
+
+        public static void OpenWindow(string tip, string initialString, ValidationDelegate validator,
+            System.Action<string> callback, string title = "Input")
         {
             var window = GetWindow<StringEditWindow>();
-            window.Init(initialString, callback, tip);
-            window.titleContent = new GUIContent("Input");
+            window.Init(tip, initialString, validator, callback);
+            window.titleContent = new GUIContent(title);
             window.Show();
         }
+
+        public static void OpenWindow(string tip, string initialString, System.Action<string> callback,
+            string title = "Input")
+        {
+            OpenWindow(tip, initialString, null, callback, title);
+        }
+
         private void OnGUI()
         {
-            // Display the input field to edit the string
-            //editedString = EditorGUILayout.TextField("Attribute:", editedString);
-            editedString = EditorGUILayout.TextField($"{tip}:", editedString);
+            _editedString = EditorGUILayout.TextField($"{_tip}:", _editedString);
 
             EditorGUILayout.Space();
 
-            // Save button to apply changes
             if (GUILayout.Button("Save"))
             {
-                callback?.Invoke(editedString);
+                if (_validator != null)
+                {
+                    var validationResult = _validator.Invoke(_editedString);
+                    if (!validationResult.IsValid)
+                    {
+                        EditorUtility.DisplayDialog("Validation Failed", validationResult.Message, "OK");
+                        return;
+                    }
+                }
+
+                _callback?.Invoke(_editedString);
                 Close();
             }
         }
 
-        private void Init(string initialString, Action<string> callback,string tip)
+        private void Init(string tip, string initialString, ValidationDelegate validator,
+            System.Action<string> callback)
         {
-            editedString = initialString;
-            this.callback = callback;
-            this.tip = tip;
+            _tip = tip;
+            _editedString = initialString;
+            _validator = validator;
+            _callback = callback;
         }
     }
 }
