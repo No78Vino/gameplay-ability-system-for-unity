@@ -9,7 +9,7 @@ namespace GAS.Editor
     using UnityEditor;
     using UnityEngine;
     using GAS.General;
-    
+
     public class AttributeAsset : ScriptableObject
     {
         [BoxGroup("Warning", order: -1)]
@@ -17,7 +17,7 @@ namespace GAS.Editor
         [ShowIf("ExistDuplicatedAttribute")]
         [DisplayAsString(TextAlignment.Left, true)]
         public string Warning_DuplicatedAttribute = "";
-        
+
         [VerticalGroup("Attributes", order: 1)]
         [ListDrawerSettings(
             Expanded = true,
@@ -28,8 +28,9 @@ namespace GAS.Editor
         [Searchable]
         [OnValueChanged("Save")]
         public List<AttributeAccessor> attributes = new List<AttributeAccessor>();
-        
-        public List<string> AttributeNames => (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
+
+        public List<string> AttributeNames =>
+            (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
 
         private void OnEnable()
         {
@@ -37,9 +38,10 @@ namespace GAS.Editor
         }
 
         [VerticalGroup("Gen Code", order: 0)]
-        [GUIColor(0,0.9f,0)]
-        [Button(SdfIconType.Upload,GASTextDefine.BUTTON_GenerateAttributeCollection,ButtonHeight = 30, Expanded = true)]
-        [InfoBox(GASTextDefine.TIP_Warning_EmptyAttribute,InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
+        [GUIColor(0, 0.9f, 0)]
+        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30,
+            Expanded = true)]
+        [InfoBox(GASTextDefine.TIP_Warning_EmptyAttribute, InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
         void GenCode()
         {
             if (ExistEmptyAttribute() || ExistDuplicatedAttribute())
@@ -48,11 +50,12 @@ namespace GAS.Editor
                                                        "Fix the Attribute Error!\n", "OK");
                 return;
             }
+
             Save();
             AttributeCollectionGen.Gen();
             AssetDatabase.Refresh();
         }
-        
+
         private void Save()
         {
             Debug.Log("[EX] Attribute Asset save!");
@@ -88,12 +91,14 @@ namespace GAS.Editor
             return index;
         }
 
-        private int OnAddAttribute()
+        private void OnAddAttribute()
         {
-            attributes.Add(new AttributeAccessor(""));
-            Save();
-            Debug.Log("[EX] Attribute Asset add element!");
-            return attributes.Count;
+            AttributeEditorWindow.OpenWindow(new AttributeEditorWindow.Data(), AttributeNames, (d =>
+            {
+                attributes.Add(new AttributeAccessor(d.Name, d.Comment));
+                Save();
+                Debug.Log("[EX] Attribute Asset add element!");
+            }), "Add new Attribute");
         }
 
         private bool ExistEmptyAttribute()
@@ -114,7 +119,8 @@ namespace GAS.Editor
             {
                 var duplicatedAttributes = duplicates.Aggregate("", (current, d) => current + d + ",");
                 duplicatedAttributes = duplicatedAttributes.Remove(duplicatedAttributes.Length - 1, 1);
-                Warning_DuplicatedAttribute = string.Format(GASTextDefine.TIP_Warning_DuplicatedAttribute, duplicatedAttributes);
+                Warning_DuplicatedAttribute =
+                    string.Format(GASTextDefine.TIP_Warning_DuplicatedAttribute, duplicatedAttributes);
             }
 
             return duplicates.Count > 0;
@@ -124,21 +130,17 @@ namespace GAS.Editor
         public class AttributeAccessor
         {
             public static AttributeAsset ParentAsset;
-            
-            [HorizontalGroup("A")]
-            [HorizontalGroup("A/R", order:1)]
-            [DisplayAsString] [HideLabel]
+
+            [HorizontalGroup("A")] [HorizontalGroup("A/R", order: 1)] [DisplayAsString] [HideLabel]
             public string Name;
 
-            [HorizontalGroup("A")] 
-            [HorizontalGroup("A/R", order: 3)]
-            [DisplayAsString] [HideLabel]
+            [HorizontalGroup("A")] [HorizontalGroup("A/R", order: 3)] [DisplayAsString] [HideLabel]
             public string Comment;
 
             public AttributeAccessor(string attributeName, string attributeComment = "")
             {
-                Name = attributeName;
-                Comment = attributeComment;
+                Name = string.IsNullOrWhiteSpace(attributeName) ? "Unnamed" : attributeName;
+                Comment = string.IsNullOrWhiteSpace(attributeComment) ? "" : attributeComment;
             }
 
             [HorizontalGroup("A", Width = 50)]
@@ -146,27 +148,19 @@ namespace GAS.Editor
             [Button(SdfIconType.Brush, "", ButtonHeight = 25)]
             public void Edit()
             {
-                StringEditWindow.OpenWindow(Name, OnEditSuccess, "Attribute Name");
-            }
+                if (ParentAsset == null) return;
 
-            private void OnEditSuccess(string newName)
-            {
-                Name = newName;
-                ParentAsset?.Save();
-            }
-
-            [HorizontalGroup("A", Width = 50)]
-            [HorizontalGroup("A/R/G", order: 1, Width = 50)]
-            [Button(SdfIconType.ChatText, "", ButtonHeight = 25)]
-            public void EditComment()
-            {
-                StringEditWindow.OpenWindow(Comment, OnCommentEditSuccess, "Attribute Comment");
-            }
-
-            private void OnCommentEditSuccess(string newComment)
-            {
-                Comment = newComment;
-                ParentAsset?.Save();
+                var nameBlackList = ParentAsset.AttributeNames.Where(x => x != Name);
+                AttributeEditorWindow.OpenWindow(new AttributeEditorWindow.Data(Name, Comment), nameBlackList,
+                    x =>
+                    {
+                        if (ParentAsset != null)
+                        {
+                            Name = x.Name;
+                            Comment = x.Comment;
+                            ParentAsset.Save();
+                        }
+                    }, "Edit Attribute Asset");
             }
         }
     }
