@@ -44,6 +44,8 @@ namespace GAS.Runtime
 
         private void OnDisable()
         {
+            DisableAllAbilities();
+            ClearAllGameplayEffects();
             GameplayAbilitySystem.GAS.Unregister(this);
             GameplayTagAggregator?.OnDisable();
         }
@@ -235,6 +237,19 @@ namespace GAS.Runtime
         {
             var success = GameplayEffectContainer.AddGameplayEffectSpec(spec);
             return success ? spec : null;
+        }
+
+        private void DisableAllAbilities()
+        {
+            foreach (var abilityName in AbilityContainer.AbilitySpecs().Keys)
+            {
+                AbilityContainer.CancelAbility(abilityName);
+            }
+        }
+
+        private void ClearAllGameplayEffects()
+        {
+            GameplayEffectContainer.ClearGameplayEffect();
         }
     }
 }
