@@ -2,16 +2,8 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public enum InstantCueApplyTarget
-    {
-        Owner,
-        Source
-    }
-
     public abstract class GameplayCueInstant : GameplayCue<GameplayCueInstantSpec>
     {
-        public InstantCueApplyTarget applyTarget;
-
         public virtual void ApplyFrom(GameplayEffectSpec gameplayEffectSpec)
         {
             if (Triggerable(gameplayEffectSpec.Owner))
