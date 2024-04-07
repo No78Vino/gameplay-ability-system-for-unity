@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.IO;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -189,6 +191,16 @@ namespace GAS.Editor
         [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAscExtensionCode, ButtonHeight = 38)]
         void GenerateAscExtensionCode()
         {
+            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+            var filePath =
+                $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
+            
+            if (!File.Exists(filePath))
+            {
+                EditorUtility.DisplayDialog("Error!", "Please generate AttributeSetAsset first!", "OK");
+                return;
+            }
+            
             AbilitySystemComponentUtilGenerator.Gen();
         }
 
