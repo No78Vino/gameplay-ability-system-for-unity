@@ -202,6 +202,7 @@ namespace GAS.Editor
             }
             
             AbilitySystemComponentUtilGenerator.Gen();
+            AssetDatabase.Refresh();
         }
 
         void CheckTagAsset()
