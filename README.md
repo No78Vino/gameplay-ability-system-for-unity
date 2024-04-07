@@ -17,6 +17,12 @@ __*该项目依赖Odin Inspector插件（付费），请自行解决!!!!!!!!*__
 >我非常希望EX-GAS能早日稳定，为更多游戏提供支持帮助。
 
 [//]: # (## 参考案例 [Demo]&#40;Assets/Demo&#41;)
+## 入门教学案例系列文章
+俯视角2D弹幕射击游戏
+- PART.1 准备工作：https://zhuanlan.zhihu.com/p/688111182
+- PART.2 基础逻辑：https://zhuanlan.zhihu.com/p/689241379
+- PART.3 使用EX-GAS完成交互逻辑：https://zhuanlan.zhihu.com/p/689386644
+- PART.4 使用EX-GAS进行润色：https://zhuanlan.zhihu.com/p/689660650
 
 ## 目录
 - 1.[快速开始](#快速开始)
