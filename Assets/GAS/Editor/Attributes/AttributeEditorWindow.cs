@@ -38,7 +38,7 @@ namespace GAS.Editor
             var window = GetWindow<AttributeEditorWindow>();
             window.Init(data, nameBlackList, callback);
             window.titleContent = new GUIContent(title);
-            window.ShowModalUtility();
+            window.Show();
         }
 
         private void Init(Data data, IEnumerable<string> nameBlackList,
