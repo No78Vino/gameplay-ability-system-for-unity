@@ -14,6 +14,8 @@ namespace GAS.Editor.General
         private ValidationDelegate _validator;
         private System.Action<string> _callback;
 
+        private bool focusInputField = false;
+
         public static void OpenWindow(string tip, string initialString, ValidationDelegate validator,
             System.Action<string> callback, string title = "Input")
         {
@@ -31,7 +33,20 @@ namespace GAS.Editor.General
 
         private void OnGUI()
         {
+            const string ctrlName = "InputField";
+            if (!focusInputField)
+            {
+                GUI.SetNextControlName(ctrlName);
+            }
+
             _editedString = EditorGUILayout.TextField($"{_tip}:", _editedString);
+
+            // Focus the input field
+            if (!focusInputField)
+            {
+                focusInputField = true;
+                EditorGUI.FocusTextInControl(ctrlName);
+            }
 
             EditorGUILayout.Space();
 
