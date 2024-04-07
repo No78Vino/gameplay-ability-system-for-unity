@@ -109,36 +109,42 @@ namespace GAS.Runtime
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("描述性质的标签，用来描述GameplayEffect的特性表现，比如伤害、治疗、控制等。")]
         public GameplayTag[] AssetTags;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("GameplayEffect的持有者会获得这些标签，GameplayEffect被移除时，这些标签也会被移除。Instant类型的GameplayEffect的GrantedTags是无效的。")]
         public GameplayTag[] GrantedTags;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("GameplayEffect的目标单位必须拥有【所有】这些标签，否则GameplayEffect无法被施加到目标身上。")]
         public GameplayTag[] ApplicationRequiredTags;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("GameplayEffect的目标单位必须拥有【所有】这些标签，否则GameplayEffect不会被激活。 \n（施加和激活是两个概念，如果已经被施加的GameplayEffect持续过程中，目标的tag变化了，不满足，效果就会失活；满足了，就会被激活）。\nInstant类型的GameplayEffect的OngoingRequiredTags是无效的。")]
         public GameplayTag[] OngoingRequiredTags;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("GameplayEffect的目标单位当前持有的所有GameplayEffect中，拥有【任意】这些标签的GameplayEffect会被移除。")]
         public GameplayTag[] RemoveGameplayEffectsWithTags;
         
         [Title("")]
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("GameplayEffect的目标单位拥有【任意】这些标签，就对该GameplayEffect免疫。")]
         public GameplayTag[] ApplicationImmunityTags;
         
         
@@ -150,6 +156,7 @@ namespace GAS.Runtime
         [ShowIf("IsInstantPolicy")]
         [InfoBox(ERROR_NONE_CUE,InfoMessageType.Error, VisibleIf = "IsCueExecuteNone")]
         [AssetSelector]
+        [Tooltip("GameplayEffect执行时触发")]
         public GameplayCueInstant[] CueOnExecute;
         
         [Title(GASTextDefine.TITLE_GE_CUE,bold:true)]
@@ -158,6 +165,7 @@ namespace GAS.Runtime
         [ShowIf("IsDurationalPolicy")]
         [InfoBox(ERROR_NONE_CUE,InfoMessageType.Error, VisibleIf = "IsCueDurationalNone")]
         [AssetSelector]
+        [Tooltip("生命周期完全和GameplayEffect同步")]
         public GameplayCueDurational[] CueDurational;
         
         [Title("")]
@@ -165,6 +173,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
+        [Tooltip("GameplayEffect添加时触发")]
         public GameplayCueInstant[] CueOnAdd;
         
         [Title("")]
@@ -172,6 +181,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
+        [Tooltip("GameplayEffect移除时触发")]
         public GameplayCueInstant[] CueOnRemove;
         
         [Title("")]
@@ -179,6 +189,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
+        [Tooltip("GameplayEffect激活时触发")]
         public GameplayCueInstant[] CueOnActivate;
         
         [Title("")]
@@ -186,6 +197,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
+        [Tooltip("GameplayEffect失活时触发")]
         public GameplayCueInstant[] CueOnDeactivate;
 
 
