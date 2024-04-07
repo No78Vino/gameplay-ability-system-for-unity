@@ -20,7 +20,7 @@ namespace GAS.Editor.General
             var window = GetWindow<StringEditWindow>();
             window.Init(tip, initialString, validator, callback);
             window.titleContent = new GUIContent(title);
-            window.Show();
+            window.ShowModalUtility();
         }
 
         public static void OpenWindow(string tip, string initialString, System.Action<string> callback,
