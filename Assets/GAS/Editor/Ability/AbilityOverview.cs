@@ -52,6 +52,7 @@ namespace GAS.Editor
                 return;
             }
             AbilityCollectionGenerator.Gen();
+            AssetDatabase.Refresh();
         }
         
         [HorizontalGroup("Buttons",width:50)]
