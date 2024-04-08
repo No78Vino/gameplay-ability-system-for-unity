@@ -89,6 +89,15 @@
         public const string TITLE_GE_TAG_ApplicationImmunityTags = "免疫拥有【任一】标签的[游戏效果]";
         public const string TIP_GE_TAG_ApplicationImmunityTags = "ApplicationImmunityTags: 该[游戏效果]无法作用于拥有【任一】这些标签的目标单位。";
         
+        public const string TITLE_GE_CUE_CueOnExecute = "执行时触发";
+        public const string TITLE_GE_CUE_CueDurational = "存在时触发";
+        public const string TITLE_GE_CUE_CueOnAdd = "添加时触发";
+        public const string TITLE_GE_CUE_CueOnRemove = "移除时触发";
+        public const string TITLE_GE_CUE_CueOnActivate = "激活时触发";
+        public const string TITLE_GE_CUE_CueOnDeactivate = "失活时触发";
+        
+        
+        
         #endregion
 
         #region Ability

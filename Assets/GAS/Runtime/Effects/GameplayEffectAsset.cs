@@ -159,7 +159,7 @@ namespace GAS.Runtime
         [ShowIf("IsInstantPolicy")]
         [InfoBox(ERROR_NONE_CUE, InfoMessageType.Error, VisibleIf = "IsCueExecuteNone")]
         [AssetSelector]
-        [Tooltip("GameplayEffect执行时触发")]
+        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnExecute)]
         public GameplayCueInstant[] CueOnExecute;
 
         [Title(GASTextDefine.TITLE_GE_CUE, bold: true)]
@@ -168,6 +168,7 @@ namespace GAS.Runtime
         [ShowIf("IsDurationalPolicy")]
         [InfoBox(ERROR_NONE_CUE, InfoMessageType.Error, VisibleIf = "IsCueDurationalNone")]
         [AssetSelector]
+        [LabelText(GASTextDefine.TITLE_GE_CUE_CueDurational)]
         [Tooltip("生命周期完全和GameplayEffect同步")]
         public GameplayCueDurational[] CueDurational;
 
@@ -176,7 +177,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [Tooltip("GameplayEffect添加时触发")]
+       [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnAdd)]
         public GameplayCueInstant[] CueOnAdd;
 
         [Title("")]
@@ -184,7 +185,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [Tooltip("GameplayEffect移除时触发")]
+        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnRemove)]
         public GameplayCueInstant[] CueOnRemove;
 
         [Title("")]
@@ -192,7 +193,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [Tooltip("GameplayEffect激活时触发")]
+        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnActivate)]
         public GameplayCueInstant[] CueOnActivate;
 
         [Title("")]
@@ -200,7 +201,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [Tooltip("GameplayEffect失活时触发")]
+        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnDeactivate)]
         public GameplayCueInstant[] CueOnDeactivate;
 
 
