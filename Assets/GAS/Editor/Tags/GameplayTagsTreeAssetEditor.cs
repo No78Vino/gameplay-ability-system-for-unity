@@ -1,17 +1,17 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using GAS.Editor.General;
 using GAS.Editor.Validation;
+using GAS.General;
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+using UnityEditor.TreeDataModel;
+using UnityEngine;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System.Collections.Generic;
-    using GAS.Editor.General;
-    using Editor;
-    using GAS.General;
-    using UnityEditor;
-    using UnityEditor.IMGUI.Controls;
-    using UnityEditor.TreeDataModel;
-    using UnityEngine;
-
     [CustomEditor(typeof(GameplayTagsAsset))]
     public class GameplayTagsTreeAssetEditor : UnityEditor.Editor
     {
@@ -133,16 +133,57 @@ namespace GAS.Editor
 
         public void RemoveTags()
         {
-            var result = EditorUtility.DisplayDialog("Confirmation", "Are you sure you want to REMOVE these tags?",
-                "Yes", "No");
+            var selection = _treeView.GetSelection();
+
+            var sb = new StringBuilder("Tags: \n");
+            foreach (var selectedItem in selection)
+            {
+                TreeElement tag = _treeView.treeModel.Find(selectedItem);
+                BuildTagPath(sb, tag, "    " + GetPrefix(tag));
+            }
+
+            var result = EditorUtility.DisplayDialog("Remove Tags Confirmation",
+                "Are you sure you want to REMOVE the following tags?\n" +
+                "Note: All associated sub tags will also be removed.\n" +
+                sb.ToString(),
+                "Remove Tags",
+                "Cancel");
 
             if (result)
             {
                 Undo.RecordObject(Asset, "Remove Tag From Asset");
-                var selection = _treeView.GetSelection();
+
                 _treeView.treeModel.RemoveElements(selection);
                 SaveAsset();
             }
+        }
+
+        private void BuildTagPath(StringBuilder sb, TreeElement tag, string prefix, bool isSubTag = false)
+        {
+            var tagName = prefix + tag.Name;
+            var s = tagName + (isSubTag ? " (sub tag)" : "");
+            sb.AppendLine(s);
+
+            if (tag.Children != null)
+            {
+                foreach (var child in tag.Children)
+                {
+                    BuildTagPath(sb, child, tagName + ".", true);
+                }
+            }
+        }
+
+        private string GetPrefix(TreeElement tag)
+        {
+            string prefix = "";
+            var parent = tag.Parent;
+            while (parent != null && parent.Depth >= 0)
+            {
+                prefix = parent.Name + "." + prefix;
+                parent = parent.Parent;
+            }
+
+            return prefix;
         }
 
         private void CreateFirstTag()
