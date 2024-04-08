@@ -106,7 +106,7 @@ namespace GAS.Runtime
         [VerticalGroup(GRP_DATA_TAG)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices", HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_AssetTags + "(AssetTags)")]
+        [LabelText(GASTextDefine.TITLE_GE_TAG_AssetTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_AssetTags)]
         public GameplayTag[] AssetTags;
 
