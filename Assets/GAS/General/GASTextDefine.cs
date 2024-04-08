@@ -75,6 +75,19 @@
         public const string TITLE_GE_MOD = "修改器Modifier";
         public const string TITLE_GE_TAG = "标签Tag";
         public const string TITLE_GE_CUE = "提示Cue";
+      
+        public const string TITLE_GE_TAG_AssetTags = "特性标签";
+        public const string TIP_GE_TAG_AssetTags = "[特性标签] - AssetTags: 特性标签用于描述[游戏效果]的特定属性，包括但不限于伤害、治疗、控制等效果类型。\n这些标签有助于区分和定义[游戏效果]的作用和表现。";
+        public const string TITLE_GE_TAG_GrantedTags = "授予标签";
+        public const string TIP_GE_TAG_GrantedTags = "[授予标签] - GrantedTags: 当[游戏效果]生效时，授予标签会被添加到目标单位上，并在[游戏效果]失效时移除。\n该标签对即时型（Instant）[游戏效果]的无效。";
+        public const string TITLE_GE_TAG_ApplicationRequiredTags = "施加标签";
+        public const string TIP_GE_TAG_ApplicationRequiredTags = "[施加标签] - ApplicationRequiredTags: [游戏效果]的目标单位必须具备【所有】[施加标签]才能应用于目标单位。";
+        public const string TITLE_GE_TAG_OngoingRequiredTags = "激活标签";
+        public const string TIP_GE_TAG_OngoingRequiredTags = "[激活标签] - OngoingRequiredTags: [游戏效果]的目标单位必须具备【所有】[激活标签]，否则该效果不会触发。\n一旦[游戏效果]被施加，如果目标单位在效果持续期间标签发生变化，导致不再具备【所有】[激活标签]，效果将失效；反之，如果满足条件，效果将被激活。\n该标签对即时型（Instant）[游戏效果]的无效。";
+        public const string TITLE_GE_TAG_RemoveGameplayEffectsWithTags = "克制标签";
+        public const string TIP_GE_TAG_RemoveGameplayEffectsWithTags = "[克制标签] - RemoveGameplayEffectsWithTags: [游戏效果]的目标单位当前持有的所有[游戏效果]中，具有【任意】[克制标签]的[游戏效果]将被移除。";
+        public const string TITLE_GE_TAG_ApplicationImmunityTags = "免疫标签";
+        public const string TIP_GE_TAG_ApplicationImmunityTags = "[免疫标签] - ApplicationImmunityTags: [游戏效果]的目标单位拥有【任意】[免疫标签]，就对该[游戏效果]免疫。";
         
         #endregion
 
