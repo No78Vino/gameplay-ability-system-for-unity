@@ -97,6 +97,7 @@ namespace GAS.Runtime
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [Tooltip("描述性质的标签，用来描述Ability的特性表现，比如伤害、治疗、控制等。")]
         public GameplayTag[] AssetTag;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
@@ -104,6 +105,7 @@ namespace GAS.Runtime
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         [LabelText("CancelAbility With Tags ")]
         [Space]
+        [Tooltip("Ability激活时，Ability持有者当前持有的所有Ability中，拥有【任意】这些标签的Ability会被取消。")]
         public GameplayTag[] CancelAbilityTags;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
@@ -111,24 +113,28 @@ namespace GAS.Runtime
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         [LabelText("BlockAbility With Tags ")]
         [Space]
+        [Tooltip("Ability激活时，Ability持有者当前持有的所有Ability中，拥有【任意】这些标签的Ability会被阻塞激活。")]
         public GameplayTag[] BlockAbilityTags;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         [Space]
+        [Tooltip("Ability激活时，持有者会获得这些标签，Ability被失活时，这些标签也会被移除。")]
         public GameplayTag[] ActivationOwnedTag;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         [Space]
+        [Tooltip("Ability只有在其拥有者拥有【所有】这些标签时才可激活。")]
         public GameplayTag[] ActivationRequiredTags;
         
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         [Space]
+        [Tooltip("Ability在其拥有者拥有【任意】这些标签时不能被激活。")]
         public GameplayTag[] ActivationBlockedTags;
         // public GameplayTag[] SourceRequiredTags;
         // public GameplayTag[] SourceBlockedTags;

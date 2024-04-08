@@ -19,7 +19,7 @@ namespace GAS.Editor
     {
         public static AttributeSetAsset ParentAsset;
 
-        private static IEnumerable AttributeChoices = new ValueDropdownList<string>();
+        private static List<string> AttributeChoices = new List<string>();
 
         [HorizontalGroup("A")]
         [HorizontalGroup("A/R", order: 1)]
@@ -33,7 +33,7 @@ namespace GAS.Editor
 
         [Space]
         [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false)]
-        [ValueDropdown("AttributeChoices")]
+        [ValueDropdown("GetAttributeChoices")]
         [LabelText("Attributes")]
         [Searchable]
         public List<string> AttributeNames = new List<string>();
@@ -55,13 +55,15 @@ namespace GAS.Editor
 
         public static void SetAttributeChoices(List<string> attributeChoices)
         {
-            var choices = new ValueDropdownList<string>();
-            foreach (var attribute in attributeChoices)
-            {
-                choices.Add(attribute, attribute);
-            }
+            AttributeChoices = attributeChoices;
+        }
 
-            AttributeChoices = choices;
+        private IList<ValueDropdownItem<string>> GetAttributeChoices()
+        {
+            return AttributeChoices
+                .Where(attribute => !AttributeNames.Contains(attribute))
+                .Select(attribute => new ValueDropdownItem<string>(attribute, attribute))
+                .ToList();
         }
 
         public bool EmptyAttribute()
@@ -157,6 +159,7 @@ namespace GAS.Editor
                 ERROR_DuplicatedAttributeSet =
                     string.Format(GASTextDefine.ERROR_DuplicatedAttributeSet, duplicatedAttributeSets);
             }
+
             return duplicates.Count > 0;
         }
 

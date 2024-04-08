@@ -23,6 +23,7 @@ namespace GAS.Runtime
         [LabelWidth(100)]
         [OnValueChanged("OnAttributeChanged")]
         [ValueDropdown("AttributeChoices")]
+        [Tooltip("指的是GameplayEffect作用对象被修改的属性。")]
         public string AttributeName;
         
         [HideInInspector]
@@ -33,13 +34,16 @@ namespace GAS.Runtime
         
         [LabelText("Magnitude")]
         [LabelWidth(100)]
+        [Tooltip("修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。")]
         public float ModiferMagnitude;
         
         [LabelWidth(100)]
+        [Tooltip("操作类型：是对属性的操作类型，\n有3种：\nAdd ： 加法（取值为负便是减法）\nMultiply： 乘法（除法取倒数即可）\nOverride：覆写属性值")]
         public  GEOperation Operation;
         
         [LabelWidth(100)]
         [AssetSelector]
+        [Tooltip("ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。")]
         public  ModifierMagnitudeCalculation MMC;
         
         // TODO
