@@ -80,7 +80,7 @@ namespace GAS.Runtime
 
         bool IsAbilityNone()
         {
-            return BaseAbilities.Any(ability => ability == null);
+            return BaseAbilities!=null && BaseAbilities.Any(ability => ability == null);
         }
         
         static void SetAttributeSetChoices()
