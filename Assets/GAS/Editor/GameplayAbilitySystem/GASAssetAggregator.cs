@@ -133,7 +133,10 @@ namespace GAS.Editor
                         OpenDirectoryInExplorer(directoryInfo);
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Sub Directory")))
+                    {
                         CreateNewSubDirectory(directoryInfo);
+                        GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                    }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Asset")))
                     {
@@ -143,7 +146,10 @@ namespace GAS.Editor
 
                     if (!directoryInfo.Root)
                         if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
+                        {
                             RemoveSubDirectory(directoryInfo);
+                            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                        }
                 }
 
                 if (selected is { Value: ScriptableObject asset })

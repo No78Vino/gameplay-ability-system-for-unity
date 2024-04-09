@@ -99,6 +99,7 @@ namespace GAS.Editor
                 Save();
                 Debug.Log("[EX] Attribute Asset add element!");
             }), "Add new Attribute");
+            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         private bool ExistEmptyAttribute()

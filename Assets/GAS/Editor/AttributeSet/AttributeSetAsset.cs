@@ -183,6 +183,7 @@ namespace GAS.Editor
                 },
                 attributeSetName => AttributeSetConfigs.Add(new AttributeSetConfig() { Name = attributeSetName }),
                 "Create new AttributeSet");
+            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         private int OnRemoveElement(AttributeSetConfig attributeSet)
