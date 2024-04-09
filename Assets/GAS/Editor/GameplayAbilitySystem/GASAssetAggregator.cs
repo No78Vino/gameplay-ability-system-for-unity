@@ -157,6 +157,9 @@ namespace GAS.Editor
 
                 if (selected is { Value: ScriptableObject asset })
                 {
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Show In Project")))
+                        ShowInProject(asset);
+
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
                         OpenAssetInExplorer(asset);
 
@@ -178,6 +181,15 @@ namespace GAS.Editor
         {
             var path = directoryInfo.Directory.Replace("/", "\\");
             Process.Start("explorer.exe", path);
+        }
+
+        private void ShowInProject(ScriptableObject asset)
+        {
+            if (asset != null)
+            {
+                EditorGUIUtility.PingObject(asset);
+                Selection.SetActiveObjectWithContext(asset, null);
+            }
         }
 
         private void OpenAssetInExplorer(ScriptableObject asset)
