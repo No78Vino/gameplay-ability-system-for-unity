@@ -26,14 +26,14 @@ namespace GAS.Runtime
         private const string GRP_DATA_TAG = "DATA/H/Tags";
         private const string GRP_DATA_CUE = "DATA/H/Cue";
 
-        private const int WIDTH_LABLE = 100;
+        private const int WIDTH_LABEL = 100;
         private const int WIDTH_GRP_BASE_H_LEFT = 250;
         private const int WIDTH_GRP_BASE_H_RIGHT = 500;
         private const int WIDTH_GRP_EACH_TAG = 250;
 
         private const string ERROR_POLICY = "Policy CAN NOT be NONE!";
         private const string ERROR_NONE_CUE = "Cue CAN NOT be NONE!";
-        private const string ERROR_PERIODGE_NONE = "Period GameplayEffect CAN NOT be NONE!";
+        private const string ERROR_PERIOD_GE_NONE = "Period GameplayEffect CAN NOT be NONE!";
 
 
         private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
@@ -57,13 +57,13 @@ namespace GAS.Runtime
         [HorizontalGroup(GRP_BASE_H, PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelText(GASTextDefine.LABLE_GE_POLICY)]
-        [LabelWidth(WIDTH_LABLE)]
-        [InfoBox(ERROR_PERIODGE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
+        [LabelWidth(WIDTH_LABEL)]
+        [InfoBox(ERROR_PERIOD_GE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
         [InfoBox(GASTextDefine.TIP_GE_POLICY)]
         public EffectsDurationPolicy DurationPolicy = EffectsDurationPolicy.Instant;
 
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [LabelWidth(WIDTH_LABLE)]
+        [LabelWidth(WIDTH_LABEL)]
         [ShowIf("DurationPolicy", EffectsDurationPolicy.Duration)]
         [Unit(Units.Second)]
         [LabelText(GASTextDefine.LABLE_GE_DURATION)]
@@ -177,7 +177,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-       [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnAdd)]
+        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnAdd)]
         public GameplayCueInstant[] CueOnAdd;
 
         [Title("")]
