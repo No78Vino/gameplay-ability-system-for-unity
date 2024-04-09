@@ -227,15 +227,15 @@ namespace GAS.Runtime
 
         bool IsInstantPolicy() => DurationPolicy == EffectsDurationPolicy.Instant;
 
-        bool IsCueExecuteNone() => CueOnExecute.Any(cue => cue == null);
+        bool IsCueExecuteNone() => CueOnExecute != null && CueOnExecute.Any(cue => cue == null);
 
         bool IsCueDurationalNone()
         {
-            return CueDurational.Any(cue => cue == null) ||
-                   CueOnAdd.Any(cue => cue == null) ||
-                   CueOnRemove.Any(cue => cue == null) ||
-                   CueOnActivate.Any(cue => cue == null) ||
-                   CueOnDeactivate.Any(cue => cue == null);
+            return (CueDurational != null && CueDurational.Any(cue => cue == null)) ||
+                   (CueOnAdd != null && CueOnAdd.Any(cue => cue == null)) ||
+                   (CueOnRemove != null && CueOnRemove.Any(cue => cue == null)) ||
+                   (CueOnActivate != null && CueOnActivate.Any(cue => cue == null)) ||
+                   (CueOnDeactivate != null && CueOnDeactivate.Any(cue => cue == null));
         }
 
         bool IsPeriodGameplayEffectNone()
