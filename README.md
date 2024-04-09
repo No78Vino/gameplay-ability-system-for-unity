@@ -493,7 +493,7 @@ TimelineAbilityAsset的大多数表现逻辑参数在AbilityAsset面板都是隐
          - Release Effect的执行逻辑：先调用TargetCatcher的CatchTargets()方法，然后对捕获的目标单位施加所有指定GameplayEffect。
       3. Instant Task 【即时Task轨道】
          - 轨道Item类型：Mark
-         - 一个Mark可以挂载复数的Instant Task。 关于Ability Task的详细介绍见[下文](#)。
+         - 一个Mark可以挂载复数的Instant Task。 关于Ability Task的详细介绍见[下文](#375-abilitytaskwip)。
            ![QQ20240315170234.png](Wiki%2FQQ20240315170234.png)
          - Task是自定义事件，可以是任何游戏逻辑，纯粹由开发者决定。
          - Instant Task的面板绘制：自定义Task的UI面板需要继承自InstantTaskInspector<T> T为InstantAbilityTask类
