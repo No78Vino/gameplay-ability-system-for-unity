@@ -23,7 +23,7 @@ namespace GAS.Runtime
         private const string GRP_DATA_TAG = "DATA/H/Tags";
         
         
-        private const int WIDTH_LABLE = 100;
+        private const int WIDTH_LABEL = 100;
         private const int WIDTH_GRP_BASE_H_LEFT = 350;
 
         private const string ERROR_ABILITY = "Ability can't be NONE!!";
@@ -50,7 +50,7 @@ namespace GAS.Runtime
         [Title(GASTextDefine.ASC_AttributeSet, bold: true)]
         [HorizontalGroup(GRP_BASE_H,PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [LabelWidth(WIDTH_LABLE)]
+        [LabelWidth(WIDTH_LABEL)]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("AttributeSetChoice")]
         public string[] AttributeSets;

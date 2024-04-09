@@ -121,7 +121,7 @@ namespace GAS.Runtime
                 _activeGameplayEffects.Add(gameplayEffectSpec);
             }
 
-            // remove deactive gameplay effects from active list
+            // remove deactivate gameplay effects from active list
             foreach (var gameplayEffectSpec in _activeGameplayEffects)
             {
                 if (!gameplayEffectSpec.IsActive) continue;

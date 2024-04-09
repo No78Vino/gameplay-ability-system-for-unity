@@ -11,7 +11,7 @@ namespace GAS.Runtime
         /// <summary>
         ///  the order of the modifiers is important.
         /// </summary>
-        private List<Tuple<GameplayEffectSpec, GameplayEffectModifier>> _modifierCahce =
+        private List<Tuple<GameplayEffectSpec, GameplayEffectModifier>> _modifierCache =
             new List<Tuple<GameplayEffectSpec, GameplayEffectModifier>>();
         
         public AttributeAggregator(AttributeBase attribute , AbilitySystemComponent owner)
@@ -39,7 +39,7 @@ namespace GAS.Runtime
         /// </summary>
         void RefreshModifierCache()
         {
-            _modifierCahce.Clear();
+            _modifierCache.Clear();
             var activeGameplayEffects = _owner.GameplayEffectContainer.GetActiveGameplayEffects();
             foreach (var geSpec in activeGameplayEffects)
             {
@@ -47,7 +47,7 @@ namespace GAS.Runtime
                 {
                     if (modifier.AttributeName == _processedAttribute.Name)
                     {
-                        _modifierCahce.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec,modifier));
+                        _modifierCache.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec,modifier));
                     }
                 }
             }
@@ -58,13 +58,13 @@ namespace GAS.Runtime
         /// <summary>
         /// Calculate the new Value for the CurrentValue.
         /// (BaseValue's changes depend on the instant GameplayEffect.)
-        /// this method is triggered when the _modifierCahce is changed or the _processedAttribute's BaseValue is changed.
+        /// this method is triggered when the _modifierCache is changed or the _processedAttribute's BaseValue is changed.
         /// </summary>
         /// <returns></returns>
         float CalculateNewValue()
         {
             float newValue = _processedAttribute.BaseValue;
-            foreach (var tuple in _modifierCahce)
+            foreach (var tuple in _modifierCache)
             {
                 var spec = tuple.Item1;
                 var modifier = tuple.Item2;
