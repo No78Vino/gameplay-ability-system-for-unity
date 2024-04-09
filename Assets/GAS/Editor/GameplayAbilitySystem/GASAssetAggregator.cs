@@ -136,7 +136,10 @@ namespace GAS.Editor
                         CreateNewSubDirectory(directoryInfo);
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Asset")))
+                    {
                         CreateNewAsset(directoryInfo);
+                        GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                    }
 
                     if (!directoryInfo.Root)
                         if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
