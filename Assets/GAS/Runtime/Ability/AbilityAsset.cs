@@ -64,7 +64,18 @@ namespace GAS.Runtime
         [InfoBox(GASTextDefine.TIP_UNAME)]
         [LabelText("U-Name")]
         [LabelWidth(WIDTH_LABLE)]
+        [InfoBox("Invalid UniqueName", InfoMessageType.Error, "IsUniqueNameInvalid")]
         public string UniqueName;
+        
+        #if UNITY_EDITOR
+        private const string VariableNamePattern = @"^[a-zA-Z_][a-zA-Z0-9_]*$";
+        public static readonly System.Text.RegularExpressions.Regex VariableNameRegex = new (VariableNamePattern);
+        private bool IsUniqueNameInvalid()
+        {
+            if (string.IsNullOrWhiteSpace(UniqueName)) return true;
+            return !VariableNameRegex.IsMatch(UniqueName);
+        }
+        #endif
         
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [Title("Description", bold: false)]
