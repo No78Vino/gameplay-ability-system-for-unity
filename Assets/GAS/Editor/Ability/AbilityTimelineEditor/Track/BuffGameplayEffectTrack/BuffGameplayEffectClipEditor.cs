@@ -79,6 +79,14 @@ namespace GAS.Editor
     [CustomEditor(typeof(BuffGameplayEffectClipEditor))]
     public class BuffGameplayEffectClipInspector:OdinEditorWithoutHeader
     {
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("【注意！！】请确保设置的GameplayEffect类型为Durational或Infinite。 非持续类型的GameplayEffect不会生效。且GameplayEffect执行时会设置为Infinite执行策略， 生命周期由Clip长度（Duration）决定。", MessageType.Info);
+            
+            GUILayout.Space(20);
+            
+            base.OnInspectorGUI();
+        }
     }
 }
 #endif
