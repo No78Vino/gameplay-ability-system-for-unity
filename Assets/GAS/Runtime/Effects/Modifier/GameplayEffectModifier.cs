@@ -71,21 +71,10 @@ namespace GAS.Runtime
         {
             return MMC == null ? ModiferMagnitude : MMC.CalculateMagnitude(spec, modifierMagnitude);
         }
-        
+
         public void SetModiferMagnitude(float value)
         {
-            if (MMC is SetByCallerModCalculation)
-            {
-                ModiferMagnitude = value;
-            }
-            else
-            {
-                #if UNITY_EDITOR
-                UnityEngine.Debug.LogError("[EX] this MMC is not SetByCallerModCalculation, can't set ModiferMagnitude!");
-                #else
-                UnityEngine.Debug.LogWarning("[EX] this MMC is not SetByCallerModCalculation, can't set ModiferMagnitude!");
-                #endif
-            }
+            ModiferMagnitude = value;
         }
 
         void OnAttributeChanged()
