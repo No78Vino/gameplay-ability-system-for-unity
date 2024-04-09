@@ -1,22 +1,21 @@
-﻿using GAS.Editor.Validation;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using GAS.Editor.General;
+using GAS.Editor.Validation;
+using GAS.Runtime;
+using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using Editor;
-    using General;
-    using Runtime;
-    using Sirenix.OdinInspector.Editor;
-    using Sirenix.Utilities;
-    using Sirenix.Utilities.Editor;
-    using UnityEditor;
-    using UnityEngine;
-    using GAS.General;
-    using Debug = UnityEngine.Debug;
+    using Debug = Debug;
 
     public class GASAssetAggregator : OdinMenuEditorWindow
     {
@@ -135,20 +134,23 @@ namespace GAS.Editor
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Sub Directory")))
                     {
                         CreateNewSubDirectory(directoryInfo);
-                        GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                        GUIUtility
+                            .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                     }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Asset")))
                     {
                         CreateNewAsset(directoryInfo);
-                        GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                        GUIUtility
+                            .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                     }
 
                     if (!directoryInfo.Root)
                         if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
                         {
                             RemoveSubDirectory(directoryInfo);
-                            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                            GUIUtility
+                                .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                         }
                 }
 
@@ -243,9 +245,10 @@ namespace GAS.Editor
             if (!EditorUtility.DisplayDialog("Warning", "Are you sure you want to delete this asset?", "Yes",
                     "No")) return;
 
+            var name = asset.name; // Get the name before deleting
             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(asset));
             Refresh();
-            Debug.Log($"[EX] {asset.name} asset deleted!");
+            Debug.Log($"[EX] {name} asset deleted!");
         }
 
         void OnMenuSelectionChange(SelectionChangedType selectionChangedType)
