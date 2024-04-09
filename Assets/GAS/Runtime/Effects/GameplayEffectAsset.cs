@@ -33,6 +33,8 @@ namespace GAS.Runtime
 
         private const string ERROR_POLICY = "Policy CAN NOT be NONE!";
         private const string ERROR_NONE_CUE = "Cue CAN NOT be NONE!";
+        private const string ERROR_DURATION = "Duration must be > 0.";
+        private const string ERROR_PERIOD = "Period must be >= 0.";
         private const string ERROR_PERIOD_GE_NONE = "Period GameplayEffect CAN NOT be NONE!";
 
 
@@ -58,6 +60,8 @@ namespace GAS.Runtime
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelText(GASTextDefine.LABLE_GE_POLICY)]
         [LabelWidth(WIDTH_LABEL)]
+        [InfoBox(ERROR_DURATION, InfoMessageType.Error, "IsDurationInvalid")]
+        [InfoBox(ERROR_PERIOD, InfoMessageType.Error, "IsPeriodInvalid")]
         [InfoBox(ERROR_PERIOD_GE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
         [InfoBox(GASTextDefine.TIP_GE_POLICY)]
         public EffectsDurationPolicy DurationPolicy = EffectsDurationPolicy.Instant;
@@ -76,7 +80,7 @@ namespace GAS.Runtime
         [ShowIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
         public float Period;
-
+        
         [HorizontalGroup(GRP_BASE_H_RIGHT_PERIOD)]
         [LabelText(GASTextDefine.LABLE_GE_EXEC)]
         [LabelWidth(50)]
@@ -220,6 +224,7 @@ namespace GAS.Runtime
             return IsDurationalPolicy() && Period > 0;
         }
 
+
         bool IsDurationalPolicy()
         {
             return DurationPolicy == EffectsDurationPolicy.Duration || DurationPolicy == EffectsDurationPolicy.Infinite;
@@ -242,6 +247,9 @@ namespace GAS.Runtime
         {
             return IsPeriodic() && PeriodExecution == null;
         }
+        
+        bool IsDurationInvalid() => Duration <= 0;
+        bool IsPeriodInvalid() => Period < 0;
 
         private static void SetTagChoices()
         {
