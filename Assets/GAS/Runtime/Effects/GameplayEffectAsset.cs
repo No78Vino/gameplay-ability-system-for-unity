@@ -248,8 +248,8 @@ namespace GAS.Runtime
             return IsPeriodic() && PeriodExecution == null;
         }
         
-        bool IsDurationInvalid() => Duration <= 0;
-        bool IsPeriodInvalid() => Period < 0;
+        bool IsDurationInvalid() => DurationPolicy == EffectsDurationPolicy.Duration && Duration <= 0;
+        bool IsPeriodInvalid() => IsDurationalPolicy() && Period < 0;
 
         private static void SetTagChoices()
         {
