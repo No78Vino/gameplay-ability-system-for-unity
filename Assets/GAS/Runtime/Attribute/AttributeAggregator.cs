@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -26,14 +27,14 @@ namespace GAS.Runtime
         {
             _processedAttribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.RegisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
-            GASEvents.AttributeChanged.Subscribe(OnAttributeChanged);
+            //GASEvents.AttributeChanged.Subscribe(OnAttributeChanged);
         }
         
         void OnDispose()
         {
             _processedAttribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
-            GASEvents.AttributeChanged.Unsubscribe(OnAttributeChanged);
+            //GASEvents.AttributeChanged.Unsubscribe(OnAttributeChanged);
         }
         
         /// <summary>
@@ -41,6 +42,8 @@ namespace GAS.Runtime
         /// </summary>
         void RefreshModifierCache()
         {
+            // 注销属性变化监听回调
+            UnregisterAttributeChangedListen();
             _modifierCache.Clear();
             var gameplayEffects = _owner.GameplayEffectContainer.GameplayEffects();
             foreach (var geSpec in gameplayEffects)
@@ -52,6 +55,7 @@ namespace GAS.Runtime
                         if (modifier.AttributeName == _processedAttribute.Name)
                         {
                             _modifierCache.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec, modifier));
+                            TryRegisterAttributeChangedListen(geSpec, modifier);
                         }
                     }
                 }
@@ -106,7 +110,53 @@ namespace GAS.Runtime
             _processedAttribute.SetCurrentValue(newValue);
         }
 
-        private void OnAttributeChanged(object sender, AttributeChangedEventArgs e)
+        private void UnregisterAttributeChangedListen()
+        {
+            foreach (var tuple in _modifierCache)
+                TryUnregisterAttributeChangedListen(tuple.Item1, tuple.Item2);
+        }
+
+        private void TryUnregisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
+        {
+            if (modifier.MMC is AttributeBasedModCalculation mmc &&
+                mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track)
+            {
+                if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
+                {
+                    if (ge.Owner != null)
+                        ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .UnregisterPostCurrentValueChange(OnAttributeChanged);
+                }
+                else
+                {
+                    if (ge.Source != null)
+                        ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .UnregisterPostCurrentValueChange(OnAttributeChanged);
+                }
+            }
+        }
+        
+        private void TryRegisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
+        {
+            if (modifier.MMC is AttributeBasedModCalculation mmc &&
+                mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track)
+            {
+                if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
+                {
+                    if (ge.Owner != null)
+                        ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .RegisterPostCurrentValueChange(OnAttributeChanged);
+                }
+                else
+                {
+                    if (ge.Source != null)
+                        ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .RegisterPostCurrentValueChange(OnAttributeChanged);
+                }
+            }
+        }
+        
+        private void OnAttributeChanged(AttributeBase attribute,float oldValue,float newValue)
         {
             if(_modifierCache.Count == 0) return;
             foreach (var tuple in _modifierCache)
@@ -115,12 +165,12 @@ namespace GAS.Runtime
                 var modifier = tuple.Item2;
                 if (modifier.MMC is AttributeBasedModCalculation mmc &&
                     mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track &&
-                    e.Attribute.Name == modifier.AttributeName)
+                    attribute.Name == mmc.attributeName)
                 {
                     if ((mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target &&
-                         e.Owner == ge.Owner) ||
+                         attribute.Owner == ge.Owner) ||
                         (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Source &&
-                         e.Owner == ge.Source))
+                         attribute.Owner == ge.Source))
                     {
                         UpdateCurrentValueWhenModifierIsDirty();
                         break;
