@@ -13,6 +13,8 @@ namespace GAS.Runtime
         
         private AttributeValue _value;
         private AbilitySystemComponent _owner;
+        public AbilitySystemComponent Owner => _owner;
+
         public AttributeBase(string attrSetName, string attrName, float value)
         {
             SetName = attrSetName;
@@ -48,8 +50,8 @@ namespace GAS.Runtime
             var oldValue = CurrentValue;
             _value.SetCurrentValue(value);
 
-            _onPostCurrentValueChange?.Invoke(this, oldValue, value);
-            GASEvents.AttributeChanged.Publish(_owner,this, oldValue, value);
+            if (oldValue != value) _onPostCurrentValueChange?.Invoke(this, oldValue, value);
+            //GASEvents.AttributeChanged.Publish(_owner,this, oldValue, value);
         }
 
         public void SetBaseValue(float value)
@@ -62,7 +64,7 @@ namespace GAS.Runtime
             var oldValue = _value.BaseValue;
             _value.SetBaseValue(value);
 
-            _onPostBaseValueChange?.Invoke(this, oldValue, value);
+            if (oldValue != value) _onPostBaseValueChange?.Invoke(this, oldValue, value);
         }
         
         public void SetCurrentValueWithoutEvent(float value)
