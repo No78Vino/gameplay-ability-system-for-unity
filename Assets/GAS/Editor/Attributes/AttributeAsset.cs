@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using Sirenix.Utilities.Editor;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -24,10 +26,18 @@ namespace GAS.Editor
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex",
             CustomAddFunction = "OnAddAttribute",
-            ShowPaging = false)]
+            ShowPaging = false, OnTitleBarGUI = "DrawAttributeButtons")]
         [Searchable]
         [OnValueChanged("Save")]
         public List<AttributeAccessor> attributes = new List<AttributeAccessor>();
+        
+        private void DrawAttributeButtons()
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                attributes = attributes.OrderBy(x => x.Name).ToList();
+            }
+        }
 
         public List<string> AttributeNames =>
             (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
@@ -38,7 +48,6 @@ namespace GAS.Editor
         }
 
         [VerticalGroup("Gen Code", order: 0)]
-        [HorizontalGroup("Gen Code/Buttons")]
         [GUIColor(0, 0.9f, 0)]
         [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30,
             Expanded = true)]
@@ -55,14 +64,6 @@ namespace GAS.Editor
             Save();
             AttributeCollectionGen.Gen();
             AssetDatabase.Refresh();
-        }
-
-        [HorizontalGroup("Gen Code/Buttons", Width = 100)]
-        [Button(SdfIconType.SortAlphaDown, "排序", ButtonHeight = 30)]
-        private void Sort()
-        {
-            attributes = attributes.OrderBy(x => x.Name).ToList();
-            Save();
         }
 
         private void Save()
