@@ -1,4 +1,5 @@
 ﻿using GAS.Editor.Validation;
+using Sirenix.Utilities.Editor;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
@@ -18,8 +19,8 @@ namespace GAS.Editor
     public class AttributeSetConfig
     {
         public static AttributeSetAsset ParentAsset;
-
-        private static List<string> AttributeChoices = new List<string>();
+        
+        private static IEnumerable AttributeChoices = new ValueDropdownList<string>();
 
         [HorizontalGroup("A")]
         [HorizontalGroup("A/R", order: 1)]
@@ -32,11 +33,19 @@ namespace GAS.Editor
         public string Name = "Unnamed";
 
         [Space]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false)]
-        [ValueDropdown("GetAttributeChoices")]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false, OnTitleBarGUI = "DrawAttributeNamesButtons")]
+        [ValueDropdown("AttributeChoices", IsUniqueList = true)]
         [LabelText("Attributes")]
         [Searchable]
         public List<string> AttributeNames = new List<string>();
+
+        private void DrawAttributeNamesButtons()
+        {   if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                AttributeNames = AttributeNames.OrderBy(x => x).ToList();
+                ParentAsset.Save();
+            }
+        }
 
         [HorizontalGroup("A", Width = 50)]
         [HorizontalGroup("A/L", order: 0, Width = 50)]
@@ -55,15 +64,13 @@ namespace GAS.Editor
 
         public static void SetAttributeChoices(List<string> attributeChoices)
         {
-            AttributeChoices = attributeChoices;
-        }
+            var choices = new ValueDropdownList<string>();
+            foreach (var attribute in attributeChoices)
+            {
+                choices.Add(attribute, attribute);
+            }
 
-        private IList<ValueDropdownItem<string>> GetAttributeChoices()
-        {
-            return AttributeChoices
-                .Where(attribute => !AttributeNames.Contains(attribute))
-                .Select(attribute => new ValueDropdownItem<string>(attribute, attribute))
-                .ToList();
+            AttributeChoices = choices;
         }
 
         public bool EmptyAttribute()
@@ -100,9 +107,18 @@ namespace GAS.Editor
         [ListDrawerSettings(Expanded = true,
             CustomAddFunction = "OnAddAttributeSet",
             CustomRemoveElementFunction = "OnRemoveElement",
-            CustomRemoveIndexFunction = "OnRemoveIndex")]
+            CustomRemoveIndexFunction = "OnRemoveIndex", OnTitleBarGUI = "DrawAttributeSetConfigsButtons")]
         [Searchable]
         public List<AttributeSetConfig> AttributeSetConfigs = new List<AttributeSetConfig>();
+
+        private void DrawAttributeSetConfigsButtons()
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                AttributeSetConfigs = AttributeSetConfigs.OrderBy(x => x.Name).ToList();
+                Save();
+            }
+        }
 
         private void OnEnable()
         {
@@ -119,7 +135,6 @@ namespace GAS.Editor
         }
 
         [VerticalGroup("Generate AttributeSet Code", order: 0)]
-        [HorizontalGroup("Generate AttributeSet Code/Buttons")]
         [GUIColor(0, 0.9f, 0)]
         [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeSetCode, ButtonHeight = 30, Expanded = true)]
         [InfoBox(GASTextDefine.ERROR_InElements, InfoMessageType.Error, VisibleIf = "ErrorInElements")]
@@ -135,14 +150,6 @@ namespace GAS.Editor
             Save();
             AttributeSetClassGen.Gen();
             AssetDatabase.Refresh();
-        }
-        
-        [HorizontalGroup("Generate AttributeSet Code/Buttons", Width = 100)]
-        [Button(SdfIconType.SortAlphaDown, "排序", ButtonHeight = 30)]
-        private void Sort()
-        {
-            AttributeSetConfigs = AttributeSetConfigs.OrderBy(x => x.Name).ToList();
-            Save();
         }
 
         bool ErrorInElements()
