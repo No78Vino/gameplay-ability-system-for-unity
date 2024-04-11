@@ -1611,7 +1611,12 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 ---
 
 ## 5.如果...我想...,应该怎么做?(W.I.P)
-
+- Q:我想实现血量（HpMax）上限，随力量(STR)每增加1点，血量上限增加10%，怎么办？
+  - A: 有两种常见的方法：
+    - 1. 采用Derived Attribute的设计方法，给单位添加一个Infinite的GameplayEffect，
+         在修改器参数列表中添加一个修改器：修改属性为HpMax；操作类型为乘法；模值随意；
+         MMC为STR属性依赖的MMC，来源为Target，并且Capture必须为Track（只有为Track时才能触发实时重计算），剩下的线性参数为k=0.1，b=1 (Magnitude = 1 + 10% * STR )。
+    - 2. 采用监听STR属性的变化事件，手动对HpMax的BaseValue进行修改同步。
 ---
 ## 6.暂不支持的功能（可能有遗漏）
 - Granted Ability，GameplayEffect授予的能力。虽然面板显示了配置用的字段，但目前其实是不生效的
