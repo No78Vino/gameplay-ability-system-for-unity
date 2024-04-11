@@ -12,7 +12,7 @@ namespace GAS.Editor
 
     public class AttributeAsset : ScriptableObject
     {
-        [BoxGroup("Warning", order: -1)]
+        [BoxGroup("Warning", order: -1)] 
         [HideLabel]
         [ShowIf("ExistDuplicatedAttribute")]
         [DisplayAsString(TextAlignment.Left, true)]
@@ -38,6 +38,7 @@ namespace GAS.Editor
         }
 
         [VerticalGroup("Gen Code", order: 0)]
+        [HorizontalGroup("Gen Code/Buttons")]
         [GUIColor(0, 0.9f, 0)]
         [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30,
             Expanded = true)]
@@ -54,6 +55,14 @@ namespace GAS.Editor
             Save();
             AttributeCollectionGen.Gen();
             AssetDatabase.Refresh();
+        }
+
+        [HorizontalGroup("Gen Code/Buttons", Width = 100)]
+        [Button(SdfIconType.SortAlphaDown, "排序", ButtonHeight = 30)]
+        private void Sort()
+        {
+            attributes = attributes.OrderBy(x => x.Name).ToList();
+            Save();
         }
 
         private void Save()
@@ -99,7 +108,7 @@ namespace GAS.Editor
                 Save();
                 Debug.Log("[EX] Attribute Asset add element!");
             }), "Add new Attribute");
-            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+            GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         private bool ExistEmptyAttribute()

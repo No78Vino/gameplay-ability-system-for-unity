@@ -119,6 +119,7 @@ namespace GAS.Editor
         }
 
         [VerticalGroup("Generate AttributeSet Code", order: 0)]
+        [HorizontalGroup("Generate AttributeSet Code/Buttons")]
         [GUIColor(0, 0.9f, 0)]
         [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeSetCode, ButtonHeight = 30, Expanded = true)]
         [InfoBox(GASTextDefine.ERROR_InElements, InfoMessageType.Error, VisibleIf = "ErrorInElements")]
@@ -134,6 +135,14 @@ namespace GAS.Editor
             Save();
             AttributeSetClassGen.Gen();
             AssetDatabase.Refresh();
+        }
+        
+        [HorizontalGroup("Generate AttributeSet Code/Buttons", Width = 100)]
+        [Button(SdfIconType.SortAlphaDown, "排序", ButtonHeight = 30)]
+        private void Sort()
+        {
+            AttributeSetConfigs = AttributeSetConfigs.OrderBy(x => x.Name).ToList();
+            Save();
         }
 
         bool ErrorInElements()
