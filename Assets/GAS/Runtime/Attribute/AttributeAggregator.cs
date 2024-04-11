@@ -27,14 +27,12 @@ namespace GAS.Runtime
         {
             _processedAttribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.RegisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
-            //GASEvents.AttributeChanged.Subscribe(OnAttributeChanged);
         }
         
-        void OnDispose()
+        public void OnDispose()
         {
             _processedAttribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
-            //GASEvents.AttributeChanged.Unsubscribe(OnAttributeChanged);
         }
         
         /// <summary>
