@@ -5,7 +5,7 @@ namespace GAS
 {
     public static class GasDefine
     {
-        public const string GAS_VERSION = "1.0.0";
+        public const string GAS_VERSION = "1.0.4";
 
         public const string GAS_ASSET_FOLDER_NAME = "GAS_Setting";
 
