@@ -12,7 +12,7 @@ namespace GAS.Runtime
         protected event Func<AttributeBase, float, float> _onPreBaseValueChange;
         
         private AttributeValue _value;
-
+        private AbilitySystemComponent _owner;
         public AttributeBase(string attrSetName, string attrName, float value)
         {
             SetName = attrSetName;
@@ -33,6 +33,11 @@ namespace GAS.Runtime
         public float BaseValue => _value.BaseValue;
         public float CurrentValue => _value.CurrentValue;
 
+        public void SetOwner(AbilitySystemComponent owner)
+        {
+            _owner = owner;
+        }
+        
         public void SetCurrentValue(float value)
         {
             if (_onPreCurrentValueChange != null)
@@ -44,6 +49,7 @@ namespace GAS.Runtime
             _value.SetCurrentValue(value);
 
             _onPostCurrentValueChange?.Invoke(this, oldValue, value);
+            GASEvents.AttributeChanged.Publish(_owner,this, oldValue, value);
         }
 
         public void SetBaseValue(float value)

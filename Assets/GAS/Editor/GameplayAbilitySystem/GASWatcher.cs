@@ -194,11 +194,15 @@ namespace GAS.Editor
             }
             
             Effects.Clear();
-            var activeGE = _selected.GameplayEffectContainer.GetActiveGameplayEffects();
-            foreach (var ge in activeGE)
+            var gameplayEffects = _selected.GameplayEffectContainer.GameplayEffects();
+            foreach (var ge in gameplayEffects)
             {
-                string geState = $"{ge.GameplayEffect.GameplayEffectName};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
-                Effects.Add(geState);
+                if (ge.IsActive)
+                {
+                    string geState =
+                        $"{ge.GameplayEffect.GameplayEffectName};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
+                    Effects.Add(geState);
+                }
             }
             
             FixedTag.Clear();
