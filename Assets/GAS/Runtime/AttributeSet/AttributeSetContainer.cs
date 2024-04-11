@@ -46,6 +46,7 @@ namespace GAS.Runtime
                     _attributeAggregators.Add(attrSet[attr],new AttributeAggregator(attrSet[attr],_owner));
                 }
             }
+            attrSet.SetOwner(_owner);
         }
         
         /// <summary>

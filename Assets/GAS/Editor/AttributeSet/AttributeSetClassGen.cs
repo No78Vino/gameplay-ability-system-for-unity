@@ -177,6 +177,21 @@ namespace GAS.Editor
                         }
                         writer.Indent--;
                         writer.WriteLine("};");
+                        
+                        writer.WriteLine("");
+                        writer.WriteLine("public override void SetOwner(AbilitySystemComponent owner)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine("_owner = owner;");
+                            foreach (var attributeName in attributeSet.AttributeNames)
+                            {
+                                string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
+                                writer.WriteLine($"_{validAttrName}.SetOwner(owner);");
+                            }
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
