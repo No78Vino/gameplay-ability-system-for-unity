@@ -83,5 +83,11 @@ namespace GAS.Runtime
         }
         
         public Dictionary<string, AbilitySpec> AbilitySpecs() => _abilities;
+        
+        public void CancelAllAbilities()
+        {
+            foreach (var kv in _abilities)
+                _abilities[kv.Key].TryCancelAbility();
+        }
     }
 }

@@ -30,6 +30,14 @@ namespace GAS.Runtime
             _ready = true;
         }
 
+        public void Dispose()
+        {
+            DisposeAttributeSetContainer();
+            DisableAllAbilities();
+            ClearGameplayEffects();
+            GameplayTagAggregator?.OnDisable();
+        }
+        
         private void Awake()
         {
             Prepare();
@@ -44,13 +52,11 @@ namespace GAS.Runtime
 
         private void OnDisable()
         {
-            DisableAllAbilities();
-            ClearAllGameplayEffects();
+            Dispose();
             GameplayAbilitySystem.GAS.Unregister(this);
-            GameplayTagAggregator?.OnDisable();
         }
 
-        public void SetPreset( AbilitySystemComponentPreset ascPreset)
+        public void SetPreset(AbilitySystemComponentPreset ascPreset)
         {
             preset = ascPreset;
         }
@@ -223,7 +229,7 @@ namespace GAS.Runtime
             AttributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
             return attrSet;
         }
-
+        
         public void ClearGameplayEffect()
         {
             // _abilityContainer = new AbilityContainer(this);
@@ -241,15 +247,17 @@ namespace GAS.Runtime
 
         private void DisableAllAbilities()
         {
-            foreach (var abilityName in AbilityContainer.AbilitySpecs().Keys)
-            {
-                AbilityContainer.CancelAbility(abilityName);
-            }
+            AbilityContainer.CancelAllAbilities();
         }
 
-        private void ClearAllGameplayEffects()
+        private void ClearGameplayEffects()
         {
             GameplayEffectContainer.ClearGameplayEffect();
+        }
+
+        private void DisposeAttributeSetContainer()
+        {
+            AttributeSetContainer.Dispose();
         }
     }
 }

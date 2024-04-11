@@ -111,5 +111,12 @@ namespace GAS.Runtime
             }
             return snapshot;
         }
+        
+        public void Dispose()
+        {
+            foreach (var aggregator in _attributeAggregators)
+                aggregator.Value.OnDispose();
+            
+        }
     }
 }
