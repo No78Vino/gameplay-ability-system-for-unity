@@ -1,4 +1,3 @@
-
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
@@ -9,12 +8,12 @@ namespace GAS.Editor
     using Sirenix.OdinInspector;
     using GAS.Runtime;
 
-    public class DurationalCueClipEditor:OdinEditorWindow
+    public class DurationalCueClipEditor : OdinEditorWindow
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        
+
         private DurationalCueClip _clip;
-        
+
         public static DurationalCueClipEditor Create(DurationalCueClip clip)
         {
             var window = new DurationalCueClipEditor();
@@ -39,22 +38,22 @@ namespace GAS.Editor
         [AssetSelector]
         [OnValueChanged("OnCueChanged")]
         public GameplayCueDurational Cue;
-        
+
         [BoxGroup]
         [Button]
-        [GUIColor(0.9f,0.2f,0.2f)]
+        [GUIColor(0.9f, 0.2f, 0.2f)]
         void Delete()
         {
             _clip.Delete();
         }
-        
+
         void Refresh()
         {
             RunInfo = $"<b>Run(f):{_clip.DurationalCueClipData.startFrame} -> {_clip.DurationalCueClipData.EndFrame}</b>";
             Duration = _clip.DurationalCueClipData.durationFrame;
             Cue = _clip.DurationalCueClipData.cue;
         }
-        
+
         private void OnDurationFrameChanged()
         {
             // 钳制
@@ -70,10 +69,18 @@ namespace GAS.Editor
             _clip.UpdateClipDataCue(Cue);
         }
     }
-    
+
     [CustomEditor(typeof(DurationalCueClipEditor))]
-    public class DurationalCueClipInspector:OdinEditorWithoutHeader
+    public class DurationalCueClipInspector : OdinEditorWithoutHeader
     {
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("注意！！ TimelineAbility下的持续性Cue， 只会执行OnAdd（Cue播放的第一帧），OnRemove（Cue播放的最后一帧）及OnTick， 和GameplayEffect相关的方法不会被执行", MessageType.Info);
+            
+            GUILayout.Space(20);
+            
+            base.OnInspectorGUI();
+        }
     }
 }
 #endif

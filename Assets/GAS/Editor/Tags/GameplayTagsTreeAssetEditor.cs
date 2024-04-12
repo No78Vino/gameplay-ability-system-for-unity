@@ -129,6 +129,7 @@ namespace GAS.Editor
         {
             Undo.RecordObject(Asset, "Add Item To Asset");
             StringEditWindow.OpenWindow("Tag", "", Validations.ValidateVariableName, AddTag, "Create new Tag");
+            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         public void RemoveTags()

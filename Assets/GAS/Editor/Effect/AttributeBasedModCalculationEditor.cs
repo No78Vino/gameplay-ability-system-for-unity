@@ -1,14 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
+using GAS.Runtime;
+using UnityEditor;
+using UnityEngine;
+
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using GAS;
-    using Editor;
-    using Runtime;
-    using UnityEditor;
-    using UnityEngine;
-
     [CustomEditor(typeof(AttributeBasedModCalculation))]
     public class AttributeBasedModCalculationEditor : UnityEditor.Editor
     {
@@ -22,7 +20,8 @@ namespace GAS.Editor
                 if (_attributeOptions == null)
                 {
                     _attributeOptions = new List<string>();
-                    var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
+                    var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset
+                        .GAS_ATTRIBUTESET_ASSET_PATH);
                     foreach (var attributeSetConfig in asset.AttributeSetConfigs)
                     {
                         var config = attributeSetConfig;
@@ -45,6 +44,29 @@ namespace GAS.Editor
         {
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
+            EditorGUILayout.HelpBox(
+                "AttributeBasedModCalculation：基于属性的计算\n该类型是根据属性值计算Modifier模值的，计算公式为：AttributeValue * k + b 计算逻辑与ScalableFloatModCalculation一致。\n重点在于属性值的来源: 从谁身上(Attribute From)以什么方式(Capture Type)捕获哪个属性的值(Attribute Name)。",
+                MessageType.Info);
+
+            GUILayout.Space(20);
+            EditorGUILayout.HelpBox("[从谁身上] Source: [游戏效果]的来源（创建者）; Target: [游戏效果]的目标（拥有者）。", MessageType.None);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Attribute From:", GUILayout.Width(100));
+            Asset.attributeFromType =
+                (AttributeBasedModCalculation.AttributeFrom)EditorGUILayout.EnumPopup(Asset.attributeFromType);
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(20);
+            EditorGUILayout.HelpBox("[以什么捕获方式] Track: 追踪（实时）; SnapShot: 快照，在[游戏效果]被创建时会对来源和目标的属性进行快照。", MessageType.None);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Capture Type:", GUILayout.Width(100));
+            Asset.captureType =
+                (AttributeBasedModCalculation.GEAttributeCaptureType)EditorGUILayout.EnumPopup(Asset.captureType);
+            EditorGUILayout.EndHorizontal();
+            
+            GUILayout.Space(20);
+            
+            EditorGUILayout.HelpBox("[捕获哪个属性的值]", MessageType.None);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Attribute Name:", GUILayout.Width(100));
             var indexOfTag = AttributeOptions.IndexOf(Asset.attributeName);
@@ -60,26 +82,15 @@ namespace GAS.Editor
 
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Attribute From:", GUILayout.Width(100));
-            Asset.attributeFromType =
-                (AttributeBasedModCalculation.AttributeFrom)EditorGUILayout.EnumPopup(Asset.attributeFromType);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Capture Type:", GUILayout.Width(100));
-            Asset.captureType =
-                (AttributeBasedModCalculation.GEAttributeCaptureType)EditorGUILayout.EnumPopup(Asset.captureType);
-            EditorGUILayout.EndHorizontal();
-            
+            GUILayout.Space(20);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("K:", GUILayout.Width(30));
-            Asset.k = EditorGUILayout.FloatField(Asset.k,GUILayout.Width(70));
+            Asset.k = EditorGUILayout.FloatField(Asset.k, GUILayout.Width(70));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("B:", GUILayout.Width(30));
-            Asset.b = EditorGUILayout.FloatField(Asset.b,GUILayout.Width(70));
+            Asset.b = EditorGUILayout.FloatField(Asset.b, GUILayout.Width(70));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndVertical();
