@@ -136,7 +136,8 @@ namespace GAS.Runtime
         {
             _abilityArguments = args;
             var result = CanActivate();
-            if (result == AbilityActivateResult.Success)
+            var success = result == AbilityActivateResult.Success;
+            if (success)
             {
                 IsActive = true;
                 ActiveCount++;
@@ -145,7 +146,7 @@ namespace GAS.Runtime
             }
 
             _onActivateResult?.Invoke(result);
-            return true;
+            return success;
         }
 
         public virtual void TryEndAbility()
