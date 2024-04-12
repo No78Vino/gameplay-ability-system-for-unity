@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2024-04-12
+
+修复了部分bug；优化编辑器操作。
+
+### Added
+
+- 优化编辑器操作。（From: BCC @kenkinky）
+
+### Fixed
+
+- 修复了TryActivateAbility的返回值逻辑错误。
+
+
 ## [1.0.4] - 2024-04-11
 
 修复了部分bug；测试通过了推导属性设计；优化了GE容器的管理，增强代码可读性。
