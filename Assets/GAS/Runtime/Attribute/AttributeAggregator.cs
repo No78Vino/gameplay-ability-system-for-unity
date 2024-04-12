@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -9,7 +10,7 @@ namespace GAS.Runtime
         AbilitySystemComponent _owner;
 
         /// <summary>
-        ///  the order of the modifiers is important.
+        ///  modifiers的顺序很重要，因为modifiers的执行是按照顺序来的。
         /// </summary>
         private List<Tuple<GameplayEffectSpec, GameplayEffectModifier>> _modifierCache =
             new List<Tuple<GameplayEffectSpec, GameplayEffectModifier>>();
@@ -28,7 +29,7 @@ namespace GAS.Runtime
             _owner.GameplayEffectContainer.RegisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
         
-        void OnDispose()
+        public void OnDispose()
         {
             _processedAttribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
@@ -39,15 +40,21 @@ namespace GAS.Runtime
         /// </summary>
         void RefreshModifierCache()
         {
+            // 注销属性变化监听回调
+            UnregisterAttributeChangedListen();
             _modifierCache.Clear();
-            var activeGameplayEffects = _owner.GameplayEffectContainer.GetActiveGameplayEffects();
-            foreach (var geSpec in activeGameplayEffects)
+            var gameplayEffects = _owner.GameplayEffectContainer.GameplayEffects();
+            foreach (var geSpec in gameplayEffects)
             {
-                foreach (var modifier in geSpec.GameplayEffect.Modifiers)
+                if (geSpec.IsActive)
                 {
-                    if (modifier.AttributeName == _processedAttribute.Name)
+                    foreach (var modifier in geSpec.GameplayEffect.Modifiers)
                     {
-                        _modifierCache.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec,modifier));
+                        if (modifier.AttributeName == _processedAttribute.Name)
+                        {
+                            _modifierCache.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec, modifier));
+                            TryRegisterAttributeChangedListen(geSpec, modifier);
+                        }
                     }
                 }
             }
@@ -56,9 +63,11 @@ namespace GAS.Runtime
         }
         
         /// <summary>
-        /// Calculate the new Value for the CurrentValue.
-        /// (BaseValue's changes depend on the instant GameplayEffect.)
-        /// this method is triggered when the _modifierCache is changed or the _processedAttribute's BaseValue is changed.
+        /// 为CurrentValue计算新值。 (BaseValue的变化依赖于instant型GameplayEffect.)
+        /// 这个方法的触发时机为：
+        /// 1._modifierCache变化时
+        /// 2._processedAttribute的BaseValue变化时
+        /// 3._modifierCache的AttributeBased类的MMC，Track类属性变化时
         /// </summary>
         /// <returns></returns>
         float CalculateNewValue()
@@ -97,6 +106,75 @@ namespace GAS.Runtime
         {
             float newValue = CalculateNewValue();
             _processedAttribute.SetCurrentValue(newValue);
+        }
+
+        private void UnregisterAttributeChangedListen()
+        {
+            foreach (var tuple in _modifierCache)
+                TryUnregisterAttributeChangedListen(tuple.Item1, tuple.Item2);
+        }
+
+        private void TryUnregisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
+        {
+            if (modifier.MMC is AttributeBasedModCalculation mmc &&
+                mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track)
+            {
+                if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
+                {
+                    if (ge.Owner != null)
+                        ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .UnregisterPostCurrentValueChange(OnAttributeChanged);
+                }
+                else
+                {
+                    if (ge.Source != null)
+                        ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .UnregisterPostCurrentValueChange(OnAttributeChanged);
+                }
+            }
+        }
+        
+        private void TryRegisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
+        {
+            if (modifier.MMC is AttributeBasedModCalculation mmc &&
+                mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track)
+            {
+                if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
+                {
+                    if (ge.Owner != null)
+                        ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .RegisterPostCurrentValueChange(OnAttributeChanged);
+                }
+                else
+                {
+                    if (ge.Source != null)
+                        ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                            .RegisterPostCurrentValueChange(OnAttributeChanged);
+                }
+            }
+        }
+        
+        private void OnAttributeChanged(AttributeBase attribute,float oldValue,float newValue)
+        {
+            if(_modifierCache.Count == 0) return;
+            foreach (var tuple in _modifierCache)
+            {
+                var ge = tuple.Item1;
+                var modifier = tuple.Item2;
+                if (modifier.MMC is AttributeBasedModCalculation mmc &&
+                    mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track &&
+                    attribute.Name == mmc.attributeName)
+                {
+                    if ((mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target &&
+                         attribute.Owner == ge.Owner) ||
+                        (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Source &&
+                         attribute.Owner == ge.Source))
+                    {
+                        UpdateCurrentValueWhenModifierIsDirty();
+                        break;
+                    }
+                }
+            }
         }
     }
 }

@@ -5,8 +5,7 @@ namespace GAS.Runtime
 {
     public class GameplayEffectContainer
     {
-        private readonly List<GameplayEffectSpec> _activeGameplayEffects = new List<GameplayEffectSpec>();
-        private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
+        private List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly AbilitySystemComponent _owner;
 
         public GameplayEffectContainer(AbilitySystemComponent owner)
@@ -16,15 +15,18 @@ namespace GAS.Runtime
 
         private event Action OnGameplayEffectContainerIsDirty;
 
-        public List<GameplayEffectSpec> GetActiveGameplayEffects()
+        public List<GameplayEffectSpec> GameplayEffects()
         {
-            return _activeGameplayEffects;
+            return _gameplayEffectSpecs;
         }
-
+        
         public void Tick()
         {
-            var enumerable = _activeGameplayEffects.ToArray();
-            foreach (var gameplayEffectSpec in enumerable) gameplayEffectSpec.Tick();
+            var enumerable = _gameplayEffectSpecs.ToArray();
+            foreach (var gameplayEffectSpec in enumerable)
+            {
+                if(gameplayEffectSpec.IsActive) gameplayEffectSpec.Tick();
+            }
         }
 
         public void RegisterOnGameplayEffectContainerIsDirty(Action action)
@@ -85,14 +87,9 @@ namespace GAS.Runtime
 
             var canRunning = spec.CanRunning();
             if (canRunning)
-            {
-                _activeGameplayEffects.Add(spec);
                 spec.Apply();
-            }
             else
-            {
                 spec.DisApply();
-            }
 
             OnGameplayEffectContainerIsDirty?.Invoke();
 
@@ -103,7 +100,6 @@ namespace GAS.Runtime
         {
             spec.DisApply();
             spec.TriggerOnRemove();
-            _activeGameplayEffects.Remove(spec);
             _gameplayEffectSpecs.Remove(spec);
 
             OnGameplayEffectContainerIsDirty?.Invoke();
@@ -111,25 +107,20 @@ namespace GAS.Runtime
 
         public void RefreshGameplayEffectState()
         {
-            // new active gameplay effects
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
             {
                 if (!gameplayEffectSpec.IsApplied) continue;
-                if (gameplayEffectSpec.IsActive) continue;
-                if (!gameplayEffectSpec.CanRunning()) continue;
-                gameplayEffectSpec.Activate();
-                _activeGameplayEffects.Add(gameplayEffectSpec);
+                if (!gameplayEffectSpec.IsActive)
+                {
+                    // new active gameplay effects
+                    if (gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Activate();
+                }
+                else
+                {
+                    // new deactive gameplay effects
+                    if (!gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Deactivate();
+                }
             }
-
-            // remove deactivate gameplay effects from active list
-            foreach (var gameplayEffectSpec in _activeGameplayEffects)
-            {
-                if (!gameplayEffectSpec.IsActive) continue;
-                if (gameplayEffectSpec.CanRunning()) continue;
-                gameplayEffectSpec.Deactivate();
-                _activeGameplayEffects.Remove(gameplayEffectSpec);
-            }
-
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
@@ -139,24 +130,27 @@ namespace GAS.Runtime
             float maxDuration = 0;
 
             // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
-            foreach (var spec in _activeGameplayEffects)
+            foreach (var spec in _gameplayEffectSpecs)
             {
-                var grantedTags = spec.GameplayEffect.TagContainer.GrantedTags;
-                if (grantedTags.Empty) continue;
-                foreach (var t in grantedTags.Tags)
-                foreach (var targetTag in tags.Tags)
+                if (spec.IsActive)
                 {
-                    if (t != targetTag) continue;
-                    // If this is an infinite GE, then return null to signify this is on CD
-                    if (spec.GameplayEffect.DurationPolicy ==
-                        EffectsDurationPolicy.Infinite)
-                        return new CooldownTimer { TimeRemaining = -1, Duration = 0 };
+                    var grantedTags = spec.GameplayEffect.TagContainer.GrantedTags;
+                    if (grantedTags.Empty) continue;
+                    foreach (var t in grantedTags.Tags)
+                    foreach (var targetTag in tags.Tags)
+                    {
+                        if (t != targetTag) continue;
+                        // If this is an infinite GE, then return null to signify this is on CD
+                        if (spec.GameplayEffect.DurationPolicy ==
+                            EffectsDurationPolicy.Infinite)
+                            return new CooldownTimer { TimeRemaining = -1, Duration = 0 };
 
-                    var durationRemaining = spec.DurationRemaining();
+                        var durationRemaining = spec.DurationRemaining();
 
-                    if (!(durationRemaining > longestCooldown)) continue;
-                    longestCooldown = durationRemaining;
-                    maxDuration = spec.Duration;
+                        if (!(durationRemaining > longestCooldown)) continue;
+                        longestCooldown = durationRemaining;
+                        maxDuration = spec.Duration;
+                    }
                 }
             }
 
@@ -171,7 +165,6 @@ namespace GAS.Runtime
                 gameplayEffectSpec.TriggerOnRemove();
             }
 
-            _activeGameplayEffects.Clear();
             _gameplayEffectSpecs.Clear();
 
             OnGameplayEffectContainerIsDirty?.Invoke();

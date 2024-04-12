@@ -110,8 +110,7 @@ namespace GAS.Runtime
 
         public bool CanRunning()
         {
-            var canRunning = Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);
-            return canRunning;
+            return Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);
         }
 
         public void Tick()

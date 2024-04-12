@@ -8,31 +8,21 @@ namespace GAS
     public class GameplayAbilitySystem
     {
         private static GameplayAbilitySystem _gas;
-        private GasHost _gasHost;
 
         private GameplayAbilitySystem()
         {
             AbilitySystemComponents = new List<AbilitySystemComponent>();
             GASTimer.InitStartTimestamp();
+            
+            GasHost = new GameObject("GAS Host").AddComponent<GasHost>();
+            GasHost.hideFlags = HideFlags.HideAndDontSave;
+            Object.DontDestroyOnLoad(GasHost.gameObject);
             GasHost.gameObject.SetActive(true);
         }
 
         public List<AbilitySystemComponent> AbilitySystemComponents { get; }
 
-        private GasHost GasHost
-        {
-            get
-            {
-                if (_gasHost == null)
-                {
-                    _gasHost = new GameObject("GAS Host").AddComponent<GasHost>();
-                    _gasHost.hideFlags = HideFlags.HideAndDontSave;
-                    Object.DontDestroyOnLoad(_gasHost.gameObject);
-                }
-
-                return _gasHost;
-            }
-        }
+        private GasHost GasHost { get; }
 
         public static GameplayAbilitySystem GAS
         {
@@ -47,11 +37,11 @@ namespace GAS
 
         public void Register(AbilitySystemComponent abilitySystemComponent)
         {
-            if (!GasHost.enabled)
-            {
-                Debug.LogWarning("[EX] GAS is paused, can't register new ASC!");
-                return;
-            }
+            // if (!GasHost.enabled)
+            // {
+            //     Debug.LogWarning("[EX] GAS is paused, can't register new ASC!");
+            //     return;
+            // }
 
             if (AbilitySystemComponents.Contains(abilitySystemComponent)) return;
             AbilitySystemComponents.Add(abilitySystemComponent);
@@ -59,11 +49,11 @@ namespace GAS
 
         public bool Unregister(AbilitySystemComponent abilitySystemComponent)
         {
-            if (!GasHost.enabled)
-            {
-                Debug.LogWarning("[EX] GAS is paused, can't unregister ASC!");
-                return false;
-            }
+            // if (!GasHost.enabled)
+            // {
+            //     Debug.LogWarning("[EX] GAS is paused, can't unregister ASC!");
+            //     return false;
+            // }
 
             return AbilitySystemComponents.Remove(abilitySystemComponent);
         }
@@ -76,6 +66,14 @@ namespace GAS
         public void Unpause()
         {
             GasHost.enabled = true;
+        }
+        
+        public void ClearComponents()
+        {
+            foreach (var t in AbilitySystemComponents)
+                t.Dispose();
+
+            AbilitySystemComponents.Clear();
         }
     }
 }

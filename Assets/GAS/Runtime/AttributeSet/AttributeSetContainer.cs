@@ -46,6 +46,7 @@ namespace GAS.Runtime
                     _attributeAggregators.Add(attrSet[attr],new AttributeAggregator(attrSet[attr],_owner));
                 }
             }
+            attrSet.SetOwner(_owner);
         }
         
         /// <summary>
@@ -109,6 +110,13 @@ namespace GAS.Runtime
                 }
             }
             return snapshot;
+        }
+        
+        public void Dispose()
+        {
+            foreach (var aggregator in _attributeAggregators)
+                aggregator.Value.OnDispose();
+            
         }
     }
 }

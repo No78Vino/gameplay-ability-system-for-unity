@@ -161,6 +161,7 @@ MonoBehaviour:
   gePostureReductionBuff: {fileID: 11400000, guid: 0e44690e21c6c6b48bcc520828d7c0d8, type: 2}
   geOutOfPostureBuff: {fileID: 11400000, guid: c86bb973d6bab234c923e00df8edda34, type: 2}
   GEBuffStaminaRecover: {fileID: 11400000, guid: c4184d08ecb21db4282674b16419f7c8, type: 2}
+  GETestDerivedAttribute: {fileID: 11400000, guid: 857674b0bbe897141bcf9e9403885867, type: 2}
 --- !u!114 &616796335703778619
 MonoBehaviour:
   m_ObjectHideFlags: 0

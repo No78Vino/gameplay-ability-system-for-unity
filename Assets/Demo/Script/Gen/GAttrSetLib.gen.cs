@@ -187,6 +187,17 @@ namespace GAS.Runtime
             "ATK",
             "SPEED",
         };
+
+        public override void SetOwner(AbilitySystemComponent owner)
+        {
+            _owner = owner;
+            _HP.SetOwner(owner);
+            _MP.SetOwner(owner);
+            _STAMINA.SetOwner(owner);
+            _POSTURE.SetOwner(owner);
+            _ATK.SetOwner(owner);
+            _SPEED.SetOwner(owner);
+        }
     }
 
     public static class GAttrSetLib
