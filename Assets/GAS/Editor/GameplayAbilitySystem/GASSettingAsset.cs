@@ -13,22 +13,22 @@ namespace GAS.Editor
     
     public class GASSettingAsset : ScriptableObject
     {
-        private const int LABLE_WIDTH = 200;
-        private const int SHORT_LABLE_WIDTH = 200;
+        private const int LABEL_WIDTH = 200;
+        private const int SHORT_LABEL_WIDTH = 200;
         private static GASSettingAsset _setting;
         
         
         [Title(GASTextDefine.TITLE_SETTING,Bold = true)]
         [BoxGroup("A", false,order:1)] 
         [LabelText(GASTextDefine.LABLE_OF_CodeGeneratePath)]
-        [LabelWidth(LABLE_WIDTH)]
+        [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
         [OnValueChanged("Save")]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
 
         [BoxGroup("A")] 
         [LabelText(GASTextDefine.LABLE_OF_GASConfigAssetPath)] 
-        [LabelWidth(LABLE_WIDTH)]
+        [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
         [OnValueChanged("Save")]
         public string GASConfigAssetPath = "Assets/GAS/Config";
@@ -56,59 +56,59 @@ namespace GAS.Editor
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string ASCLibPath => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ASC_LIBRARY_FOLDER}";
 
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string GameplayEffectLibPath =>
             $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_EFFECT_LIBRARY_FOLDER}";
 
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string GameplayAbilityLibPath =>
             $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_LIBRARY_FOLDER}";
 
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string GameplayCueLibPath => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_CUE_LIBRARY_FOLDER}";
         
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string MMCLibPath => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_MMC_LIBRARY_FOLDER}";
 
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string AbilityTaskLib => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_TASK_LIBRARY_FOLDER}";
         
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         [LabelText("Tag Asset Path")]
         public static string GAS_TAG_ASSET_PATH => $"{Setting.GASConfigAssetPath}/GameplayTagsAsset.asset";
 
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         [LabelText("Attribute Asset Path")]
         public static string GAS_ATTRIBUTE_ASSET_PATH => $"{Setting.GASConfigAssetPath}/AttributeAsset.asset";
         
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left,true)]
-        [LabelWidth(SHORT_LABLE_WIDTH)]
+        [LabelWidth(SHORT_LABEL_WIDTH)]
         [LabelText("AttributeSet Asset Path")]
         public static string GAS_ATTRIBUTESET_ASSET_PATH => $"{Setting.GASConfigAssetPath}/AttributeSetAsset.asset";
 

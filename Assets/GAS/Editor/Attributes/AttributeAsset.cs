@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using Sirenix.Utilities.Editor;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -12,7 +14,7 @@ namespace GAS.Editor
 
     public class AttributeAsset : ScriptableObject
     {
-        [BoxGroup("Warning", order: -1)]
+        [BoxGroup("Warning", order: -1)] 
         [HideLabel]
         [ShowIf("ExistDuplicatedAttribute")]
         [DisplayAsString(TextAlignment.Left, true)]
@@ -24,10 +26,18 @@ namespace GAS.Editor
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex",
             CustomAddFunction = "OnAddAttribute",
-            ShowPaging = false)]
+            ShowPaging = false, OnTitleBarGUI = "DrawAttributeButtons")]
         [Searchable]
         [OnValueChanged("Save")]
         public List<AttributeAccessor> attributes = new List<AttributeAccessor>();
+        
+        private void DrawAttributeButtons()
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                attributes = attributes.OrderBy(x => x.Name).ToList();
+            }
+        }
 
         public List<string> AttributeNames =>
             (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
@@ -99,6 +109,7 @@ namespace GAS.Editor
                 Save();
                 Debug.Log("[EX] Attribute Asset add element!");
             }), "Add new Attribute");
+            GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         private bool ExistEmptyAttribute()

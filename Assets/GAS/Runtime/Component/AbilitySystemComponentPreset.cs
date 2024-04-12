@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using GAS.General;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities.Editor;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -19,11 +20,11 @@ namespace GAS.Runtime
         
         private const string GRP_DATA = "DATA";
         private const string GRP_DATA_H = "DATA/H";
-        private const string GRP_DATA_PARAMETER = "DATA/H/Parameter";
         private const string GRP_DATA_TAG = "DATA/H/Tags";
+        private const string GRP_DATA_ABILITY = "DATA/H/Abilities";
         
         
-        private const int WIDTH_LABLE = 100;
+        private const int WIDTH_LABEL = 100;
         private const int WIDTH_GRP_BASE_H_LEFT = 350;
 
         private const string ERROR_ABILITY = "Ability can't be NONE!!";
@@ -50,27 +51,50 @@ namespace GAS.Runtime
         [Title(GASTextDefine.ASC_AttributeSet, bold: true)]
         [HorizontalGroup(GRP_BASE_H,PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [LabelWidth(WIDTH_LABLE)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("AttributeSetChoice")]
+        [LabelWidth(WIDTH_LABEL)]
+        [ListDrawerSettings(Expanded = true, OnTitleBarGUI = "DrawAttributeSetsButtons")]
+        [ValueDropdown("AttributeSetChoice", IsUniqueList = true)]
         public string[] AttributeSets;
+        
+        private void DrawAttributeSetsButtons()
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                AttributeSets = AttributeSets.OrderBy(x => x).ToArray();
+            }
+        }
         
         [Title(GASTextDefine.ASC_BASE_TAG,bold:true)]
         [BoxGroup(GRP_DATA,false)]
         [HorizontalGroup(GRP_DATA_H)]
-        [VerticalGroup(GRP_DATA_PARAMETER)]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ListElementLabelName ="Name", OnTitleBarGUI = "DrawBaseTagsButtons")]
+        [ValueDropdown("TagChoices", HideChildProperties = true, IsUniqueList = true)]
         public GameplayTag[] BaseTags;
+        
+        private void DrawBaseTagsButtons()
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                BaseTags = BaseTags.OrderBy(x => x.Name).ToArray();
+            }
+        }
         
         [Title(GASTextDefine.ASC_BASE_ABILITY,bold:true)]
         [HorizontalGroup(GRP_DATA_H)]
-        [VerticalGroup(GRP_DATA_TAG)]
-        [ListDrawerSettings(Expanded = true)]
+        [VerticalGroup(GRP_DATA_ABILITY)]
+        [ListDrawerSettings(Expanded = true, OnTitleBarGUI = "DrawBaseAbilitiesButtons")]
         [AssetSelector]
         [InfoBox(ERROR_ABILITY,InfoMessageType.Error,VisibleIf = "IsAbilityNone")]
         public AbilityAsset[] BaseAbilities;
-
+        
+        private void DrawBaseAbilitiesButtons()
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+            {
+                BaseAbilities = BaseAbilities.OrderBy(x => x.name).ToArray();
+            }
+        }
 
         private void OnEnable()
         {
@@ -80,7 +104,7 @@ namespace GAS.Runtime
 
         bool IsAbilityNone()
         {
-            return BaseAbilities.Any(ability => ability == null);
+            return BaseAbilities!=null && BaseAbilities.Any(ability => ability == null);
         }
         
         static void SetAttributeSetChoices()
