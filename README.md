@@ -1643,6 +1643,10 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 另外还要感谢开源项目：[UnityToolchainsTrick](https://github.com/XINCGer/UnityToolchainsTrick)
 
 多亏UnityToolchainsTrick中的大量Editor开发技巧，极大的缩减了项目中编辑器的制作时间，省了很多事儿。非常感谢！
+
+感谢参与EX-GAS开发的朋友们:
+- [BBC](https://github.com/kenkinky) :优化了很多编辑器的体验以及bug，还提出了很多问题和反馈。
+
 ## 9.插件反馈渠道
 QQ群号:616570103
 
