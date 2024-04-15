@@ -1,16 +1,13 @@
-
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS;
     using UnityEditor;
     using UnityEngine;
-    using Editor;
 
     public class GameplayTagsManager
     {
         private static GameplayTagsAsset _asset;
-        private static UnityEditor.Editor _editor;
+        private static Editor _editor;
         
         [SettingsProvider]
         private static SettingsProvider GameplayTagsManagerSetting()
@@ -37,20 +34,9 @@ namespace GAS.Editor
 
         private static void Load()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
-            // if (asset == null)
-            // {
-            //     GasDefine.CheckGasAssetFolder();
-            //
-            //     var a = ScriptableObject.CreateInstance<GameplayTagsAsset>();
-            //     AssetDatabase.CreateAsset(a, GASSettingAsset.GAS_TAG_ASSET_PATH);
-            //     AssetDatabase.SaveAssets();
-            //     AssetDatabase.Refresh();
-            //     asset = ScriptableObject.CreateInstance<GameplayTagsAsset>();
-            // }
-
+            var asset = GameplayTagsAsset.LoadOrCreate();
             _asset = asset;
-            _editor = UnityEditor.Editor.CreateEditor(asset);
+            _editor = Editor.CreateEditor(asset);
         }
     }
 }

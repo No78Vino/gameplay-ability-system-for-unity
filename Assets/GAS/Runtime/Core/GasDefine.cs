@@ -53,6 +53,8 @@ namespace GAS
                 Debug.Log($"[EX] {GAS_ASSET_FOLDER_NAME} folder created!");
             }
         }
+
+        public const string GAS_TAGS_MANAGER_ASSET_PATH = "ProjectSettings/GameplayTagsAsset.asset";
 #endif
     }
 }

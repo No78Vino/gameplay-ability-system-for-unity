@@ -33,7 +33,7 @@ namespace GAS.Editor
             get
             {
                 if (_tagsAsset == null)
-                    _tagsAsset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
+                    _tagsAsset = GameplayTagsAsset.LoadOrCreate(); //AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
                 return _tagsAsset;
             }
         }
