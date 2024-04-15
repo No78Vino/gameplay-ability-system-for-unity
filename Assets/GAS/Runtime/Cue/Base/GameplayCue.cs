@@ -10,7 +10,15 @@ namespace GAS.Runtime
 {
     public abstract class GameplayCue : ScriptableObject
     {
+        private const string BaseInfoGroup = "BaseInfoGroup";
         private const string TagBoxGroup = "TagBoxGroup";
+        
+        [Title("基本信息")]
+        [BoxGroup(BaseInfoGroup,false)]
+        [InfoBox("基本信息仅仅是为了备注以方便理解, 不会对游戏产生实质性影响。",SdfIconType.None)]
+        public string Name = "Unnamed";
+        [BoxGroup(BaseInfoGroup,false)]
+        public string Description = "He is very lazy and left nothing behind.";
         
         [Title("标签")]
         [BoxGroup(TagBoxGroup,false)]
