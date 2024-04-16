@@ -14,7 +14,7 @@ namespace GAS.Editor
     {
         public static void Gen()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
+            var asset = GameplayTagsAsset.LoadOrCreate();
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             var filePath =
                 $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_LIB_CSHARP_SCRIPT_NAME}";
