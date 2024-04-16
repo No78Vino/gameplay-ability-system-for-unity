@@ -41,6 +41,8 @@ namespace GAS.Editor
 
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
+            
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
             EditorGUILayout.HelpBox(
@@ -62,9 +64,9 @@ namespace GAS.Editor
             Asset.captureType =
                 (AttributeBasedModCalculation.GEAttributeCaptureType)EditorGUILayout.EnumPopup(Asset.captureType);
             EditorGUILayout.EndHorizontal();
-            
+
             GUILayout.Space(20);
-            
+
             EditorGUILayout.HelpBox("[捕获哪个属性的值]", MessageType.None);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Attribute Name:", GUILayout.Width(100));
@@ -93,6 +95,11 @@ namespace GAS.Editor
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndVertical();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Save();
+            }
         }
 
         private void Save()
