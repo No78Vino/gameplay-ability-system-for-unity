@@ -6,11 +6,11 @@ namespace GAS.Editor
     using UnityEditorInternal;
     
     [InitializeOnLoad]
-    public static class EditorStatusWatcher
+    public static class GASSettingStatusWatcher
     {
         public static Action OnEditorFocused;
         static bool isFocused;
-        static EditorStatusWatcher() => EditorApplication.update += Update;
+        static GASSettingStatusWatcher() => EditorApplication.update += Update;
         static void Update()
         {
             if (isFocused != InternalEditorUtility.isApplicationActive)
@@ -18,7 +18,10 @@ namespace GAS.Editor
                 isFocused = InternalEditorUtility.isApplicationActive;
                 if (isFocused)
                 {
+                    GASSettingAsset.LoadOrCreate();
                     GameplayTagsAsset.LoadOrCreate();
+                    AttributeAsset.LoadOrCreate();
+                    AttributeSetAsset.LoadOrCreate();
                     OnEditorFocused?.Invoke();
                 }
             }

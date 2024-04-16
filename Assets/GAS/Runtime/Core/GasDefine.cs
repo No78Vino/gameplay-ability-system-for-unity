@@ -54,7 +54,10 @@ namespace GAS
             }
         }
 
+        public const string GAS_BASE_SETTING_PATH = "ProjectSettings/GASSettingAsset.asset";
         public const string GAS_TAGS_MANAGER_ASSET_PATH = "ProjectSettings/GameplayTagsAsset.asset";
+        public const string GAS_ATTRIBUTE_ASSET_PATH = "ProjectSettings/AttributeAsset.asset";
+        public const string GAS_ATTRIBUTE_SET_ASSET_PATH = "ProjectSettings/AttributeSetAsset.asset";
 #endif
     }
 }

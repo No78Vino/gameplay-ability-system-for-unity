@@ -17,9 +17,9 @@ namespace GAS.Editor
     {
         public static void Gen()
         {
-            var attributeSetAsset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
-            
-            var attributeAsset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+            var attributeSetAsset = AttributeSetAsset.LoadOrCreate();
+
+            var attributeAsset = AttributeAsset.LoadOrCreate();
             var attributeNames = (from t in attributeAsset.attributes where !string.IsNullOrWhiteSpace(t.Name) select t.Name)
                 .ToList();
 

@@ -1,8 +1,6 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS;
-    using Editor;
     using Sirenix.OdinInspector.Editor;
     using Sirenix.Utilities;
     using Sirenix.Utilities.Editor;
@@ -22,8 +20,7 @@ namespace GAS.Editor
         {
             get
             {
-                if (_settingAsset == null)
-                    _settingAsset = GASSettingAsset.Load();
+                if (_settingAsset == null) _settingAsset = GASSettingAsset.LoadOrCreate();
                 return _settingAsset;
             }
         }
@@ -32,8 +29,7 @@ namespace GAS.Editor
         {
             get
             {
-                if (_tagsAsset == null)
-                    _tagsAsset = GameplayTagsAsset.LoadOrCreate(); //AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
+                if (_tagsAsset == null) _tagsAsset = GameplayTagsAsset.LoadOrCreate();
                 return _tagsAsset;
             }
         }
@@ -42,9 +38,7 @@ namespace GAS.Editor
         {
             get
             {
-                if (_attributeAsset == null)
-                    _attributeAsset =
-                        AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+                if (_attributeAsset == null) _attributeAsset = AttributeAsset.LoadOrCreate();
                 return _attributeAsset;
             }
         }
@@ -53,9 +47,7 @@ namespace GAS.Editor
         {
             get
             {
-                if (_attributeSetAsset == null)
-                    _attributeSetAsset =
-                        AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
+                if (_attributeSetAsset == null) _attributeSetAsset = AttributeSetAsset.LoadOrCreate();
                 return _attributeSetAsset;
             }
         }
@@ -79,6 +71,13 @@ namespace GAS.Editor
             tree.Config.AutoScrollOnSelectionChanged = true;
             tree.Config.DrawScrollView = true;
             tree.Config.AutoHandleKeyboardNavigation = true;
+            tree.Selection.SelectionChanged += type =>
+            {
+                GASSettingAsset.Save();
+                GameplayTagsAsset.Save();
+                AttributeAsset.Save();
+                AttributeSetAsset.Save();
+            };
             return tree;
         }
     }

@@ -1,0 +1,65 @@
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace GAS.Editor
+{
+    public class GameplayTagsSettingsProvider : SettingsProvider
+    {
+        private  GameplayTagsAsset _asset;
+        private  UnityEditor.Editor _editor;
+        
+        public GameplayTagsSettingsProvider() : base("Project/EX Gameplay Ability System/Tag Manager", SettingsScope.Project)
+        {
+        }
+        
+        public override void OnActivate(string searchContext, VisualElement rootElement)
+        {
+            var asset = GameplayTagsAsset.LoadOrCreate();
+            _asset = asset;
+            _editor = UnityEditor.Editor.CreateEditor(asset);
+            GASSettingStatusWatcher.OnEditorFocused += OnEditorFocused;
+        }
+        
+        public override void OnDeactivate()
+        {
+            base.OnDeactivate();
+            GASSettingStatusWatcher.OnEditorFocused -= OnEditorFocused;
+            GameplayTagsAsset.Save();
+        }
+        
+        private void OnEditorFocused()
+        {
+            Repaint();
+        }
+
+        public override void OnGUI(string searchContext)
+        {
+            base.OnGUI(searchContext);
+
+            if (_editor == null) return;
+
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+
+            EditorGUILayout.Space();
+            _editor.OnInspectorGUI();
+            EditorGUILayout.EndVertical();
+        }
+
+        static GameplayTagsSettingsProvider provider;
+        [SettingsProvider]
+        public static SettingsProvider CreateMyCustomSettingsProvider()
+        {
+            if (GameplayTagsAsset.Instance && provider == null)
+            {
+                provider = new GameplayTagsSettingsProvider();
+                using (var so = new SerializedObject(GameplayTagsAsset.Instance))
+                {
+                    provider.keywords = GetSearchKeywordsFromSerializedObject(so);
+                }
+            }
+            return provider;
+        }
+    }
+}
