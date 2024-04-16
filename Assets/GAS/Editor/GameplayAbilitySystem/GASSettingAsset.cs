@@ -186,7 +186,7 @@ namespace GAS.Editor
 
         void CheckTagAsset()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GAS_TAG_ASSET_PATH);
+            var asset = GameplayTagsAsset.LoadOrCreate();
             if (asset != null) return;
             GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<GameplayTagsAsset>();
@@ -197,7 +197,7 @@ namespace GAS.Editor
         
         void CheckAttributeAsset()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AttributeAsset.LoadOrCreate();
             if (asset != null) return;
             GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<AttributeAsset>();
@@ -208,7 +208,7 @@ namespace GAS.Editor
         
         void CheckAttributeSetAsset()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GAS_ATTRIBUTESET_ASSET_PATH);
+            var asset = AttributeSetAsset.LoadOrCreate();
             if (asset != null) return;
             GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<AttributeSetAsset>();

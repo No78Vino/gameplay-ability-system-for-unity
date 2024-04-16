@@ -18,7 +18,7 @@ namespace GAS.Editor
 
         public static void Gen()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AttributeAsset.LoadOrCreate();
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
             var filePath =
                 $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME}";

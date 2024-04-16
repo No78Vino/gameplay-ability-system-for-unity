@@ -13,7 +13,7 @@ namespace GAS.Editor
         public static List<string> GetAttributeSetChoice()
         {
             var choices = new List<string>();
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset.GAS_ATTRIBUTESET_ASSET_PATH);
+            var asset = AttributeSetAsset.LoadOrCreate();
             foreach (var attributeSetConfig in asset.AttributeSetConfigs)
             {
                 var config = attributeSetConfig;

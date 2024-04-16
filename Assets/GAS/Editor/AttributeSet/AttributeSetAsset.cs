@@ -124,7 +124,7 @@ namespace GAS.Editor
         private void OnEnable()
         {
             AttributeSetConfig.ParentAsset = this;
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AttributeAsset.LoadOrCreate();
             AttributeSetConfig.SetAttributeChoices(asset?.AttributeNames);
         }
 

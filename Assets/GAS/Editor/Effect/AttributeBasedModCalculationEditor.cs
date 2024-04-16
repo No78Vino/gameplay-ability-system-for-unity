@@ -20,8 +20,7 @@ namespace GAS.Editor
                 if (_attributeOptions == null)
                 {
                     _attributeOptions = new List<string>();
-                    var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GASSettingAsset
-                        .GAS_ATTRIBUTESET_ASSET_PATH);
+                    var asset = AttributeSetAsset.LoadOrCreate();
                     foreach (var attributeSetConfig in asset.AttributeSetConfigs)
                     {
                         var config = attributeSetConfig;
