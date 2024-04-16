@@ -144,7 +144,6 @@ namespace GAS.Editor
         [Button(SdfIconType.FolderCheck,GASTextDefine.BUTTON_CheckAllPathFolderExist,ButtonHeight = 38)]
         void CheckAllPathFolderExist()
         {
-            GasDefine.CheckGasAssetFolder();
             CheckPathFolderExist(GASConfigAssetPath);
             CheckPathFolderExist(CodeGeneratePath);
             CheckPathFolderExist(ASCLibPath);
@@ -188,7 +187,6 @@ namespace GAS.Editor
         {
             var asset = GameplayTagsAsset.LoadOrCreate();
             if (asset != null) return;
-            GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<GameplayTagsAsset>();
             AssetDatabase.CreateAsset(a, GAS_TAG_ASSET_PATH);
             AssetDatabase.SaveAssets();
@@ -199,7 +197,6 @@ namespace GAS.Editor
         {
             var asset = AttributeAsset.LoadOrCreate();
             if (asset != null) return;
-            GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<AttributeAsset>();
             AssetDatabase.CreateAsset(a, GAS_ATTRIBUTE_ASSET_PATH);
             AssetDatabase.SaveAssets();
@@ -210,7 +207,6 @@ namespace GAS.Editor
         {
             var asset = AttributeSetAsset.LoadOrCreate();
             if (asset != null) return;
-            GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<AttributeSetAsset>();
             AssetDatabase.CreateAsset(a, GAS_ATTRIBUTESET_ASSET_PATH);
             AssetDatabase.SaveAssets();

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2024-04-16
+
+优化type查找，优化GAS的项目级配置文件管理。
+
+### Changed
+
+- 修改了Tag，Attribute，AttributeSet，Setting的配置文件路径，调整至ProjectSettings，并且为单例配置文件。
+- 优化了TypeUtil，Editor环境下类型查找范围改为全程序集。
+
 ## [1.0.5] - 2024-04-12
 
 修复了部分bug；优化编辑器操作。
