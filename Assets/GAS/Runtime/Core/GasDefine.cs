@@ -7,8 +7,6 @@ namespace GAS
     {
         public const string GAS_VERSION = "1.0.6";
 
-        public const string GAS_ASSET_FOLDER_NAME = "GAS_Setting";
-
         public const string GAS_TAG_LIB_CSHARP_SCRIPT_NAME = "GTagLib.gen.cs";
 
         public const string GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME = "GAttrLib.gen.cs";
@@ -37,23 +35,10 @@ namespace GAS
         public const string GAS_MMC_LIBRARY_FOLDER = "ModMagnitudeCalculationLib";
         
         public const string GAS_ABILITY_TASK_LIBRARY_FOLDER = "AbilityTaskLib";
-        
-        
-        public static string GAS_ASSET_PATH => $"Assets/{GAS_ASSET_FOLDER_NAME}";
-        public static string GAS_SYSTEM_ASSET_PATH => $"{GAS_ASSET_PATH}/GASSettingAsset.asset";
 
         public const string GAS_ATTRIBUTESET_CLASS_TYPE_PREFIX = "GAS.Runtime.AttributeSet.AS_";
 
 #if UNITY_EDITOR
-        public static void CheckGasAssetFolder()
-        {
-            if (!AssetDatabase.IsValidFolder(GAS_ASSET_PATH))
-            {
-                AssetDatabase.CreateFolder("Assets", GAS_ASSET_FOLDER_NAME);
-                Debug.Log($"[EX] {GAS_ASSET_FOLDER_NAME} folder created!");
-            }
-        }
-
         public const string GAS_BASE_SETTING_PATH = "ProjectSettings/GASSettingAsset.asset";
         public const string GAS_TAGS_MANAGER_ASSET_PATH = "ProjectSettings/GameplayTagsAsset.asset";
         public const string GAS_ATTRIBUTE_ASSET_PATH = "ProjectSettings/AttributeAsset.asset";
