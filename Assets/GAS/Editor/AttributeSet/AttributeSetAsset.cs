@@ -43,7 +43,7 @@ namespace GAS.Editor
         {   if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 AttributeNames = AttributeNames.OrderBy(x => x).ToList();
-                ParentAsset.Save();
+                ParentAsset.SaveAsset();
             }
         }
 
@@ -59,7 +59,7 @@ namespace GAS.Editor
         private void OnEditNameSuccess(string newName)
         {
             Name = newName;
-            ParentAsset.Save();
+            ParentAsset.SaveAsset();
         }
 
         public static void SetAttributeChoices(List<string> attributeChoices)
@@ -95,7 +95,8 @@ namespace GAS.Editor
         }
     }
 
-    public class AttributeSetAsset : ScriptableObject
+    [FilePath(GasDefine.GAS_ATTRIBUTE_SET_ASSET_PATH)]
+    public class AttributeSetAsset : ScriptableSingleton<AttributeSetAsset>
     {
         [BoxGroup("Warning", order: -1)]
         [HideLabel]
@@ -116,18 +117,18 @@ namespace GAS.Editor
             if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 AttributeSetConfigs = AttributeSetConfigs.OrderBy(x => x.Name).ToList();
-                Save();
+                SaveAsset();
             }
         }
 
         private void OnEnable()
         {
             AttributeSetConfig.ParentAsset = this;
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AttributeAsset.LoadOrCreate();
             AttributeSetConfig.SetAttributeChoices(asset?.AttributeNames);
         }
 
-        public void Save()
+        public void SaveAsset()
         {
             Debug.Log("[EX] AttributeSetAsset save!");
             EditorUtility.SetDirty(this);
@@ -147,7 +148,7 @@ namespace GAS.Editor
                 return;
             }
 
-            Save();
+            SaveAsset();
             AttributeSetClassGen.Gen();
             AssetDatabase.Refresh();
         }
@@ -211,7 +212,7 @@ namespace GAS.Editor
             if (!result) return -1;
 
             Debug.Log($"[EX] AttributeSet Asset remove element:{attributeSet.Name} !");
-            Save();
+            SaveAsset();
             return AttributeSetConfigs.IndexOf(attributeSet);
         }
 
@@ -226,7 +227,7 @@ namespace GAS.Editor
 
             AttributeSetConfigs.RemoveAt(index);
             Debug.Log($"[EX] Attribute Asset remove element:{attributeSet.Name} !");
-            Save();
+            SaveAsset();
             return index;
         }
     }

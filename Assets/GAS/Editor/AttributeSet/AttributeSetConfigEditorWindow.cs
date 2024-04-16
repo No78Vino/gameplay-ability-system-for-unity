@@ -30,7 +30,7 @@ namespace GAS.Editor
             {
                 if (_attributeOptions == null)
                 {
-                    var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GASSettingAsset.GAS_ATTRIBUTE_ASSET_PATH);
+                    var asset = AttributeAsset.LoadOrCreate();
                     _attributeOptions = asset?.AttributeNames;
                 }
 

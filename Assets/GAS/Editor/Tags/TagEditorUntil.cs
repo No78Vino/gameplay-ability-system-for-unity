@@ -9,7 +9,7 @@ namespace GAS.Editor
     {
         public static List<GameplayTag> GetTagChoice()
         {
-            var tagAsset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GASSettingAsset.GAS_TAG_ASSET_PATH);
+            var tagAsset = GameplayTagsAsset.LoadOrCreate();
             return tagAsset.Tags;
         }
     }
