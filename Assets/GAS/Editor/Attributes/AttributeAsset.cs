@@ -1,18 +1,18 @@
-﻿using Sirenix.Utilities.Editor;
-
+﻿
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using GAS.Editor.General;
     using Sirenix.OdinInspector;
     using UnityEditor;
     using UnityEngine;
     using GAS.General;
+    using Sirenix.Utilities.Editor;
 
-    public class AttributeAsset : ScriptableObject
+    [FilePath(GasDefine.GAS_ATTRIBUTE_ASSET_PATH)]
+    public class AttributeAsset : ScriptableSingleton<AttributeAsset>
     {
         [BoxGroup("Warning", order: -1)] 
         [HideLabel]
@@ -61,12 +61,12 @@ namespace GAS.Editor
                 return;
             }
 
-            Save();
+            SaveAsset();
             AttributeCollectionGen.Gen();
             AssetDatabase.Refresh();
         }
 
-        private void Save()
+        private void SaveAsset()
         {
             Debug.Log("[EX] Attribute Asset save!");
             EditorUtility.SetDirty(this);
@@ -82,7 +82,7 @@ namespace GAS.Editor
             if (!result) return -1;
 
             Debug.Log($"[EX] Attribute Asset remove element:{attribute.Name} !");
-            Save();
+            SaveAsset();
             return attributes.IndexOf(attribute);
         }
 
@@ -97,7 +97,7 @@ namespace GAS.Editor
 
             attributes.RemoveAt(index);
             Debug.Log($"[EX] Attribute Asset remove element:{attribute.Name} !");
-            Save();
+            SaveAsset();
             return index;
         }
 
@@ -106,7 +106,7 @@ namespace GAS.Editor
             AttributeEditorWindow.OpenWindow(new AttributeEditorWindow.Data(), AttributeNames, (d =>
             {
                 attributes.Add(new AttributeAccessor(d.Name, d.Comment));
-                Save();
+                SaveAsset();
                 Debug.Log("[EX] Attribute Asset add element!");
             }), "Add new Attribute");
             GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
@@ -169,7 +169,7 @@ namespace GAS.Editor
                         {
                             Name = x.Name;
                             Comment = x.Comment;
-                            ParentAsset.Save();
+                            ParentAsset.SaveAsset();
                         }
                     }, "Edit Attribute Asset");
             }

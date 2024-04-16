@@ -1,17 +1,15 @@
-﻿using System.IO;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
+    using System.IO;
     using GAS;
-    using Editor;
     using GAS.General;
     using Sirenix.OdinInspector;
     using UnityEditor;
     using UnityEngine;
     
-    public class GASSettingAsset : ScriptableObject
+    [FilePath(GasDefine.GAS_BASE_SETTING_PATH)]
+    public class GASSettingAsset : ScriptableSingleton<GASSettingAsset>
     {
         private const int LABEL_WIDTH = 200;
         private const int SHORT_LABEL_WIDTH = 200;
@@ -37,8 +35,7 @@ namespace GAS.Editor
         {
             get
             {
-                if (_setting == null) _setting = Load();
-
+                if (_setting == null) _setting = LoadOrCreate();
                 return _setting;
             }
         }
@@ -90,45 +87,27 @@ namespace GAS.Editor
         [DisplayAsString(TextAlignment.Left,true)]
         [LabelWidth(SHORT_LABEL_WIDTH)]
         public static string AbilityTaskLib => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_TASK_LIBRARY_FOLDER}";
-        
+
         [ShowInInspector]
         [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left,true)]
+        [DisplayAsString(TextAlignment.Left, true)]
         [LabelWidth(SHORT_LABEL_WIDTH)]
         [LabelText("Tag Asset Path")]
-        public static string GAS_TAG_ASSET_PATH => $"{Setting.GASConfigAssetPath}/GameplayTagsAsset.asset";
+        public static string GAS_TAG_ASSET_PATH => GasDefine.GAS_TAGS_MANAGER_ASSET_PATH;
 
         [ShowInInspector]
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left, true)]
         [LabelWidth(SHORT_LABEL_WIDTH)]
         [LabelText("Attribute Asset Path")]
-        public static string GAS_ATTRIBUTE_ASSET_PATH => $"{Setting.GASConfigAssetPath}/AttributeAsset.asset";
-        
+        public static string GAS_ATTRIBUTE_ASSET_PATH => GasDefine.GAS_ATTRIBUTE_ASSET_PATH;
+
         [ShowInInspector]
         [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left,true)]
+        [DisplayAsString(TextAlignment.Left, true)]
         [LabelWidth(SHORT_LABEL_WIDTH)]
         [LabelText("AttributeSet Asset Path")]
-        public static string GAS_ATTRIBUTESET_ASSET_PATH => $"{Setting.GASConfigAssetPath}/AttributeSetAsset.asset";
-
-
-        public static GASSettingAsset Load()
-        {
-            var asset = AssetDatabase.LoadAssetAtPath<GASSettingAsset>(GasDefine.GAS_SYSTEM_ASSET_PATH);
-            if (asset == null)
-            {
-                GasDefine.CheckGasAssetFolder();
-
-                var a = CreateInstance<GASSettingAsset>();
-                AssetDatabase.CreateAsset(a, GasDefine.GAS_SYSTEM_ASSET_PATH);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-                asset = AssetDatabase.LoadAssetAtPath<GASSettingAsset>(GasDefine.GAS_SYSTEM_ASSET_PATH);
-            }
-
-            return asset;
-        }
+        public static string GAS_ATTRIBUTESET_ASSET_PATH => GasDefine.GAS_ATTRIBUTE_SET_ASSET_PATH;
 
         void CheckPathFolderExist(string folderPath)
         {
@@ -207,7 +186,7 @@ namespace GAS.Editor
 
         void CheckTagAsset()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<GameplayTagsAsset>(GAS_TAG_ASSET_PATH);
+            var asset = GameplayTagsAsset.LoadOrCreate();
             if (asset != null) return;
             GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<GameplayTagsAsset>();
@@ -218,7 +197,7 @@ namespace GAS.Editor
         
         void CheckAttributeAsset()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeAsset>(GAS_ATTRIBUTE_ASSET_PATH);
+            var asset = AttributeAsset.LoadOrCreate();
             if (asset != null) return;
             GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<AttributeAsset>();
@@ -229,19 +208,13 @@ namespace GAS.Editor
         
         void CheckAttributeSetAsset()
         {
-            var asset = AssetDatabase.LoadAssetAtPath<AttributeSetAsset>(GAS_ATTRIBUTESET_ASSET_PATH);
+            var asset = AttributeSetAsset.LoadOrCreate();
             if (asset != null) return;
             GasDefine.CheckGasAssetFolder();
             var a = CreateInstance<AttributeSetAsset>();
             AssetDatabase.CreateAsset(a, GAS_ATTRIBUTESET_ASSET_PATH);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
-
-        void Save()
-        {
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssetIfDirty(this);
         }
     }
 }

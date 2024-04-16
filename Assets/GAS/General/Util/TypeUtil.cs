@@ -28,6 +28,27 @@ namespace GAS.General
             return sonTypes.ToArray();
         }
         
-        
+        public static Type FindTypeInAllAssemblies(string typeName)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    Type type = assembly.GetType(typeName);
+                    if (type != null)
+                    {
+                        // 如果找到了类型，返回它
+                        return type;
+                    }
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    // 忽略因无法加载类型而引发的异常
+                }
+            }
+
+            // 如果没有找到类型，返回null
+            return null;
+        }
     }
 }

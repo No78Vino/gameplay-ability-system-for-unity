@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using GAS.Editor.General;
-using GAS.Editor.Validation;
-using GAS.Runtime;
-using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities;
-using Sirenix.Utilities.Editor;
-using UnityEditor;
-using UnityEngine;
-using Debug = UnityEngine.Debug;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using Debug = Debug;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using GAS.Editor.General;
+    using GAS.Editor.Validation;
+    using GAS.Runtime;
+    using Sirenix.OdinInspector.Editor;
+    using Sirenix.Utilities;
+    using Sirenix.Utilities.Editor;
+    using UnityEditor;
+    using UnityEngine;
+    using Debug = UnityEngine.Debug;
 
     public class GASAssetAggregator : OdinMenuEditorWindow
     {

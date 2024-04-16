@@ -1,16 +1,13 @@
-
-
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
 	using GAS.Runtime;
 	using System.Collections.Generic;
-	using Editor;
 	using UnityEditor.TreeDataModel;
 	using UnityEngine;
 	
-	[CreateAssetMenu (fileName = "GameplayTagsAsset", menuName = "GAS/GameplayTagsAsset ", order = 1)]
-	public class GameplayTagsAsset : ScriptableObject
+	[FilePath(GasDefine.GAS_TAGS_MANAGER_ASSET_PATH)]
+	public class GameplayTagsAsset : ScriptableSingleton<GameplayTagsAsset>
 	{
 		[SerializeField] List<GameplayTagTreeElement> gameplayTagTreeElements = new List<GameplayTagTreeElement>();
 

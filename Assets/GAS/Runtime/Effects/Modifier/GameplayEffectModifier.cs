@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -86,7 +87,7 @@ namespace GAS.Runtime
         
         public static void SetAttributeChoices()
         {
-            Type attributeSetUtil = Type.GetType($"GAS.Runtime.GAttrSetLib, Assembly-CSharp");
+            Type attributeSetUtil = TypeUtil.FindTypeInAllAssemblies("GAS.Runtime.GAttrSetLib");
             if(attributeSetUtil == null)
             {
                 Debug.LogError("[EX] Type 'GAttrSetLib' not found. Please generate the AttributeSet CODE first!");
