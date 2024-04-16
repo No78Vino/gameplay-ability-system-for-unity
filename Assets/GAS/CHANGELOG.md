@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 修改了Tag，Attribute，AttributeSet，Setting的配置文件路径，调整至ProjectSettings，并且为单例配置文件。
 - 优化了TypeUtil，Editor环境下类型查找范围改为全程序集。
 
+### Fixed
+
+- 修复一个严重bug: 修复AttributeBasedModCalculation不能正确保存的问题, 还有一些小优化.（From: BCC @kenkinky）
+
 ## [1.0.5] - 2024-04-12
 
 修复了部分bug；优化编辑器操作。
