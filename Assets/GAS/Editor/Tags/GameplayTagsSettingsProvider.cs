@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using UnityEditor;
+    using UnityEngine;
+    using UnityEngine.UIElements;
+    
     public class GameplayTagsSettingsProvider : SettingsProvider
     {
         private  GameplayTagsAsset _asset;
@@ -63,3 +63,4 @@ namespace GAS.Editor
         }
     }
 }
+#endif
