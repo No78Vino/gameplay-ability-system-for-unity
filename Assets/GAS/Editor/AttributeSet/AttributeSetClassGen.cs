@@ -1,17 +1,12 @@
-﻿using System.Linq;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using GAS;
-    using Runtime;
+    using System.Linq;
     using UnityEditor;
     using UnityEngine;
-    using Editor;
-
 
     public static class AttributeSetClassGen
     {
@@ -177,7 +172,7 @@ namespace GAS.Editor
                         }
                         writer.Indent--;
                         writer.WriteLine("};");
-                        
+
                         writer.WriteLine("");
                         writer.WriteLine("public override void SetOwner(AbilitySystemComponent owner)");
                         writer.WriteLine("{");

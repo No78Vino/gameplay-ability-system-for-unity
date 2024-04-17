@@ -1,5 +1,5 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using GAS.Editor.General;
 using GAS.Editor.Validation;
@@ -9,7 +9,6 @@ using UnityEditor.IMGUI.Controls;
 using UnityEditor.TreeDataModel;
 using UnityEngine;
 
-#if UNITY_EDITOR
 namespace GAS.Editor
 {
     [CustomEditor(typeof(GameplayTagsAsset))]
@@ -129,7 +128,7 @@ namespace GAS.Editor
         {
             Undo.RecordObject(Asset, "Add Item To Asset");
             StringEditWindow.OpenWindow("Tag", "", Validations.ValidateVariableName, AddTag, "Create new Tag");
-            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+            GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         public void RemoveTags()
