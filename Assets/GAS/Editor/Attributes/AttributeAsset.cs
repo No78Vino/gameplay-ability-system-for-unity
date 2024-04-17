@@ -70,7 +70,8 @@ namespace GAS.Editor
         {
             Debug.Log("[EX] Attribute Asset save!");
             EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
+            UpdateAsset(this);
+            Save();
         }
 
         private int OnRemoveElement(AttributeAccessor attribute)

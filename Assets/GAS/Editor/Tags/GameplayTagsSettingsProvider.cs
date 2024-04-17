@@ -7,8 +7,7 @@ namespace GAS.Editor
     
     public class GameplayTagsSettingsProvider : SettingsProvider
     {
-        private  GameplayTagsAsset _asset;
-        private  UnityEditor.Editor _editor;
+        private  Editor _editor;
         
         public GameplayTagsSettingsProvider() : base("Project/EX Gameplay Ability System/Tag Manager", SettingsScope.Project)
         {
@@ -16,9 +15,7 @@ namespace GAS.Editor
         
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
-            var asset = GameplayTagsAsset.LoadOrCreate();
-            _asset = asset;
-            _editor = UnityEditor.Editor.CreateEditor(asset);
+            _editor = Editor.CreateEditor(GameplayTagsAsset.LoadOrCreate());
             GASSettingStatusWatcher.OnEditorFocused += OnEditorFocused;
         }
         

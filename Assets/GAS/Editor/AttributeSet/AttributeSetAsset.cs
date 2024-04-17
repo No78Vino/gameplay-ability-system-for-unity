@@ -130,9 +130,10 @@ namespace GAS.Editor
 
         public void SaveAsset()
         {
-            Debug.Log("[EX] AttributeSetAsset save!");
             EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
+            UpdateAsset(this);
+            Save();
+            Debug.Log("[EX] AttributeSetAsset save!");
         }
 
         [VerticalGroup("Generate AttributeSet Code", order: 0)]

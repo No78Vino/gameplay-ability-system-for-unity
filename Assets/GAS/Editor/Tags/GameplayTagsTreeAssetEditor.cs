@@ -196,7 +196,8 @@ namespace GAS.Editor
         {
             Asset.CacheTags();
             EditorUtility.SetDirty(Asset);
-            AssetDatabase.SaveAssets();
+            GameplayTagsAsset.UpdateAsset(Asset);
+            GameplayTagsAsset.Save();
         }
 
         void GenCode()
@@ -224,7 +225,7 @@ namespace GAS.Editor
                 base.OnDropDraggedElementsAtIndex(draggedRows, parent, insertIndex);
                 _asset.CacheTags();
                 EditorUtility.SetDirty(_asset);
-                AssetDatabase.SaveAssets();
+                GameplayTagsAsset.Save();
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System.IO;
@@ -21,14 +23,14 @@ namespace GAS.Editor
         [LabelText(GASTextDefine.LABLE_OF_CodeGeneratePath)]
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
-        [OnValueChanged("Save")]
+        [OnValueChanged("SaveAsset")]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
 
         [BoxGroup("A")] 
         [LabelText(GASTextDefine.LABLE_OF_GASConfigAssetPath)] 
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
-        [OnValueChanged("Save")]
+        [OnValueChanged("SaveAsset")]
         public string GASConfigAssetPath = "Assets/GAS/Config";
         
         public static GASSettingAsset Setting
@@ -152,13 +154,6 @@ namespace GAS.Editor
             CheckPathFolderExist(GameplayCueLibPath);
             CheckPathFolderExist(MMCLibPath);
             CheckPathFolderExist(AbilityTaskLib);
-            
-            // 生成TagAsset
-            CheckTagAsset();
-            // 生成AttributeAsset
-            CheckAttributeAsset();
-            // 生成AttributeSetAsset
-            CheckAttributeSetAsset();
         }
 
         [BoxGroup("A")]
@@ -183,34 +178,11 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
 
-        void CheckTagAsset()
+        private void SaveAsset()
         {
-            var asset = GameplayTagsAsset.LoadOrCreate();
-            if (asset != null) return;
-            var a = CreateInstance<GameplayTagsAsset>();
-            AssetDatabase.CreateAsset(a, GAS_TAG_ASSET_PATH);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-        
-        void CheckAttributeAsset()
-        {
-            var asset = AttributeAsset.LoadOrCreate();
-            if (asset != null) return;
-            var a = CreateInstance<AttributeAsset>();
-            AssetDatabase.CreateAsset(a, GAS_ATTRIBUTE_ASSET_PATH);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-        
-        void CheckAttributeSetAsset()
-        {
-            var asset = AttributeSetAsset.LoadOrCreate();
-            if (asset != null) return;
-            var a = CreateInstance<AttributeSetAsset>();
-            AssetDatabase.CreateAsset(a, GAS_ATTRIBUTESET_ASSET_PATH);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            if (Instance == this) return;
+            UpdateAsset(this);
+            Save();
         }
     }
 }
