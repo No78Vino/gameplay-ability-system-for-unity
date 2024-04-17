@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2024-04-17
+
+修复全局配置保存失败问题；修复Editor代码不该编译问题
+
+### Fixed
+
+- 修复全局配置保存失败问题，Tag，Attribute，AttributeSet，Setting的配置文件保存不该使用AssetDataBase。
+- 修正无法打包编译异常 #11 （From: BCC @kenkinky）
+
 ## [1.0.6] - 2024-04-16
 
 优化type查找，优化GAS的项目级配置文件管理。
