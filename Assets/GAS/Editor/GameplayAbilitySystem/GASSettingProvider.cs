@@ -27,6 +27,7 @@ namespace GAS.Editor
         {
             base.OnDeactivate();
             GASSettingStatusWatcher.OnEditorFocused -= OnEditorFocused;
+            GASSettingAsset.UpdateAsset(_asset);
             GASSettingAsset.Save();
         }
         

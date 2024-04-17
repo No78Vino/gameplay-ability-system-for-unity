@@ -58,6 +58,13 @@ namespace GAS.Editor
                 //Debug.Log($"Saved ScriptableSingleton to {filePath}");
             }
         }
+
+        public static void UpdateAsset(T asset)
+        {
+            if (asset == null) return;
+            s_Instance = asset;
+        }
+        
         protected static string GetFilePath()
         {
             return typeof(T).GetCustomAttributes(inherit: true)
