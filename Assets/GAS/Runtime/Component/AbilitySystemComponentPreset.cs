@@ -5,8 +5,10 @@ using System.Linq;
 using System.Reflection;
 using GAS.General;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities.Editor;
 using UnityEngine;
+#if UNITY_EDITOR
+using Sirenix.Utilities.Editor;
+#endif
 
 namespace GAS.Runtime
 {
@@ -58,10 +60,12 @@ namespace GAS.Runtime
         
         private void DrawAttributeSetsButtons()
         {
+#if UNITY_EDITOR
             if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 AttributeSets = AttributeSets.OrderBy(x => x).ToArray();
             }
+#endif
         }
         
         [Title(GASTextDefine.ASC_BASE_TAG,bold:true)]
@@ -74,10 +78,12 @@ namespace GAS.Runtime
         
         private void DrawBaseTagsButtons()
         {
+#if UNITY_EDITOR
             if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 BaseTags = BaseTags.OrderBy(x => x.Name).ToArray();
             }
+            #endif
         }
         
         [Title(GASTextDefine.ASC_BASE_ABILITY,bold:true)]
@@ -90,10 +96,12 @@ namespace GAS.Runtime
         
         private void DrawBaseAbilitiesButtons()
         {
+#if UNITY_EDITOR
             if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 BaseAbilities = BaseAbilities.OrderBy(x => x.name).ToArray();
             }
+#endif
         }
 
         private void OnEnable()

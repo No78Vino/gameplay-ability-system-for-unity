@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using UnityEditor;
-using UnityEngine;
+﻿#if UNITY_EDITOR
 
-#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using UnityEngine;
+    
     public static class AttributeCollectionGen
     {
         private sealed class AttributeInfo
