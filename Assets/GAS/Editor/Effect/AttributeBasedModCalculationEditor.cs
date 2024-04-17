@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using GAS.Runtime;
-using UnityEditor;
-using UnityEngine;
-
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using GAS.Runtime;
+    using UnityEditor;
+    using UnityEngine;
+
     [CustomEditor(typeof(AttributeBasedModCalculation))]
     public class AttributeBasedModCalculationEditor : UnityEditor.Editor
     {
@@ -42,7 +42,7 @@ namespace GAS.Editor
         public override void OnInspectorGUI()
         {
             EditorGUI.BeginChangeCheck();
-            
+
             EditorGUILayout.BeginVertical(GUI.skin.box);
 
             EditorGUILayout.HelpBox(

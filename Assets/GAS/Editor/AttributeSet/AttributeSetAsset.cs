@@ -1,7 +1,7 @@
-﻿using GAS.Editor.Validation;
+﻿#if UNITY_EDITOR
+using GAS.Editor.Validation;
 using Sirenix.Utilities.Editor;
 
-#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
