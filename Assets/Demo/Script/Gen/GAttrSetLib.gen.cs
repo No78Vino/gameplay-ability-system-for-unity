@@ -206,6 +206,10 @@ namespace GAS.Runtime
         {
             { "Fight", typeof(AS_Fight) },
         };
+        public static readonly Dictionary<Type,string> TypeToName = new Dictionary<Type,string>
+        {
+            {  typeof(AS_Fight),nameof(AS_Fight) },
+        };
 
         public static List<string> AttributeFullNames = new List<string>()
         {

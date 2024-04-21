@@ -5,6 +5,7 @@ using Demo.Script.Element;
 using Demo.Script.Map;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
+using GAS.Runtime;
 using UnityEngine;
 
 namespace Demo.Script
@@ -20,7 +21,8 @@ namespace Demo.Script
         private void Start()
         {
             XUI.Launch(prefixOfFguiPackagePath,LoadResource);
-            
+            // GAS的cache初始化
+            GasCache.CacheAttributeSetName(GAttrSetLib.TypeToName);
             StartGame();
         }
 

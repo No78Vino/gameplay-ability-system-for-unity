@@ -211,7 +211,21 @@ namespace GAS.Editor
                     }
                     writer.Indent--;
                     writer.WriteLine("};");
-
+        
+                    writer.WriteLine(
+                        "public static readonly Dictionary<Type,string> TypeToName = new Dictionary<Type,string>");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        foreach (var attributeSet in attributeSetConfigs)
+                        {
+                            var validName = EditorUtil.MakeValidIdentifier(attributeSet.Name);
+                            writer.WriteLine($"{{  typeof(AS_{validName}),nameof(AS_{validName}) }},");
+                        }
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("};");
+                    
                     writer.WriteLine("");
 
                     writer.WriteLine("public static List<string> AttributeFullNames = new List<string>()");
