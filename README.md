@@ -91,6 +91,11 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 
 8. 设计ASC预设（可选）:  详见 [AbilitySystemComponent](#29-abilitysystemcomponent)
 
+> GAS的预缓存：
+> - 为了解决EX-GAS框架中关于Type.Name造成的GC问题。
+>  可以在游戏内合适的地方（一般是游戏初始化阶段）调用GasCache.CacheAttributeSetName(GAttrSetLib.TypeToName)
+>   这行代码。他会将GAttrSetLib.TypeToName中的所有Key-Value对缓存起来，避开Type.Name的使用。
+>   如果你不调用这个方法，也不会对运行逻辑造成影响，不过会有额外的GC。
 
 ---
 ## 2.EX-GAS系统介绍
