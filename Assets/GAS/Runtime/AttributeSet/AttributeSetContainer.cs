@@ -20,9 +20,10 @@ namespace GAS.Runtime
         {
             if (TryGetAttributeSet<T>(out _)) return;
             
-            _attributeSets.Add(nameof(T),Activator.CreateInstance<T>());
+            var setName = AttributeSetUtil.AttributeSetName(typeof(T));
+            _attributeSets.Add(setName,Activator.CreateInstance<T>());
             
-            var attrSet = _attributeSets[nameof(T)];
+            var attrSet = _attributeSets[setName];
             foreach (var attr in attrSet.AttributeNames)
             {
                 if (!_attributeAggregators.ContainsKey(attrSet[attr]))
@@ -35,10 +36,10 @@ namespace GAS.Runtime
         public void AddAttributeSet(Type attrSetType)
         {
             if (TryGetAttributeSet(attrSetType,out _)) return;
+            var setName = AttributeSetUtil.AttributeSetName(attrSetType);
+            _attributeSets.Add(setName,Activator.CreateInstance(attrSetType) as AttributeSet);
             
-            _attributeSets.Add(attrSetType.Name,Activator.CreateInstance(attrSetType) as AttributeSet);
-            
-            var attrSet = _attributeSets[attrSetType.Name];
+            var attrSet = _attributeSets[setName];
             foreach (var attr in attrSet.AttributeNames)
             {
                 if (!_attributeAggregators.ContainsKey(attrSet[attr]))
@@ -55,18 +56,19 @@ namespace GAS.Runtime
         /// <typeparam name="T"></typeparam>
         public void RemoveAttributeSet<T>()where T : AttributeSet
         {
-            var attrSet = _attributeSets[nameof(T)];
+            var setName = AttributeSetUtil.AttributeSetName(typeof(T));
+            var attrSet = _attributeSets[setName];
             foreach (var attr in attrSet.AttributeNames)
             {
                 _attributeAggregators.Remove(attrSet[attr]);
             }
 
-            _attributeSets.Remove(nameof(T));
+            _attributeSets.Remove(setName);
         }
         
         public bool TryGetAttributeSet<T>(out T attributeSet) where T : AttributeSet
         {
-            if(_attributeSets.TryGetValue(typeof(T).Name, out var set))
+            if(_attributeSets.TryGetValue(AttributeSetUtil.AttributeSetName(typeof(T)), out var set))
             {
                 attributeSet = (T)set;
                 return true;
@@ -78,7 +80,7 @@ namespace GAS.Runtime
         
         bool TryGetAttributeSet(Type attrSetType,out AttributeSet attributeSet)
         {
-            if(_attributeSets.TryGetValue(attrSetType.Name, out var set))
+            if(_attributeSets.TryGetValue(AttributeSetUtil.AttributeSetName(attrSetType), out var set))
             {
                 attributeSet = set;
                 return true;

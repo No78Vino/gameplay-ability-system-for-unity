@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+//using System.Linq;
+
 namespace GAS.Runtime
 {
     public class GameplayTagAggregator
@@ -210,40 +212,102 @@ namespace GAS.Runtime
 
         public bool HasTag(GameplayTag tag)
         {
-            var fixedTagsContainsTag = _fixedTags.Any(t => t.HasTag(tag));
-            var dynamicAddedTagsContainsTag = _dynamicAddedTags.Keys.Any(t => t.HasTag(tag));
-            var dynamicRemovedTagsContainsTag = _dynamicRemovedTags.Keys.Any(t => t.HasTag(tag));
+            // LINQ表达式存在GC，且HasTag调用频率很高，所以这里全都使用foreach
+            var fixedTagsContainsTag = false;
+            foreach (var t in _fixedTags)
+            {
+                if(t.HasTag(tag))
+                {
+                    fixedTagsContainsTag = true;
+                    break;
+                }
+            }
+
+            var dynamicAddedTagsContainsTag = false;
+            foreach (var t in _dynamicAddedTags)
+            {
+                if (t.Key.HasTag(tag))
+                {
+                    dynamicAddedTagsContainsTag = true;
+                    break;
+                }
+            }
+
+            var dynamicRemovedTagsContainsTag = false;
+            foreach (var t in _dynamicRemovedTags)
+            {
+                if (t.Key.HasTag(tag))
+                {
+                    dynamicRemovedTagsContainsTag = true;
+                    break;
+                }
+            }
+            
             return (fixedTagsContainsTag || dynamicAddedTagsContainsTag) && !dynamicRemovedTagsContainsTag;
         }
 
         public bool HasAllTags(GameplayTagSet other)
         {
-            return other.Empty || other.Tags.All(HasTag);
+            if( other.Empty) return true;
+            foreach (var tag in other.Tags)
+                if (!HasTag(tag)) return false;
+            
+            return true;
         }
 
         public bool HasAllTags(params GameplayTag[] tags)
         {
-            return tags.All(HasTag);
+            foreach (var tag in tags)
+                if (!HasTag(tag)) return false;
+            
+            return true;
         }
 
         public bool HasAnyTags(GameplayTagSet other)
         {
-            return !other.Empty && other.Tags.Any(HasTag);
+            if(other.Empty) return false;
+            foreach (var tag in other.Tags)
+            {
+                if (HasTag(tag)) return true;
+            }
+            return false;
+            //return !other.Empty && other.Tags.Any(HasTag);
         }
 
         public bool HasAnyTags(params GameplayTag[] tags)
         {
-            return tags.Any(HasTag);
+            bool hasAny = false;
+            foreach (var tag in tags)
+                if (HasTag(tag))
+                {
+                    hasAny = true;
+                    break;
+                }
+
+            return hasAny;
+            //return tags.Any(HasTag);
         }
 
         public bool HasNoneTags(GameplayTagSet other)
         {
-            return other.Empty || !other.Tags.Any(HasTag);
+            if(other.Empty) return true;
+            foreach (var tag in other.Tags)
+            {
+                if (HasTag(tag)) return false;
+            }
+            return true;
+            //return other.Empty || !other.Tags.Any(HasTag);
         }
 
         public bool HasNoneTags(params GameplayTag[] tags)
         {
-            return !tags.Any(HasTag);
+            if (tags.Length == 0) return true;
+            foreach (var tag in tags)
+            {
+                if (HasTag(tag)) return false;
+            }
+            return true;
+            //return !tags.Any(HasTag);
         }
         
         #if UNITY_EDITOR

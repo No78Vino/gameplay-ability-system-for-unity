@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] - 2024-04-21
+
+优化了部分GC。
+
+### Fixed
+
+- AttributeSetContainer的TryGetAttributeSet方法中，Type.Name存在GC。
+  - 新增了预缓存接口:GasCache.CacheAttributeSetName。
+  - 使用方法：在GAS初始化时，调用GasCache.CacheAttributeSetName(GAttrSetLib.TypeToName);
+- GameplayTagAggregator的Tag判断相关方法存在GC。GC来源是LINQ表达式的过程匿名方法产生的GC。已经把LINQ表达式改成了普通循环做法。
+
 ## [1.0.7] - 2024-04-17
 
 修复全局配置保存失败问题；修复Editor代码不该编译问题
