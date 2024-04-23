@@ -67,7 +67,7 @@ namespace GAS.Runtime
         
         public bool HasNoneTags(GameplayTagSet other)
         {
-            return HasAnyTags(other.Tags);
+            return HasNoneTags(other.Tags);
         }
         
         public bool HasNoneTags(params GameplayTag[] tags)
