@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 
 namespace GAS.Runtime
 {
     /// <summary>
     /// If the collection of tags is stable and unchangable, use this class to improve performance.
     /// </summary>
-    public struct GameplayTagSet
+    public readonly struct GameplayTagSet
     {
         public readonly GameplayTag[] Tags;
         
@@ -28,37 +27,57 @@ namespace GAS.Runtime
         
         public bool HasTag(GameplayTag tag)
         {
-            return Tags.Any(t => t.HasTag(tag));
+            foreach (var t in Tags)
+            {
+                if (t.HasTag(tag)) return true;
+            }
+
+            return false;
         }
         
         public bool HasAllTags(GameplayTagSet other)
         {
-            return other.Tags.All(HasTag);
+            return HasAllTags(other.Tags);
         }
         
         public bool HasAllTags(params GameplayTag[] tags)
         {
-            return tags.All(HasTag);
+            foreach (var tag in tags)
+            {
+                if (!HasTag(tag)) return false;
+            }
+
+            return true;
         }
         
         public bool HasAnyTags(GameplayTagSet other)
         {
-            return other.Tags.Any(HasTag);
+            return HasAnyTags(other.Tags);
         }
 
         public bool HasAnyTags(params GameplayTag[] tags)
         {
-            return tags.Any(HasTag);
+            foreach (var tag in tags)
+            {
+                if (HasTag(tag)) return true;
+            }
+
+            return false;
         }
         
         public bool HasNoneTags(GameplayTagSet other)
         {
-            return !other.Tags.Any(HasTag);
+            return HasAnyTags(other.Tags);
         }
         
         public bool HasNoneTags(params GameplayTag[] tags)
         {
-            return !tags.Any(HasTag);
+            foreach (var tag in tags)
+            {
+                if (HasTag(tag)) return false;
+            }
+
+            return true;
         }
     }
 }
