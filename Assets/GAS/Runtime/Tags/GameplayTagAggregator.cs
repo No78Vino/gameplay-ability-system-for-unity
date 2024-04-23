@@ -56,7 +56,7 @@ namespace GAS.Runtime
         {
             foreach (var t in tags)
             {
-                if (t.Equals(tag))
+                if (t == tag)
                 {
                     return true;
                 }
