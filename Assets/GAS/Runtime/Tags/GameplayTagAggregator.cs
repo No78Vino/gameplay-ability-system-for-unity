@@ -134,9 +134,9 @@ namespace GAS.Runtime
 
             if (_dynamicAddedTags.TryGetValue(tag, out var addedTag))
             {
-                foreach (T o in addedTag)
+                foreach (object o in addedTag)
                 {
-                    if (o.Equals(source))
+                    if (source.Equals(o))
                     {
                         return false;
                     }
@@ -150,6 +150,7 @@ namespace GAS.Runtime
                 list.Add(source);
                 _dynamicAddedTags.Add(tag, list);
             }
+
             return true;
         }
 
