@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GAS.General;
-using GAS.Runtime;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -33,9 +32,9 @@ namespace GAS.Runtime
         public InstantAbilityTask task;
     }
 
-    public class TimelineAbilityPlayer
+    public class TimelineAbilityPlayer<T>  where T : AbstractAbility
     {
-        private readonly TimelineAbilitySpec _abilitySpec;
+        private readonly TimelineAbilitySpecT<T> _abilitySpec;
         private readonly List<RuntimeBuffClip> _cacheBuffGameplayEffectTrack = new();
 
         private readonly List<RuntimeDurationCueClip> _cacheDurationalCueTrack = new();
@@ -51,7 +50,7 @@ namespace GAS.Runtime
         private int _currentFrame;
         private float _playTotalTime;
 
-        public TimelineAbilityPlayer(TimelineAbilitySpec abilitySpec)
+        public TimelineAbilityPlayer(TimelineAbilitySpecT<T> abilitySpec)
         {
             _abilitySpec = abilitySpec;
             Cache();
@@ -59,8 +58,8 @@ namespace GAS.Runtime
 
         public bool IsPlaying { get; private set; }
 
-        public TimelineAbilityAsset AbilityAsset => _abilitySpec.AbilityAsset;
-        private int FrameCount => AbilityAsset.FrameCount;
+        public TimelineAbilityAsset AbilityAsset => _abilitySpec.Ability.DataReference as TimelineAbilityAsset;
+             private int FrameCount => AbilityAsset.FrameCount;
         private int FrameRate => GASTimer.FrameRate;
 
         private void Cache()
