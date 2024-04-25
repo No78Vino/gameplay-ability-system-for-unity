@@ -1,49 +1,37 @@
-﻿using GAS.Runtime;
-
-namespace GAS.Runtime
+﻿namespace GAS.Runtime
 {
-    public class TimelineAbility:AbstractAbility
+    public abstract class TimelineAbilityT<T> : AbstractAbility<T> where T : TimelineAbilityAsset
     {
-        public readonly TimelineAbilityAsset AbilityAsset;
-        public TimelineAbility(AbilityAsset abilityAsset) : base(abilityAsset)
+        protected TimelineAbilityT(T abilityAsset) : base(abilityAsset)
         {
-            AbilityAsset = abilityAsset as TimelineAbilityAsset;
-        }
-
-        public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
-        {
-            return new TimelineAbilitySpec(this, owner);
         }
     }
-    
-    public class TimelineAbilitySpec: AbilitySpec
+
+    public abstract class TimelineAbilitySpecT<T> : AbilitySpec<T> where T : AbstractAbility
     {
-        private TimelineAbility _ability;
-        public TimelineAbilityAsset AbilityAsset => _ability.AbilityAsset;
-        private TimelineAbilityPlayer _player;
+        protected TimelineAbilityPlayer<T> _player;
 
         /// <summary>
         /// 向性技能的作用目标
         /// </summary>
         public AbilitySystemComponent Target { get; private set; }
 
-        public TimelineAbilitySpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
+        protected TimelineAbilitySpecT(T ability, AbilitySystemComponent owner) : base(ability, owner)
         {
-            _ability = ability as TimelineAbility;
-            _player = new TimelineAbilityPlayer(this);
+            _player = new TimelineAbilityPlayer<T>(this);
         }
 
         public void SetAbilityTarget(AbilitySystemComponent mainTarget)
         {
             Target = mainTarget;
         }
-        
+
         public override void ActivateAbility(params object[] args)
         {
-             _player.Play();
+            _player.Play();
         }
 
-        public override void CancelAbility() 
+        public override void CancelAbility()
         {
             _player.Stop();
         }
@@ -56,6 +44,31 @@ namespace GAS.Runtime
         protected override void AbilityTick()
         {
             _player.Tick();
+        }
+    }
+
+    /// <summary>
+    ///  这是一个最朴素的TimelineAbility实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
+    /// </summary>
+    public sealed class TimelineAbility : TimelineAbilityT<TimelineAbilityAsset>
+    {
+        public TimelineAbility(TimelineAbilityAsset abilityAsset) : base(abilityAsset)
+        {
+        }
+
+        public override AbilitySpec CreateSpec(AbilitySystemComponent owner)
+        {
+            return new TimelineAbilitySpec(this, owner);
+        }
+    }
+
+    /// <summary>
+    ///  这是一个最朴素的TimelineAbilitySpec实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
+    /// </summary>
+    public sealed class TimelineAbilitySpec : TimelineAbilitySpecT<TimelineAbility>
+    {
+        public TimelineAbilitySpec(TimelineAbility ability, AbilitySystemComponent owner) : base(ability, owner)
+        {
         }
     }
 }

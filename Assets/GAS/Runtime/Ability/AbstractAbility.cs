@@ -6,19 +6,19 @@ namespace GAS.Runtime
     public abstract class AbstractAbility
     {
         public readonly string Name;
-        protected readonly AbilityAsset DataReference;
-        
+        public readonly AbilityAsset DataReference;
+
         // TODO : AbilityTask
         // public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
         // public List<AsyncAbilityTask> AsyncAbilityTasks = new List<AsyncAbilityTask>();
 
         public AbilityTagContainer Tag { get; protected set; }
 
-        public GameplayEffect Cooldown{ get; protected set; }
+        public GameplayEffect Cooldown { get; protected set; }
 
-        public  float CooldownTime{ get; protected set; }
+        public float CooldownTime { get; protected set; }
 
-        public  GameplayEffect Cost{ get; protected set; }
+        public GameplayEffect Cost { get; protected set; }
 
         public AbstractAbility(AbilityAsset abilityAsset)
         {
@@ -26,14 +26,14 @@ namespace GAS.Runtime
 
             Name = DataReference.UniqueName;
             Tag = new AbilityTagContainer(
-                DataReference.AssetTag,DataReference.CancelAbilityTags,DataReference.BlockAbilityTags,
-                DataReference.ActivationOwnedTag,DataReference.ActivationRequiredTags,DataReference.ActivationBlockedTags);
-            Cooldown = DataReference.Cooldown?new GameplayEffect(DataReference.Cooldown):default;
-            Cost = DataReference.Cost?new GameplayEffect(DataReference.Cost):default;
-            
+                DataReference.AssetTag, DataReference.CancelAbilityTags, DataReference.BlockAbilityTags,
+                DataReference.ActivationOwnedTag, DataReference.ActivationRequiredTags, DataReference.ActivationBlockedTags);
+            Cooldown = DataReference.Cooldown ? new GameplayEffect(DataReference.Cooldown) : default;
+            Cost = DataReference.Cost ? new GameplayEffect(DataReference.Cost) : default;
+
             CooldownTime = DataReference.CooldownTime;
         }
-        
+
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
 
         public void SetCooldown(GameplayEffect coolDown)
@@ -42,35 +42,35 @@ namespace GAS.Runtime
             {
                 Cooldown = coolDown;
             }
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             else
             {
                 UnityEngine.Debug.LogError("[EX] Cooldown must be duration policy!");
             }
-            #endif
+#endif
         }
-        
+
         public void SetCost(GameplayEffect cost)
         {
             if (cost.DurationPolicy == EffectsDurationPolicy.Instant)
             {
                 Cost = cost;
             }
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             else
             {
                 UnityEngine.Debug.LogError("[EX] Cost must be instant policy!");
             }
-            #endif
+#endif
         }
     }
-    
-    public abstract class AbstractAbility<T> :AbstractAbility where T : AbilityAsset
+
+    public abstract class AbstractAbility<T> : AbstractAbility where T : AbilityAsset
     {
-        protected readonly T AbilityAsset;
-        protected AbstractAbility(AbilityAsset abilityAsset) : base(abilityAsset)
+        public T AbilityAsset => DataReference as T;
+
+        protected AbstractAbility(T abilityAsset) : base(abilityAsset)
         {
-            AbilityAsset = abilityAsset as T;
         }
     }
 }
