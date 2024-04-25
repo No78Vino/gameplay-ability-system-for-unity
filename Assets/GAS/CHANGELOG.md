@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.0.9] - 2024-04-25
+
+优化type查找，优化GAS的项目级配置文件管理。
+
+### Changed
+
+- 新增TimelineAbilityT, 方便继承和扩展TimelineAbility.（From: BCC @kenkinky）
+
+### Fixed
+
+- 修正TryAddDynamicAddedTag添加不同类型Source时类型转换失败异常（From: BCC @kenkinky）
+- 修复了Setting中生成配置目录后，未调用AssetDatabase.Refresh()导致配置文件目录未及时更新的问题。
 ## [1.0.8] - 2024-04-23
 
 优化了部分GC。

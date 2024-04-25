@@ -154,6 +154,7 @@ namespace GAS.Editor
             CheckPathFolderExist(GameplayCueLibPath);
             CheckPathFolderExist(MMCLibPath);
             CheckPathFolderExist(AbilityTaskLib);
+            AssetDatabase.Refresh();
         }
 
         [BoxGroup("A")]
