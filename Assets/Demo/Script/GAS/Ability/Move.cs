@@ -5,7 +5,7 @@ namespace GAS.Runtime
 {
     public class Move:AbstractAbility<AAMove>
     {
-        public Move(AbilityAsset abilityAsset) : base(abilityAsset)
+        public Move(AAMove abilityAsset) : base(abilityAsset)
         {
         }
 

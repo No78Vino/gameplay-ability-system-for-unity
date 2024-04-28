@@ -4,7 +4,7 @@ namespace GAS.Runtime
 {
     public class BossAttack00:AbstractAbility<AABossAttack00>
     {
-        public BossAttack00(AbilityAsset abilityAsset) : base(abilityAsset)
+        public BossAttack00(AABossAttack00 abilityAsset) : base(abilityAsset)
         {
         }
 

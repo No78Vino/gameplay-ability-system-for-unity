@@ -5,7 +5,7 @@ namespace GAS.Runtime
     public class Jump:AbstractAbility<AAJump>
     {
         public readonly float JumpPower;
-        public Jump(AbilityAsset abilityAsset) : base(abilityAsset)
+        public Jump(AAJump abilityAsset) : base(abilityAsset)
         {
             JumpPower = AbilityAsset.JumpPower;
         }
