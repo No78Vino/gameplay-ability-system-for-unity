@@ -89,5 +89,9 @@ namespace GAS.Runtime
             foreach (var kv in _abilities)
                 _abilities[kv.Key].TryCancelAbility();
         }
+        
+        public bool HasAbility(string abilityName) => _abilities.ContainsKey(abilityName);
+        
+        public bool HasAbility(AbstractAbility ability) => HasAbility(ability.Name);
     }
 }

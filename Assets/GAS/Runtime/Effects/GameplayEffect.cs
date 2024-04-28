@@ -24,9 +24,13 @@ namespace GAS.Runtime
         public readonly GameplayCueInstant[] CueOnActivate;
         public readonly GameplayCueInstant[] CueOnDeactivate;
         public readonly GameplayCueDurational[] CueDurational;
-
+        
+        // Modifiers
         public readonly GameplayEffectModifier[] Modifiers;
-        public readonly ExecutionCalculation[] Executions;
+        public readonly ExecutionCalculation[] Executions; // TODO: this should be a list of execution calculations
+        
+        // Granted Ability
+        public readonly GrantedAbilityFromEffect[] GrantedAbilities;
 
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator,
