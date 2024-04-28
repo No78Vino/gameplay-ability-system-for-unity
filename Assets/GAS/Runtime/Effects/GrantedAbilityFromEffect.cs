@@ -16,7 +16,7 @@ namespace GAS.Runtime
         public GrantedAbilitySpecFromEffect CreateSpec(GameplayEffectSpec sourceEffectSpec)
         {
             // 是否宿主已经持有该技能，如果已经持有，则不创建新的技能
-            if (sourceEffectSpec.Owner.AbilityContainer(Ability))
+            // if (sourceEffectSpec.Owner.AbilityContainer(Ability))
             return new GrantedAbilitySpecFromEffect(this,sourceEffectSpec);
         } 
     }
