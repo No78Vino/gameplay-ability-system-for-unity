@@ -83,7 +83,7 @@ namespace GAS.Runtime
         {
             if (IsApplied) return;
             IsApplied = true;
-            Activate();
+            if(CanRunning()) Activate();
         }
 
         public void DisApply()
@@ -108,6 +108,11 @@ namespace GAS.Runtime
             TriggerOnDeactivation();
         }
 
+        public bool CanApply()
+        {
+            return Owner.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags);
+        }
+        
         public bool CanRunning()
         {
             return Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);

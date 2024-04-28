@@ -85,15 +85,15 @@ namespace GAS.Runtime
             _gameplayEffectSpecs.Add(spec);
             spec.TriggerOnAdd();
 
-            var canRunning = spec.CanRunning();
-            if (canRunning)
+            var canApply = spec.CanApply();
+            if (canApply)
                 spec.Apply();
             else
                 spec.DisApply();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
 
-            return canRunning;
+            return canApply;
         }
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
