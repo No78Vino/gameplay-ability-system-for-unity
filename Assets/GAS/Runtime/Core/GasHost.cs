@@ -1,5 +1,4 @@
-﻿using System;
-using GAS.General;
+﻿using GAS.General;
 using UnityEngine;
 
 namespace GAS
@@ -11,8 +10,7 @@ namespace GAS
         private void Update()
         {
             GASTimer.UpdateCurrentFrameCount();
-            var snapshot = _gas.AbilitySystemComponents.ToArray();
-            foreach (var abilitySystemComponent in snapshot) abilitySystemComponent.Tick();
+            _gas.Tick();
         }
 
         private void OnDestroy()
