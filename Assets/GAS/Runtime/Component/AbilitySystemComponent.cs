@@ -145,9 +145,10 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
 
-        public void GrantAbility(AbstractAbility ability)
+        public AbilitySpec GrantAbility(AbstractAbility ability)
         {
             AbilityContainer.GrantAbility(ability);
+            return AbilityContainer.AbilitySpecs()[ability.Name];
         }
 
         public void RemoveAbility(string abilityName)

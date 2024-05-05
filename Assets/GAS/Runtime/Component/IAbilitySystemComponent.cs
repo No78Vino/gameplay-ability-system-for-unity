@@ -35,7 +35,7 @@ namespace GAS.Runtime
         
         Dictionary<string,float> DataSnapshot();
         
-        void GrantAbility(AbstractAbility ability);
+        AbilitySpec GrantAbility(AbstractAbility ability);
         
         void RemoveAbility(string abilityName);
         

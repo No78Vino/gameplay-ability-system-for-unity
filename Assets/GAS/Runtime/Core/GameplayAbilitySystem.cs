@@ -83,20 +83,16 @@ namespace GAS
 
         public void Tick()
         {
-            Profiler.BeginSample("GAS.Update");
-
             _cacheAbilitySystemComponents.AddRange(AbilitySystemComponents);
 
             foreach (var abilitySystemComponent in _cacheAbilitySystemComponents)
             {
-                Profiler.BeginSample("GAS.Tick.AbilitySystemComponent");
+                //Profiler.BeginSample("GAS.Tick.AbilitySystemComponent");
                 abilitySystemComponent.Tick();
-                Profiler.EndSample();
+                //Profiler.EndSample();
             }
 
             _cacheAbilitySystemComponents.Clear();
-
-            Profiler.EndSample();
         }
     }
 }
