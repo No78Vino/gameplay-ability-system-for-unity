@@ -195,7 +195,10 @@ namespace GAS.Runtime
 
             if (source is GameplayEffectSpec || source is AbilitySpec)
             {
-                if (dynamicTag.TryGetValue(tag, out var tagList))
+                Profiler.BeginSample("[GC Mark]TryGetValue");
+                var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
+                Profiler.EndSample();
+                if (hasValue)
                 {
                     Profiler.BeginSample("remove source from tag list");
                     tagList.Remove(source);
@@ -206,7 +209,7 @@ namespace GAS.Runtime
                     {
                         _pool.Return(tagList);
 
-                        Profiler.BeginSample("remove dynamic tag");
+                        Profiler.BeginSample("[GC Mark]remove dynamic tag");
                         dynamicTag.Remove(tag); // 有 GC
                         Profiler.EndSample();
                     }

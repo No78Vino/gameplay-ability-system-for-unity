@@ -243,21 +243,24 @@ namespace GAS.Runtime
                     catcher.Init(_abilitySpec.Owner);
 
                     Profiler.BeginSample("catcher.CatchTargets()");
-                    catcher.CatchTargetsNonAlloc(_abilitySpec.Target, _targets);
+                    catcher.CatchTargetsNonAllocSafe(_abilitySpec.Target, _targets);
                     Profiler.EndSample();
 
-                    if (_targets != null)
+                    foreach (var asc in _targets)
                     {
-                        foreach (var asc in _targets)
+                        foreach (var effect in mark.gameplayEffectAssets)
                         {
-                            foreach (var effect in mark.gameplayEffectAssets)
-                            {
-                                Profiler.BeginSample("releaseGameplayEffect.ApplyGameplayEffectTo()");
-                                _abilitySpec.Owner.ApplyGameplayEffectTo(new GameplayEffect(effect), asc);
-                                Profiler.EndSample();
-                            }
+                            Profiler.BeginSample("[GC Mark] new GameplayEffect()");
+                            var ge = new GameplayEffect(effect);
+                            Profiler.EndSample();
+
+                            Profiler.BeginSample("releaseGameplayEffect.ApplyGameplayEffectTo()");
+                            _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
+                            Profiler.EndSample();
                         }
                     }
+                    
+                    _targets.Clear();
                 }
             }
 

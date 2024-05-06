@@ -141,9 +141,24 @@ namespace GAS.Runtime
                 return null;
             }
 #endif
-            return gameplayEffect.CanApplyTo(target)
-                ? target.AddGameplayEffect(gameplayEffect.CreateSpec(this, target, Level))
-                : null;
+            Profiler.BeginSample("ApplyGameplayEffectTo()");
+
+            Profiler.BeginSample("gameplayEffect.CanApplyTo()");
+            var canApply = gameplayEffect.CanApplyTo(target);
+            Profiler.EndSample();
+
+            GameplayEffectSpec applyGameplayEffectTo = null;
+            if (canApply)
+            {
+                var spec = gameplayEffect.CreateSpec(this, target, Level);
+
+                Profiler.BeginSample("AddGameplayEffect()");
+                applyGameplayEffectTo = target.AddGameplayEffect(spec);
+                Profiler.EndSample();
+            }
+
+            Profiler.EndSample();
+            return applyGameplayEffectTo;
         }
 
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
