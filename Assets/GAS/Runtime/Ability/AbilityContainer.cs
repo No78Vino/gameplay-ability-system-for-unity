@@ -23,7 +23,9 @@ namespace GAS.Runtime
 
             foreach (var abilitySpec in _cachedAbilities)
             {
+                Profiler.BeginSample("abilitySpec.Tick()");
                 abilitySpec.Tick();
+                Profiler.EndSample();
             }
 
             _cachedAbilities.Clear();

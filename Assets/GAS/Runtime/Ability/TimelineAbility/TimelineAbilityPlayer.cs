@@ -174,7 +174,7 @@ namespace GAS.Runtime
         public void Tick()
         {
             if (!IsPlaying) return;
-            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Tick()  ability name: {_abilitySpec.Ability.Name}");
+            Profiler.BeginSample($"TimelineAbilityPlayer::Tick()");
 
             _playTotalTime += Time.deltaTime;
             var targetFrame = (int)(_playTotalTime * FrameRate);

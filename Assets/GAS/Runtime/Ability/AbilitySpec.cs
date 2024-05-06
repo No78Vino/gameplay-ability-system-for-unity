@@ -135,7 +135,7 @@ namespace GAS.Runtime
 
         public virtual bool TryActivateAbility(params object[] args)
         {
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryActivateAbility()  {Ability.Name}");
+            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryActivateAbility()");
             _abilityArguments = args;
             var result = CanActivate();
             var success = result == AbilityActivateResult.Success;
@@ -145,7 +145,7 @@ namespace GAS.Runtime
                 ActiveCount++;
                 Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
 
-                Profiler.BeginSample($"{nameof(AbilitySpec)}::TryActivateAbility().ActivateAbility()  {Ability.Name}");
+                Profiler.BeginSample($"{nameof(AbilitySpec)}::TryActivateAbility().ActivateAbility()");
                 ActivateAbility(_abilityArguments);
                 Profiler.EndSample();
             }
@@ -160,14 +160,14 @@ namespace GAS.Runtime
             if (!IsActive) return;
             IsActive = false;
 
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryEndAbility()  {Ability.Name}");
+            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryEndAbility()");
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
-            
-            Profiler.BeginSample($"EndAbility()  {Ability.Name}");
+
+            Profiler.BeginSample($"EndAbility()");
             EndAbility();
             Profiler.EndSample();
 
-            Profiler.BeginSample($"_onEndAbility?.Invoke()  {Ability.Name}");
+            Profiler.BeginSample($"_onEndAbility?.Invoke()");
             _onEndAbility?.Invoke();
             Profiler.EndSample();
 
@@ -179,7 +179,7 @@ namespace GAS.Runtime
             if (!IsActive) return;
             IsActive = false;
 
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryCancelAbility() {Ability.Name}");
+            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryCancelAbility()");
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
@@ -188,14 +188,12 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            if (!IsActive)
+            if (IsActive)
             {
-                return;
+                Profiler.BeginSample($"{nameof(AbilitySpec)}::Tick()");
+                AbilityTick();
+                Profiler.EndSample();
             }
-
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::Tick() {Ability.Name}");
-            AbilityTick();
-            Profiler.EndSample();
         }
 
         protected virtual void AbilityTick()
