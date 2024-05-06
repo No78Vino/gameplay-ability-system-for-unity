@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.Runtime;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -28,7 +27,14 @@ namespace GAS.Runtime
             return result;
         }
 
-        public abstract void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results);
+        public void CatchTargetsNonAllocSafe(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
+        {
+            results.Clear();
+
+            CatchTargetsNonAlloc(mainTarget, results);
+        }
+
+        protected abstract void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results);
 
 #if UNITY_EDITOR
         public virtual void OnEditorPreview(GameObject obj)

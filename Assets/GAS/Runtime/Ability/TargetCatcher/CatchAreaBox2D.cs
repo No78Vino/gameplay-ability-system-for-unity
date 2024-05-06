@@ -24,10 +24,8 @@ namespace GAS.Runtime
 
         private static readonly Collider2D[] Collider2Ds = new Collider2D[32];
 
-        public override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
         {
-            results.Clear();
-
             int count = centerType switch
             {
                 EffectCenterType.SelfOffset => Owner.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds, checkLayer),
