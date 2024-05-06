@@ -14,7 +14,7 @@ namespace GAS
         {
             const int capacity = 1024;
             AbilitySystemComponents = new List<AbilitySystemComponent>(capacity);
-            _cacheAbilitySystemComponents = new List<AbilitySystemComponent>(capacity);
+            _cachedAbilitySystemComponents = new List<AbilitySystemComponent>(capacity);
             GASTimer.InitStartTimestamp();
 
             GasHost = new GameObject("GAS Host").AddComponent<GasHost>();
@@ -25,7 +25,7 @@ namespace GAS
 
         public List<AbilitySystemComponent> AbilitySystemComponents { get; }
 
-        private readonly List<AbilitySystemComponent> _cacheAbilitySystemComponents;
+        private readonly List<AbilitySystemComponent> _cachedAbilitySystemComponents;
 
         private GasHost GasHost { get; }
 
@@ -83,18 +83,16 @@ namespace GAS
 
         public void Tick()
         {
-            Profiler.BeginSample("GAS.Update");
+            Profiler.BeginSample($"{nameof(GameplayAbilitySystem)}::Tick()");
 
-            _cacheAbilitySystemComponents.AddRange(AbilitySystemComponents);
+            _cachedAbilitySystemComponents.AddRange(AbilitySystemComponents);
 
-            foreach (var abilitySystemComponent in _cacheAbilitySystemComponents)
+            foreach (var abilitySystemComponent in _cachedAbilitySystemComponents)
             {
-                Profiler.BeginSample("GAS.Tick.AbilitySystemComponent");
                 abilitySystemComponent.Tick();
-                Profiler.EndSample();
             }
 
-            _cacheAbilitySystemComponents.Clear();
+            _cachedAbilitySystemComponents.Clear();
 
             Profiler.EndSample();
         }

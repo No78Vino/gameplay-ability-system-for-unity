@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
     public class GameplayEffectContainer
     {
-        private List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly AbilitySystemComponent _owner;
+        private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
+        private readonly List<GameplayEffectSpec> _cachedGameplayEffectSpecs = new List<GameplayEffectSpec>();
 
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
@@ -19,14 +21,26 @@ namespace GAS.Runtime
         {
             return _gameplayEffectSpecs;
         }
-        
+
         public void Tick()
         {
-            var enumerable = _gameplayEffectSpecs.ToArray();
-            foreach (var gameplayEffectSpec in enumerable)
+            Profiler.BeginSample($"{nameof(GameplayEffectContainer)}::Tick()");
+
+            _cachedGameplayEffectSpecs.AddRange(_gameplayEffectSpecs);
+
+            foreach (var gameplayEffectSpec in _cachedGameplayEffectSpecs)
             {
-                if(gameplayEffectSpec.IsActive) gameplayEffectSpec.Tick();
+                if (gameplayEffectSpec.IsActive)
+                {
+                    Profiler.BeginSample("gameplayEffectSpec.Tick()");
+                    gameplayEffectSpec.Tick();
+                    Profiler.EndSample();
+                }
             }
+
+            _cachedGameplayEffectSpecs.Clear();
+
+            Profiler.EndSample();
         }
 
         public void RegisterOnGameplayEffectContainerIsDirty(Action action)
@@ -69,21 +83,31 @@ namespace GAS.Runtime
         /// </returns>
         public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
         {
+            Profiler.BeginSample($"{nameof(GameplayEffectContainer)}::AddGameplayEffectSpec()");
             // Check Immunity Tags
             if (_owner.HasAnyTags(spec.GameplayEffect.TagContainer.ApplicationImmunityTags))
             {
+                Profiler.BeginSample("TriggerOnImmunity()");
                 spec.TriggerOnImmunity();
+                Profiler.EndSample();
+                Profiler.EndSample();
                 return false;
             }
 
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
+                Profiler.BeginSample("TriggerOnExecute()");
                 spec.TriggerOnExecute();
+                Profiler.EndSample();
+                Profiler.EndSample();
                 return false;
             }
 
             _gameplayEffectSpecs.Add(spec);
+
+            Profiler.BeginSample("TriggerOnAdd()");
             spec.TriggerOnAdd();
+            Profiler.EndSample();
 
             var canApply = spec.CanApply();
             if (canApply)
@@ -91,7 +115,11 @@ namespace GAS.Runtime
             else
                 spec.DisApply();
 
+            Profiler.BeginSample("OnGameplayEffectContainerIsDirty.Invoke()");
             OnGameplayEffectContainerIsDirty?.Invoke();
+            Profiler.EndSample();
+
+            Profiler.EndSample();
 
             return canApply;
         }
@@ -121,6 +149,7 @@ namespace GAS.Runtime
                     if (!gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Deactivate();
                 }
             }
+
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 

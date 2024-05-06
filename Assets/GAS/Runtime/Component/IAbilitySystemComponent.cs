@@ -18,10 +18,10 @@ namespace GAS.Runtime
         bool HasAnyTags(GameplayTagSet tags);
         
         void AddFixedTags(GameplayTagSet tags);
-        void AddFixedTag(GameplayTag tag);
+        void AddFixedTag(GameplayTag gameplayTag);
         
         void RemoveFixedTags(GameplayTagSet tags);
-        void RemoveFixedTag(GameplayTag tag);
+        void RemoveFixedTag(GameplayTag gameplayTag);
 
         GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect,AbilitySystemComponent target);
         
