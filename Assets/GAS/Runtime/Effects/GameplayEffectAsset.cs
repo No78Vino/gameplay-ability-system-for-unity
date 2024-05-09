@@ -91,10 +91,9 @@ namespace GAS.Runtime
         [Space]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
         [Title(GASTextDefine.TITLE_GE_GrantedAbilities, Bold = true)]
-        [AssetSelector]
         [ShowIf("IsDurationalPolicy")]
         [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false)]
-        public AbilityAsset[] GrantedAbilities;
+        public GrantedAbilityConfig[] GrantedAbilities;
 
         // Mod
         [Title(GASTextDefine.TITLE_GE_MOD, bold: true)]
