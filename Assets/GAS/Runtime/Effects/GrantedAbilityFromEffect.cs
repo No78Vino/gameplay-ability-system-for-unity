@@ -1,10 +1,36 @@
+using System;
+using GAS.General;
+using Sirenix.OdinInspector;
+using UnityEngine;
+
 namespace GAS.Runtime
 {
+    [Serializable]
+    public struct GrantedAbilityConfig
+    {
+        [LabelWidth(100)]
+        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY_PASSIVE)]
+        [Tooltip(GASTextDefine.TIP_GRANT_ABILITY_PASSIVE)]
+        public bool Passive;
+        
+        [LabelWidth(100)]
+        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY)]
+        [AssetSelector]
+        public AbilityAsset AbilityAsset;
+    }
+    
     public class GrantedAbilityFromEffect
     {
         public readonly bool Passive;
         public readonly AbstractAbility Ability;
         public readonly GameplayEffect SourceEffect;
+        
+        public GrantedAbilityFromEffect(GrantedAbilityConfig config, GameplayEffect sourceEffect)
+        {
+            Passive = config.Passive;
+            Ability = Activator.CreateInstance(config.AbilityAsset.AbilityType(), args: config.AbilityAsset) as AbstractAbility;
+            SourceEffect = sourceEffect;
+        }
         
         public GrantedAbilityFromEffect(bool passive, AbstractAbility ability, GameplayEffect sourceEffect)
         {
