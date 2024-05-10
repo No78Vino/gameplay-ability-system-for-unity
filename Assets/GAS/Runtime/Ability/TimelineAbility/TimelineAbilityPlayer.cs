@@ -68,7 +68,7 @@ namespace GAS.Runtime
 
         private void Cache()
         {
-            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Tick()");
+            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Cache()");
             {
                 Cache_InstantCues();
                 Cache_ReleaseGameplayEffects();
