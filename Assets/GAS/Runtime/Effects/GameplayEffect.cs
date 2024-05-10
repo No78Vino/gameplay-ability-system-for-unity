@@ -1,4 +1,4 @@
-﻿using UnityEngine.Profiling;
+﻿//using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -38,9 +38,9 @@ namespace GAS.Runtime
             AbilitySystemComponent owner,
             float level = 1)
         {
-            Profiler.BeginSample("[GC Mark] GameplayEffectSpec.CreateSpec()");
+            //Profiler.BeginSample("[GC Mark] GameplayEffectSpec.CreateSpec()");
             var spec = new GameplayEffectSpec(this, creator, owner, level);
-            Profiler.EndSample();
+            //Profiler.EndSample();
             return spec;
         }
 

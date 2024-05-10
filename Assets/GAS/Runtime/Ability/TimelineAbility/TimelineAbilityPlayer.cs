@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GAS.General;
 using UnityEngine;
-using UnityEngine.Profiling;
+//using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -68,16 +68,16 @@ namespace GAS.Runtime
 
         private void Cache()
         {
-            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Cache()");
-            {
+            // Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Cache()");
+            // {
                 Cache_InstantCues();
                 Cache_ReleaseGameplayEffects();
                 Cache_InstantTasks();
                 Cache_DurationalGameplayCues();
                 Cache_BuffGameplayEffects();
                 Cache_OngoingTasks();
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void Cache_InstantCues()
@@ -234,8 +234,8 @@ namespace GAS.Runtime
         {
             if (!IsPlaying) return;
 
-            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Tick()");
-            {
+            // Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Tick()");
+            // {
                 _playTotalTime += Time.deltaTime;
                 var targetFrame = (int)(_playTotalTime * FrameRate);
 
@@ -250,8 +250,8 @@ namespace GAS.Runtime
                 {
                     OnPlayEnd();
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         /// <summary>
@@ -259,14 +259,14 @@ namespace GAS.Runtime
         /// </summary>
         private void OnPlayEnd()
         {
-            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::OnPlayEnd()");
-            {
+            // Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::OnPlayEnd()");
+            // {
                 IsPlaying = false;
 
                 if (!AbilityAsset.manualEndAbility)
                     _abilitySpec.TryEndAbility();
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         /// <summary>
@@ -275,42 +275,42 @@ namespace GAS.Runtime
         /// <param name="frame"></param>
         private void TickFrame(int frame)
         {
-            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::TickFrame()");
-            {
+            // Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::TickFrame()");
+            // {
                 TickFrame_InstantGameplayCues(frame);
                 TickFrame_ReleaseGameplayEffects(frame);
                 TickFrame_InstantTasks(frame);
                 TickFrame_DurationalGameplayCues(frame);
                 TickFrame_BuffGameplayEffects(frame);
                 TickFrame_OngoingTasks(frame);
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void TickFrame_InstantGameplayCues(int frame)
         {
-            Profiler.BeginSample($"TickFrame_InstantGameplayCues");
-            {
+            // Profiler.BeginSample($"TickFrame_InstantGameplayCues");
+            // {
                 foreach (var cueMark in _cacheInstantCues)
                 {
                     if (frame == cueMark.startFrame)
                     {
                         foreach (var cue in cueMark.cues)
                         {
-                            Profiler.BeginSample("cue.ApplyFrom()");
+                            //Profiler.BeginSample("cue.ApplyFrom()");
                             cue.ApplyFrom(_abilitySpec);
-                            Profiler.EndSample();
+                            //Profiler.EndSample();
                         }
                     }
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void TickFrame_ReleaseGameplayEffects(int frame)
         {
-            Profiler.BeginSample($"TickFrame_ReleaseGameplayEffects");
-            {
+            // Profiler.BeginSample($"TickFrame_ReleaseGameplayEffects");
+            // {
                 foreach (var mark in _cacheReleaseGameplayEffect)
                 {
                     if (frame == mark.startFrame)
@@ -318,140 +318,142 @@ namespace GAS.Runtime
                         var catcher = mark.TargetCatcher;
                         catcher.Init(_abilitySpec.Owner);
 
-                        Profiler.BeginSample("catcher.CatchTargets()");
+                        //Profiler.BeginSample("catcher.CatchTargets()");
                         catcher.CatchTargetsNonAllocSafe(_abilitySpec.Target, _targets);
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
 
                         foreach (var asc in _targets)
                         {
                             foreach (var gea in mark.gameplayEffectAssets)
                             {
-                                Profiler.BeginSample("[GC Mark] new GameplayEffect()");
+                                //Profiler.BeginSample("[GC Mark] new GameplayEffect()");
                                 var ge = new GameplayEffect(gea);
-                                Profiler.EndSample();
+                                //Profiler.EndSample();
 
-                                Profiler.BeginSample("releaseGameplayEffect.ApplyGameplayEffectTo()");
+                                //Profiler.BeginSample("releaseGameplayEffect.ApplyGameplayEffectTo()");
                                 _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
-                                Profiler.EndSample();
+                                //Profiler.EndSample();
                             }
                         }
 
                         _targets.Clear();
                     }
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void TickFrame_InstantTasks(int frame)
         {
-            Profiler.BeginSample($"TickFrame_InstantTasks");
-            {
+            // Profiler.BeginSample($"TickFrame_InstantTasks");
+            // {
                 foreach (var instantTask in _cacheInstantTasks)
                 {
                     if (frame == instantTask.startFrame)
                     {
-                        Profiler.BeginSample("instantTask.OnExecute()");
+                        //Profiler.BeginSample("instantTask.OnExecute()");
                         instantTask.task.OnExecute();
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void TickFrame_DurationalGameplayCues(int frame)
         {
-            Profiler.BeginSample("TickFrame_DurationalGameplayCues");
-            {
+            // Profiler.BeginSample("TickFrame_DurationalGameplayCues");
+            // {
                 foreach (var cueClip in _cacheDurationalCueTrack)
                 {
                     if (frame == cueClip.startFrame)
                     {
-                        Profiler.BeginSample("durationalCues.OnAdd()");
+                        //Profiler.BeginSample("durationalCues.OnAdd()");
                         cueClip.cueSpec.OnAdd();
-                        Profiler.EndSample();
+                        //cueClip.cueSpec.OnGameplayEffectActivate();
+                        //Profiler.EndSample();
                     }
 
                     if (frame >= cueClip.startFrame && frame <= cueClip.endFrame)
                     {
-                        Profiler.BeginSample("durationalCues.OnTick()");
+                        //Profiler.BeginSample("durationalCues.OnTick()");
                         cueClip.cueSpec.OnTick();
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
 
                     if (frame == cueClip.endFrame)
                     {
-                        Profiler.BeginSample("durationalCues.OnRemove()");
+                        //Profiler.BeginSample("durationalCues.OnRemove()");
+                        //cueClip.cueSpec.OnGameplayEffectDeactivate();
                         cueClip.cueSpec.OnRemove();
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void TickFrame_BuffGameplayEffects(int frame)
         {
             // buff持续时间以Timeline配置时间为准（执行策略全部改为Infinite）
-            Profiler.BeginSample("TickFrame_BuffGameplayEffects");
-            {
+            // Profiler.BeginSample("TickFrame_BuffGameplayEffects");
+            // {
                 foreach (var buffClip in _cacheBuffGameplayEffectTrack)
                 {
                     if (frame == buffClip.startFrame)
                     {
-                        Profiler.BeginSample("buffGameplayEffect.Start");
+                        //Profiler.BeginSample("buffGameplayEffect.Start");
                         var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
                         buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
                         buffClip.buffSpec = buffSpec;
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
 
                     if (frame == buffClip.endFrame)
                     {
                         if (buffClip.buffSpec != null)
                         {
-                            Profiler.BeginSample("buffGameplayEffect.End");
+                            //Profiler.BeginSample("buffGameplayEffect.End");
                             _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
-                            Profiler.EndSample();
+                            //Profiler.EndSample();
                         }
 
                         buffClip.buffSpec = null;
                     }
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
 
         private void TickFrame_OngoingTasks(int frame)
         {
-            Profiler.BeginSample("TickFrame_OngoingTasks");
-            {
+            // Profiler.BeginSample("TickFrame_OngoingTasks");
+            // {
                 foreach (var taskClip in _cacheOngoingTaskTrack)
                 {
                     if (frame == taskClip.startFrame)
                     {
-                        Profiler.BeginSample("Ongoing Task.OnStart()");
+                        //Profiler.BeginSample("Ongoing Task.OnStart()");
                         taskClip.task.OnStart(frame);
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
 
                     if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
                     {
-                        Profiler.BeginSample("Ongoing Task.OnTick()");
+                        //Profiler.BeginSample("Ongoing Task.OnTick()");
                         taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
 
                     if (frame == taskClip.endFrame)
                     {
-                        Profiler.BeginSample("Ongoing Task.OnEnd()");
+                        //Profiler.BeginSample("Ongoing Task.OnEnd()");
                         taskClip.task.OnEnd(frame);
-                        Profiler.EndSample();
+                        //Profiler.EndSample();
                     }
                 }
-            }
-            Profiler.EndSample();
+            // }
+            // Profiler.EndSample();
         }
     }
 }

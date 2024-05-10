@@ -32,6 +32,7 @@ namespace GAS.Runtime
             {
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
+                SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
 
             CaptureDataFromSource();
@@ -48,6 +49,7 @@ namespace GAS.Runtime
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
         public GameplayEffectSpec PeriodExecution { get; private set; }
+        public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
 
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
 
@@ -77,6 +79,15 @@ namespace GAS.Runtime
         public void SetPeriodExecution(GameplayEffectSpec periodExecution)
         {
             PeriodExecution = periodExecution;
+        }
+        
+        public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbility)
+        {
+            GrantedAbilitySpec = new GrantedAbilitySpecFromEffect[grantedAbility.Length];
+            for (var i = 0; i < grantedAbility.Length;i++)
+            {
+                GrantedAbilitySpec[i] = grantedAbility[i].CreateSpec(this);
+            }
         }
 
         public void Apply()
@@ -216,12 +227,16 @@ namespace GAS.Runtime
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
+            
+            GrantAbility();
         }
 
         private void TriggerOnDeactivation()
         {
             TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
+            
+            RevokeAbility();
         }
 
         public void TriggerOnTick()
@@ -276,5 +291,21 @@ namespace GAS.Runtime
         {
             return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?)null;
         }
+
+        /// <summary>
+        /// TODO: 授予能力
+        /// </summary>
+        private void GrantAbility()
+        {
+            
+        }
+
+        /// <summary>
+        /// TODO: 剥夺能力
+        /// </summary>
+        private void RevokeAbility()
+        {
+        }
+
     }
 }
