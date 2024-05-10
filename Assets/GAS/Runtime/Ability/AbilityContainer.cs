@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.Profiling;
 
 namespace GAS.Runtime
@@ -55,7 +56,14 @@ namespace GAS.Runtime
 
         public bool TryActivateAbility(string abilityName, params object[] args)
         {
-            if (!_abilities.ContainsKey(abilityName)) return false;
+            if (!_abilities.ContainsKey(abilityName))
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"you are trying to activate an ability that does not exist: {abilityName}");
+#endif
+                return false;
+            }
+
             if (!_abilities[abilityName].TryActivateAbility(args)) return false;
 
             var tags = _abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags;
