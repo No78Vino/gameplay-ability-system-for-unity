@@ -66,6 +66,7 @@ namespace GAS.Runtime
             CueDurational = asset.CueDurational;
             Modifiers = asset.Modifiers;
             Executions = asset.Executions;
+            GrantedAbilities = asset.GetGrantedAbilities();
         }
 
         public GameplayEffect(
@@ -81,7 +82,8 @@ namespace GAS.Runtime
             GameplayCueInstant[] cueOnDeactivate,
             GameplayCueDurational[] cueDurational,
             GameplayEffectModifier[] modifiers,
-            ExecutionCalculation[] executions)
+            ExecutionCalculation[] executions,
+            GrantedAbilityFromEffect[] grantedAbilities)
         {
             GameplayEffectName = null;
             DurationPolicy = durationPolicy;
@@ -97,6 +99,7 @@ namespace GAS.Runtime
             CueDurational = cueDurational;
             Modifiers = modifiers;
             Executions = executions;
+            GrantedAbilities = grantedAbilities;
         }
 
         public bool CanApplyTo(IAbilitySystemComponent target)

@@ -23,20 +23,17 @@ namespace GAS.Runtime
     {
         public readonly bool Passive;
         public readonly AbstractAbility Ability;
-        public readonly GameplayEffect SourceEffect;
-        
-        public GrantedAbilityFromEffect(GrantedAbilityConfig config, GameplayEffect sourceEffect)
+        public GrantedAbilityFromEffect(GrantedAbilityConfig config)
         {
             Passive = config.Passive;
             Ability = Activator.CreateInstance(config.AbilityAsset.AbilityType(), args: config.AbilityAsset) as AbstractAbility;
-            SourceEffect = sourceEffect;
+            //SourceEffect = sourceEffect;
         }
         
-        public GrantedAbilityFromEffect(bool passive, AbstractAbility ability, GameplayEffect sourceEffect)
+        public GrantedAbilityFromEffect(bool passive, AbstractAbility ability)
         {
             Passive = passive;
             Ability = ability;
-            SourceEffect = sourceEffect;
         }
         
         public GrantedAbilitySpecFromEffect CreateSpec(GameplayEffectSpec sourceEffectSpec)

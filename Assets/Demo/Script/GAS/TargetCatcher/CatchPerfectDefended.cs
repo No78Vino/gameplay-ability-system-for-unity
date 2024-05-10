@@ -18,14 +18,28 @@ namespace Demo.Script.GAS.TargetCatcher
         /// </summary>
         /// <param name="mainTarget"></param>
         /// <returns></returns>
-        public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget,List<AbilitySystemComponent> results)
         {
-            var targets = CatchDefaultTargets(mainTarget);
+            int count = centerType switch
+            {
+                EffectCenterType.SelfOffset => Owner.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds,
+                    checkLayer),
+                EffectCenterType.WorldSpace => Physics2D.OverlapBoxNonAlloc(offset, size, rotation, Collider2Ds,
+                    checkLayer),
+                EffectCenterType.TargetOffset => mainTarget.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds,
+                    checkLayer),
+                _ => 0
+            };
 
-            foreach (var target in targets)
-                if (IsDefendSuccess(target) && target.HasTag(GTagLib.Event_PerfectDefending))
-                    return new List<AbilitySystemComponent> { Owner };
-            return new List<AbilitySystemComponent>();
+            for (var i = 0; i < count; ++i)
+            {
+                var targetUnit = Collider2Ds[i].GetComponent<AbilitySystemComponent>();
+                if (targetUnit != null)
+                {
+                    if (IsDefendSuccess(targetUnit) && targetUnit.HasTag(GTagLib.Event_PerfectDefending))
+                        results.Add(Owner);
+                }
+            }
         }
 
 #if UNITY_EDITOR

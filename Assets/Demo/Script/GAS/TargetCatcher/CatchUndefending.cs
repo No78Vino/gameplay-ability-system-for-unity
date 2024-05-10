@@ -11,22 +11,23 @@ using UnityEngine;
 namespace Demo.Script.GAS.TargetCatcher
 {
     [Serializable]
-    public class CatchUndefending : CatchAreaBox2D
+    public class CatchUndefending : CatchAreaBase 
     {
-        public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
+        public Vector2 offset;
+        public float rotation;
+        public Vector2 size;
+        public EffectCenterType centerType;
+
+        public void Init(AbilitySystemComponent owner, LayerMask tCheckLayer, Vector2 offset, Vector2 size,
+            float rotation)
         {
-            var targets = CatchDefaultTargets(mainTarget);
-            var result = new List<AbilitySystemComponent>();
-            foreach (var target in targets)
-                if (!IsDefendSuccess(target))
-                    result.Add(target);
-            return result;
+            base.Init(owner, tCheckLayer);
+            this.offset = offset;
+            this.size = size;
+            this.rotation = rotation;
         }
 
-        protected List<AbilitySystemComponent> CatchDefaultTargets(AbilitySystemComponent mainTarget)
-        {
-            return base.CatchTargets(mainTarget);
-        }
+        protected static readonly Collider2D[] Collider2Ds = new Collider2D[32];
 
         /// <summary>
         /// 没有防御成功的判定：1.没有防御  2.防御了，但是方向错误(丢弃判断)
@@ -38,14 +39,43 @@ namespace Demo.Script.GAS.TargetCatcher
             // if (!target.HasTag(GTagLib.Event_Defending)) return false;
             // return target.transform.localScale.x * Owner.transform.localScale.x < 0;
         }
-        
+
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget,
+            List<AbilitySystemComponent> results)
+        {
+            int count = centerType switch
+            {
+                EffectCenterType.SelfOffset => Owner.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds,
+                    checkLayer),
+                EffectCenterType.WorldSpace => Physics2D.OverlapBoxNonAlloc(offset, size, rotation, Collider2Ds,
+                    checkLayer),
+                EffectCenterType.TargetOffset => mainTarget.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds,
+                    checkLayer),
+                _ => 0
+            };
+
+            for (var i = 0; i < count; ++i)
+            {
+                var targetUnit = Collider2Ds[i].GetComponent<AbilitySystemComponent>();
+                if (targetUnit != null)
+                {
+                    if (!IsDefendSuccess(targetUnit))
+                        results.Add(targetUnit);
+                }
+            }
+        }
+    
+        //         protected List<AbilitySystemComponent> CatchDefaultTargets(AbilitySystemComponent mainTarget)
+//         {
+//             return base.CatchTargets(mainTarget);
+//         }
 #if UNITY_EDITOR
-        public override void OnEditorPreview(GameObject obj)
+        public override void OnEditorPreview(GameObject previewObject)
         {
             // 使用Debug 绘制box预览
             float showTime = 1;
-            var color = Color.green;
-            var relativeTransform = AbilityTimelineEditorWindow.Instance.PreviewObject.transform;
+            Color color = Color.green;
+            var relativeTransform = previewObject.transform;
             var center = offset;
             var angle = rotation + relativeTransform.eulerAngles.z;
             switch (centerType)
@@ -67,6 +97,21 @@ namespace Demo.Script.GAS.TargetCatcher
         }
 #endif
     }
+//         public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
+//         {
+//             var targets = CatchDefaultTargets(mainTarget);
+//             var result = new List<AbilitySystemComponent>();
+//             foreach (var target in targets)
+//                 if (!IsDefendSuccess(target))
+//                     result.Add(target);
+//             return result;
+//         }
+//
+
+//
+
+//         
+
 #if UNITY_EDITOR
     public class CatchUndefendingInspector : TargetCatcherInspector<CatchUndefending>
     {

@@ -277,5 +277,17 @@ namespace GAS.Runtime
                 TagChoices = new ValueDropdownList<GameplayTag>();
             }
         }
+
+        public GrantedAbilityFromEffect[] GetGrantedAbilities()
+        {
+            var grantedAbilityList = new List<GrantedAbilityFromEffect>();
+            foreach (var grantedAbilityConfig in GrantedAbilities)
+            {
+                if (grantedAbilityConfig.AbilityAsset == null) continue;
+                grantedAbilityList.Add(new GrantedAbilityFromEffect(grantedAbilityConfig));
+            }
+
+            return grantedAbilityList.ToArray();
+        }
     }
 }
