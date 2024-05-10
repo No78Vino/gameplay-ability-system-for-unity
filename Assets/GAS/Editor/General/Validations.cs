@@ -21,7 +21,7 @@ namespace GAS.Editor.Validation
 
     public static class Validations
     {
-        private const string VariableNamePattern = @"^[a-zA-Z_][a-zA-Z0-9_]*$";
+        private const string VariableNamePattern = @"^[a-zA-Z_@][a-zA-Z0-9_]*$";
         public static readonly Regex VariableNameRegex = new Regex(VariableNamePattern);
 
         public static ValidationResult ValidateVariableName(string name)
