@@ -10,11 +10,11 @@ namespace GAS.Runtime
         private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
         private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
         private List<GameplayCueDurationalSpec> _cueDurationalSpecs = new List<GameplayCueDurationalSpec>();
-        
+
         /// <summary>
         /// The execution type of onImmunity is one shot.
         /// </summary>
-        public event Action<AbilitySystemComponent,GameplayEffectSpec> onImmunity; 
+        public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
 
         public GameplayEffectSpec(
             GameplayEffect gameplayEffect,
@@ -38,7 +38,7 @@ namespace GAS.Runtime
         }
 
         public GameplayEffect GameplayEffect { get; }
-        public long ActivationTime { get; private set; }
+        public float ActivationTime { get; private set; }
         public float Level { get; private set; }
         public AbilitySystemComponent Source { get; }
         public AbilitySystemComponent Owner { get; }
@@ -47,7 +47,7 @@ namespace GAS.Runtime
         public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
-        public GameplayEffectSpec PeriodExecution{ get; private set; }
+        public GameplayEffectSpec PeriodExecution { get; private set; }
 
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
 
@@ -56,7 +56,7 @@ namespace GAS.Runtime
             if (DurationPolicy == EffectsDurationPolicy.Infinite)
                 return -1;
 
-            return Mathf.Max(0, Duration - (GASTimer.Timestamp() - ActivationTime) / 1000f);
+            return Mathf.Max(0, Duration - (Time.time - ActivationTime));
         }
 
         public void SetLevel(float level)
@@ -68,12 +68,12 @@ namespace GAS.Runtime
         {
             Duration = duration;
         }
-        
+
         public void SetDurationPolicy(EffectsDurationPolicy durationPolicy)
         {
             DurationPolicy = durationPolicy;
         }
-        
+
         public void SetPeriodExecution(GameplayEffectSpec periodExecution)
         {
             PeriodExecution = periodExecution;
@@ -83,7 +83,7 @@ namespace GAS.Runtime
         {
             if (IsApplied) return;
             IsApplied = true;
-            if(CanRunning()) Activate();
+            if (CanRunning()) Activate();
         }
 
         public void DisApply()
@@ -97,7 +97,7 @@ namespace GAS.Runtime
         {
             if (IsActive) return;
             IsActive = true;
-            ActivationTime = GASTimer.Timestamp();
+            ActivationTime = Time.time;
             TriggerOnActivation();
         }
 
@@ -112,7 +112,7 @@ namespace GAS.Runtime
         {
             return Owner.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags);
         }
-        
+
         public bool CanRunning()
         {
             return Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);
@@ -127,7 +127,7 @@ namespace GAS.Runtime
         {
             foreach (var cue in cues) cue.ApplyFrom(this);
         }
-        
+
         private void TriggerCueOnExecute()
         {
             if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
@@ -236,7 +236,7 @@ namespace GAS.Runtime
             onImmunity?.Invoke(Owner, this);
             onImmunity = null;
         }
-        
+
         public void RemoveSelf()
         {
             Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
@@ -251,30 +251,30 @@ namespace GAS.Runtime
         {
             _valueMapWithTag[tag] = value;
         }
-        
+
         public void RegisterValue(string name, float value)
         {
             _valueMapWithName[name] = value;
         }
-        
+
         public bool UnregisterValue(GameplayTag tag)
         {
             return _valueMapWithTag.Remove(tag);
         }
-        
+
         public bool UnregisterValue(string name)
         {
             return _valueMapWithName.Remove(name);
         }
-        
+
         public float? GetMapValue(GameplayTag tag)
         {
-            return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?) null;
+            return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?)null;
         }
-        
+
         public float? GetMapValue(string name)
         {
-            return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?) null;
+            return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?)null;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace GAS.Runtime
+﻿using UnityEngine.Profiling;
+
+namespace GAS.Runtime
 {
     public abstract class TimelineAbilityT<T> : AbstractAbility<T> where T : TimelineAbilityAsset
     {
@@ -43,7 +45,9 @@
 
         protected override void AbilityTick()
         {
+            Profiler.BeginSample("TimelineAbilitySpecT<T>::AbilityTick()");
             _player.Tick();
+            Profiler.EndSample();
         }
     }
 

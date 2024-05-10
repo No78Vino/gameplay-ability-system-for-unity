@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using GAS.Runtime;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -8,9 +8,8 @@ namespace GAS.Runtime
     {
         public AbilitySystemComponent Owner;
 
-        public TargetCatcherBase()
+        protected TargetCatcherBase()
         {
-
         }
 
         public virtual void Init(AbilitySystemComponent owner)
@@ -18,7 +17,24 @@ namespace GAS.Runtime
             Owner = owner;
         }
 
-        public abstract List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget);
+        [Obsolete("请使用CatchTargetsNonAlloc方法来避免产生垃圾收集（GC）。")]
+        public List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
+        {
+            var result = new List<AbilitySystemComponent>();
+
+            CatchTargetsNonAlloc(mainTarget, result);
+
+            return result;
+        }
+
+        public void CatchTargetsNonAllocSafe(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
+        {
+            results.Clear();
+
+            CatchTargetsNonAlloc(mainTarget, results);
+        }
+
+        protected abstract void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results);
 
 #if UNITY_EDITOR
         public virtual void OnEditorPreview(GameObject obj)

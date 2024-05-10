@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine.Profiling;
+
 namespace GAS.Runtime
 {
     public enum EffectsDurationPolicy
@@ -24,11 +25,11 @@ namespace GAS.Runtime
         public readonly GameplayCueInstant[] CueOnActivate;
         public readonly GameplayCueInstant[] CueOnDeactivate;
         public readonly GameplayCueDurational[] CueDurational;
-        
+
         // Modifiers
         public readonly GameplayEffectModifier[] Modifiers;
         public readonly ExecutionCalculation[] Executions; // TODO: this should be a list of execution calculations
-        
+
         // Granted Ability
         public readonly GrantedAbilityFromEffect[] GrantedAbilities;
 
@@ -37,7 +38,10 @@ namespace GAS.Runtime
             AbilitySystemComponent owner,
             float level = 1)
         {
-            return new GameplayEffectSpec(this, creator, owner, level);
+            Profiler.BeginSample("[GC Mark] GameplayEffectSpec.CreateSpec()");
+            var spec = new GameplayEffectSpec(this, creator, owner, level);
+            Profiler.EndSample();
+            return spec;
         }
 
         public GameplayEffect(GameplayEffectAsset asset)

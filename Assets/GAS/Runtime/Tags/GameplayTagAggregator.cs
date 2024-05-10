@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.General;
+using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -27,12 +28,16 @@ namespace GAS.Runtime
 
         private void TagIsDirty(GameplayTagSet tags)
         {
+            Profiler.BeginSample($"{nameof(GameplayTagAggregator)}::TagIsDirty(GameplayTagSet)");
             if (!tags.Empty) OnTagIsDirty?.Invoke();
+            Profiler.EndSample();
         }
 
         private void TagIsDirty(GameplayTag tag)
         {
+            Profiler.BeginSample($"{nameof(GameplayTagAggregator)}::TagIsDirty(GameplayTag)");
             OnTagIsDirty?.Invoke();
+            Profiler.EndSample();
         }
 
         public void Init(GameplayTag[] tags)
@@ -43,7 +48,10 @@ namespace GAS.Runtime
 
         public void OnEnable()
         {
+            Profiler.BeginSample($"[GC Mark] {nameof(GameplayTagAggregator)}::OnEnable()");
+            // 有 GC, 无法避免
             OnTagIsDirty += _owner.GameplayEffectContainer.RefreshGameplayEffectState;
+            Profiler.EndSample();
         }
 
         public void OnDisable()
@@ -182,19 +190,33 @@ namespace GAS.Runtime
         private bool TryRemoveDynamicTag<T>(ref Dictionary<GameplayTag, List<object>> dynamicTag, T source,
             GameplayTag tag)
         {
-            if (!(source is GameplayEffectSpec) && !(source is AbilitySpec)) return false;
             var dirty = false;
-            if (dynamicTag.TryGetValue(tag, out var tagList))
+            Profiler.BeginSample("TryRemoveDynamicTag");
+
+            if (source is GameplayEffectSpec || source is AbilitySpec)
             {
-                tagList.Remove(source);
-                dirty = tagList.Count == 0;
-                if (dirty)
+                Profiler.BeginSample("[GC Mark]TryGetValue");
+                var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
+                Profiler.EndSample();
+                if (hasValue)
                 {
-                    _pool.Return(tagList);
-                    dynamicTag.Remove(tag);
+                    Profiler.BeginSample("remove source from tag list");
+                    tagList.Remove(source);
+                    Profiler.EndSample();
+
+                    dirty = tagList.Count == 0;
+                    if (dirty)
+                    {
+                        _pool.Return(tagList);
+
+                        Profiler.BeginSample("[GC Mark]remove dynamic tag");
+                        dynamicTag.Remove(tag); // 有 GC
+                        Profiler.EndSample();
+                    }
                 }
             }
 
+            Profiler.EndSample();
             return dirty;
         }
 

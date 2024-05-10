@@ -1,28 +1,32 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        [SerializeField] private AbilitySystemComponentPreset preset;
+        [SerializeField]
+        private AbilitySystemComponentPreset preset;
+
         public AbilitySystemComponentPreset Preset => preset;
-        
+
         public int Level { get; protected set; }
 
-        public GameplayEffectContainer GameplayEffectContainer { get; private set; } 
+        public GameplayEffectContainer GameplayEffectContainer { get; private set; }
 
-        public GameplayTagAggregator GameplayTagAggregator { get; private set;} 
+        public GameplayTagAggregator GameplayTagAggregator { get; private set; }
 
-        public AbilityContainer AbilityContainer { get; private set;}
+        public AbilityContainer AbilityContainer { get; private set; }
 
-        public AttributeSetContainer AttributeSetContainer { get; private set;}
+        public AttributeSetContainer AttributeSetContainer { get; private set; }
 
         private bool _ready;
+
         private void Prepare()
         {
-            if(_ready) return;
+            if (_ready) return;
             AbilityContainer = new AbilityContainer(this);
             GameplayEffectContainer = new GameplayEffectContainer(this);
             AttributeSetContainer = new AttributeSetContainer(this);
@@ -37,7 +41,7 @@ namespace GAS.Runtime
             ClearGameplayEffects();
             GameplayTagAggregator?.OnDisable();
         }
-        
+
         private void Awake()
         {
             Prepare();
@@ -45,9 +49,11 @@ namespace GAS.Runtime
 
         private void OnEnable()
         {
+            Profiler.BeginSample($"{nameof(AbilitySystemComponent)}::OnEnable()");
             Prepare();
             GameplayAbilitySystem.GAS.Register(this);
             GameplayTagAggregator?.OnEnable();
+            Profiler.EndSample();
         }
 
         private void OnDisable()
@@ -60,17 +66,17 @@ namespace GAS.Runtime
         {
             preset = ascPreset;
         }
-        
-        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities,int level)
+
+        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities, int level)
         {
             Prepare();
             SetLevel(level);
             if (baseTags != null) GameplayTagAggregator.Init(baseTags);
-            
+
             if (attrSetTypes != null)
                 foreach (var attrSetType in attrSetTypes)
                     AttributeSetContainer.AddAttributeSet(attrSetType);
-            
+
             if (baseAbilities != null)
                 foreach (var info in baseAbilities)
                     if (info != null)
@@ -84,7 +90,7 @@ namespace GAS.Runtime
         {
             Level = level;
         }
-        
+
         public bool HasTag(GameplayTag gameplayTag)
         {
             return GameplayTagAggregator.HasTag(gameplayTag);
@@ -110,16 +116,16 @@ namespace GAS.Runtime
             GameplayTagAggregator.RemoveFixedTag(tags);
         }
 
-        public void AddFixedTag(GameplayTag tag)
+        public void AddFixedTag(GameplayTag gameplayTag)
         {
-            GameplayTagAggregator.AddFixedTag(tag);
+            GameplayTagAggregator.AddFixedTag(gameplayTag);
         }
 
-        public void RemoveFixedTag(GameplayTag tag)
+        public void RemoveFixedTag(GameplayTag gameplayTag)
         {
-            GameplayTagAggregator.RemoveFixedTag(tag);
+            GameplayTagAggregator.RemoveFixedTag(gameplayTag);
         }
-        
+
         public void RemoveGameplayEffect(GameplayEffectSpec spec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
@@ -135,9 +141,24 @@ namespace GAS.Runtime
                 return null;
             }
 #endif
-            return gameplayEffect.CanApplyTo(target)
-                ? target.AddGameplayEffect(gameplayEffect.CreateSpec(this, target, Level))
-                : null;
+            Profiler.BeginSample("ApplyGameplayEffectTo()");
+
+            Profiler.BeginSample("gameplayEffect.CanApplyTo()");
+            var canApply = gameplayEffect.CanApplyTo(target);
+            Profiler.EndSample();
+
+            GameplayEffectSpec applyGameplayEffectTo = null;
+            if (canApply)
+            {
+                var spec = gameplayEffect.CreateSpec(this, target, Level);
+
+                Profiler.BeginSample("AddGameplayEffect()");
+                applyGameplayEffectTo = target.AddGameplayEffect(spec);
+                Profiler.EndSample();
+            }
+
+            Profiler.EndSample();
+            return applyGameplayEffectTo;
         }
 
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
@@ -170,8 +191,10 @@ namespace GAS.Runtime
 
         public void Tick()
         {
+            Profiler.BeginSample($"{nameof(AbilitySystemComponent)}::Tick()");
             AbilityContainer.Tick();
             GameplayEffectContainer.Tick();
+            Profiler.EndSample();
         }
 
         public Dictionary<string, float> DataSnapshot()
@@ -188,7 +211,7 @@ namespace GAS.Runtime
         {
             AbilityContainer.EndAbility(abilityName);
         }
-        
+
         public void TryCancelAbility(string abilityName)
         {
             AbilityContainer.CancelAbility(abilityName);
@@ -213,6 +236,8 @@ namespace GAS.Runtime
                     case GEOperation.Override:
                         baseValue = magnitude;
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 AttributeSetContainer.Sets[modifier.AttributeSetName]
@@ -230,7 +255,7 @@ namespace GAS.Runtime
             AttributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
             return attrSet;
         }
-        
+
         public void ClearGameplayEffect()
         {
             // _abilityContainer = new AbilityContainer(this);

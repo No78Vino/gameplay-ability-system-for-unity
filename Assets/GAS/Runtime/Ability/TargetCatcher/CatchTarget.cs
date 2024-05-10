@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-using GAS.Runtime;
 
 namespace GAS.Runtime
 {
-    public class CatchTarget : TargetCatcherBase
+    public sealed class CatchTarget : TargetCatcherBase
     {
-        public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent target)
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
         {
-            return new List<AbilitySystemComponent>() { target };
+            results.Add(mainTarget);
         }
     }
 }

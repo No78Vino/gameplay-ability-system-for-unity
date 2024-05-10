@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.Linq;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using GAS.Runtime;
@@ -12,18 +14,33 @@ namespace GAS.Editor
 
     public static class GTagLibGenerator
     {
-        public static void Gen()
+        public static void Gen(string filePath = null)
         {
             var asset = GameplayTagsAsset.LoadOrCreate();
-            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath =
-                $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_LIB_CSHARP_SCRIPT_NAME}";
             var tags = asset.Tags;
             GenerateGTagLib(tags, filePath);
         }
 
-        private static void GenerateGTagLib(List<GameplayTag> tags, string filePath)
+        public static string DefaultFilePath
         {
+            get
+            {
+                string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+                var filePath = $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_TAG_LIB_CSHARP_SCRIPT_NAME}";
+                return filePath;
+            }
+        }
+
+        // We expose the method as public to facilitate support for extension tools in generating…
+        public static void GenerateGTagLib(IEnumerable<GameplayTag> gameplayTags, string filePath = null)
+        {
+            var gameplayTagNamesWithIdentifier = gameplayTags
+                .OrderBy(x => x.Name)
+                .Select(x => new Tuple<string, string>(x.Name, MakeValidIdentifier(x.Name)))
+                .ToArray();
+
+            filePath ??= DefaultFilePath;
+
             using var writer = new IndentedWriter(new StreamWriter(filePath));
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("//// This is a generated file. ////");
@@ -45,11 +62,10 @@ namespace GAS.Editor
                 writer.Indent++;
                 {
                     // Generate members for each tag
-                    foreach (var tag in tags)
+                    foreach (var tuple in gameplayTagNamesWithIdentifier)
                     {
-                        var validName = MakeValidIdentifier(tag.Name);
                         writer.WriteLine(
-                            $"public static GameplayTag {validName} {{ get; }} = new GameplayTag(\"{tag.Name}\");");
+                            $"public static GameplayTag {tuple.Item2} {{ get; }} = new GameplayTag(\"{tuple.Item1}\");");
                     }
 
                     writer.WriteLine("");
@@ -59,10 +75,9 @@ namespace GAS.Editor
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
-                        foreach (var tag in tags)
+                        foreach (var tuple in gameplayTagNamesWithIdentifier)
                         {
-                            var validName = MakeValidIdentifier(tag.Name);
-                            writer.WriteLine($"[\"{tag.Name}\"] = {validName},");
+                            writer.WriteLine($"[\"{tuple.Item1}\"] = {tuple.Item2},");
                         }
                     }
                     writer.Indent--;
