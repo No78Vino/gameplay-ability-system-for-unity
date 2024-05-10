@@ -40,7 +40,6 @@ namespace GAS.Runtime
 
         private readonly List<RuntimeDurationCueClip> _cacheDurationalCueTrack = new();
 
-
         private readonly List<InstantCueMarkEvent> _cacheInstantCues = new();
 
         private readonly List<RuntimeTaskMark> _cacheInstantTasks = new();
@@ -69,83 +68,135 @@ namespace GAS.Runtime
 
         private void Cache()
         {
+            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Tick()");
+            {
+                Cache_InstantCues();
+                Cache_ReleaseGameplayEffects();
+                Cache_InstantTasks();
+                Cache_DurationalGameplayCues();
+                Cache_BuffGameplayEffects();
+                Cache_OngoingTasks();
+            }
+            Profiler.EndSample();
+        }
+
+        private void Cache_InstantCues()
+        {
             _cacheInstantCues.Clear();
             foreach (var trackData in AbilityAsset.InstantCues)
+            {
                 _cacheInstantCues.AddRange(trackData.markEvents);
-            _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+            }
 
+            _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+        }
+
+        private void Cache_ReleaseGameplayEffects()
+        {
             _cacheReleaseGameplayEffect.Clear();
             foreach (var trackData in AbilityAsset.ReleaseGameplayEffect)
+            {
                 _cacheReleaseGameplayEffect.AddRange(trackData.markEvents);
+            }
+
             _cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
-            for (var i = 0; i < _cacheReleaseGameplayEffect.Count; i++)
-                _cacheReleaseGameplayEffect[i].CacheTargetCatcher();
-
-            _cacheInstantTasks.Clear();
-            foreach (var trackData in AbilityAsset.InstantTasks)
-            foreach (var markEvent in trackData.markEvents)
-            foreach (var taskData in markEvent.InstantTasks)
+            foreach (var releaseGameplayEffectMarkEvent in _cacheReleaseGameplayEffect)
             {
-                var runtimeTaskMark = new RuntimeTaskMark
-                {
-                    startFrame = markEvent.startFrame,
-                    task = taskData.CreateTask(_abilitySpec)
-                };
-                _cacheInstantTasks.Add(runtimeTaskMark);
-            }
-
-            _cacheInstantTasks.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
-
-            _cacheDurationalCueTrack.Clear();
-            foreach (var track in AbilityAsset.DurationalCues)
-            foreach (var clipEvent in track.clipEvents)
-            {
-                var cueSpec = clipEvent.cue.ApplyFrom(_abilitySpec);
-                if (cueSpec == null) continue;
-                var runtimeDurationCueClip = new RuntimeDurationCueClip
-                {
-                    startFrame = clipEvent.startFrame,
-                    endFrame = clipEvent.EndFrame,
-                    cueSpec = cueSpec
-                };
-                _cacheDurationalCueTrack.Add(runtimeDurationCueClip);
-            }
-
-            _cacheBuffGameplayEffectTrack.Clear();
-            foreach (var track in AbilityAsset.BuffGameplayEffects)
-            foreach (var clipEvent in track.clipEvents)
-                // 只有持续型的GameplayEffect可视作buff
-                if (clipEvent.gameplayEffect.DurationPolicy is EffectsDurationPolicy.Duration
-                    or EffectsDurationPolicy.Infinite)
-                {
-                    var runtimeBuffClip = new RuntimeBuffClip
-                    {
-                        startFrame = clipEvent.startFrame,
-                        endFrame = clipEvent.EndFrame,
-                        buff = new GameplayEffect(clipEvent.gameplayEffect),
-                        buffSpec = null
-                    };
-                    _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
-                }
-
-            _cacheOngoingTaskTrack.Clear();
-            foreach (var track in AbilityAsset.OngoingTasks)
-            foreach (var clip in track.clipEvents)
-            {
-                var runtimeTaskClip = new RuntimeTaskClip
-                {
-                    startFrame = clip.startFrame,
-                    endFrame = clip.EndFrame,
-                    task = clip.ongoingTask.CreateTask(_abilitySpec)
-                };
-                _cacheOngoingTaskTrack.Add(runtimeTaskClip);
+                releaseGameplayEffectMarkEvent.CacheTargetCatcher();
             }
         }
 
+        private void Cache_InstantTasks()
+        {
+            _cacheInstantTasks.Clear();
+            foreach (var trackData in AbilityAsset.InstantTasks)
+            {
+                foreach (var markEvent in trackData.markEvents)
+                {
+                    foreach (var taskData in markEvent.InstantTasks)
+                    {
+                        var runtimeTaskMark = new RuntimeTaskMark
+                        {
+                            startFrame = markEvent.startFrame,
+                            task = taskData.CreateTask(_abilitySpec)
+                        };
+                        _cacheInstantTasks.Add(runtimeTaskMark);
+                    }
+                }
+            }
+
+            _cacheInstantTasks.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+        }
+
+        private void Cache_DurationalGameplayCues()
+        {
+            _cacheDurationalCueTrack.Clear();
+            foreach (var track in AbilityAsset.DurationalCues)
+            {
+                foreach (var clipEvent in track.clipEvents)
+                {
+                    var cueSpec = clipEvent.cue.ApplyFrom(_abilitySpec);
+                    if (cueSpec == null) continue;
+                    var runtimeDurationCueClip = new RuntimeDurationCueClip
+                    {
+                        startFrame = clipEvent.startFrame,
+                        endFrame = clipEvent.EndFrame,
+                        cueSpec = cueSpec
+                    };
+                    _cacheDurationalCueTrack.Add(runtimeDurationCueClip);
+                }
+            }
+        }
+
+        private void Cache_BuffGameplayEffects()
+        {
+            _cacheBuffGameplayEffectTrack.Clear();
+            foreach (var track in AbilityAsset.BuffGameplayEffects)
+            {
+                foreach (var clipEvent in track.clipEvents)
+                {
+                    // 只有持续型的GameplayEffect可视作buff
+                    if (clipEvent.gameplayEffect.DurationPolicy is EffectsDurationPolicy.Duration
+                        or EffectsDurationPolicy.Infinite)
+                    {
+                        var runtimeBuffClip = new RuntimeBuffClip
+                        {
+                            startFrame = clipEvent.startFrame,
+                            endFrame = clipEvent.EndFrame,
+                            buff = new GameplayEffect(clipEvent.gameplayEffect),
+                            buffSpec = null
+                        };
+                        _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
+                    }
+                }
+            }
+        }
+
+        private void Cache_OngoingTasks()
+        {
+            _cacheOngoingTaskTrack.Clear();
+            foreach (var track in AbilityAsset.OngoingTasks)
+            {
+                foreach (var clip in track.clipEvents)
+                {
+                    var runtimeTaskClip = new RuntimeTaskClip
+                    {
+                        startFrame = clip.startFrame,
+                        endFrame = clip.EndFrame,
+                        task = clip.ongoingTask.CreateTask(_abilitySpec)
+                    };
+                    _cacheOngoingTaskTrack.Add(runtimeTaskClip);
+                }
+            }
+        }
+
+
         private void Prepare()
         {
-            for (var i = 0; i < _cacheBuffGameplayEffectTrack.Count; i++)
-                _cacheBuffGameplayEffectTrack[i].buffSpec = null;
+            foreach (var runtimeBuffClip in _cacheBuffGameplayEffectTrack)
+            {
+                runtimeBuffClip.buffSpec = null;
+            }
         }
 
         public void Play()
@@ -160,13 +211,21 @@ namespace GAS.Runtime
         {
             if (!IsPlaying) return;
 
-            foreach (var clip in _cacheDurationalCueTrack) clip.cueSpec.OnRemove();
+            foreach (var clip in _cacheDurationalCueTrack)
+            {
+                clip.cueSpec.OnRemove();
+            }
 
             foreach (var clip in _cacheBuffGameplayEffectTrack)
+            {
                 if (clip.buffSpec != null)
                     _abilitySpec.Owner.RemoveGameplayEffect(clip.buffSpec);
+            }
 
-            foreach (var clip in _cacheOngoingTaskTrack) clip.task.OnEnd(clip.endFrame);
+            foreach (var clip in _cacheOngoingTaskTrack)
+            {
+                clip.task.OnEnd(clip.endFrame);
+            }
 
             IsPlaying = false;
         }
@@ -174,199 +233,224 @@ namespace GAS.Runtime
         public void Tick()
         {
             if (!IsPlaying) return;
-            Profiler.BeginSample($"TimelineAbilityPlayer::Tick()");
 
-            _playTotalTime += Time.deltaTime;
-            var targetFrame = (int)(_playTotalTime * FrameRate);
-
-            // 追帧
-            while (_currentFrame < targetFrame)
+            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::Tick()");
             {
-                _currentFrame++;
-                TickFrame(_currentFrame);
-            }
+                _playTotalTime += Time.deltaTime;
+                var targetFrame = (int)(_playTotalTime * FrameRate);
 
-            if (_currentFrame >= FrameCount)
-            {
-                OnPlayEnd();
-            }
+                // 追帧
+                while (_currentFrame < targetFrame)
+                {
+                    _currentFrame++;
+                    TickFrame(_currentFrame);
+                }
 
+                if (_currentFrame >= FrameCount)
+                {
+                    OnPlayEnd();
+                }
+            }
             Profiler.EndSample();
         }
 
         /// <summary>
-        ///     播放结束
+        /// 播放结束
         /// </summary>
         private void OnPlayEnd()
         {
-            Profiler.BeginSample("OnPlayEnd()");
-            IsPlaying = false;
+            Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::OnPlayEnd()");
+            {
+                IsPlaying = false;
 
-            if (!AbilityAsset.manualEndAbility)
-                _abilitySpec.TryEndAbility();
+                if (!AbilityAsset.manualEndAbility)
+                    _abilitySpec.TryEndAbility();
+            }
             Profiler.EndSample();
         }
 
         /// <summary>
-        ///     当前帧的事件
+        /// 当前帧的事件
         /// </summary>
         /// <param name="frame"></param>
         private void TickFrame(int frame)
         {
             Profiler.BeginSample($"{nameof(TimelineAbilityPlayer<T>)}::TickFrame()");
-
-            // Cue 即时
-            Profiler.BeginSample($"instantCues");
-            foreach (var cueMark in _cacheInstantCues)
             {
-                if (frame == cueMark.startFrame)
-                {
-                    foreach (var cue in cueMark.cues)
-                    {
-                        Profiler.BeginSample("cue.ApplyFrom()");
-                        cue.ApplyFrom(_abilitySpec);
-                        Profiler.EndSample();
-                    }
-                }
+                TickFrame_InstantGameplayCues(frame);
+                TickFrame_ReleaseGameplayEffects(frame);
+                TickFrame_InstantTasks(frame);
+                TickFrame_DurationalGameplayCues(frame);
+                TickFrame_BuffGameplayEffects(frame);
+                TickFrame_OngoingTasks(frame);
             }
-
             Profiler.EndSample();
+        }
 
-
-            // 释放型GameplayEffect
-            Profiler.BeginSample($"releaseGameplayEffect");
-            foreach (var mark in _cacheReleaseGameplayEffect)
+        private void TickFrame_InstantGameplayCues(int frame)
+        {
+            Profiler.BeginSample($"TickFrame_InstantGameplayCues");
             {
-                if (frame == mark.startFrame)
+                foreach (var cueMark in _cacheInstantCues)
                 {
-                    var catcher = mark.TargetCatcher;
-                    catcher.Init(_abilitySpec.Owner);
-
-                    Profiler.BeginSample("catcher.CatchTargets()");
-                    catcher.CatchTargetsNonAllocSafe(_abilitySpec.Target, _targets);
-                    Profiler.EndSample();
-
-                    foreach (var asc in _targets)
+                    if (frame == cueMark.startFrame)
                     {
-                        foreach (var effect in mark.gameplayEffectAssets)
+                        foreach (var cue in cueMark.cues)
                         {
-                            Profiler.BeginSample("[GC Mark] new GameplayEffect()");
-                            var ge = new GameplayEffect(effect);
-                            Profiler.EndSample();
-
-                            Profiler.BeginSample("releaseGameplayEffect.ApplyGameplayEffectTo()");
-                            _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
+                            Profiler.BeginSample("cue.ApplyFrom()");
+                            cue.ApplyFrom(_abilitySpec);
                             Profiler.EndSample();
                         }
                     }
-                    
-                    _targets.Clear();
                 }
             }
-
             Profiler.EndSample();
+        }
 
-
-            // Instant Task
-            Profiler.BeginSample($"instantTasks");
-            foreach (var instantTask in _cacheInstantTasks)
+        private void TickFrame_ReleaseGameplayEffects(int frame)
+        {
+            Profiler.BeginSample($"TickFrame_ReleaseGameplayEffects");
             {
-                if (frame == instantTask.startFrame)
+                foreach (var mark in _cacheReleaseGameplayEffect)
                 {
-                    Profiler.BeginSample("instantTask.OnExecute()");
-                    instantTask.task.OnExecute();
-                    Profiler.EndSample();
-                }
-            }
-
-            Profiler.EndSample();
-
-
-            // Cue 持续
-            Profiler.BeginSample("durationalCues");
-            foreach (var cueClip in _cacheDurationalCueTrack)
-            {
-                if (frame == cueClip.startFrame)
-                {
-                    Profiler.BeginSample("durationalCues.OnAdd()");
-                    cueClip.cueSpec.OnAdd();
-                    Profiler.EndSample();
-                }
-
-                if (frame >= cueClip.startFrame && frame <= cueClip.endFrame)
-                {
-                    Profiler.BeginSample("durationalCues.OnTick()");
-                    cueClip.cueSpec.OnTick();
-                    Profiler.EndSample();
-                }
-
-                if (frame == cueClip.endFrame)
-                {
-                    Profiler.BeginSample("durationalCues.OnRemove()");
-                    cueClip.cueSpec.OnRemove();
-                    Profiler.EndSample();
-                }
-            }
-
-            Profiler.EndSample();
-
-            // Buff型GameplayEffect
-            // buff持续时间以Timeline配置时间为准（执行策略全部改为Infinite）
-            Profiler.BeginSample("buffGameplayEffect");
-            foreach (var buffClip in _cacheBuffGameplayEffectTrack)
-            {
-                if (frame == buffClip.startFrame)
-                {
-                    Profiler.BeginSample("buffGameplayEffect.Start");
-                    var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
-                    buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
-                    buffClip.buffSpec = buffSpec;
-                    Profiler.EndSample();
-                }
-
-                if (frame == buffClip.endFrame)
-                {
-                    if (buffClip.buffSpec != null)
+                    if (frame == mark.startFrame)
                     {
-                        Profiler.BeginSample("buffGameplayEffect.End");
-                        _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
+                        var catcher = mark.TargetCatcher;
+                        catcher.Init(_abilitySpec.Owner);
+
+                        Profiler.BeginSample("catcher.CatchTargets()");
+                        catcher.CatchTargetsNonAllocSafe(_abilitySpec.Target, _targets);
+                        Profiler.EndSample();
+
+                        foreach (var asc in _targets)
+                        {
+                            foreach (var gea in mark.gameplayEffectAssets)
+                            {
+                                Profiler.BeginSample("[GC Mark] new GameplayEffect()");
+                                var ge = new GameplayEffect(gea);
+                                Profiler.EndSample();
+
+                                Profiler.BeginSample("releaseGameplayEffect.ApplyGameplayEffectTo()");
+                                _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
+                                Profiler.EndSample();
+                            }
+                        }
+
+                        _targets.Clear();
+                    }
+                }
+            }
+            Profiler.EndSample();
+        }
+
+        private void TickFrame_InstantTasks(int frame)
+        {
+            Profiler.BeginSample($"TickFrame_InstantTasks");
+            {
+                foreach (var instantTask in _cacheInstantTasks)
+                {
+                    if (frame == instantTask.startFrame)
+                    {
+                        Profiler.BeginSample("instantTask.OnExecute()");
+                        instantTask.task.OnExecute();
+                        Profiler.EndSample();
+                    }
+                }
+            }
+            Profiler.EndSample();
+        }
+
+        private void TickFrame_DurationalGameplayCues(int frame)
+        {
+            Profiler.BeginSample("TickFrame_DurationalGameplayCues");
+            {
+                foreach (var cueClip in _cacheDurationalCueTrack)
+                {
+                    if (frame == cueClip.startFrame)
+                    {
+                        Profiler.BeginSample("durationalCues.OnAdd()");
+                        cueClip.cueSpec.OnAdd();
                         Profiler.EndSample();
                     }
 
-                    buffClip.buffSpec = null;
+                    if (frame >= cueClip.startFrame && frame <= cueClip.endFrame)
+                    {
+                        Profiler.BeginSample("durationalCues.OnTick()");
+                        cueClip.cueSpec.OnTick();
+                        Profiler.EndSample();
+                    }
+
+                    if (frame == cueClip.endFrame)
+                    {
+                        Profiler.BeginSample("durationalCues.OnRemove()");
+                        cueClip.cueSpec.OnRemove();
+                        Profiler.EndSample();
+                    }
                 }
             }
-
             Profiler.EndSample();
+        }
 
-            // Ongoing Task
-            Profiler.BeginSample("ongoingTasks");
-            foreach (var taskClip in _cacheOngoingTaskTrack)
+        private void TickFrame_BuffGameplayEffects(int frame)
+        {
+            // buff持续时间以Timeline配置时间为准（执行策略全部改为Infinite）
+            Profiler.BeginSample("TickFrame_BuffGameplayEffects");
             {
-                if (frame == taskClip.startFrame)
+                foreach (var buffClip in _cacheBuffGameplayEffectTrack)
                 {
-                    Profiler.BeginSample("Ongoing Task.OnStart()");
-                    taskClip.task.OnStart(frame);
-                    Profiler.EndSample();
-                }
+                    if (frame == buffClip.startFrame)
+                    {
+                        Profiler.BeginSample("buffGameplayEffect.Start");
+                        var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
+                        buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
+                        buffClip.buffSpec = buffSpec;
+                        Profiler.EndSample();
+                    }
 
-                if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
-                {
-                    Profiler.BeginSample("Ongoing Task.OnTick()");
-                    taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
-                    Profiler.EndSample();
-                }
+                    if (frame == buffClip.endFrame)
+                    {
+                        if (buffClip.buffSpec != null)
+                        {
+                            Profiler.BeginSample("buffGameplayEffect.End");
+                            _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
+                            Profiler.EndSample();
+                        }
 
-                if (frame == taskClip.endFrame)
-                {
-                    Profiler.BeginSample("Ongoing Task.OnEnd()");
-                    taskClip.task.OnEnd(frame);
-                    Profiler.EndSample();
+                        buffClip.buffSpec = null;
+                    }
                 }
             }
-
             Profiler.EndSample();
+        }
 
+        private void TickFrame_OngoingTasks(int frame)
+        {
+            Profiler.BeginSample("TickFrame_OngoingTasks");
+            {
+                foreach (var taskClip in _cacheOngoingTaskTrack)
+                {
+                    if (frame == taskClip.startFrame)
+                    {
+                        Profiler.BeginSample("Ongoing Task.OnStart()");
+                        taskClip.task.OnStart(frame);
+                        Profiler.EndSample();
+                    }
+
+                    if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
+                    {
+                        Profiler.BeginSample("Ongoing Task.OnTick()");
+                        taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
+                        Profiler.EndSample();
+                    }
+
+                    if (frame == taskClip.endFrame)
+                    {
+                        Profiler.BeginSample("Ongoing Task.OnEnd()");
+                        taskClip.task.OnEnd(frame);
+                        Profiler.EndSample();
+                    }
+                }
+            }
             Profiler.EndSample();
         }
     }
