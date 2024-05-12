@@ -331,9 +331,9 @@ GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义
   - PeriodExecution
     - 周期执行的GameplayEffect，只有DurationPolicy为Duration或者Infinite，且Period>0时有效。每隔Period时间执行一次PeriodExecution。
       _**PeriodExecution禁止为空!!**_PeriodExecution原则上只允许是Instant类型的GameplayEffect。但如果根据开发者需求，也可以使用其他类型的GameplayEffect。
-  - GrantedAbilities(**该功能目前尚未生效**)
+  - GrantedAbilities
     - 授予的能力，只有DurationPolicy为Duration或者Infinite时有效。在GameplayEffect生命周期内，GameplayEffect的持有者会被授予这些能力。
-        GameplayEffect被移除时，这些能力也会被移除。
+        GameplayEffect被移除时，这些能力也会被移除。具体详见[GrantedAbility](#28c-granted-ability-from-gameplayeffect-来自游戏效果授予的能力)
   - Modifiers: 属性修改器。详见[MMC](#25-modifiermagnitudecalculation)
 - Tags：标签。Tag具有非常重要的作用，合适的tag可以处理GameplayEffect之间复杂的关系。
   - | Tag类型 | 作用                                                                                   |
@@ -536,6 +536,27 @@ TimelineAbility的配置可能还满足不了一些设计时，程序开发人�
 > 特别是在TargetCatcher，AbilityTask的自定义上，还是很可能遇到这个问题。
 > 因为TargetCatcher和AbilityTask的持续化存储是以JsonData的格式，ScriptableObject类型参数的Json存储是存在GUID不匹配问题的。
 > 所以，TargetCatcher和AbilityTask的参数中，不建议出现ScriptableObject类型的参数。
+
+#### 2.8.c Granted Ability From GameplayEffect 来自游戏效果授予的能力
+能力不仅仅可以由AbilitySystemComponent直接授予，还可以通过GE来授予,甚至是GE来全权控制。
+
+我们为了更通俗的去理解BUFF的概念，就必须允许GE可以实现自由的逻辑自定义。但是GAS本身的GE仅仅是遵循体系内固定逻辑，不存在开发者自定义GE逻辑。
+> 为了更好理解这种情况，举个例子：
+> 
+> 在一个RPG游戏中，有一个名为“亡灵收割”的BUFF。
+> “亡灵收割”效果为：BUFF持有者，在x米范围内，每当有单位死亡便获得y点生命值。
+> 
+> 一般的做法可能是把“亡灵收割”视作一个被动技能（Ability）,然后根据设计需求动态的添加/移除/激活/失活“亡灵收割”效果。
+> 可能有些设计者为了使之更符合BUFF的逻辑，会通过GE的Add/Remove/Active/Deactive回调，来关联“亡灵收割”添加/移除/激活/失活。
+
+上述例子的这个做法当然是没问题的，而且十分合理。 
+而在EX-GAS中，我为了减少Ability管理的事件注册这个繁琐步骤。我对GE的逻辑进行了优化，兼并了这一设计方案。
+做法就是在GE中，添加了GrantedAbility变量。
+GrantedAbility有3个参数：
+- Ability：授予的能力（数据）
+- Passive：是否被动的完全受GE的生命周期控制：Ability的Add/Remove/Active/Deactive和GE的期完全一致。
+- 当 Passive = false时：
+  - ActiveWhenEffectActivated：是否在GE被激活时，激活Ability
 
 ---
 ### 2.9 AbilitySystemComponent
