@@ -25,6 +25,10 @@ namespace GAS.Runtime
         [BoxGroup]
         [LabelText(GASTextDefine.CUE_VFX_SCALE)]
         public Vector3 Scale = Vector3.one;
+        
+        [BoxGroup]
+        [LabelText(GASTextDefine.CUE_VFX_ACTIVE_WHEN_ADDED)]
+        public bool ActiveWhenAdded = false;
 
         public override GameplayCueDurationalSpec CreateSpec(GameplayCueParameters parameters)
         {
@@ -93,7 +97,7 @@ namespace GAS.Runtime
                 _vfxInstance.transform.localPosition = cue.Offset;
                 _vfxInstance.transform.localEulerAngles = cue.Rotation;
                 _vfxInstance.transform.localScale = cue.Scale;
-                _vfxInstance.SetActive(false);
+                _vfxInstance.SetActive(cue.ActiveWhenAdded);
             }
             else
             {

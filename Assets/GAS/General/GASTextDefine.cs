@@ -150,6 +150,7 @@
         public const string CUE_VFX_OFFSET = "特效偏移";
         public const string CUE_VFX_ROTATION = "特效旋转";
         public const string CUE_VFX_SCALE = "特效缩放";
+        public const string CUE_VFX_ACTIVE_WHEN_ADDED = "是否在添加时就被激活";
 
         #endregion
     }

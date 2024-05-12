@@ -38,7 +38,6 @@ namespace GAS.Runtime
         public GameplayTag[] RequiredTags;
         
         [VerticalGroup(TopGroup_H_Right)]
-        [HideLabel]
         [ListDrawerSettings(Expanded = true)]
         [ValueDropdown("TagChoices",HideChildProperties = true)]
         public GameplayTag[] ImmunityTags;
