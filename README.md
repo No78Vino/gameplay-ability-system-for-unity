@@ -554,9 +554,12 @@ TimelineAbility的配置可能还满足不了一些设计时，程序开发人�
 做法就是在GE中，添加了GrantedAbility变量。
 GrantedAbility有3个参数：
 - Ability：授予的能力（数据）
-- Passive：是否被动的完全受GE的生命周期控制：Ability的Add/Remove/Active/Deactive和GE的期完全一致。
-- 当 Passive = false时：
-  - ActiveWhenEffectActivated：是否在GE被激活时，激活Ability
+- Passive：是否被动的受GE的生命周期控制
+- ForcedByEffect: 是否被GE强制控制。这个参数只有Passive=true时才生效。
+
+下图直观的解释了GrantedAbility的3个参数的作用，以及不同情况的Granted Ability的处理情况：
+
+
 
 ---
 ### 2.9 AbilitySystemComponent
