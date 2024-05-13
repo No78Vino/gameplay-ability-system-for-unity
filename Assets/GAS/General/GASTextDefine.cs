@@ -98,8 +98,11 @@
         
         public const string LABEL_GRANT_ABILITY = "授予的能力";
         public const string LABEL_GRANT_ABILITY_PASSIVE = "被动激活";
+        public const string LABEL_GRANT_ABILITY_FORCE = "是否被GE强制控制";
         public const string TIP_GRANT_ABILITY_PASSIVE = "true = 能力激活周期与GE同步，一般可用于被动Buff的实现; " +
-                                                        "false = 单纯赐予宿主一个技能，赐予的技能需要自己激活";
+                                                        "false = 单纯赐予宿主一个技能，赐予的技能需要自己激活";        
+        public const string TIP_GRANT_ABILITY_FORCE = "true = GE获得能力的绝对控制权;" +
+                                                      "false = GE和ASC对能力进行混合控制";
         
         
         #endregion

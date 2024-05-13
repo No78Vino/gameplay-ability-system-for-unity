@@ -169,12 +169,16 @@ namespace GAS.Runtime
         public AbilitySpec GrantAbility(AbstractAbility ability)
         {
             AbilityContainer.GrantAbility(ability);
+            // GE的Granted Ability的Grab处理
+            GameplayEffectContainer.TryGrabGrantedAbility(ability.Name);
             return AbilityContainer.AbilitySpecs()[ability.Name];
         }
 
         public void RemoveAbility(string abilityName)
         {
-            AbilityContainer.RemoveAbility(abilityName);
+            // GE的Granted Ability的UnGrab处理
+            if(!GameplayEffectContainer.TryUngrabGrantedAbility(abilityName))
+                AbilityContainer.RemoveAbility(abilityName);
         }
 
         public float? GetAttributeCurrentValue(string setName, string attributeShortName)

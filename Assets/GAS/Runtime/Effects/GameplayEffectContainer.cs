@@ -9,7 +9,7 @@ namespace GAS.Runtime
         private readonly AbilitySystemComponent _owner;
         private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly List<GameplayEffectSpec> _cachedGameplayEffectSpecs = new List<GameplayEffectSpec>();
-
+        
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
@@ -21,11 +21,9 @@ namespace GAS.Runtime
         {
             return _gameplayEffectSpecs;
         }
-
+        
         public void Tick()
         {
-            Profiler.BeginSample($"{nameof(GameplayEffectContainer)}::Tick()");
-
             _cachedGameplayEffectSpecs.AddRange(_gameplayEffectSpecs);
 
             foreach (var gameplayEffectSpec in _cachedGameplayEffectSpecs)
@@ -39,8 +37,6 @@ namespace GAS.Runtime
             }
 
             _cachedGameplayEffectSpecs.Clear();
-
-            Profiler.EndSample();
         }
 
         public void RegisterOnGameplayEffectContainerIsDirty(Action action)
@@ -83,31 +79,22 @@ namespace GAS.Runtime
         /// </returns>
         public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
         {
-            Profiler.BeginSample($"{nameof(GameplayEffectContainer)}::AddGameplayEffectSpec()");
             // Check Immunity Tags
             if (_owner.HasAnyTags(spec.GameplayEffect.TagContainer.ApplicationImmunityTags))
             {
-                Profiler.BeginSample("TriggerOnImmunity()");
                 spec.TriggerOnImmunity();
-                Profiler.EndSample();
-                Profiler.EndSample();
                 return false;
             }
 
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
-                Profiler.BeginSample("TriggerOnExecute()");
                 spec.TriggerOnExecute();
-                Profiler.EndSample();
-                Profiler.EndSample();
                 return false;
             }
 
             _gameplayEffectSpecs.Add(spec);
 
-            Profiler.BeginSample("TriggerOnAdd()");
             spec.TriggerOnAdd();
-            Profiler.EndSample();
 
             var canApply = spec.CanApply();
             if (canApply)
@@ -115,12 +102,7 @@ namespace GAS.Runtime
             else
                 spec.DisApply();
 
-            Profiler.BeginSample("OnGameplayEffectContainerIsDirty.Invoke()");
             OnGameplayEffectContainerIsDirty?.Invoke();
-            Profiler.EndSample();
-
-            Profiler.EndSample();
-
             return canApply;
         }
 
@@ -197,6 +179,31 @@ namespace GAS.Runtime
             _gameplayEffectSpecs.Clear();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
+        }
+        
+        public void TryGrabGrantedAbility(string abilityName)
+        {
+            foreach (var ge in _gameplayEffectSpecs)
+                foreach (var grantedAbility in ge.GrantedAbilitySpec)
+                {
+                    if (abilityName == grantedAbility.AbilityName)
+                    {
+                        grantedAbility.Grab();
+                        return;
+                    }
+                }
+        }
+        
+        public bool TryUngrabGrantedAbility(string abilityName)
+        {
+            foreach (var ge in _gameplayEffectSpecs)
+                foreach (var grantedAbility in ge.GrantedAbilitySpec)
+                    if (abilityName == grantedAbility.AbilityName)
+                    {
+                        grantedAbility.Ungrab();
+                        return true;
+                    }
+            return false;
         }
     }
 }

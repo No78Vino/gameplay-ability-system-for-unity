@@ -559,7 +559,19 @@ GrantedAbility有3个参数：
 
 下图直观的解释了GrantedAbility的3个参数的作用，以及不同情况的Granted Ability的处理情况：
 
+![Granted Ability运作逻辑.jpg](Wiki%2FGranted%20Ability%E8%BF%90%E4%BD%9C%E9%80%BB%E8%BE%91.jpg)
 
+关于GrantedAbility的Ability的Add/Remove，不难发现ASC对Ability增删控制权力完全压过GE。
+
+所以，可能会出现ASC已经持有了，或者在GE生效期间主动持有了granted ability的特殊情况。
+为了解决这个问题，Granted Ability还会有一个Grab变量，当然这个变量是类内变量，你控制不了。
+但为了更好的理解，我还是在这里解释一下实现的机制：
+- ASC在GE添加之前，没有持有了授予的某个能力时，则Grab = false。【等到GE移除时，ASC就会失去这个能力】
+- ASC在GE添加之前，已经持有了授予的某个能力时，则Grab = true。【等到GE移除时，ASC依然不会失去这个能力】
+- ASC在GE添加之后，通过其它手段持有了授予的某个能力时，Grab由false变为true。【等到GE移除时，ASC依然不会失去这个能力】
+- ASC在GE添加之后，通过其它手段失去了授予的某个能力时，Grab由true变为false。【但此时ASC实际没有失去这个能力，而是要等到GE移除时才会真正失去这个能力】
+
+到这里Granted Ability的逻辑就清晰了。Granted Ability只是EX-GAS给出的一个现成设计方案，依然可以通过各个事件监听/回调，来实现同样的效果。
 
 ---
 ### 2.9 AbilitySystemComponent

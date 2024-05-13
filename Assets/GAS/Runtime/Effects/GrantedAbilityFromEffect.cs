@@ -14,6 +14,11 @@ namespace GAS.Runtime
         public bool Passive;
         
         [LabelWidth(100)]
+        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY_FORCE)]
+        [Tooltip(GASTextDefine.TIP_GRANT_ABILITY_FORCE)]
+        public bool ForcedByEffect;
+        
+        [LabelWidth(100)]
         [LabelText(GASTextDefine.LABEL_GRANT_ABILITY)]
         [AssetSelector]
         public AbilityAsset AbilityAsset;
@@ -22,26 +27,32 @@ namespace GAS.Runtime
     public class GrantedAbilityFromEffect
     {
         public readonly bool Passive;
+        public readonly bool ForcedByEffect;
         public readonly AbstractAbility Ability;
         public GrantedAbilityFromEffect(GrantedAbilityConfig config)
         {
             Passive = config.Passive;
+            ForcedByEffect = config.ForcedByEffect;
             Ability = Activator.CreateInstance(config.AbilityAsset.AbilityType(), args: config.AbilityAsset) as AbstractAbility;
             //SourceEffect = sourceEffect;
         }
-        
-        public GrantedAbilityFromEffect(bool passive, AbstractAbility ability)
+
+        public GrantedAbilityFromEffect(bool passive, bool forcedByEffect, AbstractAbility ability)
         {
             Passive = passive;
             Ability = ability;
+            ForcedByEffect = forcedByEffect;
         }
-        
+
         public GrantedAbilitySpecFromEffect CreateSpec(GameplayEffectSpec sourceEffectSpec)
         {
-            // 是否宿主已经持有该技能，如果已经持有，则不创建新的技能
-            if (sourceEffectSpec.Owner.AbilityContainer.HasAbility(Ability)) return null;
-            
-            return new GrantedAbilitySpecFromEffect(this,sourceEffectSpec);
+            var grantedAbility = new GrantedAbilitySpecFromEffect(this,sourceEffectSpec);
+            // 是否宿主已经持有该技能，如果已经持有,则Grab标记为true
+            if (sourceEffectSpec.Owner.AbilityContainer.HasAbility(Ability))
+            {
+                grantedAbility.Grab();
+            }
+            return grantedAbility;
         } 
     }
     
@@ -52,7 +63,7 @@ namespace GAS.Runtime
         public readonly string AbilityName;
         public readonly AbilitySystemComponent Owner;
         
-        public bool Grabbed { get; private set; }
+        public bool Grabbed { get; private set; } = false;
         
         public GrantedAbilitySpecFromEffect(GrantedAbilityFromEffect grantedAbility,GameplayEffectSpec sourceEffectSpec)
         {
@@ -61,7 +72,6 @@ namespace GAS.Runtime
             AbilityName = GrantedAbility.Ability.Name;
             Owner = SourceEffectSpec.Owner;
             Owner.GrantAbility(GrantedAbility.Ability);
-            Grabbed = false;
         }
 
         public AbilitySpec AbilitySpec => Owner.AbilityContainer.AbilitySpecs()[AbilityName];
@@ -79,6 +89,6 @@ namespace GAS.Runtime
         }
         
         public void Grab() => Grabbed = true;
-        public void UnGrab() => Grabbed = false;
+        public void Ungrab() => Grabbed = false;
     }
 }
