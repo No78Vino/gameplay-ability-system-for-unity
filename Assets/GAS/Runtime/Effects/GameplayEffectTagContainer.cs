@@ -58,6 +58,17 @@ namespace GAS.Runtime
         /// </summary>
         public GameplayTagSet OngoingRequiredTags;
 
+        public GameplayEffectTagContainer(IGameplayEffectData data) : this(
+            data.GetAssetTags(),
+            data.GetGrantedTags(),
+            data.GetApplicationRequiredTags(),
+            data.GetOngoingRequiredTags(),
+            data.GetRemoveGameplayEffectsWithTags(),
+            data.GetApplicationImmunityTags()
+        )
+        {
+        }
+
         public GameplayEffectTagContainer(
             GameplayTag[] assetTags,
             GameplayTag[] grantedTags,

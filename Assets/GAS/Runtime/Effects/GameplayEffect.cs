@@ -52,13 +52,7 @@ namespace GAS.Runtime
             DurationPolicy = data.GetDurationPolicy();
             Duration = data.GetDuration();
             Period = data.GetPeriod();
-            TagContainer = new GameplayEffectTagContainer(
-                data.GetAssetTags(),
-                data.GetGrantedTags(),
-                data.GetApplicationRequiredTags(),
-                data.GetOngoingRequiredTags(),
-                data.GetRemoveGameplayEffectsWithTags(),
-                data.GetApplicationImmunityTags());
+            TagContainer = new GameplayEffectTagContainer(data);
             PeriodExecution = data.GetPeriodExecution() != null ? new GameplayEffect(data.GetPeriodExecution()) : null;
             CueOnExecute = data.GetCueOnExecute();
             CueOnRemove = data.GetCueOnRemove();
