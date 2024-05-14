@@ -80,11 +80,11 @@ namespace GAS.Runtime
         {
             PeriodExecution = periodExecution;
         }
-        
+
         public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbility)
         {
             GrantedAbilitySpec = new GrantedAbilitySpecFromEffect[grantedAbility.Length];
-            for (var i = 0; i < grantedAbility.Length;i++)
+            for (var i = 0; i < grantedAbility.Length; i++)
             {
                 GrantedAbilitySpec[i] = grantedAbility[i].CreateSpec(this);
             }
@@ -94,7 +94,11 @@ namespace GAS.Runtime
         {
             if (IsApplied) return;
             IsApplied = true;
-            if (CanRunning()) Activate();
+
+            if (GameplayEffect.CanRunning(Owner))
+            {
+                Activate();
+            }
         }
 
         public void DisApply()
@@ -119,15 +123,6 @@ namespace GAS.Runtime
             TriggerOnDeactivation();
         }
 
-        public bool CanApply()
-        {
-            return Owner.HasAllTags(GameplayEffect.TagContainer.ApplicationRequiredTags);
-        }
-
-        public bool CanRunning()
-        {
-            return Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);
-        }
 
         public void Tick()
         {
@@ -227,7 +222,7 @@ namespace GAS.Runtime
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
-            
+
             GrantAbility();
         }
 
@@ -235,7 +230,7 @@ namespace GAS.Runtime
         {
             TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
-            
+
             RevokeAbility();
         }
 
@@ -297,7 +292,6 @@ namespace GAS.Runtime
         /// </summary>
         private void GrantAbility()
         {
-            
         }
 
         /// <summary>
@@ -306,6 +300,5 @@ namespace GAS.Runtime
         private void RevokeAbility()
         {
         }
-
     }
 }

@@ -131,7 +131,6 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
 
-
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
 #if UNITY_EDITOR
@@ -153,7 +152,7 @@ namespace GAS.Runtime
                 var spec = gameplayEffect.CreateSpec(this, target, Level);
 
                 Profiler.BeginSample("AddGameplayEffect()");
-                applyGameplayEffectTo = target.AddGameplayEffect(spec);
+                applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
                 Profiler.EndSample();
             }
 
@@ -265,10 +264,16 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
+        private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
         {
-            var success = GameplayEffectContainer.AddGameplayEffectSpec(spec);
-            return success ? spec : null;
+            var success = GameplayEffectContainer.AddGameplayEffectSpec(spec, ignoreApplicationRequired);
+            if (success)
+            {
+                // we can't hold the reference of the instant effect
+                return spec.DurationPolicy == EffectsDurationPolicy.Instant ? null : spec;
+            }
+
+            return null;
         }
 
         private void DisableAllAbilities()

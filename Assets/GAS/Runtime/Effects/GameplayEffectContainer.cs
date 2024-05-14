@@ -77,19 +77,23 @@ namespace GAS.Runtime
         /// <summary>
         /// </summary>
         /// <param name="spec"></param>
+        /// <param
+        ///     name="ignoreApplicationRequired">
+        /// </param>
         /// <returns>
-        ///     If the added effect is an instant effect,return false.
-        ///     If the added effect is a duration effect and activate successfully ,return true.
+        ///     If the added effect is applied.
         /// </returns>
-        public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
+        public bool AddGameplayEffectSpec(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
         {
-            Profiler.BeginSample($"{nameof(GameplayEffectContainer)}::AddGameplayEffectSpec()");
-            // Check Immunity Tags
-            if (_owner.HasAnyTags(spec.GameplayEffect.TagContainer.ApplicationImmunityTags))
+            if (!ignoreApplicationRequired && !spec.GameplayEffect.CanApplyTo(_owner))
+            {
+                return false;
+            }
+
+            if (spec.GameplayEffect.IsImmune(_owner))
             {
                 Profiler.BeginSample("TriggerOnImmunity()");
                 spec.TriggerOnImmunity();
-                Profiler.EndSample();
                 Profiler.EndSample();
                 return false;
             }
@@ -99,29 +103,23 @@ namespace GAS.Runtime
                 Profiler.BeginSample("TriggerOnExecute()");
                 spec.TriggerOnExecute();
                 Profiler.EndSample();
+            }
+            else
+            {
+                _gameplayEffectSpecs.Add(spec);
+
+                Profiler.BeginSample("TriggerOnAdd()");
+                spec.TriggerOnAdd();
                 Profiler.EndSample();
-                return false;
+
+                spec.Apply();
+
+                Profiler.BeginSample("OnGameplayEffectContainerIsDirty.Invoke()");
+                OnGameplayEffectContainerIsDirty?.Invoke();
+                Profiler.EndSample();
             }
 
-            _gameplayEffectSpecs.Add(spec);
-
-            Profiler.BeginSample("TriggerOnAdd()");
-            spec.TriggerOnAdd();
-            Profiler.EndSample();
-
-            var canApply = spec.CanApply();
-            if (canApply)
-                spec.Apply();
-            else
-                spec.DisApply();
-
-            Profiler.BeginSample("OnGameplayEffectContainerIsDirty.Invoke()");
-            OnGameplayEffectContainerIsDirty?.Invoke();
-            Profiler.EndSample();
-
-            Profiler.EndSample();
-
-            return canApply;
+            return true;
         }
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
@@ -141,12 +139,12 @@ namespace GAS.Runtime
                 if (!gameplayEffectSpec.IsActive)
                 {
                     // new active gameplay effects
-                    if (gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Activate();
+                    if (gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Activate();
                 }
                 else
                 {
                     // new deactive gameplay effects
-                    if (!gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Deactivate();
+                    if (!gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Deactivate();
                 }
             }
 

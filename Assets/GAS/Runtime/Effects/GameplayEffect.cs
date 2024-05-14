@@ -1,5 +1,7 @@
 ﻿//using UnityEngine.Profiling;
 
+using System.Collections.Generic;
+
 namespace GAS.Runtime
 {
     public enum EffectsDurationPolicy
@@ -44,67 +46,56 @@ namespace GAS.Runtime
             return spec;
         }
 
-        public GameplayEffect(GameplayEffectAsset asset)
+        public GameplayEffect(IGameplayEffectData data)
         {
-            GameplayEffectName = asset.name;
-            DurationPolicy = asset.DurationPolicy;
-            Duration = asset.Duration;
-            Period = asset.Period;
+            GameplayEffectName = data.GetDisplayName();
+            DurationPolicy = data.GetDurationPolicy();
+            Duration = data.GetDuration();
+            Period = data.GetPeriod();
             TagContainer = new GameplayEffectTagContainer(
-                asset.AssetTags,
-                asset.GrantedTags,
-                asset.ApplicationRequiredTags,
-                asset.OngoingRequiredTags,
-                asset.RemoveGameplayEffectsWithTags,
-                asset.ApplicationImmunityTags);
-            PeriodExecution = asset.PeriodExecution != null ? new GameplayEffect(asset.PeriodExecution) : null;
-            CueOnExecute = asset.CueOnExecute;
-            CueOnRemove = asset.CueOnRemove;
-            CueOnAdd = asset.CueOnAdd;
-            CueOnActivate = asset.CueOnActivate;
-            CueOnDeactivate = asset.CueOnDeactivate;
-            CueDurational = asset.CueDurational;
-            Modifiers = asset.Modifiers;
-            Executions = asset.Executions;
-            GrantedAbilities = asset.GetGrantedAbilities();
+                data.GetAssetTags(),
+                data.GetGrantedTags(),
+                data.GetApplicationRequiredTags(),
+                data.GetOngoingRequiredTags(),
+                data.GetRemoveGameplayEffectsWithTags(),
+                data.GetApplicationImmunityTags());
+            PeriodExecution = data.GetPeriodExecution() != null ? new GameplayEffect(data.GetPeriodExecution()) : null;
+            CueOnExecute = data.GetCueOnExecute();
+            CueOnRemove = data.GetCueOnRemove();
+            CueOnAdd = data.GetCueOnAdd();
+            CueOnActivate = data.GetCueOnActivate();
+            CueOnDeactivate = data.GetCueOnDeactivate();
+            CueDurational = data.GetCueDurational();
+            Modifiers = data.GetModifiers();
+            Executions = data.GetExecutions();
+            GrantedAbilities = GetGrantedAbilities(data.GetGrantedAbilities());
         }
 
-        public GameplayEffect(
-            EffectsDurationPolicy durationPolicy,
-            float duration,
-            float period,
-            GameplayEffect periodExecution,
-            GameplayEffectTagContainer tagContainer,
-            GameplayCueInstant[] cueOnExecute,
-            GameplayCueInstant[] cueOnAdd,
-            GameplayCueInstant[] cueOnRemove,
-            GameplayCueInstant[] cueOnActivate,
-            GameplayCueInstant[] cueOnDeactivate,
-            GameplayCueDurational[] cueDurational,
-            GameplayEffectModifier[] modifiers,
-            ExecutionCalculation[] executions,
-            GrantedAbilityFromEffect[] grantedAbilities)
+        private static GrantedAbilityFromEffect[] GetGrantedAbilities(IEnumerable<GrantedAbilityConfig> grantedAbilities)
         {
-            GameplayEffectName = null;
-            DurationPolicy = durationPolicy;
-            Duration = duration;
-            Period = period;
-            PeriodExecution = periodExecution;
-            TagContainer = tagContainer;
-            CueOnExecute = cueOnExecute;
-            CueOnRemove = cueOnRemove;
-            CueOnAdd = cueOnAdd;
-            CueOnActivate = cueOnActivate;
-            CueOnDeactivate = cueOnDeactivate;
-            CueDurational = cueDurational;
-            Modifiers = modifiers;
-            Executions = executions;
-            GrantedAbilities = grantedAbilities;
+            var grantedAbilityList = new List<GrantedAbilityFromEffect>();
+            foreach (var grantedAbilityConfig in grantedAbilities)
+            {
+                if (grantedAbilityConfig.AbilityAsset == null) continue;
+                grantedAbilityList.Add(new GrantedAbilityFromEffect(grantedAbilityConfig));
+            }
+
+            return grantedAbilityList.ToArray();
         }
 
         public bool CanApplyTo(IAbilitySystemComponent target)
         {
             return target.HasAllTags(TagContainer.ApplicationRequiredTags);
+        }
+        
+        public bool CanRunning(IAbilitySystemComponent target)
+        {
+            return target.HasAllTags(TagContainer.OngoingRequiredTags);
+        }
+        
+        public bool IsImmune(IAbilitySystemComponent target)
+        {
+            return target.HasAnyTags(TagContainer.ApplicationImmunityTags);
         }
     }
 }
