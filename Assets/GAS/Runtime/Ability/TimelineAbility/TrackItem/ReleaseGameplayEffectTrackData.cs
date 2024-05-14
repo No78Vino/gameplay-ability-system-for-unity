@@ -31,7 +31,15 @@ namespace GAS.Runtime
 
 
         private TargetCatcherBase _targetCatcher;
-        public TargetCatcherBase TargetCatcher => _targetCatcher;
+        public TargetCatcherBase TargetCatcher
+        {
+            get
+            {
+                // 如果是反序列化的数据，没有执行构造函数, 需要加载
+                _targetCatcher ??= LoadTargetCatcher();
+                return _targetCatcher;
+            }
+        }
 
         public void CacheTargetCatcher()
         {
