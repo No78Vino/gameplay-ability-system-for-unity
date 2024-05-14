@@ -10,7 +10,7 @@ using UnityEngine;
 namespace GAS.Runtime
 {
     [CreateAssetMenu(fileName = "GameplayEffect", menuName = "GAS/GameplayEffect")]
-    public class GameplayEffectAsset : ScriptableObject
+    public class GameplayEffectAsset : ScriptableObject, IGameplayEffectData
     {
         private const string GRP_BASE = "Base Info";
         private const string GRP_BASE_H = "Base Info/H";
@@ -80,7 +80,7 @@ namespace GAS.Runtime
         [ShowIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
         public float Period;
-        
+
         [HorizontalGroup(GRP_BASE_H_RIGHT_PERIOD)]
         [LabelText(GASTextDefine.LABLE_GE_EXEC)]
         [LabelWidth(50)]
@@ -209,7 +209,8 @@ namespace GAS.Runtime
 
 
         // TODO
-        [HideInInspector] public ExecutionCalculation[] Executions;
+        [HideInInspector]
+        public ExecutionCalculation[] Executions;
 
 
         private void OnEnable()
@@ -246,7 +247,7 @@ namespace GAS.Runtime
         {
             return IsPeriodic() && PeriodExecution == null;
         }
-        
+
         bool IsDurationInvalid() => DurationPolicy == EffectsDurationPolicy.Duration && Duration <= 0;
         bool IsPeriodInvalid() => IsDurationalPolicy() && Period < 0;
 
@@ -278,16 +279,44 @@ namespace GAS.Runtime
             }
         }
 
-        public GrantedAbilityFromEffect[] GetGrantedAbilities()
-        {
-            var grantedAbilityList = new List<GrantedAbilityFromEffect>();
-            foreach (var grantedAbilityConfig in GrantedAbilities)
-            {
-                if (grantedAbilityConfig.AbilityAsset == null) continue;
-                grantedAbilityList.Add(new GrantedAbilityFromEffect(grantedAbilityConfig));
-            }
+        public string GetDisplayName() => name;
 
-            return grantedAbilityList.ToArray();
-        }
+        public EffectsDurationPolicy GetDurationPolicy() => DurationPolicy;
+
+        public float GetDuration() => Duration;
+
+        public float GetPeriod() => Period;
+
+        public IGameplayEffectData GetPeriodExecution() => PeriodExecution;
+
+        public GameplayTag[] GetAssetTags() => AssetTags;
+
+        public GameplayTag[] GetGrantedTags() => GrantedTags;
+
+        public GameplayTag[] GetApplicationRequiredTags() => ApplicationRequiredTags;
+
+        public GameplayTag[] GetOngoingRequiredTags() => OngoingRequiredTags;
+
+        public GameplayTag[] GetRemoveGameplayEffectsWithTags() => RemoveGameplayEffectsWithTags;
+
+        public GameplayTag[] GetApplicationImmunityTags() => ApplicationImmunityTags;
+
+        public GameplayCueInstant[] GetCueOnExecute() => CueOnExecute;
+
+        public GameplayCueInstant[] GetCueOnRemove() => CueOnRemove;
+
+        public GameplayCueInstant[] GetCueOnAdd() => CueOnAdd;
+
+        public GameplayCueInstant[] GetCueOnActivate() => CueOnActivate;
+
+        public GameplayCueInstant[] GetCueOnDeactivate() => CueOnDeactivate;
+
+        public GameplayCueDurational[] GetCueDurational() => CueDurational;
+
+        public GameplayEffectModifier[] GetModifiers() => Modifiers;
+
+        public ExecutionCalculation[] GetExecutions() => Executions;
+
+        public GrantedAbilityConfig[] GetGrantedAbilities() => GrantedAbilities;
     }
 }
