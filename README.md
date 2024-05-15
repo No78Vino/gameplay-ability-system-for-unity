@@ -566,12 +566,17 @@ GrantedAbility有3个参数：
 所以，可能会出现ASC已经持有了，或者在GE生效期间主动持有了granted ability的特殊情况。
 为了解决这个问题，Granted Ability还会有一个Grab变量，当然这个变量是类内变量，你控制不了。
 但为了更好的理解，我还是在这里解释一下实现的机制：
-- ASC在GE添加之前，没有持有了授予的某个能力时，则Grab = false。【等到GE移除时，ASC就会失去这个能力】
-- ASC在GE添加之前，已经持有了授予的某个能力时，则Grab = true。【等到GE移除时，ASC依然不会失去这个能力】
-- ASC在GE添加之后，通过其它手段持有了授予的某个能力时，Grab由false变为true。【等到GE移除时，ASC依然不会失去这个能力】
-- ASC在GE添加之后，通过其它手段失去了授予的某个能力时，Grab由true变为false。【但此时ASC实际没有失去这个能力，而是要等到GE移除时才会真正失去这个能力】
+- 1.ASC在GE添加之前，没有持有了授予的某个能力时，则Grab = false。【等到GE移除时，ASC就会失去这个能力】
+- 2.ASC在GE添加之前，已经持有了授予的某个能力时，则Grab = true。【等到GE移除时，ASC依然不会失去这个能力】
+- 3.ASC在GE添加之后，通过其它手段持有了授予的某个能力时，Grab由false变为true。【等到GE移除时，ASC依然不会失去这个能力】
+- 4.ASC在GE添加之后，通过其它手段失去了授予的某个能力时，Grab由true变为false。【ASC已经失去这个能力，而GE移除时实际不会有任何操作】
 
-到这里Granted Ability的逻辑就清晰了。Granted Ability只是EX-GAS给出的一个现成设计方案，依然可以通过各个事件监听/回调，来实现同样的效果。
+到这里Granted Ability的逻辑就清晰了。不难发现，能力的实际增/删权力（实现的接口）依然在ASC身上，因为ASC是GE,Ability的持有单位，有且只有他自身可以
+管理GE和Ability的增/删。不能因为次级设计,反而去破坏原有的封装逻辑。
+
+**上述的4种情况，在一般的游戏设计中，【3】和【4】这2个情况应该是要规避的。GE被动赋予的能力，理应不该被观测和干涉。**
+
+Granted Ability只是EX-GAS给出的一个现成设计方案，依然可以通过各个事件监听/回调，来实现同样的效果。
 
 ---
 ### 2.9 AbilitySystemComponent

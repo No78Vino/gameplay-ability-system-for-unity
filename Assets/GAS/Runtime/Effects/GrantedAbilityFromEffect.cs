@@ -78,16 +78,6 @@ namespace GAS.Runtime
         
         public bool Passive => GrantedAbility.Passive;
         
-        public void Activate()
-        {
-            AbilitySpec.TryActivateAbility();
-        }
-
-        public void Deactivate()
-        {
-            AbilitySpec.TryEndAbility();
-        }
-        
         public void Grab() => Grabbed = true;
         public void Ungrab() => Grabbed = false;
     }

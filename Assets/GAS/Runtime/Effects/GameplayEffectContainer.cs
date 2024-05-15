@@ -9,7 +9,7 @@ namespace GAS.Runtime
         private readonly AbilitySystemComponent _owner;
         private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly List<GameplayEffectSpec> _cachedGameplayEffectSpecs = new List<GameplayEffectSpec>();
-        
+       
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
