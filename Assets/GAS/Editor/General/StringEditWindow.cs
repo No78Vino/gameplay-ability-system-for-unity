@@ -1,5 +1,6 @@
 using GAS.Editor.Validation;
 
+
 #if UNITY_EDITOR
 namespace GAS.Editor.General
 {
@@ -53,20 +54,6 @@ namespace GAS.Editor.General
             if (GUILayout.Button("Save"))
             {
                 Save();
-            }
-
-            EditorGUILayout.HelpBox("Press Enter to save, Esc to cancel", MessageType.None);
-
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return && Event.current.type == EventType.KeyUp)
-            {
-                Event.current.Use();
-                Save();
-            }
-
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Escape && Event.current.type == EventType.KeyUp)
-            {
-                Event.current.Use();
-                Close();
             }
         }
 
