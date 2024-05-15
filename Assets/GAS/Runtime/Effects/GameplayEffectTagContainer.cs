@@ -26,8 +26,9 @@ namespace GAS.Runtime
         /// <summary>
         /// 当GameplayEffect成功应用后, 如果位于目标上的该GameplayEffect在其Asset Tags或Granted Tags中有任意一个本标签的话, 其就会自目标上移除.
         /// 匹配判断发生在：
-        ///   1. Instant GE 被应用时的瞬间；
-        ///   2. 非Instant GE每次更新时（每帧检测）。
+        ///   1. Instant GE被应用时；
+        ///   2. 非Instant GE每次被激活时；
+        ///   3. Period GE(非Instant GE中的PeriodExecution)的每个周期到期时。
         /// </summary>
         public GameplayTagSet RemoveGameplayEffectsWithTags;
 
