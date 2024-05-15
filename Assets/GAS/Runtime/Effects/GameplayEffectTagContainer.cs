@@ -28,7 +28,7 @@ namespace GAS.Runtime
         /// 匹配判断发生在：
         ///   1. Instant GE被应用时；
         ///   2. 非Instant GE每次被激活时；
-        ///   3. Period GE(非Instant GE中的PeriodExecution)的每个周期到期时。
+        ///   3. Period Execution GE(非Instant GE中的PeriodExecution)的每个周期到期时。
         /// </summary>
         public GameplayTagSet RemoveGameplayEffectsWithTags;
 

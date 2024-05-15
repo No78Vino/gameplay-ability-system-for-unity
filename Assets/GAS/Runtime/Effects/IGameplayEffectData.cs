@@ -6,6 +6,10 @@
         EffectsDurationPolicy GetDurationPolicy();
         float GetDuration();
         float GetPeriod();
+
+        /// <summary>
+        /// 必须是Instant型的GameplayEffect
+        /// </summary>
         IGameplayEffectData GetPeriodExecution();
 
         GameplayTag[] GetAssetTags();

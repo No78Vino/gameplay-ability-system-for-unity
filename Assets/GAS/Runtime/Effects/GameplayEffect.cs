@@ -53,7 +53,14 @@ namespace GAS.Runtime
             Duration = data.GetDuration();
             Period = data.GetPeriod();
             TagContainer = new GameplayEffectTagContainer(data);
-            PeriodExecution = data.GetPeriodExecution() != null ? new GameplayEffect(data.GetPeriodExecution()) : null;
+            var periodExecutionGe = data.GetPeriodExecution();
+#if UNITY_EDITOR
+            if (periodExecutionGe != null && periodExecutionGe.GetDurationPolicy() != EffectsDurationPolicy.Instant)
+            {
+                UnityEngine.Debug.LogError($"PeriodExecution of {GameplayEffectName} should be Instant type.");
+            }
+#endif
+            PeriodExecution = periodExecutionGe != null ? new GameplayEffect(periodExecutionGe) : null;
             CueOnExecute = data.GetCueOnExecute();
             CueOnRemove = data.GetCueOnRemove();
             CueOnAdd = data.GetCueOnAdd();
@@ -81,12 +88,12 @@ namespace GAS.Runtime
         {
             return target.HasAllTags(TagContainer.ApplicationRequiredTags);
         }
-        
+
         public bool CanRunning(IAbilitySystemComponent target)
         {
             return target.HasAllTags(TagContainer.OngoingRequiredTags);
         }
-        
+
         public bool IsImmune(IAbilitySystemComponent target)
         {
             return target.HasAnyTags(TagContainer.ApplicationImmunityTags);
