@@ -9,7 +9,7 @@ namespace GAS.Runtime
         private readonly AbilitySystemComponent _owner;
         private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly List<GameplayEffectSpec> _cachedGameplayEffectSpecs = new List<GameplayEffectSpec>();
-        
+
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
@@ -21,7 +21,7 @@ namespace GAS.Runtime
         {
             return _gameplayEffectSpecs;
         }
-        
+
         public void Tick()
         {
             _cachedGameplayEffectSpecs.AddRange(_gameplayEffectSpecs);
@@ -73,11 +73,15 @@ namespace GAS.Runtime
         /// <summary>
         /// </summary>
         /// <param name="spec"></param>
-        /// <param
-        ///     name="ignoreApplicationRequired">
+        /// <param name="ignoreApplicationRequired">
+        ///     If set to true, the method will not check whether the gameplay effect is required to be applied,
+        ///     assuming that the caller has already performed this check. This can be used to optimize performance
+        ///     in cases where the application requirement has been confirmed elsewhere.
         /// </param>
         /// <returns>
-        ///     If the added effect is applied.
+        ///     Returns true if the gameplay effect is successfully applied and remains active.
+        ///     Returns false if the gameplay effect is applied but immediately removed due to a tag(in `AssetTags` or `GrantedTags`) match
+        ///     with the `RemoveGameplayEffectsWithTags` function, indicating that the effect did not persist.
         /// </returns>
         public bool AddGameplayEffectSpec(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
         {
@@ -110,6 +114,17 @@ namespace GAS.Runtime
 
                 spec.Apply();
 
+                // If the gameplay effect was removed immediately after being applied, return false
+                if (!_gameplayEffectSpecs.Contains(spec))
+                {
+#if UNITY_EDITOR
+                    UnityEngine.Debug.LogWarning(
+                        $"GameplayEffect {spec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
+#endif
+                    // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
+                    return false;
+                }
+
                 Profiler.BeginSample("OnGameplayEffectContainerIsDirty.Invoke()");
                 OnGameplayEffectContainerIsDirty?.Invoke();
                 Profiler.EndSample();
@@ -117,6 +132,7 @@ namespace GAS.Runtime
 
             return true;
         }
+
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
         {
@@ -192,29 +208,30 @@ namespace GAS.Runtime
 
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
-        
+
         public void TryGrabGrantedAbility(string abilityName)
         {
             foreach (var ge in _gameplayEffectSpecs)
-                foreach (var grantedAbility in ge.GrantedAbilitySpec)
+            foreach (var grantedAbility in ge.GrantedAbilitySpec)
+            {
+                if (abilityName == grantedAbility.AbilityName)
                 {
-                    if (abilityName == grantedAbility.AbilityName)
-                    {
-                        grantedAbility.Grab();
-                        return;
-                    }
+                    grantedAbility.Grab();
+                    return;
                 }
+            }
         }
-        
+
         public bool TryUngrabGrantedAbility(string abilityName)
         {
             foreach (var ge in _gameplayEffectSpecs)
-                foreach (var grantedAbility in ge.GrantedAbilitySpec)
-                    if (abilityName == grantedAbility.AbilityName)
-                    {
-                        grantedAbility.Ungrab();
-                        return true;
-                    }
+            foreach (var grantedAbility in ge.GrantedAbilitySpec)
+                if (abilityName == grantedAbility.AbilityName)
+                {
+                    grantedAbility.Ungrab();
+                    return true;
+                }
+
             return false;
         }
     }
