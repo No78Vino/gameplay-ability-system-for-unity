@@ -40,6 +40,7 @@ namespace GAS.Runtime
         
         [LabelWidth(100)]
         [Tooltip("操作类型：是对属性的操作类型，\n有3种：\nAdd ： 加法（取值为负便是减法）\nMultiply： 乘法（除法取倒数即可）\nOverride：覆写属性值")]
+        [EnumToggleButtons]
         public  GEOperation Operation;
         
         [LabelWidth(100)]
