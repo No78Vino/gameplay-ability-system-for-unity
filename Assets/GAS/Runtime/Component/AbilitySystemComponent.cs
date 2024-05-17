@@ -165,6 +165,11 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
 
+        public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
+        }
+
         public AbilitySpec GrantAbility(AbstractAbility ability)
         {
             AbilityContainer.GrantAbility(ability);
@@ -176,7 +181,7 @@ namespace GAS.Runtime
         public void RemoveAbility(string abilityName)
         {
             // GE的Granted Ability的UnGrab处理
-            if(!GameplayEffectContainer.TryUngrabGrantedAbility(abilityName))
+            if (!GameplayEffectContainer.TryUngrabGrantedAbility(abilityName))
                 AbilityContainer.RemoveAbility(abilityName);
         }
 
