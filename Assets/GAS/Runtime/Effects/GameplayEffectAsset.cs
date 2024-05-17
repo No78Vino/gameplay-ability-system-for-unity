@@ -36,6 +36,8 @@ namespace GAS.Runtime
         private const string ERROR_DURATION = "Duration must be > 0.";
         private const string ERROR_PERIOD = "Period must be >= 0.";
         private const string ERROR_PERIOD_GE_NONE = "Period GameplayEffect CAN NOT be NONE!";
+        
+        private const string INFO_INVALID_FOR_INSTANT_GE = "瞬时(Instant)GE无效";
 
 
         private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
@@ -64,6 +66,7 @@ namespace GAS.Runtime
         [InfoBox(ERROR_PERIOD, InfoMessageType.Error, "IsPeriodInvalid")]
         [InfoBox(ERROR_PERIOD_GE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
         [InfoBox(GASTextDefine.TIP_GE_POLICY)]
+        [EnumToggleButtons]
         public EffectsDurationPolicy DurationPolicy = EffectsDurationPolicy.Instant;
 
         [VerticalGroup(GRP_BASE_H_RIGHT)]
@@ -111,6 +114,8 @@ namespace GAS.Runtime
         [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_AssetTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_AssetTags)]
+        [InfoBox(INFO_INVALID_FOR_INSTANT_GE, InfoMessageType.None, "IsInstantPolicy")]
+        [EnableIf("IsDurationalPolicy")]
         public GameplayTag[] AssetTags;
 
         [Title("")]
@@ -119,6 +124,8 @@ namespace GAS.Runtime
         [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_GrantedTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_GrantedTags)]
+        [InfoBox(INFO_INVALID_FOR_INSTANT_GE, InfoMessageType.None, "IsInstantPolicy")]
+        [EnableIf("IsDurationalPolicy")]
         public GameplayTag[] GrantedTags;
 
         [Title("")]
@@ -135,6 +142,8 @@ namespace GAS.Runtime
         [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_OngoingRequiredTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_OngoingRequiredTags)]
+        [InfoBox(INFO_INVALID_FOR_INSTANT_GE, InfoMessageType.None, "IsInstantPolicy")]
+        [EnableIf("IsDurationalPolicy")]
         public GameplayTag[] OngoingRequiredTags;
 
         [Title("")]
