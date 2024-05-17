@@ -6,51 +6,15 @@ using System.Reflection;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Object = UnityEngine.Object;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace GAS.Runtime
 {
     public abstract class GameplayCue : ScriptableObject
     {
-        private const string ScriptGroup = "ScriptGroup";
-        private const string ScriptGroup_H = "ScriptGroup/H";
         private const string TopGroup = "TopGroup";
         private const string TopGroup_H = "TopGroup/H";
         private const string TopGroup_H_Left = "TopGroup/H/Left";
         private const string TopGroup_H_Right = "TopGroup/H/Right";
-
-#if UNITY_EDITOR
-        [BoxGroup(ScriptGroup, false)]
-        [HorizontalGroup(ScriptGroup_H)]
-        [ShowInInspector]
-        [LabelText("脚本类型")]
-        public string TypeName => GetType().Name;
-
-        [HorizontalGroup(ScriptGroup_H)]
-        [Button("选中脚本")]
-        private void SelectScript()
-        {
-            var monoScript = MonoScript.FromScriptableObject(this);
-            string path = AssetDatabase.GetAssetPath(monoScript);
-
-            var obj = AssetDatabase.LoadAssetAtPath<Object>(path);
-            EditorGUIUtility.PingObject(obj);
-            Selection.activeObject = obj;
-        }
-
-        [HorizontalGroup(ScriptGroup_H)]
-        [Button("编辑脚本")]
-        private void EditScript()
-        {
-            var monoScript = MonoScript.FromScriptableObject(this);
-
-            AssetDatabase.OpenAsset(monoScript);
-        }
-#endif
 
         [Title("基本信息")]
         [BoxGroup(TopGroup, false)]
