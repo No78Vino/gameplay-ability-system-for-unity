@@ -54,7 +54,7 @@ namespace GAS.Editor
         {
             CheckLibPaths();
             var window = GetWindow<GASAssetAggregator>();
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1050, 625);
+            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1250, 625);
             window.MenuWidth = 220;
         }
 

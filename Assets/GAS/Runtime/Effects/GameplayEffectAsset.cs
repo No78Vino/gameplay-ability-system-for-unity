@@ -36,7 +36,7 @@ namespace GAS.Runtime
         private const string ERROR_DURATION = "Duration must be > 0.";
         private const string ERROR_PERIOD = "Period must be >= 0.";
         private const string ERROR_PERIOD_GE_NONE = "Period GameplayEffect CAN NOT be NONE!";
-        
+
         private const string INFO_INVALID_FOR_INSTANT_GE = "瞬时(Instant)GE无效";
 
 
