@@ -540,7 +540,9 @@ TimelineAbility的配置可能还满足不了一些设计时，程序开发人�
 #### 2.8.c Granted Ability From GameplayEffect 来自游戏效果授予的能力
 能力不仅仅可以由AbilitySystemComponent直接授予，还可以通过GE来授予,甚至是GE来全权控制。
 
-我们为了更通俗的去理解BUFF的概念，就必须允许GE可以实现自由的逻辑自定义。但是GAS本身的GE仅仅是遵循体系内固定逻辑，不存在开发者自定义GE逻辑。
+我们为了更通俗的去理解BUFF的概念，就必须允许GE可以实现自由的逻辑自定义。
+但是GAS本身的GE仅仅是遵循体系内固定逻辑，不存在开发者自定义GE逻辑。
+GAS为GE提供了Granted Ability的解决方案。
 > 为了更好理解这种情况，举个例子：
 > 
 > 在一个RPG游戏中，有一个名为“亡灵收割”的BUFF。
@@ -552,29 +554,31 @@ TimelineAbility的配置可能还满足不了一些设计时，程序开发人�
 上述例子的这个做法当然是没问题的，而且十分合理。 
 而在EX-GAS中，我为了减少Ability管理的事件注册这个繁琐步骤。我对GE的逻辑进行了优化，兼并了这一设计方案。
 做法就是在GE中，添加了GrantedAbility变量。
-GrantedAbility有3个参数：
+GrantedAbility有5个参数：
 - Ability：授予的能力（数据）
-- Passive：是否被动的受GE的生命周期控制
-- ForcedByEffect: 是否被GE强制控制。这个参数只有Passive=true时才生效。
+- AbilityLevel：授予的能力等级
+- ActivationPolicy: 授予的能力的激活策略，类型如下：
+  - | 激活策略              | 作用                       |
+    |-------------------|--------------------------
+    | None | 无激活逻辑, 需要用户自己调用ASC能力激活接口 |
+    | WhenAdded | 能力添加时激活（GE添加时激活）         |
+    | SyncWithEffect | 同步GE，GE激活时激活             |
+- DeactivationPolicy: 授予的能力的取消激活策略，类型如下：
+    - | 取消激活策略              | 作用                           |
+          |-------------------|------------------------------
+      | None | 无相关取消激活逻辑, 需要用户调用ASC能力取消激活接口 |
+      | SyncWithEffect | 同步GE，GE失活时取消激活               |
+- RemovePolicy: 授予的能力的移除策略，类型如下：
+    - | 移除策略              | 作用                       |
+      |-------------------|--------------------------
+      | None | 不移除 |
+      | SyncWithEffect | 同步GE，GE移除时移除           |
+      |WhenEnd| 能力结束时自己移除|
+      |WhenCancel|  能力取消时自己移除|
+      |WhenCancelOrEnd|  能力结束或取消时自己移除|
 
-下图直观的解释了GrantedAbility的3个参数的作用，以及不同情况的Granted Ability的处理情况：
-
-![Granted Ability运作逻辑.jpg](Wiki%2FGranted%20Ability%E8%BF%90%E4%BD%9C%E9%80%BB%E8%BE%91.jpg)
-
-关于GrantedAbility的Ability的Add/Remove，不难发现ASC对Ability增删控制权力完全压过GE。
-
-所以，可能会出现ASC已经持有了，或者在GE生效期间主动持有了granted ability的特殊情况。
-为了解决这个问题，Granted Ability还会有一个Grab变量，当然这个变量是类内变量，你控制不了。
-但为了更好的理解，我还是在这里解释一下实现的机制：
-- 1.ASC在GE添加之前，没有持有了授予的某个能力时，则Grab = false。【等到GE移除时，ASC就会失去这个能力】
-- 2.ASC在GE添加之前，已经持有了授予的某个能力时，则Grab = true。【等到GE移除时，ASC依然不会失去这个能力】
-- 3.ASC在GE添加之后，通过其它手段持有了授予的某个能力时，Grab由false变为true。【等到GE移除时，ASC依然不会失去这个能力】
-- 4.ASC在GE添加之后，通过其它手段失去了授予的某个能力时，Grab由true变为false。【ASC已经失去这个能力，而GE移除时实际不会有任何操作】
-
-到这里Granted Ability的逻辑就清晰了。不难发现，能力的实际增/删权力（实现的接口）依然在ASC身上，因为ASC是GE,Ability的持有单位，有且只有他自身可以
-管理GE和Ability的增/删。不能因为次级设计,反而去破坏原有的封装逻辑。
-
-**上述的4种情况，在一般的游戏设计中，【3】和【4】这2个情况应该是要规避的。GE被动赋予的能力，理应不该被观测和干涉。**
+到这里Granted Ability的逻辑就清晰了。我们提前将Ability的生命周期通过参数，来确定哪些阶段交给GE来管理。
+> 有一点需要注意，Granted Ability的激活不会传任何参数，请保证Ability执行逻辑中依赖的参数，都可以通过Owner（ASC）直接或间接获取。
 
 Granted Ability只是EX-GAS给出的一个现成设计方案，依然可以通过各个事件监听/回调，来实现同样的效果。
 

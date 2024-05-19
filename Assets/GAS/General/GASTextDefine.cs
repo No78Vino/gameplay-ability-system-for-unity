@@ -97,12 +97,21 @@
         public const string TITLE_GE_CUE_CueOnDeactivate = "失活时触发";
         
         public const string LABEL_GRANT_ABILITY = "授予的能力";
-        public const string LABEL_GRANT_ABILITY_PASSIVE = "被动激活";
-        public const string LABEL_GRANT_ABILITY_FORCE = "是否被GE强制控制";
-        public const string TIP_GRANT_ABILITY_PASSIVE = "true = 能力激活周期与GE同步，一般可用于被动Buff的实现; " +
-                                                        "false = 单纯赐予宿主一个技能，赐予的技能需要自己激活";        
-        public const string TIP_GRANT_ABILITY_FORCE = "true = GE获得能力的绝对控制权;" +
-                                                      "false = GE和ASC对能力进行混合控制";
+        public const string LABEL_GRANT_ABILITY_LEVEL = "能力等级";
+        public const string LABEL_GRANT_ABILITY_ACTIVATION_POLICY = "能力激活策略";
+        public const string LABEL_GRANT_ABILITY_DEACTIVATION_POLICY = "能力取消激活策略";
+        public const string LABEL_GRANT_ABILITY_REMOVE_POLICY = "能力移除策略";
+        public const string TIP_GRANT_ABILITY_ACTIVATION_POLICY = "None = 不激活，需要用户手动调用ASC相关接口激活; " +
+                                                                  "WhenAdded = 添加时就激活;" +
+                                                                  "SyncWithEffect = 同步GE，GE激活时激活"; 
+        public const string TIP_GRANT_ABILITY_DEACTIVATION_POLICY = "None = 无相关取消激活逻辑, 需要用户调用ASC取消激活; " +
+                                                                  "SyncWithEffect = 同步GE，GE失活时取消激活";   
+        public const string TIP_GRANT_ABILITY_REMOVE_POLICY = "None = 不移除能力;" +
+                                                              "SyncWithEffect = 同步GE，GE移除时移除" +
+                                                              "WhenEnd = 能力结束时，移除自身;" +
+                                                              "WhenCancel = 能力取消时，移除自身;" +
+                                                              "WhenCancelOrEnd = 能力取消或结束时，移除自身";
+  
         
         
         #endregion

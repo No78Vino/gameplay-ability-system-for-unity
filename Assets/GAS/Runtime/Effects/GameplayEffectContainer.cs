@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -30,9 +29,7 @@ namespace GAS.Runtime
             {
                 if (gameplayEffectSpec.IsActive)
                 {
-                    Profiler.BeginSample("gameplayEffectSpec.Tick()");
                     gameplayEffectSpec.Tick();
-                    Profiler.EndSample();
                 }
             }
 
@@ -179,31 +176,6 @@ namespace GAS.Runtime
             _gameplayEffectSpecs.Clear();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
-        }
-        
-        public void TryGrabGrantedAbility(string abilityName)
-        {
-            foreach (var ge in _gameplayEffectSpecs)
-                foreach (var grantedAbility in ge.GrantedAbilitySpec)
-                {
-                    if (abilityName == grantedAbility.AbilityName)
-                    {
-                        grantedAbility.Grab();
-                        return;
-                    }
-                }
-        }
-        
-        public bool TryUngrabGrantedAbility(string abilityName)
-        {
-            foreach (var ge in _gameplayEffectSpecs)
-                foreach (var grantedAbility in ge.GrantedAbilitySpec)
-                    if (abilityName == grantedAbility.AbilityName)
-                    {
-                        grantedAbility.Ungrab();
-                        return true;
-                    }
-            return false;
         }
     }
 }

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -18,20 +16,14 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            Profiler.BeginSample($"{nameof(AbilityContainer)}::Tick()");
-
             _cachedAbilities.AddRange(_abilities.Values);
 
             foreach (var abilitySpec in _cachedAbilities)
             {
-                Profiler.BeginSample("abilitySpec.Tick()");
                 abilitySpec.Tick();
-                Profiler.EndSample();
             }
 
             _cachedAbilities.Clear();
-
-            Profiler.EndSample();
         }
 
         public void GrantAbility(AbstractAbility ability)
@@ -51,6 +43,7 @@ namespace GAS.Runtime
             if (!_abilities.ContainsKey(abilityName)) return;
 
             EndAbility(abilityName);
+            _abilities[abilityName].Dispose();
             _abilities.Remove(abilityName);
         }
 
