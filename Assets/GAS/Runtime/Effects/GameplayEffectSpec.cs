@@ -322,6 +322,7 @@ namespace GAS.Runtime
             {
                 if (grantedAbilitySpec.RemovePolicy == GrantedAbilityRemovePolicy.SyncWithEffect)
                 {
+                    Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
                     Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
                 }
             }
