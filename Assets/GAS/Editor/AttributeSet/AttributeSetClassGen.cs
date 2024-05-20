@@ -187,6 +187,20 @@ namespace GAS.Editor
                         }
                         writer.Indent--;
                         writer.WriteLine("}");
+
+                        writer.WriteLine("");
+                        writer.WriteLine("public static class Lookup");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            foreach (var attributeName in attributeSet.AttributeNames)
+                            {
+                                string validAttrName = EditorUtil.MakeValidIdentifier(attributeName);
+                                writer.WriteLine($"public const string {attributeName} = \"AS_{validName}.{validAttrName}\";");
+                            }
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
@@ -251,7 +265,6 @@ namespace GAS.Editor
             }
             writer.Indent--;
             writer.Write("}");
-
             Console.WriteLine($"Generated Code Script at path: {filePath}");
         }
     }
