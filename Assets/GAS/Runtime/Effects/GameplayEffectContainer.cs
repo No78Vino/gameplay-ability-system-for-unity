@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -30,9 +29,7 @@ namespace GAS.Runtime
             {
                 if (gameplayEffectSpec.IsActive)
                 {
-                    Profiler.BeginSample("gameplayEffectSpec.Tick()");
                     gameplayEffectSpec.Tick();
-                    Profiler.EndSample();
                 }
             }
 
@@ -92,26 +89,18 @@ namespace GAS.Runtime
 
             if (spec.GameplayEffect.IsImmune(_owner))
             {
-                Profiler.BeginSample("TriggerOnImmunity()");
                 spec.TriggerOnImmunity();
-                Profiler.EndSample();
                 return false;
             }
 
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
-                Profiler.BeginSample("TriggerOnExecute()");
                 spec.TriggerOnExecute();
-                Profiler.EndSample();
             }
             else
             {
                 _gameplayEffectSpecs.Add(spec);
-
-                Profiler.BeginSample("TriggerOnAdd()");
                 spec.TriggerOnAdd();
-                Profiler.EndSample();
-
                 spec.Apply();
 
                 // If the gameplay effect was removed immediately after being applied, return false
@@ -124,10 +113,8 @@ namespace GAS.Runtime
                     // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
                     return false;
                 }
-
-                Profiler.BeginSample("OnGameplayEffectContainerIsDirty.Invoke()");
+                
                 OnGameplayEffectContainerIsDirty?.Invoke();
-                Profiler.EndSample();
             }
 
             return true;
@@ -207,32 +194,6 @@ namespace GAS.Runtime
             _gameplayEffectSpecs.Clear();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
-        }
-
-        public void TryGrabGrantedAbility(string abilityName)
-        {
-            foreach (var ge in _gameplayEffectSpecs)
-            foreach (var grantedAbility in ge.GrantedAbilitySpec)
-            {
-                if (abilityName == grantedAbility.AbilityName)
-                {
-                    grantedAbility.Grab();
-                    return;
-                }
-            }
-        }
-
-        public bool TryUngrabGrantedAbility(string abilityName)
-        {
-            foreach (var ge in _gameplayEffectSpecs)
-            foreach (var grantedAbility in ge.GrantedAbilitySpec)
-                if (abilityName == grantedAbility.AbilityName)
-                {
-                    grantedAbility.Ungrab();
-                    return true;
-                }
-
-            return false;
         }
     }
 }

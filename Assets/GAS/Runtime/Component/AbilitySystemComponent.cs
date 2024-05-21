@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -49,11 +48,9 @@ namespace GAS.Runtime
 
         private void OnEnable()
         {
-            Profiler.BeginSample($"{nameof(AbilitySystemComponent)}::OnEnable()");
             Prepare();
             GameplayAbilitySystem.GAS.Register(this);
             GameplayTagAggregator?.OnEnable();
-            Profiler.EndSample();
         }
 
         private void OnDisable()
@@ -140,23 +137,18 @@ namespace GAS.Runtime
                 return null;
             }
 #endif
-            Profiler.BeginSample("ApplyGameplayEffectTo()");
 
-            Profiler.BeginSample("gameplayEffect.CanApplyTo()");
             var canApply = gameplayEffect.CanApplyTo(target);
-            Profiler.EndSample();
 
             GameplayEffectSpec applyGameplayEffectTo = null;
             if (canApply)
             {
                 var spec = gameplayEffect.CreateSpec(this, target, Level);
 
-                Profiler.BeginSample("AddGameplayEffect()");
                 applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
-                Profiler.EndSample();
+                //applyGameplayEffectTo = target.AddGameplayEffect(spec);
             }
 
-            Profiler.EndSample();
             return applyGameplayEffectTo;
         }
 
@@ -173,16 +165,12 @@ namespace GAS.Runtime
         public AbilitySpec GrantAbility(AbstractAbility ability)
         {
             AbilityContainer.GrantAbility(ability);
-            // GE的Granted Ability的Grab处理
-            GameplayEffectContainer.TryGrabGrantedAbility(ability.Name);
             return AbilityContainer.AbilitySpecs()[ability.Name];
         }
 
         public void RemoveAbility(string abilityName)
         {
-            // GE的Granted Ability的UnGrab处理
-            if (!GameplayEffectContainer.TryUngrabGrantedAbility(abilityName))
-                AbilityContainer.RemoveAbility(abilityName);
+            AbilityContainer.RemoveAbility(abilityName);
         }
 
         public float? GetAttributeCurrentValue(string setName, string attributeShortName)
@@ -199,10 +187,8 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            Profiler.BeginSample($"{nameof(AbilitySystemComponent)}::Tick()");
             AbilityContainer.Tick();
             GameplayEffectContainer.Tick();
-            Profiler.EndSample();
         }
 
         public Dictionary<string, float> DataSnapshot()

@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -12,12 +11,19 @@ namespace GAS.Runtime
             Ability = ability;
             Owner = owner;
         }
-
+        
+        public virtual void Dispose()
+        {
+            _onActivateResult = null;
+            _onEndAbility = null;
+            _onCancelAbility = null;
+        }
+        
         public AbstractAbility Ability { get; }
 
         public AbilitySystemComponent Owner { get; protected set; }
 
-        public float Level { get; }
+        public int Level { get; protected set; }
 
         public bool IsActive { get; private set; }
 
@@ -55,7 +61,11 @@ namespace GAS.Runtime
         {
             _onCancelAbility -= onCancelAbility;
         }
-
+        
+        public virtual void SetLevel(int level)
+        {
+            Level = level;
+        }
         public virtual AbilityActivateResult CanActivate()
         {
             if (IsActive) return AbilityActivateResult.FailHasActivated;
@@ -135,7 +145,6 @@ namespace GAS.Runtime
 
         public virtual bool TryActivateAbility(params object[] args)
         {
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryActivateAbility()");
             _abilityArguments = args;
             var result = CanActivate();
             var success = result == AbilityActivateResult.Success;
@@ -145,13 +154,10 @@ namespace GAS.Runtime
                 ActiveCount++;
                 Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
 
-                Profiler.BeginSample($"{nameof(AbilitySpec)}::TryActivateAbility().ActivateAbility()");
                 ActivateAbility(_abilityArguments);
-                Profiler.EndSample();
             }
 
             _onActivateResult?.Invoke(result);
-            Profiler.EndSample();
             return success;
         }
 
@@ -159,40 +165,26 @@ namespace GAS.Runtime
         {
             if (!IsActive) return;
             IsActive = false;
-
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryEndAbility()");
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
-
-            Profiler.BeginSample($"EndAbility()");
             EndAbility();
-            Profiler.EndSample();
-
-            Profiler.BeginSample($"_onEndAbility?.Invoke()");
             _onEndAbility?.Invoke();
-            Profiler.EndSample();
-
-            Profiler.EndSample();
         }
 
         public virtual void TryCancelAbility()
         {
             if (!IsActive) return;
             IsActive = false;
-
-            Profiler.BeginSample($"{nameof(AbilitySpec)}::TryCancelAbility()");
+            
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
-            Profiler.EndSample();
         }
 
         public void Tick()
         {
             if (IsActive)
             {
-                Profiler.BeginSample($"{nameof(AbilitySpec)}::Tick()");
                 AbilityTick();
-                Profiler.EndSample();
             }
         }
 

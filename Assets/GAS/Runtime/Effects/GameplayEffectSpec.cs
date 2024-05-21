@@ -214,6 +214,8 @@ namespace GAS.Runtime
         public void TriggerOnRemove()
         {
             TriggerCueOnRemove();
+            
+            TryRemoveGrantedAbilities();
         }
 
         private void TriggerOnActivation()
@@ -222,16 +224,16 @@ namespace GAS.Runtime
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
-
-            GrantAbility();
+            
+            TryActivateGrantedAbilities();
         }
 
         private void TriggerOnDeactivation()
         {
             TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
-
-            RevokeAbility();
+            
+            TryDeactivateGrantedAbilities();
         }
 
         public void TriggerOnTick()
@@ -286,19 +288,39 @@ namespace GAS.Runtime
         {
             return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?)null;
         }
-
-        /// <summary>
-        /// TODO: 授予能力
-        /// </summary>
-        private void GrantAbility()
+        
+        private void TryActivateGrantedAbilities()
         {
+            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            {
+                if (grantedAbilitySpec.ActivationPolicy == GrantedAbilityActivationPolicy.SyncWithEffect)
+                {
+                    Owner.TryActivateAbility(grantedAbilitySpec.AbilityName);
+                }
+            }
         }
 
-        /// <summary>
-        /// TODO: 剥夺能力
-        /// </summary>
-        private void RevokeAbility()
+        private void TryDeactivateGrantedAbilities()
         {
+            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            {
+                if (grantedAbilitySpec.DeactivationPolicy == GrantedAbilityDeactivationPolicy.SyncWithEffect)
+                {
+                    Owner.TryEndAbility(grantedAbilitySpec.AbilityName);
+                }
+            }
+        }
+
+        private void TryRemoveGrantedAbilities()
+        {
+            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            {
+                if (grantedAbilitySpec.RemovePolicy == GrantedAbilityRemovePolicy.SyncWithEffect)
+                {
+                    Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
+                    Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
+                }
+            }
         }
     }
 }
