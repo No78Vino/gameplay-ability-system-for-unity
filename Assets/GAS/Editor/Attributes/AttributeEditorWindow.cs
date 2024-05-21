@@ -8,7 +8,7 @@ namespace GAS.Editor
     using GAS.Editor.Validation;
     using UnityEditor;
     using UnityEngine;
-    
+
     public sealed class AttributeEditorWindow : EditorWindow
     {
         public sealed class Data
@@ -62,23 +62,6 @@ namespace GAS.Editor
             if (GUILayout.Button("Ok"))
             {
                 Save();
-            }
-
-            EditorGUILayout.HelpBox("Press Enter to save, Esc to cancel", MessageType.None);
-
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return && Event.current.type == EventType.KeyUp)
-            {
-                Event.current.Use();
-                Save();
-            }
-
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Escape && Event.current.type == EventType.KeyUp)
-            {
-                Event.current.Use();
-                if (EditorUtility.DisplayDialog("Warning", "Are you sure to cancel?", "Yes", "No"))
-                {
-                    Close();
-                }
             }
         }
 

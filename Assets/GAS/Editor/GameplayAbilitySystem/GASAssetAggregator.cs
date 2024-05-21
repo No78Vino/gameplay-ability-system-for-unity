@@ -1,20 +1,20 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using GAS.Editor.General;
+using GAS.Editor.Validation;
+using GAS.Runtime;
+using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using GAS.Editor.General;
-    using GAS.Editor.Validation;
-    using GAS.Runtime;
-    using Sirenix.OdinInspector.Editor;
-    using Sirenix.Utilities;
-    using Sirenix.Utilities.Editor;
-    using UnityEditor;
-    using UnityEngine;
-    using Debug = UnityEngine.Debug;
-
     public class GASAssetAggregator : OdinMenuEditorWindow
     {
         private static readonly Type[] _types = new Type[5]
@@ -54,7 +54,7 @@ namespace GAS.Editor
         {
             CheckLibPaths();
             var window = GetWindow<GASAssetAggregator>();
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1050, 625);
+            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1250, 625);
             window.MenuWidth = 220;
         }
 
@@ -119,7 +119,7 @@ namespace GAS.Editor
             // Draws a toolbar with the name of the currently selected menu item.
             SirenixEditorGUI.BeginHorizontalToolbar(toolbarHeight);
             {
-                if (selected != null) GUILayout.Label(selected.Name);
+                if (selected != null) GUILayout.Label(selected.Name + " (" + selected.Value.GetType().FullName + ")");
 
                 if (selected != null && (selected.Value is DirectoryInfo || selected.Value is AbilityOverview))
                 {
@@ -128,7 +128,9 @@ namespace GAS.Editor
                         : selected.Value as DirectoryInfo;
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
+                    {
                         OpenDirectoryInExplorer(directoryInfo);
+                    }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Sub Directory")))
                     {
@@ -156,13 +158,33 @@ namespace GAS.Editor
                 if (selected is { Value: ScriptableObject asset })
                 {
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Show In Project")))
+                    {
                         ShowInProject(asset);
+                    }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
+                    {
                         OpenAssetInExplorer(asset);
+                    }
+
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Select Script")))
+                    {
+                        var monoScript = MonoScript.FromScriptableObject(asset);
+                        string path = AssetDatabase.GetAssetPath(monoScript);
+
+                        var obj = AssetDatabase.LoadAssetAtPath<Object>(path);
+                        ShowInProject(obj);
+                    }
+
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Edit Script")))
+                    {
+                        AssetDatabase.OpenAsset(MonoScript.FromScriptableObject(asset));
+                    }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
+                    {
                         RemoveAsset(asset);
+                    }
                 }
             }
             SirenixEditorGUI.EndHorizontalToolbar();
@@ -181,7 +203,7 @@ namespace GAS.Editor
             Process.Start("explorer.exe", path);
         }
 
-        private void ShowInProject(ScriptableObject asset)
+        private void ShowInProject(Object asset)
         {
             if (asset != null)
             {
@@ -272,4 +294,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

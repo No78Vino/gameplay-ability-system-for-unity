@@ -78,6 +78,7 @@ namespace GAS.Editor
         [DisplayAsString]
         [LabelText(" ")]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> Abilities = new List<string>();
 
         [HorizontalGroup(BOXGROUP_ASC_H_R_A, PaddingRight = 0.01f)]
@@ -87,6 +88,7 @@ namespace GAS.Editor
         [DisplayAsString]
         [LabelText(" ")]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> Attributes = new List<string>();
 
 
@@ -97,6 +99,7 @@ namespace GAS.Editor
         [LabelText(" ")]
         [InfoBox("format: [ActiveState][DurationInfo]GeName", InfoMessageType.None, "IsPlaying")]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> Effects = new List<string>();
 
 
@@ -106,6 +109,7 @@ namespace GAS.Editor
         [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
         [DisplayAsString]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> FixedTag = new List<string>();
 
         [Title("  ", bold: true)]
@@ -113,6 +117,7 @@ namespace GAS.Editor
         [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
         [DisplayAsString]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> DynamicTag = new List<string>();
 
 

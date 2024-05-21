@@ -128,7 +128,6 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
 
-
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
 #if UNITY_EDITOR
@@ -145,7 +144,9 @@ namespace GAS.Runtime
             if (canApply)
             {
                 var spec = gameplayEffect.CreateSpec(this, target, Level);
-                applyGameplayEffectTo = target.AddGameplayEffect(spec);
+
+                applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
+                //applyGameplayEffectTo = target.AddGameplayEffect(spec);
             }
 
             return applyGameplayEffectTo;
@@ -154,6 +155,11 @@ namespace GAS.Runtime
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
+        }
+
+        public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
         }
 
         public AbilitySpec GrantAbility(AbstractAbility ability)
@@ -253,10 +259,16 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
+        private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
         {
-            var success = GameplayEffectContainer.AddGameplayEffectSpec(spec);
-            return success ? spec : null;
+            var success = GameplayEffectContainer.AddGameplayEffectSpec(spec, ignoreApplicationRequired);
+            if (success)
+            {
+                // we can't hold the reference of the instant effect
+                return spec.DurationPolicy == EffectsDurationPolicy.Instant ? null : spec;
+            }
+
+            return null;
         }
 
         private void DisableAllAbilities()

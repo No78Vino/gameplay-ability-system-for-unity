@@ -8,7 +8,7 @@ namespace GAS.Runtime
         private readonly AbilitySystemComponent _owner;
         private readonly List<GameplayEffectSpec> _gameplayEffectSpecs = new List<GameplayEffectSpec>();
         private readonly List<GameplayEffectSpec> _cachedGameplayEffectSpecs = new List<GameplayEffectSpec>();
-       
+
         public GameplayEffectContainer(AbilitySystemComponent owner)
         {
             _owner = owner;
@@ -20,7 +20,7 @@ namespace GAS.Runtime
         {
             return _gameplayEffectSpecs;
         }
-        
+
         public void Tick()
         {
             _cachedGameplayEffectSpecs.AddRange(_gameplayEffectSpecs);
@@ -70,14 +70,24 @@ namespace GAS.Runtime
         /// <summary>
         /// </summary>
         /// <param name="spec"></param>
+        /// <param name="ignoreApplicationRequired">
+        ///     If set to true, the method will not check whether the gameplay effect is required to be applied,
+        ///     assuming that the caller has already performed this check. This can be used to optimize performance
+        ///     in cases where the application requirement has been confirmed elsewhere.
+        /// </param>
         /// <returns>
-        ///     If the added effect is an instant effect,return false.
-        ///     If the added effect is a duration effect and activate successfully ,return true.
+        ///     Returns true if the gameplay effect is successfully applied and remains active.
+        ///     Returns false if the gameplay effect is applied but immediately removed due to a tag(in `AssetTags` or `GrantedTags`) match
+        ///     with the `RemoveGameplayEffectsWithTags` function, indicating that the effect did not persist.
         /// </returns>
-        public bool AddGameplayEffectSpec(GameplayEffectSpec spec)
+        public bool AddGameplayEffectSpec(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
         {
-            // Check Immunity Tags
-            if (_owner.HasAnyTags(spec.GameplayEffect.TagContainer.ApplicationImmunityTags))
+            if (!ignoreApplicationRequired && !spec.GameplayEffect.CanApplyTo(_owner))
+            {
+                return false;
+            }
+
+            if (spec.GameplayEffect.IsImmune(_owner))
             {
                 spec.TriggerOnImmunity();
                 return false;
@@ -86,22 +96,30 @@ namespace GAS.Runtime
             if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
                 spec.TriggerOnExecute();
-                return false;
+            }
+            else
+            {
+                _gameplayEffectSpecs.Add(spec);
+                spec.TriggerOnAdd();
+                spec.Apply();
+
+                // If the gameplay effect was removed immediately after being applied, return false
+                if (!_gameplayEffectSpecs.Contains(spec))
+                {
+#if UNITY_EDITOR
+                    UnityEngine.Debug.LogWarning(
+                        $"GameplayEffect {spec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
+#endif
+                    // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
+                    return false;
+                }
+                
+                OnGameplayEffectContainerIsDirty?.Invoke();
             }
 
-            _gameplayEffectSpecs.Add(spec);
-
-            spec.TriggerOnAdd();
-
-            var canApply = spec.CanApply();
-            if (canApply)
-                spec.Apply();
-            else
-                spec.DisApply();
-
-            OnGameplayEffectContainerIsDirty?.Invoke();
-            return canApply;
+            return true;
         }
+
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
         {
@@ -120,12 +138,12 @@ namespace GAS.Runtime
                 if (!gameplayEffectSpec.IsActive)
                 {
                     // new active gameplay effects
-                    if (gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Activate();
+                    if (gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Activate();
                 }
                 else
                 {
                     // new deactive gameplay effects
-                    if (!gameplayEffectSpec.CanRunning()) gameplayEffectSpec.Deactivate();
+                    if (!gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Deactivate();
                 }
             }
 

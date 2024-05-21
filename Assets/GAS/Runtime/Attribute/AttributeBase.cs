@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -13,8 +14,8 @@ namespace GAS.Runtime
         protected event Action<AttributeBase, float, float> _onPostBaseValueChange;
         protected event Action<AttributeBase, float> _onPreCurrentValueChange;
         protected event Func<AttributeBase, float, float> _onPreBaseValueChange;
-        protected IEnumerable<Func<AttributeBase, float, float>> _preBaseValueChangelisteners;
-        
+        protected IEnumerable<Func<AttributeBase, float, float>> _preBaseValueChangeListeners;
+
         private AttributeValue _value;
         private AbilitySystemComponent _owner;
         public AbilitySystemComponent Owner => _owner;
@@ -43,7 +44,7 @@ namespace GAS.Runtime
         {
             _owner = owner;
         }
-        
+
         public void SetCurrentValue(float value)
         {
             _onPreCurrentValueChange?.Invoke(this, value);
@@ -51,7 +52,7 @@ namespace GAS.Runtime
             var oldValue = CurrentValue;
             _value.SetCurrentValue(value);
 
-            if (oldValue != value) _onPostCurrentValueChange?.Invoke(this, oldValue, value);
+            if (!Mathf.Approximately(oldValue, value)) _onPostCurrentValueChange?.Invoke(this, oldValue, value);
         }
 
         public void SetBaseValue(float value)
@@ -60,27 +61,27 @@ namespace GAS.Runtime
             {
                 value = InvokePreBaseValueChangeListeners(value);
             }
-            
+
             var oldValue = _value.BaseValue;
             _value.SetBaseValue(value);
 
-            if (oldValue != value) _onPostBaseValueChange?.Invoke(this, oldValue, value);
+            if (!Mathf.Approximately(oldValue, value)) _onPostBaseValueChange?.Invoke(this, oldValue, value);
         }
-        
+
         public void SetCurrentValueWithoutEvent(float value)
         {
             _value.SetCurrentValue(value);
         }
-        
+
         public void SetBaseValueWithoutEvent(float value)
         {
             _value.SetBaseValue(value);
         }
 
-        public void RegisterPreBaseValueChange(Func<AttributeBase, float,float> func)
+        public void RegisterPreBaseValueChange(Func<AttributeBase, float, float> func)
         {
             _onPreBaseValueChange += func;
-            _preBaseValueChangelisteners =
+            _preBaseValueChangeListeners =
                 _onPreBaseValueChange?.GetInvocationList().Cast<Func<AttributeBase, float, float>>();
         }
 
@@ -99,10 +100,10 @@ namespace GAS.Runtime
             _onPostCurrentValueChange += action;
         }
 
-        public void UnregisterPreBaseValueChange(Func<AttributeBase, float,float> func)
+        public void UnregisterPreBaseValueChange(Func<AttributeBase, float, float> func)
         {
             _onPreBaseValueChange -= func;
-            _preBaseValueChangelisteners =
+            _preBaseValueChangeListeners =
                 _onPreBaseValueChange?.GetInvocationList().Cast<Func<AttributeBase, float, float>>();
         }
 
@@ -128,12 +129,12 @@ namespace GAS.Runtime
             _onPreCurrentValueChange = null;
             _onPostCurrentValueChange = null;
         }
-        
+
         private float InvokePreBaseValueChangeListeners(float value)
         {
-            if (_preBaseValueChangelisteners == null) return value;
-            
-            foreach (var t in _preBaseValueChangelisteners)
+            if (_preBaseValueChangeListeners == null) return value;
+
+            foreach (var t in _preBaseValueChangeListeners)
                 value = t.Invoke(this, value);
             return value;
         }
