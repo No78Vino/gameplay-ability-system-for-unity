@@ -39,24 +39,31 @@ namespace GAS.Runtime
             if (startFrame <= frame)
             {
                 var transform = previewObject.transform.Find(AnimatorRelativePath);
-                var animator = IncludeChildrenAnimator ? transform.GetComponentInChildren<Animator>() : transform.GetComponent<Animator>();
-                if (animator != null)
+                Animator animator = null;
+                if (transform != null)
                 {
-                    var stateMap = animator.GetAllAnimationState();
-                    if (stateMap.TryGetValue(StateName, out var clip))
-                    {
-                        float clipFrameCount = (int)(clip.frameRate * clip.length);
-                        if (frame <= clipFrameCount + startFrame)
-                        {
-                            var progress = (frame - startFrame) / clipFrameCount;
-                            if (progress > 1 && clip.isLooping) progress -= (int)progress;
-                            clip.SampleAnimation(animator.gameObject, progress * clip.length);
-                        }
-                    }
+                    animator = IncludeChildrenAnimator
+                        ? transform.GetComponentInChildren<Animator>()
+                        : transform.GetComponent<Animator>();
                 }
-                else
+
+                if (animator == null)
                 {
-                    Debug.LogError($"Animator is null. Please check the cue asset: {name}, AnimatorRelativePath: {AnimatorRelativePath}, IncludeChildrenAnimator: {IncludeChildrenAnimator}");
+                    Debug.LogError(
+                        $"Animator is null. Please check the cue asset: {name}, AnimatorRelativePath: {AnimatorRelativePath}, IncludeChildrenAnimator: {IncludeChildrenAnimator}");
+                    return;
+                }
+
+                var stateMap = animator.GetAllAnimationState();
+                if (stateMap.TryGetValue(StateName, out var clip))
+                {
+                    float clipFrameCount = (int)(clip.frameRate * clip.length);
+                    if (frame <= clipFrameCount + startFrame)
+                    {
+                        var progress = (frame - startFrame) / clipFrameCount;
+                        if (progress > 1 && clip.isLooping) progress -= (int)progress;
+                        clip.SampleAnimation(animator.gameObject, progress * clip.length);
+                    }
                 }
             }
         }
@@ -67,14 +74,21 @@ namespace GAS.Runtime
     {
         private readonly Animator _animator;
 
-        public CueAnimationOneShotSpec(CueAnimationOneShot cue, GameplayCueParameters parameters) : base(cue,
-            parameters)
+        public CueAnimationOneShotSpec(CueAnimationOneShot cue, GameplayCueParameters parameters)
+            : base(cue, parameters)
         {
             var transform = Owner.transform.Find(cue.AnimatorRelativePath);
-            _animator = cue.IncludeChildrenAnimator ? transform.GetComponentInChildren<Animator>() : transform.GetComponent<Animator>();
+            if (transform != null)
+            {
+                _animator = cue.IncludeChildrenAnimator
+                    ? transform.GetComponentInChildren<Animator>()
+                    : transform.GetComponent<Animator>();
+            }
+
             if (_animator == null)
             {
-                Debug.LogError($"Animator is null. Please check the cue asset: {cue.name}, AnimatorRelativePath: {cue.AnimatorRelativePath}, IncludeChildrenAnimator: {cue.IncludeChildrenAnimator}");
+                Debug.LogError(
+                    $"Animator is null. Please check the cue asset: {cue.name}, AnimatorRelativePath: {cue.AnimatorRelativePath}, IncludeChildrenAnimator: {cue.IncludeChildrenAnimator}");
             }
         }
 
