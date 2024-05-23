@@ -97,7 +97,17 @@ namespace GAS.Runtime
         [ShowIf("IsDurationalPolicy")]
         [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false)]
         public GrantedAbilityConfig[] GrantedAbilities;
+        
+        [Space]
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
+        [Title(GASTextDefine.TITLE_GE_STACKING)]
+        [ShowIf("IsDurationalPolicy")]
+        public GameplayEffectStackingConfig Stacking;
+        
+        
 
+        
+        
         // Mod
         [Title(GASTextDefine.TITLE_GE_MOD, bold: true)]
         [BoxGroup(GRP_DATA, false)]

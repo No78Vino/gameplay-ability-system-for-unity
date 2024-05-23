@@ -19,6 +19,15 @@ MonoBehaviour:
   Period: 0
   PeriodExecution: {fileID: 0}
   GrantedAbilities: []
+  Stacking:
+    stackingType: 0
+    limitCount: 10
+    durationRefreshPolicy: 1
+    periodResetPolicy: 0
+    expirationPolicy: 0
+    denyOverflowApplication: 1
+    clearStackOnOverflow: 1
+    overflowEffects: []
   Modifiers: []
   AssetTags: []
   GrantedTags:
