@@ -1,13 +1,19 @@
 ﻿//using UnityEngine.Profiling;
 
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public enum EffectsDurationPolicy
     {
+        [LabelText("瞬时(Instant)", SdfIconType.LightningCharge)]
         Instant = 1,
+
+        [LabelText("永久(Infinite)", SdfIconType.Infinity)]
         Infinite,
+
+        [LabelText("限时(Duration)", SdfIconType.HourglassSplit)]
         Duration
     }
 
@@ -34,14 +40,14 @@ namespace GAS.Runtime
 
         // Granted Ability
         public readonly GrantedAbilityFromEffect[] GrantedAbilities;
-        
+
         // TODO: Stacking
         public readonly GameplayEffectStacking Stacking;
-        
+
         // TODO: Expiration Effects 
         public readonly GameplayEffect[] PrematureExpirationEffect;
         public readonly GameplayEffect[] RoutineExpirationEffectClasses;
-        
+
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator,
             AbilitySystemComponent owner,

@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Text.RegularExpressions;
 using GAS.General;
-using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -32,8 +29,6 @@ namespace GAS.Runtime
 
 
         private static IEnumerable AbilityClassChoice = new ValueDropdownList<string>();
-        private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
-
 
 
         public abstract Type AbilityType();
@@ -47,16 +42,20 @@ namespace GAS.Runtime
         [ShowInInspector]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(1, 1, 1, 1)]
-        private string
-            AbilityTypeFoShow {
+        private string AbilityTypeFoShow
+        {
             get
             {
-                if(InstanceAbilityClassFullName==null) return "<size=18><color=red><b>Ability Class is NULL!!! Please check.</b></color></size>";
+                if (InstanceAbilityClassFullName == null)
+                {
+                    return "<size=18><color=red><b>Ability Class is NULL!!! Please check.</b></color></size>";
+                }
+
                 return $"<size=15><color=white><b>Ability Class : {InstanceAbilityClassFullName}</b></color></size>";
             }
         }
 #endif
-        
+
         [BoxGroup(GRP_BASE, false)]
         [Title(GASTextDefine.ABILITY_BASEINFO, bold: true)]
         [HorizontalGroup(GRP_BASE_H, Width = WIDTH_GRP_BASE_H_LEFT)]
@@ -66,84 +65,85 @@ namespace GAS.Runtime
         [LabelWidth(WIDTH_LABLE)]
         [InfoBox("Invalid UniqueName", InfoMessageType.Error, "IsUniqueNameInvalid")]
         public string UniqueName;
-        
-        #if UNITY_EDITOR
+
+#if UNITY_EDITOR
         private const string VariableNamePattern = @"^[a-zA-Z_][a-zA-Z0-9_]*$";
-        public static readonly System.Text.RegularExpressions.Regex VariableNameRegex = new (VariableNamePattern);
+        public static readonly Regex VariableNameRegex = new(VariableNamePattern);
         private bool IsUniqueNameInvalid()
         {
             if (string.IsNullOrWhiteSpace(UniqueName)) return true;
             return !VariableNameRegex.IsMatch(UniqueName);
         }
-        #endif
-        
+#endif
+
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [Title("Description", bold: false)]
         [HideLabel]
         [MultiLineProperty(5)]
         public string Description;
-        
+
         [Space]
         [Title("Gameplay Effect", bold: true)]
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [LabelWidth(WIDTH_LABLE)]
         [AssetSelector]
-        [LabelText(GASTextDefine.ABILITY_EFFECT_COST)]
+        [LabelText(SdfIconType.CupStraw, Text = GASTextDefine.ABILITY_EFFECT_COST)]
         public GameplayEffectAsset Cost;
-        
+
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [LabelWidth(WIDTH_LABLE)]
         [AssetSelector]
-        [LabelText(GASTextDefine.ABILITY_EFFECT_CD)]
+        [LabelText(SdfIconType.Stopwatch, Text = GASTextDefine.ABILITY_EFFECT_CD)]
         public GameplayEffectAsset Cooldown;
-        
+
         [VerticalGroup(GRP_BASE_H_LEFT)]
         [LabelWidth(WIDTH_LABLE)]
-        [LabelText(SdfIconType.ClockFill,Text = GASTextDefine.ABILITY_CD_TIME)]
+        [LabelText(SdfIconType.Clock, Text = GASTextDefine.ABILITY_CD_TIME)]
+        [Unit(Units.Second)]
         public float CooldownTime;
-        
+
         // Tags
-        [Title("Tags",bold:true)]
-        [HorizontalGroup(GRP_BASE_H,PaddingLeft = 0.025f)]
+        [Title("Tags", bold: true)]
+        [HorizontalGroup(GRP_BASE_H, PaddingLeft = 0.025f)]
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [Tooltip("描述性质的标签，用来描述Ability的特性表现，比如伤害、治疗、控制等。")]
         public GameplayTag[] AssetTag;
-        
+
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [LabelText("CancelAbility With Tags ")]
         [Space]
         [Tooltip("Ability激活时，Ability持有者当前持有的所有Ability中，拥有【任意】这些标签的Ability会被取消。")]
         public GameplayTag[] CancelAbilityTags;
-        
+
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [LabelText("BlockAbility With Tags ")]
         [Space]
         [Tooltip("Ability激活时，Ability持有者当前持有的所有Ability中，拥有【任意】这些标签的Ability会被阻塞激活。")]
         public GameplayTag[] BlockAbilityTags;
-        
+
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [Space]
         [Tooltip("Ability激活时，持有者会获得这些标签，Ability被失活时，这些标签也会被移除。")]
         public GameplayTag[] ActivationOwnedTag;
-        
+
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [Space]
         [Tooltip("Ability只有在其拥有者拥有【所有】这些标签时才可激活。")]
         public GameplayTag[] ActivationRequiredTags;
-        
+
         [VerticalGroup(GRP_BASE_H_RIGHT)]
-        [ListDrawerSettings(Expanded = true)]
-        [ValueDropdown("TagChoices",HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [Space]
         [Tooltip("Ability在其拥有者拥有【任意】这些标签时不能被激活。")]
         public GameplayTag[] ActivationBlockedTags;
@@ -151,39 +151,5 @@ namespace GAS.Runtime
         // public GameplayTag[] SourceBlockedTags;
         // public GameplayTag[] TargetRequiredTags;
         // public GameplayTag[] TargetBlockedTags;
-
-
-        
-        
-        
-        private void OnEnable()
-        {
-            SetTagChoices();
-        }
-        
-        private static void SetTagChoices()
-        {
-            Type gameplayTagSumCollectionType = TypeUtil.FindTypeInAllAssemblies("GAS.Runtime.GTagLib");
-            if(gameplayTagSumCollectionType == null)
-            {
-                Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");
-                TagChoices = new ValueDropdownList<GameplayTag>();
-                return;
-            }
-            FieldInfo tagMapField = gameplayTagSumCollectionType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
-
-            if (tagMapField != null)
-            {
-                Dictionary<string, GameplayTag> tagMapValue = (Dictionary<string, GameplayTag>)tagMapField.GetValue(null);
-                var tagChoices = tagMapValue.Values.ToList();
-                var choices = new ValueDropdownList<GameplayTag>();
-                foreach (var tag in tagChoices) choices.Add(tag.Name,tag);
-                TagChoices = choices;
-            }
-            else
-            {
-                TagChoices = new ValueDropdownList<GameplayTag>();
-            }
-        }
     }
 }
