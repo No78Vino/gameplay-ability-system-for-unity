@@ -1,13 +1,19 @@
 ﻿//using UnityEngine.Profiling;
 
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public enum EffectsDurationPolicy
     {
+        [LabelText("瞬时(Instant)", SdfIconType.LightningCharge)]
         Instant = 1,
+
+        [LabelText("永久(Infinite)", SdfIconType.Infinity)]
         Infinite,
+
+        [LabelText("限时(Duration)", SdfIconType.HourglassSplit)]
         Duration
     }
 

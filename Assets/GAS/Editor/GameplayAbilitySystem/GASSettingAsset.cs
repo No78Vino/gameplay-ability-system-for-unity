@@ -20,14 +20,14 @@ namespace GAS.Editor
         
         [Title(GASTextDefine.TITLE_SETTING,Bold = true)]
         [BoxGroup("A", false,order:1)] 
-        [LabelText(GASTextDefine.LABLE_OF_CodeGeneratePath)]
+        [LabelText(GASTextDefine.LABEL_OF_CodeGeneratePath)]
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
         [OnValueChanged("SaveAsset")]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
 
         [BoxGroup("A")] 
-        [LabelText(GASTextDefine.LABLE_OF_GASConfigAssetPath)] 
+        [LabelText(GASTextDefine.LABEL_OF_GASConfigAssetPath)] 
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
         [OnValueChanged("SaveAsset")]

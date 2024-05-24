@@ -4,7 +4,7 @@
     {
         public const string TITLE_SETTING = "设置";
         public const string TITLE_PATHS = "路径";
-        public const string TITLE_BASEINFO = "基本信息";
+        public const string TITLE_BASE_INFO = "基本信息";
         public const string TITLE_DESCRIPTION = "描述";
 
         
@@ -16,8 +16,8 @@
         public const string TIP_CREATE_FOLDERS =
             "<color=white><size=15>如果你修改了EX-GAS的配置Asset路径,请点击这个按钮来确保所有子文件夹和基础配置文件正确生成。</size></color>";
 
-        public const string LABLE_OF_CodeGeneratePath = "脚本生成路径";
-        public const string LABLE_OF_GASConfigAssetPath = "配置文件Asset路径";
+        public const string LABEL_OF_CodeGeneratePath = "脚本生成路径";
+        public const string LABEL_OF_GASConfigAssetPath = "配置文件Asset路径";
         public const string BUTTON_CheckAllPathFolderExist = " 检查子目录和基础配置";
         public const string BUTTON_GenerateAscExtensionCode = " 生成AbilitySystemComponentExtension类脚本";
 
@@ -63,14 +63,15 @@
 
         #region GameplayEffect
         
-        public const string TIP_BASEINFO="基本信息只用于描述这个GameplayEffect，方便策划阅读理解该Effect。";
+        public const string TIP_BASE_INFO="仅用于描述，方便理解。";
         public const string TIP_GE_POLICY="Instant=瞬时，Duration=持续性，Infinite=永久";
-        public const string LABLE_GE_NAME = "效果名";
+        public const string LABLE_GE_NAME = "效果名称";
+        public const string LABLE_GE_DESCRIPTION = "效果描述";
         public const string TITLE_GE_POLICY="Gameplay Effect实施策略";
-        public const string LABLE_GE_POLICY = "执行策略";
+        public const string LABLE_GE_POLICY = "时限策略";
         public const string LABLE_GE_DURATION = "持续时间";
-        public const string LABLE_GE_PER = "每";
-        public const string LABLE_GE_EXEC = "执行";
+        public const string LABLE_GE_INTERVAL = "间隔时间";
+        public const string LABLE_GE_EXEC = "间隔效果";
         public const string TITLE_GE_GrantedAbilities = "授予能力(Ability)";
         public const string TITLE_GE_MOD = "修改器Modifier";
         public const string TITLE_GE_TAG = "标签Tag";
@@ -96,11 +97,11 @@
         public const string TITLE_GE_CUE_CueOnActivate = "激活时触发";
         public const string TITLE_GE_CUE_CueOnDeactivate = "失活时触发";
         
-        public const string LABEL_GRANT_ABILITY = "授予的能力";
+        public const string LABEL_GRANT_ABILITY = "授予能力";
         public const string LABEL_GRANT_ABILITY_LEVEL = "能力等级";
-        public const string LABEL_GRANT_ABILITY_ACTIVATION_POLICY = "能力激活策略";
-        public const string LABEL_GRANT_ABILITY_DEACTIVATION_POLICY = "能力取消激活策略";
-        public const string LABEL_GRANT_ABILITY_REMOVE_POLICY = "能力移除策略";
+        public const string LABEL_GRANT_ABILITY_ACTIVATION_POLICY = "激活策略";
+        public const string LABEL_GRANT_ABILITY_DEACTIVATION_POLICY = "失活策略";
+        public const string LABEL_GRANT_ABILITY_REMOVE_POLICY = "移除策略";
         public const string TIP_GRANT_ABILITY_ACTIVATION_POLICY = "None = 不激活，需要用户手动调用ASC相关接口激活; " +
                                                                   "WhenAdded = 添加时就激活;" +
                                                                   "SyncWithEffect = 同步GE，GE激活时激活"; 
