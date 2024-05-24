@@ -34,7 +34,14 @@ namespace GAS.Runtime
 
         // Granted Ability
         public readonly GrantedAbilityFromEffect[] GrantedAbilities;
-
+        
+        // TODO: Stacking
+        public readonly GameplayEffectStacking Stacking;
+        
+        // TODO: Expiration Effects 
+        public readonly GameplayEffect[] PrematureExpirationEffect;
+        public readonly GameplayEffect[] RoutineExpirationEffectClasses;
+        
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator,
             AbilitySystemComponent owner,
