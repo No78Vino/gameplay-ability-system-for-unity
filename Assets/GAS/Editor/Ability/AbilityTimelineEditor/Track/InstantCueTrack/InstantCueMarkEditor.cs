@@ -1,19 +1,21 @@
-using System.Collections.Generic;
-using GAS.Runtime;
-using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
-using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
+    using System.Collections.Generic;
+    using Runtime;
+    using UnityEditor;
+    using Editor;
+    using UnityEngine;
+    using Sirenix.OdinInspector.Editor;
+    using Sirenix.OdinInspector;
+
     public class InstantCueMarkEditor : OdinEditorWindow
     {
         private InstantCueMark _mark;
 
         public static InstantCueMarkEditor Create(InstantCueMark mark)
         {
-            var window = CreateInstance<InstantCueMarkEditor>();
+            var window = new InstantCueMarkEditor();
             window._mark = mark;
 
             window.UpdateMarkInfo();
@@ -28,8 +30,9 @@ namespace GAS.Editor
         [Delayed]
         [BoxGroup]
         [AssetSelector]
-        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
+        [ListDrawerSettings(Expanded = true, DraggableItems = true)]
         [OnValueChanged("OnCueListChanged")]
+        [InlineEditor(InlineEditorModes.FullEditor)]
         public List<GameplayCueInstant> Cues;
 
         [BoxGroup]
@@ -58,3 +61,4 @@ namespace GAS.Editor
     {
     }
 }
+#endif

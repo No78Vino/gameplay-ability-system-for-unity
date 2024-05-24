@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -12,168 +16,167 @@ namespace GAS.Runtime
         private const string GRP_BASE_H = "Base Info/H";
         private const string GRP_BASE_H_LEFT = "Base Info/H/Left";
         private const string GRP_BASE_H_RIGHT = "Base Info/H/Right";
+        private const string GRP_BASE_H_RIGHT_PERIOD = "Base Info/H/Right/Period";
+        private const string GRP_BASE_H_RIGHT_POLICY = "Base Info/H/Right/Policy";
 
-        private const string GRP_DATA = "Data";
-        private const string GRP_DATA_H = "Data/H";
-        private const string GRP_DATA_TAG = "Data/H/Tags";
-        private const string GRP_DATA_CUE = "Data/H/Cues";
-        private const string GRP_DATA_H2 = "Data/H2";
-        private const string GRP_DATA_MOD = "Data/H2/Modifiers";
-        private const string GRP_DATA_GRANTED_ABILITIES = "Data/H2/GrantedAbilities";
 
-        private const int WIDTH_LABEL = 70;
+        private const string GRP_DATA = "DATA";
+        private const string GRP_DATA_H = "DATA/H";
+        private const string GRP_DATA_MOD = "DATA/H/Modifiers";
+        private const string GRP_DATA_TAG = "DATA/H/Tags";
+        private const string GRP_DATA_CUE = "DATA/H/Cue";
 
+        private const int WIDTH_LABEL = 100;
+        private const int WIDTH_GRP_BASE_H_LEFT = 250;
+        private const int WIDTH_GRP_BASE_H_RIGHT = 500;
+        private const int WIDTH_GRP_EACH_TAG = 250;
+
+        private const string ERROR_POLICY = "Policy CAN NOT be NONE!";
         private const string ERROR_NONE_CUE = "Cue CAN NOT be NONE!";
         private const string ERROR_DURATION = "Duration must be > 0.";
+        private const string ERROR_PERIOD = "Period must be >= 0.";
         private const string ERROR_PERIOD_GE_NONE = "Period GameplayEffect CAN NOT be NONE!";
-        private const string ERROR_GRANTED_ABILITY_INVALID = "存在无效的Ability!";
 
-        #region Base Info
+        private const string INFO_INVALID_FOR_INSTANT_GE = "瞬时(Instant)GE无效";
 
-        [TitleGroup(GRP_BASE)]
-        [HorizontalGroup(GRP_BASE_H, Width = 1 - 0.618f)]
-        [TabGroup(GRP_BASE_H_LEFT, "Summary", SdfIconType.InfoSquareFill, TextColor = "#0BFFC5")]
-        [LabelText(GASTextDefine.LABLE_GE_NAME, SdfIconType.CardHeading)]
-        [LabelWidth(WIDTH_LABEL)]
+
+        private static IEnumerable TagChoices = new ValueDropdownList<GameplayTag>();
+
+        [BoxGroup(GRP_BASE, false)]
+        [InfoBox(GASTextDefine.TIP_BASEINFO)]
+        [Title(GASTextDefine.TITLE_BASEINFO, bold: true)]
+        [HorizontalGroup(GRP_BASE_H, Width = WIDTH_GRP_BASE_H_LEFT)]
+        [VerticalGroup(GRP_BASE_H_LEFT)]
+        [LabelText(GASTextDefine.LABLE_GE_NAME)]
         public string Name;
 
-        [TabGroup(GRP_BASE_H_LEFT, "Summary")]
-        [LabelText(GASTextDefine.LABLE_GE_DESCRIPTION, SdfIconType.CardText)]
-        [LabelWidth(WIDTH_LABEL)]
-        [MultiLineProperty(3)]
+        [VerticalGroup(GRP_BASE_H_LEFT)]
+        [Title(GASTextDefine.TITLE_DESCRIPTION, bold: false)]
+        [HideLabel]
+        [MultiLineProperty(5)]
         public string Description;
 
-        #endregion Base Info
 
-        #region Policy
-
-        [HorizontalGroup(GRP_BASE_H)]
-        [TabGroup(GRP_BASE_H_RIGHT, "Policy", SdfIconType.AwardFill, TextColor = "#FF7F00")]
-        [LabelText(GASTextDefine.LABLE_GE_POLICY, SdfIconType.Diagram3Fill)]
+        [Title(GASTextDefine.TITLE_GE_POLICY, bold: true)]
+        [HorizontalGroup(GRP_BASE_H, PaddingLeft = 0.025f)]
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
+        [LabelText(GASTextDefine.LABLE_GE_POLICY)]
         [LabelWidth(WIDTH_LABEL)]
+        [InfoBox(ERROR_DURATION, InfoMessageType.Error, "IsDurationInvalid")]
+        [InfoBox(ERROR_PERIOD, InfoMessageType.Error, "IsPeriodInvalid")]
+        [InfoBox(ERROR_PERIOD_GE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
+        [InfoBox(GASTextDefine.TIP_GE_POLICY)]
         [EnumToggleButtons]
         public EffectsDurationPolicy DurationPolicy = EffectsDurationPolicy.Instant;
 
-        [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
         [LabelWidth(WIDTH_LABEL)]
-        [EnableIf("@DurationPolicy == EffectsDurationPolicy.Duration")]
+        [ShowIf("DurationPolicy", EffectsDurationPolicy.Duration)]
         [Unit(Units.Second)]
-        [ValidateInput("@DurationPolicy != EffectsDurationPolicy.Duration || Duration > 0", ERROR_DURATION)]
-        [LabelText(GASTextDefine.LABLE_GE_DURATION, SdfIconType.HourglassSplit)]
+        [LabelText(GASTextDefine.LABLE_GE_DURATION)]
         public float Duration;
 
-        [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
-        [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
-        [LabelWidth(WIDTH_LABEL)]
-        [EnableIf("IsDurationalPolicy")]
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
+        [HorizontalGroup(GRP_BASE_H_RIGHT_PERIOD, width: 100)]
+        [LabelText(GASTextDefine.LABLE_GE_PER)]
+        [LabelWidth(25)]
+        [ShowIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
-        [PropertyRange(0, "@Duration")]
         public float Period;
 
-        [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
-        [LabelText(GASTextDefine.LABLE_GE_EXEC, SdfIconType.Magic)]
-        [LabelWidth(WIDTH_LABEL)]
-        [EnableIf("IsPeriodic")]
+        [HorizontalGroup(GRP_BASE_H_RIGHT_PERIOD)]
+        [LabelText(GASTextDefine.LABLE_GE_EXEC)]
+        [LabelWidth(50)]
+        [ShowIf("IsPeriodic")]
         [AssetSelector]
-        [InfoBox(ERROR_PERIOD_GE_NONE, InfoMessageType.Error, VisibleIf = "IsPeriodGameplayEffectNone")]
-        [InfoBox("必须为Instant类型", InfoMessageType.Error,
-            VisibleIf =
-                "@IsPeriodic() && (PeriodExecution != null && PeriodExecution.DurationPolicy != EffectsDurationPolicy.Instant)")]
         public GameplayEffectAsset PeriodExecution;
 
-        #endregion Policy
-
-        #region Granted Abilities
-
-        [TitleGroup(GRP_DATA)]
-        [HorizontalGroup(GRP_DATA_H2, width: 0.618f, order: 2)]
-        [TabGroup(GRP_DATA_GRANTED_ABILITIES, "Granted Abilities", SdfIconType.YinYang, TextColor = "#D6626E",
-            Order = 2)]
-        [EnableIf("IsDurationalPolicy")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [InfoBox(ERROR_GRANTED_ABILITY_INVALID, InfoMessageType.Error, VisibleIf = "IsGrantedAbilitiesInvalid")]
+        [Space]
+        [VerticalGroup(GRP_BASE_H_RIGHT)]
+        [Title(GASTextDefine.TITLE_GE_GrantedAbilities, Bold = true)]
+        [ShowIf("IsDurationalPolicy")]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false)]
         public GrantedAbilityConfig[] GrantedAbilities;
 
-        #endregion Granted Abilities
-
-        #region Modifiers
-
-        [TabGroup(GRP_DATA_MOD, "Modifiers", SdfIconType.CalculatorFill, TextColor = "#FFE60B", Order = 1)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [InfoBox(@"@IsInstantPolicy() ? ""仅在成功应用时执行"":""每次激活时都会执行""", InfoMessageType.None)]
-        [InfoBox("依次执行多个修改器, 请注意执行顺序", InfoMessageType.Warning, VisibleIf = "@$value != null && $value.Length > 1")]
+        // Mod
+        [Title(GASTextDefine.TITLE_GE_MOD, bold: true)]
+        [BoxGroup(GRP_DATA, false)]
+        [HorizontalGroup(GRP_DATA_H)]
+        [VerticalGroup(GRP_DATA_MOD)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false)]
         public GameplayEffectModifier[] Modifiers;
 
-        #endregion Modifiers
-
-        #region Tags
-
-        [HorizontalGroup(GRP_DATA_H, width: 1 - 0.618f, order: 1)]
-        [TabGroup(GRP_DATA_TAG, "Tags", SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 1)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        // Tag Container
+        [Title(GASTextDefine.TITLE_GE_TAG, bold: true)]
+        [HorizontalGroup(GRP_DATA_H)]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_AssetTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_AssetTags)]
-        [ShowIf("IsDurationalPolicy")]
+        [InfoBox(INFO_INVALID_FOR_INSTANT_GE, InfoMessageType.None, "IsInstantPolicy")]
+        [EnableIf("IsDurationalPolicy")]
         public GameplayTag[] AssetTags;
 
-        [Space()]
-        [TabGroup(GRP_DATA_TAG, "Tags")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_GrantedTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_GrantedTags)]
-        [ShowIf("IsDurationalPolicy")]
+        [InfoBox(INFO_INVALID_FOR_INSTANT_GE, InfoMessageType.None, "IsInstantPolicy")]
+        [EnableIf("IsDurationalPolicy")]
         public GameplayTag[] GrantedTags;
 
-        [Space()]
-        [TabGroup(GRP_DATA_TAG, "Tags")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_ApplicationRequiredTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_ApplicationRequiredTags)]
         public GameplayTag[] ApplicationRequiredTags;
 
-        [Space()]
-        [TabGroup(GRP_DATA_TAG, "Tags")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_OngoingRequiredTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_OngoingRequiredTags)]
-        [ShowIf("IsDurationalPolicy")]
+        [InfoBox(INFO_INVALID_FOR_INSTANT_GE, InfoMessageType.None, "IsInstantPolicy")]
+        [EnableIf("IsDurationalPolicy")]
         public GameplayTag[] OngoingRequiredTags;
 
-        [Space()]
-        [TabGroup(GRP_DATA_TAG, "Tags")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_RemoveGameplayEffectsWithTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_RemoveGameplayEffectsWithTags)]
         public GameplayTag[] RemoveGameplayEffectsWithTags;
 
-        [Space()]
-        [TabGroup(GRP_DATA_TAG, "Tags")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_TAG)]
+        [ListDrawerSettings(Expanded = true)]
+        [ValueDropdown("TagChoices", HideChildProperties = true)]
         [LabelText(GASTextDefine.TITLE_GE_TAG_ApplicationImmunityTags)]
         [Tooltip(GASTextDefine.TIP_GE_TAG_ApplicationImmunityTags)]
         public GameplayTag[] ApplicationImmunityTags;
 
-        #endregion Tags
 
-        #region Cues
-
-        [TabGroup(GRP_DATA_CUE, "Cues", SdfIconType.Stars, TextColor = "#00FFFF", Order = 2)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        // Cues
+        [Title(GASTextDefine.TITLE_GE_CUE, bold: true)]
+        [HorizontalGroup(GRP_DATA_H)]
+        [VerticalGroup(GRP_DATA_CUE)]
+        [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsInstantPolicy")]
         [InfoBox(ERROR_NONE_CUE, InfoMessageType.Error, VisibleIf = "IsCueExecuteNone")]
         [AssetSelector]
         [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnExecute)]
         public GameplayCueInstant[] CueOnExecute;
 
-        [Space()]
-        [TabGroup(GRP_DATA_CUE, "Cues")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [Title(GASTextDefine.TITLE_GE_CUE, bold: true)]
+        [VerticalGroup(GRP_DATA_CUE)]
+        [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [InfoBox(ERROR_NONE_CUE, InfoMessageType.Error, VisibleIf = "IsCueDurationalNone")]
         [AssetSelector]
@@ -181,48 +184,55 @@ namespace GAS.Runtime
         [Tooltip("生命周期完全和GameplayEffect同步")]
         public GameplayCueDurational[] CueDurational;
 
-        [Space()]
-        [TabGroup(GRP_DATA_CUE, "Cues")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_CUE)]
+        [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
         [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnAdd)]
         public GameplayCueInstant[] CueOnAdd;
 
-        [Space()]
-        [TabGroup(GRP_DATA_CUE, "Cues")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_CUE)]
+        [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
         [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnRemove)]
         public GameplayCueInstant[] CueOnRemove;
 
-        [Space()]
-        [TabGroup(GRP_DATA_CUE, "Cues")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_CUE)]
+        [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
         [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnActivate)]
         public GameplayCueInstant[] CueOnActivate;
 
-        [Space()]
-        [TabGroup(GRP_DATA_CUE, "Cues")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [Title("")]
+        [VerticalGroup(GRP_DATA_CUE)]
+        [ListDrawerSettings(Expanded = true)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
         [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnDeactivate)]
         public GameplayCueInstant[] CueOnDeactivate;
 
-        #endregion Cues
 
         // TODO
         [HideInInspector]
         public ExecutionCalculation[] Executions;
 
+
+        private void OnEnable()
+        {
+            SetTagChoices();
+            GameplayEffectModifier.SetAttributeChoices();
+        }
+
         bool IsPeriodic()
         {
             return IsDurationalPolicy() && Period > 0;
         }
+
 
         bool IsDurationalPolicy()
         {
@@ -250,14 +260,33 @@ namespace GAS.Runtime
         bool IsDurationInvalid() => DurationPolicy == EffectsDurationPolicy.Duration && Duration <= 0;
         bool IsPeriodInvalid() => IsDurationalPolicy() && Period < 0;
 
-        bool IsGrantedAbilitiesInvalid()
+        private static void SetTagChoices()
         {
-            return IsDurationalPolicy() &&
-                   GrantedAbilities != null &&
-                   GrantedAbilities.Any(abilityConfig => abilityConfig.AbilityAsset == null);
-        }
+            Type gameplayTagSumCollectionType = TypeUtil.FindTypeInAllAssemblies("GAS.Runtime.GTagLib");
+            if (gameplayTagSumCollectionType == null)
+            {
+                Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");
+                TagChoices = new ValueDropdownList<GameplayTag>();
+                return;
+            }
 
-        #region IGameplayEffectData
+            FieldInfo tagMapField =
+                gameplayTagSumCollectionType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
+
+            if (tagMapField != null)
+            {
+                Dictionary<string, GameplayTag> tagMapValue =
+                    (Dictionary<string, GameplayTag>)tagMapField.GetValue(null);
+                var tagChoices = tagMapValue.Values.ToList();
+                var choices = new ValueDropdownList<GameplayTag>();
+                foreach (var tag in tagChoices) choices.Add(tag.Name, tag);
+                TagChoices = choices;
+            }
+            else
+            {
+                TagChoices = new ValueDropdownList<GameplayTag>();
+            }
+        }
 
         public string GetDisplayName() => name;
 
@@ -298,7 +327,5 @@ namespace GAS.Runtime
         public ExecutionCalculation[] GetExecutions() => Executions;
 
         public GrantedAbilityConfig[] GetGrantedAbilities() => GrantedAbilities;
-
-        #endregion IGameplayEffectData
     }
 }
