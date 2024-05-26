@@ -116,6 +116,11 @@ namespace GAS.Runtime
         {
             return Array.Empty<GrantedAbilityConfig>();
         }
+
+        public GameplayEffectStacking GetStacking()
+        {
+            return GameplayEffectStacking.None;
+        }
     }
 
     public class InfiniteGameplayEffectData : InstantGameplayEffectData

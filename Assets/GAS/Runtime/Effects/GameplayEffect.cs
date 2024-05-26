@@ -41,7 +41,7 @@ namespace GAS.Runtime
         // Granted Ability
         public readonly GrantedAbilityFromEffect[] GrantedAbilities;
 
-        // TODO: Stacking
+        //Stacking
         public readonly GameplayEffectStacking Stacking;
 
         // TODO: Expiration Effects 
@@ -83,6 +83,7 @@ namespace GAS.Runtime
             Modifiers = data.GetModifiers();
             Executions = data.GetExecutions();
             GrantedAbilities = GetGrantedAbilities(data.GetGrantedAbilities());
+            Stacking = data.GetStacking();
         }
 
         private static GrantedAbilityFromEffect[] GetGrantedAbilities(IEnumerable<GrantedAbilityConfig> grantedAbilities)

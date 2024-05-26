@@ -95,6 +95,16 @@ namespace GAS.Runtime
         {
             this.clearStackOnOverflow = clearStackOnOverflow;
         }
+        
+        public static GameplayEffectStacking None 
+        {
+            get 
+            {
+                var stack = new GameplayEffectStacking();
+                stack.SetStackingType(StackingType.None);
+                return stack;
+            }
+        }
     }
 
     [Serializable]

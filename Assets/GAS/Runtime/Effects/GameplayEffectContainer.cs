@@ -70,54 +70,54 @@ namespace GAS.Runtime
         /// <summary>
         /// </summary>
         /// <param name="spec"></param>
-        /// <param name="ignoreApplicationRequired">
-        ///     If set to true, the method will not check whether the gameplay effect is required to be applied,
-        ///     assuming that the caller has already performed this check. This can be used to optimize performance
-        ///     in cases where the application requirement has been confirmed elsewhere.
-        /// </param>
         /// <returns>
         ///     Returns true if the gameplay effect is successfully applied and remains active.
         ///     Returns false if the gameplay effect is applied but immediately removed due to a tag(in `AssetTags` or `GrantedTags`) match
         ///     with the `RemoveGameplayEffectsWithTags` function, indicating that the effect did not persist.
         /// </returns>
-        public bool AddGameplayEffectSpec(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
+        public GameplayEffectSpec AddGameplayEffectSpec(AbilitySystemComponent source,GameplayEffect effect)
         {
-            if (!ignoreApplicationRequired && !spec.GameplayEffect.CanApplyTo(_owner))
+            if (!effect.CanApplyTo(_owner)) return null;
+            
+            if (effect.IsImmune(_owner))
             {
-                return false;
+                //spec.TriggerOnImmunity();
+                // TODO 免疫Cue触发
+                return null;
             }
-
-            if (spec.GameplayEffect.IsImmune(_owner))
+            
+            if (effect.DurationPolicy == EffectsDurationPolicy.Instant)
             {
-                spec.TriggerOnImmunity();
-                return false;
-            }
-
-            if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Instant)
-            {
+                var spec = effect.CreateSpec(source, _owner, source.Level);
                 spec.TriggerOnExecute();
+                return null;
             }
-            else
+
+            // Check GE Stacking
+            if (effect.Stacking.stackingType == StackingType.None)
             {
-                _gameplayEffectSpecs.Add(spec);
-                spec.TriggerOnAdd();
-                spec.Apply();
-
-                // If the gameplay effect was removed immediately after being applied, return false
-                if (!_gameplayEffectSpecs.Contains(spec))
-                {
-#if UNITY_EDITOR
-                    UnityEngine.Debug.LogWarning(
-                        $"GameplayEffect {spec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
-#endif
-                    // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
-                    return false;
-                }
-                
-                OnGameplayEffectContainerIsDirty?.Invoke();
+                return Operation_AddNewGameplayEffectSpec(source, effect);
             }
+            
+            // 处理GE堆叠
+            GetGameplayEffectSpecByData(effect, out var geSpec);
+            // 新添加GE
+            if (geSpec == null)
+                return Operation_AddNewGameplayEffectSpec(source, effect);
 
-            return true;
+            // 叠加GE
+            // 处理基于Target类型GE堆叠
+            if (effect.Stacking.stackingType == StackingType.AggregateByTarget)
+            {
+                geSpec.RefreshStack();
+            }
+            // TODO: 处理基于Source类型GE堆叠
+            // else if (effect.Stacking.stackingType == StackingType.AggregateBySource)
+            // {
+            // }
+
+
+            return null;
         }
 
 
@@ -194,6 +194,40 @@ namespace GAS.Runtime
             _gameplayEffectSpecs.Clear();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
+        }
+
+        private void GetGameplayEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
+        {
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+                if (gameplayEffectSpec.GameplayEffect == effect)
+                {
+                    spec = gameplayEffectSpec;
+                    return;
+                }
+
+            spec = null;
+        }
+
+        private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source,GameplayEffect effect)
+        {
+            var spec = effect.CreateSpec(source, _owner, source.Level);
+            _gameplayEffectSpecs.Add(spec);
+            spec.TriggerOnAdd();
+            spec.Apply();
+
+            // If the gameplay effect was removed immediately after being applied, return false
+            if (!_gameplayEffectSpecs.Contains(spec))
+            {
+#if UNITY_EDITOR
+                UnityEngine.Debug.LogWarning(
+                    $"GameplayEffect {spec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
+#endif
+                // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
+                return null;
+            }
+
+            OnGameplayEffectContainerIsDirty?.Invoke();
+            return spec;
         }
     }
 }
