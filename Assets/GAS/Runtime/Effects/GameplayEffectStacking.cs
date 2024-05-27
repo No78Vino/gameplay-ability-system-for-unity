@@ -29,8 +29,8 @@ namespace GAS.Runtime
         ClearEntireStack, //持续时间结束时,清楚所有层数
         RemoveSingleStackAndRefreshDuration, //持续时间结束时减少一层，然后重新经历一个Duration，一直持续到层数减为0
         RefreshDuration //持续时间结束时,再次刷新Duration，这相当于无限Duration，
-        //可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
-        //可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
+        //TODO :可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
+        //TODO :可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
     }
 
     // GE堆栈数据结构

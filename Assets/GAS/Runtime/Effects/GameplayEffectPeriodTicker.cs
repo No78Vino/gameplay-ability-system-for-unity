@@ -58,8 +58,8 @@ namespace GAS.Runtime
                     else if (_spec.GameplayEffect.Stacking.expirationPolicy == ExpirationPolicy.RefreshDuration)
                     {
                         //持续时间结束时,再次刷新Duration，这相当于无限Duration，
-                        //可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
-                        //可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
+                        //TODO :可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
+                        //TODO :可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
                         _spec.RefreshDuration();
                     }
                 }
