@@ -100,23 +100,26 @@ namespace GAS.Runtime
             }
             
             // 处理GE堆叠
-            GetGameplayEffectSpecByData(effect, out var geSpec);
-            // 新添加GE
-            if (geSpec == null)
-                return Operation_AddNewGameplayEffectSpec(source, effect);
-
-            // 叠加GE
-            // 处理基于Target类型GE堆叠
+            // 基于Target类型GE堆叠
             if (effect.Stacking.stackingType == StackingType.AggregateByTarget)
             {
+                GetGameplayEffectSpecByData(effect, out var geSpec);
+                // 新添加GE
+                if (geSpec == null)
+                    return Operation_AddNewGameplayEffectSpec(source, effect);
                 geSpec.RefreshStack();
+                return geSpec;
             }
-            // TODO: 处理基于Source类型GE堆叠
-            else if (effect.Stacking.stackingType == StackingType.AggregateBySource)
+            
+            // 基于Source类型GE堆叠
+            if (effect.Stacking.stackingType == StackingType.AggregateBySource)
             {
-                
+                GetGameplayEffectSpecByDataFrom(effect,source, out var geSpec);
+                if (geSpec == null)
+                    return Operation_AddNewGameplayEffectSpec(source, effect);
+                geSpec.RefreshStack();
+                return geSpec;
             }
-
 
             return null;
         }
@@ -208,6 +211,20 @@ namespace GAS.Runtime
 
             spec = null;
         }
+
+        private void GetGameplayEffectSpecByDataFrom(GameplayEffect effect,AbilitySystemComponent source, 
+            out GameplayEffectSpec spec)
+        {
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+                if (gameplayEffectSpec.Source == source && gameplayEffectSpec.GameplayEffect == effect)
+                {
+                    spec = gameplayEffectSpec;
+                    return;
+                }
+
+            spec = null;
+        }
+
 
         private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source,GameplayEffect effect)
         {
