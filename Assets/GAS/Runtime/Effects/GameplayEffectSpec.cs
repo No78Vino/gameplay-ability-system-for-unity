@@ -28,6 +28,7 @@ namespace GAS.Runtime
             Level = level;
             Duration = GameplayEffect.Duration;
             DurationPolicy = GameplayEffect.DurationPolicy;
+            Stacking = GameplayEffect.Stacking;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
@@ -50,8 +51,15 @@ namespace GAS.Runtime
         public EffectsDurationPolicy DurationPolicy { get; private set; }
         public GameplayEffectSpec PeriodExecution { get; private set; }
         public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
+        public GameplayEffectStacking Stacking { get; private set; }
 
+        
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
+        /// <summary>
+        /// 堆叠数
+        /// </summary>
+        public int StackCount { get; private set; }
+        
 
         public float DurationRemaining()
         {
@@ -66,6 +74,11 @@ namespace GAS.Runtime
             Level = level;
         }
 
+        public void SetActivationTime(float activationTime)
+        {
+            ActivationTime = activationTime;
+        }
+        
         public void SetDuration(float duration)
         {
             Duration = duration;
@@ -88,6 +101,11 @@ namespace GAS.Runtime
             {
                 GrantedAbilitySpec[i] = grantedAbility[i].CreateSpec(this);
             }
+        }
+
+        public void SetStacking(GameplayEffectStacking stacking)
+        {
+            Stacking = stacking;
         }
 
         public void Apply()
@@ -245,8 +263,9 @@ namespace GAS.Runtime
 
         public void TriggerOnImmunity()
         {
-            onImmunity?.Invoke(Owner, this);
-            onImmunity = null;
+            // TODO 免疫触发事件逻辑需要调整
+            // onImmunity?.Invoke(Owner, this);
+            // onImmunity = null;
         }
 
         public void RemoveSelf()
@@ -322,5 +341,36 @@ namespace GAS.Runtime
                 }
             }
         }
+
+        #region ABOUT STACKING
+        public void RefreshStack()
+        {
+            RefreshStack(StackCount + 1);
+        }
+        
+        public void RefreshStack(int stackCount)
+        {
+            if (stackCount < Stacking.limitCount)
+            {
+                // 更新栈数
+                StackCount = stackCount;
+                // 是否刷新Duration
+                if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
+                {
+                    ActivationTime = Time.time;
+                }
+                // 是否重置Period
+                if (Stacking.periodResetPolicy == PeriodResetPolicy.ResetOnSuccessfulApplication)
+                {
+                    PeriodTicker.ResetPeriod();
+                }
+            }
+            else
+            {
+                // TODO 溢出处理
+            } 
+        }
+
+        #endregion
     }
 }

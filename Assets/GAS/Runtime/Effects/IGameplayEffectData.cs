@@ -33,5 +33,8 @@
 
         // Granted Ability
         GrantedAbilityConfig[] GetGrantedAbilities();
+        
+        //Stacking
+        GameplayEffectStacking GetStacking();
     }
 }

@@ -21,7 +21,7 @@ namespace GAS.Runtime
             
             if (_periodRemaining <= 0)
             {
-                _periodRemaining = Period;
+                ResetPeriod();
                 _spec.PeriodExecution?.TriggerOnExecute();
             }
             else
@@ -33,6 +33,11 @@ namespace GAS.Runtime
             {
                 _spec.RemoveSelf();
             }
+        }
+        
+        public void ResetPeriod()
+        {
+            _periodRemaining = Period;
         }
     }
 }

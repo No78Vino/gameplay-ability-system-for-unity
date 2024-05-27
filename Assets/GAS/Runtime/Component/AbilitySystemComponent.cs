@@ -130,26 +130,25 @@ namespace GAS.Runtime
 
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
-#if UNITY_EDITOR
             if (gameplayEffect == null)
             {
+#if UNITY_EDITOR
                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
+#endif
                 return null;
             }
-#endif
-
-            var canApply = gameplayEffect.CanApplyTo(target);
-
-            GameplayEffectSpec applyGameplayEffectTo = null;
-            if (canApply)
-            {
-                var spec = gameplayEffect.CreateSpec(this, target, Level);
-
-                applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
-                //applyGameplayEffectTo = target.AddGameplayEffect(spec);
-            }
-
-            return applyGameplayEffectTo;
+            
+            // // 在ge spec实例化前就应该处理CanApply逻辑
+            // var canApply = gameplayEffect.CanApplyTo(target);
+            // if (canApply)
+            // {
+            //     // TODO 在此处处理Stacking逻辑，因为堆叠是不应该产生Spec的
+            //     var spec = gameplayEffect.CreateSpec(this, target, Level);
+            //     var applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
+            //     //applyGameplayEffectTo = target.AddGameplayEffect(spec);
+            //     return applyGameplayEffectTo;
+            // }
+            return target.AddGameplayEffect(this,gameplayEffect);;
         }
 
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
@@ -259,16 +258,9 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec, bool ignoreApplicationRequired = false)
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source,GameplayEffect effect)
         {
-            var success = GameplayEffectContainer.AddGameplayEffectSpec(spec, ignoreApplicationRequired);
-            if (success)
-            {
-                // we can't hold the reference of the instant effect
-                return spec.DurationPolicy == EffectsDurationPolicy.Instant ? null : spec;
-            }
-
-            return null;
+            return GameplayEffectContainer.AddGameplayEffectSpec(source,effect);
         }
 
         private void DisableAllAbilities()
