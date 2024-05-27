@@ -308,6 +308,7 @@ namespace GAS.Runtime
         public ExecutionCalculation[] GetExecutions() => Executions;
 
         public GrantedAbilityConfig[] GetGrantedAbilities() => GrantedAbilities;
+        
         public GameplayEffectStacking GetStacking() => Stacking.ToRuntimeData();
 
         #endregion IGameplayEffectData
