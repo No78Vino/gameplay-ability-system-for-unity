@@ -45,7 +45,7 @@ namespace GAS.Runtime
         // Overflow 溢出逻辑处理
         public bool denyOverflowApplication; //对应于StackDurationRefreshPolicy，如果为True则多余的Apply不会刷新Duration
         public bool clearStackOnOverflow; //当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数
-        public GameplayEffect[] overflowEffects; // 超过StackLimitCount数量(包括等于)的Effect被Apply时将会调用该OverflowEffects
+        public GameplayEffect[] overflowEffects; // 超过StackLimitCount数量的Effect被Apply时将会调用该OverflowEffects
         
         public void SetStackingType(StackingType stackingType)
         {

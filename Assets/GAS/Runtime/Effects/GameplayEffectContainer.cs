@@ -112,9 +112,10 @@ namespace GAS.Runtime
                 geSpec.RefreshStack();
             }
             // TODO: 处理基于Source类型GE堆叠
-            // else if (effect.Stacking.stackingType == StackingType.AggregateBySource)
-            // {
-            // }
+            else if (effect.Stacking.stackingType == StackingType.AggregateBySource)
+            {
+                
+            }
 
 
             return null;

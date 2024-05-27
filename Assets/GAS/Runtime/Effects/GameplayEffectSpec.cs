@@ -350,14 +350,14 @@ namespace GAS.Runtime
         
         public void RefreshStack(int stackCount)
         {
-            if (stackCount < Stacking.limitCount)
+            if (stackCount <= Stacking.limitCount)
             {
                 // 更新栈数
                 StackCount = stackCount;
                 // 是否刷新Duration
                 if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
                 {
-                    ActivationTime = Time.time;
+                    RefreshDuration();
                 }
                 // 是否重置Period
                 if (Stacking.periodResetPolicy == PeriodResetPolicy.ResetOnSuccessfulApplication)
@@ -367,10 +367,32 @@ namespace GAS.Runtime
             }
             else
             {
-                // TODO 溢出处理
-            } 
+                // 溢出GE生效
+                foreach (var overflowEffect in Stacking.overflowEffects)
+                    Owner.ApplyGameplayEffectToSelf(overflowEffect);
+
+                if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
+                {
+                    if (Stacking.denyOverflowApplication)
+                    {
+                        //当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数
+                        if (Stacking.clearStackOnOverflow)
+                        {
+                            RemoveSelf();
+                        }
+                    }
+                    else
+                    {
+                        RefreshDuration();
+                    }
+                }
+            }
         }
 
+        public void RefreshDuration()
+        {
+            ActivationTime = Time.time;
+        }
         #endregion
     }
 }
