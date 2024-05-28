@@ -114,12 +114,13 @@
                                                               "WhenCancelOrEnd = 能力取消或结束时，移除自身";
         
         public const string TITLE_GE_STACKING = "堆叠配置";
+        public const string LABEL_GE_STACKING_CODENAME = "堆叠GE识别码";
         public const string LABEL_GE_STACKING_TYPE = "堆叠类型";
         public const string LABEL_GE_STACKING_COUNT = "堆叠次数";
         public const string LABEL_GE_STACKING_DURATION_REFRESH_POLICY = "持续时间刷新策略";
         public const string LABEL_GE_STACKING_PERIOD_RESET_POLICY = "周期重置策略";
         public const string LABEL_GE_STACKING_EXPIRATION_POLICY = "持续时间结束策略";
-        public const string LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION = "溢出GE是否生效";
+        public const string LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION = "溢出的GE不生效";
         public const string LABEL_GE_STACKING_CLEAR_STACK_ON_OVERFLOW = "溢出时清空堆叠";
         public const string LABEL_GE_STACKING_CLEAR_OVERFLOW_EFFECTS = "溢出时触发的GE";
         

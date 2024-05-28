@@ -10,37 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
-  m_Name: DerivedAttrTest
+  m_Name: GE_Stun_Stack_3
   m_EditorClassIdentifier: 
-  Name: "\u63A8\u5BFC\u5C5E\u6027\u5237\u65B0\u673A\u5236\u6D4B\u8BD5"
-  Description: 
-  DurationPolicy: 2
-  Duration: 0
+  Name: "\u7729\u6655buff"
+  Description: "\u53E0\u52A0\u7B2C4\u5C42\u65F6\u89E6\u53D1\u7729\u6655"
+  DurationPolicy: 3
+  Duration: 6
   Period: 0
   PeriodExecution: {fileID: 0}
   Stacking:
-    stackingType: 0
-    limitCount: 0
-    durationRefreshPolicy: 0
+    stackingCodeName: Stun3
+    stackingType: 2
+    limitCount: 3
+    durationRefreshPolicy: 1
     periodResetPolicy: 0
     expirationPolicy: 0
-    denyOverflowApplication: 0
-    clearStackOnOverflow: 0
-    overflowEffects: []
+    denyOverflowApplication: 1
+    clearStackOnOverflow: 1
+    overflowEffects:
+    - {fileID: 11400000, guid: c86bb973d6bab234c923e00df8edda34, type: 2}
   GrantedAbilities: []
-  Modifiers:
-  - AttributeName: AS_Fight.ATK
-    AttributeSetName: AS_Fight
-    AttributeShortName: ATK
-    ModiferMagnitude: 0
-    Operation: 0
-    MMC: {fileID: 11400000, guid: 589a1214192e236479ac70a44ba53aa6, type: 2}
-  - AttributeName: AS_Fight.ATK
-    AttributeSetName: AS_Fight
-    AttributeShortName: ATK
-    ModiferMagnitude: 0
-    Operation: 1
-    MMC: {fileID: 11400000, guid: f92e70e383b870448bbbc309469635b3, type: 2}
+  Modifiers: []
   AssetTags: []
   GrantedTags: []
   ApplicationRequiredTags: []

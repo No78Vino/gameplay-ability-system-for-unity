@@ -103,7 +103,7 @@ namespace GAS.Runtime
             // 基于Target类型GE堆叠
             if (effect.Stacking.stackingType == StackingType.AggregateByTarget)
             {
-                GetGameplayEffectSpecByData(effect, out var geSpec);
+                GetStackingEffectSpecByData(effect, out var geSpec);
                 // 新添加GE
                 if (geSpec == null)
                     return Operation_AddNewGameplayEffectSpec(source, effect);
@@ -114,7 +114,7 @@ namespace GAS.Runtime
             // 基于Source类型GE堆叠
             if (effect.Stacking.stackingType == StackingType.AggregateBySource)
             {
-                GetGameplayEffectSpecByDataFrom(effect,source, out var geSpec);
+                GetStackingEffectSpecByDataFrom(effect,source, out var geSpec);
                 if (geSpec == null)
                     return Operation_AddNewGameplayEffectSpec(source, effect);
                 geSpec.RefreshStack();
@@ -200,10 +200,10 @@ namespace GAS.Runtime
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
-        private void GetGameplayEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
+        private void GetStackingEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
         {
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
-                if (gameplayEffectSpec.GameplayEffect == effect)
+                if (gameplayEffectSpec.GameplayEffect.Stacking.stackingHashCode == effect.Stacking.stackingHashCode)
                 {
                     spec = gameplayEffectSpec;
                     return;
@@ -212,11 +212,12 @@ namespace GAS.Runtime
             spec = null;
         }
 
-        private void GetGameplayEffectSpecByDataFrom(GameplayEffect effect,AbilitySystemComponent source, 
+        private void GetStackingEffectSpecByDataFrom(GameplayEffect effect,AbilitySystemComponent source, 
             out GameplayEffectSpec spec)
         {
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
-                if (gameplayEffectSpec.Source == source && gameplayEffectSpec.GameplayEffect == effect)
+                if (gameplayEffectSpec.Source == source && 
+                    gameplayEffectSpec.GameplayEffect.Stacking.stackingHashCode == effect.Stacking.stackingHashCode)
                 {
                     spec = gameplayEffectSpec;
                     return;

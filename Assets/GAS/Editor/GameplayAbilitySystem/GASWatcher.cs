@@ -206,7 +206,8 @@ namespace GAS.Editor
                     EffectsDurationPolicy.Instant => "N/A",
                     _ => "Unknown"
                 };
-                Effects.Add($"[{isActive}][{durationStr}]{ge.GameplayEffect.GameplayEffectName}");
+                var stackCountText = ge.Stacking.stackingType != StackingType.None ? $"[S:{ge.StackCount}]" : "";
+                Effects.Add($"[{isActive}][{durationStr}]{stackCountText}{ge.GameplayEffect.GameplayEffectName}");
             }
         }
 

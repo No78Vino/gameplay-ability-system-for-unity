@@ -55,10 +55,11 @@ namespace GAS.Runtime
 
         
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
+
         /// <summary>
         /// 堆叠数
         /// </summary>
-        public int StackCount { get; private set; }
+        public int StackCount { get; private set; } = 1;
         
 
         public float DurationRemaining()
@@ -353,7 +354,7 @@ namespace GAS.Runtime
             if (stackCount <= Stacking.limitCount)
             {
                 // 更新栈数
-                StackCount = stackCount;
+                StackCount = Mathf.Max(1,stackCount); // 最小层数为1
                 // 是否刷新Duration
                 if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
                 {
