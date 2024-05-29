@@ -20,11 +20,11 @@ MonoBehaviour:
   PeriodExecution: {fileID: 0}
   Stacking:
     stackingCodeName: Stun3
-    stackingType: 2
+    stackingType: 1
     limitCount: 3
     durationRefreshPolicy: 1
     periodResetPolicy: 0
-    expirationPolicy: 0
+    expirationPolicy: 1
     denyOverflowApplication: 1
     clearStackOnOverflow: 1
     overflowEffects:
