@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class CueAnimation:GameplayCueDurational
+    public class CueAnimation : GameplayCueDurational
     {
         [BoxGroup]
         [InfoBox(GASTextDefine.CUE_ANIMATION_PATH_TIP)]
@@ -12,10 +12,18 @@ namespace GAS.Runtime
         [SerializeField]
         private string _animatorRelativePath;
 
-        [BoxGroup] [LabelText(GASTextDefine.CUE_ANIMATION_STATE)] [SerializeField]
+        [BoxGroup]
+        [InfoBox(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP)]
+        [SerializeField]
+        private bool _includeChildrenAnimator;
+
+        [BoxGroup]
+        [LabelText(GASTextDefine.CUE_ANIMATION_STATE)]
+        [SerializeField]
         private string _stateName;
 
         public string AnimatorRelativePath => _animatorRelativePath;
+        public bool IncludeChildrenAnimator => _includeChildrenAnimator;
         public string StateName => _stateName;
 
 
@@ -23,30 +31,37 @@ namespace GAS.Runtime
         {
             return new CueAnimationSpec(this, parameters);
         }
-        
+
 #if UNITY_EDITOR
-        public override void OnEditorPreview(GameObject previewObject, int frame, int startFrame,int endFrame)
+        public override void OnEditorPreview(GameObject previewObject, int frame, int startFrame, int endFrame)
         {
             if (startFrame <= frame && frame <= endFrame)
             {
-                var animatorObject = previewObject.transform.Find(AnimatorRelativePath);
-                var animator = animatorObject.GetComponent<Animator>();
-                var stateMap = animator.GetAllAnimationState();
-                if (stateMap.TryGetValue(StateName, out var clip))
+                var transform = previewObject.transform.Find(AnimatorRelativePath);
+                var animator = IncludeChildrenAnimator ? transform.GetComponentInChildren<Animator>() : transform.GetComponent<Animator>();
+                if (animator != null)
                 {
-                    float clipFrameCount = (int)(clip.frameRate * clip.length);
-                    if (frame <= clipFrameCount + startFrame)
+                    var stateMap = animator.GetAllAnimationState();
+                    if (stateMap.TryGetValue(StateName, out var clip))
                     {
-                        var progress = (frame - startFrame) / clipFrameCount;
-                        if (progress > 1 && clip.isLooping) progress -= (int)progress;
-                        clip.SampleAnimation(animatorObject.gameObject, progress * clip.length);
+                        float clipFrameCount = (int)(clip.frameRate * clip.length);
+                        if (frame <= clipFrameCount + startFrame)
+                        {
+                            var progress = (frame - startFrame) / clipFrameCount;
+                            if (progress > 1 && clip.isLooping) progress -= (int)progress;
+                            clip.SampleAnimation(animator.gameObject, progress * clip.length);
+                        }
                     }
+                }
+                else
+                {
+                    Debug.LogError($"Animator is null. Please check the cue asset: {name}, AnimatorRelativePath: {AnimatorRelativePath}, IncludeChildrenAnimator: {IncludeChildrenAnimator}");
                 }
             }
         }
 #endif
     }
-    
+
     public class CueAnimationSpec : GameplayCueDurationalSpec<CueAnimation>
     {
         private readonly Animator _animator;
@@ -54,13 +69,20 @@ namespace GAS.Runtime
         public CueAnimationSpec(CueAnimation cue, GameplayCueParameters parameters) : base(cue,
             parameters)
         {
-            var animatorTransform = Owner.transform.Find(cue.AnimatorRelativePath);
-            _animator = animatorTransform.GetComponent<Animator>();
+            var transform = Owner.transform.Find(cue.AnimatorRelativePath);
+            _animator = cue.IncludeChildrenAnimator ? transform.GetComponentInChildren<Animator>() : transform.GetComponent<Animator>();
+            if (_animator == null)
+            {
+                Debug.LogError($"Animator is null. Please check the cue asset: {cue.name}, AnimatorRelativePath: {cue.AnimatorRelativePath}, IncludeChildrenAnimator: {cue.IncludeChildrenAnimator}");
+            }
         }
 
         public override void OnAdd()
         {
-            _animator.Play(cue.StateName);
+            if (_animator != null)
+            {
+                _animator.Play(cue.StateName);
+            }
         }
 
         public override void OnRemove()

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GAS.General;
 using GAS.Runtime;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace GAS.Runtime
 {
@@ -11,7 +11,7 @@ namespace GAS.Runtime
     public class ReleaseGameplayEffectTrackData : TrackDataBase
     {
         public List<ReleaseGameplayEffectMarkEvent> markEvents = new List<ReleaseGameplayEffectMarkEvent>();
-        
+
         public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
@@ -26,11 +26,21 @@ namespace GAS.Runtime
         {
             Type = typeof(CatchSelf).FullName // 默认 CatchSelf
         };
+
         public List<GameplayEffectAsset> gameplayEffectAssets = new List<GameplayEffectAsset>();
 
-        
+
         private TargetCatcherBase _targetCatcher;
-        public TargetCatcherBase TargetCatcher => _targetCatcher;
+        public TargetCatcherBase TargetCatcher
+        {
+            get
+            {
+                // 如果是反序列化的数据，没有执行构造函数, 需要加载
+                _targetCatcher ??= LoadTargetCatcher();
+                return _targetCatcher;
+            }
+        }
+
         public void CacheTargetCatcher()
         {
             _targetCatcher = LoadTargetCatcher();
@@ -47,22 +57,39 @@ namespace GAS.Runtime
             };
         }
 
-        public TargetCatcherBase LoadTargetCatcher()
+        private TargetCatcherBase LoadTargetCatcher()
         {
             TargetCatcherBase targetCatcher = null;
             var jsonData = jsonTargetCatcher.Data;
             var dataType = jsonTargetCatcher.Type;
 
-            var type = TargetCatcherSonTypes.FirstOrDefault(sonType => sonType.FullName == dataType);
+            Type type = null;
+            foreach (var t in TargetCatcherSonTypes)
+            {
+                if (t.FullName == dataType)
+                {
+                    type = t;
+                    break;
+                }
+            }
+
             if (type == null)
+            {
                 Debug.LogError("[EX] TargetCatcherBase SonType not found: " + dataType);
+            }
             else
             {
+                Profiler.BeginSample($"{nameof(ReleaseGameplayEffectMarkEvent)}::LoadTargetCatcher() -> Activator.CreateInstance GC Alloc");
                 if (string.IsNullOrEmpty(jsonData))
                 {
                     targetCatcher = Activator.CreateInstance(type) as TargetCatcherBase;
-                }else
+                }
+                else
+                {
                     targetCatcher = JsonUtility.FromJson(jsonData, type) as TargetCatcherBase;
+                }
+
+                Profiler.EndSample();
             }
 
             return targetCatcher;

@@ -22,95 +22,105 @@ namespace GAS.Editor
         private const string BOXGROUP_ASC_H_R_A_VB = "Ability System Components/H/R/A/VB";
         private const string BOXGROUP_ASC_H_R_A_VC = "Ability System Components/H/R/A/VC";
 
-
         private AbilitySystemComponent _selected;
-        
-        [HideLabel] [DisplayAsString(TextAlignment.Center, true)]
+
+        [HideLabel]
+        [DisplayAsString(TextAlignment.Center, true)]
         public string windowTitle = "<size=18><b>EX Gameplay Ability System Watcher</b></size>";
 
-        [BoxGroup(BOXGROUP_TIPS)] [HideLabel] [DisplayAsString(TextAlignment.Left, true)]
+        [BoxGroup(BOXGROUP_TIPS)]
+        [HideLabel]
+        [DisplayAsString(TextAlignment.Left, true)]
         public string tips = GASTextDefine.TIP_WATCHER;
-        
-              [BoxGroup(BOXGROUP_TIPS_RUNNINGTIP, false)]
-              [HideLabel]
-              [DisplayAsString(TextAlignment.Center, true)]
-              [HideIf("IsPlaying")]
-              public string onlyForGameRunning = GASTextDefine.TIP_WATCHER_OnlyForGameRunning;
-            
+
+        [BoxGroup(BOXGROUP_TIPS_RUNNINGTIP, false)]
+        [HideLabel]
+        [DisplayAsString(TextAlignment.Center, true)]
+        [HideIf("IsPlaying")]
+        public string onlyForGameRunning = GASTextDefine.TIP_WATCHER_OnlyForGameRunning;
+
 
         [BoxGroup(BOXGROUP_ASC)]
         [HorizontalGroup(BOXGROUP_ASC_H, 200)]
         [BoxGroup(BOXGROUP_ASC_H_L, false)]
-        [OnInspectorGUI("OnDrawNavi")] [DisplayAsString(TextAlignment.Center)] [HideLabel]
+        [OnInspectorGUI("OnDrawNavi")]
+        [DisplayAsString(TextAlignment.Center)]
+        [HideLabel]
         [ShowIf("IsPlaying")]
         public string Navis = "NAVI";
-        
+
         [HorizontalGroup(BOXGROUP_ASC_H)]
-        [BoxGroup(BOXGROUP_ASC_H_R,false)]
-        [HorizontalGroup(BOXGROUP_ASC_H_R_A,PaddingRight = 0.01f)]
+        [BoxGroup(BOXGROUP_ASC_H_R, false)]
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A, PaddingRight = 0.01f)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
-        [Title("ID Mark",bold:true)]
+        [Title("ID Mark", bold: true)]
         [DisplayAsString]
         [LabelWidth(75)]
         [ShowIf("IsPlaying")]
         public int IID;
-        
+
         [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
         [ReadOnly]
         [LabelWidth(75)]
         [ShowIf("IsPlaying")]
         public GameObject instance;
-        
+
         [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
         [DisplayAsString]
         [LabelWidth(75)]
         [ShowIf("IsPlaying")]
         public int Level;
-        
+
         [Space]
-        [Title("Abilities",bold:true)]
+        [Title("Abilities", bold: true)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
-        [DisplayAsString][LabelText(" ")]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [DisplayAsString]
+        [LabelText(" ")]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> Abilities = new List<string>();
-        
-        [HorizontalGroup(BOXGROUP_ASC_H_R_A,PaddingRight = 0.01f)]
+
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A, PaddingRight = 0.01f)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_VB)]
-        [Title("Attributes",bold:true)]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
-        [DisplayAsString][LabelText(" ")]
+        [Title("Attributes", bold: true)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [DisplayAsString]
+        [LabelText(" ")]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> Attributes = new List<string>();
-        
-        
-        [HorizontalGroup(BOXGROUP_ASC_H_R_A,PaddingRight = 0.01f)]
-        [Title("GameplayEffects",bold:true)]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
-        [DisplayAsString][LabelText(" ")]
+
+
+        [HorizontalGroup(BOXGROUP_ASC_H_R_A, PaddingRight = 0.01f)]
+        [Title("GameplayEffects", bold: true)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [DisplayAsString]
+        [LabelText(" ")]
+        [InfoBox("format: [ActiveState][DurationInfo]GeName", InfoMessageType.None, "IsPlaying")]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> Effects = new List<string>();
-        
-        
+
+
         [HorizontalGroup(BOXGROUP_ASC_H_R_A)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_VC)]
-        [Title("Tags",bold:true)]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [Title("Tags", bold: true)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
         [DisplayAsString]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> FixedTag = new List<string>();
-        
-        [Title("  ",bold:true)]
+
+        [Title("  ", bold: true)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_VC)]
-        [ListDrawerSettings(Expanded = true,ShowIndexLabels = false,ShowItemCount = false,IsReadOnly = true,ShowPaging = false)]
+        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
         [DisplayAsString]
         [ShowIf("IsPlaying")]
+        [Searchable]
         public List<string> DynamicTag = new List<string>();
 
-        
-        
-        
-        
+
         private Vector2 menuScrollPos;
 
         private bool IsPlaying => Application.isPlaying;
@@ -125,6 +135,7 @@ namespace GAS.Editor
                         ? GAS.GameplayAbilitySystem.GAS.AbilitySystemComponents[0] as AbilitySystemComponent
                         : null;
                 }
+
                 RefreshAscInfo();
                 Repaint();
             }
@@ -137,11 +148,11 @@ namespace GAS.Editor
             window.titleContent = new GUIContent("EX Gameplay Ability System Watcher");
             window.Show();
         }
-        
+
         void OnDrawNavi()
         {
             if (!IsPlaying) return;
-            
+
             menuScrollPos = EditorGUILayout.BeginScrollView(menuScrollPos, GUI.skin.box);
             foreach (var iasc in GAS.GameplayAbilitySystem.GAS.AbilitySystemComponents)
             {
@@ -170,63 +181,97 @@ namespace GAS.Editor
                 DynamicTag.Clear();
                 return;
             }
-            
+
             IID = _selected.GetInstanceID();
             instance = _selected.gameObject;
             Level = _selected.Level;
+
+            RefreshAbilityInfo();
+            RefreshAttributesInfo();
+            RefreshGameplayEffectsInfo();
+            RefreshTagsInfo();
+        }
+
+
+        private void RefreshGameplayEffectsInfo()
+        {
+            Effects.Clear();
+            foreach (var ge in _selected.GameplayEffectContainer.GameplayEffects())
+            {
+                string isActive = ge.IsActive ? "√" : "×";
+                string durationStr = ge.DurationPolicy switch
+                {
+                    EffectsDurationPolicy.Duration => $"{ge.DurationRemaining():N2}/{ge.Duration:N2}(s)",
+                    EffectsDurationPolicy.Infinite => "∞",
+                    EffectsDurationPolicy.Instant => "N/A",
+                    _ => "Unknown"
+                };
+                var stackCountText = ge.Stacking.stackingType != StackingType.None ? $"[S:{ge.StackCount}]" : "";
+                Effects.Add($"[{isActive}][{durationStr}]{stackCountText}{ge.GameplayEffect.GameplayEffectName}");
+            }
+        }
+
+        private void RefreshAbilityInfo()
+        {
             Abilities.Clear();
             foreach (var ability in _selected.AbilityContainer.AbilitySpecs())
             {
-                string isActive = ability.Value.IsActive ? " ( Active ) " : "";
-                Abilities.Add($"{ability.Key} | Lv.{ability.Value.Level}  {isActive}");
+                string isActive = ability.Value.IsActive ? "(Active)" : "";
+                Abilities.Add($"{ability.Key} | Lv.{ability.Value.Level} {isActive}");
             }
-            
+        }
+
+        private void RefreshAttributesInfo()
+        {
             Attributes.Clear();
-            foreach (var kv in _selected.AttributeSetContainer.Sets)
+            foreach (var (attributeSetName, attributeSet) in _selected.AttributeSetContainer.Sets)
             {
-                var setName = kv.Key;
-                Attributes.Add($"Set:{setName} ↓");
-                foreach (var attributeName in kv.Value.AttributeNames)
+                Attributes.Add($"AttributeSet: {attributeSetName} ↓");
+                foreach (var attributeName in attributeSet.AttributeNames)
                 {
-                    var attr = kv.Value[attributeName];
-                    Attributes.Add($"--{attributeName} = {attr.CurrentValue}({attr.BaseValue} + {attr.CurrentValue - attr.BaseValue})");
+                    var attr = attributeSet[attributeName];
+                    Attributes.Add($"  - {attributeName} = {attr.CurrentValue:N2}({attr.BaseValue:N2} + {attr.CurrentValue - attr.BaseValue:N2})");
                 }
             }
-            
-            Effects.Clear();
-            var gameplayEffects = _selected.GameplayEffectContainer.GameplayEffects();
-            foreach (var ge in gameplayEffects)
-            {
-                if (ge.IsActive)
-                {
-                    string geState =
-                        $"{ge.GameplayEffect.GameplayEffectName};DUR:{ge.DurationRemaining()}/{ge.Duration}(s)";
-                    Effects.Add(geState);
-                }
-            }
-            
+        }
+
+        private void RefreshTagsInfo()
+        {
+            RefreshFixedTagsInfo();
+            RefreshDynamicTagsInfo();
+        }
+
+        void RefreshFixedTagsInfo()
+        {
             FixedTag.Clear();
             foreach (var tag in _selected.GameplayTagAggregator.FixedTags)
             {
                 FixedTag.Add(tag.Name);
             }
-            
+        }
+
+        void RefreshDynamicTagsInfo()
+        {
             DynamicTag.Clear();
             foreach (var kv in _selected.GameplayTagAggregator.DynamicAddedTags)
             {
                 var tagName = kv.Key.Name;
                 DynamicTag.Add($"{tagName} ↓ ");
+
                 foreach (var obj in kv.Value)
                 {
-                    if (obj is GameplayEffectSpec spec)
+                    switch (obj)
                     {
-                        var owner = spec.Owner;
-                        DynamicTag.Add($"--From:{owner.GetInstanceID()}-GE:{spec.GameplayEffect.GameplayEffectName}"); 
-                    }
-                    else if (obj is AbilitySpec ability)
-                    {
-                        var owner = ability.Owner;
-                        DynamicTag.Add($"--From:{owner.GetInstanceID()}-Ability:{ability.Ability.Name}");
+                        case GameplayEffectSpec spec:
+                        {
+                            DynamicTag.Add($"  - From: {spec.Owner.GetInstanceID()}'s GE: {spec.GameplayEffect.GameplayEffectName}");
+                            break;
+                        }
+                        case AbilitySpec ability:
+                        {
+                            DynamicTag.Add($"  - From: {ability.Owner.GetInstanceID()}'s Ability: {ability.Ability.Name}");
+                            break;
+                        }
                     }
                 }
             }

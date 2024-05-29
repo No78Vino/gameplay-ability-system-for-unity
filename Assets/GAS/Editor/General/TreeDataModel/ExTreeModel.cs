@@ -15,7 +15,7 @@ namespace UnityEditor.TreeDataModel
 	// The first element of the input list is required to have depth == -1 (the hiddenroot) and the rest to have
 	// depth >= 0 (otherwise an exception will be thrown)
 
-	public class TreeModel<T> where T : TreeElement
+	public class ExTreeModel<T> where T : ExTreeElement
 	{
 		IList<T> m_Data;
 		int m_MaxID;
@@ -25,7 +25,7 @@ namespace UnityEditor.TreeDataModel
 		public event Action modelChanged;
 		public int NumberOfDataElements => m_Data.Count;
 
-		public TreeModel (IList<T> data)
+		public ExTreeModel (IList<T> data)
 		{
 			SetData (data);
 		}
@@ -45,7 +45,7 @@ namespace UnityEditor.TreeDataModel
 			m_Data = data ?? throw new ArgumentNullException("data", "Input data is null. Ensure input is a non-null list.");
 			if (m_Data.Count > 0)
 			{
-				Root = TreeElementUtility.ListToTree(data);
+				Root = ExTreeElementUtility.ListToTree(data);
 			}
 			else
 			{
@@ -65,7 +65,7 @@ namespace UnityEditor.TreeDataModel
 		public IList<int> GetAncestors (int id)
 		{
 			var parents = new List<int>();
-			TreeElement T = Find(id);
+			ExTreeElement T = Find(id);
 			if (T != null)
 			{
 				while (T.Parent != null)
@@ -87,15 +87,15 @@ namespace UnityEditor.TreeDataModel
 			return new List<int>();
 		}
 
-		IList<int> GetParentsBelowStackBased(TreeElement searchFromThis)
+		IList<int> GetParentsBelowStackBased(ExTreeElement searchFromThis)
 		{
-			Stack<TreeElement> stack = new Stack<TreeElement>();
+			Stack<ExTreeElement> stack = new Stack<ExTreeElement>();
 			stack.Push(searchFromThis);
 
 			var parentsBelow = new List<int>();
 			while (stack.Count > 0)
 			{
-				TreeElement current = stack.Pop();
+				ExTreeElement current = stack.Pop();
 				if (current.HasChildren)
 				{
 					parentsBelow.Add(current.ID);
@@ -121,7 +121,7 @@ namespace UnityEditor.TreeDataModel
 				if (element == Root)
 					throw new ArgumentException("It is not allowed to remove the root element");
 		
-			var commonAncestors = TreeElementUtility.FindCommonAncestorsWithinList (elements);
+			var commonAncestors = ExTreeElementUtility.FindCommonAncestorsWithinList (elements);
 
 			foreach (var element in commonAncestors)
 			{
@@ -129,12 +129,12 @@ namespace UnityEditor.TreeDataModel
 				element.Parent = null;
 			}
 
-			TreeElementUtility.TreeToList(Root, m_Data);
+			ExTreeElementUtility.TreeToList(Root, m_Data);
 
 			Changed();
 		}
 
-		public void AddElements (IList<T> elements, TreeElement parent, int insertPosition)
+		public void AddElements (IList<T> elements, ExTreeElement parent, int insertPosition)
 		{
 			if (elements == null)
 				throw new ArgumentNullException("elements", "elements is null");
@@ -144,17 +144,17 @@ namespace UnityEditor.TreeDataModel
 				throw new ArgumentNullException("parent", "parent is null");
 
 			if (parent.Children == null)
-				parent.Children = new List<TreeElement>();
+				parent.Children = new List<ExTreeElement>();
 
-			parent.Children.InsertRange(insertPosition, elements.Cast<TreeElement> ());
+			parent.Children.InsertRange(insertPosition, elements.Cast<ExTreeElement> ());
 			foreach (var element in elements)
 			{
 				element.Parent = parent;
 				element.Depth = parent.Depth + 1;
-				TreeElementUtility.UpdateDepthValues(element);
+				ExTreeElementUtility.UpdateDepthValues(element);
 			}
 
-			TreeElementUtility.TreeToList(Root, m_Data);
+			ExTreeElementUtility.TreeToList(Root, m_Data);
 
 			Changed();
 		}
@@ -176,7 +176,7 @@ namespace UnityEditor.TreeDataModel
 			m_Data.Add (root);
 		}
 
-		public void AddElement (T element, TreeElement parent, int insertPosition)
+		public void AddElement (T element, ExTreeElement parent, int insertPosition)
 		{
 			if (element == null)
 				throw new ArgumentNullException("element", "element is null");
@@ -184,18 +184,18 @@ namespace UnityEditor.TreeDataModel
 				throw new ArgumentNullException("parent", "parent is null");
 		
 			if (parent.Children == null)
-				parent.Children = new List<TreeElement> ();
+				parent.Children = new List<ExTreeElement> ();
 
 			parent.Children.Insert (insertPosition, element);
 			element.Parent = parent;
 
-			TreeElementUtility.UpdateDepthValues(parent);
-			TreeElementUtility.TreeToList(Root, m_Data);
+			ExTreeElementUtility.UpdateDepthValues(parent);
+			ExTreeElementUtility.TreeToList(Root, m_Data);
 
 			Changed ();
 		}
 
-		public void MoveElements(TreeElement parentElement, int insertionIndex, List<TreeElement> elements)
+		public void MoveElements(ExTreeElement parentElement, int insertionIndex, List<ExTreeElement> elements)
 		{
 			if (insertionIndex < 0)
 				throw new ArgumentException("Invalid input: insertionIndex is -1, client needs to decide what index elements should be reparented at");
@@ -216,13 +216,13 @@ namespace UnityEditor.TreeDataModel
 			} 
 
 			if (parentElement.Children == null)
-				parentElement.Children = new List<TreeElement>();
+				parentElement.Children = new List<ExTreeElement>();
 
 			// Insert dragged items under new parent
 			parentElement.Children.InsertRange(insertionIndex, elements);
 
-			TreeElementUtility.UpdateDepthValues (Root);
-			TreeElementUtility.TreeToList (Root, m_Data);
+			ExTreeElementUtility.UpdateDepthValues (Root);
+			ExTreeElementUtility.TreeToList (Root, m_Data);
 
 			Changed ();
 		}

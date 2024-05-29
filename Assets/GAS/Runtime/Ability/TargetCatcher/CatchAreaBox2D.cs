@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.General;
-using GAS.Runtime;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
     [Serializable]
-    public class CatchAreaBox2D : CatchAreaBase
+    public sealed class CatchAreaBox2D : CatchAreaBase
     {
         public Vector2 offset;
         public float rotation;
         public Vector2 size;
         public EffectCenterType centerType;
-        
+
         public void Init(AbilitySystemComponent owner, LayerMask tCheckLayer, Vector2 offset, Vector2 size,
             float rotation)
         {
@@ -23,28 +22,28 @@ namespace GAS.Runtime
             this.rotation = rotation;
         }
 
-        public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
-        {
-            var result = new List<AbilitySystemComponent>();
+        private static readonly Collider2D[] Collider2Ds = new Collider2D[32];
 
-            Collider2D[] targets = centerType switch
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
+        {
+            int count = centerType switch
             {
-                EffectCenterType.SelfOffset => Owner.OverlapBox2D(offset, size, rotation, checkLayer),
-                EffectCenterType.WorldSpace => Physics2D.OverlapBoxAll(offset, size, rotation, checkLayer),
-                EffectCenterType.TargetOffset => mainTarget.OverlapBox2D(offset, size, rotation, checkLayer),
-                _ => null
+                EffectCenterType.SelfOffset => Owner.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds, checkLayer),
+                EffectCenterType.WorldSpace => Physics2D.OverlapBoxNonAlloc(offset, size, rotation, Collider2Ds, checkLayer),
+                EffectCenterType.TargetOffset => mainTarget.OverlapBox2DNonAlloc(offset, size, rotation, Collider2Ds, checkLayer),
+                _ => 0
             };
 
-            if (targets == null) return result;
-            foreach (var target in targets)
+            for (var i = 0; i < count; ++i)
             {
-                var targetUnit = target.GetComponent<AbilitySystemComponent>();
-                if (targetUnit != null) result.Add(targetUnit);
+                var targetUnit = Collider2Ds[i].GetComponent<AbilitySystemComponent>();
+                if (targetUnit != null)
+                {
+                    results.Add(targetUnit);
+                }
             }
-
-            return result;
         }
-        
+
 #if UNITY_EDITOR
         public override void OnEditorPreview(GameObject previewObject)
         {
@@ -68,6 +67,7 @@ namespace GAS.Runtime
                     //center = _spec.Target.transform.position + (Vector3)_task.Offset;
                     break;
             }
+
             DebugExtension.DebugBox(center, size, angle, color, showTime);
         }
 #endif

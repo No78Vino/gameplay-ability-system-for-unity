@@ -10,11 +10,11 @@ namespace GAS.Runtime
         private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
         private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
         private List<GameplayCueDurationalSpec> _cueDurationalSpecs = new List<GameplayCueDurationalSpec>();
-        
+
         /// <summary>
         /// The execution type of onImmunity is one shot.
         /// </summary>
-        public event Action<AbilitySystemComponent,GameplayEffectSpec> onImmunity; 
+        public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
 
         public GameplayEffectSpec(
             GameplayEffect gameplayEffect,
@@ -28,17 +28,19 @@ namespace GAS.Runtime
             Level = level;
             Duration = GameplayEffect.Duration;
             DurationPolicy = GameplayEffect.DurationPolicy;
+            Stacking = GameplayEffect.Stacking;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
+                SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
 
             CaptureDataFromSource();
         }
 
         public GameplayEffect GameplayEffect { get; }
-        public long ActivationTime { get; private set; }
+        public float ActivationTime { get; private set; }
         public float Level { get; private set; }
         public AbilitySystemComponent Source { get; }
         public AbilitySystemComponent Owner { get; }
@@ -47,16 +49,25 @@ namespace GAS.Runtime
         public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
-        public GameplayEffectSpec PeriodExecution{ get; private set; }
+        public GameplayEffectSpec PeriodExecution { get; private set; }
+        public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
+        public GameplayEffectStacking Stacking { get; private set; }
 
+        
         public Dictionary<string, float> SnapshotAttributes { get; private set; }
+
+        /// <summary>
+        /// 堆叠数
+        /// </summary>
+        public int StackCount { get; private set; } = 1;
+        
 
         public float DurationRemaining()
         {
             if (DurationPolicy == EffectsDurationPolicy.Infinite)
                 return -1;
 
-            return Mathf.Max(0, Duration - (GASTimer.Timestamp() - ActivationTime) / 1000f);
+            return Mathf.Max(0, Duration - (Time.time - ActivationTime));
         }
 
         public void SetLevel(float level)
@@ -64,26 +75,49 @@ namespace GAS.Runtime
             Level = level;
         }
 
+        public void SetActivationTime(float activationTime)
+        {
+            ActivationTime = activationTime;
+        }
+        
         public void SetDuration(float duration)
         {
             Duration = duration;
         }
-        
+
         public void SetDurationPolicy(EffectsDurationPolicy durationPolicy)
         {
             DurationPolicy = durationPolicy;
         }
-        
+
         public void SetPeriodExecution(GameplayEffectSpec periodExecution)
         {
             PeriodExecution = periodExecution;
+        }
+
+        public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbility)
+        {
+            GrantedAbilitySpec = new GrantedAbilitySpecFromEffect[grantedAbility.Length];
+            for (var i = 0; i < grantedAbility.Length; i++)
+            {
+                GrantedAbilitySpec[i] = grantedAbility[i].CreateSpec(this);
+            }
+        }
+
+        public void SetStacking(GameplayEffectStacking stacking)
+        {
+            Stacking = stacking;
         }
 
         public void Apply()
         {
             if (IsApplied) return;
             IsApplied = true;
-            Activate();
+
+            if (GameplayEffect.CanRunning(Owner))
+            {
+                Activate();
+            }
         }
 
         public void DisApply()
@@ -97,7 +131,7 @@ namespace GAS.Runtime
         {
             if (IsActive) return;
             IsActive = true;
-            ActivationTime = GASTimer.Timestamp();
+            ActivationTime = Time.time;
             TriggerOnActivation();
         }
 
@@ -108,10 +142,6 @@ namespace GAS.Runtime
             TriggerOnDeactivation();
         }
 
-        public bool CanRunning()
-        {
-            return Owner.HasAllTags(GameplayEffect.TagContainer.OngoingRequiredTags);
-        }
 
         public void Tick()
         {
@@ -122,7 +152,7 @@ namespace GAS.Runtime
         {
             foreach (var cue in cues) cue.ApplyFrom(this);
         }
-        
+
         private void TriggerCueOnExecute()
         {
             if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
@@ -203,6 +233,8 @@ namespace GAS.Runtime
         public void TriggerOnRemove()
         {
             TriggerCueOnRemove();
+            
+            TryRemoveGrantedAbilities();
         }
 
         private void TriggerOnActivation()
@@ -211,12 +243,16 @@ namespace GAS.Runtime
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
+            
+            TryActivateGrantedAbilities();
         }
 
         private void TriggerOnDeactivation()
         {
             TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
+            
+            TryDeactivateGrantedAbilities();
         }
 
         public void TriggerOnTick()
@@ -228,10 +264,11 @@ namespace GAS.Runtime
 
         public void TriggerOnImmunity()
         {
-            onImmunity?.Invoke(Owner, this);
-            onImmunity = null;
+            // TODO 免疫触发事件逻辑需要调整
+            // onImmunity?.Invoke(Owner, this);
+            // onImmunity = null;
         }
-        
+
         public void RemoveSelf()
         {
             Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
@@ -246,30 +283,117 @@ namespace GAS.Runtime
         {
             _valueMapWithTag[tag] = value;
         }
-        
+
         public void RegisterValue(string name, float value)
         {
             _valueMapWithName[name] = value;
         }
-        
+
         public bool UnregisterValue(GameplayTag tag)
         {
             return _valueMapWithTag.Remove(tag);
         }
-        
+
         public bool UnregisterValue(string name)
         {
             return _valueMapWithName.Remove(name);
         }
-        
+
         public float? GetMapValue(GameplayTag tag)
         {
-            return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?) null;
+            return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?)null;
         }
-        
+
         public float? GetMapValue(string name)
         {
-            return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?) null;
+            return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?)null;
         }
+        
+        private void TryActivateGrantedAbilities()
+        {
+            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            {
+                if (grantedAbilitySpec.ActivationPolicy == GrantedAbilityActivationPolicy.SyncWithEffect)
+                {
+                    Owner.TryActivateAbility(grantedAbilitySpec.AbilityName);
+                }
+            }
+        }
+
+        private void TryDeactivateGrantedAbilities()
+        {
+            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            {
+                if (grantedAbilitySpec.DeactivationPolicy == GrantedAbilityDeactivationPolicy.SyncWithEffect)
+                {
+                    Owner.TryEndAbility(grantedAbilitySpec.AbilityName);
+                }
+            }
+        }
+
+        private void TryRemoveGrantedAbilities()
+        {
+            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            {
+                if (grantedAbilitySpec.RemovePolicy == GrantedAbilityRemovePolicy.SyncWithEffect)
+                {
+                    Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
+                    Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
+                }
+            }
+        }
+
+        #region ABOUT STACKING
+        public void RefreshStack()
+        {
+            RefreshStack(StackCount + 1);
+        }
+        
+        public void RefreshStack(int stackCount)
+        {
+            if (stackCount <= Stacking.limitCount)
+            {
+                // 更新栈数
+                StackCount = Mathf.Max(1,stackCount); // 最小层数为1
+                // 是否刷新Duration
+                if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
+                {
+                    RefreshDuration();
+                }
+                // 是否重置Period
+                if (Stacking.periodResetPolicy == PeriodResetPolicy.ResetOnSuccessfulApplication)
+                {
+                    PeriodTicker.ResetPeriod();
+                }
+            }
+            else
+            {
+                // 溢出GE生效
+                foreach (var overflowEffect in Stacking.overflowEffects)
+                    Owner.ApplyGameplayEffectToSelf(overflowEffect);
+
+                if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
+                {
+                    if (Stacking.denyOverflowApplication)
+                    {
+                        //当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数
+                        if (Stacking.clearStackOnOverflow)
+                        {
+                            RemoveSelf();
+                        }
+                    }
+                    else
+                    {
+                        RefreshDuration();
+                    }
+                }
+            }
+        }
+
+        public void RefreshDuration()
+        {
+            ActivationTime = Time.time;
+        }
+        #endregion
     }
 }

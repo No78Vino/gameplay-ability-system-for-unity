@@ -2,6 +2,7 @@
 using GAS.General;
 using GAS.Runtime;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace GAS
 {
@@ -11,9 +12,11 @@ namespace GAS
 
         private GameplayAbilitySystem()
         {
-            AbilitySystemComponents = new List<AbilitySystemComponent>();
+            const int capacity = 1024;
+            AbilitySystemComponents = new List<AbilitySystemComponent>(capacity);
+            _cachedAbilitySystemComponents = new List<AbilitySystemComponent>(capacity);
             GASTimer.InitStartTimestamp();
-            
+
             GasHost = new GameObject("GAS Host").AddComponent<GasHost>();
             GasHost.hideFlags = HideFlags.HideAndDontSave;
             Object.DontDestroyOnLoad(GasHost.gameObject);
@@ -21,6 +24,8 @@ namespace GAS
         }
 
         public List<AbilitySystemComponent> AbilitySystemComponents { get; }
+
+        private readonly List<AbilitySystemComponent> _cachedAbilitySystemComponents;
 
         private GasHost GasHost { get; }
 
@@ -67,13 +72,29 @@ namespace GAS
         {
             GasHost.enabled = true;
         }
-        
+
         public void ClearComponents()
         {
             foreach (var t in AbilitySystemComponents)
                 t.Dispose();
 
             AbilitySystemComponents.Clear();
+        }
+
+        public void Tick()
+        {
+            Profiler.BeginSample($"{nameof(GameplayAbilitySystem)}::Tick()");
+
+            _cachedAbilitySystemComponents.AddRange(AbilitySystemComponents);
+
+            foreach (var abilitySystemComponent in _cachedAbilitySystemComponents)
+            {
+                abilitySystemComponent.Tick();
+            }
+
+            _cachedAbilitySystemComponents.Clear();
+
+            Profiler.EndSample();
         }
     }
 }

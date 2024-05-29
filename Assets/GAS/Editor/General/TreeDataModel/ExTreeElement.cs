@@ -7,7 +7,7 @@ namespace UnityEditor.TreeDataModel
 
     
     [Serializable]
-    public class TreeElement
+    public class ExTreeElement
     {
         [SerializeField] private int _id;
 
@@ -15,14 +15,14 @@ namespace UnityEditor.TreeDataModel
 
         [SerializeField] private int _depth;
 
-        [NonSerialized] private List<TreeElement> _children;
-        [NonSerialized] private TreeElement _parent;
+        [NonSerialized] private List<ExTreeElement> _children;
+        [NonSerialized] private ExTreeElement _parent;
 
-        public TreeElement()
+        public ExTreeElement()
         {
         }
 
-        public TreeElement(string name, int depth, int id)
+        public ExTreeElement(string name, int depth, int id)
         {
             _name = name;
             _id = id;
@@ -35,13 +35,13 @@ namespace UnityEditor.TreeDataModel
             set => _depth = value;
         }
 
-        public TreeElement Parent
+        public ExTreeElement Parent
         {
             get => _parent;
             set => _parent = value;
         }
 
-        public List<TreeElement> Children
+        public List<ExTreeElement> Children
         {
             get => _children;
             set => _children = value;

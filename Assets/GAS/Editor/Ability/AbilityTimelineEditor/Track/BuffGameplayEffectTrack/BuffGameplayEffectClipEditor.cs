@@ -1,4 +1,3 @@
-
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
@@ -9,12 +8,12 @@ namespace GAS.Editor
     using Sirenix.OdinInspector;
     using GAS.Runtime;
 
-    public class BuffGameplayEffectClipEditor:OdinEditorWindow
+    public class BuffGameplayEffectClipEditor : OdinEditorWindow
     {
         private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        
+
         private BuffGameplayEffectClip _clip;
-        
+
         public static BuffGameplayEffectClipEditor Create(BuffGameplayEffectClip clip)
         {
             var window = new BuffGameplayEffectClipEditor();
@@ -25,7 +24,7 @@ namespace GAS.Editor
 
         [BoxGroup]
         [HideLabel]
-        [DisplayAsString(TextAlignment.Left,true)]
+        [DisplayAsString(TextAlignment.Left, true)]
         public string RunInfo;
 
         [Delayed]
@@ -42,7 +41,7 @@ namespace GAS.Editor
 
         [BoxGroup]
         [Button]
-        [GUIColor(0.9f,0.2f,0.2f)]
+        [GUIColor(0.9f, 0.2f, 0.2f)]
         void Delete()
         {
             _clip.Delete();
@@ -50,10 +49,11 @@ namespace GAS.Editor
 
         void Refresh()
         {
+            Buff = _clip.BuffGameplayEffectClipData.gameplayEffect;
             RunInfo = $"<b>Run(f):{_clip.BuffGameplayEffectClipData.startFrame} -> {_clip.BuffGameplayEffectClipData.EndFrame}</b>";
             Duration = _clip.BuffGameplayEffectClipData.durationFrame;
         }
-        
+
         private void OnDurationFrameChanged()
         {
             // 钳制
@@ -65,26 +65,25 @@ namespace GAS.Editor
             _clip.RefreshShow(_clip.FrameUnitWidth);
             Refresh();
         }
-        
+
         private void OnBuffChanged()
         {
             _clip.UpdateClipDataBuff(Buff);
             _clip.RefreshShow(_clip.FrameUnitWidth);
             Refresh();
         }
-        
     }
-    
-    
+
+
     [CustomEditor(typeof(BuffGameplayEffectClipEditor))]
-    public class BuffGameplayEffectClipInspector:OdinEditorWithoutHeader
+    public class BuffGameplayEffectClipInspector : OdinEditorWithoutHeader
     {
         public override void OnInspectorGUI()
         {
             EditorGUILayout.HelpBox("【注意！！】请确保设置的GameplayEffect类型为Durational或Infinite。 非持续类型的GameplayEffect不会生效。且GameplayEffect执行时会设置为Infinite执行策略， 生命周期由Clip长度（Duration）决定。", MessageType.Info);
-            
+
             GUILayout.Space(20);
-            
+
             base.OnInspectorGUI();
         }
     }

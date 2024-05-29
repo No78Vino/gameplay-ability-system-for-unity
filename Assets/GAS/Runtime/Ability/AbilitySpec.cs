@@ -11,12 +11,19 @@ namespace GAS.Runtime
             Ability = ability;
             Owner = owner;
         }
-
+        
+        public virtual void Dispose()
+        {
+            _onActivateResult = null;
+            _onEndAbility = null;
+            _onCancelAbility = null;
+        }
+        
         public AbstractAbility Ability { get; }
 
         public AbilitySystemComponent Owner { get; protected set; }
 
-        public float Level { get; }
+        public int Level { get; protected set; }
 
         public bool IsActive { get; private set; }
 
@@ -29,7 +36,7 @@ namespace GAS.Runtime
         {
             _onActivateResult += onActivateResult;
         }
-        
+
         public void UnregisterActivateResult(Action<AbilityActivateResult> onActivateResult)
         {
             _onActivateResult -= onActivateResult;
@@ -39,22 +46,26 @@ namespace GAS.Runtime
         {
             _onEndAbility += onEndAbility;
         }
-        
+
         public void UnregisterEndAbility(Action onEndAbility)
         {
             _onEndAbility -= onEndAbility;
         }
-        
+
         public void RegisterCancelAbility(Action onCancelAbility)
         {
             _onCancelAbility += onCancelAbility;
         }
-        
+
         public void UnregisterCancelAbility(Action onCancelAbility)
         {
             _onCancelAbility -= onCancelAbility;
         }
         
+        public virtual void SetLevel(int level)
+        {
+            Level = level;
+        }
         public virtual AbilityActivateResult CanActivate()
         {
             if (IsActive) return AbilityActivateResult.FailHasActivated;
@@ -142,6 +153,7 @@ namespace GAS.Runtime
                 IsActive = true;
                 ActiveCount++;
                 Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
+
                 ActivateAbility(_abilityArguments);
             }
 
@@ -153,7 +165,6 @@ namespace GAS.Runtime
         {
             if (!IsActive) return;
             IsActive = false;
-
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             EndAbility();
             _onEndAbility?.Invoke();
@@ -163,7 +174,7 @@ namespace GAS.Runtime
         {
             if (!IsActive) return;
             IsActive = false;
-
+            
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
@@ -171,8 +182,10 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            if (!IsActive) return;
-            AbilityTick();
+            if (IsActive)
+            {
+                AbilityTick();
+            }
         }
 
         protected virtual void AbilityTick()

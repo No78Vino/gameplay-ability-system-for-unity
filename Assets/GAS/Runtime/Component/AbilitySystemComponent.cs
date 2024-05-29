@@ -6,23 +6,26 @@ namespace GAS.Runtime
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        [SerializeField] private AbilitySystemComponentPreset preset;
+        [SerializeField]
+        private AbilitySystemComponentPreset preset;
+
         public AbilitySystemComponentPreset Preset => preset;
-        
+
         public int Level { get; protected set; }
 
-        public GameplayEffectContainer GameplayEffectContainer { get; private set; } 
+        public GameplayEffectContainer GameplayEffectContainer { get; private set; }
 
-        public GameplayTagAggregator GameplayTagAggregator { get; private set;} 
+        public GameplayTagAggregator GameplayTagAggregator { get; private set; }
 
-        public AbilityContainer AbilityContainer { get; private set;}
+        public AbilityContainer AbilityContainer { get; private set; }
 
-        public AttributeSetContainer AttributeSetContainer { get; private set;}
+        public AttributeSetContainer AttributeSetContainer { get; private set; }
 
         private bool _ready;
+
         private void Prepare()
         {
-            if(_ready) return;
+            if (_ready) return;
             AbilityContainer = new AbilityContainer(this);
             GameplayEffectContainer = new GameplayEffectContainer(this);
             AttributeSetContainer = new AttributeSetContainer(this);
@@ -37,7 +40,7 @@ namespace GAS.Runtime
             ClearGameplayEffects();
             GameplayTagAggregator?.OnDisable();
         }
-        
+
         private void Awake()
         {
             Prepare();
@@ -60,17 +63,17 @@ namespace GAS.Runtime
         {
             preset = ascPreset;
         }
-        
-        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes,AbilityAsset[] baseAbilities,int level)
+
+        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities, int level)
         {
             Prepare();
             SetLevel(level);
             if (baseTags != null) GameplayTagAggregator.Init(baseTags);
-            
+
             if (attrSetTypes != null)
                 foreach (var attrSetType in attrSetTypes)
                     AttributeSetContainer.AddAttributeSet(attrSetType);
-            
+
             if (baseAbilities != null)
                 foreach (var info in baseAbilities)
                     if (info != null)
@@ -84,7 +87,7 @@ namespace GAS.Runtime
         {
             Level = level;
         }
-        
+
         public bool HasTag(GameplayTag gameplayTag)
         {
             return GameplayTagAggregator.HasTag(gameplayTag);
@@ -110,34 +113,42 @@ namespace GAS.Runtime
             GameplayTagAggregator.RemoveFixedTag(tags);
         }
 
-        public void AddFixedTag(GameplayTag tag)
+        public void AddFixedTag(GameplayTag gameplayTag)
         {
-            GameplayTagAggregator.AddFixedTag(tag);
+            GameplayTagAggregator.AddFixedTag(gameplayTag);
         }
 
-        public void RemoveFixedTag(GameplayTag tag)
+        public void RemoveFixedTag(GameplayTag gameplayTag)
         {
-            GameplayTagAggregator.RemoveFixedTag(tag);
+            GameplayTagAggregator.RemoveFixedTag(gameplayTag);
         }
-        
+
         public void RemoveGameplayEffect(GameplayEffectSpec spec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
 
-
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
-#if UNITY_EDITOR
             if (gameplayEffect == null)
             {
+#if UNITY_EDITOR
                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
+#endif
                 return null;
             }
-#endif
-            return gameplayEffect.CanApplyTo(target)
-                ? target.AddGameplayEffect(gameplayEffect.CreateSpec(this, target, Level))
-                : null;
+            
+            // // 在ge spec实例化前就应该处理CanApply逻辑
+            // var canApply = gameplayEffect.CanApplyTo(target);
+            // if (canApply)
+            // {
+            //     // TODO 在此处处理Stacking逻辑，因为堆叠是不应该产生Spec的
+            //     var spec = gameplayEffect.CreateSpec(this, target, Level);
+            //     var applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
+            //     //applyGameplayEffectTo = target.AddGameplayEffect(spec);
+            //     return applyGameplayEffectTo;
+            // }
+            return target.AddGameplayEffect(this,gameplayEffect);;
         }
 
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
@@ -145,9 +156,15 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
 
-        public void GrantAbility(AbstractAbility ability)
+        public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
+        }
+
+        public AbilitySpec GrantAbility(AbstractAbility ability)
         {
             AbilityContainer.GrantAbility(ability);
+            return AbilityContainer.AbilitySpecs()[ability.Name];
         }
 
         public void RemoveAbility(string abilityName)
@@ -187,7 +204,7 @@ namespace GAS.Runtime
         {
             AbilityContainer.EndAbility(abilityName);
         }
-        
+
         public void TryCancelAbility(string abilityName)
         {
             AbilityContainer.CancelAbility(abilityName);
@@ -212,6 +229,8 @@ namespace GAS.Runtime
                     case GEOperation.Override:
                         baseValue = magnitude;
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 AttributeSetContainer.Sets[modifier.AttributeSetName]
@@ -229,7 +248,7 @@ namespace GAS.Runtime
             AttributeSetContainer.TryGetAttributeSet<T>(out var attrSet);
             return attrSet;
         }
-        
+
         public void ClearGameplayEffect()
         {
             // _abilityContainer = new AbilityContainer(this);
@@ -239,10 +258,9 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(GameplayEffectSpec spec)
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source,GameplayEffect effect)
         {
-            var success = GameplayEffectContainer.AddGameplayEffectSpec(spec);
-            return success ? spec : null;
+            return GameplayEffectContainer.AddGameplayEffectSpec(source,effect);
         }
 
         private void DisableAllAbilities()

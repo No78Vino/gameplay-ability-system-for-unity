@@ -7,7 +7,7 @@ namespace GAS.Editor
     using System.IO;
     using System.Linq;
     using UnityEngine;
-    
+
     public static class AttributeCollectionGen
     {
         private sealed class AttributeInfo
@@ -42,6 +42,8 @@ namespace GAS.Editor
             writer.WriteLine("///////////////////////////////////");
 
             writer.WriteLine("");
+            writer.WriteLine("using System.Collections.Generic;");
+            writer.WriteLine("");
 
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
@@ -52,6 +54,8 @@ namespace GAS.Editor
                 writer.Indent++;
                 {
                     bool skippedFirst = false;
+
+                    var names = new List<string>();
                     // Generate members for each ATTRIBUTE
                     foreach (var attr in attributes)
                     {
@@ -63,7 +67,23 @@ namespace GAS.Editor
                         writer.WriteLine($"/// {attr.Comment}");
                         writer.WriteLine("/// </summary>");
                         writer.WriteLine($"public const string {validName} = \"{attr.Name}\";");
+                        names.Add(validName);
                     }
+
+                    writer.WriteLine("");
+
+                    writer.WriteLine("// For facilitating the creation of a Value Dropdown in the editor.");
+                    writer.WriteLine("public static List<string> AttributeNames = new List<string>()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        foreach (var name in names)
+                        {
+                            writer.WriteLine($"\"{name}\",");
+                        }
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("};");
                 }
                 writer.Indent--;
                 writer.WriteLine("}");

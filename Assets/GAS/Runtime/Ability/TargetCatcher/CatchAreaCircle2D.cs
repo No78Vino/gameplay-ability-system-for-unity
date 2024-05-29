@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using GAS.General;
-using GAS.Runtime;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class CatchAreaCircle2D : CatchAreaBase
+    public sealed class CatchAreaCircle2D : CatchAreaBase
     {
         public float radius;
         public Vector2 offset;
@@ -18,26 +17,26 @@ namespace GAS.Runtime
             this.radius = radius;
         }
 
-        public override List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
+        private static readonly Collider2D[] Collider2Ds = new Collider2D[32];
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
         {
-            var result = new List<AbilitySystemComponent>();
-
-            Collider2D[] targets = centerType switch
+            int count = centerType switch
             {
-                EffectCenterType.SelfOffset => Owner.OverlapCircle2D(offset, radius, checkLayer),
-                EffectCenterType.WorldSpace => Physics2D.OverlapCircleAll(offset, radius, checkLayer),
-                EffectCenterType.TargetOffset => mainTarget.OverlapCircle2D(offset, radius, checkLayer),
-                _ => null
+                EffectCenterType.SelfOffset => Owner.OverlapCircle2DNonAlloc(offset, radius, Collider2Ds, checkLayer),
+                EffectCenterType.WorldSpace => Physics2D.OverlapCircleNonAlloc(offset, radius, Collider2Ds, checkLayer),
+                EffectCenterType.TargetOffset => mainTarget.OverlapCircle2DNonAlloc(offset, radius, Collider2Ds, checkLayer),
+                _ => 0
             };
 
-            if (targets == null) return result;
-            foreach (var target in targets)
-            {
-                var targetUnit = target.GetComponent<AbilitySystemComponent>();
-                if (targetUnit != null) result.Add(targetUnit);
-            }
 
-            return result;
+            for (var i = 0; i < count; ++i)
+            {
+                var targetUnit = Collider2Ds[i].GetComponent<AbilitySystemComponent>();
+                if (targetUnit != null)
+                {
+                    results.Add(targetUnit);
+                }
+            }
         }
 #if UNITY_EDITOR
         public override void OnEditorPreview(GameObject previewObject)
