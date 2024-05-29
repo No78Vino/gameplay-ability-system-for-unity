@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2024-05-30
+
+补充了Granted Ability和GameplayEffect Stacking两个功能；优化了部分GC；优化了编辑器界面操作等；修复了部分bug。
+
+### Changed
+
+- 补充了Granted Ability，详情可见README文档的2.8.c
+- 补充了GameplayEffect Stacking，详情可见README文档的2.7中Stacking部分
+- 优化了部分GC。（From: BCC @kenkinky）
+- 优化了部分执行逻辑，增强了代码可读性。
+
+### Fixed
+
+- 修复了部分逻辑bug。（From: BCC @kenkinky）
 
 ## [1.0.9] - 2024-04-25
 
