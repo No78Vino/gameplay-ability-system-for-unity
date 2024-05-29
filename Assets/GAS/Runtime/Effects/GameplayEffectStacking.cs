@@ -189,7 +189,7 @@ namespace GAS.Runtime
         
         #region UTIL FUNCTION FOR ODIN INSPECTOR 
         public bool IsNoStacking() => stackingType == StackingType.None;
-        public bool IsNeverRefreshDuration() => durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
+        public bool IsNeverRefreshDuration() => IsNoStacking() || durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
         public bool IsDenyOverflowApplication() => !IsNoStacking() && denyOverflowApplication;
         #endregion
     }
