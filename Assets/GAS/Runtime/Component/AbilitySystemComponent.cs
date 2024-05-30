@@ -33,9 +33,14 @@ namespace GAS.Runtime
             _ready = true;
         }
 
-        public void Dispose()
+        public void Enable()
         {
-            DisposeAttributeSetContainer();
+            AttributeSetContainer.OnEnable();
+        }
+        
+        public void Disable()
+        {
+            AttributeSetContainer.OnDisable();
             DisableAllAbilities();
             ClearGameplayEffects();
             GameplayTagAggregator?.OnDisable();
@@ -51,11 +56,12 @@ namespace GAS.Runtime
             Prepare();
             GameplayAbilitySystem.GAS.Register(this);
             GameplayTagAggregator?.OnEnable();
+            Enable();
         }
 
         private void OnDisable()
         {
-            Dispose();
+            Disable();
             GameplayAbilitySystem.GAS.Unregister(this);
         }
 
@@ -271,11 +277,6 @@ namespace GAS.Runtime
         private void ClearGameplayEffects()
         {
             GameplayEffectContainer.ClearGameplayEffect();
-        }
-
-        private void DisposeAttributeSetContainer()
-        {
-            AttributeSetContainer.Dispose();
         }
     }
 }

@@ -20,16 +20,16 @@ namespace GAS.Runtime
             _processedAttribute = attribute;
             _owner = owner;
 
-            OnCreated();
+            // OnEnable();
         }
 
-        void OnCreated()
+        public void OnEnable()
         {
             _processedAttribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.RegisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
         
-        public void OnDispose()
+        public void OnDisable()
         {
             _processedAttribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);

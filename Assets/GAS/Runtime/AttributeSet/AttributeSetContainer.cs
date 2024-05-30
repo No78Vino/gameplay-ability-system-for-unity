@@ -18,19 +18,7 @@ namespace GAS.Runtime
         
         public void AddAttributeSet<T>() where T : AttributeSet
         {
-            if (TryGetAttributeSet<T>(out _)) return;
-            
-            var setName = AttributeSetUtil.AttributeSetName(typeof(T));
-            _attributeSets.Add(setName,Activator.CreateInstance<T>());
-            
-            var attrSet = _attributeSets[setName];
-            foreach (var attr in attrSet.AttributeNames)
-            {
-                if (!_attributeAggregators.ContainsKey(attrSet[attr]))
-                {
-                    _attributeAggregators.Add(attrSet[attr],new AttributeAggregator(attrSet[attr],_owner));
-                }
-            }
+            AddAttributeSet(typeof(T));
         }
         
         public void AddAttributeSet(Type attrSetType)
@@ -44,7 +32,9 @@ namespace GAS.Runtime
             {
                 if (!_attributeAggregators.ContainsKey(attrSet[attr]))
                 {
-                    _attributeAggregators.Add(attrSet[attr],new AttributeAggregator(attrSet[attr],_owner));
+                    var attrAggt = new AttributeAggregator(attrSet[attr],_owner);
+                    if(_owner.enabled)  attrAggt.OnEnable();
+                    _attributeAggregators.Add(attrSet[attr],attrAggt);
                 }
             }
             attrSet.SetOwner(_owner);
@@ -114,11 +104,16 @@ namespace GAS.Runtime
             return snapshot;
         }
         
-        public void Dispose()
+        public void OnDisable()
         {
             foreach (var aggregator in _attributeAggregators)
-                aggregator.Value.OnDispose();
-            
+                aggregator.Value.OnDisable();
+        }
+
+        public void OnEnable()
+        {
+            foreach (var aggregator in _attributeAggregators)
+                aggregator.Value.OnEnable();
         }
     }
 }
