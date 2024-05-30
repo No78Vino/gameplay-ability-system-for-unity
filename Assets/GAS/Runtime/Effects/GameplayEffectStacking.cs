@@ -69,14 +69,14 @@ namespace GAS.Runtime
         public void SetStackingCodeName(string stackingCodeName)
         {
             this.stackingCodeName = stackingCodeName;
-            this.stackingHashCode = stackingCodeName.GetHashCode();
+            this.stackingHashCode = stackingCodeName?.GetHashCode() ?? 0;// 兼容旧的SO数据
         }
 
         public void SetStackingHashCode(int stackingHashCode)
         {
             this.stackingHashCode = stackingHashCode;
         }
-        
+
         public void SetStackingType(StackingType stackingType)
         {
             this.stackingType = stackingType;
@@ -146,7 +146,7 @@ namespace GAS.Runtime
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
         public StackingType stackingType;
-        
+
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [HideIf("IsNoStacking")]
@@ -218,7 +218,10 @@ namespace GAS.Runtime
         #region UTIL FUNCTION FOR ODIN INSPECTOR
 
         public bool IsNoStacking() => stackingType == StackingType.None;
-        public bool IsNeverRefreshDuration() => IsNoStacking() || durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
+
+        public bool IsNeverRefreshDuration() =>
+            IsNoStacking() || durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
+
         public bool IsDenyOverflowApplication() => !IsNoStacking() && denyOverflowApplication;
 
         #endregion
