@@ -15,7 +15,10 @@ namespace GAS.Runtime
         /// The execution type of onImmunity is one shot.
         /// </summary>
         public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
+        
+        public event Action<int,int> onStackCountChanged;
 
+        
         public GameplayEffectSpec(
             GameplayEffect gameplayEffect,
             AbilitySystemComponent source,
@@ -346,7 +349,9 @@ namespace GAS.Runtime
         #region ABOUT STACKING
         public void RefreshStack()
         {
+            var oldStackCount = StackCount;
             RefreshStack(StackCount + 1);
+            OnStackCountChange(oldStackCount, StackCount);
         }
         
         public void RefreshStack(int stackCount)
@@ -394,6 +399,22 @@ namespace GAS.Runtime
         {
             ActivationTime = Time.time;
         }
+        
+        private void OnStackCountChange(int oldStackCount, int newStackCount)
+        {
+            onStackCountChanged?.Invoke(oldStackCount, newStackCount);
+        }
+        
+        public void RegisterOnStackCountChanged(Action<int, int> callback)
+        {
+            onStackCountChanged += callback;
+        }
+
+        public void UnregisterOnStackCountChanged(Action<int, int> callback)
+        {
+            onStackCountChanged -= callback;
+        }
+
         #endregion
     }
 }

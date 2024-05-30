@@ -226,7 +226,11 @@ namespace GAS.Runtime
             spec = null;
         }
 
-
+        private void OnStackCountChange(GameplayEffectSpec spec, int oldStackCount, int newStackCount)
+        {
+            
+        }
+        
         private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source,GameplayEffect effect)
         {
             var spec = effect.CreateSpec(source, _owner, source.Level);
