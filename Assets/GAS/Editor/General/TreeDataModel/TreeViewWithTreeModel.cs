@@ -9,7 +9,7 @@ namespace UnityEditor.TreeDataModel
     using Object = UnityEngine.Object;
 
     
-    internal class TreeViewItem<T> : TreeViewItem where T : TreeElement
+    internal class TreeViewItem<T> : TreeViewItem where T : ExTreeElement
     {
         public TreeViewItem(int id, int depth, string displayName, T data) : base(id, depth, displayName)
         {
@@ -19,7 +19,7 @@ namespace UnityEditor.TreeDataModel
         public T data { get; set; }
     }
 
-    internal class TreeViewWithTreeModel<T> : TreeView where T : TreeElement
+    internal class TreeViewWithTreeModel<T> : TreeView where T : ExTreeElement
     {
         // Dragging
         //-----------
@@ -28,26 +28,26 @@ namespace UnityEditor.TreeDataModel
         private readonly List<TreeViewItem> m_Rows = new List<TreeViewItem>(100);
 
 
-        public TreeViewWithTreeModel(TreeViewState state, TreeModel<T> model) : base(state)
+        public TreeViewWithTreeModel(TreeViewState state, ExTreeModel<T> model) : base(state)
         {
             Init(model);
         }
 
-        public TreeViewWithTreeModel(TreeViewState state, MultiColumnHeader multiColumnHeader, TreeModel<T> model)
+        public TreeViewWithTreeModel(TreeViewState state, MultiColumnHeader multiColumnHeader, ExTreeModel<T> model)
             : base(state, multiColumnHeader)
         {
             Init(model);
         }
 
-        public TreeModel<T> treeModel { get; private set; }
+        public ExTreeModel<T> ExTreeModel { get; private set; }
 
         public event Action treeChanged;
         public event Action<IList<TreeViewItem>> beforeDroppingDraggedItems;
 
-        private void Init(TreeModel<T> model)
+        private void Init(ExTreeModel<T> model)
         {
-            treeModel = model;
-            treeModel.modelChanged += ModelChanged;
+            ExTreeModel = model;
+            ExTreeModel.modelChanged += ModelChanged;
         }
 
         private void ModelChanged()
@@ -61,22 +61,22 @@ namespace UnityEditor.TreeDataModel
         protected override TreeViewItem BuildRoot()
         {
             var depthForHiddenRoot = -1;
-            return new TreeViewItem<T>(treeModel.Root.ID, depthForHiddenRoot, treeModel.Root.Name, treeModel.Root);
+            return new TreeViewItem<T>(ExTreeModel.Root.ID, depthForHiddenRoot, ExTreeModel.Root.Name, ExTreeModel.Root);
         }
 
         protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
         {
-            if (treeModel.Root == null) Debug.LogError("tree model root is null. did you call SetData()?");
+            if (ExTreeModel.Root == null) Debug.LogError("tree model root is null. did you call SetData()?");
 
             m_Rows.Clear();
             if (!string.IsNullOrEmpty(searchString))
             {
-                Search(treeModel.Root, searchString, m_Rows);
+                Search(ExTreeModel.Root, searchString, m_Rows);
             }
             else
             {
-                if (treeModel.Root.HasChildren)
-                    AddChildrenRecursive(treeModel.Root, 0, m_Rows);
+                if (ExTreeModel.Root.HasChildren)
+                    AddChildrenRecursive(ExTreeModel.Root, 0, m_Rows);
             }
 
             // We still need to setup the child parent information for the rows since this 
@@ -137,12 +137,12 @@ namespace UnityEditor.TreeDataModel
 
         protected override IList<int> GetAncestors(int id)
         {
-            return treeModel.GetAncestors(id);
+            return ExTreeModel.GetAncestors(id);
         }
 
         protected override IList<int> GetDescendantsThatHaveChildren(int id)
         {
-            return treeModel.GetDescendantsThatHaveChildren(id);
+            return ExTreeModel.GetDescendantsThatHaveChildren(id);
         }
 
         protected override bool CanStartDrag(CanStartDragArgs args)
@@ -190,7 +190,7 @@ namespace UnityEditor.TreeDataModel
                 case DragAndDropPosition.OutsideItems:
                 {
                     if (args.performDrop)
-                        OnDropDraggedElementsAtIndex(draggedRows, treeModel.Root, treeModel.Root.Children.Count);
+                        OnDropDraggedElementsAtIndex(draggedRows, ExTreeModel.Root, ExTreeModel.Root.Children.Count);
 
                     return DragAndDropVisualMode.Move;
                 }
@@ -205,12 +205,12 @@ namespace UnityEditor.TreeDataModel
             if (beforeDroppingDraggedItems != null)
                 beforeDroppingDraggedItems(draggedRows);
 
-            var draggedElements = new List<TreeElement>();
+            var draggedElements = new List<ExTreeElement>();
             foreach (var x in draggedRows)
                 draggedElements.Add(((TreeViewItem<T>)x).data);
 
             var selectedIDs = draggedElements.Select(x => x.ID).ToArray();
-            treeModel.MoveElements(parent, insertIndex, draggedElements);
+            ExTreeModel.MoveElements(parent, insertIndex, draggedElements);
             SetSelection(selectedIDs, TreeViewSelectionOptions.RevealAndFrame);
         }
 

@@ -46,13 +46,15 @@ namespace GAS.Runtime
 
         [LabelText("RefreshDuration - 持续时间结束时,再次刷新Duration", SdfIconType.HourglassTop)]
         RefreshDuration //持续时间结束时,再次刷新Duration，这相当于无限Duration，
-        //可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
-        //可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
+        //TODO :可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
+        //TODO :可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
     }
 
     // GE堆栈数据结构
     public struct GameplayEffectStacking
     {
+        public string stackingCodeName; // 实际允许不会使用，而是使用stackingCodeName的hash值, 即stackingHashCode
+        public int stackingHashCode;
         public StackingType stackingType;
         public int limitCount;
         public DurationRefreshPolicy durationRefreshPolicy;
@@ -62,8 +64,19 @@ namespace GAS.Runtime
         // Overflow 溢出逻辑处理
         public bool denyOverflowApplication; //对应于StackDurationRefreshPolicy，如果为True则多余的Apply不会刷新Duration
         public bool clearStackOnOverflow; //当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数
-        public GameplayEffect[] overflowEffects; // 超过StackLimitCount数量(包括等于)的Effect被Apply时将会调用该OverflowEffects
+        public GameplayEffect[] overflowEffects; // 超过StackLimitCount数量的Effect被Apply时将会调用该OverflowEffects
 
+        public void SetStackingCodeName(string stackingCodeName)
+        {
+            this.stackingCodeName = stackingCodeName;
+            this.stackingHashCode = stackingCodeName.GetHashCode();
+        }
+
+        public void SetStackingHashCode(int stackingHashCode)
+        {
+            this.stackingHashCode = stackingHashCode;
+        }
+        
         public void SetStackingType(StackingType stackingType)
         {
             this.stackingType = stackingType;
@@ -131,6 +144,11 @@ namespace GAS.Runtime
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
+        [HideIf("IsNoStacking")]
+        [LabelText(GASTextDefine.LABEL_GE_STACKING_CODENAME)]
+        public string stackingCodeName;
+
+        [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
         public StackingType stackingType;
 
@@ -184,6 +202,7 @@ namespace GAS.Runtime
         public GameplayEffectStacking ToRuntimeData()
         {
             var stack = new GameplayEffectStacking();
+            stack.SetStackingCodeName(stackingCodeName);
             stack.SetStackingType(stackingType);
             stack.SetLimitCount(limitCount);
             stack.SetDurationRefreshPolicy(durationRefreshPolicy);
@@ -198,7 +217,7 @@ namespace GAS.Runtime
         #region UTIL FUNCTION FOR ODIN INSPECTOR
 
         public bool IsNoStacking() => stackingType == StackingType.None;
-        public bool IsNeverRefreshDuration() => durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
+        public bool IsNeverRefreshDuration() => IsNoStacking() || durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
         public bool IsDenyOverflowApplication() => !IsNoStacking() && denyOverflowApplication;
 
         #endregion

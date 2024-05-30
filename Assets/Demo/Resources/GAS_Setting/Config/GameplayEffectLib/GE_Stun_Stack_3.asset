@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
+  m_Name: GE_Stun_Stack_3
+  m_EditorClassIdentifier: 
+  Name: "\u7729\u6655buff"
+  Description: "\u53E0\u52A0\u7B2C4\u5C42\u65F6\u89E6\u53D1\u7729\u6655"
+  DurationPolicy: 3
+  Duration: 6
+  Period: 0
+  PeriodExecution: {fileID: 0}
+  Stacking:
+    stackingCodeName: Stun3
+    stackingType: 1
+    limitCount: 3
+    durationRefreshPolicy: 1
+    periodResetPolicy: 0
+    expirationPolicy: 1
+    denyOverflowApplication: 1
+    clearStackOnOverflow: 1
+    overflowEffects:
+    - {fileID: 11400000, guid: c86bb973d6bab234c923e00df8edda34, type: 2}
+  GrantedAbilities: []
+  Modifiers: []
+  AssetTags: []
+  GrantedTags: []
+  ApplicationRequiredTags: []
+  OngoingRequiredTags: []
+  RemoveGameplayEffectsWithTags: []
+  ApplicationImmunityTags: []
+  CueOnExecute: []
+  CueDurational: []
+  CueOnAdd: []
+  CueOnRemove: []
+  CueOnActivate: []
+  CueOnDeactivate: []
