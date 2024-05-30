@@ -76,7 +76,7 @@ namespace GAS
         public void ClearComponents()
         {
             foreach (var t in AbilitySystemComponents)
-                t.Dispose();
+                t.Disable();
 
             AbilitySystemComponents.Clear();
         }
