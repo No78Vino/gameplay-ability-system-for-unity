@@ -62,7 +62,7 @@ namespace GAS.Runtime
         [LabelWidth(WIDTH_LABEL)]
         [EnableIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
-        [PropertyRange(0, "@Duration")]
+        [PropertyRange(0, "@DurationPolicy == EffectsDurationPolicy.Duration ? Duration : float.MaxValue")]
         public float Period;
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
