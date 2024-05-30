@@ -32,6 +32,7 @@ namespace GAS.Runtime
             Duration = GameplayEffect.Duration;
             DurationPolicy = GameplayEffect.DurationPolicy;
             Stacking = GameplayEffect.Stacking;
+            Modifiers = GameplayEffect.Modifiers;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
@@ -53,6 +54,7 @@ namespace GAS.Runtime
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
         public GameplayEffectSpec PeriodExecution { get; private set; }
+        public GameplayEffectModifier[] Modifiers { get; private set; }
         public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
         public GameplayEffectStacking Stacking { get; private set; }
 
@@ -96,6 +98,11 @@ namespace GAS.Runtime
         public void SetPeriodExecution(GameplayEffectSpec periodExecution)
         {
             PeriodExecution = periodExecution;
+        }
+
+        public void SetModifiers(GameplayEffectModifier[] modifiers)
+        {
+            Modifiers = modifiers;
         }
 
         public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbility)
@@ -347,11 +354,16 @@ namespace GAS.Runtime
         }
 
         #region ABOUT STACKING
-        public void RefreshStack()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Stack Count是否变化</returns>
+        public bool RefreshStack()
         {
             var oldStackCount = StackCount;
             RefreshStack(StackCount + 1);
             OnStackCountChange(oldStackCount, StackCount);
+            return oldStackCount != StackCount;
         }
         
         public void RefreshStack(int stackCount)
@@ -402,6 +414,7 @@ namespace GAS.Runtime
         
         private void OnStackCountChange(int oldStackCount, int newStackCount)
         {
+            
             onStackCountChanged?.Invoke(oldStackCount, newStackCount);
         }
         

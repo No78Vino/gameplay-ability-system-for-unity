@@ -107,7 +107,8 @@ namespace GAS.Runtime
                 // 新添加GE
                 if (geSpec == null)
                     return Operation_AddNewGameplayEffectSpec(source, effect);
-                geSpec.RefreshStack();
+                bool stackCountChange = geSpec.RefreshStack();
+                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
                 return geSpec;
             }
             
@@ -117,7 +118,8 @@ namespace GAS.Runtime
                 GetStackingEffectSpecByDataFrom(effect,source, out var geSpec);
                 if (geSpec == null)
                     return Operation_AddNewGameplayEffectSpec(source, effect);
-                geSpec.RefreshStack();
+                bool stackCountChange = geSpec.RefreshStack();
+                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
                 return geSpec;
             }
 
@@ -226,9 +228,9 @@ namespace GAS.Runtime
             spec = null;
         }
 
-        private void OnStackCountChange(GameplayEffectSpec spec, int oldStackCount, int newStackCount)
+        private void OnRefreshStackCountMakeContainerDirty()
         {
-            
+            OnGameplayEffectContainerIsDirty?.Invoke();
         }
         
         private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source,GameplayEffect effect)
