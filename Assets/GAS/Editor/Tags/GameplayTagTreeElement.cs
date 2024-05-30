@@ -5,7 +5,7 @@ namespace GAS.Editor
 	using UnityEditor.TreeDataModel;
 	
 	[Serializable]
-	public class GameplayTagTreeElement : TreeElement
+	public class GameplayTagTreeElement : ExTreeElement
 	{
 		public GameplayTagTreeElement (string name, int depth, int id) : base (name, depth, id)
 		{

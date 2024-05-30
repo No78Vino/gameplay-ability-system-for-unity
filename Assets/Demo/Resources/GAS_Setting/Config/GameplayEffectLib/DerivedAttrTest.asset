@@ -18,6 +18,15 @@ MonoBehaviour:
   Duration: 0
   Period: 0
   PeriodExecution: {fileID: 0}
+  Stacking:
+    stackingType: 0
+    limitCount: 0
+    durationRefreshPolicy: 0
+    periodResetPolicy: 0
+    expirationPolicy: 0
+    denyOverflowApplication: 0
+    clearStackOnOverflow: 0
+    overflowEffects: []
   GrantedAbilities: []
   Modifiers:
   - AttributeName: AS_Fight.ATK

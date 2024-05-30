@@ -100,22 +100,26 @@ namespace GAS.Runtime
             }
             
             // 处理GE堆叠
-            GetGameplayEffectSpecByData(effect, out var geSpec);
-            // 新添加GE
-            if (geSpec == null)
-                return Operation_AddNewGameplayEffectSpec(source, effect);
-
-            // 叠加GE
-            // 处理基于Target类型GE堆叠
+            // 基于Target类型GE堆叠
             if (effect.Stacking.stackingType == StackingType.AggregateByTarget)
             {
+                GetStackingEffectSpecByData(effect, out var geSpec);
+                // 新添加GE
+                if (geSpec == null)
+                    return Operation_AddNewGameplayEffectSpec(source, effect);
                 geSpec.RefreshStack();
+                return geSpec;
             }
-            // TODO: 处理基于Source类型GE堆叠
-            // else if (effect.Stacking.stackingType == StackingType.AggregateBySource)
-            // {
-            // }
-
+            
+            // 基于Source类型GE堆叠
+            if (effect.Stacking.stackingType == StackingType.AggregateBySource)
+            {
+                GetStackingEffectSpecByDataFrom(effect,source, out var geSpec);
+                if (geSpec == null)
+                    return Operation_AddNewGameplayEffectSpec(source, effect);
+                geSpec.RefreshStack();
+                return geSpec;
+            }
 
             return null;
         }
@@ -196,10 +200,10 @@ namespace GAS.Runtime
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
-        private void GetGameplayEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
+        private void GetStackingEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
         {
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
-                if (gameplayEffectSpec.GameplayEffect == effect)
+                if (gameplayEffectSpec.GameplayEffect.StackEqual(effect))
                 {
                     spec = gameplayEffectSpec;
                     return;
@@ -207,6 +211,21 @@ namespace GAS.Runtime
 
             spec = null;
         }
+
+        private void GetStackingEffectSpecByDataFrom(GameplayEffect effect,AbilitySystemComponent source, 
+            out GameplayEffectSpec spec)
+        {
+            foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
+                if (gameplayEffectSpec.Source == source && 
+                    gameplayEffectSpec.GameplayEffect.StackEqual(effect))
+                {
+                    spec = gameplayEffectSpec;
+                    return;
+                }
+
+            spec = null;
+        }
+
 
         private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source,GameplayEffect effect)
         {

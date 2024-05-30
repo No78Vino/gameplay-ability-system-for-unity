@@ -352,6 +352,43 @@ GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义
     - CueOnRemove（Instant）：GameplayEffect移除时触发
     - CueOnActivate（Instant）：GameplayEffect激活时触发。
     - CueOnDeactivate（Instant）：GameplayEffect失活时触发。
+- Stacking:堆叠。该系列参数是为了处理常见的叠层类型Buff。比如《黑帝斯》中酒神，爱神，冬神的叠攻buff。stacking的参数基本囊括了绝大多数的叠层型buff的设计。
+  - 生效的GE类型：只有非Instant类型（持续型）的GameplayEffect，可以产生叠加（stacking）。
+  - stackingCodeName: 堆叠GE的唯一标识码，用于可堆叠GE的识别。
+    - 本身是字符串，但是runtime实际使用的是其对应的HashCode。如果为空，则视为不可堆叠
+    - stackingCodeName除了基础的堆叠类GE识别功能外，另一个作用是用于支持不同GE的共同堆叠。举个例子：有一个团队性质的增伤buff【元素增伤】，团队所有成员对同一个目标都可以叠加【元素增伤】，至多10层，增伤
+      随层数增加而增加。但是增伤是指定第一个施加buff成员的元素，比如第一层打的是【火增伤】，那么之后不管是【水增伤】，【雷增伤】，都是【火增伤】buff往上叠加。遇到这种特殊情况，就可以把【水增伤】，【雷增伤】，【火增伤】
+      的stackingCodeName设置为同一个值，这样就可以实现【元素增伤】的共同堆叠。
+  - stackingType：GameplayEffect的叠加类型，有三种：
+    -  | stacking类型 | 作用                                                                                                                                                               |
+       |---|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+       | None | 不叠加                                                                                                                                                              |
+       | AggregateBySource | 基于GE来源（ASC）的叠加计数，所有释放单位各自管理一个叠加计数的GE。 举例：BUFF【聚能】效果是单位被叠加三次该buff（来自同一单位）后触发爆炸。 小怪被A玩家叠了2次【聚能】，然后B玩家又对小怪施加了1次【聚能】，但是不会触发爆炸。因为叠加计数是按来源单位各自计数，需要A再叠1次或者B叠2次，小怪才会爆炸。 |
+       | AggregateByTarget | 基于GE目标（ASC）的叠加计数，所有释放单位共享一个叠加计数的GE。举例：BUFF【诅咒】效果是单位被叠加3次该buff（无关来源单位）后触发即死效果。经典魂游的咒蛙攻击buff。玩家被数只咒蛙围攻，只要被咒蛙打到3次就死亡。在场所有咒蛙的【诅咒】都会叠加在玩家身上一个计数器上。                    |
+  - limitCount：叠加上限。
+    - 需要注意一点，叠加溢出的效果触发是在叠加计数【大于】limitCount时触发。举个例子，如果某个buff叠加3层后触发爆炸伤害，那limitCount应该是2。
+  - DurationRefreshPolicy：持续时间刷新策略。GE叠加成功后，GE的持续时间的刷新策略。
+    - | DurationRefreshPolicy | 作用                                    |
+      |-----------------------|---------------------------------------|
+      | NeverRefresh                  | 从不刷新持续时间。即叠加的BUFF持续时间从第一层生效后计时就不再受影响。 |
+      | RefreshOnSuccessfulApplication | 每次Effect叠加apply成功后刷新Effect的持续时间。      |
+  - PeriodResetPolicy：周期重置策略。GE叠加成功后，GE的周期（Period）的刷新策略。
+    -  | PeriodResetPolicy | 作用                       |
+       |-----------------------|--------------------------|
+       | NeverReset                  | 从不重置周期。                  |
+       | ResetOnSuccessfulApplication | 每次apply成功后重置Effect的周期计时。 |
+  - ExpirationPolicy：过期策略（持续时间结束时逻辑处理）。GE叠加成功后，GE的过期时间（Expiration）的刷新策略。
+    - | ExpirationPolicy | 作用                                      |
+      |-----------------------|-----------------------------------------|
+      | ClearEntireStack                  | 持续时间结束时,清楚所有层数                          |
+      | RemoveSingleStackAndRefreshDuration | 持续时间结束时减少一层，然后重新经历一个Duration，一直持续到层数减为0 | 
+      | RefreshDuration | 持续时间结束时,再次刷新Duration，这相当于无限Duration。    | 
+  - denyOverflowApplication：布尔类型。是否允许溢出的GE叠加生效。
+    - 对应于DurationRefreshPolicy = RefreshOnSuccessfulApplication时，如果为true则多余的Apply不会刷新Duration
+  - clearStackOnOverflow: 布尔类型。是否溢出时清空所有层数，移除GE。
+    - 当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数，移除GE。
+  - overflowEffects:GameplayEffect的数组，溢出时施加的游戏效果。当Stack计数溢出时，对生效单位执行这些GE。
+
 > GameplayEffect的施加（Apply）和激活（Activate）
 >   - GameplayEffect的施加（Apply）和激活（Activate）是两个概念，施加是指GameplayEffect被添加到目标身上，激活是指GameplayEffect实际生效。
 >      - 为什么做区分？
@@ -1669,19 +1706,17 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
     - 2. 采用监听STR属性的变化事件，手动对HpMax的BaseValue进行修改同步。
 ---
 ## 6.暂不支持的功能（可能有遗漏）
-- Granted Ability，GameplayEffect授予的能力。虽然面板显示了配置用的字段，但目前其实是不生效的
-- Derived Attribute，推论Attribute还未实现。
-- GameplayEffect Stack， 同一游戏效果堆叠（如燃烧效果堆叠，伤害提升）
 - RPC相关的GE复制广播
 - GameplayEffect Execution，目前只有Modifier，没有Execution
 - Ability的触发判断用的Source/Target Tag目前不生效
+- GE过期时，触发的游戏效果
 
 ## 7.后续计划
 - 修复bug ，性能优化
+- 将GAS采用ECS结构来运行
 - 补全遗漏的功能 
 - 优化Ability的编辑
 - 支持RPC的GE复制广播，网络同步 
-- 将GAS移交DOTS或采用ECS结构来运行(可能会做)
 
 ## 8.特别感谢
 本插件全面参考了[UE的GAS解析](https://github.com/tranek/GASDocumentation)，来自github --[@tranek](https://github.com/tranek)

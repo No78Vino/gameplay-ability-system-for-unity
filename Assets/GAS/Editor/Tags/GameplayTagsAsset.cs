@@ -21,7 +21,7 @@ namespace GAS.Editor
 			Tags.Clear();
 			for (int i = 0; i < gameplayTagTreeElements.Count; i++)
 			{
-				TreeElement tag = gameplayTagTreeElements[i];
+				ExTreeElement tag = gameplayTagTreeElements[i];
 				if (tag.Depth == -1) continue;
 				string tagName = tag.Name;
 				while (tag.Parent.Depth >=0)

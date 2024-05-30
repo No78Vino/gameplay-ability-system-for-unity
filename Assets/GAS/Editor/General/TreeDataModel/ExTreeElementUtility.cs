@@ -7,9 +7,9 @@ namespace UnityEditor.TreeDataModel
 	// TreeElementUtility and TreeElement are useful helper classes for backend tree data structures.
 	// See tests at the bottom for examples of how to use.
 
-	public static class TreeElementUtility
+	public static class ExTreeElementUtility
 	{
-		public static void TreeToList<T>(T root, IList<T> result) where T : TreeElement
+		public static void TreeToList<T>(T root, IList<T> result) where T : ExTreeElement
 		{
 			if (result == null)
 				throw new NullReferenceException("The input 'IList<T> result' list is null");
@@ -36,7 +36,7 @@ namespace UnityEditor.TreeDataModel
 		// Returns the root of the tree parsed from the list (always the first element).
 		// Important: the first item and is required to have a depth value of -1. 
 		// The rest of the items should have depth >= 0. 
-		public static T ListToTree<T>(IList<T> list) where T : TreeElement
+		public static T ListToTree<T>(IList<T> list) where T : ExTreeElement
 		{
 			// Validate input
 			ValidateDepthValues (list);
@@ -69,10 +69,10 @@ namespace UnityEditor.TreeDataModel
 				}
 
 				// Fill child array
-				List<TreeElement> childList = null;
+				List<ExTreeElement> childList = null;
 				if (childCount != 0)
 				{
-					childList = new List<TreeElement>(childCount); // Allocate once
+					childList = new List<ExTreeElement>(childCount); // Allocate once
 					childCount = 0;
 					for (int i = parentIndex + 1; i < list.Count; i++)
 					{
@@ -95,7 +95,7 @@ namespace UnityEditor.TreeDataModel
 		}
 
 		// Check state of input list
-		public static void ValidateDepthValues<T>(IList<T> list) where T : TreeElement
+		public static void ValidateDepthValues<T>(IList<T> list) where T : ExTreeElement
 		{
 			if (list.Count == 0)
 				throw new ArgumentException("list should have items, count is 0, check before calling ValidateDepthValues", "list");
@@ -121,7 +121,7 @@ namespace UnityEditor.TreeDataModel
 
 
 		// For updating depth values below any given element e.g after reparenting elements
-		public static void UpdateDepthValues<T>(T root) where T : TreeElement
+		public static void UpdateDepthValues<T>(T root) where T : ExTreeElement
 		{
 			if (root == null)
 				throw new ArgumentNullException("root", "The root is null");
@@ -129,11 +129,11 @@ namespace UnityEditor.TreeDataModel
 			if (!root.HasChildren)
 				return;
 
-			Stack<TreeElement> stack = new Stack<TreeElement>();
+			Stack<ExTreeElement> stack = new Stack<ExTreeElement>();
 			stack.Push(root);
 			while (stack.Count > 0)
 			{
-				TreeElement current = stack.Pop();
+				ExTreeElement current = stack.Pop();
 				if (current.Children != null)
 				{
 					foreach (var child in current.Children)
@@ -146,7 +146,7 @@ namespace UnityEditor.TreeDataModel
 		}
 
 		// Returns true if there is an ancestor of child in the elements list
-		static bool IsChildOf<T>(T child, IList<T> elements) where T : TreeElement
+		static bool IsChildOf<T>(T child, IList<T> elements) where T : ExTreeElement
 		{
 			while (child != null)
 			{
@@ -157,7 +157,7 @@ namespace UnityEditor.TreeDataModel
 			return false;
 		}
 
-		public static IList<T> FindCommonAncestorsWithinList<T>(IList<T> elements) where T : TreeElement
+		public static IList<T> FindCommonAncestorsWithinList<T>(IList<T> elements) where T : ExTreeElement
 		{
 			if (elements.Count == 1)
 				return new List<T>(elements);
