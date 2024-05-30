@@ -33,9 +33,14 @@ namespace GAS.Runtime
             _ready = true;
         }
 
-        public void Dispose()
+        public void Enable()
         {
-            DisposeAttributeSetContainer();
+            AttributeSetContainer.OnEnable();
+        }
+        
+        public void Disable()
+        {
+            AttributeSetContainer.OnDisable();
             DisableAllAbilities();
             ClearGameplayEffects();
             GameplayTagAggregator?.OnDisable();
@@ -51,11 +56,12 @@ namespace GAS.Runtime
             Prepare();
             GameplayAbilitySystem.GAS.Register(this);
             GameplayTagAggregator?.OnEnable();
+            Enable();
         }
 
         private void OnDisable()
         {
-            Dispose();
+            Disable();
             GameplayAbilitySystem.GAS.Unregister(this);
         }
 
@@ -212,7 +218,7 @@ namespace GAS.Runtime
 
         public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
         {
-            foreach (var modifier in spec.GameplayEffect.Modifiers)
+            foreach (var modifier in spec.Modifiers)
             {
                 var attributeBaseValue = GetAttributeBaseValue(modifier.AttributeSetName, modifier.AttributeShortName);
                 if (attributeBaseValue == null) continue;
@@ -271,11 +277,6 @@ namespace GAS.Runtime
         private void ClearGameplayEffects()
         {
             GameplayEffectContainer.ClearGameplayEffect();
-        }
-
-        private void DisposeAttributeSetContainer()
-        {
-            AttributeSetContainer.Dispose();
         }
     }
 }
