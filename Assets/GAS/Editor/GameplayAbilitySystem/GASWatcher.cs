@@ -41,7 +41,7 @@ namespace GAS.Editor
 
 
         [BoxGroup(BOXGROUP_ASC)]
-        [HorizontalGroup(BOXGROUP_ASC_H, 200)]
+        [HorizontalGroup(BOXGROUP_ASC_H, 300)]
         [BoxGroup(BOXGROUP_ASC_H_L, false)]
         [OnInspectorGUI("OnDrawNavi")]
         [DisplayAsString(TextAlignment.Center)]
@@ -74,7 +74,8 @@ namespace GAS.Editor
         [Space]
         [Title("Abilities", bold: true)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_V)]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true,
+            ShowPaging = false)]
         [DisplayAsString]
         [LabelText(" ")]
         [ShowIf("IsPlaying")]
@@ -84,7 +85,8 @@ namespace GAS.Editor
         [HorizontalGroup(BOXGROUP_ASC_H_R_A, PaddingRight = 0.01f)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_VB)]
         [Title("Attributes", bold: true)]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true,
+            ShowPaging = false)]
         [DisplayAsString]
         [LabelText(" ")]
         [ShowIf("IsPlaying")]
@@ -94,7 +96,8 @@ namespace GAS.Editor
 
         [HorizontalGroup(BOXGROUP_ASC_H_R_A, PaddingRight = 0.01f)]
         [Title("GameplayEffects", bold: true)]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true,
+            ShowPaging = false)]
         [DisplayAsString]
         [LabelText(" ")]
         [InfoBox("format: [ActiveState][DurationInfo]GeName", InfoMessageType.None, "IsPlaying")]
@@ -106,7 +109,8 @@ namespace GAS.Editor
         [HorizontalGroup(BOXGROUP_ASC_H_R_A)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_VC)]
         [Title("Tags", bold: true)]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true,
+            ShowPaging = false)]
         [DisplayAsString]
         [ShowIf("IsPlaying")]
         [Searchable]
@@ -114,7 +118,8 @@ namespace GAS.Editor
 
         [Title("  ", bold: true)]
         [VerticalGroup(BOXGROUP_ASC_H_R_A_VC)]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true, ShowPaging = false)]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = true, IsReadOnly = true,
+            ShowPaging = false)]
         [DisplayAsString]
         [ShowIf("IsPlaying")]
         [Searchable]
@@ -157,7 +162,8 @@ namespace GAS.Editor
             foreach (var iasc in GAS.GameplayAbilitySystem.GAS.AbilitySystemComponents)
             {
                 var asc = (AbilitySystemComponent)iasc;
-                if (GUILayout.Button($"{asc.GetInstanceID()}"))
+                var presetName = asc.Preset != null ? asc.Preset.name : "NoPreset";
+                if (GUILayout.Button($"{presetName}#{asc.GetInstanceID()}"))
                 {
                     _selected = asc;
                     RefreshAscInfo();
@@ -229,7 +235,8 @@ namespace GAS.Editor
                 foreach (var attributeName in attributeSet.AttributeNames)
                 {
                     var attr = attributeSet[attributeName];
-                    Attributes.Add($"  - {attributeName} = {attr.CurrentValue:N2}({attr.BaseValue:N2} + {attr.CurrentValue - attr.BaseValue:N2})");
+                    Attributes.Add(
+                        $"  - {attributeName} = {attr.CurrentValue:N2}({attr.BaseValue:N2} + {attr.CurrentValue - attr.BaseValue:N2})");
                 }
             }
         }
@@ -263,12 +270,14 @@ namespace GAS.Editor
                     {
                         case GameplayEffectSpec spec:
                         {
-                            DynamicTag.Add($"  - From: {spec.Owner.GetInstanceID()}'s GE: {spec.GameplayEffect.GameplayEffectName}");
+                            DynamicTag.Add(
+                                $"  - From: {spec.Owner.GetInstanceID()}'s GE: {spec.GameplayEffect.GameplayEffectName}");
                             break;
                         }
                         case AbilitySpec ability:
                         {
-                            DynamicTag.Add($"  - From: {ability.Owner.GetInstanceID()}'s Ability: {ability.Ability.Name}");
+                            DynamicTag.Add(
+                                $"  - From: {ability.Owner.GetInstanceID()}'s Ability: {ability.Ability.Name}");
                             break;
                         }
                     }

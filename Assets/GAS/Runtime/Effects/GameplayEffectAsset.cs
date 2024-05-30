@@ -8,10 +8,10 @@ namespace GAS.Runtime
     [CreateAssetMenu(fileName = "GameplayEffect", menuName = "GAS/GameplayEffect")]
     public class GameplayEffectAsset : ScriptableObject, IGameplayEffectData
     {
-        private const string GRP_BASE = "Base Info";
-        private const string GRP_BASE_H = "Base Info/H";
-        private const string GRP_BASE_H_LEFT = "Base Info/H/Left";
-        private const string GRP_BASE_H_RIGHT = "Base Info/H/Right";
+        private const string GRP_BASE = "Base";
+        private const string GRP_BASE_H = "Base/H";
+        private const string GRP_BASE_H_LEFT = "Base/H/Left";
+        private const string GRP_BASE_H_RIGHT = "Base/H/Right";
 
         private const string GRP_DATA = "Data";
         private const string GRP_DATA_H = "Data/H";
@@ -34,13 +34,7 @@ namespace GAS.Runtime
         [TitleGroup(GRP_BASE)]
         [HorizontalGroup(GRP_BASE_H, Width = 1 - 0.618f)]
         [TabGroup(GRP_BASE_H_LEFT, "Summary", SdfIconType.InfoSquareFill, TextColor = "#0BFFC5")]
-        [LabelText(GASTextDefine.LABLE_GE_NAME, SdfIconType.CardHeading)]
-        [LabelWidth(WIDTH_LABEL)]
-        public string Name;
-
-        [TabGroup(GRP_BASE_H_LEFT, "Summary")]
-        [LabelText(GASTextDefine.LABLE_GE_DESCRIPTION, SdfIconType.CardText)]
-        [LabelWidth(WIDTH_LABEL)]
+        [HideLabel]
         [MultiLineProperty(5)]
         public string Description;
 
@@ -87,8 +81,8 @@ namespace GAS.Runtime
         #region Stack
 
         [TitleGroup(GRP_DATA)]
-        [HorizontalGroup(GRP_DATA_H2, order: 2)]
-        [TabGroup(GRP_DATA_STACK, "Stack", SdfIconType.Stack, TextColor = "#9B4AE3", Order = 1)]
+        [HorizontalGroup(GRP_DATA_H2, order: 2, Width = 1 - 0.618f)]
+        [TabGroup(GRP_DATA_STACK, "Stacking", SdfIconType.Stack, TextColor = "#9B4AE3", Order = 1)]
         [HideLabel]
         [EnableIf("IsDurationalPolicy")]
         public GameplayEffectStackingConfig Stacking;
@@ -108,17 +102,18 @@ namespace GAS.Runtime
 
         #region Modifiers
 
+        [HorizontalGroup(GRP_DATA_H, order: 1, Width = 0.618f * 0.618f)]
         [TabGroup(GRP_DATA_MOD, "Modifiers", SdfIconType.CalculatorFill, TextColor = "#FFE60B", Order = 2)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [InfoBox(@"@IsInstantPolicy() ? ""仅在成功应用时执行"":""每次激活时都会执行""", InfoMessageType.None)]
         [InfoBox("依次执行多个修改器, 请注意执行顺序", InfoMessageType.Warning, VisibleIf = "@$value != null && $value.Length > 1")]
+        [LabelText(@"@IsInstantPolicy() ? ""仅在成功应用时执行"":""每次激活时都会执行""")]
         public GameplayEffectModifier[] Modifiers;
 
         #endregion Modifiers
 
         #region Tags
 
-        [HorizontalGroup(GRP_DATA_H, order: 1)]
+        [HorizontalGroup(GRP_DATA_H, order: 1, Width = 1 - 0.618f)]
         [TabGroup(GRP_DATA_TAG, "Tags", SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 1)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]

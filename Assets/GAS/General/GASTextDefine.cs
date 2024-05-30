@@ -77,25 +77,25 @@
         public const string TITLE_GE_TAG = "标签Tag";
         public const string TITLE_GE_CUE = "提示Cue";
       
-        public const string TITLE_GE_TAG_AssetTags = "该[游戏效果]自身的标签";
+        public const string TITLE_GE_TAG_AssetTags = "AssetTags - 该[游戏效果]自身的标签";
         public const string TIP_GE_TAG_AssetTags = "AssetTags: 标签用于描述[游戏效果]自身的特定属性，包括但不限于伤害、治疗、控制等效果类型。\n这些标签有助于区分和定义[游戏效果]的作用和表现。\n可配合RemoveGameplayEffectsWithTags食用。";
-        public const string TITLE_GE_TAG_GrantedTags = "授予目标单位的标签";
+        public const string TITLE_GE_TAG_GrantedTags = "GrantedTags - 授予目标单位的标签";
         public const string TIP_GE_TAG_GrantedTags = "GrantedTags: 当[游戏效果]生效时，标签会被添加到目标单位上，并在[游戏效果]失效时移除。\n该标签对即时型（Instant）[游戏效果]的无效。";
-        public const string TITLE_GE_TAG_ApplicationRequiredTags = "应用该[游戏效果]的【全部】前提";
+        public const string TITLE_GE_TAG_ApplicationRequiredTags = "ApplicationRequiredTags - 应用该[游戏效果]的【全部】前提";
         public const string TIP_GE_TAG_ApplicationRequiredTags = "ApplicationRequiredTags: [游戏效果]的目标单位必须具备【所有】这些标签才能应用于目标单位。\n如果想表达【任一】标签不可作用于目标，应该使用ApplicationImmunityTags标签。";
-        public const string TITLE_GE_TAG_OngoingRequiredTags = "激活该[游戏效果]的【全部】前提";
+        public const string TITLE_GE_TAG_OngoingRequiredTags = "OngoingRequiredTags - 激活该[游戏效果]的【全部】前提";
         public const string TIP_GE_TAG_OngoingRequiredTags = "OngoingRequiredTags: [游戏效果]的目标单位必须具备【全部】这些标签，否则该效果不会触发。\n一旦[游戏效果]被施加，如果目标单位在效果持续期间标签发生变化，导致不再具备【全部】这些标签，效果将失效；反之，如果满足条件，效果将被激活。\n该标签对即时型（Instant）[游戏效果]的无效。";
-        public const string TITLE_GE_TAG_RemoveGameplayEffectsWithTags = "移除具有【任一】标签的[游戏效果]";
+        public const string TITLE_GE_TAG_RemoveGameplayEffectsWithTags = "RemoveGameplayEffectsWithTags - 移除具有【任一】标签的[游戏效果]";
         public const string TIP_GE_TAG_RemoveGameplayEffectsWithTags = "RemoveGameplayEffectsWithTags: [游戏效果]的目标单位当前持有的所有[游戏效果]中，其AssetTags或GrantedTags中具有【任一】这些标签的[游戏效果]将被移除。";
-        public const string TITLE_GE_TAG_ApplicationImmunityTags = "无法应用于具有【任一】标签的目标";
+        public const string TITLE_GE_TAG_ApplicationImmunityTags = "ApplicationImmunityTags - 无法应用于具有【任一】标签的目标";
         public const string TIP_GE_TAG_ApplicationImmunityTags = "ApplicationImmunityTags: 该[游戏效果]无法作用于拥有【任一】这些标签的目标单位。";
         
-        public const string TITLE_GE_CUE_CueOnExecute = "执行时触发";
-        public const string TITLE_GE_CUE_CueDurational = "存在时触发";
-        public const string TITLE_GE_CUE_CueOnAdd = "添加时触发";
-        public const string TITLE_GE_CUE_CueOnRemove = "移除时触发";
-        public const string TITLE_GE_CUE_CueOnActivate = "激活时触发";
-        public const string TITLE_GE_CUE_CueOnDeactivate = "失活时触发";
+        public const string TITLE_GE_CUE_CueOnExecute = "CueOnExecute - 执行时触发";
+        public const string TITLE_GE_CUE_CueDurational = "CueDurational - 存在时持续触发";
+        public const string TITLE_GE_CUE_CueOnAdd = "CueOnAdd - 添加时触发";
+        public const string TITLE_GE_CUE_CueOnRemove = "CueOnRemove - 移除时触发";
+        public const string TITLE_GE_CUE_CueOnActivate = "CueOnActivate - 激活时触发";
+        public const string TITLE_GE_CUE_CueOnDeactivate = "CueOnDeactivate - 失活时触发";
         
         public const string LABEL_GRANT_ABILITY = "授予能力";
         public const string LABEL_GRANT_ABILITY_LEVEL = "能力等级";
@@ -131,12 +131,12 @@
         public const string ABILITY_BASEINFO="基本信息";
         public const string TIP_UNAME =
             "<size=12><b><color=white><color=orange>U-Name非常重要!</color>" +
-            "GAS 会使用U-Name作为Ability的标识符。" +
+            "GAS会使用U-Name作为Ability的标识符。" +
             "所以你必须保证U-Name的唯一性。" +
             "别担心，生成AbilityLib时工具会提醒你这一点。</color></b></size>";
-        public const string ABILITY_CD_TIME="CD时间";
-        public const string ABILITY_EFFECT_CD="冷却CD";
-        public const string ABILITY_EFFECT_COST="消耗";
+        public const string ABILITY_CD_TIME="冷却时长";
+        public const string ABILITY_EFFECT_CD="冷却效果";
+        public const string ABILITY_EFFECT_COST="消耗效果";
         public const string ABILITY_MANUAL_ENDABILITY = "手动结束能力";
         public const string BUTTON_CHECK_TIMELINE_ABILITY = "查看/编辑能力时间轴";
 
@@ -145,7 +145,7 @@
         #region ASC
         
         public const string TIP_ASC_BASEINFO="基本信息只用于描述这个ASC，方便策划阅读理解该ASC。";
-        public const string ASC_BASE_TAG="固有Tag";
+        public const string ASC_BASE_TAG="固有标签";
         public const string ASC_BASE_ABILITY="固有能力";
         public const string ASC_AttributeSet="属性集";
         

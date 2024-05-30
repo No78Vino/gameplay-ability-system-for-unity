@@ -1,33 +1,50 @@
 ﻿using System;
 using GAS.General;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace GAS.Runtime
 {
     public enum StackingType
     {
+        [LabelText("None - 不会叠加", SdfIconType.XCircleFill)]
         None, //不会叠加，如果多次释放则每个Effect相当于单个Effect
+
+        [LabelText("StackBySource - 叠加至来源", SdfIconType.Magic)]
         AggregateBySource, //目标(Target)上的每个源(Source)ASC都有一个单独的堆栈实例, 每个源(Source)可以应用堆栈中的X个GameplayEffect.
+
+        [LabelText("StackByTarget - 叠加至目标", SdfIconType.Person)]
         AggregateByTarget //目标(Target)上只有一个堆栈实例而不管源(Source)如何, 每个源(Source)都可以在共享堆栈限制(Shared Stack Limit)内应用堆栈.
     }
 
     public enum DurationRefreshPolicy
     {
+        [LabelText("NeverRefresh - 不刷新Effect的持续时间", SdfIconType.XCircleFill)]
         NeverRefresh, //不刷新Effect的持续时间
+
+        [LabelText(
+            "RefreshOnSuccessfulApplication - 每次apply成功后刷新持续时间, denyOverflowApplication如果为True则多余的Apply不会刷新Duration",
+            SdfIconType.HourglassTop)]
         RefreshOnSuccessfulApplication //每次apply成功后刷新Effect的持续时间, denyOverflowApplication如果为True则多余的Apply不会刷新Duration
     }
 
     public enum PeriodResetPolicy
     {
+        [LabelText("NeverReset - 不重置Effect的周期计时", SdfIconType.XCircleFill)]
         NeverRefresh, //不重置Effect的周期计时
+
+        [LabelText("ResetOnSuccessfulApplication - 每次apply成功后重置Effect的周期计时", SdfIconType.HourglassTop)]
         ResetOnSuccessfulApplication //每次apply成功后重置Effect的周期计时
     }
 
     public enum ExpirationPolicy
     {
-        ClearEntireStack, //持续时间结束时,清楚所有层数
+        [LabelText("ClearEntireStack - 持续时间结束时, 清除所有层数", SdfIconType.TrashFill)]
+        ClearEntireStack, //持续时间结束时,清除所有层数
+
+        [LabelText("RemoveSingleStackAndRefreshDuration - 持续时间结束时减少一层，然后重新经历一个Duration", SdfIconType.EraserFill)]
         RemoveSingleStackAndRefreshDuration, //持续时间结束时减少一层，然后重新经历一个Duration，一直持续到层数减为0
+
+        [LabelText("RefreshDuration - 持续时间结束时,再次刷新Duration", SdfIconType.HourglassTop)]
         RefreshDuration //持续时间结束时,再次刷新Duration，这相当于无限Duration，
         //可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
         //可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
@@ -46,7 +63,7 @@ namespace GAS.Runtime
         public bool denyOverflowApplication; //对应于StackDurationRefreshPolicy，如果为True则多余的Apply不会刷新Duration
         public bool clearStackOnOverflow; //当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数
         public GameplayEffect[] overflowEffects; // 超过StackLimitCount数量(包括等于)的Effect被Apply时将会调用该OverflowEffects
-        
+
         public void SetStackingType(StackingType stackingType)
         {
             this.stackingType = stackingType;
@@ -85,7 +102,7 @@ namespace GAS.Runtime
                 overflowEffects[i] = new GameplayEffect(overflowEffectAssets[i]);
             }
         }
-        
+
         public void SetDenyOverflowApplication(bool denyOverflowApplication)
         {
             this.denyOverflowApplication = denyOverflowApplication;
@@ -95,10 +112,10 @@ namespace GAS.Runtime
         {
             this.clearStackOnOverflow = clearStackOnOverflow;
         }
-        
-        public static GameplayEffectStacking None 
+
+        public static GameplayEffectStacking None
         {
-            get 
+            get
             {
                 var stack = new GameplayEffectStacking();
                 stack.SetStackingType(StackingType.None);
@@ -110,47 +127,56 @@ namespace GAS.Runtime
     [Serializable]
     public struct GameplayEffectStackingConfig
     {
-        [Space]
+        private const int LABEL_WIDTH = 100;
+
+        [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
         public StackingType stackingType;
-        
+
+        [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_COUNT)]
         [HideIf("IsNoStacking")]
         public int limitCount;
-        
+
+        [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_DURATION_REFRESH_POLICY)]
         [HideIf("IsNoStacking")]
         public DurationRefreshPolicy durationRefreshPolicy;
-        
+
+        [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_PERIOD_RESET_POLICY)]
         [HideIf("IsNoStacking")]
         public PeriodResetPolicy periodResetPolicy;
-        
+
+        [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_EXPIRATION_POLICY)]
         [HideIf("IsNoStacking")]
         public ExpirationPolicy expirationPolicy;
 
         // Overflow 溢出逻辑处理
+        [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION)]
-        [HideIf("IsNeverRefreshDuration")]
-        public bool denyOverflowApplication; 
-        
+        [HideIf("@IsNoStacking() || IsNeverRefreshDuration()")]
+        public bool denyOverflowApplication;
+
         [VerticalGroup]
+        [LabelWidth(LABEL_WIDTH)]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_CLEAR_STACK_ON_OVERFLOW)]
         [ShowIf("IsDenyOverflowApplication")]
-        public bool clearStackOnOverflow; 
-        
+        public bool clearStackOnOverflow;
+
         [VerticalGroup]
+        [LabelWidth(LABEL_WIDTH)]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_CLEAR_OVERFLOW_EFFECTS)]
         [HideIf("IsNoStacking")]
-        public GameplayEffectAsset[] overflowEffects; 
-        
+        public GameplayEffectAsset[] overflowEffects;
+
         /// <summary>
         /// 转换为运行时数据
         /// </summary>
@@ -168,11 +194,13 @@ namespace GAS.Runtime
             stack.SetClearStackOnOverflow(clearStackOnOverflow);
             return stack;
         }
-        
-        #region UTIL FUNCTION FOR ODIN INSPECTOR 
+
+        #region UTIL FUNCTION FOR ODIN INSPECTOR
+
         public bool IsNoStacking() => stackingType == StackingType.None;
         public bool IsNeverRefreshDuration() => durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;
         public bool IsDenyOverflowApplication() => !IsNoStacking() && denyOverflowApplication;
+
         #endregion
     }
 }

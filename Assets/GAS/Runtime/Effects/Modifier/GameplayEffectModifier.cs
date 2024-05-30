@@ -23,12 +23,15 @@ namespace GAS.Runtime
     [Serializable]
     public struct GameplayEffectModifier
     {
-        [LabelText("Attribute")]
-        [LabelWidth(100)]
+        private const int LABEL_WIDTH = 70;
+
+        [LabelText("修改属性", SdfIconType.Fingerprint)]
+        [LabelWidth(LABEL_WIDTH)]
         [OnValueChanged("OnAttributeChanged")]
         [ValueDropdown("@ValueDropdownHelper.AttributeChoices", IsUniqueList = true)]
         [Tooltip("指的是GameplayEffect作用对象被修改的属性。")]
         [InfoBox("未选择属性", InfoMessageType.Error, VisibleIf = "@string.IsNullOrWhiteSpace($value)")]
+        [PropertyOrder(1)]
         public string AttributeName;
 
         [HideInInspector]
@@ -37,19 +40,24 @@ namespace GAS.Runtime
         [HideInInspector]
         public string AttributeShortName;
 
-        [LabelText("Magnitude")]
-        [LabelWidth(100)]
-        [Tooltip("修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。")]
+        [LabelText("修改参数", SdfIconType.Activity)]
+        [LabelWidth(LABEL_WIDTH)]
+        [Tooltip("修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。\nMMC未指定时直接使用这个值。")]
+        [PropertyOrder(3)]
         public float ModiferMagnitude;
-        
-        [LabelWidth(100)]
+
+        [LabelText("修改类型", SdfIconType.PlusSlashMinus)]
+        [LabelWidth(LABEL_WIDTH)]
         [Tooltip("操作类型：是对属性的操作类型，\n有3种：\nAdd ： 加法（取值为负便是减法）\nMultiply： 乘法（除法取倒数即可）\nOverride：覆写属性值")]
         [EnumToggleButtons]
+        [PropertyOrder(2)]
         public GEOperation Operation;
 
-        [LabelWidth(100)]
+        [LabelText("参数修饰", SdfIconType.CpuFill)]
+        [LabelWidth(LABEL_WIDTH)]
         [AssetSelector]
-        [Tooltip("ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。")]
+        [Tooltip("ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。\n可以为空(不对\"计算参数\"做任何修改)。")]
+        [PropertyOrder(4)]
         public ModifierMagnitudeCalculation MMC;
 
         // TODO

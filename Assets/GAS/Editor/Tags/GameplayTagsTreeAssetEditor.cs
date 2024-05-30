@@ -1,9 +1,8 @@
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Text;
 using GAS.Editor.General;
-using GAS.Editor.Validation;
 using GAS.General;
+using GAS.General.Validation;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.TreeDataModel;
@@ -229,4 +228,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

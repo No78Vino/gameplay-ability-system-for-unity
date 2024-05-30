@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GAS.Editor.General;
-using GAS.Editor.Validation;
+using GAS.General.Validation;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;

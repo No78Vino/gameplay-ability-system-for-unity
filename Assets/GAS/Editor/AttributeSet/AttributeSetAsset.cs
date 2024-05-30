@@ -1,25 +1,22 @@
-﻿#if UNITY_EDITOR
-using GAS.Editor.Validation;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using GAS.Editor.General;
+using GAS.General;
+using GAS.General.Validation;
+using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEngine;
 
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Editor;
-    using GAS.General;
-    using GAS.Editor.General;
-    using Sirenix.OdinInspector;
-    using UnityEditor;
-    using UnityEngine;
-
     [Serializable]
     public class AttributeSetConfig
     {
         public static AttributeSetAsset ParentAsset;
-        
+
         private static IEnumerable AttributeChoices = new ValueDropdownList<string>();
 
         [HorizontalGroup("A")]
@@ -33,14 +30,16 @@ namespace GAS.Editor
         public string Name = "Unnamed";
 
         [Space]
-        [ListDrawerSettings(Expanded = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false, OnTitleBarGUI = "DrawAttributeNamesButtons")]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false,
+            OnTitleBarGUI = "DrawAttributeNamesButtons")]
         [ValueDropdown("AttributeChoices", IsUniqueList = true)]
         [LabelText("Attributes")]
         [Searchable]
         public List<string> AttributeNames = new List<string>();
 
         private void DrawAttributeNamesButtons()
-        {   if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
+        {
+            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 AttributeNames = AttributeNames.OrderBy(x => x).ToList();
                 ParentAsset.SaveAsset();
@@ -105,7 +104,7 @@ namespace GAS.Editor
         public string ERROR_DuplicatedAttributeSet = "";
 
         [VerticalGroup("AttributeSetConfigs", order: 1)]
-        [ListDrawerSettings(Expanded = true,
+        [ListDrawerSettings(ShowFoldout = true,
             CustomAddFunction = "OnAddAttributeSet",
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex", OnTitleBarGUI = "DrawAttributeSetConfigsButtons")]
@@ -201,7 +200,7 @@ namespace GAS.Editor
                 },
                 attributeSetName => AttributeSetConfigs.Add(new AttributeSetConfig() { Name = attributeSetName }),
                 "Create new AttributeSet");
-            GUIUtility.ExitGUI();// In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+            GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
         private int OnRemoveElement(AttributeSetConfig attributeSet)
@@ -233,4 +232,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif
