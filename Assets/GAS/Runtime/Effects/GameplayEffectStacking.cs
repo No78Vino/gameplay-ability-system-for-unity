@@ -144,13 +144,14 @@ namespace GAS.Runtime
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
+        [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
+        public StackingType stackingType;
+        
+        [LabelWidth(LABEL_WIDTH)]
+        [VerticalGroup]
         [HideIf("IsNoStacking")]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_CODENAME)]
         public string stackingCodeName;
-
-        [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
-        public StackingType stackingType;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]

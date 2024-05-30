@@ -85,6 +85,7 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_STACK, "Stacking", SdfIconType.Stack, TextColor = "#9B4AE3", Order = 1)]
         [HideLabel]
         [EnableIf("IsDurationalPolicy")]
+        [InfoBox("瞬时效果无法叠加", InfoMessageType.None, VisibleIf = "@IsInstantPolicy()")]
         public GameplayEffectStackingConfig Stacking;
 
         #endregion Stack
@@ -303,7 +304,7 @@ namespace GAS.Runtime
         public ExecutionCalculation[] GetExecutions() => Executions;
 
         public GrantedAbilityConfig[] GetGrantedAbilities() => GrantedAbilities;
-        
+
         public GameplayEffectStacking GetStacking() => Stacking.ToRuntimeData();
 
         #endregion IGameplayEffectData
