@@ -47,6 +47,7 @@ namespace GAS.Runtime
         [LabelText(GASTextDefine.LABLE_GE_POLICY, SdfIconType.Diagram3Fill)]
         [LabelWidth(WIDTH_LABEL)]
         [EnumToggleButtons]
+        [PropertyOrder(1)]
         public EffectsDurationPolicy DurationPolicy = EffectsDurationPolicy.Instant;
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
@@ -55,15 +56,33 @@ namespace GAS.Runtime
         [Unit(Units.Second)]
         [ValidateInput("@DurationPolicy != EffectsDurationPolicy.Duration || Duration > 0", ERROR_DURATION)]
         [LabelText(GASTextDefine.LABLE_GE_DURATION, SdfIconType.HourglassSplit)]
+        [PropertyOrder(2)]
         public float Duration;
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
         [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
         [LabelWidth(WIDTH_LABEL)]
+        [ShowIf("@DurationPolicy != EffectsDurationPolicy.Duration")]
         [EnableIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
-        [PropertyRange(0, "@DurationPolicy == EffectsDurationPolicy.Duration ? Duration : float.MaxValue")]
+        [PropertyOrder(3)]
         public float Period;
+
+        [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
+        [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
+        [LabelWidth(WIDTH_LABEL)]
+        [ShowIf("@DurationPolicy == EffectsDurationPolicy.Duration")]
+        [EnableIf("IsDurationalPolicy")]
+        [Unit(Units.Second)]
+        [PropertyOrder(3)]
+        [PropertyRange(0, "@Duration")]
+        [ShowInInspector]
+        // 这个Property是为了给"限时型"效果绘制一个范围滑动条
+        public float PeriodForDurational
+        {
+            get => Period;
+            set => Period = value;
+        }
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
         [LabelText(GASTextDefine.LABLE_GE_EXEC, SdfIconType.Magic)]
@@ -74,6 +93,7 @@ namespace GAS.Runtime
         [InfoBox("必须为Instant类型", InfoMessageType.Error,
             VisibleIf =
                 "@IsPeriodic() && (PeriodExecution != null && PeriodExecution.DurationPolicy != EffectsDurationPolicy.Instant)")]
+        [PropertyOrder(4)]
         public GameplayEffectAsset PeriodExecution;
 
         #endregion Policy
