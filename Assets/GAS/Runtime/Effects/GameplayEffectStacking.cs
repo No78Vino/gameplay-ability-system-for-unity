@@ -1,18 +1,19 @@
 ﻿using System;
 using GAS.General;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
     public enum StackingType
     {
-        [LabelText("None - 不会叠加", SdfIconType.XCircleFill)]
+        [LabelText("独立", SdfIconType.XCircleFill)]
         None, //不会叠加，如果多次释放则每个Effect相当于单个Effect
 
-        [LabelText("StackBySource - 叠加至来源", SdfIconType.Magic)]
+        [LabelText("来源", SdfIconType.Magic)]
         AggregateBySource, //目标(Target)上的每个源(Source)ASC都有一个单独的堆栈实例, 每个源(Source)可以应用堆栈中的X个GameplayEffect.
 
-        [LabelText("StackByTarget - 叠加至目标", SdfIconType.Person)]
+        [LabelText("目标", SdfIconType.Person)]
         AggregateByTarget //目标(Target)上只有一个堆栈实例而不管源(Source)如何, 每个源(Source)都可以在共享堆栈限制(Shared Stack Limit)内应用堆栈.
     }
 
@@ -22,7 +23,7 @@ namespace GAS.Runtime
         NeverRefresh, //不刷新Effect的持续时间
 
         [LabelText(
-            "RefreshOnSuccessfulApplication - 每次apply成功后刷新持续时间, denyOverflowApplication如果为True则多余的Apply不会刷新Duration",
+            "RefreshOnSuccessfulApplication - 每次apply成功后刷新持续时间",
             SdfIconType.HourglassTop)]
         RefreshOnSuccessfulApplication //每次apply成功后刷新Effect的持续时间, denyOverflowApplication如果为True则多余的Apply不会刷新Duration
     }
@@ -69,7 +70,7 @@ namespace GAS.Runtime
         public void SetStackingCodeName(string stackingCodeName)
         {
             this.stackingCodeName = stackingCodeName;
-            this.stackingHashCode = stackingCodeName?.GetHashCode() ?? 0;// 兼容旧的SO数据
+            this.stackingHashCode = stackingCodeName?.GetHashCode() ?? 0; // 兼容旧的SO数据
         }
 
         public void SetStackingHashCode(int stackingHashCode)
@@ -138,31 +139,39 @@ namespace GAS.Runtime
     }
 
     [Serializable]
-    public struct GameplayEffectStackingConfig
+    public sealed class GameplayEffectStackingConfig
     {
         private const int LABEL_WIDTH = 100;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
+        [EnumToggleButtons]
         public StackingType stackingType;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [HideIf("IsNoStacking")]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_CODENAME)]
+        [InlineButton(@"@stackingCodeName = """"", SdfIconType.EraserFill, "")]
         public string stackingCodeName;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_COUNT)]
         [HideIf("IsNoStacking")]
+        [InlineButton(@"@limitCount = int.MaxValue", SdfIconType.Hammer, "max")]
+        [InlineButton(@"@limitCount = 0", SdfIconType.Hammer, "min")]
+        [ValidateInput("@limitCount >= 0", "必须>=0")]
         public int limitCount;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_DURATION_REFRESH_POLICY)]
         [HideIf("IsNoStacking")]
+        [InfoBox(GASTextDefine.LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION+"为True时多余的Apply不会刷新Duration", InfoMessageType.None,
+            VisibleIf =
+                "@durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication && denyOverflowApplication")]
         public DurationRefreshPolicy durationRefreshPolicy;
 
         [LabelWidth(LABEL_WIDTH)]

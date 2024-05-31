@@ -108,6 +108,18 @@ namespace GAS.Runtime
         [InfoBox("瞬时效果无法叠加", InfoMessageType.None, VisibleIf = "@IsInstantPolicy()")]
         public GameplayEffectStackingConfig Stacking;
 
+#if UNITY_EDITOR
+        [TabGroup(GRP_DATA_STACK, "Stacking")]
+        [ShowIf("@IsDurationalPolicy() && Stacking.stackingType != StackingType.None")]
+        [Button("使用资产名称作为堆叠识别码", ButtonSizes.Medium, Icon = SdfIconType.Hammer)]
+        private void SetStackingCodeNameAsAssetName()
+        {
+            var stacking = Stacking;
+            stacking.stackingCodeName = name;
+            Stacking = stacking;
+        }
+#endif
+
         #endregion Stack
 
         #region Granted Abilities
