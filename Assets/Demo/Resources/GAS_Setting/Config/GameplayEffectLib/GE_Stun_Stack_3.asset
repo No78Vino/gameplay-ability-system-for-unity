@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GE_Stun_Stack_3
   m_EditorClassIdentifier: 
   Name: "\u7729\u6655buff"
-  Description: "\u53E0\u52A0\u7B2C4\u5C42\u65F6\u89E6\u53D1\u7729\u6655"
+  Description: "\u6BCF\u53E01\u5C42\u901F\u5EA6\u4E0B\u964D\uFF1A0.4*\u6765\u6E90\u653B\u51FB\u529B\u503C\uFF0C\u53E0\u52A0\u7B2C4\u5C42\u65F6\u89E6\u53D1\u7729\u6655"
   DurationPolicy: 3
   Duration: 6
   Period: 0
@@ -30,7 +30,13 @@ MonoBehaviour:
     overflowEffects:
     - {fileID: 11400000, guid: c86bb973d6bab234c923e00df8edda34, type: 2}
   GrantedAbilities: []
-  Modifiers: []
+  Modifiers:
+  - AttributeName: AS_Fight.SPEED
+    AttributeSetName: AS_Fight
+    AttributeShortName: SPEED
+    ModiferMagnitude: 0
+    Operation: 0
+    MMC: {fileID: 11400000, guid: fb20a9f30255b7d49a68961aa9e7ab7c, type: 2}
   AssetTags: []
   GrantedTags: []
   ApplicationRequiredTags: []

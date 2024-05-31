@@ -48,7 +48,7 @@ namespace GAS.Runtime
             {
                 if (geSpec.IsActive)
                 {
-                    foreach (var modifier in geSpec.GameplayEffect.Modifiers)
+                    foreach (var modifier in geSpec.Modifiers)
                     {
                         if (modifier.AttributeName == _processedAttribute.Name)
                         {

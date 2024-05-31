@@ -218,7 +218,7 @@ namespace GAS.Runtime
 
         public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
         {
-            foreach (var modifier in spec.GameplayEffect.Modifiers)
+            foreach (var modifier in spec.Modifiers)
             {
                 var attributeBaseValue = GetAttributeBaseValue(modifier.AttributeSetName, modifier.AttributeShortName);
                 if (attributeBaseValue == null) continue;

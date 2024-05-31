@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2024-05-31
+
+补充了Stacking相关功能。
+
+### Changed
+
+- 添加Stack相关MMC
+- 补充stack刷新计算current value逻辑
+- 添加stack count变化监听事件
+
+### Fixed
+
+- 修复了Attribute Aggregator的事件注册逻辑错误。
+
 ## [1.1.0] - 2024-05-30
 
 补充了Granted Ability和GameplayEffect Stacking两个功能；优化了部分GC；优化了编辑器界面操作等；修复了部分bug。
