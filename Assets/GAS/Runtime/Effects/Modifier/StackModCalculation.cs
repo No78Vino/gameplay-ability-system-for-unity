@@ -7,11 +7,11 @@ namespace GAS.Runtime
     public class StackModCalculation:ModifierMagnitudeCalculation
     {
         [InfoBox("计算逻辑与ScalableFloatModCalculation一致, 公式：(StackCount) * k + b")]
-        [TabGroup("Default", "AttributeBasedModCalculation")]
+        [TabGroup("Default", "StackModCalculation")]
         [LabelText("系数(k)")]
         public float k = 1;
 
-        [TabGroup("Default", "AttributeBasedModCalculation")]
+        [TabGroup("Default", "StackModCalculation")]
         [LabelText("常量(b)")]
         public float b = 0;
         
