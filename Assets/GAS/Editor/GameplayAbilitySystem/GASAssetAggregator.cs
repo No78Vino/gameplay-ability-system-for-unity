@@ -55,8 +55,8 @@ namespace GAS.Editor
         {
             CheckLibPaths();
             var window = GetWindow<GASAssetAggregator>();
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1250, 625);
-            window.MenuWidth = 220;
+            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1600, 900);
+            window.MenuWidth = 240;
         }
 
         private void ShowButton(Rect rect)
@@ -156,12 +156,14 @@ namespace GAS.Editor
                     }
 
                     if (!directoryInfo.Root)
+                    {
                         if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
                         {
                             RemoveSubDirectory(directoryInfo);
                             GUIUtility
                                 .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                         }
+                    }
                 }
 
                 if (selected is { Value: ScriptableObject asset })
@@ -194,6 +196,11 @@ namespace GAS.Editor
                     {
                         RemoveAsset(asset);
                     }
+                }
+
+                if (SirenixEditorGUI.ToolbarButton(new GUIContent("GAS设置")))
+                {
+                    GASSettingAggregator.OpenWindow();
                 }
             }
             SirenixEditorGUI.EndHorizontalToolbar();
