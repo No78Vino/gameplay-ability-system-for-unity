@@ -117,7 +117,7 @@ namespace GAS.Runtime
             return Array.Empty<GrantedAbilityConfig>();
         }
 
-        public GameplayEffectStacking GetStacking()
+        public virtual GameplayEffectStacking GetStacking()
         {
             return GameplayEffectStacking.None;
         }
@@ -140,6 +140,7 @@ namespace GAS.Runtime
         public GameplayCueDurational[] CueDurational { get; set; } = Array.Empty<GameplayCueDurational>();
         public ExecutionCalculation[] Executions { get; set; } = Array.Empty<ExecutionCalculation>();
         public GrantedAbilityConfig[] GrantedAbilities { get; set; } = Array.Empty<GrantedAbilityConfig>();
+        public GameplayEffectStacking Stacking { get; set; } = GameplayEffectStacking.None;
 
         public InfiniteGameplayEffectData(string name, float period) : base(name)
         {
@@ -209,6 +210,11 @@ namespace GAS.Runtime
         public override GrantedAbilityConfig[] GetGrantedAbilities()
         {
             return GrantedAbilities;
+        }
+
+        public override GameplayEffectStacking GetStacking()
+        {
+            return Stacking;
         }
     }
 
