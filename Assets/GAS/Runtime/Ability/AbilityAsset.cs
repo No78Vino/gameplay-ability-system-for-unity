@@ -62,6 +62,7 @@ namespace GAS.Runtime
         [LabelWidth(WIDTH_LABEL)]
         [InfoBox("无效的名字 - 不符合C#标识符命名规则", InfoMessageType.Error,
             "@GAS.General.Validation.Validations.IsValidVariableName($value) == false")]
+        [InlineButton("@UniqueName = name", "Auto", Icon = SdfIconType.Hammer)]
         public string UniqueName;
 
         [TabGroup("Base/H1/V2", "General")]
