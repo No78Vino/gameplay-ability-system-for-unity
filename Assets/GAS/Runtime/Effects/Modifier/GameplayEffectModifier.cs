@@ -70,7 +70,7 @@ namespace GAS.Runtime
             string attributeName,
             float modiferMagnitude,
             GEOperation operation,
-            ModifierMagnitudeCalculation mmc)
+            ModifierMagnitudeCalculation mmc = null)
         {
             AttributeName = attributeName;
             var splits = attributeName.Split('.');
