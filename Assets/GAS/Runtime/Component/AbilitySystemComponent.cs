@@ -108,7 +108,7 @@ namespace GAS.Runtime
                 //   复制了某个AbilityAsset实现类的代码，但忘记更新AbilityType()方法的返回值。
                 //   一般来说AbilityAsset和Ability应该是配套的, 比如在"GAA_xxx"中返回"GA_xxx"的类型.
                 Debug.LogError($"[EX] 创建能力失败: " +
-                               $"请检查AbilityAsset实现类'{info.GetType().Name}'中的AbilityType()方法" +
+                               $"请检查AbilityAsset实现类'{info.GetType().FullName}'中的AbilityType()方法" +
                                $"是否正确返回了能力类型(当前为'{info.AbilityType()?.FullName ?? "null"}')。");
                 throw;
             }
