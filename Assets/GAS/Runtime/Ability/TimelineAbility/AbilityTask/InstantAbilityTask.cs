@@ -1,6 +1,6 @@
 ﻿namespace GAS.Runtime
 {
-    public abstract class InstantAbilityTask:AbilityTaskBase
+    public abstract class InstantAbilityTask : AbilityTaskBase
     {
 #if UNITY_EDITOR
         /// <summary>
@@ -12,5 +12,10 @@
         }
 #endif
         public abstract void OnExecute();
+    }
+
+    public abstract class InstantAbilityTaskT<T> : InstantAbilityTask where T : AbilitySpec
+    {
+        public new T Spec => (T)_spec;
     }
 }
