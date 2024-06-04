@@ -37,7 +37,7 @@ namespace GAS.Runtime
         {
             AttributeSetContainer.OnEnable();
         }
-        
+
         public void Disable()
         {
             AttributeSetContainer.OnDisable();
@@ -77,16 +77,41 @@ namespace GAS.Runtime
             if (baseTags != null) GameplayTagAggregator.Init(baseTags);
 
             if (attrSetTypes != null)
+            {
                 foreach (var attrSetType in attrSetTypes)
                     AttributeSetContainer.AddAttributeSet(attrSetType);
+            }
 
             if (baseAbilities != null)
+            {
                 foreach (var info in baseAbilities)
-                    if (info != null)
-                    {
-                        var ability = Activator.CreateInstance(info.AbilityType(), args: info) as AbstractAbility;
-                        AbilityContainer.GrantAbility(ability);
-                    }
+                    GrantAbility(info);
+            }
+        }
+
+        private void GrantAbility(AbilityAsset info)
+        {
+            if (info == null)
+            {
+                Debug.LogWarning($"[EX] Try To Grant a NULL Ability!");
+                return;
+            }
+
+            try
+            {
+                var ability = Activator.CreateInstance(info.AbilityType(), args: info) as AbstractAbility;
+                AbilityContainer.GrantAbility(ability);
+            }
+            catch (MissingMethodException e)
+            {
+                // 踩坑日志:
+                //   复制了某个AbilityAsset实现类的代码，但忘记更新AbilityType()方法的返回值。
+                //   一般来说AbilityAsset和Ability应该是配套的, 比如在"GAA_xxx"中返回"GA_xxx"的类型.
+                Debug.LogError($"[EX] 创建能力失败: " +
+                               $"请检查AbilityAsset实现类'{info.GetType().Name}'中的AbilityType()方法" +
+                               $"是否正确返回了能力类型(当前为'{info.AbilityType()?.FullName ?? "null"}')。");
+                throw;
+            }
         }
 
         public void SetLevel(int level)
@@ -143,7 +168,7 @@ namespace GAS.Runtime
 #endif
                 return null;
             }
-            
+
             // // 在ge spec实例化前就应该处理CanApply逻辑
             // var canApply = gameplayEffect.CanApplyTo(target);
             // if (canApply)
@@ -154,7 +179,7 @@ namespace GAS.Runtime
             //     //applyGameplayEffectTo = target.AddGameplayEffect(spec);
             //     return applyGameplayEffectTo;
             // }
-            return target.AddGameplayEffect(this,gameplayEffect);;
+            return target.AddGameplayEffect(this, gameplayEffect);
         }
 
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
@@ -264,9 +289,9 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source,GameplayEffect effect)
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffect effect)
         {
-            return GameplayEffectContainer.AddGameplayEffectSpec(source,effect);
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effect);
         }
 
         private void DisableAllAbilities()
