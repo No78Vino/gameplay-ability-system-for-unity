@@ -6,6 +6,10 @@ namespace GAS.Runtime
     {
         protected object[] _abilityArguments;
 
+        public object[] AbilityArguments => _abilityArguments;
+
+        public object UserData { get; set; }
+
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
             Ability = ability;
