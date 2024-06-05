@@ -127,6 +127,7 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_GRANTED_ABILITIES, "Granted Abilities", SdfIconType.YinYang, TextColor = "#D6626E",
             Order = 2)]
         [EnableIf("IsDurationalPolicy")]
+        [InfoBox("瞬时效果无法赋予能力", InfoMessageType.None, VisibleIf = "@IsInstantPolicy()")]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [InfoBox(ERROR_GRANTED_ABILITY_INVALID, InfoMessageType.Error, VisibleIf = "IsGrantedAbilitiesInvalid")]
         public GrantedAbilityConfig[] GrantedAbilities;
