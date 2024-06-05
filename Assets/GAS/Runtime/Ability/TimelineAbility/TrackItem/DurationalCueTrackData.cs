@@ -9,7 +9,7 @@ namespace GAS.Runtime
     {
         public List<DurationalCueClipEvent> clipEvents = new List<DurationalCueClipEvent>();
 
-        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        public override void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
             abilityAsset.DurationalCues.Add(this);

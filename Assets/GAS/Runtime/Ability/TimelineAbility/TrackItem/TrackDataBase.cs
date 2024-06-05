@@ -7,7 +7,7 @@ namespace GAS.Runtime
     {
         public string trackName;
         
-        public virtual void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        public virtual void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         {
         }
         

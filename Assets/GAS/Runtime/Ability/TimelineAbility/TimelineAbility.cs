@@ -2,7 +2,7 @@
 
 namespace GAS.Runtime
 {
-    public abstract class TimelineAbilityT<T> : AbstractAbility<T> where T : TimelineAbilityAsset
+    public abstract class TimelineAbilityT<T> : AbstractAbility<T> where T : TimelineAbilityAssetBase
     {
         protected TimelineAbilityT(T abilityAsset) : base(abilityAsset)
         {
@@ -52,11 +52,11 @@ namespace GAS.Runtime
     }
 
     /// <summary>
-    ///  这是一个最朴素的TimelineAbility实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
+    /// 这是一个最朴素的TimelineAbility实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
     /// </summary>
-    public sealed class TimelineAbility : TimelineAbilityT<TimelineAbilityAsset>
+    public sealed class TimelineAbility : TimelineAbilityT<TimelineAbilityAssetBase>
     {
-        public TimelineAbility(TimelineAbilityAsset abilityAsset) : base(abilityAsset)
+        public TimelineAbility(TimelineAbilityAssetBase abilityAsset) : base(abilityAsset)
         {
         }
 
@@ -67,7 +67,7 @@ namespace GAS.Runtime
     }
 
     /// <summary>
-    ///  这是一个最朴素的TimelineAbilitySpec实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
+    /// 这是一个最朴素的TimelineAbilitySpec实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
     /// </summary>
     public sealed class TimelineAbilitySpec : TimelineAbilitySpecT<TimelineAbility>
     {

@@ -1,20 +1,22 @@
-#if UNITY_EDITOR
+using System;
+using GAS.Runtime;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
+
 namespace GAS.Editor
 {
-    using System;
-    using Editor;
-    using GAS.Runtime;
-    using UnityEditor;
-    using UnityEditor.SceneManagement;
-    using UnityEditor.UIElements;
-    using UnityEngine;
-    using UnityEngine.SceneManagement;
-    using UnityEngine.UIElements;
-    using Object = UnityEngine.Object;
-    
+    /// <summary>
+    /// 这个类被反射引用到, 重构请小心!!
+    /// </summary>
     public class AbilityTimelineEditorWindow : EditorWindow
     {
-        [SerializeField] private VisualTreeAsset m_VisualTreeAsset;
+        [SerializeField]
+        private VisualTreeAsset m_VisualTreeAsset;
 
         private VisualElement _root;
 
@@ -25,6 +27,7 @@ namespace GAS.Editor
         public TimelineInspector TimelineInspector { get; private set; }
 
         private static EditorWindow _childInspector;
+
         public void CreateGUI()
         {
             Instance = this;
@@ -41,13 +44,16 @@ namespace GAS.Editor
             TrackView = new TimelineTrackView(_root);
             TimelineInspector = new TimelineInspector(_root);
         }
-        
-        public static void ShowWindow(TimelineAbilityAsset asset)
+
+        /// <summary>
+        /// 这个方法被反射引用到, 重构请小心!!
+        /// </summary>
+        public static void ShowWindow(TimelineAbilityAssetBase asset)
         {
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
             wnd.InitAbility(asset);
-            
+
             // 打开子Inspector
             EditorApplication.delayCall += () => wnd.ShowChildInspector();
         }
@@ -57,7 +63,7 @@ namespace GAS.Editor
             AbilityAsset.Save();
         }
 
-        private void InitAbility(TimelineAbilityAsset asset)
+        private void InitAbility(TimelineAbilityAssetBase asset)
         {
             _abilityAsset.value = asset;
             MaxFrame.value = AbilityAsset.FrameCount;
@@ -78,11 +84,11 @@ namespace GAS.Editor
 
         private ObjectField _abilityAsset;
         private Button _btnShowAbilityAssetDetail;
-        public TimelineAbilityAsset AbilityAsset => _abilityAsset.value as TimelineAbilityAsset;
+        public TimelineAbilityAssetBase AbilityAsset => _abilityAsset.value as TimelineAbilityAssetBase;
 
-        private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
-            ? UnityEditor.Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
-            : null;
+        // private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
+        //     ? UnityEditor.Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
+        //     : null;
 
         private void InitAbilityAssetBar()
         {
@@ -95,7 +101,6 @@ namespace GAS.Editor
 
         private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
         {
-            var asset = evt.newValue as TimelineAbilityAsset;
             if (AbilityAsset != null)
             {
                 MaxFrame.value = AbilityAsset.FrameCount;
@@ -133,17 +138,17 @@ namespace GAS.Editor
             BtnLoadPreviewScene.clickable.clicked += LoadPreviewScene;
             BtnBackToScene = _root.Q<Button>(nameof(BtnBackToScene));
             BtnBackToScene.clickable.clicked += BackToScene;
-            
+
             BtnChildInspector = _root.Q<Button>(nameof(BtnChildInspector));
             BtnChildInspector.clickable.clicked += ShowChildInspector;
-            
+
             _previewObjectField = _root.Q<ObjectField>("PreviewInstance");
             _previewObjectField.RegisterValueChangedCallback(OnPreviewObjectChanged);
         }
 
         private void ShowChildInspector()
         {
-            if(_childInspector==null)
+            if (_childInspector == null)
             {
                 _childInspector = GetInspectTarget();
                 _childInspector.Show();
@@ -152,7 +157,7 @@ namespace GAS.Editor
             EditorApplication.delayCall += () =>
                 DockUtilities.DockWindow(this, _childInspector, DockUtilities.DockPosition.Right);
         }
-        
+
         private void OnPreviewObjectChanged(ChangeEvent<Object> evt)
         {
             // TODO : 在这里处理预览对象的变化
@@ -200,7 +205,7 @@ namespace GAS.Editor
                     _currentMaxFrame = 0;
                     return;
                 }
-                
+
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
                 AbilityAsset.FrameCount = _currentMaxFrame;
@@ -235,7 +240,7 @@ namespace GAS.Editor
         {
             return TimerShaftView.GetFrameIndexByPosition(x);
         }
-    
+
         public int GetFrameIndexByMouse(float x)
         {
             return TimerShaftView.GetFrameIndexByMouse(x);
@@ -289,20 +294,20 @@ namespace GAS.Editor
 
         private void OnPlay()
         {
-            if(AbilityAsset==null) return;
+            if (AbilityAsset == null) return;
             IsPlaying = !IsPlaying;
         }
 
         private void OnLeftFrame()
         {
-            if(AbilityAsset==null) return;
+            if (AbilityAsset == null) return;
             IsPlaying = false;
             CurrentSelectFrameIndex -= 1;
         }
 
         private void OnRightFrame()
         {
-            if(AbilityAsset==null) return;
+            if (AbilityAsset == null) return;
             IsPlaying = false;
             CurrentSelectFrameIndex += 1;
         }
@@ -315,7 +320,7 @@ namespace GAS.Editor
 
         public void SetInspector(object target = null)
         {
-            if(AbilityAsset==null) return;
+            if (AbilityAsset == null) return;
             TimelineInspector.SetInspector(target);
         }
 
@@ -363,9 +368,9 @@ namespace GAS.Editor
         private void EvaluateFrame(int frameIndex)
         {
             if (AbilityAsset == null || _previewObjectField.value == null) return;
-            
+
             foreach (var track in TrackView.TrackList)
-                track.TickView(frameIndex);       
+                track.TickView(frameIndex);
         }
 
         private bool CanPlay()
@@ -379,16 +384,14 @@ namespace GAS.Editor
 
         #region Another Inspector
 
-        
-        private static EditorWindow GetInspectTarget(Object targetGO=null)
+        private static EditorWindow GetInspectTarget(Object targetGO = null)
         {
-            Type inspectorType = typeof(Editor).Assembly.GetType("UnityEditor.InspectorWindow");
+            Type inspectorType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.InspectorWindow");
             EditorWindow inspectorInstance = CreateInstance(inspectorType) as EditorWindow;
-            if(targetGO) Selection.activeObject = targetGO;
+            if (targetGO) Selection.activeObject = targetGO;
             return inspectorInstance;
         }
 
         #endregion
     }
 }
-#endif

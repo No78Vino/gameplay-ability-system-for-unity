@@ -32,7 +32,7 @@ namespace GAS.Editor
         public List<TrackBase> TrackList { get; } = new();
 
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
-        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         private void InitTracks()
         {

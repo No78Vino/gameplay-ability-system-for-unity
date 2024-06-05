@@ -12,7 +12,7 @@ namespace GAS.Runtime
     {
         public List<ReleaseGameplayEffectMarkEvent> markEvents = new List<ReleaseGameplayEffectMarkEvent>();
 
-        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        public override void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
             abilityAsset.ReleaseGameplayEffect.Add(this);

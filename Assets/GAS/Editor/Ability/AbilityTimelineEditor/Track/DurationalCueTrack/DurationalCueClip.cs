@@ -8,7 +8,7 @@ namespace GAS.Editor
 
     public class DurationalCueClip : TrackClip<DurationalCueTrack>
     {
-        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         public DurationalCueClipEvent DurationalCueClipData => clipData as DurationalCueClipEvent;
 
         private DurationalCueClipEvent ClipDataForSave
