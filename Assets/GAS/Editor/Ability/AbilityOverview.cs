@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using GAS.General.Validation;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -56,7 +57,8 @@ namespace GAS.Editor
         private bool _orderByUniqueName = true;
 
         [HorizontalGroup("Buttons", width: 180)]
-        [Button(SdfIconType.SortAlphaDown, "@_orderByUniqueName?\"Sort By AssetName\":\"Sort By UniqueName\"", ButtonHeight = 30)]
+        [Button(SdfIconType.SortAlphaDown, "@_orderByUniqueName?\"Sort By AssetName\":\"Sort By UniqueName\"",
+            ButtonHeight = 30)]
         public void ToggleOrderByUniqueName()
         {
             _orderByUniqueName = !_orderByUniqueName;
@@ -89,7 +91,10 @@ namespace GAS.Editor
 
             Abilities = orderedAbilityAssets.Select(ability =>
             {
-                var text = $"{ability.UniqueName}";
+                var text = Validations.ValidateVariableName(ability.UniqueName).IsValid
+                    ? ability.UniqueName
+                    : $"{ability.UniqueName}(非法UniqueName)";
+
                 if (_showDetail)
                 {
                     text += $" - asset: {ability.name}, type: {ability.GetType().FullName}";
