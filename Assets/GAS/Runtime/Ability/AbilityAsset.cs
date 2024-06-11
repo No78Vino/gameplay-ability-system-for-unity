@@ -134,4 +134,13 @@ namespace GAS.Runtime
         // public GameplayTag[] TargetRequiredTags;
         // public GameplayTag[] TargetBlockedTags;
     }
+
+
+    public abstract class AbilityAssetT<T> : AbilityAsset where T : class
+    {
+        public sealed override Type AbilityType()
+        {
+            return typeof(T);
+        }
+    }
 }
