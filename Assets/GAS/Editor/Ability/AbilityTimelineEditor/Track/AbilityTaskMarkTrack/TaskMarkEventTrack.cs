@@ -11,7 +11,7 @@ namespace GAS.Editor
     public class TaskMarkEventTrack : TrackBase
     {
         private TaskMarkEventTrackData _instantTasksTrackData;
-        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         public TaskMarkEventTrackData InstantTaskEventTrackData
         {

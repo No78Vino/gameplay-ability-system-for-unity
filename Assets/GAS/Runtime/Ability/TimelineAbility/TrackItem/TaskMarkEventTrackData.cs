@@ -9,7 +9,7 @@ namespace GAS.Runtime
     {
         public List<TaskMarkEvent> markEvents = new List<TaskMarkEvent>();
         
-        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        public override void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
             abilityAsset.InstantTasks.Add(this);

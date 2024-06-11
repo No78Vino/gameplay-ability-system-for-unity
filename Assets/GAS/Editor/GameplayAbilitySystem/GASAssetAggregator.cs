@@ -240,12 +240,8 @@ namespace GAS.Editor
                 s =>
                 {
                     var newPath = directoryInfo.Directory + "/" + s;
-                    if (!AssetDatabase.IsValidFolder(newPath))
-                    {
-                        return ValidationResult.Invalid("Folder already exists!");
-                    }
-
-                    return ValidationResult.Valid;
+                    var isExist = AssetDatabase.IsValidFolder(newPath);
+                    return isExist ? ValidationResult.Invalid("Folder already exists!") : ValidationResult.Valid;
                 },
                 s =>
                 {

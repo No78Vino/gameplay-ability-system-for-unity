@@ -9,7 +9,7 @@ namespace GAS.Editor
     
     public class ReleaseGameplayEffectTrack : TrackBase
     {
-        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         public ReleaseGameplayEffectTrackData ReleaseGameplayEffectTrackData {
             get
             {

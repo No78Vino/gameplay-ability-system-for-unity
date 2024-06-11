@@ -32,12 +32,23 @@ namespace GAS.Editor
                 _streamWriter.Write(GetIndentation() + text);
         }
 
-        public void WriteLine(string line = null)
+        public void WriteLine(string line = null, bool ignoreIndent = false)
         {
             if (string.IsNullOrWhiteSpace(line))
+            {
                 _streamWriter.WriteLine();
+            }
             else
-                _streamWriter.WriteLine(GetIndentation() + line);
+            {
+                if (ignoreIndent)
+                {
+                    _streamWriter.WriteLine(line);
+                }
+                else
+                {
+                    _streamWriter.WriteLine(GetIndentation() + line);
+                }
+            }
         }
 
         private bool _isDisposed;

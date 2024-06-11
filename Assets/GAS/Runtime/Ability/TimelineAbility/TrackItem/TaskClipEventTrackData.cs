@@ -10,7 +10,7 @@ namespace GAS.Runtime
     {
         public List<TaskClipEvent> clipEvents = new List<TaskClipEvent>();
 
-        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        public override void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
             abilityAsset.OngoingTasks.Add(this);

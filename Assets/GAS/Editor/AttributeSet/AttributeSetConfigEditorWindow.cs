@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.Linq;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -20,7 +22,7 @@ namespace GAS.Editor
         private Action<string, List<string>> _callback;
         private Func<AttributeSetConfig, bool> _checkAttributeSetValid;
 
-        private List<int> _selectedAttributeIndexs;
+        private List<int> _selectedAttributeIndexes;
 
         private GUIStyle BigFontLabelStyle;
 
@@ -31,7 +33,7 @@ namespace GAS.Editor
                 if (_attributeOptions == null)
                 {
                     var asset = AttributeAsset.LoadOrCreate();
-                    _attributeOptions = asset?.AttributeNames;
+                    _attributeOptions = asset?.AttributeNames?.OrderBy(x => x).ToList();
                 }
 
                 return _attributeOptions;
@@ -60,7 +62,7 @@ namespace GAS.Editor
             if (GUILayout.Button("Add Attribute", GUILayout.Width(100)))
             {
                 attributeNames.Add("");
-                _selectedAttributeIndexs.Add(-1);
+                _selectedAttributeIndexes.Add(-1);
             }
 
             EditorGUILayout.Space();
@@ -72,13 +74,13 @@ namespace GAS.Editor
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUILayout.LabelField("Attribute:", GUILayout.Width(80));
-                _selectedAttributeIndexs[i] = EditorGUILayout.Popup("", _selectedAttributeIndexs[i],
+                _selectedAttributeIndexes[i] = EditorGUILayout.Popup("", _selectedAttributeIndexes[i],
                     AttributeOptions.ToArray());
 
                 // 更新选中的字符串
-                attributeNames[i] = _selectedAttributeIndexs[i] < 0
+                attributeNames[i] = _selectedAttributeIndexes[i] < 0
                     ? ""
-                    : AttributeOptions[_selectedAttributeIndexs[i]];
+                    : AttributeOptions[_selectedAttributeIndexes[i]];
 
                 if (GUILayout.Button("Remove", GUILayout.Width(100)))
                 {
@@ -104,9 +106,9 @@ namespace GAS.Editor
             _callback = callback;
             _checkAttributeSetValid = checkAttributeSetValid;
             this.attributeNames = attributeNames;
-            _selectedAttributeIndexs = new List<int>();
+            _selectedAttributeIndexes = new List<int>();
             foreach (var attributeName in attributeNames)
-                _selectedAttributeIndexs.Add(AttributeOptions.IndexOf(attributeName));
+                _selectedAttributeIndexes.Add(AttributeOptions.IndexOf(attributeName));
 
 
             BigFontLabelStyle = new GUIStyle(EditorStyles.label);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using GAS.General.Validation;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -53,12 +54,22 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
 
+        private bool _orderByUniqueName = true;
+
+        [HorizontalGroup("Buttons", width: 180)]
+        [Button(SdfIconType.SortAlphaDown, "@_orderByUniqueName?\"Sort By AssetName\":\"Sort By UniqueName\"",
+            ButtonHeight = 30)]
+        public void ToggleOrderByUniqueName()
+        {
+            _orderByUniqueName = !_orderByUniqueName;
+            Refresh();
+        }
 
         private bool _showDetail = false;
 
         [HorizontalGroup("Buttons", width: 120)]
         [Button(SdfIconType.TicketDetailed, "@_showDetail?\"Hide Detail\":\"Show Detail\"", ButtonHeight = 30)]
-        public void Toggle()
+        public void ToggleShowDetail()
         {
             _showDetail = !_showDetail;
             Refresh();
@@ -72,16 +83,25 @@ namespace GAS.Editor
         {
             Abilities.Clear();
             var abilityAssets = EditorUtil.FindAssetsByType<AbilityAsset>(GASSettingAsset.GameplayAbilityLibPath);
-            abilityAssets.ForEach(ability =>
+            var orderedAbilityAssets = _orderByUniqueName
+                ? abilityAssets
+                    .OrderBy(x => x.UniqueName)
+                    .ThenBy(x => x.name)
+                : abilityAssets.OrderBy(x => x.name);
+
+            Abilities = orderedAbilityAssets.Select(ability =>
             {
-                var text = $"{ability.UniqueName}";
+                var text = Validations.ValidateVariableName(ability.UniqueName).IsValid
+                    ? ability.UniqueName
+                    : $"{ability.UniqueName}(非法UniqueName)";
+
                 if (_showDetail)
                 {
                     text += $" - asset: {ability.name}, type: {ability.GetType().FullName}";
                 }
 
-                Abilities.Add(text);
-            });
+                return text;
+            }).ToList();
         }
 
         bool ExistAbilityWithEmptyUniqueName()
