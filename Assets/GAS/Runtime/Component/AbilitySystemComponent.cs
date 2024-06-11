@@ -159,6 +159,11 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
 
+        public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
+        }
+
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
             if (gameplayEffect == null)
