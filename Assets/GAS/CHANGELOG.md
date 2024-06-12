@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2024-06-12
+
+修复了部分bug。编辑器界面部分优化
+
+### Changed
+
+- 编辑器界面部分优化（From: BCC @kenkinky）
+
+### Fixed
+
+- 修复了时间轴能力的durational cue重复调用OnRemove()的错误
+- 修复了时间轴编辑器的TargetCatcher的Inspector不更新的错误
+
+
 ## [1.1.1] - 2024-05-31
 
 补充了Stacking相关功能。
