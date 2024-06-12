@@ -53,7 +53,7 @@ namespace GAS.Editor
         }
 
         [MenuItem("EX-GAS/Settings", priority = 0)]
-        private static void OpenWindow()
+        public static void OpenWindow()
         {
             var window = GetWindow<GASSettingAggregator>();
             window.position = GUIHelper.GetEditorWindowRect().AlignCenter(900, 600);

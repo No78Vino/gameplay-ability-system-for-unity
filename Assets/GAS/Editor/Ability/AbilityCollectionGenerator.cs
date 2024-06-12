@@ -1,14 +1,12 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+using System.IO;
+using System.Linq;
+using GAS.Runtime;
+using UnityEditor;
+using UnityEngine;
+
 namespace GAS.Editor
 {
-    using Runtime;
-    using UnityEditor;
-    using System;
-    using System.IO;
-    using GAS;
-    using Editor;
-    using UnityEngine;
-
     public class AbilityCollectionGenerator
     {
         public static void Gen()
@@ -64,8 +62,12 @@ namespace GAS.Editor
 
                     writer.WriteLine("");
 
-                    var abilityAssets =
-                        EditorUtil.FindAssetsByType<AbilityAsset>(GASSettingAsset.GameplayAbilityLibPath);
+                    var abilityAssets = EditorUtil
+                        .FindAssetsByType<AbilityAsset>(GASSettingAsset.GameplayAbilityLibPath)
+                        .OrderBy(x => x.UniqueName)
+                        .ThenBy(x => x.name)
+                        .ToArray();
+
                     foreach (var ability in abilityAssets)
                     {
                         var path = AssetDatabase.GetAssetPath(ability);
@@ -131,4 +133,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

@@ -57,12 +57,19 @@ namespace GAS.Runtime
                 var stateMap = animator.GetAllAnimationState();
                 if (stateMap.TryGetValue(StateName, out var clip))
                 {
-                    float clipFrameCount = (int)(clip.frameRate * clip.length);
-                    if (frame <= clipFrameCount + startFrame)
+                    if (clip != null)
                     {
-                        var progress = (frame - startFrame) / clipFrameCount;
-                        if (progress > 1 && clip.isLooping) progress -= (int)progress;
-                        clip.SampleAnimation(animator.gameObject, progress * clip.length);
+                        float clipFrameCount = (int)(clip.frameRate * clip.length);
+                        if (frame <= clipFrameCount + startFrame)
+                        {
+                            var progress = (frame - startFrame) / clipFrameCount;
+                            if (progress > 1 && clip.isLooping) progress -= (int)progress;
+                            clip.SampleAnimation(animator.gameObject, progress * clip.length);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Clip is null. Please check the cue asset: {name}, StateName: {StateName}");
                     }
                 }
             }

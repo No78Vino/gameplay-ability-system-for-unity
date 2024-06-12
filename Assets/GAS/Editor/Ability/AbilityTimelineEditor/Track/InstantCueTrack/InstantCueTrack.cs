@@ -12,7 +12,7 @@ namespace GAS.Editor
     public class InstantCueTrack : TrackBase
     {
         private InstantCueTrackData _instantCuesTrackData;
-        private static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         public InstantCueTrackData InstantCueTrackData
         {

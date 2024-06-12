@@ -1,14 +1,13 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using GAS.General.Validation;
+using UnityEditor;
+using UnityEngine;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using GAS.Editor.Validation;
-    using UnityEditor;
-    using UnityEngine;
-
     public sealed class AttributeEditorWindow : EditorWindow
     {
         public sealed class Data
@@ -106,4 +105,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

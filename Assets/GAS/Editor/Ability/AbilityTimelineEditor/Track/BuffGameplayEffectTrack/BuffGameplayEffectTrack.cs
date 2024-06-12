@@ -13,7 +13,7 @@ namespace GAS.Editor
         protected override Color TrackColor => new(0.9f, 0.6f, 0.6f, 0.2f);
         protected override Color MenuColor => new(0.9f, 0.6f, 0.6f, 1);
 
-        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         public BuffGameplayEffectTrackData BuffTrackDataForSave
         {

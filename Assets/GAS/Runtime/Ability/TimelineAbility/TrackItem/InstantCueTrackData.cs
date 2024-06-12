@@ -9,7 +9,7 @@ namespace GAS.Runtime
     {
         public List<InstantCueMarkEvent> markEvents = new List<InstantCueMarkEvent>();
         
-        public override void AddToAbilityAsset(TimelineAbilityAsset abilityAsset)
+        public override void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         {
             base.AddToAbilityAsset(abilityAsset);
             abilityAsset.InstantCues.Add(this);

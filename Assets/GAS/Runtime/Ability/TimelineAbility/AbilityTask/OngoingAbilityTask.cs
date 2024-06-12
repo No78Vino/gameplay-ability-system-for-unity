@@ -1,6 +1,6 @@
 ﻿namespace GAS.Runtime
 {
-    public abstract class OngoingAbilityTask:AbilityTaskBase
+    public abstract class OngoingAbilityTask : AbilityTaskBase
     {
 #if UNITY_EDITOR
         /// <summary>
@@ -18,6 +18,11 @@
 
         public abstract void OnEnd(int endFrame);
 
-        public abstract void OnTick(int frameIndex,int startFrame,int endFrame);
+        public abstract void OnTick(int frameIndex, int startFrame, int endFrame);
+    }
+
+    public abstract class OngoingAbilityTaskT<T> : OngoingAbilityTask where T : AbilitySpec
+    {
+        public new T Spec => (T)_spec;
     }
 }

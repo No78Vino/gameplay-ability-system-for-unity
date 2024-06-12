@@ -10,7 +10,7 @@ namespace GAS.Editor
 
     public class DurationalCueClipEditor : OdinEditorWindow
     {
-        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         private DurationalCueClip _clip;
 

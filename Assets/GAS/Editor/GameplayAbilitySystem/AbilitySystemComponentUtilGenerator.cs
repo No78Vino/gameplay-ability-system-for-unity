@@ -29,6 +29,8 @@ namespace GAS.Editor
             writer.WriteLine("");
 
             writer.WriteLine("using System;");
+            writer.WriteLine("using System.Linq;");
+            writer.WriteLine("using UnityEngine;");
 
             writer.WriteLine("");
 
@@ -70,18 +72,35 @@ namespace GAS.Editor
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
-                    
+
                     writer.WriteLine("");
-                    
+
                     writer.WriteLine(
-                        "public static void InitWithPreset(this AbilitySystemComponent asc,int level, AbilitySystemComponentPreset preset = null)");
+                        "public static void InitWithPreset(this AbilitySystemComponent asc, int level, AbilitySystemComponentPreset preset = null)");
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
                         writer.WriteLine("if (preset != null) asc.SetPreset(preset);");
                         writer.WriteLine("if (asc.Preset == null) return;");
+
+                        writer.WriteLine("");
+
+                        writer.WriteLine("#if UNITY_EDITOR", true);
+                        writer.WriteLine("if (asc.Preset.BaseAbilities != null && asc.Preset.BaseAbilities.Any(x => x == null))");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine(
+                                "Debug.LogWarning($\"BaseAbilities contains null in preset: {asc.Preset.name}\");");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("#endif", true);
+
+                        writer.WriteLine("");
+
                         writer.WriteLine(
-                            "asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.Preset.BaseAbilities,level);");
+                            "asc.Init(asc.PresetBaseTags(), asc.PresetAttributeSetTypes(), asc.Preset.BaseAbilities, level);");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");

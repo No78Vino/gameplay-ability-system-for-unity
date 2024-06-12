@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GAS.Editor.General;
-using GAS.Editor.Validation;
+using GAS.General.Validation;
 using GAS.Runtime;
+using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
@@ -54,8 +55,16 @@ namespace GAS.Editor
         {
             CheckLibPaths();
             var window = GetWindow<GASAssetAggregator>();
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1250, 625);
-            window.MenuWidth = 220;
+            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1600, 900);
+            window.MenuWidth = 240;
+        }
+
+        private void ShowButton(Rect rect)
+        {
+            if (SirenixEditorGUI.SDFIconButton(rect, "GitHub", SdfIconType.Github))
+            {
+                Application.OpenURL("https://github.com/No78Vino/gameplay-ability-system-for-unity");
+            }
         }
 
         private static void CheckLibPaths()
@@ -123,23 +132,23 @@ namespace GAS.Editor
 
                 if (selected != null && (selected.Value is DirectoryInfo || selected.Value is AbilityOverview))
                 {
-                    DirectoryInfo directoryInfo = selected.Value is AbilityOverview
+                    var directoryInfo = selected.Value is AbilityOverview
                         ? _directoryInfos[3]
                         : selected.Value as DirectoryInfo;
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("浏览")))
                     {
                         OpenDirectoryInExplorer(directoryInfo);
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Sub Directory")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建子文件夹")))
                     {
                         CreateNewSubDirectory(directoryInfo);
                         GUIUtility
                             .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Asset")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建")))
                     {
                         CreateNewAsset(directoryInfo);
                         GUIUtility
@@ -147,27 +156,29 @@ namespace GAS.Editor
                     }
 
                     if (!directoryInfo.Root)
-                        if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
+                    {
+                        if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
                         {
                             RemoveSubDirectory(directoryInfo);
                             GUIUtility
                                 .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                         }
+                    }
                 }
 
                 if (selected is { Value: ScriptableObject asset })
                 {
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Show In Project")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("定位")))
                     {
                         ShowInProject(asset);
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Open In Explorer")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("浏览")))
                     {
                         OpenAssetInExplorer(asset);
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Select Script")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("定位脚本")))
                     {
                         var monoScript = MonoScript.FromScriptableObject(asset);
                         string path = AssetDatabase.GetAssetPath(monoScript);
@@ -176,15 +187,20 @@ namespace GAS.Editor
                         ShowInProject(obj);
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Edit Script")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("编辑脚本")))
                     {
                         AssetDatabase.OpenAsset(MonoScript.FromScriptableObject(asset));
                     }
 
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("Remove")))
+                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
                     {
                         RemoveAsset(asset);
                     }
+                }
+
+                if (SirenixEditorGUI.ToolbarButton(new GUIContent("GAS设置")))
+                {
+                    GASSettingAggregator.OpenWindow();
                 }
             }
             SirenixEditorGUI.EndHorizontalToolbar();
@@ -224,12 +240,8 @@ namespace GAS.Editor
                 s =>
                 {
                     var newPath = directoryInfo.Directory + "/" + s;
-                    if (!AssetDatabase.IsValidFolder(newPath))
-                    {
-                        return ValidationResult.Invalid("Folder already exists!");
-                    }
-
-                    return ValidationResult.Valid;
+                    var isExist = AssetDatabase.IsValidFolder(newPath);
+                    return isExist ? ValidationResult.Invalid("Folder already exists!") : ValidationResult.Valid;
                 },
                 s =>
                 {

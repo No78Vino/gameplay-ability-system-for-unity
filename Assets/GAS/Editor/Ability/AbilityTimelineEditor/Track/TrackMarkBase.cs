@@ -8,7 +8,7 @@ namespace GAS.Editor
     using UnityEngine.UIElements;
     public abstract class TrackMarkBase:TrackItemBase
     {
-        protected static TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        protected static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
         private static string MarkAssetGuid => "5a3b3360bcba29b4cac2875f518af19d";
         public float FrameUnitWidth { get;protected set; }
         public int StartFrameIndex=>markData.startFrame;

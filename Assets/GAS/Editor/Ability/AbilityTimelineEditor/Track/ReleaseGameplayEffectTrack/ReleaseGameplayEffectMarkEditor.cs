@@ -76,7 +76,7 @@ namespace GAS.Editor
         void RefreshCatcherInspector()
         {
             // 根据选择的OngoingAbilityTask子类，显示对应的属性
-            var catcher = _mark.MarkDataForSave.TargetCatcher;
+            var catcher = _mark.MarkDataForSave.LoadTargetCatcher();
             if (TargetCatcherInspectorMap.TryGetValue(catcher.GetType(), out var inspectorType))
             {
                 var targetCatcherInspector =

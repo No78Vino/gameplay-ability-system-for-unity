@@ -10,7 +10,7 @@ namespace GAS.Editor
 
     public class BuffGameplayEffectClipEditor : OdinEditorWindow
     {
-        private TimelineAbilityAsset AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
 
         private BuffGameplayEffectClip _clip;
 

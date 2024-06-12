@@ -1,6 +1,6 @@
 ﻿namespace GAS.Runtime
 {
-    public class DefaultOngoingAbilityTask:OngoingAbilityTask 
+    public class DefaultOngoingAbilityTask : OngoingAbilityTask
     {
         public override void OnStart(int startFrame)
         {

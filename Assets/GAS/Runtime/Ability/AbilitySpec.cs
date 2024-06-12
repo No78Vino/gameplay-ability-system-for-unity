@@ -6,19 +6,23 @@ namespace GAS.Runtime
     {
         protected object[] _abilityArguments;
 
+        public object[] AbilityArguments => _abilityArguments;
+
+        public object UserData { get; set; }
+
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
             Ability = ability;
             Owner = owner;
         }
-        
+
         public virtual void Dispose()
         {
             _onActivateResult = null;
             _onEndAbility = null;
             _onCancelAbility = null;
         }
-        
+
         public AbstractAbility Ability { get; }
 
         public AbilitySystemComponent Owner { get; protected set; }
@@ -61,11 +65,12 @@ namespace GAS.Runtime
         {
             _onCancelAbility -= onCancelAbility;
         }
-        
+
         public virtual void SetLevel(int level)
         {
             Level = level;
         }
+
         public virtual AbilityActivateResult CanActivate()
         {
             if (IsActive) return AbilityActivateResult.FailHasActivated;
@@ -174,7 +179,7 @@ namespace GAS.Runtime
         {
             if (!IsActive) return;
             IsActive = false;
-            
+
             Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
@@ -202,6 +207,8 @@ namespace GAS.Runtime
     public abstract class AbilitySpec<T> : AbilitySpec where T : AbstractAbility
     {
         protected T data;
+
+        public T Data => data;
 
         protected AbilitySpec(T ability, AbilitySystemComponent owner) : base(ability, owner)
         {

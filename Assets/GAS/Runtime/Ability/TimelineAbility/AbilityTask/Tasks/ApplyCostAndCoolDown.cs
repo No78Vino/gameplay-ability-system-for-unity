@@ -3,7 +3,7 @@
 namespace GAS.Runtime
 {
     [Serializable]
-    public class ApplyCostAndCoolDown:InstantAbilityTask
+    public class ApplyCostAndCoolDown : InstantAbilityTask
     {
         public override void OnExecute()
         {

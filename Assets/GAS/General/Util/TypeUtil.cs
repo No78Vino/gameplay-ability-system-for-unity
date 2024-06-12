@@ -27,7 +27,7 @@ namespace GAS.General
 
             return sonTypes.ToArray();
         }
-        
+
         public static Type FindTypeInAllAssemblies(string typeName)
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -49,6 +49,24 @@ namespace GAS.General
 
             // 如果没有找到类型，返回null
             return null;
+        }
+
+        /// <summary>
+        /// 获取类型的继承链
+        /// </summary>
+        public static string[] GetInheritanceChain(this Type type, bool fullName = true)
+        {
+            var inheritanceChain = new List<string>();
+            var currentType = type;
+
+            while (currentType != null)
+            {
+                var name = fullName ? currentType.FullName : currentType.Name;
+                inheritanceChain.Add(name);
+                currentType = currentType.BaseType;
+            }
+
+            return inheritanceChain.ToArray();
         }
     }
 }
