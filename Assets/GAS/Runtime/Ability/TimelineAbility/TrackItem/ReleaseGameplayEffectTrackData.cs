@@ -57,7 +57,7 @@ namespace GAS.Runtime
             };
         }
 
-        private TargetCatcherBase LoadTargetCatcher()
+        public TargetCatcherBase LoadTargetCatcher()
         {
             TargetCatcherBase targetCatcher = null;
             var jsonData = jsonTargetCatcher.Data;
@@ -79,7 +79,6 @@ namespace GAS.Runtime
             }
             else
             {
-                Profiler.BeginSample($"{nameof(ReleaseGameplayEffectMarkEvent)}::LoadTargetCatcher() -> Activator.CreateInstance GC Alloc");
                 if (string.IsNullOrEmpty(jsonData))
                 {
                     targetCatcher = Activator.CreateInstance(type) as TargetCatcherBase;
@@ -88,8 +87,6 @@ namespace GAS.Runtime
                 {
                     targetCatcher = JsonUtility.FromJson(jsonData, type) as TargetCatcherBase;
                 }
-
-                Profiler.EndSample();
             }
 
             return targetCatcher;
