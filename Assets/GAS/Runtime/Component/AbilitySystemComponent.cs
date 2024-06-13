@@ -173,17 +173,7 @@ namespace GAS.Runtime
 #endif
                 return null;
             }
-
-            // // 在ge spec实例化前就应该处理CanApply逻辑
-            // var canApply = gameplayEffect.CanApplyTo(target);
-            // if (canApply)
-            // {
-            //     // TODO 在此处处理Stacking逻辑，因为堆叠是不应该产生Spec的
-            //     var spec = gameplayEffect.CreateSpec(this, target, Level);
-            //     var applyGameplayEffectTo = target.AddGameplayEffect(spec, true);
-            //     //applyGameplayEffectTo = target.AddGameplayEffect(spec);
-            //     return applyGameplayEffectTo;
-            // }
+            
             return target.AddGameplayEffect(this, gameplayEffect);
         }
 
@@ -192,6 +182,24 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
 
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,int effectLevel)
+        {
+            if (gameplayEffect == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
+#endif
+                return null;
+            }
+            
+            return target.AddGameplayEffect(this, gameplayEffect,effectLevel);
+        }
+
+        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect,int effectLevel)
+        {
+            return ApplyGameplayEffectTo(gameplayEffect, this,effectLevel);
+        }
+        
         public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
@@ -299,6 +307,11 @@ namespace GAS.Runtime
             return GameplayEffectContainer.AddGameplayEffectSpec(source, effect);
         }
 
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffect effect,int effectLevel)
+        {
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effect,effectLevel);
+        }
+        
         private void DisableAllAbilities()
         {
             AbilityContainer.CancelAllAbilities();
