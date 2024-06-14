@@ -164,6 +164,11 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
         }
 
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemComponent target)
+        {
+            return target.AddGameplayEffect(this, gameplayEffectSpec);
+        }
+        
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
             if (gameplayEffect == null)
@@ -173,13 +178,9 @@ namespace GAS.Runtime
 #endif
                 return null;
             }
-            
-            return target.AddGameplayEffect(this, gameplayEffect);
-        }
 
-        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
-        {
-            return ApplyGameplayEffectTo(gameplayEffect, this);
+            var spec = gameplayEffect.CreateSpec();
+            return ApplyGameplayEffectTo(spec, target);
         }
 
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,int effectLevel)
@@ -191,13 +192,19 @@ namespace GAS.Runtime
 #endif
                 return null;
             }
-            
-            return target.AddGameplayEffect(this, gameplayEffect,effectLevel);
+            var spec = gameplayEffect.CreateSpec();
+            spec.SetLevel(effectLevel);
+            return ApplyGameplayEffectTo(spec, target);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect,int effectLevel)
+        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
         {
-            return ApplyGameplayEffectTo(gameplayEffect, this,effectLevel);
+            return ApplyGameplayEffectTo(gameplayEffectSpec, this);
+        }
+        
+        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
+        {
+            return ApplyGameplayEffectTo(gameplayEffect, this);
         }
         
         public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
@@ -302,14 +309,14 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffect effect)
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec)
         {
-            return GameplayEffectContainer.AddGameplayEffectSpec(source, effect);
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
         }
 
-        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffect effect,int effectLevel)
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,int effectLevel)
         {
-            return GameplayEffectContainer.AddGameplayEffectSpec(source, effect,effectLevel);
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec,true,effectLevel);
         }
         
         private void DisableAllAbilities()

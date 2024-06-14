@@ -146,7 +146,13 @@ namespace GAS.Editor
             }
         }
 
-        [MenuItem("EX-GAS/Runtime Watcher", priority = 3)]
+        private const string OpenWindow_MenuItemName = "EX-GAS/Runtime Watcher";
+#if EX_GAS_ENABLE_HOT_KEYS
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F11";
+#else
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName;
+#endif
+        [MenuItem(OpenWindow_MenuItemNameEnh, priority = 3)]
         private static void OpenWindow()
         {
             var window = GetWindow<GASWatcher>();

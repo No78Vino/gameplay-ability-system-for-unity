@@ -1,6 +1,4 @@
-﻿//using UnityEngine.Profiling;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
@@ -53,12 +51,21 @@ namespace GAS.Runtime
             AbilitySystemComponent owner,
             float level = 1)
         {
-            //Profiler.BeginSample("[GC Mark] GameplayEffectSpec.CreateSpec()");
-            var spec = new GameplayEffectSpec(this, creator, owner, level);
-            //Profiler.EndSample();
+            var spec = new GameplayEffectSpec(this);
+            spec.Init(creator, owner, level);
             return spec;
         }
 
+        /// <summary>
+        /// 分离GameplayEffectSpec的实例化过程为：实例 + 数据初始化
+        /// </summary>
+        /// <returns></returns>
+        public GameplayEffectSpec CreateSpec()
+        {
+            var spec = new GameplayEffectSpec(this);
+            return spec;
+        }
+        
         public GameplayEffect(IGameplayEffectData data)
         {
             GameplayEffectName = data.GetDisplayName();

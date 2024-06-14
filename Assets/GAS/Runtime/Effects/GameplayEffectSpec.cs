@@ -19,35 +19,36 @@ namespace GAS.Runtime
         public event Action<int,int> onStackCountChanged;
 
         
-        public GameplayEffectSpec(
-            GameplayEffect gameplayEffect,
-            AbilitySystemComponent source,
-            AbilitySystemComponent owner,
-            float level = 1)
+        public GameplayEffectSpec(GameplayEffect gameplayEffect)
         {
             GameplayEffect = gameplayEffect;
-            Source = source;
-            Owner = owner;
-            Level = level;
             Duration = GameplayEffect.Duration;
             DurationPolicy = GameplayEffect.DurationPolicy;
             Stacking = GameplayEffect.Stacking;
             Modifiers = GameplayEffect.Modifiers;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
-                PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
                 SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
-
-            CaptureDataFromSource();
         }
 
+        public void Init(AbilitySystemComponent source, AbilitySystemComponent owner, float level = 1)
+        {
+            Source = source;
+            Owner = owner;
+            Level = level;
+            if (GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
+            {
+                PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
+            }
+            CaptureDataFromSource();
+        }
         public GameplayEffect GameplayEffect { get; }
         public float ActivationTime { get; private set; }
         public float Level { get; private set; }
-        public AbilitySystemComponent Source { get; }
-        public AbilitySystemComponent Owner { get; }
+        public AbilitySystemComponent Source { get; private set; }
+        public AbilitySystemComponent Owner { get; private set; }
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public GameplayEffectPeriodTicker PeriodTicker { get; }
