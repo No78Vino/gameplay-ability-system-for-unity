@@ -5,13 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2024-06-14
+
+重新整理了ASC的ApplyGameplayEffect方法的逻辑,现在GE的Tag相关判断是在实例化之后。允许用户在GameplayEffectSpec生效前对GE进行修改和操作。
+
+### Changed
+
+- 重新整理了ASC的ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)方法的逻辑
+- ASC新增：ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemComponent target) 和
+          ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
+
 ## [1.1.3] - 2024-06-13
 
 添加了带level形参的ApplyGE方法。
 
 ### Changed
 
-- 添加了带level形参的ApplyGE方法。ga
+- 添加了带level形参的ApplyGE方法。
 
 
 ## [1.1.2] - 2024-06-12
