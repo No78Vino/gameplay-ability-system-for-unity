@@ -5,7 +5,7 @@ namespace GAS.Editor
     using Sirenix.Utilities;
     using Sirenix.Utilities.Editor;
     using UnityEditor;
-    
+
     public class GASSettingAggregator : OdinMenuEditorWindow
     {
         private static GASSettingAsset _settingAsset;
@@ -52,7 +52,13 @@ namespace GAS.Editor
             }
         }
 
-        [MenuItem("EX-GAS/Settings", priority = 0)]
+        private const string OpenWindow_MenuItemName = "EX-GAS/Settings";
+#if EX_GAS_ENABLE_HOT_KEYS
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F12";
+#else
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName;
+#endif
+        [MenuItem(OpenWindow_MenuItemNameEnh, priority = 0)]
         public static void OpenWindow()
         {
             var window = GetWindow<GASSettingAggregator>();
