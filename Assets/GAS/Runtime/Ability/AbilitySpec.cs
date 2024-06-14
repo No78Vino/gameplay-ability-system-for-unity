@@ -206,13 +206,11 @@ namespace GAS.Runtime
 
     public abstract class AbilitySpec<T> : AbilitySpec where T : AbstractAbility
     {
-        protected T data;
-
-        public T Data => data;
+        public T Data { get; private set; }
 
         protected AbilitySpec(T ability, AbilitySystemComponent owner) : base(ability, owner)
         {
-            data = ability;
+            Data = ability;
         }
     }
 }

@@ -50,7 +50,13 @@ namespace GAS.Editor
             "D- Ability System Component"
         };
 
-        [MenuItem("EX-GAS/Asset Aggregator", priority = 1)]
+        private const string OpenWindow_MenuItemName = "EX-GAS/Asset Aggregator";
+#if EX_GAS_ENABLE_HOT_KEYS
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName+ " %F9";
+#else
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName;
+#endif
+        [MenuItem(OpenWindow_MenuItemNameEnh, priority = 1)]
         private static void OpenWindow()
         {
             CheckLibPaths();
