@@ -163,6 +163,7 @@
         #region Gameplay Cue
 
         public const string CUE_ANIMATION_PATH = "动画机相对路径";
+        public const string CUE_ANIMATION_INCLUDE_CHILDREN = "包括子节点";
         public const string CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP = "在自身及孩子节点中查找动画机, 当你的动画机路径不能完全确定时(例如: 不同的皮肤节点不一致), 可勾选此项";
         public const string CUE_ANIMATION_STATE = "Animation State名";
         public const string CUE_ANIMATION_PATH_TIP = "为空表示物体根节点,示例：'A'=根节点下名为'A'的子物体,'A/B'='A'节点下名为'B'的子物体";
