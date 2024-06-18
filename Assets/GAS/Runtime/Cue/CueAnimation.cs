@@ -14,6 +14,7 @@ namespace GAS.Runtime
 
         [BoxGroup]
         [InfoBox(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP)]
+        [LabelText(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN)]
         [SerializeField]
         private bool _includeChildrenAnimator;
 
