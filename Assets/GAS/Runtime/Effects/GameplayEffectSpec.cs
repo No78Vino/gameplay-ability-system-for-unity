@@ -14,7 +14,9 @@ namespace GAS.Runtime
         /// <summary>
         /// The execution type of onImmunity is one shot.
         /// </summary>
+#pragma warning disable CS0067 // 事件从未使用过
         public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
+#pragma warning restore CS0067 // 事件从未使用过
         
         public event Action<int,int> onStackCountChanged;
 
