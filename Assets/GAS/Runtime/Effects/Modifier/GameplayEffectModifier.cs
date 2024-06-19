@@ -10,14 +10,20 @@ namespace GAS.Runtime
 {
     public enum GEOperation
     {
-        [LabelText(SdfIconType.Plus, Text = "加法")]
-        Add,
+        [LabelText(SdfIconType.PlusLg, Text = "加")]
+        Add = 0,
 
-        [LabelText(SdfIconType.X, Text = "乘法")]
-        Multiply,
+        [LabelText(SdfIconType.DashLg, Text = "减")]
+        Minus = 3,
 
-        [LabelText(SdfIconType.Pencil, Text = "覆写")]
-        Override
+        [LabelText(SdfIconType.XLg, Text = "乘")]
+        Multiply = 1,
+
+        [LabelText(SdfIconType.SlashLg, Text = "除")]
+        Divide = 4,
+
+        [LabelText(SdfIconType.Pencil, Text = "替")]
+        Override = 2,
     }
 
     [Serializable]
@@ -40,15 +46,15 @@ namespace GAS.Runtime
         [HideInInspector]
         public string AttributeShortName;
 
-        [LabelText("修改参数", SdfIconType.Activity)]
+        [LabelText("运算参数", SdfIconType.Activity)]
         [LabelWidth(LABEL_WIDTH)]
         [Tooltip("修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。\nMMC未指定时直接使用这个值。")]
+        [InfoBox("除数不能为零", InfoMessageType.Error, VisibleIf = "@Operation == GEOperation.Divide && ModiferMagnitude == 0 && MMC == null")]
         [PropertyOrder(3)]
         public float ModiferMagnitude;
 
-        [LabelText("修改类型", SdfIconType.PlusSlashMinus)]
+        [LabelText("运算法则", SdfIconType.PlusSlashMinus)]
         [LabelWidth(LABEL_WIDTH)]
-        [Tooltip("操作类型：是对属性的操作类型，\n有3种：\nAdd ： 加法（取值为负便是减法）\nMultiply： 乘法（除法取倒数即可）\nOverride：覆写属性值")]
         [EnumToggleButtons]
         [PropertyOrder(2)]
         public GEOperation Operation;

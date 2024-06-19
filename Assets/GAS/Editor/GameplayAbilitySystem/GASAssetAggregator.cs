@@ -52,7 +52,7 @@ namespace GAS.Editor
 
         private const string OpenWindow_MenuItemName = "EX-GAS/Asset Aggregator";
 #if EX_GAS_ENABLE_HOT_KEYS
-        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName+ " %F9";
+        private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F9";
 #else
         private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName;
 #endif
@@ -293,13 +293,22 @@ namespace GAS.Editor
 
         private void RemoveAsset(ScriptableObject asset)
         {
-            if (!EditorUtility.DisplayDialog("Warning", "Are you sure you want to delete this asset?", "Yes",
-                    "No")) return;
-
-            var name = asset.name; // Get the name before deleting
-            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(asset));
-            Refresh();
-            Debug.Log($"[EX] {name} asset deleted!");
+            if (asset == null)
+            {
+                EditorUtility.DisplayDialog("Warning", "The asset you want to delete is null", "Ok");
+                return;
+            }
+            
+            var assetName = asset.name; // Get the name before deleting
+            var assetPath = AssetDatabase.GetAssetPath(asset);
+            if (EditorUtility.DisplayDialog("Warning",
+                    $"Are you sure you want to delete this asset?\n\nName=\"{assetName}\"\nPath=\"{assetPath}\""
+                    , "Yes", "No"))
+            {
+                AssetDatabase.DeleteAsset(assetPath);
+                Refresh();
+                Debug.Log($"[EX] delete asset: Name=\"{assetName}\", Path=\"{assetPath}\"");
+            }
         }
 
         void OnMenuSelectionChange(SelectionChangedType selectionChangedType)

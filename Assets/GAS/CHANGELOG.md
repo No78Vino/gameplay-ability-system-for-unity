@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.1.5] - 2024-06-19
+
+修复了AttrBasedMMC的快照读取错误；Modifier新增了减法，除法操作类型。
+
+### Changed
+
+- Modifier新增了减法，除法操作类型。（From: BCC @kenkinky）
+
+### Fixed
+
+- 修复了AttrBasedMMC的快照读取错误。
+
+
 ## [1.1.4] - 2024-06-14
 
 重新整理了ASC的ApplyGameplayEffect方法的逻辑,现在GE的Tag相关判断是在实例化之后。允许用户在GameplayEffectSpec生效前对GE进行修改和操作。
