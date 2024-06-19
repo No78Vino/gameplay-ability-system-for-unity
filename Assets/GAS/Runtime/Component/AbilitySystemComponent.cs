@@ -164,11 +164,12 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemComponent target)
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec,
+            AbilitySystemComponent target)
         {
             return target.AddGameplayEffect(this, gameplayEffectSpec);
         }
-        
+
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
             if (gameplayEffect == null)
@@ -183,7 +184,8 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(spec, target);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,int effectLevel)
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,
+            int effectLevel)
         {
             if (gameplayEffect == null)
             {
@@ -192,6 +194,7 @@ namespace GAS.Runtime
 #endif
                 return null;
             }
+
             var spec = gameplayEffect.CreateSpec();
             spec.SetLevel(effectLevel);
             return ApplyGameplayEffectTo(spec, target);
@@ -201,12 +204,12 @@ namespace GAS.Runtime
         {
             return ApplyGameplayEffectTo(gameplayEffectSpec, this);
         }
-        
+
         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
-        
+
         public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
@@ -274,8 +277,14 @@ namespace GAS.Runtime
                     case GEOperation.Add:
                         baseValue += magnitude;
                         break;
+                    case GEOperation.Minus:
+                        baseValue -= magnitude;
+                        break;
                     case GEOperation.Multiply:
                         baseValue *= magnitude;
+                        break;
+                    case GEOperation.Divide:
+                        baseValue /= magnitude;
                         break;
                     case GEOperation.Override:
                         baseValue = magnitude;
@@ -314,11 +323,12 @@ namespace GAS.Runtime
             return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
         }
 
-        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,int effectLevel)
+        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
+            int effectLevel)
         {
-            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec,true,effectLevel);
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec, true, effectLevel);
         }
-        
+
         private void DisableAllAbilities()
         {
             AbilityContainer.CancelAllAbilities();

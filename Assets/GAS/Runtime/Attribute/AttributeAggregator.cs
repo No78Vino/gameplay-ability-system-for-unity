@@ -14,8 +14,8 @@ namespace GAS.Runtime
         /// </summary>
         private List<Tuple<GameplayEffectSpec, GameplayEffectModifier>> _modifierCache =
             new List<Tuple<GameplayEffectSpec, GameplayEffectModifier>>();
-        
-        public AttributeAggregator(AttributeBase attribute , AbilitySystemComponent owner)
+
+        public AttributeAggregator(AttributeBase attribute, AbilitySystemComponent owner)
         {
             _processedAttribute = attribute;
             _owner = owner;
@@ -28,13 +28,13 @@ namespace GAS.Runtime
             _processedAttribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.RegisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
-        
+
         public void OnDisable()
         {
             _processedAttribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueIsDirty);
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
-        
+
         /// <summary>
         /// it's triggered only when the owner's gameplay effect is added or removed. 
         /// </summary>
@@ -58,10 +58,10 @@ namespace GAS.Runtime
                     }
                 }
             }
-            
+
             UpdateCurrentValueWhenModifierIsDirty();
         }
-        
+
         /// <summary>
         /// 为CurrentValue计算新值。 (BaseValue的变化依赖于instant型GameplayEffect.)
         /// 这个方法的触发时机为：
@@ -77,31 +77,38 @@ namespace GAS.Runtime
             {
                 var spec = tuple.Item1;
                 var modifier = tuple.Item2;
-                var magnitude = modifier.CalculateMagnitude(spec,modifier.ModiferMagnitude);
+                var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
                 switch (modifier.Operation)
                 {
                     case GEOperation.Add:
                         newValue += magnitude;
                         break;
+                    case GEOperation.Minus:
+                        newValue -= magnitude;
+                        break;
                     case GEOperation.Multiply:
                         newValue *= magnitude;
+                        break;
+                    case GEOperation.Divide:
+                        newValue /= magnitude;
                         break;
                     case GEOperation.Override:
                         newValue = magnitude;
                         break;
                 }
             }
+
             return newValue;
         }
-        
+
         void UpdateCurrentValueWhenBaseValueIsDirty(AttributeBase attribute, float oldBaseValue, float newBaseValue)
         {
-            if(oldBaseValue == newBaseValue) return;
-            
+            if (oldBaseValue == newBaseValue) return;
+
             float newValue = CalculateNewValue();
             _processedAttribute.SetCurrentValue(newValue);
         }
-        
+
         void UpdateCurrentValueWhenModifierIsDirty()
         {
             float newValue = CalculateNewValue();
@@ -133,7 +140,7 @@ namespace GAS.Runtime
                 }
             }
         }
-        
+
         private void TryRegisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
         {
             if (modifier.MMC is AttributeBasedModCalculation mmc &&
@@ -153,10 +160,10 @@ namespace GAS.Runtime
                 }
             }
         }
-        
-        private void OnAttributeChanged(AttributeBase attribute,float oldValue,float newValue)
+
+        private void OnAttributeChanged(AttributeBase attribute, float oldValue, float newValue)
         {
-            if(_modifierCache.Count == 0) return;
+            if (_modifierCache.Count == 0) return;
             foreach (var tuple in _modifierCache)
             {
                 var ge = tuple.Item1;
