@@ -289,7 +289,7 @@ namespace GAS.Runtime
         private void CaptureAttributesSnapshot()
         {
             SnapshotSourceAttributes = Source.DataSnapshot();
-            SnapshotTargetAttributes = Owner.DataSnapshot();
+            SnapshotTargetAttributes = Source == Owner ? SnapshotSourceAttributes : Owner.DataSnapshot();
         }
 
         public void RegisterValue(GameplayTag tag, float value)
