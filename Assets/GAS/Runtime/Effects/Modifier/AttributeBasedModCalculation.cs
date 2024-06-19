@@ -65,7 +65,7 @@ namespace GAS.Runtime
             {
                 if (captureType == GEAttributeCaptureType.SnapShot)
                 {
-                    var snapShot = spec.Source.DataSnapshot();
+                    var snapShot = spec.SnapshotSourceAttributes;
                     var attribute = snapShot[attributeName];
                     return attribute * k + b;
                 }
@@ -78,7 +78,8 @@ namespace GAS.Runtime
 
             if (captureType == GEAttributeCaptureType.SnapShot)
             {
-                var attribute = spec.Owner.DataSnapshot()[attributeName];
+                var snapShot = spec.SnapshotTargetAttributes;
+                var attribute = snapShot[attributeName];
                 return attribute * k + b;
             }
             else

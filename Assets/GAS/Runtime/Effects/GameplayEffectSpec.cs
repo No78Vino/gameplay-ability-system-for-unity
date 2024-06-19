@@ -44,7 +44,7 @@ namespace GAS.Runtime
             {
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
             }
-            CaptureDataFromSource();
+            CaptureAttributesSnapshot();
         }
         public GameplayEffect GameplayEffect { get; }
         public float ActivationTime { get; private set; }
@@ -62,7 +62,8 @@ namespace GAS.Runtime
         public GameplayEffectStacking Stacking { get; private set; }
 
         
-        public Dictionary<string, float> SnapshotAttributes { get; private set; }
+        public Dictionary<string, float> SnapshotSourceAttributes { get; private set; }
+        public Dictionary<string, float> SnapshotTargetAttributes { get; private set; }
 
         /// <summary>
         /// 堆叠数
@@ -287,9 +288,10 @@ namespace GAS.Runtime
             Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
         }
 
-        private void CaptureDataFromSource()
+        private void CaptureAttributesSnapshot()
         {
-            SnapshotAttributes = Source.DataSnapshot();
+            SnapshotSourceAttributes = Source.DataSnapshot();
+            SnapshotTargetAttributes = Owner.DataSnapshot();
         }
 
         public void RegisterValue(GameplayTag tag, float value)
