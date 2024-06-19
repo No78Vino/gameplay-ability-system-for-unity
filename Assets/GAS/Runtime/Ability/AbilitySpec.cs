@@ -126,7 +126,8 @@ namespace GAS.Runtime
 
             foreach (var modifier in Ability.Cost.Modifiers)
             {
-                if (modifier.Operation != GEOperation.Add) continue;
+                // 常规来说消耗是减法, 但是加一个负数也应该被视为减法
+                if (modifier.Operation != GEOperation.Add && modifier.Operation != GEOperation.Minus) continue;
 
                 var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
                 var attributeCurrentValue =
