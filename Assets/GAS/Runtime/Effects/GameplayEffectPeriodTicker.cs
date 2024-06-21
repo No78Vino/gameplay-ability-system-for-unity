@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -58,9 +57,7 @@ namespace GAS.Runtime
         }
 
         /// <summary>
-        /// 注意：经测试发现，当周期（Period）设置为 0.0001f 时，本功能表现正常。
-        /// 然而，当周期减小至 0.00001f 时，由于浮点数精度限制，可能会出现计算误差。
-        /// 请在使用较小周期值时特别注意，并考虑可能的误差影响。
+        /// 注意: Period 小于 0.01f 可能出现误差, 基本够用了
         /// </summary>
         private void UpdatePeriod()
         {
@@ -76,15 +73,17 @@ namespace GAS.Runtime
 
             var dt = Time.deltaTime;
             var excessDuration = actualDuration - _spec.Duration;
-            if (excessDuration > 0)
+            if (excessDuration >= 0)
             {
                 // 如果超出了持续时间，就减去超出的时间, 此时应该是最后一次执行
                 dt -= excessDuration;
+                // 为了避免误差, 保证最后一次边界得到执行机会
+                dt += 0.0001f;
             }
 
             _periodRemaining -= dt;
 
-            while (_periodRemaining < Mathf.Epsilon)
+            while (_periodRemaining < 0)
             {
                 // 不能直接将_periodRemaining置为0, 这将累计误差
                 _periodRemaining += Period;
