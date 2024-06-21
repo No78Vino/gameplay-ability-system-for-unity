@@ -72,6 +72,9 @@ namespace GAS.Runtime
         [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
         [LabelWidth(WIDTH_LABEL)]
         [ShowIf("@DurationPolicy == EffectsDurationPolicy.Duration")]
+        [InfoBox("Period < 0.0001会出现误差", InfoMessageType.Warning,
+            VisibleIf =
+                "@DurationPolicy == EffectsDurationPolicy.Duration && PeriodForDurational > 0 && PeriodForDurational < 0.0001f")]
         [EnableIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
         [PropertyOrder(3)]
