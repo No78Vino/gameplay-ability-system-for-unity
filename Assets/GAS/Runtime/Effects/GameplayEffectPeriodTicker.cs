@@ -19,16 +19,15 @@ namespace GAS.Runtime
         {
             _spec.TriggerOnTick();
             
+            _periodRemaining -= Time.deltaTime;
+            
+            // 保证duration判断结束，在周期GE生效之后
             if (_periodRemaining <= 0)
             {
                 ResetPeriod();
                 _spec.PeriodExecution?.TriggerOnExecute();
             }
-            else
-            {
-                _periodRemaining -= Time.deltaTime;
-            }
-
+            
             if (_spec.DurationPolicy== EffectsDurationPolicy.Duration && _spec.DurationRemaining() <= 0)
             {
                 // 处理STACKING
@@ -58,8 +57,6 @@ namespace GAS.Runtime
                     else if (_spec.GameplayEffect.Stacking.expirationPolicy == ExpirationPolicy.RefreshDuration)
                     {
                         //持续时间结束时,再次刷新Duration，这相当于无限Duration，
-                        //TODO :可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
-                        //TODO :可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
                         _spec.RefreshDuration();
                     }
                 }
