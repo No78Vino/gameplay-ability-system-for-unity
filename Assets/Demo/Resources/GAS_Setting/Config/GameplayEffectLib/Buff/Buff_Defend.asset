@@ -12,13 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
   m_Name: Buff_Defend
   m_EditorClassIdentifier: 
-  Name: "\u9632\u5FA1Buff"
   Description: 
   DurationPolicy: 2
   Duration: 0
   Period: 0
   PeriodExecution: {fileID: 0}
-  GrantedAbilities: []
+  Stacking:
+    stackingType: 0
+    stackingCodeName: 
+    limitCount: 0
+    durationRefreshPolicy: 0
+    periodResetPolicy: 0
+    expirationPolicy: 0
+    denyOverflowApplication: 0
+    clearStackOnOverflow: 0
+    overflowEffects: []
+  GrantedAbilities:
+  - AbilityAsset: {fileID: 11400000, guid: d714d55595383374c86b92d2e9c76651, type: 2}
+    AbilityLevel: 0
+    ActivationPolicy: 0
+    DeactivationPolicy: 0
+    RemovePolicy: 1
   Modifiers: []
   AssetTags:
   - _name: State.Buff.DefendBuff
