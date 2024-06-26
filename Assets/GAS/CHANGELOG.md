@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.1.6] - 2024-06-26
+
+修复了由于优化GE创建流程时导致的Granted Ability生成错误；优化了period的边界问题
+
+### Changed
+
+- 优化了period的边界问题（From: BCC @kenkinky）
+
+### Fixed
+
+- 修复了由于优化GE创建流程时导致的Granted Ability生成错误。
+
+
 ## [1.1.5] - 2024-06-19
 
 修复了AttrBasedMMC的快照读取错误；Modifier新增了减法，除法操作类型。

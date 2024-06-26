@@ -31,7 +31,6 @@ namespace GAS.Runtime
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 PeriodTicker = new GameplayEffectPeriodTicker(this);
-                SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
         }
 
@@ -43,6 +42,7 @@ namespace GAS.Runtime
             if (GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
+                SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
             CaptureAttributesSnapshot();
         }
