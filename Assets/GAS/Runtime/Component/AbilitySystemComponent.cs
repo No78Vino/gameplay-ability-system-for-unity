@@ -282,7 +282,7 @@ namespace GAS.Runtime
             {
                 var attributeValue = GetAttributeAttributeValue(modifier.AttributeSetName, modifier.AttributeShortName);
                 if (attributeValue == null) continue;
-                if (attributeValue.Value.SupportedOperation.HasFlag(modifier.Operation) == false)
+                if (attributeValue.Value.IsSupportOperation(modifier.Operation) == false)
                 {
                     throw new InvalidOperationException("Unsupported operation.");
                 }
