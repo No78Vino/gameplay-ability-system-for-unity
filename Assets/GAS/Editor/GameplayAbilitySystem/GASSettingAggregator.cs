@@ -1,11 +1,10 @@
-﻿#if UNITY_EDITOR
+﻿using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
+
 namespace GAS.Editor
 {
-    using Sirenix.OdinInspector.Editor;
-    using Sirenix.Utilities;
-    using Sirenix.Utilities.Editor;
-    using UnityEditor;
-
     public class GASSettingAggregator : OdinMenuEditorWindow
     {
         private static GASSettingAsset _settingAsset;
@@ -62,7 +61,7 @@ namespace GAS.Editor
         public static void OpenWindow()
         {
             var window = GetWindow<GASSettingAggregator>();
-            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(900, 600);
+            window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1200, 600);
         }
 
         protected override OdinMenuTree BuildMenuTree()
@@ -88,4 +87,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

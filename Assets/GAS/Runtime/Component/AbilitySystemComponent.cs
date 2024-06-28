@@ -226,6 +226,18 @@ namespace GAS.Runtime
             AbilityContainer.RemoveAbility(abilityName);
         }
 
+        public AttributeValue? GetAttributeAttributeValue(string attrSetName, string attrShortName)
+        {
+            var value = AttributeSetContainer.GetAttributeAttributeValue(attrSetName, attrShortName);
+            return value;
+        }
+
+        public CalculateMode? GetAttributeCalculateMode(string attrSetName, string attrShortName)
+        {
+            var value = AttributeSetContainer.GetAttributeCalculateMode(attrSetName, attrShortName);
+            return value;
+        }
+
         public float? GetAttributeCurrentValue(string setName, string attributeShortName)
         {
             var value = AttributeSetContainer.GetAttributeCurrentValue(setName, attributeShortName);
@@ -268,10 +280,22 @@ namespace GAS.Runtime
         {
             foreach (var modifier in spec.Modifiers)
             {
-                var attributeBaseValue = GetAttributeBaseValue(modifier.AttributeSetName, modifier.AttributeShortName);
-                if (attributeBaseValue == null) continue;
+                var attributeValue = GetAttributeAttributeValue(modifier.AttributeSetName, modifier.AttributeShortName);
+                if (attributeValue == null) continue;
+                if (attributeValue.Value.SupportedOperation.HasFlag(modifier.Operation) == false)
+                {
+                    throw new InvalidOperationException("Unsupported operation.");
+                }
+
+                if (attributeValue.Value.CalculateMode != CalculateMode.Stacking)
+                {
+                    throw new InvalidOperationException(
+                        $"[EX] Instant GameplayEffect Can Only Modify Stacking Mode Attribute! " +
+                        $"But {modifier.AttributeSetName}.{modifier.AttributeShortName} is {attributeValue.Value.CalculateMode}");
+                }
+
                 var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
-                var baseValue = attributeBaseValue.Value;
+                var baseValue = attributeValue.Value.BaseValue;
                 switch (modifier.Operation)
                 {
                     case GEOperation.Add:
