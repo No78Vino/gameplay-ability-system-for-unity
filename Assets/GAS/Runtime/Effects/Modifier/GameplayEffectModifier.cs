@@ -26,6 +26,29 @@ namespace GAS.Runtime
         Override = 2,
     }
 
+    [Flags]
+    public enum SupportedOperation : byte
+    {
+        None = 0,
+
+        [LabelText(SdfIconType.PlusLg, Text = "加")]
+        Add = 1 << GEOperation.Add,
+
+        [LabelText(SdfIconType.DashLg, Text = "减")]
+        Minus = 1 << GEOperation.Minus,
+
+        [LabelText(SdfIconType.XLg, Text = "乘")]
+        Multiply = 1 << GEOperation.Multiply,
+
+        [LabelText(SdfIconType.SlashLg, Text = "除")]
+        Divide = 1 << GEOperation.Divide,
+
+        [LabelText(SdfIconType.Pencil, Text = "替")]
+        Override = 1 << GEOperation.Override,
+
+        All = Add | Minus | Multiply | Divide | Override
+    }
+
     [Serializable]
     public struct GameplayEffectModifier
     {
@@ -37,6 +60,7 @@ namespace GAS.Runtime
         [ValueDropdown("@ValueDropdownHelper.AttributeChoices", IsUniqueList = true)]
         [Tooltip("指的是GameplayEffect作用对象被修改的属性。")]
         [InfoBox("未选择属性", InfoMessageType.Error, VisibleIf = "@string.IsNullOrWhiteSpace($value)")]
+        [SuffixLabel("@ReflectionHelper.GetAttribute($value)?.CalculateMode")]
         [PropertyOrder(1)]
         public string AttributeName;
 
@@ -49,7 +73,8 @@ namespace GAS.Runtime
         [LabelText("运算参数", SdfIconType.Activity)]
         [LabelWidth(LABEL_WIDTH)]
         [Tooltip("修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。\nMMC未指定时直接使用这个值。")]
-        [InfoBox("除数不能为零", InfoMessageType.Error, VisibleIf = "@Operation == GEOperation.Divide && ModiferMagnitude == 0 && MMC == null")]
+        [InfoBox("除数不能为零", InfoMessageType.Error,
+            VisibleIf = "@Operation == GEOperation.Divide && ModiferMagnitude == 0 && MMC == null")]
         [PropertyOrder(3)]
         public float ModiferMagnitude;
 
@@ -57,6 +82,7 @@ namespace GAS.Runtime
         [LabelWidth(LABEL_WIDTH)]
         [EnumToggleButtons]
         [PropertyOrder(2)]
+        [ValidateInput("@ReflectionHelper.GetAttribute(AttributeName).SupportedOperation.HasFlag((SupportedOperation)(1 << (int)$value))", "非法运算: 该属性不支持的此运算法则")]
         public GEOperation Operation;
 
         [LabelText("参数修饰", SdfIconType.CpuFill)]
@@ -85,6 +111,12 @@ namespace GAS.Runtime
             ModiferMagnitude = modiferMagnitude;
             Operation = operation;
             MMC = mmc;
+
+            if (ReflectionHelper.GetAttribute(AttributeName)?.CalculateMode !=
+                CalculateMode.Stacking)
+            {
+                Operation = GEOperation.Override;
+            }
         }
 
         public float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
@@ -102,6 +134,12 @@ namespace GAS.Runtime
             var split = AttributeName.Split('.');
             AttributeSetName = split[0];
             AttributeShortName = split[1];
+
+            if (ReflectionHelper.GetAttribute(AttributeName)?.CalculateMode !=
+                CalculateMode.Stacking)
+            {
+                Operation = GEOperation.Override;
+            }
         }
     }
 }

@@ -143,8 +143,28 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_MOD, "Modifiers", SdfIconType.CalculatorFill, TextColor = "#FFE60B", Order = 2)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [InfoBox("依次执行多个修改器, 请注意执行顺序", InfoMessageType.Warning, VisibleIf = "@$value != null && $value.Length > 1")]
+        [InfoBox("瞬时效果不能修改非Stacking属性", InfoMessageType.Error, VisibleIf = "IsModifiersHasInvalid")]
         [LabelText(@"@IsInstantPolicy() ? ""仅在成功应用时执行"":""每次激活时都会执行""")]
         public GameplayEffectModifier[] Modifiers;
+
+        bool IsModifiersHasInvalid()
+        {
+            if (IsInstantPolicy())
+            {
+                return Modifiers != null && Modifiers.Any(modifier =>
+                {
+                    var attributeBase = ReflectionHelper.GetAttribute(modifier.AttributeName);
+                    if (attributeBase != null)
+                    {
+                        return attributeBase.CalculateMode != CalculateMode.Stacking;
+                    }
+
+                    return false;
+                });
+            }
+
+            return false;
+        }
 
         #endregion Modifiers
 
