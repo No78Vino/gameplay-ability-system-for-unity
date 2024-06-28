@@ -83,7 +83,7 @@ namespace GAS.Runtime
                         var modifier = tuple.Item2;
                         var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
 
-                        if (_processedAttribute.SupportedOperation.HasFlag(modifier.Operation) == false)
+                        if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
                         {
                             throw new InvalidOperationException("Unsupported operation.");
                         }
@@ -121,7 +121,7 @@ namespace GAS.Runtime
                         var spec = tuple.Item1;
                         var modifier = tuple.Item2;
 
-                        if (_processedAttribute.SupportedOperation.HasFlag(modifier.Operation) == false)
+                        if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
                         {
                             throw new InvalidOperationException("Unsupported operation.");
                         }
@@ -147,7 +147,7 @@ namespace GAS.Runtime
                         var spec = tuple.Item1;
                         var modifier = tuple.Item2;
 
-                        if (_processedAttribute.SupportedOperation.HasFlag(modifier.Operation) == false)
+                        if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
                         {
                             throw new InvalidOperationException("Unsupported operation.");
                         }

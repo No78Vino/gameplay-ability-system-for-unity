@@ -62,6 +62,11 @@ namespace GAS.Runtime
             _value.SetMinValue(min);
             _value.SetMaxValue(max);
         }
+        
+        public bool IsSupportOperation(GEOperation operation)
+        {
+            return _value.IsSupportOperation(operation);
+        }
 
         public void SetCurrentValue(float value)
         {
