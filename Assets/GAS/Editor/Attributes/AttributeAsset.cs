@@ -1,41 +1,57 @@
-﻿
-#if UNITY_EDITOR
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GAS.Editor.General;
+using GAS.General;
+using GAS.General.Validation;
+using GAS.Runtime;
+using Sirenix.OdinInspector;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEngine;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Sirenix.OdinInspector;
-    using UnityEditor;
-    using UnityEngine;
-    using GAS.General;
-    using Sirenix.Utilities.Editor;
-
     [FilePath(GasDefine.GAS_ATTRIBUTE_ASSET_PATH)]
     public class AttributeAsset : ScriptableSingleton<AttributeAsset>
     {
-        [BoxGroup("Warning", order: -1)] 
+        [BoxGroup("Warning", order: -1)]
         [HideLabel]
         [ShowIf("ExistDuplicatedAttribute")]
         [DisplayAsString(TextAlignment.Left, true)]
+        [NonSerialized]
         public string Warning_DuplicatedAttribute = "";
-
+        
         [VerticalGroup("Attributes", order: 1)]
         [ListDrawerSettings(
-            Expanded = true,
+            ShowFoldout = true,
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex",
             CustomAddFunction = "OnAddAttribute",
             ShowPaging = false, OnTitleBarGUI = "DrawAttributeButtons")]
         [Searchable]
-        [OnValueChanged("Save")]
+        [OnValueChanged("@OnValueChanged()", true)]
+        [OnCollectionChanged(after: "@OnCollectionChanged()")]
         public List<AttributeAccessor> attributes = new List<AttributeAccessor>();
-        
+
+        private void OnValueChanged()
+        {
+            Debug.Log("OnListChanged");
+            SaveAsset();
+        }
+
+        private void OnCollectionChanged()
+        {
+            Debug.Log("OnCollectionChanged");
+            SaveAsset();
+        }
+
         private void DrawAttributeButtons()
         {
             if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 attributes = attributes.OrderBy(x => x.Name).ToList();
+                SaveAsset();
             }
         }
 
@@ -104,12 +120,27 @@ namespace GAS.Editor
 
         private void OnAddAttribute()
         {
-            AttributeEditorWindow.OpenWindow(new AttributeEditorWindow.Data(), AttributeNames, (d =>
+            StringEditWindow.OpenWindow("创建新属性", null, newName =>
             {
-                attributes.Add(new AttributeAccessor(d.Name, d.Comment));
+                var validateVariableName = Validations.ValidateVariableName(newName);
+
+                if (validateVariableName.IsValid == false)
+                {
+                    return validateVariableName;
+                }
+
+                if (attributes.Exists(x => x.Name == newName))
+                {
+                    return ValidationResult.Invalid($"属性名已存在: \"{newName}\"!");
+                }
+
+                return ValidationResult.Valid;
+            }, x =>
+            {
+                attributes.Add(new AttributeAccessor { Name = x });
                 SaveAsset();
                 Debug.Log("[EX] Attribute Asset add element!");
-            }), "Add new Attribute");
+            });
             GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
 
@@ -141,40 +172,91 @@ namespace GAS.Editor
         [Serializable]
         public class AttributeAccessor
         {
+            private const int LabelWidth = 100;
             public static AttributeAsset ParentAsset;
 
-            [HorizontalGroup("A")] [HorizontalGroup("A/R", order: 1)] [DisplayAsString] [HideLabel]
-            public string Name;
+            private string DisplayName => $"{Name} - {Comment}";
 
-            [HorizontalGroup("A")] [HorizontalGroup("A/R", order: 3)] [DisplayAsString] [HideLabel]
-            public string Comment;
+            [FoldoutGroup("$DisplayName", false)]
+            [LabelText("属性名"), LabelWidth(LabelWidth)]
+            [DelayedProperty]
+            [ValidateInput("@OnNameChanged($value)", "Attribute name is invalid!")]
+            [PropertyOrder(1)]
+            public string Name = "Unnamed";
 
-            public AttributeAccessor(string attributeName, string attributeComment = "")
+            private bool OnNameChanged(string value)
             {
-                Name = string.IsNullOrWhiteSpace(attributeName) ? "Unnamed" : attributeName;
-                Comment = string.IsNullOrWhiteSpace(attributeComment) ? "" : attributeComment;
+                if (ParentAsset == null) return true;
+
+                return Validations.IsValidVariableName(value);
             }
 
-            [HorizontalGroup("A", Width = 50)]
-            [HorizontalGroup("A/L", order: 0, Width = 50)]
-            [Button(SdfIconType.Brush, "", ButtonHeight = 25)]
-            public void Edit()
-            {
-                if (ParentAsset == null) return;
+            [FoldoutGroup("$DisplayName")]
+            [DelayedProperty]
+            [LabelText("备注"), LabelWidth(LabelWidth)]
+            [PropertyOrder(2)]
+            public string Comment = "";
 
-                var nameBlackList = ParentAsset.AttributeNames.Where(x => x != Name);
-                AttributeEditorWindow.OpenWindow(new AttributeEditorWindow.Data(Name, Comment), nameBlackList,
-                    x =>
-                    {
-                        if (ParentAsset != null)
-                        {
-                            Name = x.Name;
-                            Comment = x.Comment;
-                            ParentAsset.SaveAsset();
-                        }
-                    }, "Edit Attribute Asset");
+            [FoldoutGroup("$DisplayName")]
+            [LabelText("计算模式"), LabelWidth(LabelWidth)]
+            [PropertyOrder(3)]
+            [OnValueChanged("@OnCalculateModeChanged()")]
+            [HorizontalGroup("$DisplayName/d")]
+            public CalculateMode CalculateMode = CalculateMode.Stacking;
+
+            private void OnCalculateModeChanged()
+            {
+                if (CalculateMode is CalculateMode.MinValueOnly or CalculateMode.MaxValueOnly)
+                {
+                    SupportedOperation = SupportedOperation.Override;
+                }
             }
+
+            [FoldoutGroup("$DisplayName")]
+            [LabelText("支持运算"), LabelWidth(LabelWidth)]
+            [PropertyOrder(4)]
+            [DisableIf(
+                "@CalculateMode == GAS.Runtime.CalculateMode.MinValueOnly || CalculateMode == GAS.Runtime.CalculateMode.MaxValueOnly")]
+            [HorizontalGroup("$DisplayName/d")]
+            public SupportedOperation SupportedOperation = SupportedOperation.All;
+
+            [FoldoutGroup("$DisplayName")]
+            [LabelText("默认值"), LabelWidth(LabelWidth)]
+            [DelayedProperty]
+            [PropertyOrder(5)]
+            [HorizontalGroup("$DisplayName/Values")]
+            public float DefaultValue = 0f;
+
+            [FoldoutGroup("$DisplayName")]
+            [LabelText("最小值"), LabelWidth(40)]
+            [DelayedProperty]
+            [PropertyOrder(6)]
+            [HorizontalGroup("$DisplayName/Values")]
+            [ToggleLeft]
+            public bool LimitMinValue = false;
+
+            [FoldoutGroup("$DisplayName")]
+            [HideLabel]
+            [DelayedProperty]
+            [PropertyOrder(6)]
+            [EnableIf("LimitMinValue")]
+            [HorizontalGroup("$DisplayName/Values")]
+            public float MinValue = float.MinValue;
+
+            [FoldoutGroup("$DisplayName")]
+            [LabelText("最大值"), LabelWidth(50)]
+            [DelayedProperty]
+            [PropertyOrder(6)]
+            [HorizontalGroup("$DisplayName/Values")]
+            public bool LimitMaxValue = false;
+
+            [FoldoutGroup("$DisplayName")]
+            [HideLabel]
+            [DelayedProperty]
+            [PropertyOrder(7)]
+            [EnableIf("LimitMaxValue")]
+            [HorizontalGroup("$DisplayName/Values")]
+            public float MaxValue = float.MaxValue;
         }
     }
 }
-#endif

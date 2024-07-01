@@ -1,13 +1,11 @@
-﻿#if UNITY_EDITOR
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
 
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using UnityEngine;
-
     public static class AttributeCollectionGen
     {
         private sealed class AttributeInfo
@@ -95,4 +93,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

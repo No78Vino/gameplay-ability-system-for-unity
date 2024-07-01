@@ -72,38 +72,106 @@ namespace GAS.Runtime
         /// <returns></returns>
         float CalculateNewValue()
         {
-            float newValue = _processedAttribute.BaseValue;
-            foreach (var tuple in _modifierCache)
+            switch (_processedAttribute.CalculateMode)
             {
-                var spec = tuple.Item1;
-                var modifier = tuple.Item2;
-                var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
-                switch (modifier.Operation)
+                case CalculateMode.Stacking:
                 {
-                    case GEOperation.Add:
-                        newValue += magnitude;
-                        break;
-                    case GEOperation.Minus:
-                        newValue -= magnitude;
-                        break;
-                    case GEOperation.Multiply:
-                        newValue *= magnitude;
-                        break;
-                    case GEOperation.Divide:
-                        newValue /= magnitude;
-                        break;
-                    case GEOperation.Override:
-                        newValue = magnitude;
-                        break;
-                }
-            }
+                    float newValue = _processedAttribute.BaseValue;
+                    foreach (var tuple in _modifierCache)
+                    {
+                        var spec = tuple.Item1;
+                        var modifier = tuple.Item2;
+                        var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
 
-            return newValue;
+                        if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
+                        {
+                            throw new InvalidOperationException("Unsupported operation.");
+                        }
+
+                        switch (modifier.Operation)
+                        {
+                            case GEOperation.Add:
+                                newValue += magnitude;
+                                break;
+                            case GEOperation.Minus:
+                                newValue -= magnitude;
+                                break;
+                            case GEOperation.Multiply:
+                                newValue *= magnitude;
+                                break;
+                            case GEOperation.Divide:
+                                newValue /= magnitude;
+                                break;
+                            case GEOperation.Override:
+                                newValue = magnitude;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+
+                    return newValue;
+                }
+                case CalculateMode.MinValueOnly:
+                {
+                    var hasOverride = false;
+                    var min = float.MaxValue;
+                    foreach (var tuple in _modifierCache)
+                    {
+                        var spec = tuple.Item1;
+                        var modifier = tuple.Item2;
+
+                        if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
+                        {
+                            throw new InvalidOperationException("Unsupported operation.");
+                        }
+
+                        if (modifier.Operation != GEOperation.Override)
+                        {
+                            throw new InvalidOperationException("MinValueOnly mode only support override operation.");
+                        }
+
+                        var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
+                        min = Mathf.Min(min, magnitude);
+                        hasOverride = true;
+                    }
+
+                    return hasOverride ? min : _processedAttribute.BaseValue;
+                }
+                case CalculateMode.MaxValueOnly:
+                {
+                    var hasOverride = false;
+                    var max = float.MinValue;
+                    foreach (var tuple in _modifierCache)
+                    {
+                        var spec = tuple.Item1;
+                        var modifier = tuple.Item2;
+
+                        if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
+                        {
+                            throw new InvalidOperationException("Unsupported operation.");
+                        }
+
+                        if (modifier.Operation != GEOperation.Override)
+                        {
+                            throw new InvalidOperationException("MaxValueOnly mode only support override operation.");
+                        }
+
+                        var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
+                        max = Mathf.Max(max, magnitude);
+                        hasOverride = true;
+                    }
+
+                    return hasOverride ? max : _processedAttribute.BaseValue;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         void UpdateCurrentValueWhenBaseValueIsDirty(AttributeBase attribute, float oldBaseValue, float newBaseValue)
         {
-            if (oldBaseValue == newBaseValue) return;
+            if (Mathf.Approximately(oldBaseValue, newBaseValue)) return;
 
             float newValue = CalculateNewValue();
             _processedAttribute.SetCurrentValue(newValue);

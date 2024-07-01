@@ -20,33 +20,58 @@ namespace GAS.Runtime
         private AbilitySystemComponent _owner;
         public AbilitySystemComponent Owner => _owner;
 
-        public AttributeBase(string attrSetName, string attrName, float value)
+        public AttributeBase(string attrSetName, string attrName, float value = 0,
+            CalculateMode calculateMode = CalculateMode.Stacking,
+            SupportedOperation supportedOperation = SupportedOperation.All,
+            float minValue = float.MinValue, float maxValue = float.MaxValue)
         {
             SetName = attrSetName;
             Name = $"{attrSetName}.{attrName}";
             ShortName = attrName;
-            _value = new AttributeValue(value);
+            _value = new AttributeValue(value, calculateMode, supportedOperation, minValue, maxValue);
         }
 
-        public AttributeBase(string attrSetName, string attrName)
-        {
-            SetName = attrSetName;
-            Name = $"{attrSetName}.{attrName}";
-            ShortName = attrName;
-            _value = new AttributeValue(0);
-        }
 
         public AttributeValue Value => _value;
         public float BaseValue => _value.BaseValue;
         public float CurrentValue => _value.CurrentValue;
+
+        public float MinValue => _value.MinValue;
+        public float MaxValue => _value.MaxValue;
+
+        public CalculateMode CalculateMode => _value.CalculateMode;
+        public SupportedOperation SupportedOperation => _value.SupportedOperation;
 
         public void SetOwner(AbilitySystemComponent owner)
         {
             _owner = owner;
         }
 
+        public void SetMinValue(float min)
+        {
+            _value.SetMinValue(min);
+        }
+
+        public void SetMaxValue(float max)
+        {
+            _value.SetMaxValue(max);
+        }
+
+        public void SetMinMaxValue(float min, float max)
+        {
+            _value.SetMinValue(min);
+            _value.SetMaxValue(max);
+        }
+        
+        public bool IsSupportOperation(GEOperation operation)
+        {
+            return _value.IsSupportOperation(operation);
+        }
+
         public void SetCurrentValue(float value)
         {
+            value = Mathf.Clamp(value, _value.MinValue, _value.MaxValue);
+
             _onPreCurrentValueChange?.Invoke(this, value);
 
             var oldValue = CurrentValue;
