@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -111,12 +107,6 @@ namespace GAS.Runtime
             ModiferMagnitude = modiferMagnitude;
             Operation = operation;
             MMC = mmc;
-
-            if (ReflectionHelper.GetAttribute(AttributeName)?.CalculateMode !=
-                CalculateMode.Stacking)
-            {
-                Operation = GEOperation.Override;
-            }
         }
 
         public float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
