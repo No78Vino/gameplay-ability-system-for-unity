@@ -66,5 +66,10 @@ namespace GAS.Runtime
             MinValue = min;
             MaxValue = max;
         }
+
+        public bool IsSupportOperation(GEOperation operation)
+        {
+            return SupportedOperation.HasFlag((SupportedOperation)(1 << (int)operation));
+        }
     }
 }
