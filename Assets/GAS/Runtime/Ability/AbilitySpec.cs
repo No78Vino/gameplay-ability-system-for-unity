@@ -132,8 +132,12 @@ namespace GAS.Runtime
                 var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
                 var attributeCurrentValue =
                     Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
-
-                if (attributeCurrentValue + costValue < 0) return false;
+                
+                if(modifier.Operation == GEOperation.Add)
+                    if (attributeCurrentValue + costValue < 0) return false;
+                
+                if(modifier.Operation == GEOperation.Minus)
+                    if (attributeCurrentValue - costValue < 0) return false;
             }
 
             return true;
