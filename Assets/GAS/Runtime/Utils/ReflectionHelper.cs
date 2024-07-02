@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -52,7 +51,7 @@ namespace GAS.Runtime
 
         #endregion AttributeSetNames
 
-        #region AttributeFullNames
+        #region AttributeNames
 
         private static string[] _attributeNames;
 
@@ -92,7 +91,68 @@ namespace GAS.Runtime
             return list.ToArray();
         }
 
-        #endregion AttributeFullNames
+        #endregion AttributeNames
+
+        #region Attributes
+
+        private static AttributeBase[] _attributes;
+
+        public static IEnumerable<AttributeBase> Attributes
+        {
+            get
+            {
+                _attributes ??= LoadAttributes();
+                return _attributes;
+            }
+        }
+
+        private static AttributeBase[] LoadAttributes()
+        {
+            return AttributeNames.Select(x =>
+            {
+                var strings = x.Split('.');
+                return LoadAttribute(strings[0], strings[1]);
+            }).ToArray();
+        }
+
+        private static Dictionary<string, AttributeBase> _attributeDict;
+
+        public static AttributeBase GetAttribute(string attributeFullName)
+        {
+            if (_attributeDict == null)
+            {
+                _attributeDict = new Dictionary<string, AttributeBase>();
+                foreach (var attributeBase in Attributes)
+                {
+                    _attributeDict[attributeBase.Name] = attributeBase;
+                }
+            }
+
+            _attributeDict.TryGetValue(attributeFullName, out var attr);
+            return attr;
+        }
+
+        public static AttributeBase GetAttribute(string attrSetName, string attrName)
+        {
+            return GetAttribute(attrSetName + "." + attrName);
+        }
+
+        private static AttributeBase LoadAttribute(string attrSetName, string attrName)
+        {
+            var fullName = $"GAS.Runtime.{attrSetName}";
+            var type = TypeUtil.FindTypeInAllAssemblies(fullName);
+            if (type == null)
+            {
+                Debug.LogError(
+                    $"[EX] attr set Type '{fullName}' not found. Please generate the GAttrSetLib CODE first!");
+                return null;
+            }
+
+            var attrSet = Activator.CreateInstance(type) as AttributeSet;
+            return attrSet?[attrName];
+        }
+
+        #endregion Attributes
 
         #region GameplayTags
 
@@ -137,4 +197,3 @@ namespace GAS.Runtime
         #endregion GameplayTags
     }
 }
-#endif

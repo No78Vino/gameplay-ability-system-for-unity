@@ -1,9 +1,8 @@
 ﻿using GAS.General;
-using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GameLogic
+namespace GAS.Runtime
 {
     public sealed class CueAnimationSpeedModifier : GameplayCueDurational
     {
