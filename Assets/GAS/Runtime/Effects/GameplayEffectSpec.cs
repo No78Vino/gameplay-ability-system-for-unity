@@ -232,11 +232,11 @@ namespace GAS.Runtime
 
         public void TriggerOnExecute()
         {
-            TriggerCueOnExecute();
-
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
             Owner.ApplyModFromInstantGameplayEffect(this);
+            
+            TriggerCueOnExecute();
         }
 
         public void TriggerOnAdd()
