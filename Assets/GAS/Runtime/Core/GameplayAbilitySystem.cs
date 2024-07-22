@@ -85,6 +85,7 @@ namespace GAS
         {
             Profiler.BeginSample($"{nameof(GameplayAbilitySystem)}::Tick()");
 
+            _cachedAbilitySystemComponents.Clear();
             _cachedAbilitySystemComponents.AddRange(AbilitySystemComponents);
 
             foreach (var abilitySystemComponent in _cachedAbilitySystemComponents)
