@@ -286,6 +286,83 @@ namespace GAS.General
         }
 
         /// <summary>
+        /// 绘制一个圆柱体
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="rotation">朝向, 以圆柱的侧面为forward/right, 上下面为up</param>
+        /// <param name="radius"></param>
+        /// <param name="height"></param>
+        /// <param name="segments"> </param>
+        /// <param name="color"></param>
+        /// <param name="duration"></param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void DrawCylinder(in Vector3 position, in Quaternion rotation, float radius, float height, int segments = 12,
+            in Color? color = null, float duration = 0f)
+        {
+            var offset = rotation * Vector3.up * (height * 0.5f);
+            var topCenter = position + offset;
+            var bottomCenter = position - offset;
+            DrawCylinder(topCenter, bottomCenter, radius, segments, color, duration);
+        }
+
+        /// <summary>
+        /// 绘制一个圆柱体
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="forward">朝向, forward是圆柱体的侧面(其实对于圆柱体而言forward/right都一样)</param>
+        /// <param name="radius"></param>
+        /// <param name="height"></param>
+        /// <param name="segments"></param>
+        /// <param name="color"></param>
+        /// <param name="duration"></param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void DrawCylinder(in Vector3 position, in Vector3 forward, float radius, float height, int segments = 12,
+            in Color? color = null, float duration = 0f)
+        {
+            DrawCylinder(position, Quaternion.LookRotation(forward), radius, height, segments, in color, duration);
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void DrawCylinder(in Vector3 topCenter, in Vector3 bottomCenter, float radius, int segments = 12,
+            in Color? color = null, float duration = 0f)
+        {
+            if (radius <= 0) return;
+            if (segments <= 0) return;
+
+            if (Vector3.Distance(topCenter, bottomCenter) <= Mathf.Epsilon) return;
+
+            var direction = (topCenter - bottomCenter).normalized;
+
+            // 计算一个垂直于direction的向量作为forward
+            var forward = Vector3.Cross(direction, Vector3.up).normalized;
+
+            // 如果forward和direction平行（即direction和Vector3.up共线），则选择一个不同的方向作为forward
+            if (forward == Vector3.zero)
+            {
+                forward = Vector3.Cross(direction, Vector3.right).normalized;
+            }
+
+            var rotation = Quaternion.LookRotation(forward, direction);
+
+            var angleStep = 360f / segments;
+            var offset = rotation * (Vector3.right * radius);
+            var lastTopPoint = topCenter + offset;
+            var lastBottomPoint = bottomCenter + offset;
+            for (int i = 1; i <= segments; i++)
+            {
+                var currentAngle = i * angleStep;
+                offset = rotation * (Quaternion.Euler(0, currentAngle, 0) * (Vector3.right * radius));
+                var nextTopPoint = topCenter + offset;
+                var nextBottomPoint = bottomCenter + offset;
+                DrawLine(lastTopPoint, nextTopPoint, color, duration);
+                DrawLine(lastBottomPoint, nextBottomPoint, color, duration);
+                DrawLine(nextTopPoint, nextBottomPoint, color, duration);
+                lastTopPoint = nextTopPoint;
+                lastBottomPoint = nextBottomPoint;
+            }
+        }
+
+        /// <summary>
         /// 绘制一个扇形
         /// </summary>
         /// <param name="position">位置, 扇形所在圆的圆心</param>
