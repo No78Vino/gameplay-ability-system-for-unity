@@ -1,18 +1,11 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Runtime;
+using UnityEngine;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using GAS.General;
-    using Runtime;
-    using UnityEngine;
-    using UnityEngine.UIElements;
-    using Object = UnityEngine.Object;
-    
     public class ReleaseGameplayEffectMark : TrackMark<ReleaseGameplayEffectTrack>
     {
-        private ReleaseGameplayEffectMarkEvent MarkData => markData as ReleaseGameplayEffectMarkEvent;
+        private new ReleaseGameplayEffectMarkEvent MarkData => markData as ReleaseGameplayEffectMarkEvent;
 
         public ReleaseGameplayEffectMarkEvent MarkDataForSave
         {
@@ -135,4 +128,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

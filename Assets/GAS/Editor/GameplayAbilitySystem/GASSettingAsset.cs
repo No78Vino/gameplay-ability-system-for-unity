@@ -208,10 +208,12 @@ namespace GAS.Editor
                     "切换快捷键状态\n将在你的项目中切换\"EX_GAS_ENABLE_HOT_KEYS\"宏定义\n\n这会重新编译你的代码, 之后你可能需要手动保存你的项目(请留意ProjectSettings.asset的变化).",
                     "确定", "取消"))
             {
+#pragma warning disable 162
                 if (EnableHotKeys)
                     ScriptingDefineSymbolsHelper.Remove(EX_GAS_ENABLE_HOT_KEYS);
                 else
                     ScriptingDefineSymbolsHelper.Add(EX_GAS_ENABLE_HOT_KEYS);
+#pragma warning restore 162
             }
         }
     }
