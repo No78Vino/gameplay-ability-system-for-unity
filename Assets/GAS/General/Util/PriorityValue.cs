@@ -13,9 +13,9 @@ namespace GAS.General
     public sealed class PriorityValue<T> : IDisposable
     {
 #if false //C# 10.0+
-        private readonly record struct Data(string Key, int Priority, T Value);
+        public readonly record struct Data(string Key, int Priority, T Value);
 #else
-        private record Data(string Key, int Priority, T Value)
+        public record Data(string Key, int Priority, T Value)
         {
             public string Key { get; } = Key;
             public int Priority { get; } = Priority;
@@ -272,6 +272,76 @@ namespace GAS.General
             {
                 OnPostValueChanged -= listener;
             }
+        }
+    }
+
+    /// <summary>
+    /// 通过Enable控制PriorityValue的某个key是否生效, 省去了手动管理Add/Remove等繁琐操作
+    /// </summary>
+    public sealed class PriorityValueToggle<T> : IDisposable
+    {
+        private PriorityValue<T>.Data _data;
+        public PriorityValue<T> PriorityValue { get; }
+
+        public string Key => _data.Key;
+
+        public int Priority
+        {
+            get => _data.Priority;
+            set
+            {
+                if (_data.Priority != value)
+                {
+                    _data = new(Key, value, Value);
+                    if (IsEnabled)
+                    {
+                        PriorityValue?.AddOrSet(Key, Priority, Value);
+                    }
+                }
+            }
+        }
+
+        public T Value
+        {
+            get => _data.Value;
+            set
+            {
+                if (!EqualityComparer<T>.Default.Equals(_data.Value, value))
+                {
+                    _data = new(Key, Priority, value);
+                    if (IsEnabled)
+                    {
+                        PriorityValue?.AddOrSet(Key, Priority, Value);
+                    }
+                }
+            }
+        }
+
+        private bool _isEnabled;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    if (_isEnabled) PriorityValue?.AddOrSet(Key, Priority, Value);
+                    else PriorityValue?.Remove(Key);
+                }
+            }
+        }
+
+        public PriorityValueToggle(PriorityValue<T> priorityValue, string key, int priority, T value)
+        {
+            PriorityValue = priorityValue;
+            _data = new(key, priority, value);
+        }
+
+        public void Dispose()
+        {
+            IsEnabled = false;
         }
     }
 }
