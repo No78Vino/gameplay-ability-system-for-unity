@@ -102,7 +102,9 @@ namespace GAS.Runtime
                 var ability = Activator.CreateInstance(info.AbilityType(), args: info) as AbstractAbility;
                 AbilityContainer.GrantAbility(ability);
             }
+#pragma warning disable CS0168 // 声明了变量，但从未使用过
             catch (MissingMethodException e)
+#pragma warning restore CS0168 // 声明了变量，但从未使用过
             {
                 // 踩坑日志:
                 //   复制了某个AbilityAsset实现类的代码，但忘记更新AbilityType()方法的返回值。

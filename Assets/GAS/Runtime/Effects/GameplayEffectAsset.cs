@@ -72,6 +72,9 @@ namespace GAS.Runtime
         [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
         [LabelWidth(WIDTH_LABEL)]
         [ShowIf("@DurationPolicy == EffectsDurationPolicy.Duration")]
+        [InfoBox("Period < 0.01会出现误差", InfoMessageType.Warning,
+            VisibleIf =
+                "@DurationPolicy == EffectsDurationPolicy.Duration && PeriodForDurational > 0 && PeriodForDurational < 0.01f")]
         [EnableIf("IsDurationalPolicy")]
         [Unit(Units.Second)]
         [PropertyOrder(3)]
@@ -139,7 +142,7 @@ namespace GAS.Runtime
         [HorizontalGroup(GRP_DATA_H, order: 1, Width = 0.618f * 0.618f)]
         [TabGroup(GRP_DATA_MOD, "Modifiers", SdfIconType.CalculatorFill, TextColor = "#FFE60B", Order = 2)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
-        [InfoBox("依次执行多个修改器, 请注意执行顺序", InfoMessageType.Warning, VisibleIf = "@$value != null && $value.Length > 1")]
+        [InfoBox("依次执行多个修改器, 请注意执行顺序", InfoMessageType.Info, VisibleIf = "@$value != null && $value.Length > 1")]
         [InfoBox("瞬时效果不能修改非Stacking属性", InfoMessageType.Error, VisibleIf = "IsModifiersHasInvalid")]
         [LabelText(@"@IsInstantPolicy() ? ""仅在成功应用时执行"":""每次激活时都会执行""")]
         public GameplayEffectModifier[] Modifiers;

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.8] - 2024-07-30
+
+进行了一系列的优化。（From: BCC @kenkinky）
+
+### Changed
+
+- 进行了一系列的优化
+
 ## [1.1.6] - 2024-06-26
 
 修复了AbilitySpec中CheckCost时，modifier为减法时的计算错误；追加了Attribute的钳制功能。

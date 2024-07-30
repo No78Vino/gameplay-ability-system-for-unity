@@ -2,7 +2,7 @@
 {
     public static class GasDefine
     {
-        public const string GAS_VERSION = "1.1.7";
+        public const string GAS_VERSION = "1.1.8";
 
         public const string GAS_TAG_LIB_CSHARP_SCRIPT_NAME = "GTagLib.gen.cs";
 

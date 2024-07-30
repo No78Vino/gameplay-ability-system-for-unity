@@ -65,9 +65,14 @@ namespace GAS.Runtime
             var spec = new GameplayEffectSpec(this);
             return spec;
         }
-        
+
         public GameplayEffect(IGameplayEffectData data)
         {
+            if (data is null)
+            {
+                throw new System.Exception($"GE data can't be null!");
+            }
+
             GameplayEffectName = data.GetDisplayName();
             DurationPolicy = data.GetDurationPolicy();
             Duration = data.GetDuration();
@@ -126,7 +131,7 @@ namespace GAS.Runtime
             if (effect.Stacking.stackingType == StackingType.None) return false;
             if (string.IsNullOrEmpty(Stacking.stackingCodeName)) return false;
             if (string.IsNullOrEmpty(effect.Stacking.stackingCodeName)) return false;
-            
+
             return Stacking.stackingHashCode == effect.Stacking.stackingHashCode;
         }
     }

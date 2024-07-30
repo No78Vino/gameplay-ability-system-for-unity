@@ -1,18 +1,11 @@
-﻿
-#if UNITY_EDITOR
+﻿using GAS.Runtime;
+using UnityEngine;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using GAS.General;
-    using Runtime;
-    using UnityEngine;
-    using UnityEngine.UIElements;
-    
     public class TaskMark : TrackMark<TaskMarkEventTrack>
     {
-        public TaskMarkEvent MarkData => markData as TaskMarkEvent;
+        public new TaskMarkEvent MarkData => markData as TaskMarkEvent;
 
         public TaskMarkEvent MarkDataForSave
         {
@@ -25,8 +18,8 @@ namespace GAS.Editor
                 return null;
             }
         }
-        
-        public override UnityEngine.Object DataInspector => TaskMarkEditor.Create(this);
+
+        public override Object DataInspector => TaskMarkEditor.Create(this);
 
         public override void Duplicate()
         {
@@ -41,7 +34,7 @@ namespace GAS.Editor
                 InstantTasks = (markData as TaskMarkEvent)?.InstantTasks
             };
             track.InstantTaskEventTrackData.markEvents.Add(markEvent);
-        
+
             // 刷新显示
             var mark = new TaskMark();
             mark.InitTrackMark(track, track.Track, FrameUnitWidth, markEvent);
@@ -166,7 +159,7 @@ namespace GAS.Editor
 
         //
         // #endregion
-        
+
         public override void Delete()
         {
             var success = track.InstantTaskEventTrackData.markEvents.Remove(MarkData);
@@ -175,7 +168,7 @@ namespace GAS.Editor
             track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();
         }
-        
+
         public override void UpdateMarkDataFrame(int newStartFrame)
         {
             var updatedClip = MarkDataForSave;
@@ -202,4 +195,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif
