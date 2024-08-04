@@ -6,6 +6,7 @@ using Demo.Script.Map;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Core;
 using UnityEngine;
 
 namespace Demo.Script
@@ -51,7 +52,8 @@ namespace Demo.Script
         {
             XUI.M.OpenWindow<MainUI>();
             XUI.M.OpenWindow<MenuWindow>();
-
+            
+            GASManager.Initialize();
             ResetGameScene();
         }
 
