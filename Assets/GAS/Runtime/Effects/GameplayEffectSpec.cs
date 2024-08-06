@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.General;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -17,10 +16,10 @@ namespace GAS.Runtime
 #pragma warning disable CS0067 // 事件从未使用过
         public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
 #pragma warning restore CS0067 // 事件从未使用过
-        
-        public event Action<int,int> onStackCountChanged;
 
-        
+        public event Action<int, int> onStackCountChanged;
+
+
         public GameplayEffectSpec(GameplayEffect gameplayEffect)
         {
             GameplayEffect = gameplayEffect;
@@ -44,8 +43,10 @@ namespace GAS.Runtime
                 PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
                 SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
+
             CaptureAttributesSnapshot();
         }
+
         public GameplayEffect GameplayEffect { get; }
         public float ActivationTime { get; private set; }
         public float Level { get; private set; }
@@ -61,7 +62,7 @@ namespace GAS.Runtime
         public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
         public GameplayEffectStacking Stacking { get; private set; }
 
-        
+
         public Dictionary<string, float> SnapshotSourceAttributes { get; private set; }
         public Dictionary<string, float> SnapshotTargetAttributes { get; private set; }
 
@@ -69,7 +70,7 @@ namespace GAS.Runtime
         /// 堆叠数
         /// </summary>
         public int StackCount { get; private set; } = 1;
-        
+
 
         public float DurationRemaining()
         {
@@ -88,7 +89,7 @@ namespace GAS.Runtime
         {
             ActivationTime = activationTime;
         }
-        
+
         public void SetDuration(float duration)
         {
             Duration = duration;
@@ -164,7 +165,14 @@ namespace GAS.Runtime
 
         void TriggerInstantCues(GameplayCueInstant[] cues)
         {
-            foreach (var cue in cues) cue.ApplyFrom(this);
+            try
+            {
+                foreach (var cue in cues) cue.ApplyFrom(this);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void TriggerCueOnExecute()
@@ -178,16 +186,23 @@ namespace GAS.Runtime
             if (GameplayEffect.CueOnAdd != null && GameplayEffect.CueOnAdd.Length > 0)
                 TriggerInstantCues(GameplayEffect.CueOnAdd);
 
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+            try
             {
-                _cueDurationalSpecs.Clear();
-                foreach (var cueDurational in GameplayEffect.CueDurational)
+                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
                 {
-                    var cueSpec = cueDurational.ApplyFrom(this);
-                    if (cueSpec != null) _cueDurationalSpecs.Add(cueSpec);
-                }
+                    _cueDurationalSpecs.Clear();
+                    foreach (var cueDurational in GameplayEffect.CueDurational)
+                    {
+                        var cueSpec = cueDurational.ApplyFrom(this);
+                        if (cueSpec != null) _cueDurationalSpecs.Add(cueSpec);
+                    }
 
-                foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
+                    foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
 
@@ -196,11 +211,18 @@ namespace GAS.Runtime
             if (GameplayEffect.CueOnRemove != null && GameplayEffect.CueOnRemove.Length > 0)
                 TriggerInstantCues(GameplayEffect.CueOnRemove);
 
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+            try
             {
-                foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
+                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                {
+                    foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
 
-                _cueDurationalSpecs = null;
+                    _cueDurationalSpecs = null;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
 
@@ -209,9 +231,16 @@ namespace GAS.Runtime
             if (GameplayEffect.CueOnActivate != null && GameplayEffect.CueOnActivate.Length > 0)
                 TriggerInstantCues(GameplayEffect.CueOnActivate);
 
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
-                foreach (var cue in _cueDurationalSpecs)
-                    cue.OnGameplayEffectActivate();
+            try
+            {
+                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                    foreach (var cue in _cueDurationalSpecs)
+                        cue.OnGameplayEffectActivate();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void TriggerCueOnDeactivation()
@@ -219,15 +248,29 @@ namespace GAS.Runtime
             if (GameplayEffect.CueOnDeactivate != null && GameplayEffect.CueOnDeactivate.Length > 0)
                 TriggerInstantCues(GameplayEffect.CueOnDeactivate);
 
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
-                foreach (var cue in _cueDurationalSpecs)
-                    cue.OnGameplayEffectDeactivate();
+            try
+            {
+                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                    foreach (var cue in _cueDurationalSpecs)
+                        cue.OnGameplayEffectDeactivate();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void CueOnTick()
         {
             if (GameplayEffect.CueDurational == null || GameplayEffect.CueDurational.Length <= 0) return;
-            foreach (var cue in _cueDurationalSpecs) cue.OnTick();
+            try
+            {
+                foreach (var cue in _cueDurationalSpecs) cue.OnTick();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         public void TriggerOnExecute()
@@ -235,7 +278,7 @@ namespace GAS.Runtime
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
             Owner.ApplyModFromInstantGameplayEffect(this);
-            
+
             TriggerCueOnExecute();
         }
 
@@ -247,7 +290,7 @@ namespace GAS.Runtime
         public void TriggerOnRemove()
         {
             TriggerCueOnRemove();
-            
+
             TryRemoveGrantedAbilities();
         }
 
@@ -257,7 +300,7 @@ namespace GAS.Runtime
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
-            
+
             TryActivateGrantedAbilities();
         }
 
@@ -265,7 +308,7 @@ namespace GAS.Runtime
         {
             TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
-            
+
             TryDeactivateGrantedAbilities();
         }
 
@@ -323,7 +366,7 @@ namespace GAS.Runtime
         {
             return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?)null;
         }
-        
+
         private void TryActivateGrantedAbilities()
         {
             foreach (var grantedAbilitySpec in GrantedAbilitySpec)
@@ -359,6 +402,7 @@ namespace GAS.Runtime
         }
 
         #region ABOUT STACKING
+
         /// <summary>
         /// 
         /// </summary>
@@ -370,18 +414,19 @@ namespace GAS.Runtime
             OnStackCountChange(oldStackCount, StackCount);
             return oldStackCount != StackCount;
         }
-        
+
         public void RefreshStack(int stackCount)
         {
             if (stackCount <= Stacking.limitCount)
             {
                 // 更新栈数
-                StackCount = Mathf.Max(1,stackCount); // 最小层数为1
+                StackCount = Mathf.Max(1, stackCount); // 最小层数为1
                 // 是否刷新Duration
                 if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
                 {
                     RefreshDuration();
                 }
+
                 // 是否重置Period
                 if (Stacking.periodResetPolicy == PeriodResetPolicy.ResetOnSuccessfulApplication)
                 {
@@ -416,13 +461,12 @@ namespace GAS.Runtime
         {
             ActivationTime = Time.time;
         }
-        
+
         private void OnStackCountChange(int oldStackCount, int newStackCount)
         {
-            
             onStackCountChanged?.Invoke(oldStackCount, newStackCount);
         }
-        
+
         public void RegisterOnStackCountChanged(Action<int, int> callback)
         {
             onStackCountChanged += callback;
