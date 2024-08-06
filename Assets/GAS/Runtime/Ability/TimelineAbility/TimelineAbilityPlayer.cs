@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using GAS.General;
 using UnityEngine;
+
 //using UnityEngine.Profiling;
 
 namespace GAS.Runtime
@@ -33,9 +35,9 @@ namespace GAS.Runtime
         public InstantAbilityTask task;
     }
 
-    public class TimelineAbilityPlayer<T> where T : AbstractAbility
+    public class TimelineAbilityPlayer<AbilityT, AssetT> where AssetT : TimelineAbilityAssetBase where AbilityT : TimelineAbilityT<AssetT>
     {
-        private readonly TimelineAbilitySpecT<T> _abilitySpec;
+        private readonly TimelineAbilitySpecT<AbilityT, AssetT> _abilitySpec;
         private readonly List<RuntimeBuffClip> _cacheBuffGameplayEffectTrack = new();
 
         private readonly List<RuntimeDurationCueClip> _cacheDurationalCueTrack = new();
@@ -53,8 +55,9 @@ namespace GAS.Runtime
 
         private int _currentFrame;
         private float _playTotalTime;
+        private float _speed = 1;
 
-        public TimelineAbilityPlayer(TimelineAbilitySpecT<T> abilitySpec)
+        public TimelineAbilityPlayer(TimelineAbilitySpecT<AbilityT, AssetT> abilitySpec)
         {
             _abilitySpec = abilitySpec;
             Cache();
@@ -62,9 +65,19 @@ namespace GAS.Runtime
 
         public bool IsPlaying { get; private set; }
 
-        public TimelineAbilityAssetBase AbilityAsset => _abilitySpec.Ability.DataReference as TimelineAbilityAssetBase;
-        private int FrameCount => AbilityAsset.FrameCount;
-        private int FrameRate => GASTimer.FrameRate;
+        public float Speed
+        {
+            get => _speed;
+            private set => _speed = Math.Max(0, value);
+        }
+
+        public AssetT AbilityAsset => _abilitySpec.Data.AbilityAsset;
+        public int FrameCount => AbilityAsset.FrameCount;
+        public int FrameRate => GASTimer.FrameRate;
+        /// <summary>
+        /// 不受播放速率影响的总时间
+        /// </summary>
+        public float TotalTime => (float)FrameCount / FrameRate;
 
         private void Cache()
         {
@@ -195,8 +208,9 @@ namespace GAS.Runtime
             }
         }
 
-        public void Play()
+        public void Play(float speed = 1)
         {
+            Speed = speed;
             _currentFrame = -1; // 为了播放第0帧
             _playTotalTime = 0;
             IsPlaying = true;
@@ -209,7 +223,7 @@ namespace GAS.Runtime
 
             foreach (var clip in _cacheDurationalCueTrack)
             {
-                if(_currentFrame <= clip.endFrame)
+                if (_currentFrame <= clip.endFrame)
                     clip.cueSpec.OnRemove();
             }
 
@@ -232,7 +246,7 @@ namespace GAS.Runtime
             if (!IsPlaying) return;
 
             _playTotalTime += Time.deltaTime;
-            var targetFrame = (int)(_playTotalTime * FrameRate);
+            var targetFrame = (int)(_playTotalTime * FrameRate * Speed);
 
             // 追帧
             while (_currentFrame < targetFrame)
@@ -255,9 +269,8 @@ namespace GAS.Runtime
         {
             IsPlaying = false;
 
-            if (!AbilityAsset.manualEndAbility)
+            if (!AbilityAsset.ManualEndAbility)
                 _abilitySpec.TryEndAbility();
-
         }
 
         /// <summary>
@@ -350,29 +363,29 @@ namespace GAS.Runtime
             // buff持续时间以Timeline配置时间为准（执行策略全部改为Infinite）
             // Profiler.BeginSample("TickFrame_BuffGameplayEffects");
             // {
-                foreach (var buffClip in _cacheBuffGameplayEffectTrack)
+            foreach (var buffClip in _cacheBuffGameplayEffectTrack)
+            {
+                if (frame == buffClip.startFrame)
                 {
-                    if (frame == buffClip.startFrame)
+                    //Profiler.BeginSample("buffGameplayEffect.Start");
+                    var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
+                    buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
+                    buffClip.buffSpec = buffSpec;
+                    //Profiler.EndSample();
+                }
+
+                if (frame == buffClip.endFrame)
+                {
+                    if (buffClip.buffSpec != null)
                     {
-                        //Profiler.BeginSample("buffGameplayEffect.Start");
-                        var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
-                        buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
-                        buffClip.buffSpec = buffSpec;
+                        //Profiler.BeginSample("buffGameplayEffect.End");
+                        _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
                         //Profiler.EndSample();
                     }
 
-                    if (frame == buffClip.endFrame)
-                    {
-                        if (buffClip.buffSpec != null)
-                        {
-                            //Profiler.BeginSample("buffGameplayEffect.End");
-                            _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
-                            //Profiler.EndSample();
-                        }
-
-                        buffClip.buffSpec = null;
-                    }
+                    buffClip.buffSpec = null;
                 }
+            }
             // }
             // Profiler.EndSample();
         }
@@ -381,29 +394,29 @@ namespace GAS.Runtime
         {
             // Profiler.BeginSample("TickFrame_OngoingTasks");
             // {
-                foreach (var taskClip in _cacheOngoingTaskTrack)
+            foreach (var taskClip in _cacheOngoingTaskTrack)
+            {
+                if (frame == taskClip.startFrame)
                 {
-                    if (frame == taskClip.startFrame)
-                    {
-                        //Profiler.BeginSample("Ongoing Task.OnStart()");
-                        taskClip.task.OnStart(frame);
-                        //Profiler.EndSample();
-                    }
-
-                    if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
-                    {
-                        //Profiler.BeginSample("Ongoing Task.OnTick()");
-                        taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
-                        //Profiler.EndSample();
-                    }
-
-                    if (frame == taskClip.endFrame)
-                    {
-                        //Profiler.BeginSample("Ongoing Task.OnEnd()");
-                        taskClip.task.OnEnd(frame);
-                        //Profiler.EndSample();
-                    }
+                    //Profiler.BeginSample("Ongoing Task.OnStart()");
+                    taskClip.task.OnStart(frame);
+                    //Profiler.EndSample();
                 }
+
+                if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
+                {
+                    //Profiler.BeginSample("Ongoing Task.OnTick()");
+                    taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
+                    //Profiler.EndSample();
+                }
+
+                if (frame == taskClip.endFrame)
+                {
+                    //Profiler.BeginSample("Ongoing Task.OnEnd()");
+                    taskClip.task.OnEnd(frame);
+                    //Profiler.EndSample();
+                }
+            }
             // }
             // Profiler.EndSample();
         }

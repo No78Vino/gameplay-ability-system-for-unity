@@ -140,6 +140,7 @@
         public const string ABILITY_EFFECT_COST="消耗效果";
         public const string ABILITY_MANUAL_ENDABILITY = "手动结束能力";
         public const string BUTTON_CHECK_TIMELINE_ABILITY = "查看/编辑能力时间轴";
+        public const string ABILITY_PLAY_RATE = "播放速率";
 
         #endregion
         

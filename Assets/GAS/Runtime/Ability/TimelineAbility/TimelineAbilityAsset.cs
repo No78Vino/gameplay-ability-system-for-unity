@@ -5,6 +5,7 @@ using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime
 {
@@ -30,11 +31,21 @@ namespace GAS.Runtime
                     $"调用\"GAS.Editor.AbilityTimelineEditorWindow\"类的静态方法ShowWindow(TimelineAbilityAsset asset)失败, 代码可能被重构了: {e}");
             }
         }
+        
+        /// <summary>
+        /// 播放速率, 常用于加速或减速播放(例如基于攻击速度的技能, 播放速率随攻击速度变化)
+        /// </summary>
+        [TabGroup("Data/H1/V1", "Timeline")]
+        [LabelText(GASTextDefine.ABILITY_PLAY_RATE)]
+        [LabelWidth(100)]
+        [MinValue(0)]
+        public float Speed = 1.0f;
 
         [TabGroup("Data/H1/V1", "Timeline")]
         [LabelText(GASTextDefine.ABILITY_MANUAL_ENDABILITY)]
         [LabelWidth(100)]
-        public bool manualEndAbility;
+        [FormerlySerializedAs("manualEndAbility")]
+        public bool ManualEndAbility;
 
         [HideInInspector]
         public int FrameCount; // 能力结束时间

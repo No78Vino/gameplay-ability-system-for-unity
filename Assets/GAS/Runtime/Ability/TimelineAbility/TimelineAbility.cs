@@ -9,18 +9,25 @@ namespace GAS.Runtime
         }
     }
 
-    public abstract class TimelineAbilitySpecT<T> : AbilitySpec<T> where T : AbstractAbility
+    public abstract class TimelineAbilitySpecT<AbilityT, AssetT> : AbilitySpec<AbilityT> where AbilityT : TimelineAbilityT<AssetT> where AssetT : TimelineAbilityAssetBase
     {
-        protected TimelineAbilityPlayer<T> _player;
+        protected TimelineAbilityPlayer<AbilityT, AssetT> _player;
+
+        public int FrameCount => _player.FrameCount;
+        public int FrameRate => _player.FrameRate;
+        /// <summary>
+        /// 不受播放速率影响的总时间
+        /// </summary>
+        public float TotalTime => _player.TotalTime;
 
         /// <summary>
         /// 向性技能的作用目标
         /// </summary>
         public AbilitySystemComponent Target { get; private set; }
 
-        protected TimelineAbilitySpecT(T ability, AbilitySystemComponent owner) : base(ability, owner)
+        protected TimelineAbilitySpecT(AbilityT ability, AbilitySystemComponent owner) : base(ability, owner)
         {
-            _player = new TimelineAbilityPlayer<T>(this);
+            _player = new(this);
         }
 
         public void SetAbilityTarget(AbilitySystemComponent mainTarget)
@@ -30,7 +37,13 @@ namespace GAS.Runtime
 
         public override void ActivateAbility(params object[] args)
         {
-            _player.Play();
+            var playSpeed = GetPlaySpeed();
+            _player.Play(playSpeed);
+        }
+        
+        public virtual float GetPlaySpeed()
+        {
+            return Data.AbilityAsset.Speed;
         }
 
         public override void CancelAbility()
@@ -52,11 +65,11 @@ namespace GAS.Runtime
     }
 
     /// <summary>
-    /// 这是一个最朴素的TimelineAbility实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
+    /// 这是一个最朴素的TimelineAbility实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT和TimelineAbilitySpecT为基类
     /// </summary>
-    public sealed class TimelineAbility : TimelineAbilityT<TimelineAbilityAssetBase>
+    public sealed class TimelineAbility : TimelineAbilityT<TimelineAbilityAsset>
     {
-        public TimelineAbility(TimelineAbilityAssetBase abilityAsset) : base(abilityAsset)
+        public TimelineAbility(TimelineAbilityAsset abilityAsset) : base(abilityAsset)
         {
         }
 
@@ -67,11 +80,11 @@ namespace GAS.Runtime
     }
 
     /// <summary>
-    /// 这是一个最朴素的TimelineAbilitySpec实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
+    /// 这是一个最朴素的TimelineAbilitySpec实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT和TimelineAbilitySpecT为基类
     /// </summary>
-    public sealed class TimelineAbilitySpec : TimelineAbilitySpecT<TimelineAbility>
+    public sealed class TimelineAbilitySpec : TimelineAbilitySpecT<TimelineAbilityT<TimelineAbilityAsset>, TimelineAbilityAsset>
     {
-        public TimelineAbilitySpec(TimelineAbility ability, AbilitySystemComponent owner) : base(ability, owner)
+        public TimelineAbilitySpec(TimelineAbilityT<TimelineAbilityAsset> ability, AbilitySystemComponent owner) : base(ability, owner)
         {
         }
     }
