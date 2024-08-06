@@ -293,7 +293,7 @@ namespace GAS.General
                 if (_data.Priority != value)
                 {
                     _data = new(Key, value, Value);
-                    if (IsEnabled)
+                    if (Enabled)
                     {
                         PriorityValue?.AddOrSet(Key, Priority, Value);
                     }
@@ -309,7 +309,7 @@ namespace GAS.General
                 if (!EqualityComparer<T>.Default.Equals(_data.Value, value))
                 {
                     _data = new(Key, Priority, value);
-                    if (IsEnabled)
+                    if (Enabled)
                     {
                         PriorityValue?.AddOrSet(Key, Priority, Value);
                     }
@@ -317,31 +317,34 @@ namespace GAS.General
             }
         }
 
-        private bool _isEnabled;
+        private bool _enabled;
 
-        public bool IsEnabled
+        public bool Enabled
         {
-            get => _isEnabled;
+            get => _enabled;
             set
             {
-                if (_isEnabled != value)
+                if (_enabled != value)
                 {
-                    _isEnabled = value;
-                    if (_isEnabled) PriorityValue?.AddOrSet(Key, Priority, Value);
+                    _enabled = value;
+                    if (_enabled) PriorityValue?.AddOrSet(Key, Priority, Value);
                     else PriorityValue?.Remove(Key);
                 }
             }
         }
 
-        public PriorityValueToggle(PriorityValue<T> priorityValue, string key, int priority, T value)
+        public PriorityValueToggle(PriorityValue<T> priorityValue, string key, int priority, T value, bool enableImmediately = false)
         {
             PriorityValue = priorityValue;
             _data = new(key, priority, value);
+            
+            if (enableImmediately)
+                Enabled = true;
         }
 
         public void Dispose()
         {
-            IsEnabled = false;
+            Enabled = false;
         }
     }
 }
