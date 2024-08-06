@@ -7,12 +7,8 @@ namespace GAS.RuntimeWithECS.Core
     {
         public int FrameCount;
     }
-    
-    public struct TurnTimer : IComponentData
-    {
-        public int Count;
-    }
-    
+        
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))] 
     public partial struct GASTimerSystem : ISystem
     {
         [BurstCompile]
@@ -24,7 +20,6 @@ namespace GAS.RuntimeWithECS.Core
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            
         }
 
         [BurstCompile]
