@@ -14,12 +14,17 @@ namespace GAS.RuntimeWithECS.Core
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            
+            state.RequireForUpdate<GASRunningTagComponent>();
+            state.RequireForUpdate<GlobalFrameTimer>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            foreach (var timer in SystemAPI.Query<RefRW<GlobalFrameTimer>>())
+            {
+                timer.ValueRW.FrameCount++;
+            }
         }
 
         [BurstCompile]
