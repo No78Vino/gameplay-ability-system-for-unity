@@ -99,6 +99,13 @@ namespace GAS.Runtime
         [PropertyOrder(4)]
         public GameplayEffectAsset PeriodExecution;
 
+        [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
+        [LabelText(GASTextDefine.LABLE_GE_SnapshotPolicy, SdfIconType.Camera)]
+        [LabelWidth(WIDTH_LABEL)]
+        [PropertyOrder(5)]
+        [EnumToggleButtons]
+        public GameplayEffectSnapshotPolicy SnapshotPolicy = GameplayEffectSnapshotPolicy.None;
+
         #endregion Policy
 
         #region Stack
@@ -331,6 +338,8 @@ namespace GAS.Runtime
 
         public IGameplayEffectData GetPeriodExecution() => PeriodExecution;
 
+        public GameplayEffectSnapshotPolicy GetSnapshotPolicy() => SnapshotPolicy;
+
         public GameplayTag[] GetAssetTags() => AssetTags;
 
         public GameplayTag[] GetGrantedTags() => GrantedTags;
@@ -364,5 +373,30 @@ namespace GAS.Runtime
         public GameplayEffectStacking GetStacking() => Stacking.ToRuntimeData();
 
         #endregion IGameplayEffectData
+
+        #region shared GameplayEffect instance
+
+        /// <summary>
+        /// 共享实例, 一个GameplayEffectAsset对应一个共享实例, 首次访问时创建
+        /// <remarks>
+        /// <para>优点: 通过共享实例, 可以减少GameplayEffect的实例化次数, 减少内存开销, 同时也可以减少GC的产生, 提高性能</para>
+        /// <para>缺点: Editor下实时修改GameplayEffectAsset无法实时生效, 因为共享实例一旦创建, 就不会再改变, 可以设置GasRuntimeSettings.DisableGameplayEffectSharedInstance来禁用Editor模式下的SharedInstance</para>
+        /// </remarks> 
+        /// </summary>
+        public GameplayEffect SharedInstance
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (GasRuntimeSettings.DisableGameplayEffectSharedInstance)
+                    return new GameplayEffect(this);
+#endif
+                return _sharedInstance ??= new GameplayEffect(this);
+            }
+        }
+
+        private GameplayEffect _sharedInstance;
+
+        #endregion shared GameplayEffect instance
     }
 }

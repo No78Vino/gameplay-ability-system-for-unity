@@ -6,6 +6,8 @@ namespace GAS.Runtime
     {
         private string Name { get; }
 
+        public GameplayEffectSnapshotPolicy SnapshotPolicy { get; set; } = GameplayEffectSnapshotPolicy.None;
+
         public GameplayTag[] ApplicationRequiredTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] ApplicationImmunityTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] RemoveGameplayEffectsWithTags { get; set; } = Array.Empty<GameplayTag>();
@@ -40,6 +42,11 @@ namespace GAS.Runtime
         public virtual IGameplayEffectData GetPeriodExecution()
         {
             return null;
+        }
+
+        public GameplayEffectSnapshotPolicy GetSnapshotPolicy()
+        {
+            return SnapshotPolicy;
         }
 
         public virtual GameplayTag[] GetAssetTags()

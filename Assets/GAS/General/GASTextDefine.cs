@@ -72,6 +72,7 @@
         public const string LABLE_GE_DURATION = "持续时间";
         public const string LABLE_GE_INTERVAL = "间隔时间";
         public const string LABLE_GE_EXEC = "间隔效果";
+        public const string LABLE_GE_SnapshotPolicy = "快照策略";
         public const string TITLE_GE_GrantedAbilities = "授予能力(Ability)";
         public const string TITLE_GE_MOD = "修改器Modifier";
         public const string TITLE_GE_TAG = "标签Tag";

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -148,25 +149,26 @@ namespace GAS.Runtime
 
         public GrantedAbilitySpecFromEffect CreateSpec(GameplayEffectSpec sourceEffectSpec)
         {
-            var grantedAbility = new GrantedAbilitySpecFromEffect(this, sourceEffectSpec);
-            return grantedAbility;
+            var grantedAbilitySpecFromEffect = ObjectPool.Instance.Fetch<GrantedAbilitySpecFromEffect>();
+            grantedAbilitySpecFromEffect.Awake(this, sourceEffectSpec);
+            return grantedAbilitySpecFromEffect;
         }
     }
 
     public class GrantedAbilitySpecFromEffect
     {
-        public readonly GrantedAbilityFromEffect GrantedAbility;
-        public readonly GameplayEffectSpec SourceEffectSpec;
-        public readonly AbilitySystemComponent Owner;
+        public GrantedAbilityFromEffect GrantedAbility { get; private set; }
+        public GameplayEffectSpec SourceEffectSpec { get; private set; }
+        public AbilitySystemComponent Owner { get; private set; }
 
-        public readonly string AbilityName;
+        public string AbilityName { get; private set; }
         public int AbilityLevel => GrantedAbility.AbilityLevel;
         public GrantedAbilityActivationPolicy ActivationPolicy => GrantedAbility.ActivationPolicy;
         public GrantedAbilityDeactivationPolicy DeactivationPolicy => GrantedAbility.DeactivationPolicy;
         public GrantedAbilityRemovePolicy RemovePolicy => GrantedAbility.RemovePolicy;
         public AbilitySpec AbilitySpec => Owner.AbilityContainer.AbilitySpecs()[AbilityName];
 
-        public GrantedAbilitySpecFromEffect(GrantedAbilityFromEffect grantedAbility,
+        public void Awake(GrantedAbilityFromEffect grantedAbility,
             GameplayEffectSpec sourceEffectSpec)
         {
             GrantedAbility = grantedAbility;
@@ -200,6 +202,14 @@ namespace GAS.Runtime
                     AbilitySpec.RegisterCancelAbility(RemoveSelf);
                     break;
             }
+        }
+
+        public void Release()
+        {
+            GrantedAbility = default;
+            Owner = default;
+            AbilityName = default;
+            SourceEffectSpec = default;
         }
 
         private void RemoveSelf()

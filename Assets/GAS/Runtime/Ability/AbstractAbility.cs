@@ -28,8 +28,8 @@ namespace GAS.Runtime
             Tag = new AbilityTagContainer(
                 DataReference.AssetTags, DataReference.CancelAbilityTags, DataReference.BlockAbilityTags,
                 DataReference.ActivationOwnedTags, DataReference.ActivationRequiredTags, DataReference.ActivationBlockedTags);
-            Cooldown = DataReference.Cooldown ? new GameplayEffect(DataReference.Cooldown) : default;
-            Cost = DataReference.Cost ? new GameplayEffect(DataReference.Cost) : default;
+            Cooldown = DataReference.Cooldown ? DataReference.Cooldown.SharedInstance : default;
+            Cost = DataReference.Cost ? DataReference.Cost.SharedInstance: default;
 
             CooldownTime = DataReference.CooldownTime;
         }

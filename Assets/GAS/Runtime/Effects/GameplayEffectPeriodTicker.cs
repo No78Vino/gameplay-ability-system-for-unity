@@ -1,16 +1,25 @@
-﻿using UnityEngine;
+﻿using GAS.General;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class GameplayEffectPeriodTicker
+    public class GameplayEffectPeriodTicker : IPool
     {
-        private float _periodRemaining;
-        private readonly GameplayEffectSpec _spec;
+        public bool IsFromPool { get; set; }
 
-        public GameplayEffectPeriodTicker(GameplayEffectSpec spec)
+        private float _periodRemaining;
+        private GameplayEffectSpec _spec;
+
+        public void Awake(GameplayEffectSpec spec)
         {
             _spec = spec;
             _periodRemaining = Period;
+        }
+
+        public void Release()
+        {
+            _spec = default;
+            _periodRemaining = default;
         }
 
         private float Period => _spec.GameplayEffect.Period;

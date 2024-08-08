@@ -6,6 +6,7 @@
         EffectsDurationPolicy GetDurationPolicy();
         float GetDuration();
         float GetPeriod();
+        GameplayEffectSnapshotPolicy GetSnapshotPolicy();
 
         /// <summary>
         /// 必须是Instant型的GameplayEffect

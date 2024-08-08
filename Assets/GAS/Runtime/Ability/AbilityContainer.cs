@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GAS.General;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -6,8 +7,7 @@ namespace GAS.Runtime
     public class AbilityContainer
     {
         private readonly AbilitySystemComponent _owner;
-        private readonly Dictionary<string, AbilitySpec> _abilities = new Dictionary<string, AbilitySpec>();
-        private readonly List<AbilitySpec> _cachedAbilities = new List<AbilitySpec>();
+        private readonly Dictionary<string, AbilitySpec> _abilities = new ();
 
         public AbilityContainer(AbilitySystemComponent owner)
         {
@@ -16,14 +16,16 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            _cachedAbilities.AddRange(_abilities.Values);
+            var abilitySpecs = ObjectPool.Instance.Fetch<List<AbilitySpec>>();
+            abilitySpecs.AddRange(_abilities.Values);
 
-            foreach (var abilitySpec in _cachedAbilities)
+            foreach (var abilitySpec in abilitySpecs)
             {
                 abilitySpec.Tick();
             }
 
-            _cachedAbilities.Clear();
+            abilitySpecs.Clear();
+            ObjectPool.Instance.Recycle(abilitySpecs);
         }
 
         public void GrantAbility(AbstractAbility ability)

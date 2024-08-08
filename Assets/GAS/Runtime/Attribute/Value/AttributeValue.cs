@@ -69,7 +69,9 @@ namespace GAS.Runtime
 
         public bool IsSupportOperation(GEOperation operation)
         {
-            return SupportedOperation.HasFlag((SupportedOperation)(1 << (int)operation));
+            // var isSupportOperation = SupportedOperation.HasFlag((SupportedOperation)(1 << (int)operation)); // Enum.HasFlag() 有很严重的GC!!!
+            var isSupportOperation = ((byte)SupportedOperation & (1 << (byte)operation)) != 0;
+            return isSupportOperation;
         }
     }
 }

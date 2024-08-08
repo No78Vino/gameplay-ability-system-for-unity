@@ -66,6 +66,12 @@ namespace GAS.Runtime
                 if (captureType == GEAttributeCaptureType.SnapShot)
                 {
                     var snapShot = spec.SnapshotSourceAttributes;
+                    if (snapShot == null)
+                    {
+                        Debug.LogError($"Source snapshot not enabled for spec: '{spec.GameplayEffect.GameplayEffectName}'. Please verify snapshot policy: '{spec.SnapshotPolicy}'.");
+                        return 0;
+                    }
+
                     var attribute = snapShot[attributeName];
                     return attribute * k + b;
                 }
@@ -79,6 +85,12 @@ namespace GAS.Runtime
             if (captureType == GEAttributeCaptureType.SnapShot)
             {
                 var snapShot = spec.SnapshotTargetAttributes;
+                if (snapShot == null)
+                {
+                    Debug.LogError($"Target snapshot not enabled for spec: '{spec.GameplayEffect.GameplayEffectName}'. Please verify snapshot policy: '{spec.SnapshotPolicy}'.");
+                    return 0;
+                }
+
                 var attribute = snapShot[attributeName];
                 return attribute * k + b;
             }

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using GAS.General;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -15,6 +18,22 @@ namespace GAS.Runtime
         Duration
     }
 
+    [Flags]
+    public enum GameplayEffectSnapshotPolicy
+    {
+        [LabelText("禁用", SdfIconType.XCircleFill)]
+        None = 0,
+
+        [LabelText("来源", SdfIconType.Magic)]
+        Source = 1 << 0,
+
+        [LabelText("目标", SdfIconType.Person)]
+        Target = 1 << 1,
+
+        [LabelText("全部", SdfIconType.People)]
+        All = Source | Target
+    }
+
     public class GameplayEffect
     {
         public readonly string GameplayEffectName;
@@ -22,6 +41,7 @@ namespace GAS.Runtime
         public readonly float Duration; // -1 represents infinite duration
         public readonly float Period;
         public readonly GameplayEffect PeriodExecution;
+        public readonly GameplayEffectSnapshotPolicy SnapshotPolicy;
         public readonly GameplayEffectTagContainer TagContainer;
 
         // Cues
@@ -51,7 +71,8 @@ namespace GAS.Runtime
             AbilitySystemComponent owner,
             float level = 1)
         {
-            var spec = new GameplayEffectSpec(this);
+            var spec = ObjectPool.Instance.Fetch<GameplayEffectSpec>();
+            spec.Awake(this);
             spec.Init(creator, owner, level);
             return spec;
         }
@@ -62,7 +83,8 @@ namespace GAS.Runtime
         /// <returns></returns>
         public GameplayEffectSpec CreateSpec()
         {
-            var spec = new GameplayEffectSpec(this);
+            var spec = ObjectPool.Instance.Fetch<GameplayEffectSpec>();
+            spec.Awake(this);
             return spec;
         }
 
@@ -70,19 +92,20 @@ namespace GAS.Runtime
         {
             if (data is null)
             {
-                throw new System.Exception($"GE data can't be null!");
+                throw new Exception($"GE data can't be null!");
             }
 
             GameplayEffectName = data.GetDisplayName();
             DurationPolicy = data.GetDurationPolicy();
             Duration = data.GetDuration();
             Period = data.GetPeriod();
+            SnapshotPolicy = data.GetSnapshotPolicy();
             TagContainer = new GameplayEffectTagContainer(data);
             var periodExecutionGe = data.GetPeriodExecution();
 #if UNITY_EDITOR
             if (periodExecutionGe != null && periodExecutionGe.GetDurationPolicy() != EffectsDurationPolicy.Instant)
             {
-                UnityEngine.Debug.LogError($"PeriodExecution of {GameplayEffectName} should be Instant type.");
+                Debug.LogError($"PeriodExecution of {GameplayEffectName} should be Instant type.");
             }
 #endif
             PeriodExecution = periodExecutionGe != null ? new GameplayEffect(periodExecutionGe) : null;
@@ -98,16 +121,33 @@ namespace GAS.Runtime
             Stacking = data.GetStacking();
         }
 
-        private static GrantedAbilityFromEffect[] GetGrantedAbilities(IEnumerable<GrantedAbilityConfig> grantedAbilities)
+        public void Release()
         {
-            var grantedAbilityList = new List<GrantedAbilityFromEffect>();
-            foreach (var grantedAbilityConfig in grantedAbilities)
+            PeriodExecution?.Release();
+            GrantedAbilityFromEffectArrayPool.Recycle(GrantedAbilities);
+        }
+
+        private static readonly ArrayPool<GrantedAbilityFromEffect> GrantedAbilityFromEffectArrayPool = new();
+
+        private static GrantedAbilityFromEffect[] GetGrantedAbilities(IReadOnlyCollection<GrantedAbilityConfig> grantedAbilities)
+        {
+            if (grantedAbilities.Count == 0)
             {
-                if (grantedAbilityConfig.AbilityAsset == null) continue;
-                grantedAbilityList.Add(new GrantedAbilityFromEffect(grantedAbilityConfig));
+                return Array.Empty<GrantedAbilityFromEffect>();
             }
 
-            return grantedAbilityList.ToArray();
+            var grantedAbilityFromEffects = ObjectPool.Instance.Fetch<List<GrantedAbilityFromEffect>>();
+            foreach (var grantedAbilityConfig in grantedAbilities)
+            {
+                if (grantedAbilityConfig.AbilityAsset != null)
+                    grantedAbilityFromEffects.Add(new GrantedAbilityFromEffect(grantedAbilityConfig));
+            }
+
+            var ret = GrantedAbilityFromEffectArrayPool.Fetch(grantedAbilityFromEffects.Count);
+            grantedAbilityFromEffects.CopyTo(ret);
+            grantedAbilityFromEffects.Clear();
+            ObjectPool.Instance.Recycle(grantedAbilityFromEffects);
+            return ret;
         }
 
         public bool CanApplyTo(IAbilitySystemComponent target)

@@ -113,7 +113,7 @@ namespace GAS.Runtime
             overflowEffects = new GameplayEffect[overflowEffectAssets.Length];
             for (var i = 0; i < overflowEffectAssets.Length; ++i)
             {
-                overflowEffects[i] = new GameplayEffect(overflowEffectAssets[i]);
+                overflowEffects[i] = overflowEffectAssets[i].SharedInstance;
             }
         }
 

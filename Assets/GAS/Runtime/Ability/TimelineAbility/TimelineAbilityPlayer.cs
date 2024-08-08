@@ -74,6 +74,7 @@ namespace GAS.Runtime
         public AssetT AbilityAsset => _abilitySpec.Data.AbilityAsset;
         public int FrameCount => AbilityAsset.FrameCount;
         public int FrameRate => GASTimer.FrameRate;
+
         /// <summary>
         /// 不受播放速率影响的总时间
         /// </summary>
@@ -172,7 +173,7 @@ namespace GAS.Runtime
                         {
                             startFrame = clipEvent.startFrame,
                             endFrame = clipEvent.EndFrame,
-                            buff = new GameplayEffect(clipEvent.gameplayEffect),
+                            buff = clipEvent.gameplayEffect.SharedInstance,
                             buffSpec = null
                         };
                         _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
@@ -204,6 +205,7 @@ namespace GAS.Runtime
         {
             foreach (var runtimeBuffClip in _cacheBuffGameplayEffectTrack)
             {
+                runtimeBuffClip.buffSpec.Recycle();
                 runtimeBuffClip.buffSpec = null;
             }
         }
@@ -230,7 +232,11 @@ namespace GAS.Runtime
             foreach (var clip in _cacheBuffGameplayEffectTrack)
             {
                 if (clip.buffSpec != null)
+                {
                     _abilitySpec.Owner.RemoveGameplayEffect(clip.buffSpec);
+                    clip.buffSpec.Recycle();
+                    clip.buffSpec = null;
+                }
             }
 
             foreach (var clip in _cacheOngoingTaskTrack)
@@ -316,7 +322,7 @@ namespace GAS.Runtime
                     {
                         foreach (var gea in mark.gameplayEffectAssets)
                         {
-                            var ge = new GameplayEffect(gea);
+                            var ge = gea.SharedInstance;
                             _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
                         }
                     }
@@ -381,9 +387,9 @@ namespace GAS.Runtime
                         //Profiler.BeginSample("buffGameplayEffect.End");
                         _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
                         //Profiler.EndSample();
+                        buffClip.buffSpec.Recycle();
+                        buffClip.buffSpec = null;
                     }
-
-                    buffClip.buffSpec = null;
                 }
             }
             // }

@@ -1,27 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.General;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class GameplayEffectSpec
+    public class GameplayEffectSpec : IPool
     {
-        private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
-        private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
-        private List<GameplayCueDurationalSpec> _cueDurationalSpecs = new List<GameplayCueDurationalSpec>();
+        private static ArrayPool<GrantedAbilitySpecFromEffect> _grantedAbilitySpecFromEffectArrayPool = new();
+
+        private readonly Dictionary<GameplayTag, float> _valueMapWithTag = new();
+        private readonly Dictionary<string, float> _valueMapWithName = new();
+        private readonly List<GameplayCueDurationalSpec> _cueDurationalSpecs = new();
 
         /// <summary>
         /// The execution type of onImmunity is one shot.
         /// </summary>
-#pragma warning disable CS0067 // 事件从未使用过
+#pragma warning disable CS0414 // The field 'GameplayEffectSpec.onImmunity' is assigned but its value is never used
         public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
-#pragma warning restore CS0067 // 事件从未使用过
+#pragma warning restore CS0414
 
         public event Action<int, int> onStackCountChanged;
 
-
-        public GameplayEffectSpec(GameplayEffect gameplayEffect)
+        [Flags]
+        public enum Status : byte
         {
+            None = 0,
+            IsFromPool = 1 << 0,
+            IsReleased = 1 << 1,
+        }
+
+        private Status _status = Status.None;
+
+        public bool IsFromPool
+        {
+            get => (_status & Status.IsFromPool) == Status.IsFromPool;
+            set
+            {
+                if (value)
+                {
+                    _status |= Status.IsFromPool;
+                }
+                else
+                {
+                    _status &= ~Status.IsFromPool;
+                }
+            }
+        }
+
+        public bool IsReleased
+        {
+            get => (_status & Status.IsReleased) == Status.IsReleased;
+            set
+            {
+                if (value)
+                {
+                    _status |= Status.IsReleased;
+                }
+                else
+                {
+                    _status &= ~Status.IsReleased;
+                }
+            }
+        }
+
+        public void Awake(GameplayEffect gameplayEffect)
+        {
+            IsReleased = false;
+
             GameplayEffect = gameplayEffect;
             Duration = GameplayEffect.Duration;
             DurationPolicy = GameplayEffect.DurationPolicy;
@@ -29,8 +75,83 @@ namespace GAS.Runtime
             Modifiers = GameplayEffect.Modifiers;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
-                PeriodTicker = new GameplayEffectPeriodTicker(this);
+                PeriodTicker = ObjectPool.Instance.Fetch<GameplayEffectPeriodTicker>();
+                PeriodTicker.Awake(this);
             }
+        }
+
+        public void Recycle()
+        {
+            if (IsReleased == false)
+            {
+                IsReleased = true;
+
+                GameplayEffect = default;
+                ActivationTime = default;
+                Level = default;
+                Source = default;
+                Owner = default;
+                IsApplied = default;
+                IsActive = default;
+                if (PeriodTicker != null)
+                {
+                    PeriodTicker.Release();
+                    ObjectPool.Instance.Recycle(PeriodTicker);
+                    PeriodTicker = default;
+                }
+
+                Duration = default;
+                DurationPolicy = default;
+                PeriodExecution?.Recycle();
+                PeriodExecution = default;
+                Modifiers = default;
+
+                if (GrantedAbilitySpec != null)
+                {
+                    for (var i = 0; i < GrantedAbilitySpec.Length; ++i)
+                    {
+                        var grantedAbilitySpecFromEffect = GrantedAbilitySpec[i];
+                        if (grantedAbilitySpecFromEffect != null)
+                        {
+                            grantedAbilitySpecFromEffect.Release();
+                            ObjectPool.Instance.Recycle(grantedAbilitySpecFromEffect);
+                            GrantedAbilitySpec[i] = null;
+                        }
+                    }
+
+                    _grantedAbilitySpecFromEffectArrayPool.Recycle(GrantedAbilitySpec);
+                    GrantedAbilitySpec = default;
+                }
+
+                Stacking = default;
+
+                // 注意: SnapshotSourceAttributes 和 SnapshotTargetAttributes 可能是同一个对象
+                if (SnapshotSourceAttributes != null)
+                {
+                    SnapshotSourceAttributes.Clear();
+                    ObjectPool.Instance.Recycle(SnapshotSourceAttributes);
+                }
+
+                if (SnapshotTargetAttributes != null && SnapshotSourceAttributes != SnapshotTargetAttributes)
+                {
+                    SnapshotTargetAttributes.Clear();
+                    ObjectPool.Instance.Recycle(SnapshotTargetAttributes);
+                }
+
+                SnapshotSourceAttributes = null;
+                SnapshotTargetAttributes = null;
+
+                StackCount = 1;
+
+                _valueMapWithTag.Clear();
+                _valueMapWithName.Clear();
+                _cueDurationalSpecs.Clear();
+
+                onImmunity = default;
+                onStackCountChanged = default;
+            }
+
+            ObjectPool.Instance.Recycle(this);
         }
 
         public void Init(AbilitySystemComponent source, AbilitySystemComponent owner, float level = 1)
@@ -47,14 +168,14 @@ namespace GAS.Runtime
             CaptureAttributesSnapshot();
         }
 
-        public GameplayEffect GameplayEffect { get; }
+        public GameplayEffect GameplayEffect { get; private set; }
         public float ActivationTime { get; private set; }
         public float Level { get; private set; }
         public AbilitySystemComponent Source { get; private set; }
         public AbilitySystemComponent Owner { get; private set; }
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
-        public GameplayEffectPeriodTicker PeriodTicker { get; }
+        public GameplayEffectPeriodTicker PeriodTicker { get; private set; }
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
         public GameplayEffectSpec PeriodExecution { get; private set; }
@@ -62,7 +183,7 @@ namespace GAS.Runtime
         public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
         public GameplayEffectStacking Stacking { get; private set; }
 
-
+        public GameplayEffectSnapshotPolicy SnapshotPolicy => GameplayEffect.SnapshotPolicy;
         public Dictionary<string, float> SnapshotSourceAttributes { get; private set; }
         public Dictionary<string, float> SnapshotTargetAttributes { get; private set; }
 
@@ -102,6 +223,7 @@ namespace GAS.Runtime
 
         public void SetPeriodExecution(GameplayEffectSpec periodExecution)
         {
+            PeriodExecution?.Recycle();
             PeriodExecution = periodExecution;
         }
 
@@ -112,7 +234,7 @@ namespace GAS.Runtime
 
         public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbility)
         {
-            GrantedAbilitySpec = new GrantedAbilitySpecFromEffect[grantedAbility.Length];
+            GrantedAbilitySpec = _grantedAbilitySpecFromEffectArrayPool.Fetch(grantedAbility.Length);
             for (var i = 0; i < grantedAbility.Length; i++)
             {
                 GrantedAbilitySpec[i] = grantedAbility[i].CreateSpec(this);
@@ -217,7 +339,7 @@ namespace GAS.Runtime
                 {
                     foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
 
-                    _cueDurationalSpecs = null;
+                    _cueDurationalSpecs.Clear();
                 }
             }
             catch (Exception e)
@@ -333,8 +455,11 @@ namespace GAS.Runtime
 
         private void CaptureAttributesSnapshot()
         {
-            SnapshotSourceAttributes = Source.DataSnapshot();
-            SnapshotTargetAttributes = Source == Owner ? SnapshotSourceAttributes : Owner.DataSnapshot();
+            if ((SnapshotPolicy & GameplayEffectSnapshotPolicy.Source) != 0)
+                SnapshotSourceAttributes = Source.DataSnapshot();
+
+            if ((SnapshotPolicy & GameplayEffectSnapshotPolicy.Target) != 0)
+                SnapshotTargetAttributes = Source == Owner && SnapshotSourceAttributes != null ? SnapshotSourceAttributes : Owner.DataSnapshot();
         }
 
         public void RegisterValue(GameplayTag tag, float value)

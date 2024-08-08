@@ -4,14 +4,28 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
+    /// <summary>
+    /// <remarks>
+    /// 实现IEquatable接口, 避免当作为Dictionary的Key时产生GC Alloc.
+    /// </remarks>>
+    /// </summary>
     [Serializable]
-    public struct GameplayTag
+    public struct GameplayTag : IEquatable<GameplayTag>
     {
-        [SerializeField] private string _name;
-        [SerializeField] private int _hashCode;
-        [SerializeField] private string _shortName;
-        [SerializeField] private int[] _ancestorHashCodes;
-        [SerializeField] private string[] _ancestorNames;
+        [SerializeField]
+        private string _name;
+
+        [SerializeField]
+        private int _hashCode;
+
+        [SerializeField]
+        private string _shortName;
+
+        [SerializeField]
+        private int[] _ancestorHashCodes;
+
+        [SerializeField]
+        private string[] _ancestorNames;
 
         public GameplayTag(string name)
         {
@@ -63,6 +77,11 @@ namespace GAS.Runtime
         public bool IsDescendantOf(GameplayTag other)
         {
             return other._ancestorHashCodes.Contains(HashCode);
+        }
+
+        public bool Equals(GameplayTag other)
+        {
+            return this == other;
         }
 
         public override bool Equals(object obj)

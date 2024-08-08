@@ -9,15 +9,11 @@ namespace GAS.Runtime
     {
         private AbilitySystemComponent _owner;
 
-        private Dictionary<GameplayTag, List<object>> _dynamicAddedTags =
-            new Dictionary<GameplayTag, List<object>>();
+        private Dictionary<GameplayTag, List<object>> _dynamicAddedTags = new();
 
-        private Dictionary<GameplayTag, List<object>> _dynamicRemovedTags =
-            new Dictionary<GameplayTag, List<object>>();
+        private Dictionary<GameplayTag, List<object>> _dynamicRemovedTags = new();
 
-        private readonly List<GameplayTag> _fixedTags = new List<GameplayTag>();
-
-        private static Pool _pool = new Pool(typeof(List<object>), 1024);
+        private readonly List<GameplayTag> _fixedTags = new();
 
         public GameplayTagAggregator(AbilitySystemComponent owner)
         {
@@ -48,7 +44,7 @@ namespace GAS.Runtime
 
         public void OnEnable()
         {
-            Profiler.BeginSample($"[GC Mark] {nameof(GameplayTagAggregator)}::OnEnable()");
+            Profiler.BeginSample($"[GC Mark] {nameof(GameplayTagAggregator)}::OnEnable().OnTagIsDirty +=");
             // 有 GC, 无法避免
             OnTagIsDirty += _owner.GameplayEffectContainer.RefreshGameplayEffectState;
             Profiler.EndSample();
@@ -154,7 +150,7 @@ namespace GAS.Runtime
             }
             else
             {
-                var list = _pool.Get() as List<object>;
+                var list = ObjectPool.Instance.Fetch<List<object>>();
                 list.Add(source);
                 _dynamicAddedTags.Add(tag, list);
             }
@@ -169,17 +165,19 @@ namespace GAS.Runtime
             if (_dynamicAddedTags.TryGetValue(tag, out var addedTag))
             {
                 addedTag.Clear();
-                _pool.Return(addedTag);
+                ObjectPool.Instance.Recycle(addedTag);
                 dirty = _dynamicAddedTags.Remove(tag);
             }
 
             if (!IsTagInList(tag, _fixedTags)) return dirty;
 
             if (_dynamicRemovedTags.TryGetValue(tag, out var removedTag))
+            {
                 removedTag.Add(source);
+            }
             else
             {
-                var list = _pool.Get() as List<object>;
+                var list = ObjectPool.Instance.Fetch<List<object>>();
                 list.Add(source);
                 _dynamicRemovedTags.Add(tag, list);
             }
@@ -191,32 +189,22 @@ namespace GAS.Runtime
             GameplayTag tag)
         {
             var dirty = false;
-            Profiler.BeginSample("TryRemoveDynamicTag");
 
             if (source is GameplayEffectSpec || source is AbilitySpec)
             {
-                Profiler.BeginSample("[GC Mark]TryGetValue");
-                var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
-                Profiler.EndSample();
-                if (hasValue)
+                if (dynamicTag.TryGetValue(tag, out var tagList))
                 {
-                    Profiler.BeginSample("remove source from tag list");
                     tagList.Remove(source);
-                    Profiler.EndSample();
 
                     dirty = tagList.Count == 0;
                     if (dirty)
                     {
-                        _pool.Return(tagList);
-
-                        Profiler.BeginSample("[GC Mark]remove dynamic tag");
-                        dynamicTag.Remove(tag); // 有 GC
-                        Profiler.EndSample();
+                        ObjectPool.Instance.Recycle(tagList);
+                        dynamicTag.Remove(tag);
                     }
                 }
             }
 
-            Profiler.EndSample();
             return dirty;
         }
 

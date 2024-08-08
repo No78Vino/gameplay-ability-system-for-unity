@@ -50,6 +50,11 @@ namespace GAS.Runtime
         {
             Prepare();
         }
+        
+        private void OnDestroy()
+        {
+            AttributeSetContainer.OnDestroy();
+        }
 
         private void OnEnable()
         {
@@ -211,7 +216,12 @@ namespace GAS.Runtime
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
-        
+
+        public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
+        }
+
         public AbilitySpec GrantAbility(AbstractAbility ability)
         {
             AbilityContainer.GrantAbility(ability);
@@ -341,13 +351,17 @@ namespace GAS.Runtime
 
         private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec)
         {
-            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
+            var ges = GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
+            if (ges == null) effectSpec.Recycle();
+            return ges;
         }
 
         private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
             int effectLevel)
         {
-            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec, true, effectLevel);
+            var ges = GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec, true, effectLevel);
+            if (ges == null) effectSpec.Recycle();
+            return ges;
         }
 
         private void DisableAllAbilities()

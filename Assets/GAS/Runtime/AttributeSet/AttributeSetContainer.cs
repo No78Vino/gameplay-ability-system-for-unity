@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.General;
 
 namespace GAS.Runtime
 {
     public class AttributeSetContainer
     {
         private readonly AbilitySystemComponent _owner;
-        private readonly Dictionary<string, AttributeSet> _attributeSets = new Dictionary<string, AttributeSet>();
+        private readonly Dictionary<string, AttributeSet> _attributeSets = new();
 
-        private readonly Dictionary<AttributeBase, AttributeAggregator> _attributeAggregators =
-            new Dictionary<AttributeBase, AttributeAggregator>();
+        private readonly Dictionary<AttributeBase, AttributeAggregator> _attributeAggregators = new();
 
         public Dictionary<string, AttributeSet> Sets => _attributeSets;
 
@@ -109,14 +109,16 @@ namespace GAS.Runtime
                 : (float?)null;
         }
 
+
         public Dictionary<string, float> Snapshot()
         {
-            Dictionary<string, float> snapshot = new Dictionary<string, float>();
-            foreach (var attributeSet in _attributeSets)
+            var snapshot = ObjectPool.Instance.Fetch<Dictionary<string, float>>();
+            foreach (var kv in _attributeSets)
             {
-                foreach (var name in attributeSet.Value.AttributeNames)
+                var attributeSet = kv.Value;
+                foreach (var name in attributeSet.AttributeNames)
                 {
-                    var attr = attributeSet.Value[name];
+                    var attr = attributeSet[name];
                     snapshot.Add(attr.Name, attr.CurrentValue);
                 }
             }
@@ -134,6 +136,13 @@ namespace GAS.Runtime
         {
             foreach (var aggregator in _attributeAggregators)
                 aggregator.Value.OnEnable();
+        }
+
+        public void OnDestroy()
+        {
+            foreach (var aggregator in _attributeAggregators)
+                aggregator.Value.OnDestroy();
+            _attributeAggregators.Clear();
         }
     }
 }

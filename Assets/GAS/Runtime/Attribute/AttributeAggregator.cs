@@ -1,19 +1,37 @@
 using System;
 using System.Collections.Generic;
+using GAS.General;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
     public class AttributeAggregator
     {
+        private record ModifierSpec
+        {
+            public GameplayEffectSpec Spec { get; private set; }
+            public GameplayEffectModifier Modifier { get; private set; }
+
+            public void Init(GameplayEffectSpec spec, GameplayEffectModifier modifier)
+            {
+                Spec = spec;
+                Modifier = modifier;
+            }
+
+            public void Release()
+            {
+                Spec = default;
+                Modifier = default;
+            }
+        }
+
         AttributeBase _processedAttribute;
         AbilitySystemComponent _owner;
 
         /// <summary>
         ///  modifiers的顺序很重要，因为modifiers的执行是按照顺序来的。
         /// </summary>
-        private List<Tuple<GameplayEffectSpec, GameplayEffectModifier>> _modifierCache =
-            new List<Tuple<GameplayEffectSpec, GameplayEffectModifier>>();
+        private readonly List<ModifierSpec> _modifierCache = new();
 
         public AttributeAggregator(AttributeBase attribute, AbilitySystemComponent owner)
         {
@@ -35,14 +53,22 @@ namespace GAS.Runtime
             _owner.GameplayEffectContainer.UnregisterOnGameplayEffectContainerIsDirty(RefreshModifierCache);
         }
 
+        public void OnDestroy()
+        {
+            ReleaseModifiersCache();
+        }
+
         /// <summary>
         /// it's triggered only when the owner's gameplay effect is added or removed. 
         /// </summary>
         void RefreshModifierCache()
         {
+            // UnityEngine.Profiling.Profiler.BeginSample("AttributeAggregator.RefreshModifierCache");
+
             // 注销属性变化监听回调
             UnregisterAttributeChangedListen();
-            _modifierCache.Clear();
+            ReleaseModifiersCache();
+
             var gameplayEffects = _owner.GameplayEffectContainer.GameplayEffects();
             foreach (var geSpec in gameplayEffects)
             {
@@ -52,7 +78,9 @@ namespace GAS.Runtime
                     {
                         if (modifier.AttributeName == _processedAttribute.Name)
                         {
-                            _modifierCache.Add(new Tuple<GameplayEffectSpec, GameplayEffectModifier>(geSpec, modifier));
+                            var modifierSpec = ObjectPool.Instance.Fetch<ModifierSpec>();
+                            modifierSpec.Init(geSpec, modifier);
+                            _modifierCache.Add(modifierSpec);
                             TryRegisterAttributeChangedListen(geSpec, modifier);
                         }
                     }
@@ -60,6 +88,19 @@ namespace GAS.Runtime
             }
 
             UpdateCurrentValueWhenModifierIsDirty();
+
+            // UnityEngine.Profiling.Profiler.EndSample();
+        }
+
+        private void ReleaseModifiersCache()
+        {
+            foreach (var modifierSpec in _modifierCache)
+            {
+                modifierSpec.Release();
+                ObjectPool.Instance.Recycle(modifierSpec);
+            }
+
+            _modifierCache.Clear();
         }
 
         /// <summary>
@@ -77,10 +118,10 @@ namespace GAS.Runtime
                 case CalculateMode.Stacking:
                 {
                     float newValue = _processedAttribute.BaseValue;
-                    foreach (var tuple in _modifierCache)
+                    foreach (var modifierSpec in _modifierCache)
                     {
-                        var spec = tuple.Item1;
-                        var modifier = tuple.Item2;
+                        var spec = modifierSpec.Spec;
+                        var modifier = modifierSpec.Modifier;
                         var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
 
                         if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
@@ -116,10 +157,10 @@ namespace GAS.Runtime
                 {
                     var hasOverride = false;
                     var min = float.MaxValue;
-                    foreach (var tuple in _modifierCache)
+                    foreach (var modifierSpec in _modifierCache)
                     {
-                        var spec = tuple.Item1;
-                        var modifier = tuple.Item2;
+                        var spec = modifierSpec.Spec;
+                        var modifier = modifierSpec.Modifier;
 
                         if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
                         {
@@ -142,10 +183,10 @@ namespace GAS.Runtime
                 {
                     var hasOverride = false;
                     var max = float.MinValue;
-                    foreach (var tuple in _modifierCache)
+                    foreach (var modifierSpec in _modifierCache)
                     {
-                        var spec = tuple.Item1;
-                        var modifier = tuple.Item2;
+                        var spec = modifierSpec.Spec;
+                        var modifier = modifierSpec.Modifier;
 
                         if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
                         {
@@ -185,8 +226,8 @@ namespace GAS.Runtime
 
         private void UnregisterAttributeChangedListen()
         {
-            foreach (var tuple in _modifierCache)
-                TryUnregisterAttributeChangedListen(tuple.Item1, tuple.Item2);
+            foreach (var modifierSpec in _modifierCache)
+                TryUnregisterAttributeChangedListen(modifierSpec.Spec, modifierSpec.Modifier);
         }
 
         private void TryUnregisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
@@ -232,10 +273,10 @@ namespace GAS.Runtime
         private void OnAttributeChanged(AttributeBase attribute, float oldValue, float newValue)
         {
             if (_modifierCache.Count == 0) return;
-            foreach (var tuple in _modifierCache)
+            foreach (var modifierSpec in _modifierCache)
             {
-                var ge = tuple.Item1;
-                var modifier = tuple.Item2;
+                var ge = modifierSpec.Spec;
+                var modifier = modifierSpec.Modifier;
                 if (modifier.MMC is AttributeBasedModCalculation mmc &&
                     mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track &&
                     attribute.Name == mmc.attributeName)
