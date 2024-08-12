@@ -9,12 +9,13 @@ namespace GAS.RuntimeWithECS.Core
     }
         
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))] 
+    [UpdateAfter(typeof(GASManagerInputSystem))]
     public partial struct GASTimerSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<GASRunningTagComponent>();
+            state.RequireForUpdate<GASRunningTag>();
             state.RequireForUpdate<GlobalFrameTimer>();
         }
 

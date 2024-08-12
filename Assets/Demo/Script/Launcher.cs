@@ -54,6 +54,7 @@ namespace Demo.Script
             XUI.M.OpenWindow<MenuWindow>();
             
             GASManager.Initialize();
+            GASManager.Run();
             ResetGameScene();
         }
 
