@@ -107,7 +107,7 @@ public abstract class FightUnit : MonoBehaviour
 
     public void ActivateMove(float direction)
     {
-        ASC.TryActivateAbility(MoveName, direction);
+        ASC.TryActivateAbility(MoveName, new Move.Args(direction));
     }
 
     public void DeactivateMove()
@@ -118,7 +118,7 @@ public abstract class FightUnit : MonoBehaviour
     public void Jump()
     {
         if (Grounded || DoubleJumpValid)
-            ASC.TryActivateAbility(JumpName, _rb);
+            ASC.TryActivateAbility(JumpName, new Jump.Args(_rb));
     }
 
     public bool Attack()

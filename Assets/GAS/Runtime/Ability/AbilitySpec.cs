@@ -4,16 +4,19 @@ namespace GAS.Runtime
 {
     public abstract class AbilitySpec
     {
-        protected object[] _abilityArguments = Array.Empty<object>();
-
         /// <summary>
         /// 获取激活能力时传递给能力的参数。
         /// </summary>
         /// <remarks>
-        /// <para>该属性返回一个对象数组，表示激活能力时传入的参数。</para>
-        /// <para>即使没有参数传递，该数组也绝不会是 <c>null</c>，在这种情况下，它将是一个空数组。</para>
+        /// <para>旧版本为一个params object[] 类型, 在传参时有装箱/拆箱问题, 应自行创建一个数据结构(推荐record)来传参.</para>
         /// </remarks>
-        public object[] AbilityArguments => _abilityArguments;
+        public object AbilityArgument { get; private set; }
+
+        /// <summary>
+        /// 仅限GrantedAbility, 激活能力时传递给能力的效果规格。
+        /// 可以通过给gameplayEffectSpec添加自定义数据(UserData)来传递更多信息。
+        /// </summary>
+        public GameplayEffectSpec GameplayEffectSpec { get; private set; }
 
         /// <summary>
         /// 获取或设置与能力关联的自定义数据。
@@ -132,12 +135,14 @@ namespace GAS.Runtime
                 var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
                 var attributeCurrentValue =
                     Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
-                
-                if(modifier.Operation == GEOperation.Add)
-                    if (attributeCurrentValue + costValue < 0) return false;
-                
-                if(modifier.Operation == GEOperation.Minus)
-                    if (attributeCurrentValue - costValue < 0) return false;
+
+                if (modifier.Operation == GEOperation.Add)
+                    if (attributeCurrentValue + costValue < 0)
+                        return false;
+
+                if (modifier.Operation == GEOperation.Minus)
+                    if (attributeCurrentValue - costValue < 0)
+                        return false;
             }
 
             return true;
@@ -168,9 +173,11 @@ namespace GAS.Runtime
             }
         }
 
-        public virtual bool TryActivateAbility(params object[] args)
+        public virtual bool TryActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
         {
-            _abilityArguments = args;
+            AbilityArgument = arg;
+            GameplayEffectSpec = gameplayEffectSpec;
+
             var result = CanActivate();
             var success = result == AbilityActivateResult.Success;
             if (success)
@@ -179,7 +186,7 @@ namespace GAS.Runtime
                 ActiveCount++;
                 Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
 
-                ActivateAbility(_abilityArguments);
+                ActivateAbility(AbilityArgument, GameplayEffectSpec);
             }
 
             _onActivateResult?.Invoke(result);
@@ -217,7 +224,7 @@ namespace GAS.Runtime
         {
         }
 
-        public abstract void ActivateAbility(params object[] args);
+        public abstract void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null);
 
         public abstract void CancelAbility();
 

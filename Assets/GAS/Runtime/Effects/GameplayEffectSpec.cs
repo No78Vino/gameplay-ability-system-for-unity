@@ -13,6 +13,8 @@ namespace GAS.Runtime
         private readonly Dictionary<string, float> _valueMapWithName = new();
         private readonly List<GameplayCueDurationalSpec> _cueDurationalSpecs = new();
 
+        public object UserData { get; set; }
+
         /// <summary>
         /// The execution type of onImmunity is one shot.
         /// </summary>
@@ -64,11 +66,12 @@ namespace GAS.Runtime
             }
         }
 
-        public void Awake(GameplayEffect gameplayEffect)
+        public void Awake(GameplayEffect gameplayEffect, object userData = null)
         {
             IsReleased = false;
 
             GameplayEffect = gameplayEffect;
+            UserData = userData;
             Duration = GameplayEffect.Duration;
             DurationPolicy = GameplayEffect.DurationPolicy;
             Stacking = GameplayEffect.Stacking;

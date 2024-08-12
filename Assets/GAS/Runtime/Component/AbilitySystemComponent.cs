@@ -21,6 +21,8 @@ namespace GAS.Runtime
 
         public AttributeSetContainer AttributeSetContainer { get; private set; }
 
+        public object UserData { get; set; }
+
         private bool _ready;
 
         private void Prepare()
@@ -50,10 +52,11 @@ namespace GAS.Runtime
         {
             Prepare();
         }
-        
+
         private void OnDestroy()
         {
             AttributeSetContainer.OnDestroy();
+            UserData = null;
         }
 
         private void OnEnable()
@@ -171,8 +174,7 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec,
-            AbilitySystemComponent target)
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemComponent target)
         {
             return target.AddGameplayEffect(this, gameplayEffectSpec);
         }
@@ -191,8 +193,7 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(spec, target);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,
-            int effectLevel)
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target, int effectLevel)
         {
             if (gameplayEffect == null)
             {
@@ -268,9 +269,14 @@ namespace GAS.Runtime
             return AttributeSetContainer.Snapshot();
         }
 
-        public bool TryActivateAbility(string abilityName, params object[] args)
+        public bool TryActivateAbility(string abilityName, object arg = null)
         {
-            return AbilityContainer.TryActivateAbility(abilityName, args);
+            return AbilityContainer.TryActivateAbility(abilityName, arg, null);
+        }
+
+        internal bool TryActivateAbility(string abilityName, GameplayEffectSpec gameplayEffectSpec)
+        {
+            return AbilityContainer.TryActivateAbility(abilityName, null, gameplayEffectSpec);
         }
 
         public void TryEndAbility(string abilityName)

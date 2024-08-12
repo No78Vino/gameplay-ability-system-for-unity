@@ -186,7 +186,7 @@ namespace GAS.Runtime
             // 是否添加时激活
             if (ActivationPolicy == GrantedAbilityActivationPolicy.WhenAdded)
             {
-                Owner.TryActivateAbility(AbilityName);
+                Owner.TryActivateAbility(AbilityName, sourceEffectSpec);
             }
 
             switch (RemovePolicy)

@@ -1,10 +1,14 @@
-﻿using GAS.Runtime;
+﻿using System;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class Jump:AbstractAbility<AAJump>
+    public class Jump : AbstractAbility<AAJump>
     {
+        public sealed record Args(Rigidbody2D Rigidbody2D);
+
         public readonly float JumpPower;
+
         public Jump(AAJump abilityAsset) : base(abilityAsset)
         {
             JumpPower = AbilityAsset.JumpPower;
@@ -15,18 +19,22 @@ namespace GAS.Runtime
             return new JumpSpec(this, owner);
         }
     }
-    
-    public class JumpSpec: AbilitySpec
+
+    public class JumpSpec : AbilitySpec
     {
         Jump _jump;
+
         public JumpSpec(AbstractAbility ability, AbilitySystemComponent owner) : base(ability, owner)
         {
             _jump = ability as Jump;
         }
 
-        public override void ActivateAbility(params object[] args)
+        public override void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
         {
-            var rb = args[0] as UnityEngine.Rigidbody2D;
+            if (arg is not Jump.Args jumpArgs)
+                throw new Exception("arg is not Jump.JumpArgs");
+
+            var rb = jumpArgs.Rigidbody2D;
             var velocity = rb.velocity;
             velocity.y = _jump.JumpPower;
             rb.velocity = velocity;

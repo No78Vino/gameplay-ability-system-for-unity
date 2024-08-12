@@ -15,6 +15,7 @@ namespace GAS.Runtime
 
         public int FrameCount => _player.FrameCount;
         public int FrameRate => _player.FrameRate;
+
         /// <summary>
         /// 不受播放速率影响的总时间
         /// </summary>
@@ -35,12 +36,12 @@ namespace GAS.Runtime
             Target = mainTarget;
         }
 
-        public override void ActivateAbility(params object[] args)
+        public override void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
         {
             var playSpeed = GetPlaySpeed();
             _player.Play(playSpeed);
         }
-        
+
         public virtual float GetPlaySpeed()
         {
             return Data.AbilityAsset.Speed;

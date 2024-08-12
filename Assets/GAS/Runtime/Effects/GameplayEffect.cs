@@ -69,10 +69,11 @@ namespace GAS.Runtime
         public GameplayEffectSpec CreateSpec(
             AbilitySystemComponent creator,
             AbilitySystemComponent owner,
-            float level = 1)
+            float level = 1,
+            object userData = null)
         {
             var spec = ObjectPool.Instance.Fetch<GameplayEffectSpec>();
-            spec.Awake(this);
+            spec.Awake(this, userData);
             spec.Init(creator, owner, level);
             return spec;
         }
@@ -81,10 +82,10 @@ namespace GAS.Runtime
         /// 分离GameplayEffectSpec的实例化过程为：实例 + 数据初始化
         /// </summary>
         /// <returns></returns>
-        public GameplayEffectSpec CreateSpec()
+        public GameplayEffectSpec CreateSpec(object userData = null)
         {
             var spec = ObjectPool.Instance.Fetch<GameplayEffectSpec>();
-            spec.Awake(this);
+            spec.Awake(this, userData);
             return spec;
         }
 

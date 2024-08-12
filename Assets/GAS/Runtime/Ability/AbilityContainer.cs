@@ -7,7 +7,7 @@ namespace GAS.Runtime
     public class AbilityContainer
     {
         private readonly AbilitySystemComponent _owner;
-        private readonly Dictionary<string, AbilitySpec> _abilities = new ();
+        private readonly Dictionary<string, AbilitySpec> _abilities = new();
 
         public AbilityContainer(AbilitySystemComponent owner)
         {
@@ -49,7 +49,7 @@ namespace GAS.Runtime
             _abilities.Remove(abilityName);
         }
 
-        public bool TryActivateAbility(string abilityName, params object[] args)
+        public bool TryActivateAbility(string abilityName, object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
         {
             if (!_abilities.ContainsKey(abilityName))
             {
@@ -67,7 +67,7 @@ namespace GAS.Runtime
                 return false;
             }
 
-            if (!_abilities[abilityName].TryActivateAbility(args)) return false;
+            if (!_abilities[abilityName].TryActivateAbility(arg, gameplayEffectSpec)) return false;
 
             var tags = _abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags;
             foreach (var kv in _abilities)
