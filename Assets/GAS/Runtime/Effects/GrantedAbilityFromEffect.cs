@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -155,8 +154,10 @@ namespace GAS.Runtime
         }
     }
 
-    public class GrantedAbilitySpecFromEffect
+    public class GrantedAbilitySpecFromEffect : IEntity
     {
+        public ulong InstanceId { get; private set; }
+
         public GrantedAbilityFromEffect GrantedAbility { get; private set; }
         public GameplayEffectSpec SourceEffectSpec { get; private set; }
         public AbilitySystemComponent Owner { get; private set; }
@@ -168,9 +169,9 @@ namespace GAS.Runtime
         public GrantedAbilityRemovePolicy RemovePolicy => GrantedAbility.RemovePolicy;
         public AbilitySpec AbilitySpec => Owner.AbilityContainer.AbilitySpecs()[AbilityName];
 
-        public void Awake(GrantedAbilityFromEffect grantedAbility,
-            GameplayEffectSpec sourceEffectSpec)
+        public void Awake(GrantedAbilityFromEffect grantedAbility, GameplayEffectSpec sourceEffectSpec)
         {
+            InstanceId = IdGenerator.Next;
             GrantedAbility = grantedAbility;
             SourceEffectSpec = sourceEffectSpec;
             AbilityName = GrantedAbility.Ability.Name;
@@ -206,6 +207,7 @@ namespace GAS.Runtime
 
         public void Release()
         {
+            InstanceId = default;
             GrantedAbility = default;
             Owner = default;
             AbilityName = default;

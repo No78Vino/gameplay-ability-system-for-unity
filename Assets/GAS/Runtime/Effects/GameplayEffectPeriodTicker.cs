@@ -1,23 +1,24 @@
-﻿using GAS.General;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class GameplayEffectPeriodTicker : IPool
+    internal sealed class GameplayEffectPeriodTicker : IEntity
     {
-        public bool IsFromPool { get; set; }
+        public ulong InstanceId { get; private set; }
 
         private float _periodRemaining;
         private GameplayEffectSpec _spec;
 
         public void Awake(GameplayEffectSpec spec)
         {
+            InstanceId = IdGenerator.Next;
             _spec = spec;
             _periodRemaining = Period;
         }
 
         public void Release()
         {
+            InstanceId = default;
             _spec = default;
             _periodRemaining = default;
         }
@@ -94,9 +95,9 @@ namespace GAS.Runtime
 
             while (_periodRemaining < 0)
             {
-                // 不能直接将_periodRemaining置为0, 这将累计误差
+                // 不能直接将_periodRemaining重置为Period, 这将累计误差
                 _periodRemaining += Period;
-                _spec.PeriodExecution?.TriggerOnExecute();
+                _spec.PeriodExecution.Value?.TriggerOnExecute();
             }
         }
 

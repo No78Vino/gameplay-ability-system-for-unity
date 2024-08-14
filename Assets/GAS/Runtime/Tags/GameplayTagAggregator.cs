@@ -122,7 +122,7 @@ namespace GAS.Runtime
 
         private bool TryAddDynamicAddedTag<T>(T source, GameplayTag tag)
         {
-            if (!(source is GameplayEffectSpec) && !(source is AbilitySpec))
+            if (source is not GameplayEffectSpec && source is not AbilitySpec)
             {
                 return false;
             }
@@ -160,7 +160,7 @@ namespace GAS.Runtime
 
         private bool TryAddDynamicRemovedTag<T>(T source, GameplayTag tag)
         {
-            if (!(source is GameplayEffectSpec) && !(source is AbilitySpec)) return false;
+            if (source is not GameplayEffectSpec && source is not AbilitySpec) return false;
             var dirty = false;
             if (_dynamicAddedTags.TryGetValue(tag, out var addedTag))
             {

@@ -66,7 +66,7 @@ namespace GAS.Runtime
         public readonly GameplayEffect[] PrematureExpirationEffect;
         public readonly GameplayEffect[] RoutineExpirationEffectClasses;
 
-        public GameplayEffectSpec CreateSpec(
+        public EntityRef<GameplayEffectSpec> CreateSpec(
             AbilitySystemComponent creator,
             AbilitySystemComponent owner,
             float level = 1,
@@ -82,7 +82,7 @@ namespace GAS.Runtime
         /// 分离GameplayEffectSpec的实例化过程为：实例 + 数据初始化
         /// </summary>
         /// <returns></returns>
-        public GameplayEffectSpec CreateSpec(object userData = null)
+        public EntityRef<GameplayEffectSpec> CreateSpec(object userData = null)
         {
             var spec = ObjectPool.Instance.Fetch<GameplayEffectSpec>();
             spec.Awake(this, userData);

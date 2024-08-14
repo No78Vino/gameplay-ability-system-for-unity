@@ -36,7 +36,7 @@ namespace GAS.Runtime
             Target = mainTarget;
         }
 
-        public override void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
+        public override void ActivateAbility()
         {
             var playSpeed = GetPlaySpeed();
             _player.Play(playSpeed);

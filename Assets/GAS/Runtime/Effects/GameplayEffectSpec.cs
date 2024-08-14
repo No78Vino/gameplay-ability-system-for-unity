@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class GameplayEffectSpec : IPool
+    public class GameplayEffectSpec : IEntity, IPool
     {
-        private static ArrayPool<GrantedAbilitySpecFromEffect> _grantedAbilitySpecFromEffectArrayPool = new();
-
         private readonly Dictionary<GameplayTag, float> _valueMapWithTag = new();
         private readonly Dictionary<string, float> _valueMapWithName = new();
         private readonly List<GameplayCueDurationalSpec> _cueDurationalSpecs = new();
@@ -22,53 +20,15 @@ namespace GAS.Runtime
         public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
 #pragma warning restore CS0414
 
-        public event Action<int, int> onStackCountChanged;
+        private event Action<int, int> onStackCountChanged;
 
-        [Flags]
-        public enum Status : byte
-        {
-            None = 0,
-            IsFromPool = 1 << 0,
-            IsReleased = 1 << 1,
-        }
+        public ulong InstanceId { get; private set; }
 
-        private Status _status = Status.None;
-
-        public bool IsFromPool
-        {
-            get => (_status & Status.IsFromPool) == Status.IsFromPool;
-            set
-            {
-                if (value)
-                {
-                    _status |= Status.IsFromPool;
-                }
-                else
-                {
-                    _status &= ~Status.IsFromPool;
-                }
-            }
-        }
-
-        public bool IsReleased
-        {
-            get => (_status & Status.IsReleased) == Status.IsReleased;
-            set
-            {
-                if (value)
-                {
-                    _status |= Status.IsReleased;
-                }
-                else
-                {
-                    _status &= ~Status.IsReleased;
-                }
-            }
-        }
+        public bool IsFromPool { get; set; }
 
         public void Awake(GameplayEffect gameplayEffect, object userData = null)
         {
-            IsReleased = false;
+            InstanceId = IdGenerator.Next;
 
             GameplayEffect = gameplayEffect;
             UserData = userData;
@@ -78,16 +38,18 @@ namespace GAS.Runtime
             Modifiers = GameplayEffect.Modifiers;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
-                PeriodTicker = ObjectPool.Instance.Fetch<GameplayEffectPeriodTicker>();
-                PeriodTicker.Awake(this);
+                var periodTicker = ObjectPool.Instance.Fetch<GameplayEffectPeriodTicker>();
+                periodTicker.Awake(this);
+                // EntityRef之前必须确定InstanceId的值 
+                PeriodTicker = periodTicker;
             }
         }
 
         public void Recycle()
         {
-            if (IsReleased == false)
+            if (InstanceId != 0)
             {
-                IsReleased = true;
+                InstanceId = 0;
 
                 GameplayEffect = default;
                 ActivationTime = default;
@@ -96,34 +58,36 @@ namespace GAS.Runtime
                 Owner = default;
                 IsApplied = default;
                 IsActive = default;
-                if (PeriodTicker != null)
+
+                var gameplayEffectPeriodTicker = PeriodTicker.Value;
+                if (gameplayEffectPeriodTicker != null)
                 {
-                    PeriodTicker.Release();
-                    ObjectPool.Instance.Recycle(PeriodTicker);
-                    PeriodTicker = default;
+                    gameplayEffectPeriodTicker.Release();
+                    ObjectPool.Instance.Recycle(gameplayEffectPeriodTicker);
                 }
+
+                PeriodTicker = default;
 
                 Duration = default;
                 DurationPolicy = default;
-                PeriodExecution?.Recycle();
+                PeriodExecution.Value?.Recycle();
                 PeriodExecution = default;
                 Modifiers = default;
 
-                if (GrantedAbilitySpec != null)
+                if (GrantedAbilitiesSpecFromEffect != null)
                 {
-                    for (var i = 0; i < GrantedAbilitySpec.Length; ++i)
+                    foreach (GrantedAbilitySpecFromEffect grantedAbilitySpecFromEffect in GrantedAbilitiesSpecFromEffect)
                     {
-                        var grantedAbilitySpecFromEffect = GrantedAbilitySpec[i];
                         if (grantedAbilitySpecFromEffect != null)
                         {
                             grantedAbilitySpecFromEffect.Release();
                             ObjectPool.Instance.Recycle(grantedAbilitySpecFromEffect);
-                            GrantedAbilitySpec[i] = null;
                         }
                     }
 
-                    _grantedAbilitySpecFromEffectArrayPool.Recycle(GrantedAbilitySpec);
-                    GrantedAbilitySpec = default;
+                    GrantedAbilitiesSpecFromEffect.Clear();
+                    ObjectPool.Instance.Recycle(GrantedAbilitiesSpecFromEffect);
+                    GrantedAbilitiesSpecFromEffect = default;
                 }
 
                 Stacking = default;
@@ -164,7 +128,11 @@ namespace GAS.Runtime
             Level = level;
             if (GameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
-                PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
+                if (GameplayEffect.PeriodExecution is not null)
+                {
+                    PeriodExecution = GameplayEffect.PeriodExecution.CreateSpec(source, owner);
+                }
+
                 SetGrantedAbility(GameplayEffect.GrantedAbilities);
             }
 
@@ -178,12 +146,12 @@ namespace GAS.Runtime
         public AbilitySystemComponent Owner { get; private set; }
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
-        public GameplayEffectPeriodTicker PeriodTicker { get; private set; }
+        internal EntityRef<GameplayEffectPeriodTicker> PeriodTicker { get; private set; }
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
-        public GameplayEffectSpec PeriodExecution { get; private set; }
+        public EntityRef<GameplayEffectSpec> PeriodExecution { get; private set; }
         public GameplayEffectModifier[] Modifiers { get; private set; }
-        public GrantedAbilitySpecFromEffect[] GrantedAbilitySpec { get; private set; }
+        public List<EntityRef<GrantedAbilitySpecFromEffect>> GrantedAbilitiesSpecFromEffect { get; private set; }
         public GameplayEffectStacking Stacking { get; private set; }
 
         public GameplayEffectSnapshotPolicy SnapshotPolicy => GameplayEffect.SnapshotPolicy;
@@ -226,7 +194,7 @@ namespace GAS.Runtime
 
         public void SetPeriodExecution(GameplayEffectSpec periodExecution)
         {
-            PeriodExecution?.Recycle();
+            PeriodExecution.Value?.Recycle();
             PeriodExecution = periodExecution;
         }
 
@@ -235,12 +203,12 @@ namespace GAS.Runtime
             Modifiers = modifiers;
         }
 
-        public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbility)
+        public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbilityFromEffects)
         {
-            GrantedAbilitySpec = _grantedAbilitySpecFromEffectArrayPool.Fetch(grantedAbility.Length);
-            for (var i = 0; i < grantedAbility.Length; i++)
+            GrantedAbilitiesSpecFromEffect = ObjectPool.Instance.Fetch<List<EntityRef<GrantedAbilitySpecFromEffect>>>();
+            foreach (var grantedAbilityFromEffect in grantedAbilityFromEffects)
             {
-                GrantedAbilitySpec[i] = grantedAbility[i].CreateSpec(this);
+                GrantedAbilitiesSpecFromEffect.Add(grantedAbilityFromEffect.CreateSpec(this));
             }
         }
 
@@ -282,10 +250,9 @@ namespace GAS.Runtime
             TriggerOnDeactivation();
         }
 
-
         public void Tick()
         {
-            PeriodTicker?.Tick();
+            PeriodTicker.Value?.Tick();
         }
 
         void TriggerInstantCues(GameplayCueInstant[] cues)
@@ -308,12 +275,12 @@ namespace GAS.Runtime
 
         private void TriggerCueOnAdd()
         {
-            if (GameplayEffect.CueOnAdd != null && GameplayEffect.CueOnAdd.Length > 0)
+            if (GameplayEffect.CueOnAdd is { Length: > 0 })
                 TriggerInstantCues(GameplayEffect.CueOnAdd);
 
             try
             {
-                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                if (GameplayEffect.CueDurational is { Length: > 0 })
                 {
                     _cueDurationalSpecs.Clear();
                     foreach (var cueDurational in GameplayEffect.CueDurational)
@@ -333,12 +300,12 @@ namespace GAS.Runtime
 
         private void TriggerCueOnRemove()
         {
-            if (GameplayEffect.CueOnRemove != null && GameplayEffect.CueOnRemove.Length > 0)
+            if (GameplayEffect.CueOnRemove is { Length: > 0 })
                 TriggerInstantCues(GameplayEffect.CueOnRemove);
 
             try
             {
-                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                if (GameplayEffect.CueDurational is { Length: > 0 })
                 {
                     foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
 
@@ -353,12 +320,12 @@ namespace GAS.Runtime
 
         private void TriggerCueOnActivation()
         {
-            if (GameplayEffect.CueOnActivate != null && GameplayEffect.CueOnActivate.Length > 0)
+            if (GameplayEffect.CueOnActivate is { Length: > 0 })
                 TriggerInstantCues(GameplayEffect.CueOnActivate);
 
             try
             {
-                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                if (GameplayEffect.CueDurational is { Length: > 0 })
                     foreach (var cue in _cueDurationalSpecs)
                         cue.OnGameplayEffectActivate();
             }
@@ -370,12 +337,12 @@ namespace GAS.Runtime
 
         private void TriggerCueOnDeactivation()
         {
-            if (GameplayEffect.CueOnDeactivate != null && GameplayEffect.CueOnDeactivate.Length > 0)
+            if (GameplayEffect.CueOnDeactivate is { Length: > 0 })
                 TriggerInstantCues(GameplayEffect.CueOnDeactivate);
 
             try
             {
-                if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
+                if (GameplayEffect.CueDurational is { Length: > 0 })
                     foreach (var cue in _cueDurationalSpecs)
                         cue.OnGameplayEffectDeactivate();
             }
@@ -387,7 +354,7 @@ namespace GAS.Runtime
 
         private void CueOnTick()
         {
-            if (GameplayEffect.CueDurational == null || GameplayEffect.CueDurational.Length <= 0) return;
+            if (GameplayEffect.CueDurational is not { Length: > 0 }) return;
             try
             {
                 foreach (var cue in _cueDurationalSpecs) cue.OnTick();
@@ -497,9 +464,9 @@ namespace GAS.Runtime
 
         private void TryActivateGrantedAbilities()
         {
-            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            foreach (GrantedAbilitySpecFromEffect grantedAbilitySpec in GrantedAbilitiesSpecFromEffect)
             {
-                if (grantedAbilitySpec.ActivationPolicy == GrantedAbilityActivationPolicy.SyncWithEffect)
+                if (grantedAbilitySpec is { ActivationPolicy: GrantedAbilityActivationPolicy.SyncWithEffect })
                 {
                     Owner.TryActivateAbility(grantedAbilitySpec.AbilityName);
                 }
@@ -508,9 +475,9 @@ namespace GAS.Runtime
 
         private void TryDeactivateGrantedAbilities()
         {
-            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            foreach (GrantedAbilitySpecFromEffect grantedAbilitySpec in GrantedAbilitiesSpecFromEffect)
             {
-                if (grantedAbilitySpec.DeactivationPolicy == GrantedAbilityDeactivationPolicy.SyncWithEffect)
+                if (grantedAbilitySpec is { DeactivationPolicy: GrantedAbilityDeactivationPolicy.SyncWithEffect })
                 {
                     Owner.TryEndAbility(grantedAbilitySpec.AbilityName);
                 }
@@ -519,9 +486,9 @@ namespace GAS.Runtime
 
         private void TryRemoveGrantedAbilities()
         {
-            foreach (var grantedAbilitySpec in GrantedAbilitySpec)
+            foreach (GrantedAbilitySpecFromEffect grantedAbilitySpec in GrantedAbilitiesSpecFromEffect)
             {
-                if (grantedAbilitySpec.RemovePolicy == GrantedAbilityRemovePolicy.SyncWithEffect)
+                if (grantedAbilitySpec is { RemovePolicy: GrantedAbilityRemovePolicy.SyncWithEffect })
                 {
                     Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
                     Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
@@ -558,7 +525,7 @@ namespace GAS.Runtime
                 // 是否重置Period
                 if (Stacking.periodResetPolicy == PeriodResetPolicy.ResetOnSuccessfulApplication)
                 {
-                    PeriodTicker.ResetPeriod();
+                    PeriodTicker.Value.ResetPeriod();
                 }
             }
             else

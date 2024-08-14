@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.General;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -80,7 +81,7 @@ namespace GAS.Runtime
         ///     Returns false if the gameplay effect is applied but immediately removed due to a tag(in `AssetTags` or `GrantedTags`) match
         ///     with the `RemoveGameplayEffectsWithTags` function, indicating that the effect did not persist.
         /// </returns>
-        public GameplayEffectSpec AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffectSpec effectSpec, bool overwriteEffectLevel = false, int effectLevel = 0)
+        public EntityRef<GameplayEffectSpec> AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffectSpec effectSpec, bool overwriteEffectLevel = false, int effectLevel = 0)
         {
             if (!effectSpec.GameplayEffect.CanApplyTo(_owner))
                 return null;
@@ -117,13 +118,11 @@ namespace GAS.Runtime
                 // 新添加GE
                 if (geSpec == null)
                 {
-                    geSpec = Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
+                    return Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
                 }
-                else
-                {
-                    bool stackCountChange = geSpec.RefreshStack();
-                    if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
-                }
+
+                bool stackCountChange = geSpec.RefreshStack();
+                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
 
                 return geSpec;
             }
@@ -134,13 +133,11 @@ namespace GAS.Runtime
                 GetStackingEffectSpecByDataFrom(effectSpec.GameplayEffect, source, out var geSpec);
                 if (geSpec == null)
                 {
-                    geSpec = Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
+                    return Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
                 }
-                else
-                {
-                    bool stackCountChange = geSpec.RefreshStack();
-                    if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
-                }
+
+                bool stackCountChange = geSpec.RefreshStack();
+                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
 
                 return geSpec;
             }
@@ -148,13 +145,14 @@ namespace GAS.Runtime
             return null;
         }
 
-        public GameplayEffectSpec AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffect effect, int effectLevel)
+        public EntityRef<GameplayEffectSpec> AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffect effect, int effectLevel)
         {
             var spec = effect.CreateSpec();
             var ges = AddGameplayEffectSpec(source, spec, true, effectLevel);
-            if (ges == null)
+            // 没有add成功(被免疫了等)
+            if (ges.Value == null)
             {
-                spec.Recycle();
+                spec.Value?.Recycle();
             }
 
             return ges;
@@ -162,12 +160,34 @@ namespace GAS.Runtime
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
         {
+            if (spec == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning("the GameplayEffectSpec you want to remove is null!");
+#endif
+                return;
+            }
+
             spec.DisApply();
             spec.TriggerOnRemove();
             _gameplayEffectSpecs.Remove(spec);
             spec.Recycle();
 
             OnGameplayEffectContainerIsDirty?.Invoke();
+        }
+
+        public void RemoveGameplayEffectSpec(in EntityRef<GameplayEffectSpec> gameplayEffectSpecRef)
+        {
+            var gameplayEffectSpec = gameplayEffectSpecRef.Value;
+            if (gameplayEffectSpec == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning("the EntityRef of GameplayEffectSpec is Invalid!");
+#endif
+                return;
+            }
+
+            RemoveGameplayEffectSpec(gameplayEffectSpec);
         }
 
         public void RefreshGameplayEffectState()
@@ -268,7 +288,7 @@ namespace GAS.Runtime
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
-        private GameplayEffectSpec Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
+        private EntityRef<GameplayEffectSpec> Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
             bool overwriteEffectLevel, int effectLevel)
         {
             var level = overwriteEffectLevel ? effectLevel : source.Level;
@@ -281,7 +301,7 @@ namespace GAS.Runtime
             if (!_gameplayEffectSpecs.Contains(effectSpec))
             {
 #if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning(
+                Debug.LogWarning(
                     $"GameplayEffect {effectSpec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
 #endif
                 effectSpec.Recycle();

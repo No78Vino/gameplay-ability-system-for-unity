@@ -9,18 +9,18 @@ namespace GAS.Runtime
     {
         private record ModifierSpec
         {
-            public GameplayEffectSpec Spec { get; private set; }
+            public EntityRef<GameplayEffectSpec> SpecRef { get; private set; }
             public GameplayEffectModifier Modifier { get; private set; }
 
-            public void Init(GameplayEffectSpec spec, GameplayEffectModifier modifier)
+            public void Init(EntityRef<GameplayEffectSpec> spec, GameplayEffectModifier modifier)
             {
-                Spec = spec;
+                SpecRef = spec;
                 Modifier = modifier;
             }
 
             public void Release()
             {
-                Spec = default;
+                SpecRef = default;
                 Modifier = default;
             }
         }
@@ -120,7 +120,7 @@ namespace GAS.Runtime
                     float newValue = _processedAttribute.BaseValue;
                     foreach (var modifierSpec in _modifierCache)
                     {
-                        var spec = modifierSpec.Spec;
+                        var spec = modifierSpec.SpecRef;
                         var modifier = modifierSpec.Modifier;
                         var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
 
@@ -159,7 +159,7 @@ namespace GAS.Runtime
                     var min = float.MaxValue;
                     foreach (var modifierSpec in _modifierCache)
                     {
-                        var spec = modifierSpec.Spec;
+                        var spec = modifierSpec.SpecRef;
                         var modifier = modifierSpec.Modifier;
 
                         if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
@@ -185,7 +185,7 @@ namespace GAS.Runtime
                     var max = float.MinValue;
                     foreach (var modifierSpec in _modifierCache)
                     {
-                        var spec = modifierSpec.Spec;
+                        var spec = modifierSpec.SpecRef;
                         var modifier = modifierSpec.Modifier;
 
                         if (_processedAttribute.IsSupportOperation(modifier.Operation) == false)
@@ -227,7 +227,7 @@ namespace GAS.Runtime
         private void UnregisterAttributeChangedListen()
         {
             foreach (var modifierSpec in _modifierCache)
-                TryUnregisterAttributeChangedListen(modifierSpec.Spec, modifierSpec.Modifier);
+                TryUnregisterAttributeChangedListen(modifierSpec.SpecRef, modifierSpec.Modifier);
         }
 
         private void TryUnregisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
@@ -275,16 +275,21 @@ namespace GAS.Runtime
             if (_modifierCache.Count == 0) return;
             foreach (var modifierSpec in _modifierCache)
             {
-                var ge = modifierSpec.Spec;
+                var geSpec = modifierSpec.SpecRef.Value;
+                if (geSpec == null)
+                {
+                    Debug.LogError("ge spec is invalid!");
+                    continue;
+                }
+                
                 var modifier = modifierSpec.Modifier;
-                if (modifier.MMC is AttributeBasedModCalculation mmc &&
-                    mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track &&
+                if (modifier.MMC is AttributeBasedModCalculation { captureType: AttributeBasedModCalculation.GEAttributeCaptureType.Track } mmc &&
                     attribute.Name == mmc.attributeName)
                 {
                     if ((mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target &&
-                         attribute.Owner == ge.Owner) ||
+                         attribute.Owner == geSpec.Owner) ||
                         (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Source &&
-                         attribute.Owner == ge.Source))
+                         attribute.Owner == geSpec.Source))
                     {
                         UpdateCurrentValueWhenModifierIsDirty();
                         break;

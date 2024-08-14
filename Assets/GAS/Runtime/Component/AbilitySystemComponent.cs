@@ -169,17 +169,36 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
 
+        public void RemoveGameplayEffect(in EntityRef<GameplayEffectSpec> spec)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
+        }
+
         public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
         {
             GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemComponent target)
+        public EntityRef<GameplayEffectSpec> ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemComponent target)
         {
             return target.AddGameplayEffect(this, gameplayEffectSpec);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
+        public EntityRef<GameplayEffectSpec> ApplyGameplayEffectTo(in EntityRef<GameplayEffectSpec> gameplayEffectSpecRef, AbilitySystemComponent target)
+        {
+            var gameplayEffectSpec = gameplayEffectSpecRef.Value;
+            if (gameplayEffectSpec == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"[EX] Try To Apply a invalid EntityRef of GameplayEffectSpec From {name} To {target.name}!");
+#endif
+                return null;
+            }
+
+            return target.AddGameplayEffect(this, gameplayEffectSpec);
+        }
+
+        public EntityRef<GameplayEffectSpec> ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
         {
             if (gameplayEffect == null)
             {
@@ -193,7 +212,7 @@ namespace GAS.Runtime
             return ApplyGameplayEffectTo(spec, target);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target, int effectLevel)
+        public EntityRef<GameplayEffectSpec> ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target, int effectLevel)
         {
             if (gameplayEffect == null)
             {
@@ -204,16 +223,16 @@ namespace GAS.Runtime
             }
 
             var spec = gameplayEffect.CreateSpec();
-            spec.SetLevel(effectLevel);
+            spec.Value.SetLevel(effectLevel);
             return ApplyGameplayEffectTo(spec, target);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
+        public EntityRef<GameplayEffectSpec> ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
         {
             return ApplyGameplayEffectTo(gameplayEffectSpec, this);
         }
 
-        public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
+        public EntityRef<GameplayEffectSpec> ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
         {
             return ApplyGameplayEffectTo(gameplayEffect, this);
         }
@@ -221,6 +240,11 @@ namespace GAS.Runtime
         public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
+        }
+
+        public void RemoveGameplayEffectSpec(in EntityRef<GameplayEffectSpec> gameplayEffectSpecRef)
+        {
+            GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpecRef);
         }
 
         public AbilitySpec GrantAbility(AbstractAbility ability)
@@ -355,18 +379,18 @@ namespace GAS.Runtime
             GameplayEffectContainer.ClearGameplayEffect();
         }
 
-        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec)
+        private EntityRef<GameplayEffectSpec> AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec)
         {
             var ges = GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
-            if (ges == null) effectSpec.Recycle();
+            if (ges.Value == null) effectSpec.Recycle();
             return ges;
         }
 
-        private GameplayEffectSpec AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
+        private EntityRef<GameplayEffectSpec> AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
             int effectLevel)
         {
             var ges = GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec, true, effectLevel);
-            if (ges == null) effectSpec.Recycle();
+            if (ges.Value == null) effectSpec.Recycle();
             return ges;
         }
 

@@ -6,9 +6,10 @@ namespace GAS.Runtime
     {
         /// <summary>
         /// 获取激活能力时传递给能力的参数。
+        /// 在技能过程中不应该修改, 考虑使用UserData
         /// </summary>
         /// <remarks>
-        /// <para>旧版本为一个params object[] 类型, 在传参时有装箱/拆箱问题, 应自行创建一个数据结构(推荐record)来传参.</para>
+        /// <para>旧版本为 object[] 类型, 有内存分配和装箱/拆箱问题, 应自行创建一个数据结构(推荐record)来传参.</para>
         /// </remarks>
         public object AbilityArgument { get; private set; }
 
@@ -16,7 +17,7 @@ namespace GAS.Runtime
         /// 仅限GrantedAbility, 激活能力时传递给能力的效果规格。
         /// 可以通过给gameplayEffectSpec添加自定义数据(UserData)来传递更多信息。
         /// </summary>
-        public GameplayEffectSpec GameplayEffectSpec { get; private set; }
+        public EntityRef<GameplayEffectSpec> GameplayEffectSpec { get; private set; }
 
         /// <summary>
         /// 获取或设置与能力关联的自定义数据。
@@ -26,7 +27,6 @@ namespace GAS.Runtime
         /// <para>例如，可以在一个技能的任务(AbilityTask)中设置此数据，然后在同一个技能的另一个任务(AbilityTask)中检索和使用该数据。</para>
         /// </remarks>
         public object UserData { get; set; }
-
 
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
@@ -123,7 +123,7 @@ namespace GAS.Runtime
         {
             if (Ability.Cost == null) return true;
             var costSpec = Ability.Cost.CreateSpec(Owner, Owner, Level);
-            if (costSpec == null) return false;
+            if (costSpec.Value == null) return false;
 
             if (Ability.Cost.DurationPolicy != EffectsDurationPolicy.Instant) return true;
 
@@ -169,7 +169,7 @@ namespace GAS.Runtime
             if (Ability.Cooldown != null)
             {
                 var cdSpec = Owner.ApplyGameplayEffectToSelf(Ability.Cooldown);
-                cdSpec.SetDuration(Ability.CooldownTime); // Actually, it should be set by the ability's cooldown time.
+                cdSpec.Value.SetDuration(Ability.CooldownTime); // Actually, it should be set by the ability's cooldown time.
             }
         }
 
@@ -186,7 +186,7 @@ namespace GAS.Runtime
                 ActiveCount++;
                 Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
 
-                ActivateAbility(AbilityArgument, GameplayEffectSpec);
+                ActivateAbility();
             }
 
             _onActivateResult?.Invoke(result);
@@ -224,7 +224,7 @@ namespace GAS.Runtime
         {
         }
 
-        public abstract void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null);
+        public abstract void ActivateAbility();
 
         public abstract void CancelAbility();
 

@@ -29,9 +29,9 @@ namespace GAS.Runtime
             _jump = ability as Jump;
         }
 
-        public override void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
+        public override void ActivateAbility()
         {
-            if (arg is not Jump.Args jumpArgs)
+            if (AbilityArgument is not Jump.Args jumpArgs)
                 throw new Exception("arg is not Jump.JumpArgs");
 
             var rb = jumpArgs.Rigidbody2D;

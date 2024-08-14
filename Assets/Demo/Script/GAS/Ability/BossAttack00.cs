@@ -20,7 +20,7 @@ namespace GAS.Runtime
         {
         }
 
-        public override void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
+        public override void ActivateAbility()
         {
         }
 

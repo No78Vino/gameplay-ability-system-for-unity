@@ -23,9 +23,9 @@ namespace GAS.Runtime
         void RemoveFixedTags(GameplayTagSet tags);
         void RemoveFixedTag(GameplayTag gameplayTag);
 
-        GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target);
+        EntityRef<GameplayEffectSpec> ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target);
 
-        GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect);
+        EntityRef<GameplayEffectSpec> ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect);
 
         void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec);
 

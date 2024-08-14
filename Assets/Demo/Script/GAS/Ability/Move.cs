@@ -26,9 +26,9 @@ namespace GAS.Runtime
             _unit = owner.GetComponent<FightUnit>();
         }
 
-        public override void ActivateAbility(object arg = null, GameplayEffectSpec gameplayEffectSpec = null)
+        public override void ActivateAbility()
         {
-            if (arg is not Move.Args moveArgs)
+            if (AbilityArgument is not Move.Args moveArgs)
                 throw new System.Exception("arg is not Move.Args");
             _moveArgs = moveArgs;
 
