@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c712e05924784c5593896e5c7c1d2708, type: 3}
   m_Name: Test_Track_HP
   m_EditorClassIdentifier: 
-  attributeName: 
-  attributeSetName: 
-  attributeShortName: 
-  attributeFromType: 0
+  Description: 
   captureType: 0
+  attributeFromType: 0
+  attributeName: AS_Fight.HP
+  attributeSetName: AS_Fight
+  attributeShortName: HP
   k: 1
   b: 0

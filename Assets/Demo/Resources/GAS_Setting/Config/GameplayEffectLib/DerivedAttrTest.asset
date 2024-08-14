@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9395a0be3e547f48bd1c8320edc6c58, type: 3}
   m_Name: DerivedAttrTest
   m_EditorClassIdentifier: 
-  Name: "\u63A8\u5BFC\u5C5E\u6027\u5237\u65B0\u673A\u5236\u6D4B\u8BD5"
   Description: 
   DurationPolicy: 2
   Duration: 0
   Period: 0
   PeriodExecution: {fileID: 0}
+  SnapshotPolicy: 1
   Stacking:
     stackingType: 0
+    stackingCodeName: 
     limitCount: 0
     durationRefreshPolicy: 0
     periodResetPolicy: 0
