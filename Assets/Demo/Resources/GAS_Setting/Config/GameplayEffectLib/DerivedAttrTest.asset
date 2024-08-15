@@ -17,7 +17,6 @@ MonoBehaviour:
   Duration: 0
   Period: 0
   PeriodExecution: {fileID: 0}
-  SnapshotPolicy: 1
   Stacking:
     stackingType: 0
     stackingCodeName: 
@@ -54,3 +53,13 @@ MonoBehaviour:
   CueOnRemove: []
   CueOnActivate: []
   CueOnDeactivate: []
+  SnapshotPolicy: 0
+  SpecifiedSnapshotConfigs:
+  - SnapshotTarget: 0
+    AttributeName: AS_Fight.HP
+    AttributeSetName: AS_Fight
+    AttributeShortName: HP
+  - SnapshotTarget: 0
+    AttributeName: AS_Fight.STAMINA
+    AttributeSetName: AS_Fight
+    AttributeShortName: STAMINA

@@ -17,7 +17,6 @@ MonoBehaviour:
   Duration: 6
   Period: 0
   PeriodExecution: {fileID: 0}
-  SnapshotPolicy: 1
   Stacking:
     stackingType: 1
     stackingCodeName: Stun3
@@ -49,3 +48,9 @@ MonoBehaviour:
   CueOnRemove: []
   CueOnActivate: []
   CueOnDeactivate: []
+  SnapshotPolicy: 0
+  SpecifiedSnapshotConfigs:
+  - SnapshotTarget: 0
+    AttributeName: AS_Fight.ATK
+    AttributeSetName: AS_Fight
+    AttributeShortName: ATK
