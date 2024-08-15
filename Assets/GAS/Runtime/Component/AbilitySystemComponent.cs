@@ -381,17 +381,12 @@ namespace GAS.Runtime
 
         private EntityRef<GameplayEffectSpec> AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec)
         {
-            var ges = GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
-            if (ges.Value == null) effectSpec.Recycle();
-            return ges;
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec);
         }
 
-        private EntityRef<GameplayEffectSpec> AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
-            int effectLevel)
+        private EntityRef<GameplayEffectSpec> AddGameplayEffect(AbilitySystemComponent source, GameplayEffectSpec effectSpec, int effectLevel)
         {
-            var ges = GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec, true, effectLevel);
-            if (ges.Value == null) effectSpec.Recycle();
-            return ges;
+            return GameplayEffectContainer.AddGameplayEffectSpec(source, effectSpec, true, effectLevel);
         }
 
         private void DisableAllAbilities()

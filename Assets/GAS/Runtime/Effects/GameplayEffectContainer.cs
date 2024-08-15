@@ -77,14 +77,20 @@ namespace GAS.Runtime
         /// <summary>
         /// </summary>
         /// <returns>
-        ///     Returns true if the gameplay effect is successfully applied and remains active.
-        ///     Returns false if the gameplay effect is applied but immediately removed due to a tag(in `AssetTags` or `GrantedTags`) match
-        ///     with the `RemoveGameplayEffectsWithTags` function, indicating that the effect did not persist.
+        ///    返回实际的GameplayEffectSpec(不一定是传入的Spec, 如果堆叠成功返回的是被堆叠的初始Spec),
+        ///    如果返回null, 要么是一次性生效的, 要么是应用失败的(比如被免疫)
         /// </returns>
-        public EntityRef<GameplayEffectSpec> AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffectSpec effectSpec, bool overwriteEffectLevel = false, int effectLevel = 0)
+        public EntityRef<GameplayEffectSpec> AddGameplayEffectSpec(AbilitySystemComponent source, EntityRef<GameplayEffectSpec> effectSpecRef, bool overwriteEffectLevel = false, int effectLevel = 0)
         {
-            if (!effectSpec.GameplayEffect.CanApplyTo(_owner))
+            var effectSpec = effectSpecRef.Value;
+            if (effectSpec == null)
                 return null;
+
+            if (!effectSpec.GameplayEffect.CanApplyTo(_owner))
+            {
+                effectSpec.Recycle();
+                return null;
+            }
 
             if (effectSpec.GameplayEffect.IsImmune(_owner))
             {
@@ -92,6 +98,7 @@ namespace GAS.Runtime
                 // var lv = overwriteEffectLevel ? effectLevel : source.Level;
                 // effectSpec.Init(source, _owner, lv);
                 // effectSpec.TriggerOnImmunity();
+                effectSpec.Recycle();
                 return null;
             }
 
@@ -100,62 +107,52 @@ namespace GAS.Runtime
             {
                 effectSpec.Init(source, _owner, level);
                 effectSpec.TriggerOnExecute();
+                effectSpec.Recycle();
                 return null;
             }
 
-
             // Check GE Stacking
-            if (effectSpec.Stacking.stackingType == StackingType.None)
-            {
-                return Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
-            }
-
             // 处理GE堆叠
-            // 基于Target类型GE堆叠
-            if (effectSpec.Stacking.stackingType == StackingType.AggregateByTarget)
+            switch (effectSpec.Stacking.stackingType)
             {
-                GetStackingEffectSpecByData(effectSpec.GameplayEffect, out var geSpec);
-                // 新添加GE
-                if (geSpec == null)
+                case StackingType.None:
+                    Operation_AddNewGameplayEffectSpec(source, ref effectSpecRef, overwriteEffectLevel, effectLevel);
+                    return effectSpecRef;
+                case StackingType.AggregateByTarget:
                 {
-                    return Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
+                    GetStackingEffectSpecByData(effectSpec.GameplayEffect, out var geSpec);
+                    if (geSpec == null)
+                    {
+                        Operation_AddNewGameplayEffectSpec(source, ref effectSpecRef, overwriteEffectLevel, effectLevel);
+                        return effectSpecRef;
+                    }
+
+                    bool stackCountChange = geSpec.RefreshStack();
+                    if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
+
+                    effectSpec.Recycle();
+                    return geSpec.IsApplied ? geSpec : null;
                 }
-
-                bool stackCountChange = geSpec.RefreshStack();
-                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
-
-                return geSpec;
-            }
-
-            // 基于Source类型GE堆叠
-            if (effectSpec.Stacking.stackingType == StackingType.AggregateBySource)
-            {
-                GetStackingEffectSpecByDataFrom(effectSpec.GameplayEffect, source, out var geSpec);
-                if (geSpec == null)
+                case StackingType.AggregateBySource:
                 {
-                    return Operation_AddNewGameplayEffectSpec(source, effectSpec, overwriteEffectLevel, effectLevel);
+                    GetStackingEffectSpecByDataFrom(effectSpec.GameplayEffect, source, out var geSpec);
+                    if (geSpec == null)
+                    {
+                        Operation_AddNewGameplayEffectSpec(source, ref effectSpecRef, overwriteEffectLevel, effectLevel);
+                        return effectSpecRef;
+                    }
+
+                    bool stackCountChange = geSpec.RefreshStack();
+                    if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
+
+                    effectSpec.Recycle();
+                    return geSpec.IsApplied ? geSpec : null;
                 }
-
-                bool stackCountChange = geSpec.RefreshStack();
-                if (stackCountChange) OnRefreshStackCountMakeContainerDirty();
-
-                return geSpec;
+                default:
+                    Debug.LogError("Unsupported StackingType: " + effectSpec.Stacking.stackingType);
+                    effectSpec.Recycle();
+                    return null;
             }
-
-            return null;
-        }
-
-        public EntityRef<GameplayEffectSpec> AddGameplayEffectSpec(AbilitySystemComponent source, GameplayEffect effect, int effectLevel)
-        {
-            var spec = effect.CreateSpec();
-            var ges = AddGameplayEffectSpec(source, spec, true, effectLevel);
-            // 没有add成功(被免疫了等)
-            if (ges.Value == null)
-            {
-                spec.Value?.Recycle();
-            }
-
-            return ges;
         }
 
         public void RemoveGameplayEffectSpec(GameplayEffectSpec spec)
@@ -288,9 +285,9 @@ namespace GAS.Runtime
             OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
-        private EntityRef<GameplayEffectSpec> Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source, GameplayEffectSpec effectSpec,
-            bool overwriteEffectLevel, int effectLevel)
+        private void Operation_AddNewGameplayEffectSpec(AbilitySystemComponent source, ref EntityRef<GameplayEffectSpec> effectSpecRef, bool overwriteEffectLevel, int effectLevel)
         {
+            var effectSpec = effectSpecRef.Value;
             var level = overwriteEffectLevel ? effectLevel : source.Level;
             effectSpec.Init(source, _owner, level);
             _gameplayEffectSpecs.Add(effectSpec);
@@ -298,20 +295,17 @@ namespace GAS.Runtime
             effectSpec.Apply();
 
             // If the gameplay effect was removed immediately after being applied, return false
-            if (!_gameplayEffectSpecs.Contains(effectSpec))
+            if (effectSpec.IsApplied == false)
             {
 #if UNITY_EDITOR
                 Debug.LogWarning(
                     $"GameplayEffect {effectSpec.GameplayEffect.GameplayEffectName} was removed immediately after being applied. This may indicate a problem with the RemoveGameplayEffectsWithTags.");
 #endif
-                effectSpec.Recycle();
                 // No need to trigger OnGameplayEffectContainerIsDirty, it has already been triggered when it was removed.
-                return null;
+                return;
             }
 
             OnGameplayEffectContainerIsDirty?.Invoke();
-
-            return effectSpec;
         }
     }
 }
