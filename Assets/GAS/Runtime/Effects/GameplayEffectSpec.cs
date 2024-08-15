@@ -7,9 +7,9 @@ namespace GAS.Runtime
 {
     public class GameplayEffectSpec : IEntity, IPool
     {
-        private readonly Dictionary<GameplayTag, float> _valueMapWithTag = new();
-        private readonly Dictionary<string, float> _valueMapWithName = new();
-        private readonly List<GameplayCueDurationalSpec> _cueDurationalSpecs = new();
+        private Dictionary<GameplayTag, float> _valueMapWithTag;
+        private Dictionary<string, float> _valueMapWithName;
+        private List<GameplayCueDurationalSpec> _cueDurationalSpecs;
 
         public object UserData { get; set; }
 
@@ -110,9 +110,21 @@ namespace GAS.Runtime
 
                 StackCount = 1;
 
-                _valueMapWithTag.Clear();
-                _valueMapWithName.Clear();
-                _cueDurationalSpecs.Clear();
+                if (_valueMapWithTag != null)
+                {
+                    _valueMapWithTag.Clear();
+                    ObjectPool.Instance.Recycle(_valueMapWithTag);
+                    _valueMapWithTag = null;
+                }
+
+                if (_valueMapWithName != null)
+                {
+                    _valueMapWithName.Clear();
+                    ObjectPool.Instance.Recycle(_valueMapWithName);
+                    _valueMapWithName = null;
+                }
+
+                ReleaseCueDurationalSpecs();
 
                 onImmunity = default;
                 onStackCountChanged = default;
@@ -205,11 +217,33 @@ namespace GAS.Runtime
 
         public void SetGrantedAbility(GrantedAbilityFromEffect[] grantedAbilityFromEffects)
         {
+            ReleaseGrantedAbilitiesSpecFromEffect();
+
+            if (grantedAbilityFromEffects is null) return;
+            if (grantedAbilityFromEffects.Length == 0) return;
+
             GrantedAbilitiesSpecFromEffect = ObjectPool.Instance.Fetch<List<EntityRef<GrantedAbilitySpecFromEffect>>>();
             foreach (var grantedAbilityFromEffect in grantedAbilityFromEffects)
             {
                 GrantedAbilitiesSpecFromEffect.Add(grantedAbilityFromEffect.CreateSpec(this));
             }
+        }
+
+        private void ReleaseGrantedAbilitiesSpecFromEffect()
+        {
+            if (GrantedAbilitiesSpecFromEffect == null) return;
+            foreach (var grantedAbilitySpecFromEffectRef in GrantedAbilitiesSpecFromEffect)
+            {
+                var grantedAbilitySpecFromEffect = grantedAbilitySpecFromEffectRef.Value;
+                if (grantedAbilitySpecFromEffect != null)
+                {
+                    grantedAbilitySpecFromEffect.Release();
+                    ObjectPool.Instance.Recycle(grantedAbilitySpecFromEffect);
+                }
+            }
+
+            GrantedAbilitiesSpecFromEffect.Clear();
+            ObjectPool.Instance.Recycle(GrantedAbilitiesSpecFromEffect);
         }
 
         public void SetStacking(GameplayEffectStacking stacking)
@@ -280,16 +314,18 @@ namespace GAS.Runtime
 
             try
             {
+                ReleaseCueDurationalSpecs();
                 if (GameplayEffect.CueDurational is { Length: > 0 })
                 {
-                    _cueDurationalSpecs.Clear();
+                    _cueDurationalSpecs = ObjectPool.Instance.Fetch<List<GameplayCueDurationalSpec>>();
                     foreach (var cueDurational in GameplayEffect.CueDurational)
                     {
                         var cueSpec = cueDurational.ApplyFrom(this);
                         if (cueSpec != null) _cueDurationalSpecs.Add(cueSpec);
                     }
 
-                    foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
+                    foreach (var cue in _cueDurationalSpecs)
+                        cue.OnAdd();
                 }
             }
             catch (Exception e)
@@ -305,18 +341,22 @@ namespace GAS.Runtime
 
             try
             {
-                if (GameplayEffect.CueDurational is { Length: > 0 })
+                if (_cueDurationalSpecs != null)
                 {
-                    foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
-
-                    _cueDurationalSpecs.Clear();
+                    foreach (var cue in _cueDurationalSpecs)
+                        cue.OnRemove();
                 }
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
             }
+            finally
+            {
+                ReleaseCueDurationalSpecs();
+            }
         }
+
 
         private void TriggerCueOnActivation()
         {
@@ -325,9 +365,11 @@ namespace GAS.Runtime
 
             try
             {
-                if (GameplayEffect.CueDurational is { Length: > 0 })
+                if (_cueDurationalSpecs != null)
+                {
                     foreach (var cue in _cueDurationalSpecs)
                         cue.OnGameplayEffectActivate();
+                }
             }
             catch (Exception e)
             {
@@ -342,9 +384,11 @@ namespace GAS.Runtime
 
             try
             {
-                if (GameplayEffect.CueDurational is { Length: > 0 })
+                if (_cueDurationalSpecs != null)
+                {
                     foreach (var cue in _cueDurationalSpecs)
                         cue.OnGameplayEffectDeactivate();
+                }
             }
             catch (Exception e)
             {
@@ -354,10 +398,13 @@ namespace GAS.Runtime
 
         private void CueOnTick()
         {
-            if (GameplayEffect.CueDurational is not { Length: > 0 }) return;
             try
             {
-                foreach (var cue in _cueDurationalSpecs) cue.OnTick();
+                if (_cueDurationalSpecs != null)
+                {
+                    foreach (var cue in _cueDurationalSpecs)
+                        cue.OnTick();
+                }
             }
             catch (Exception e)
             {
@@ -434,36 +481,43 @@ namespace GAS.Runtime
 
         public void RegisterValue(GameplayTag tag, float value)
         {
+            _valueMapWithTag ??= ObjectPool.Instance.Fetch<Dictionary<GameplayTag, float>>();
             _valueMapWithTag[tag] = value;
         }
 
         public void RegisterValue(string name, float value)
         {
+            _valueMapWithName ??= ObjectPool.Instance.Fetch<Dictionary<string, float>>();
             _valueMapWithName[name] = value;
         }
 
         public bool UnregisterValue(GameplayTag tag)
         {
+            if (_valueMapWithTag == null) return false;
             return _valueMapWithTag.Remove(tag);
         }
 
         public bool UnregisterValue(string name)
-        {
+        {   
+            if (_valueMapWithName == null) return false;
             return _valueMapWithName.Remove(name);
         }
 
         public float? GetMapValue(GameplayTag tag)
         {
+            if (_valueMapWithTag == null) return null;
             return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?)null;
         }
 
         public float? GetMapValue(string name)
         {
+            if (_valueMapWithName == null) return null;
             return _valueMapWithName.TryGetValue(name, out var value) ? value : (float?)null;
         }
 
         private void TryActivateGrantedAbilities()
         {
+            if (GrantedAbilitiesSpecFromEffect == null) return;
             foreach (GrantedAbilitySpecFromEffect grantedAbilitySpec in GrantedAbilitiesSpecFromEffect)
             {
                 if (grantedAbilitySpec is { ActivationPolicy: GrantedAbilityActivationPolicy.SyncWithEffect })
@@ -475,6 +529,7 @@ namespace GAS.Runtime
 
         private void TryDeactivateGrantedAbilities()
         {
+            if (GrantedAbilitiesSpecFromEffect == null) return;
             foreach (GrantedAbilitySpecFromEffect grantedAbilitySpec in GrantedAbilitiesSpecFromEffect)
             {
                 if (grantedAbilitySpec is { DeactivationPolicy: GrantedAbilityDeactivationPolicy.SyncWithEffect })
@@ -486,6 +541,7 @@ namespace GAS.Runtime
 
         private void TryRemoveGrantedAbilities()
         {
+            if (GrantedAbilitiesSpecFromEffect == null) return;
             foreach (GrantedAbilitySpecFromEffect grantedAbilitySpec in GrantedAbilitiesSpecFromEffect)
             {
                 if (grantedAbilitySpec is { RemovePolicy: GrantedAbilityRemovePolicy.SyncWithEffect })
@@ -493,6 +549,16 @@ namespace GAS.Runtime
                     Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
                     Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
                 }
+            }
+        }
+
+        private void ReleaseCueDurationalSpecs()
+        {
+            if (_cueDurationalSpecs != null)
+            {
+                _cueDurationalSpecs.Clear();
+                ObjectPool.Instance.Recycle(_cueDurationalSpecs);
+                _cueDurationalSpecs = null;
             }
         }
 
