@@ -1,4 +1,6 @@
-﻿namespace GAS.Runtime
+﻿using System;
+
+namespace GAS.Runtime
 {
     public static class IdGenerator
     {
@@ -20,13 +22,18 @@
         private readonly ulong _instanceId;
         private T _entity;
 
-        private EntityRef(T t)
+        public EntityRef(T t)
         {
             if (t == null)
             {
                 _instanceId = 0;
                 _entity = null;
                 return;
+            }
+
+            if (t.InstanceId == 0)
+            {
+                throw new ArgumentException("EntityRef: Entity must have a valid instance id");
             }
 
             _instanceId = t.InstanceId;
