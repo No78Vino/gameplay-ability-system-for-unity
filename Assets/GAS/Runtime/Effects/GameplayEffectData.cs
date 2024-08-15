@@ -6,128 +6,62 @@ namespace GAS.Runtime
     {
         private string Name { get; }
 
-        public GameplayEffectSnapshotPolicy SnapshotPolicy { get; set; } = GameplayEffectSnapshotPolicy.None;
+        public GameplayEffectSnapshotPolicy SnapshotPolicy { get; set; } = GameplayEffectSnapshotPolicy.Specified;
 
         public GameplayTag[] ApplicationRequiredTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] ApplicationImmunityTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] RemoveGameplayEffectsWithTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayCueInstant[] CueOnExecute { get; set; } = Array.Empty<GameplayCueInstant>();
         public GameplayEffectModifier[] Modifiers { get; set; } = Array.Empty<GameplayEffectModifier>();
+        public GameplayEffectSpecifiedSnapshotConfig[] SpecifiedSnapshotConfigs { get; set; } = Array.Empty<GameplayEffectSpecifiedSnapshotConfig>();
 
-        public InstantGameplayEffectData(string name)
-        {
-            Name = name;
-        }
+        public InstantGameplayEffectData(string name) => Name = name;
 
-        public string GetDisplayName()
-        {
-            return Name;
-        }
+        public string GetDisplayName() => Name;
 
-        public virtual EffectsDurationPolicy GetDurationPolicy()
-        {
-            return EffectsDurationPolicy.Instant;
-        }
+        public virtual EffectsDurationPolicy GetDurationPolicy() => EffectsDurationPolicy.Instant;
 
-        public virtual float GetDuration()
-        {
-            return -1;
-        }
+        public virtual float GetDuration() => -1;
 
-        public virtual float GetPeriod()
-        {
-            return 0;
-        }
+        public virtual float GetPeriod() => 0;
 
-        public virtual IGameplayEffectData GetPeriodExecution()
-        {
-            return null;
-        }
+        public virtual IGameplayEffectData GetPeriodExecution() => null;
 
-        public GameplayEffectSnapshotPolicy GetSnapshotPolicy()
-        {
-            return SnapshotPolicy;
-        }
+        public GameplayEffectSnapshotPolicy GetSnapshotPolicy() => SnapshotPolicy;
 
-        public virtual GameplayTag[] GetAssetTags()
-        {
-            return Array.Empty<GameplayTag>();
-        }
+        public GameplayEffectSpecifiedSnapshotConfig[] GetSpecifiedSnapshotConfigs() => SpecifiedSnapshotConfigs;
 
-        public virtual GameplayTag[] GetGrantedTags()
-        {
-            return Array.Empty<GameplayTag>();
-        }
+        public virtual GameplayTag[] GetAssetTags() => Array.Empty<GameplayTag>();
 
-        public GameplayTag[] GetRemoveGameplayEffectsWithTags()
-        {
-            return RemoveGameplayEffectsWithTags;
-        }
+        public virtual GameplayTag[] GetGrantedTags() => Array.Empty<GameplayTag>();
 
-        public GameplayTag[] GetApplicationRequiredTags()
-        {
-            return ApplicationRequiredTags;
-        }
+        public GameplayTag[] GetRemoveGameplayEffectsWithTags() => RemoveGameplayEffectsWithTags;
 
-        public GameplayTag[] GetApplicationImmunityTags()
-        {
-            return ApplicationImmunityTags;
-        }
+        public GameplayTag[] GetApplicationRequiredTags() => ApplicationRequiredTags;
 
-        public virtual GameplayTag[] GetOngoingRequiredTags()
-        {
-            return Array.Empty<GameplayTag>();
-        }
+        public GameplayTag[] GetApplicationImmunityTags() => ApplicationImmunityTags;
 
-        public GameplayCueInstant[] GetCueOnExecute()
-        {
-            return CueOnExecute;
-        }
+        public virtual GameplayTag[] GetOngoingRequiredTags() => Array.Empty<GameplayTag>();
 
-        public virtual GameplayCueInstant[] GetCueOnRemove()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
+        public GameplayCueInstant[] GetCueOnExecute() => CueOnExecute;
 
-        public virtual GameplayCueInstant[] GetCueOnAdd()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
+        public virtual GameplayCueInstant[] GetCueOnRemove() => Array.Empty<GameplayCueInstant>();
 
-        public virtual GameplayCueInstant[] GetCueOnActivate()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
+        public virtual GameplayCueInstant[] GetCueOnAdd() => Array.Empty<GameplayCueInstant>();
 
-        public virtual GameplayCueInstant[] GetCueOnDeactivate()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
+        public virtual GameplayCueInstant[] GetCueOnActivate() => Array.Empty<GameplayCueInstant>();
 
-        public virtual GameplayCueDurational[] GetCueDurational()
-        {
-            return Array.Empty<GameplayCueDurational>();
-        }
+        public virtual GameplayCueInstant[] GetCueOnDeactivate() => Array.Empty<GameplayCueInstant>();
 
-        public GameplayEffectModifier[] GetModifiers()
-        {
-            return Modifiers;
-        }
+        public virtual GameplayCueDurational[] GetCueDurational() => Array.Empty<GameplayCueDurational>();
 
-        public virtual ExecutionCalculation[] GetExecutions()
-        {
-            return Array.Empty<ExecutionCalculation>();
-        }
+        public GameplayEffectModifier[] GetModifiers() => Modifiers;
 
-        public virtual GrantedAbilityConfig[] GetGrantedAbilities()
-        {
-            return Array.Empty<GrantedAbilityConfig>();
-        }
+        public virtual ExecutionCalculation[] GetExecutions() => Array.Empty<ExecutionCalculation>();
 
-        public virtual GameplayEffectStacking GetStacking()
-        {
-            return GameplayEffectStacking.None;
-        }
+        public virtual GrantedAbilityConfig[] GetGrantedAbilities() => Array.Empty<GrantedAbilityConfig>();
+
+        public virtual GameplayEffectStacking GetStacking() => GameplayEffectStacking.None;
     }
 
     public class InfiniteGameplayEffectData : InstantGameplayEffectData
@@ -149,99 +83,45 @@ namespace GAS.Runtime
         public GrantedAbilityConfig[] GrantedAbilities { get; set; } = Array.Empty<GrantedAbilityConfig>();
         public GameplayEffectStacking Stacking { get; set; } = GameplayEffectStacking.None;
 
-        public InfiniteGameplayEffectData(string name, float period) : base(name)
-        {
-            Period = period;
-        }
+        public InfiniteGameplayEffectData(string name, float period) : base(name) => Period = period;
 
-        public override EffectsDurationPolicy GetDurationPolicy()
-        {
-            return EffectsDurationPolicy.Infinite;
-        }
+        public override EffectsDurationPolicy GetDurationPolicy() => EffectsDurationPolicy.Infinite;
 
-        public override float GetPeriod()
-        {
-            return Period;
-        }
+        public override float GetPeriod() => Period;
 
-        public override IGameplayEffectData GetPeriodExecution()
-        {
-            return PeriodExecution;
-        }
+        public override IGameplayEffectData GetPeriodExecution() => PeriodExecution;
 
-        public override GameplayTag[] GetAssetTags()
-        {
-            return AssetTags;
-        }
+        public override GameplayTag[] GetAssetTags() => AssetTags;
 
-        public override GameplayTag[] GetGrantedTags()
-        {
-            return GrantedTags;
-        }
+        public override GameplayTag[] GetGrantedTags() => GrantedTags;
 
-        public override GameplayTag[] GetOngoingRequiredTags()
-        {
-            return OngoingRequiredTags;
-        }
+        public override GameplayTag[] GetOngoingRequiredTags() => OngoingRequiredTags;
 
-        public override GameplayCueInstant[] GetCueOnRemove()
-        {
-            return CueOnRemove;
-        }
+        public override GameplayCueInstant[] GetCueOnRemove() => CueOnRemove;
 
-        public override GameplayCueInstant[] GetCueOnAdd()
-        {
-            return CueOnAdd;
-        }
+        public override GameplayCueInstant[] GetCueOnAdd() => CueOnAdd;
 
-        public override GameplayCueInstant[] GetCueOnActivate()
-        {
-            return CueOnActivate;
-        }
+        public override GameplayCueInstant[] GetCueOnActivate() => CueOnActivate;
 
-        public override GameplayCueInstant[] GetCueOnDeactivate()
-        {
-            return CueOnDeactivate;
-        }
+        public override GameplayCueInstant[] GetCueOnDeactivate() => CueOnDeactivate;
 
-        public override GameplayCueDurational[] GetCueDurational()
-        {
-            return CueDurational;
-        }
+        public override GameplayCueDurational[] GetCueDurational() => CueDurational;
 
-        public override ExecutionCalculation[] GetExecutions()
-        {
-            return Executions;
-        }
+        public override ExecutionCalculation[] GetExecutions() => Executions;
 
-        public override GrantedAbilityConfig[] GetGrantedAbilities()
-        {
-            return GrantedAbilities;
-        }
+        public override GrantedAbilityConfig[] GetGrantedAbilities() => GrantedAbilities;
 
-        public override GameplayEffectStacking GetStacking()
-        {
-            return Stacking;
-        }
+        public override GameplayEffectStacking GetStacking() => Stacking;
     }
 
     public class DurationalGameplayEffectData : InfiniteGameplayEffectData
     {
         public float Duration { get; }
 
-        public DurationalGameplayEffectData(string name, float period, float duration) : base(name, period)
-        {
-            Duration = duration;
-        }
+        public DurationalGameplayEffectData(string name, float period, float duration) : base(name, period) => Duration = duration;
 
-        public override EffectsDurationPolicy GetDurationPolicy()
-        {
-            return EffectsDurationPolicy.Duration;
-        }
+        public override EffectsDurationPolicy GetDurationPolicy() => EffectsDurationPolicy.Duration;
 
-        public override float GetDuration()
-        {
-            return Duration;
-        }
+        public override float GetDuration() => Duration;
     }
 }

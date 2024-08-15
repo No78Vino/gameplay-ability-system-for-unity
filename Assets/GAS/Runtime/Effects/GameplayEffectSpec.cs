@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
+    /// <summary>
+    /// 注意: 永远不要直接持有对GameplayEffectSpec的引用, 用EntityRef代替, 否则当它回收入池再次使用时会出现问题
+    /// </summary>
     public class GameplayEffectSpec : IEntity, IPool
     {
         private Dictionary<GameplayTag, float> _valueMapWithTag;
@@ -472,11 +475,66 @@ namespace GAS.Runtime
 
         private void CaptureAttributesSnapshot()
         {
-            if ((SnapshotPolicy & GameplayEffectSnapshotPolicy.Source) != 0)
-                SnapshotSourceAttributes = Source.DataSnapshot();
+            switch (SnapshotPolicy)
+            {
+                case GameplayEffectSnapshotPolicy.Specified:
+                    if (GameplayEffect.SpecifiedSnapshotConfigs != null)
+                    {
+                        foreach (var config in GameplayEffect.SpecifiedSnapshotConfigs)
+                        {
+                            switch (config.SnapshotTarget)
+                            {
+                                case GameplayEffectSpecifiedSnapshotConfig.ESnapshotTarget.Source:
+                                {
+                                    SnapshotSourceAttributes ??= ObjectPool.Instance.Fetch<Dictionary<string, float>>();
+                                    var attribute = Source.AttributeSetContainer.GetAttributeAttributeValue(config.AttributeSetName, config.AttributeShortName);
+                                    if (attribute != null)
+                                    {
+                                        SnapshotSourceAttributes[config.AttributeName] = attribute.Value.CurrentValue;
+                                    }
+                                    else
+                                    {
+                                        Debug.LogError($"Snapshot Source Attribute \"{config.AttributeName}\" not found in AttributeSet \"{config.AttributeSetName}\"");
+                                    }
 
-            if ((SnapshotPolicy & GameplayEffectSnapshotPolicy.Target) != 0)
-                SnapshotTargetAttributes = Source == Owner && SnapshotSourceAttributes != null ? SnapshotSourceAttributes : Owner.DataSnapshot();
+                                    break;
+                                }
+                                case GameplayEffectSpecifiedSnapshotConfig.ESnapshotTarget.Target:
+                                {
+                                    SnapshotTargetAttributes ??= ObjectPool.Instance.Fetch<Dictionary<string, float>>();
+                                    var attribute = Owner.AttributeSetContainer.GetAttributeAttributeValue(config.AttributeSetName, config.AttributeShortName);
+                                    if (attribute != null)
+                                    {
+                                        SnapshotTargetAttributes[config.AttributeName] = attribute.Value.CurrentValue;
+                                    }
+                                    else
+                                    {
+                                        Debug.LogError($"Snapshot Target Attribute {config.AttributeName} not found in AttributeSet {config.AttributeSetName}");
+                                    }
+
+                                    break;
+                                }
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+                    }
+
+                    break;
+                case GameplayEffectSnapshotPolicy.AllOfSource:
+                    SnapshotSourceAttributes = Source.DataSnapshot();
+                    break;
+                case GameplayEffectSnapshotPolicy.AllOfTarget:
+                    SnapshotTargetAttributes = Owner.DataSnapshot();
+                    break;
+                case GameplayEffectSnapshotPolicy.AllOfBoth:
+                    SnapshotSourceAttributes = Source.DataSnapshot();
+                    SnapshotTargetAttributes = Source == Owner && SnapshotSourceAttributes != null ? SnapshotSourceAttributes : Owner.DataSnapshot();
+                    break;
+                default:
+                    Debug.LogError($"Unsupported SnapshotPolicy: {SnapshotPolicy}, GameplayEffect: {GameplayEffect.GameplayEffectName}");
+                    break;
+            }
         }
 
         public void RegisterValue(GameplayTag tag, float value)
@@ -498,7 +556,7 @@ namespace GAS.Runtime
         }
 
         public bool UnregisterValue(string name)
-        {   
+        {
             if (_valueMapWithName == null) return false;
             return _valueMapWithName.Remove(name);
         }

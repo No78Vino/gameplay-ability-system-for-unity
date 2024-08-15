@@ -16,11 +16,13 @@ namespace GAS.Runtime
         private const string GRP_DATA = "Data";
         private const string GRP_DATA_H = "Data/H";
         private const string GRP_DATA_TAG = "Data/H/Tags";
-        private const string GRP_DATA_MOD = "Data/H/Modifiers";
         private const string GRP_DATA_CUE = "Data/H/Cues";
         private const string GRP_DATA_H2 = "Data/H2";
-        private const string GRP_DATA_STACK = "Data/H2/Stack";
-        private const string GRP_DATA_GRANTED_ABILITIES = "Data/H2/GrantedAbilities";
+        private const string GRP_DATA_Snapshot = "Data/H2/Snapshot";
+        private const string GRP_DATA_MOD = "Data/H2/Modifiers";
+        private const string GRP_DATA_H3 = "Data/H3";
+        private const string GRP_DATA_STACK = "Data/H3/Stack";
+        private const string GRP_DATA_GRANTED_ABILITIES = "Data/H3/GrantedAbilities";
 
         private const int WIDTH_LABEL = 70;
 
@@ -99,19 +101,12 @@ namespace GAS.Runtime
         [PropertyOrder(4)]
         public GameplayEffectAsset PeriodExecution;
 
-        [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
-        [LabelText(GASTextDefine.LABLE_GE_SnapshotPolicy, SdfIconType.Camera)]
-        [LabelWidth(WIDTH_LABEL)]
-        [PropertyOrder(5)]
-        [EnumToggleButtons]
-        public GameplayEffectSnapshotPolicy SnapshotPolicy = GameplayEffectSnapshotPolicy.None;
-
         #endregion Policy
 
         #region Stack
 
         [TitleGroup(GRP_DATA)]
-        [HorizontalGroup(GRP_DATA_H2, order: 2, Width = 1 - 0.618f)]
+        [HorizontalGroup(GRP_DATA_H3, order: 3, Width = 1 - 0.618f)]
         [TabGroup(GRP_DATA_STACK, "Stacking", SdfIconType.Stack, TextColor = "#9B4AE3", Order = 1)]
         [HideLabel]
         [EnableIf("IsDurationalPolicy")]
@@ -146,7 +141,6 @@ namespace GAS.Runtime
 
         #region Modifiers
 
-        [HorizontalGroup(GRP_DATA_H, order: 1, Width = 0.618f * 0.618f)]
         [TabGroup(GRP_DATA_MOD, "Modifiers", SdfIconType.CalculatorFill, TextColor = "#FFE60B", Order = 2)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [InfoBox("依次执行多个修改器, 请注意执行顺序", InfoMessageType.Info, VisibleIf = "@$value != null && $value.Length > 1")]
@@ -284,6 +278,23 @@ namespace GAS.Runtime
 
         #endregion Cues
 
+        #region Snapshot
+
+        [HorizontalGroup(GRP_DATA_H2, order: 2, Width = 1 - 0.618f)]
+        [TabGroup(GRP_DATA_Snapshot, "Snapshots", SdfIconType.Camera, TextColor = "#FF7F00", Order = 1)]
+        [LabelText(GASTextDefine.LABLE_GE_SnapshotPolicy, SdfIconType.Camera)]
+        [LabelWidth(WIDTH_LABEL)]
+        [EnumToggleButtons]
+        public GameplayEffectSnapshotPolicy SnapshotPolicy = GameplayEffectSnapshotPolicy.Specified;
+
+        [TabGroup(GRP_DATA_Snapshot, "Snapshots")]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
+        [ShowIf("@SnapshotPolicy == GameplayEffectSnapshotPolicy.Specified")]
+        [LabelText("需要快照的属性")]
+        public GameplayEffectSpecifiedSnapshotConfig[] SpecifiedSnapshotConfigs;
+
+        #endregion Snapshot
+
         // TODO
         [HideInInspector]
         public ExecutionCalculation[] Executions;
@@ -339,6 +350,8 @@ namespace GAS.Runtime
         public IGameplayEffectData GetPeriodExecution() => PeriodExecution;
 
         public GameplayEffectSnapshotPolicy GetSnapshotPolicy() => SnapshotPolicy;
+
+        public GameplayEffectSpecifiedSnapshotConfig[] GetSpecifiedSnapshotConfigs() => SpecifiedSnapshotConfigs;
 
         public GameplayTag[] GetAssetTags() => AssetTags;
 

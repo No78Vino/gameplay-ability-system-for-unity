@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -39,7 +40,7 @@ namespace GAS.Runtime
         [ValueDropdown("@ValueDropdownHelper.AttributeChoices", IsUniqueList = true)]
         [LabelText("属性的名称(Attribute Name)")]
         [OnValueChanged("@OnAttributeNameChanged()")]
-        [InfoBox("未指定属性名称", InfoMessageType.Error, VisibleIf = "@string.IsNullOrWhiteSpace(attributeName)")]
+        [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效", InfoMessageType.Error)]
         public string attributeName;
 
         [TabGroup("Default", "Details", SdfIconType.Bug, TextColor = "orange")]
@@ -61,44 +62,59 @@ namespace GAS.Runtime
 
         public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
         {
+            float attributeValue;
             if (attributeFromType == AttributeFrom.Source)
             {
                 if (captureType == GEAttributeCaptureType.SnapShot)
                 {
                     var snapShot = spec.SnapshotSourceAttributes;
-                    if (snapShot == null)
+                    if (snapShot == null || snapShot.TryGetValue(attributeName, out attributeValue) == false)
                     {
-                        Debug.LogError($"Source snapshot not enabled for spec: '{spec.GameplayEffect.GameplayEffectName}'. Please verify snapshot policy: '{spec.SnapshotPolicy}'.");
-                        return 0;
+                        Debug.LogError($"Source snapshot Attribute '{attributeName}' not found in source snapshot for spec: '{spec.GameplayEffect.GameplayEffectName}'.");
+                        attributeValue = 1;
                     }
-
-                    var attribute = snapShot[attributeName];
-                    return attribute * k + b;
                 }
                 else
                 {
-                    var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                    return (attribute ?? 1) * k + b;
+                    var attributeCurrentValue = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                    if (attributeCurrentValue == null)
+                    {
+                        Debug.LogError($"Source Attribute '{attributeName}' not found in source for spec: '{spec.GameplayEffect.GameplayEffectName}'.");
+                        attributeValue = 1;
+                    }
+                    else
+                    {
+                        attributeValue = attributeCurrentValue.Value;
+                    }
                 }
-            }
-
-            if (captureType == GEAttributeCaptureType.SnapShot)
-            {
-                var snapShot = spec.SnapshotTargetAttributes;
-                if (snapShot == null)
-                {
-                    Debug.LogError($"Target snapshot not enabled for spec: '{spec.GameplayEffect.GameplayEffectName}'. Please verify snapshot policy: '{spec.SnapshotPolicy}'.");
-                    return 0;
-                }
-
-                var attribute = snapShot[attributeName];
-                return attribute * k + b;
             }
             else
             {
-                var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                return (attribute ?? 1) * k + b;
+                if (captureType == GEAttributeCaptureType.SnapShot)
+                {
+                    var snapShot = spec.SnapshotTargetAttributes;
+                    if (snapShot == null || snapShot.TryGetValue(attributeName, out attributeValue) == false)
+                    {
+                        Debug.LogError($"Target snapshot Attribute '{attributeName}' not found in target snapshot for spec: '{spec.GameplayEffect.GameplayEffectName}'.");
+                        attributeValue = 1;
+                    }
+                }
+                else
+                {
+                    var attributeCurrentValue = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                    if (attributeCurrentValue == null)
+                    {
+                        Debug.LogError($"Source Attribute '{attributeName}' not found in source for spec: '{spec.GameplayEffect.GameplayEffectName}'.");
+                        attributeValue = 1;
+                    }
+                    else
+                    {
+                        attributeValue = attributeCurrentValue.Value;
+                    }
+                }
             }
+
+            return attributeValue * k + b;
         }
 
         private void OnAttributeNameChanged()

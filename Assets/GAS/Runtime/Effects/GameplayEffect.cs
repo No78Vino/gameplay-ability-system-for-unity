@@ -18,20 +18,19 @@ namespace GAS.Runtime
         Duration
     }
 
-    [Flags]
     public enum GameplayEffectSnapshotPolicy
     {
-        [LabelText("禁用", SdfIconType.XCircleFill)]
-        None = 0,
+        [LabelText("配置指定", SdfIconType.UiChecksGrid)]
+        Specified = 0,
 
-        [LabelText("来源", SdfIconType.Magic)]
-        Source = 1 << 0,
+        [LabelText("施法者全部", SdfIconType.Magic)]
+        AllOfSource = 1,
 
-        [LabelText("目标", SdfIconType.Person)]
-        Target = 1 << 1,
+        [LabelText("持有者全部", SdfIconType.Person)]
+        AllOfTarget = 2,
 
-        [LabelText("全部", SdfIconType.People)]
-        All = Source | Target
+        [LabelText("我全都要", SdfIconType.People)]
+        AllOfBoth = 3,
     }
 
     public class GameplayEffect
@@ -41,8 +40,11 @@ namespace GAS.Runtime
         public readonly float Duration; // -1 represents infinite duration
         public readonly float Period;
         public readonly GameplayEffect PeriodExecution;
-        public readonly GameplayEffectSnapshotPolicy SnapshotPolicy;
         public readonly GameplayEffectTagContainer TagContainer;
+
+        // Snapshot
+        public readonly GameplayEffectSnapshotPolicy SnapshotPolicy;
+        public readonly GameplayEffectSpecifiedSnapshotConfig[] SpecifiedSnapshotConfigs;
 
         // Cues
         public readonly GameplayCueInstant[] CueOnExecute;
@@ -101,6 +103,7 @@ namespace GAS.Runtime
             Duration = data.GetDuration();
             Period = data.GetPeriod();
             SnapshotPolicy = data.GetSnapshotPolicy();
+            SpecifiedSnapshotConfigs = data.GetSpecifiedSnapshotConfigs();
             TagContainer = new GameplayEffectTagContainer(data);
             var periodExecutionGe = data.GetPeriodExecution();
 #if UNITY_EDITOR
