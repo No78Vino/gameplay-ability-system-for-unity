@@ -5,18 +5,19 @@ namespace GAS.RuntimeWithECS.Core
 {
     public static class GASManager
     {
-        private static bool _isInitialized;
-        public static EntityManager EntityManager { get; }
+        public static EntityManager EntityManager { get; private set; }
 
         public static World World { get; }
 
         public static TurnController TurnController { get; private set; }
 
         public static bool IsRunning { get; private set;}
+        
+        public static bool IsInitialized { get; private set; }
 
         public static void Initialize()
         {
-            if (_isInitialized)
+            if (IsInitialized)
             {
 #if UNITY_EDITOR
                 Debug.Log("EX-GAS has been initialized.Don't reinitialize.");
@@ -26,9 +27,10 @@ namespace GAS.RuntimeWithECS.Core
 
 
             TurnController ??= new TurnController();
+            EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             // 系统逻辑帧计时器
             World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(GlobalFrameTimer));
-            _isInitialized = true;
+            IsInitialized = true;
         }
 
         public static void Run() => IsRunning = true;
