@@ -78,7 +78,7 @@ namespace GAS.Runtime
         [LabelWidth(LABEL_WIDTH)]
         [EnumToggleButtons]
         [PropertyOrder(2)]
-        [ValidateInput("@ReflectionHelper.GetAttribute(AttributeName).IsSupportOperation($value)", "非法运算: 该属性不支持的此运算法则")]
+        [ValidateInput("@ReflectionHelper.GetAttribute(AttributeName)?.IsSupportOperation($value)", "非法运算: 该属性不支持的此运算法则")]
         public GEOperation Operation;
 
         [LabelText("参数修饰", SdfIconType.CpuFill)]
