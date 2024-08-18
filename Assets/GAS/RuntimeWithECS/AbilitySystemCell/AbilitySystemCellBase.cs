@@ -2,6 +2,7 @@ using System;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
 using UnityEngine;
 
@@ -12,11 +13,15 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         public Entity Entity { get; private set; }
         protected EntityManager EntityManager => GASManager.EntityManager;
 
+        private BasicDataComponent BasicData => EntityManager.GetComponentData<BasicDataComponent>(Entity);
+
         protected void OnEnable()
         {
             if (GASManager.IsInitialized && !EntityManager.Exists(Entity))
             {
                 Entity = EntityManager.CreateEntity();
+                EntityManager.AddComponentData(Entity, new BasicDataComponent());
+                EntityManager.AddComponentData(Entity, new GASTagContainer());
             }
         }
 
@@ -28,34 +33,28 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                 Entity = Entity.Null;
             }
         }
-        
-        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities, int level)
-        {
 
-            // if (baseTags != null) GameplayTagAggregator.Init(baseTags);
-            //
-            // if (attrSetTypes != null)
-            // {
-            //     foreach (var attrSetType in attrSetTypes)
-            //         AttributeSetContainer.AddAttributeSet(attrSetType);
-            // }
-            //
-            // if (baseAbilities != null)
-            // {
-            //     foreach (var info in baseAbilities)
-            //         GrantAbility(info);
-            // }
+        public void Init(int[] baseTags, int[] attrSets, AbilityAsset[] baseAbilities, int level)
+        {
+            // 1.初始化基础标签
+            var fixedTags = new DynamicBuffer<int>();
+            foreach (var i in baseTags) fixedTags.Add(i);
+            EntityManager.SetComponentData(Entity,
+                new GASTagContainer { FixedTags = fixedTags, DynamicTags = new DynamicBuffer<int>() });
             
+            // 2.创建属性集
+            
+            // 3.初始化基础技能
+            
+            // 4.初始化等级
             SetLevel(level);
         }
-        
+
         public void SetLevel(int level)
         {
             var bdc = BasicData;
             bdc.Level = level;
-            EntityManager.SetComponentData(Entity,bdc);
+            EntityManager.SetComponentData(Entity, bdc);
         }
-
-        private BasicDataComponent BasicData => EntityManager.GetComponentData<BasicDataComponent>(Entity);
     }
 }
