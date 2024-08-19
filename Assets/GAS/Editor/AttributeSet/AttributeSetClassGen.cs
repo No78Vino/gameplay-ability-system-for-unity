@@ -100,7 +100,7 @@ namespace GAS.Editor
                                 writer.WriteLine($"/// {attributeAccessor.Comment}");
                                 writer.WriteLine($"/// </summary>");
                                 writer.WriteLine(
-                                    $"public AttributeBase {validAttrName} {{ get; }} = new (\"AS_{validName}\", \"{attributeName}\", {attributeAccessor.DefaultValue}f, CalculateMode.{attributeAccessor.CalculateMode}, (SupportedOperation){(byte)attributeAccessor.SupportedOperation}, {(attributeAccessor.LimitMinValue ? attributeAccessor.MinValue : "float.MinValue")}, {(attributeAccessor.LimitMaxValue ? attributeAccessor.MaxValue : "float.MaxValue")});");
+                                    $"public AttributeBase {validAttrName} {{ get; }} = new (\"AS_{validName}\", \"{attributeName}\", {attributeAccessor.DefaultValue}f, CalculateMode.{attributeAccessor.CalculateMode}, (SupportedOperation){(byte)attributeAccessor.SupportedOperation}, {(attributeAccessor.LimitMinValue ? attributeAccessor.MinValue + "f" : "float.MinValue")}, {(attributeAccessor.LimitMaxValue ? attributeAccessor.MaxValue + "f" : "float.MaxValue")});");
 
                                 writer.WriteLine("");
 

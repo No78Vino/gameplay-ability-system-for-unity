@@ -529,7 +529,7 @@ namespace GAS.Runtime
                     break;
                 case GameplayEffectSnapshotPolicy.AllOfBoth:
                     SnapshotSourceAttributes = Source.DataSnapshot();
-                    SnapshotTargetAttributes = Source == Owner && SnapshotSourceAttributes != null ? SnapshotSourceAttributes : Owner.DataSnapshot();
+                    SnapshotTargetAttributes = Source == Owner ? SnapshotSourceAttributes : Owner.DataSnapshot();
                     break;
                 default:
                     Debug.LogError($"Unsupported SnapshotPolicy: {SnapshotPolicy}, GameplayEffect: {GameplayEffect.GameplayEffectName}");
