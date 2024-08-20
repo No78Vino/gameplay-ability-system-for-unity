@@ -42,14 +42,18 @@ namespace GAS.Runtime
 #endif
         // Tags
         [TabGroup("Base/H1/V3", "Tags", SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 3)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@RequiredTags = TagHelper.SortTags($value)")]
         [LabelText("RequiredTags - 持有所有标签才可触发")]
         public GameplayTag[] RequiredTags;
 
         [TabGroup("Base/H1/V3", "Tags")]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@ImmunityTags = TagHelper.SortTags($value)")]
         [LabelText("ImmunityTags - 持有任意标签不可触发")]
         public GameplayTag[] ImmunityTags;
 

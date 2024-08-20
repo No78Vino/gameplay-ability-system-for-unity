@@ -1,16 +1,16 @@
-#if UNITY_EDITOR
+using System;
+using System.IO;
+using System.Linq;
+using UnityEditorInternal;
+using UnityEngine;
+using Object = UnityEngine.Object;
+
 namespace GAS.Editor
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using UnityEditor;
-    using UnityEditorInternal;
-    using UnityEngine;
-    
     public class ScriptableSingleton<T> : ScriptableObject where T : ScriptableObject
     {
         private static T s_Instance;
+
         public static T Instance
         {
             get
@@ -19,21 +19,24 @@ namespace GAS.Editor
                 {
                     LoadOrCreate();
                 }
+
                 return s_Instance;
             }
         }
+
         public static T LoadOrCreate()
         {
             string filePath = GetFilePath();
             if (!string.IsNullOrEmpty(filePath))
             {
                 var arr = InternalEditorUtility.LoadSerializedFileAndForget(filePath);
-                s_Instance = arr.Length > 0 ? arr[0] as T : s_Instance??CreateInstance<T>();
+                s_Instance = arr.Length > 0 ? arr[0] as T : s_Instance ? s_Instance : CreateInstance<T>();
             }
             else
             {
                 Debug.LogError($"save location of {nameof(ScriptableSingleton<T>)} is invalid");
             }
+
             return s_Instance;
         }
 
@@ -49,11 +52,18 @@ namespace GAS.Editor
             if (!string.IsNullOrEmpty(filePath))
             {
                 string directoryName = Path.GetDirectoryName(filePath);
+                if (directoryName is null)
+                {
+                    Debug.LogError($"save location of {nameof(ScriptableSingleton<T>)} is invalid");
+                    return;
+                }
+
                 if (!Directory.Exists(directoryName))
                 {
                     Directory.CreateDirectory(directoryName);
                 }
-                UnityEngine.Object[] obj = new T[1] { s_Instance };
+
+                Object[] obj = { s_Instance };
                 InternalEditorUtility.SaveToSerializedFileAndForget(obj, filePath, saveAsText);
                 //Debug.Log($"Saved ScriptableSingleton to {filePath}");
             }
@@ -64,7 +74,7 @@ namespace GAS.Editor
             if (asset == null) return;
             s_Instance = asset;
         }
-        
+
         protected static string GetFilePath()
         {
             return typeof(T).GetCustomAttributes(inherit: true)
@@ -74,10 +84,12 @@ namespace GAS.Editor
                 ?.filepath;
         }
     }
+
     [AttributeUsage(AttributeTargets.Class)]
     public class FilePathAttribute : Attribute
     {
         internal string filepath;
+
         /// <summary>
         /// 单例存放路径
         /// </summary>
@@ -88,12 +100,13 @@ namespace GAS.Editor
             {
                 throw new ArgumentException("Invalid relative path (it is empty)");
             }
+
             if (path[0] == '/')
             {
-                path = path.Substring(1);
+                path = path[1..];
             }
+
             filepath = path;
         }
     }
 }
-#endif

@@ -54,8 +54,8 @@ namespace GAS.Runtime
         [LabelWidth(LABEL_WIDTH)]
         [OnValueChanged("OnAttributeChanged")]
         [ValueDropdown("@ValueDropdownHelper.AttributeChoices", IsUniqueList = true)]
+        [ValidateInput("@ReflectionHelper.GetAttribute($value) != null", "无效属性")]
         [Tooltip("指的是GameplayEffect作用对象被修改的属性。")]
-        [InfoBox("未选择属性", InfoMessageType.Error, VisibleIf = "@string.IsNullOrWhiteSpace($value)")]
         [SuffixLabel("@ReflectionHelper.GetAttribute($value)?.CalculateMode")]
         [PropertyOrder(1)]
         public string AttributeName;
@@ -69,8 +69,7 @@ namespace GAS.Runtime
         [LabelText("运算参数", SdfIconType.Activity)]
         [LabelWidth(LABEL_WIDTH)]
         [Tooltip("修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。\nMMC未指定时直接使用这个值。")]
-        [InfoBox("除数不能为零", InfoMessageType.Error,
-            VisibleIf = "@Operation == GEOperation.Divide && ModiferMagnitude == 0 && MMC == null")]
+        [ValidateInput("@Operation != GEOperation.Divide || ModiferMagnitude != 0", "除数不能为零")]
         [PropertyOrder(3)]
         public float ModiferMagnitude;
 
@@ -78,7 +77,7 @@ namespace GAS.Runtime
         [LabelWidth(LABEL_WIDTH)]
         [EnumToggleButtons]
         [PropertyOrder(2)]
-        [ValidateInput("@ReflectionHelper.GetAttribute(AttributeName)?.IsSupportOperation($value)", "非法运算: 该属性不支持的此运算法则")]
+        [ValidateInput("@ReflectionHelper.GetAttribute(AttributeName) == null || ReflectionHelper.GetAttribute(AttributeName).IsSupportOperation($value)", "非法运算: 该属性不支持的此运算法则")]
         public GEOperation Operation;
 
         [LabelText("参数修饰", SdfIconType.CpuFill)]

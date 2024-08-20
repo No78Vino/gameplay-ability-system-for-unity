@@ -40,7 +40,7 @@ namespace GAS.Runtime
         [ValueDropdown("@ValueDropdownHelper.AttributeChoices", IsUniqueList = true)]
         [LabelText("属性的名称(Attribute Name)")]
         [OnValueChanged("@OnAttributeNameChanged()")]
-        [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效", InfoMessageType.Error)]
+        [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效")]
         public string attributeName;
 
         [TabGroup("Default", "Details", SdfIconType.Bug, TextColor = "orange")]

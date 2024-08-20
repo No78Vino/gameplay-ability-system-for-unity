@@ -23,28 +23,21 @@ namespace GAS.Editor
         [HorizontalGroup("A/R", order: 1)]
         [DisplayAsString(TextAlignment.Left, FontSize = 18)]
         [HideLabel]
-        [InfoBox(GASTextDefine.ERROR_DuplicatedAttribute, InfoMessageType.Error,
-            VisibleIf = "ExistDuplicatedAttribute")]
+        [ValidateInput("@ExistDuplicatedAttribute() == false", GASTextDefine.ERROR_DuplicatedAttribute)]
         [InfoBox(GASTextDefine.ERROR_Empty, InfoMessageType.Error, VisibleIf = "EmptyAttribute")]
         [InfoBox(GASTextDefine.ERROR_EmptyName, InfoMessageType.Error, VisibleIf = "EmptyAttributeSetName")]
         public string Name = "Unnamed";
 
         [Space]
-        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false,
-            OnTitleBarGUI = "DrawAttributeNamesButtons")]
+        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false)]
         [ValueDropdown("AttributeChoices", IsUniqueList = true)]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@SortAttributeNames()")]
         [LabelText("Attributes")]
         [Searchable]
-        public List<string> AttributeNames = new List<string>();
+        public List<string> AttributeNames = new();
 
-        private void DrawAttributeNamesButtons()
-        {
-            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
-            {
-                AttributeNames = AttributeNames.OrderBy(x => x).ToList();
-                ParentAsset.SaveAsset();
-            }
-        }
+        private void SortAttributeNames() => AttributeNames = AttributeNames.OrderBy(x => x).ToList();
 
         [HorizontalGroup("A", Width = 50)]
         [HorizontalGroup("A/L", order: 0, Width = 50)]
@@ -107,24 +100,20 @@ namespace GAS.Editor
         [ListDrawerSettings(ShowFoldout = true,
             CustomAddFunction = "OnAddAttributeSet",
             CustomRemoveElementFunction = "OnRemoveElement",
-            CustomRemoveIndexFunction = "OnRemoveIndex", OnTitleBarGUI = "DrawAttributeSetConfigsButtons")]
+            CustomRemoveIndexFunction = "OnRemoveIndex")]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@SortAttributeSetConfigs()")]
         [Searchable]
         public List<AttributeSetConfig> AttributeSetConfigs = new List<AttributeSetConfig>();
 
-        private void DrawAttributeSetConfigsButtons()
-        {
-            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
-            {
-                AttributeSetConfigs = AttributeSetConfigs.OrderBy(x => x.Name).ToList();
-                SaveAsset();
-            }
-        }
+        private void SortAttributeSetConfigs() => AttributeSetConfigs = AttributeSetConfigs.OrderBy(x => x.Name).ToList();
 
         private void OnEnable()
         {
             AttributeSetConfig.ParentAsset = this;
             var asset = AttributeAsset.LoadOrCreate();
-            AttributeSetConfig.SetAttributeChoices(asset?.AttributeNames);
+            var attributeChoices = asset != null ? (from attr in asset.attributes where !string.IsNullOrWhiteSpace(attr.Name) select attr.Name).ToList() : new();
+            AttributeSetConfig.SetAttributeChoices(attributeChoices);
         }
 
         public void SaveAsset()

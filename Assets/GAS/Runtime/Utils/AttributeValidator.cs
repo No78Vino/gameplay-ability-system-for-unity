@@ -9,7 +9,7 @@ namespace GAS.Runtime
         /// <example>
         /// 使用示例：
         /// <code>
-        /// [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效", InfoMessageType.Error)]
+        /// [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效")]
         /// public string AttributeName;
         /// </code>
         /// </example>

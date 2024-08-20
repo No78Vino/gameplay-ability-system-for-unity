@@ -62,10 +62,16 @@ namespace GAS.Runtime
             _value.SetMinValue(min);
             _value.SetMaxValue(max);
         }
-        
+
         public bool IsSupportOperation(GEOperation operation)
         {
             return _value.IsSupportOperation(operation);
+        }
+
+        public void Init(float baseValue)
+        {
+            SetBaseValue(baseValue);
+            SetCurrentValue(baseValue);
         }
 
         public void SetCurrentValue(float value)
@@ -77,7 +83,8 @@ namespace GAS.Runtime
             var oldValue = CurrentValue;
             _value.SetCurrentValue(value);
 
-            if (!Mathf.Approximately(oldValue, value)) _onPostCurrentValueChange?.Invoke(this, oldValue, value);
+            if (!Mathf.Approximately(oldValue, value))
+                _onPostCurrentValueChange?.Invoke(this, oldValue, value);
         }
 
         public void SetBaseValue(float value)
@@ -90,7 +97,8 @@ namespace GAS.Runtime
             var oldValue = _value.BaseValue;
             _value.SetBaseValue(value);
 
-            if (!Mathf.Approximately(oldValue, value)) _onPostBaseValueChange?.Invoke(this, oldValue, value);
+            if (!Mathf.Approximately(oldValue, value))
+                _onPostBaseValueChange?.Invoke(this, oldValue, value);
         }
 
         public void SetCurrentValueWithoutEvent(float value)

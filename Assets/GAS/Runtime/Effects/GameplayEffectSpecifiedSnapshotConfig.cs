@@ -28,7 +28,7 @@ namespace GAS.Runtime
         [LabelWidth(LABEL_WIDTH)]
         [OnValueChanged("OnAttributeChanged")]
         [ValueDropdown("@ValueDropdownHelper.AttributeChoices", IsUniqueList = true)]
-        [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效", InfoMessageType.Error)]
+        [ValidateInput("@AttributeValidator.IsValidAttributeName($value)", "属性名无效")]
         public string AttributeName;
 
         [HideInInspector]

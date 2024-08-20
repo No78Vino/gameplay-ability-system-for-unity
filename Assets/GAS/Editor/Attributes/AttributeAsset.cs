@@ -6,68 +6,42 @@ using GAS.General;
 using GAS.General.Validation;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
 namespace GAS.Editor
 {
     [FilePath(GasDefine.GAS_ATTRIBUTE_ASSET_PATH)]
-    public class AttributeAsset : ScriptableSingleton<AttributeAsset>
+    internal class AttributeAsset : ScriptableSingleton<AttributeAsset>
     {
         [BoxGroup("Warning", order: -1)]
         [HideLabel]
         [ShowIf("ExistDuplicatedAttribute")]
         [DisplayAsString(TextAlignment.Left, true)]
         [NonSerialized]
-        public string Warning_DuplicatedAttribute = "";
-        
+        [ShowInInspector]
+        private string Warning_DuplicatedAttribute = "";
+
         [VerticalGroup("Attributes", order: 1)]
         [ListDrawerSettings(
             ShowFoldout = true,
             CustomRemoveElementFunction = "OnRemoveElement",
             CustomRemoveIndexFunction = "OnRemoveIndex",
             CustomAddFunction = "OnAddAttribute",
-            ShowPaging = false, OnTitleBarGUI = "DrawAttributeButtons")]
+            ShowPaging = false)]
         [Searchable]
-        [OnValueChanged("@OnValueChanged()", true)]
-        [OnCollectionChanged(after: "@OnCollectionChanged()")]
-        public List<AttributeAccessor> attributes = new List<AttributeAccessor>();
+        [OnValueChanged("@SaveAsset()", true)]
+        [OnCollectionChanged(after: "@SaveAsset()")]
+        [CustomContextMenu("排序", "@SortAttributes()")]
+        [SerializeField]
+        public List<AttributeAccessor> attributes = new();
 
-        private void OnValueChanged()
-        {
-            Debug.Log("OnListChanged");
-            SaveAsset();
-        }
-
-        private void OnCollectionChanged()
-        {
-            Debug.Log("OnCollectionChanged");
-            SaveAsset();
-        }
-
-        private void DrawAttributeButtons()
-        {
-            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
-            {
-                attributes = attributes.OrderBy(x => x.Name).ToList();
-                SaveAsset();
-            }
-        }
-
-        public List<string> AttributeNames =>
-            (from attr in attributes where !string.IsNullOrEmpty(attr.Name) select attr.Name).ToList();
-
-        private void OnEnable()
-        {
-            AttributeAccessor.ParentAsset = this;
-        }
+        private void SortAttributes() => attributes = attributes.OrderBy(x => x.Name).ToList();
 
         [VerticalGroup("Gen Code", order: 0)]
         [GUIColor(0, 0.9f, 0)]
-        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30,
-            Expanded = true)]
-        [InfoBox(GASTextDefine.TIP_Warning_EmptyAttribute, InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
+        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30, Expanded = true)]
+        [ValidateInput("@ExistEmptyAttribute() == false", GASTextDefine.TIP_Warning_EmptyAttribute)]
         void GenCode()
         {
             if (ExistEmptyAttribute() || ExistDuplicatedAttribute())
@@ -170,26 +144,18 @@ namespace GAS.Editor
         }
 
         [Serializable]
-        public class AttributeAccessor
+        internal sealed class AttributeAccessor
         {
             private const int LabelWidth = 100;
-            public static AttributeAsset ParentAsset;
 
             private string DisplayName => $"{Name} - {Comment}";
 
             [FoldoutGroup("$DisplayName", false)]
             [LabelText("属性名"), LabelWidth(LabelWidth)]
             [DelayedProperty]
-            [ValidateInput("@OnNameChanged($value)", "Attribute name is invalid!")]
+            [ValidateInput("@Validations.IsValidVariableName($value)", "Attribute name is invalid!")]
             [PropertyOrder(1)]
             public string Name = "Unnamed";
-
-            private bool OnNameChanged(string value)
-            {
-                if (ParentAsset == null) return true;
-
-                return Validations.IsValidVariableName(value);
-            }
 
             [FoldoutGroup("$DisplayName")]
             [DelayedProperty]

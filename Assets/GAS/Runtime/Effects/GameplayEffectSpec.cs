@@ -8,7 +8,7 @@ namespace GAS.Runtime
     /// <summary>
     /// 注意: 永远不要直接持有对GameplayEffectSpec的引用, 用EntityRef代替, 否则当它回收入池再次使用时会出现问题
     /// </summary>
-    public class GameplayEffectSpec : IEntity, IPool
+    public sealed class GameplayEffectSpec : IEntity, IPool
     {
         private Dictionary<GameplayTag, float> _valueMapWithTag;
         private Dictionary<string, float> _valueMapWithName;
@@ -16,14 +16,9 @@ namespace GAS.Runtime
 
         public object UserData { get; set; }
 
-        /// <summary>
-        /// The execution type of onImmunity is one shot.
-        /// </summary>
-#pragma warning disable CS0414 // The field 'GameplayEffectSpec.onImmunity' is assigned but its value is never used
-        public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
-#pragma warning restore CS0414
+        private event Action<AbilitySystemComponent, GameplayEffectSpec> OnImmunityBlock;
 
-        private event Action<int, int> onStackCountChanged;
+        private event Action<int, int> OnStackChanged;
 
         public ulong InstanceId { get; private set; }
 
@@ -129,8 +124,8 @@ namespace GAS.Runtime
 
                 ReleaseCueDurationalSpecs();
 
-                onImmunity = default;
-                onStackCountChanged = default;
+                OnImmunityBlock = default;
+                OnStackChanged = default;
             }
 
             ObjectPool.Instance.Recycle(this);
@@ -431,41 +426,47 @@ namespace GAS.Runtime
 
         public void TriggerOnRemove()
         {
-            TriggerCueOnRemove();
-
             TryRemoveGrantedAbilities();
+            TriggerCueOnRemove();
         }
 
         private void TriggerOnActivation()
         {
-            TriggerCueOnActivation();
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
-            Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
-                .RemoveGameplayEffectsWithTags);
+            Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer.RemoveGameplayEffectsWithTags);
 
             TryActivateGrantedAbilities();
+            TriggerCueOnActivation();
         }
 
         private void TriggerOnDeactivation()
         {
-            TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
 
             TryDeactivateGrantedAbilities();
+            TriggerCueOnDeactivation();
         }
 
         public void TriggerOnTick()
         {
-            if (DurationPolicy == EffectsDurationPolicy.Duration ||
-                DurationPolicy == EffectsDurationPolicy.Infinite)
+            if (DurationPolicy is EffectsDurationPolicy.Duration or EffectsDurationPolicy.Infinite)
                 CueOnTick();
         }
 
         public void TriggerOnImmunity()
         {
-            // TODO 免疫触发事件逻辑需要调整
-            // onImmunity?.Invoke(Owner, this);
-            // onImmunity = null;
+            OnImmunityBlock?.Invoke(Owner, this);
+            OnImmunityBlock = null;
+        }
+
+        public void RegisterOnImmunityBlock(Action<AbilitySystemComponent, GameplayEffectSpec> callback)
+        {
+            OnImmunityBlock += callback;
+        }
+
+        public void UnregisterOnImmunityBlock(Action<AbilitySystemComponent, GameplayEffectSpec> callback)
+        {
+            OnImmunityBlock -= callback;
         }
 
         public void RemoveSelf()
@@ -683,17 +684,17 @@ namespace GAS.Runtime
 
         private void OnStackCountChange(int oldStackCount, int newStackCount)
         {
-            onStackCountChanged?.Invoke(oldStackCount, newStackCount);
+            OnStackChanged?.Invoke(oldStackCount, newStackCount);
         }
 
         public void RegisterOnStackCountChanged(Action<int, int> callback)
         {
-            onStackCountChanged += callback;
+            OnStackChanged += callback;
         }
 
         public void UnregisterOnStackCountChanged(Action<int, int> callback)
         {
-            onStackCountChanged -= callback;
+            OnStackChanged -= callback;
         }
 
         #endregion

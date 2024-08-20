@@ -153,16 +153,17 @@ namespace GAS.Runtime
         [VerticalGroup]
         [HideIf("IsNoStacking")]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_CODENAME)]
-        [InlineButton(@"@stackingCodeName = """"", SdfIconType.EraserFill, "")]
+        [CustomContextMenu("清除","@stackingCodeName = \"\"")]
         public string stackingCodeName;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [LabelText(GASTextDefine.LABEL_GE_STACKING_COUNT)]
         [HideIf("IsNoStacking")]
-        [InlineButton(@"@limitCount = int.MaxValue", SdfIconType.Hammer, "max")]
-        [InlineButton(@"@limitCount = 0", SdfIconType.Hammer, "min")]
-        [ValidateInput("@limitCount >= 0", "必须>=0")]
+        [CustomContextMenu("设为0","@limitCount = 0")]
+        [CustomContextMenu("设为1","@limitCount = 1")]
+        [CustomContextMenu("设为最大值","@limitCount = int.MaxValue")]
+        [MinValue(0),MaxValue(int.MaxValue)]
         public int limitCount;
 
         [LabelWidth(LABEL_WIDTH)]

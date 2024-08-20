@@ -1,16 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
-#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using GAS;
-    using Editor;
-    using Runtime;
-    using UnityEditor;
-    using UnityEngine;
-
     public class AttributeSetConfigEditorWindow : EditorWindow
     {
         private static List<string> _attributeOptions;
@@ -33,7 +28,7 @@ namespace GAS.Editor
                 if (_attributeOptions == null)
                 {
                     var asset = AttributeAsset.LoadOrCreate();
-                    _attributeOptions = asset?.AttributeNames?.OrderBy(x => x).ToList();
+                    _attributeOptions = asset != null ? (from attr in asset.attributes where !string.IsNullOrWhiteSpace(attr.Name) select attr.Name).OrderBy(x => x).ToList() : new();
                 }
 
                 return _attributeOptions;
@@ -117,7 +112,7 @@ namespace GAS.Editor
 
         private void Save()
         {
-            AttributeSetConfig attributeSetConfig = new AttributeSetConfig()
+            var attributeSetConfig = new AttributeSetConfig()
             {
                 Name = editedName,
                 AttributeNames = attributeNames
@@ -136,4 +131,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

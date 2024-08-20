@@ -95,37 +95,38 @@ namespace GAS.Runtime
 
         #region Attributes
 
+        private static Dictionary<string, AttributeSet> _attributeSetDict;
+        private static Dictionary<string, AttributeBase> _attributeDict;
         private static AttributeBase[] _attributes;
 
         public static IEnumerable<AttributeBase> Attributes
         {
             get
             {
-                _attributes ??= LoadAttributes();
+                if (_attributes == null)
+                {
+                    LoadAttributes();
+                }
+
                 return _attributes;
             }
         }
 
-        private static AttributeBase[] LoadAttributes()
+        private static void LoadAttributes()
         {
-            return AttributeNames.Select(x =>
+            _attributes = AttributeNames.Select(x =>
             {
                 var strings = x.Split('.');
                 return LoadAttribute(strings[0], strings[1]);
-            }).ToArray();
+            }).Where(x => x != null).ToArray();
         }
 
-        private static Dictionary<string, AttributeBase> _attributeDict;
 
         public static AttributeBase GetAttribute(string attributeFullName)
         {
-            if (_attributeDict == null)
+            if (_attributes == null)
             {
-                _attributeDict = new Dictionary<string, AttributeBase>();
-                foreach (var attributeBase in Attributes)
-                {
-                    _attributeDict[attributeBase.Name] = attributeBase;
-                }
+                LoadAttributes();
             }
 
             _attributeDict.TryGetValue(attributeFullName, out var attr);
@@ -139,17 +140,37 @@ namespace GAS.Runtime
 
         private static AttributeBase LoadAttribute(string attrSetName, string attrName)
         {
-            var fullName = $"GAS.Runtime.{attrSetName}";
-            var type = TypeUtil.FindTypeInAllAssemblies(fullName);
-            if (type == null)
+            _attributeSetDict ??= new();
+            _attributeDict ??= new();
+            if (!_attributeSetDict.TryGetValue(attrSetName, out var attrSet))
             {
-                Debug.LogError(
-                    $"[EX] attr set Type '{fullName}' not found. Please generate the GAttrSetLib CODE first!");
+                var fullName = $"GAS.Runtime.{attrSetName}";
+                var type = TypeUtil.FindTypeInAllAssemblies(fullName);
+                if (type == null)
+                {
+                    Debug.LogError($"[EX] attr set Type '{fullName}' not found. Please generate the GAttrSetLib CODE first!");
+                    return null;
+                }
+
+                attrSet = Activator.CreateInstance(type) as AttributeSet;
+                _attributeSetDict[attrSetName] = attrSet;
+            }
+
+            if (attrSet == null)
+            {
+                Debug.LogError($"[EX] attr set '{attrSetName}' is null. Please generate the GAttrSetLib CODE first!");
                 return null;
             }
 
-            var attrSet = Activator.CreateInstance(type) as AttributeSet;
-            return attrSet?[attrName];
+            var attr = attrSet[attrName];
+            if (attr == null)
+            {
+                Debug.LogError($"[EX] attr '{attrSetName}.{attrName}' is null. Please generate the GAttrSetLib CODE first!");
+                return null;
+            }
+
+            _attributeDict[attr.Name] = attr;
+            return attr;
         }
 
         #endregion Attributes

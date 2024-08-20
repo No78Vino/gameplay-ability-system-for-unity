@@ -2,9 +2,6 @@ using System.Linq;
 using GAS.General;
 using Sirenix.OdinInspector;
 using UnityEngine;
-#if UNITY_EDITOR
-using Sirenix.Utilities.Editor;
-#endif
 
 namespace GAS.Runtime
 {
@@ -12,70 +9,45 @@ namespace GAS.Runtime
     public class AbilitySystemComponentPreset : ScriptableObject
     {
         private const int WIDTH_LABEL = 70;
-        private const string ERROR_ABILITY = "Ability can't be NONE!!";
 
         [TitleGroup("Base")]
-        [HorizontalGroup("Base/H1", Width = 1 / 3f)]
+        [HorizontalGroup("Base/H1", Width = 1 - 0.618f)]
         [TabGroup("Base/H1/V1", "Summary", SdfIconType.InfoSquareFill, TextColor = "#0BFFC5", Order = 1)]
         [HideLabel]
         [MultiLineProperty(10)]
         public string Description;
 
-
         [TabGroup("Base/H1/V2", "Attribute Sets", SdfIconType.PersonLinesFill, TextColor = "#FF7F00", Order = 2)]
         [LabelText(GASTextDefine.ASC_AttributeSet)]
         [LabelWidth(WIDTH_LABEL)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, OnTitleBarGUI = "DrawAttributeSetsButtons")]
         [ValueDropdown("@ValueDropdownHelper.AttributeSetChoices", IsUniqueList = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@SortAttributeSets()")]
         public string[] AttributeSets;
 
-        private void DrawAttributeSetsButtons()
-        {
-#if UNITY_EDITOR
-            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
-            {
-                AttributeSets = AttributeSets.OrderBy(x => x).ToArray();
-            }
-#endif
-        }
+        private void SortAttributeSets() => AttributeSets = AttributeSets.OrderBy(x => x).ToArray();
 
-        [TabGroup("Base/H1/V3", "Tags", SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 3)]
+        [HorizontalGroup("Base/H2", Width = 1 - 0.618f)]
+        [TabGroup("Base/H2/V1", "Tags", SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 1)]
         [LabelText(GASTextDefine.ASC_BASE_TAG)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, OnTitleBarGUI = "DrawBaseTagsButtons")]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@BaseTags = TagHelper.Sort($value)")]
         public GameplayTag[] BaseTags;
 
-        private void DrawBaseTagsButtons()
-        {
-#if UNITY_EDITOR
-            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
-            {
-                BaseTags = BaseTags.OrderBy(x => x.Name).ToArray();
-            }
-#endif
-        }
-
-        [HorizontalGroup("Base/H2")]
-        [TabGroup("Base/H2/V1", "Abilities", SdfIconType.YinYang, TextColor = "#D6626E", Order = 1)]
+        [TabGroup("Base/H2/V2", "Abilities", SdfIconType.YinYang, TextColor = "#D6626E", Order = 2)]
         [LabelText(GASTextDefine.ASC_BASE_ABILITY)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, OnTitleBarGUI = "DrawBaseAbilitiesButtons")]
+        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
+        [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
+        [CustomContextMenu("排序", "@SortBaseAbilities()")]
         [AssetSelector]
-        [InfoBox(ERROR_ABILITY, InfoMessageType.Error, VisibleIf = "@IsAbilityNone()")]
+        [ValidateInput("@ValidateInput_BaseAbilities()", "存在无效的能力")]
         public AbilityAsset[] BaseAbilities;
 
-        private void DrawBaseAbilitiesButtons()
-        {
-#if UNITY_EDITOR
-            if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
-            {
-                BaseAbilities = BaseAbilities.OrderBy(x => x.name).ToArray();
-            }
-#endif
-        }
+        private void SortBaseAbilities() => BaseAbilities = BaseAbilities.OrderBy(x => x.name).ToArray();
 
-        bool IsAbilityNone()
-        {
-            return BaseAbilities != null && BaseAbilities.Any(ability => ability == null);
-        }
+        bool ValidateInput_BaseAbilities() => BaseAbilities != null && BaseAbilities.All(ability => ability != null);
     }
 }
