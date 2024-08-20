@@ -94,17 +94,16 @@ namespace GAS.Runtime
 
             if (effectSpec.GameplayEffect.IsImmune(_owner))
             {
-                // TODO 免疫Cue触发
-                // var lv = overwriteEffectLevel ? effectLevel : source.Level;
-                // effectSpec.Init(source, _owner, lv);
-                // effectSpec.TriggerOnImmunity();
+                var level = overwriteEffectLevel ? effectLevel : source.Level;
+                effectSpec.Init(source, _owner, level);
+                effectSpec.TriggerOnImmunity();
                 effectSpec.Recycle();
                 return null;
             }
 
-            var level = overwriteEffectLevel ? effectLevel : source.Level;
             if (effectSpec.DurationPolicy == EffectsDurationPolicy.Instant)
             {
+                var level = overwriteEffectLevel ? effectLevel : source.Level;
                 effectSpec.Init(source, _owner, level);
                 effectSpec.TriggerOnExecute();
                 effectSpec.Recycle();
@@ -116,8 +115,10 @@ namespace GAS.Runtime
             switch (effectSpec.Stacking.stackingType)
             {
                 case StackingType.None:
+                {
                     Operation_AddNewGameplayEffectSpec(source, ref effectSpecRef, overwriteEffectLevel, effectLevel);
                     return effectSpecRef;
+                }
                 case StackingType.AggregateByTarget:
                 {
                     GetStackingEffectSpecByData(effectSpec.GameplayEffect, out var geSpec);
@@ -149,9 +150,11 @@ namespace GAS.Runtime
                     return geSpec.IsApplied ? geSpec : null;
                 }
                 default:
+                {
                     Debug.LogError("Unsupported StackingType: " + effectSpec.Stacking.stackingType);
                     effectSpec.Recycle();
                     return null;
+                }
             }
         }
 
@@ -189,22 +192,34 @@ namespace GAS.Runtime
 
         public void RefreshGameplayEffectState()
         {
+            bool isDirty = false;
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
             {
-                if (!gameplayEffectSpec.IsApplied) continue;
-                if (!gameplayEffectSpec.IsActive)
+                if (gameplayEffectSpec.IsApplied)
                 {
-                    // new active gameplay effects
-                    if (gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Activate();
-                }
-                else
-                {
-                    // new deactive gameplay effects
-                    if (!gameplayEffectSpec.GameplayEffect.CanRunning(_owner)) gameplayEffectSpec.Deactivate();
+                    if (gameplayEffectSpec.IsActive)
+                    {
+                        if (!gameplayEffectSpec.GameplayEffect.CanRunning(_owner))
+                        {
+                            isDirty = true;
+                            gameplayEffectSpec.Deactivate();
+                        }
+                    }
+                    else
+                    {
+                        if (gameplayEffectSpec.GameplayEffect.CanRunning(_owner))
+                        {
+                            isDirty = true;
+                            gameplayEffectSpec.Activate();
+                        }
+                    }
                 }
             }
 
-            OnGameplayEffectContainerIsDirty?.Invoke();
+            if (isDirty)
+            {
+                OnGameplayEffectContainerIsDirty?.Invoke();
+            }
         }
 
         public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
@@ -224,8 +239,7 @@ namespace GAS.Runtime
                     {
                         if (t != targetTag) continue;
                         // If this is an infinite GE, then return null to signify this is on CD
-                        if (spec.GameplayEffect.DurationPolicy ==
-                            EffectsDurationPolicy.Infinite)
+                        if (spec.GameplayEffect.DurationPolicy == EffectsDurationPolicy.Infinite)
                             return new CooldownTimer { TimeRemaining = -1, Duration = 0 };
 
                         var durationRemaining = spec.DurationRemaining();
@@ -242,6 +256,8 @@ namespace GAS.Runtime
 
         public void ClearGameplayEffect()
         {
+            bool isDirty = _gameplayEffectSpecs.Count > 0;
+
             foreach (var gameplayEffectSpec in _gameplayEffectSpecs)
             {
                 gameplayEffectSpec.DisApply();
@@ -251,7 +267,10 @@ namespace GAS.Runtime
 
             _gameplayEffectSpecs.Clear();
 
-            OnGameplayEffectContainerIsDirty?.Invoke();
+            if (isDirty)
+            {
+                OnGameplayEffectContainerIsDirty?.Invoke();
+            }
         }
 
         private void GetStackingEffectSpecByData(GameplayEffect effect, out GameplayEffectSpec spec)
