@@ -65,6 +65,8 @@ namespace GAS.Runtime
         {
             // UnityEngine.Profiling.Profiler.BeginSample("AttributeAggregator.RefreshModifierCache");
 
+            var isDirty = _modifierCache.Count > 0;
+
             // 注销属性变化监听回调
             UnregisterAttributeChangedListen();
             ReleaseModifiersCache();
@@ -87,7 +89,12 @@ namespace GAS.Runtime
                 }
             }
 
-            UpdateCurrentValueWhenModifierIsDirty();
+            isDirty = isDirty || _modifierCache.Count > 0;
+
+            if (isDirty)
+            {
+                UpdateCurrentValueWhenModifierIsDirty();
+            }
 
             // UnityEngine.Profiling.Profiler.EndSample();
         }
@@ -232,8 +239,7 @@ namespace GAS.Runtime
 
         private void TryUnregisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
         {
-            if (modifier.MMC is AttributeBasedModCalculation mmc &&
-                mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track)
+            if (modifier.MMC is AttributeBasedModCalculation { captureType: AttributeBasedModCalculation.GEAttributeCaptureType.Track } mmc)
             {
                 if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
                 {
@@ -252,8 +258,7 @@ namespace GAS.Runtime
 
         private void TryRegisterAttributeChangedListen(GameplayEffectSpec ge, GameplayEffectModifier modifier)
         {
-            if (modifier.MMC is AttributeBasedModCalculation mmc &&
-                mmc.captureType == AttributeBasedModCalculation.GEAttributeCaptureType.Track)
+            if (modifier.MMC is AttributeBasedModCalculation { captureType: AttributeBasedModCalculation.GEAttributeCaptureType.Track } mmc)
             {
                 if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
                 {
@@ -272,30 +277,26 @@ namespace GAS.Runtime
 
         private void OnAttributeChanged(AttributeBase attribute, float oldValue, float newValue)
         {
-            if (_modifierCache.Count == 0) return;
+            if (IsTrackingAttribute(attribute))
+                UpdateCurrentValueWhenModifierIsDirty();
+        }
+
+        private bool IsTrackingAttribute(AttributeBase attribute)
+        {
             foreach (var modifierSpec in _modifierCache)
             {
+                if (modifierSpec.Modifier.MMC is not AttributeBasedModCalculation { captureType: AttributeBasedModCalculation.GEAttributeCaptureType.Track } mmc) continue;
+                if (attribute.Name != mmc.attributeName) continue;
                 var geSpec = modifierSpec.SpecRef.Value;
-                if (geSpec == null)
+                if (geSpec == null) continue;
+                if ((mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target && attribute.Owner == geSpec.Owner) ||
+                    (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Source && attribute.Owner == geSpec.Source))
                 {
-                    Debug.LogError("ge spec is invalid!");
-                    continue;
-                }
-                
-                var modifier = modifierSpec.Modifier;
-                if (modifier.MMC is AttributeBasedModCalculation { captureType: AttributeBasedModCalculation.GEAttributeCaptureType.Track } mmc &&
-                    attribute.Name == mmc.attributeName)
-                {
-                    if ((mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target &&
-                         attribute.Owner == geSpec.Owner) ||
-                        (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Source &&
-                         attribute.Owner == geSpec.Source))
-                    {
-                        UpdateCurrentValueWhenModifierIsDirty();
-                        break;
-                    }
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }
