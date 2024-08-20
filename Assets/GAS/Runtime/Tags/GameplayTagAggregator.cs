@@ -36,7 +36,7 @@ namespace GAS.Runtime
             Profiler.EndSample();
         }
 
-        public void Init(GameplayTag[] tags)
+        public void Init(IEnumerable<GameplayTag> tags)
         {
             _fixedTags.Clear();
             _fixedTags.AddRange(tags);
@@ -59,12 +59,8 @@ namespace GAS.Runtime
         private static bool IsTagInList(GameplayTag tag, List<GameplayTag> tags)
         {
             foreach (var t in tags)
-            {
                 if (t == tag)
-                {
                     return true;
-                }
-            }
 
             return false;
         }
@@ -115,7 +111,8 @@ namespace GAS.Runtime
         {
             if (tagSet.Empty) return;
             var dirty = false;
-            foreach (var tag in tagSet.Tags) dirty = dirty || TryRemoveFixedTag(tag);
+            foreach (var tag in tagSet.Tags)
+                dirty = dirty || TryRemoveFixedTag(tag);
 
             if (dirty) TagIsDirty(tagSet);
         }
@@ -185,8 +182,7 @@ namespace GAS.Runtime
             return true;
         }
 
-        private bool TryRemoveDynamicTag<T>(ref Dictionary<GameplayTag, List<object>> dynamicTag, T source,
-            GameplayTag tag)
+        private bool TryRemoveDynamicTag<T>(Dictionary<GameplayTag, List<object>> dynamicTag, T source, GameplayTag tag)
         {
             var dirty = false;
 
@@ -210,12 +206,12 @@ namespace GAS.Runtime
 
         private bool TryRemoveDynamicAddedTag<T>(T source, GameplayTag tag)
         {
-            return TryRemoveDynamicTag(ref _dynamicAddedTags, source, tag);
+            return TryRemoveDynamicTag(_dynamicAddedTags, source, tag);
         }
 
         private bool TryRemoveDynamicRemovedTag<T>(T source, GameplayTag tag)
         {
-            return TryRemoveDynamicTag(ref _dynamicRemovedTags, source, tag);
+            return TryRemoveDynamicTag(_dynamicRemovedTags, source, tag);
         }
 
         public void ApplyGameplayEffectDynamicTag(GameplayEffectSpec source)
@@ -268,43 +264,23 @@ namespace GAS.Runtime
 
         public bool HasTag(GameplayTag tag)
         {
-            // LINQ表达式存在GC，且HasTag调用频率很高，所以这里全都使用foreach
-            var fixedTagsContainsTag = false;
-            foreach (var t in _fixedTags)
-            {
+            foreach (var t in _dynamicRemovedTags.Keys)
                 if (t.HasTag(tag))
-                {
-                    fixedTagsContainsTag = true;
-                    break;
-                }
-            }
+                    return false;
 
-            var dynamicAddedTagsContainsTag = false;
-            foreach (var t in _dynamicAddedTags)
-            {
-                if (t.Key.HasTag(tag))
-                {
-                    dynamicAddedTagsContainsTag = true;
-                    break;
-                }
-            }
+            foreach (var t in _dynamicAddedTags.Keys)
+                if (t.HasTag(tag))
+                    return true;
 
-            var dynamicRemovedTagsContainsTag = false;
-            foreach (var t in _dynamicRemovedTags)
-            {
-                if (t.Key.HasTag(tag))
-                {
-                    dynamicRemovedTagsContainsTag = true;
-                    break;
-                }
-            }
+            foreach (var t in _fixedTags)
+                if (t.HasTag(tag))
+                    return true;
 
-            return (fixedTagsContainsTag || dynamicAddedTagsContainsTag) && !dynamicRemovedTagsContainsTag;
+            return false;
         }
 
         public bool HasAllTags(GameplayTagSet other)
         {
-            if (other.Empty) return true;
             foreach (var tag in other.Tags)
                 if (!HasTag(tag))
                     return false;
@@ -312,7 +288,7 @@ namespace GAS.Runtime
             return true;
         }
 
-        public bool HasAllTags(params GameplayTag[] tags)
+        public bool HasAllTags(IEnumerable<GameplayTag> tags)
         {
             foreach (var tag in tags)
                 if (!HasTag(tag))
@@ -323,52 +299,38 @@ namespace GAS.Runtime
 
         public bool HasAnyTags(GameplayTagSet other)
         {
-            if (other.Empty) return false;
             foreach (var tag in other.Tags)
-            {
-                if (HasTag(tag)) return true;
-            }
+                if (HasTag(tag))
+                    return true;
 
             return false;
-            //return !other.Empty && other.Tags.Any(HasTag);
         }
 
-        public bool HasAnyTags(params GameplayTag[] tags)
+        public bool HasAnyTags(IEnumerable<GameplayTag> tags)
         {
-            bool hasAny = false;
             foreach (var tag in tags)
                 if (HasTag(tag))
-                {
-                    hasAny = true;
-                    break;
-                }
+                    return true;
 
-            return hasAny;
-            //return tags.Any(HasTag);
+            return false;
         }
 
         public bool HasNoneTags(GameplayTagSet other)
         {
-            if (other.Empty) return true;
             foreach (var tag in other.Tags)
-            {
-                if (HasTag(tag)) return false;
-            }
+                if (HasTag(tag))
+                    return false;
 
             return true;
-            //return other.Empty || !other.Tags.Any(HasTag);
         }
 
         public bool HasNoneTags(params GameplayTag[] tags)
         {
-            if (tags.Length == 0) return true;
             foreach (var tag in tags)
-            {
-                if (HasTag(tag)) return false;
-            }
+                if (HasTag(tag))
+                    return false;
 
             return true;
-            //return !tags.Any(HasTag);
         }
 
 #if UNITY_EDITOR
