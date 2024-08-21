@@ -45,7 +45,7 @@ namespace GAS.Runtime
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
         [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
-        [CustomContextMenu("排序", "@RequiredTags = TagHelper.SortTags($value)")]
+        [CustomContextMenu("排序", "@RequiredTags = TagHelper.Sort($value)")]
         [LabelText("RequiredTags - 持有所有标签才可触发")]
         public GameplayTag[] RequiredTags;
 
@@ -53,7 +53,7 @@ namespace GAS.Runtime
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, DraggableItems = false)]
         [DisableContextMenu(disableForMember: false, disableCollectionElements: true)]
-        [CustomContextMenu("排序", "@ImmunityTags = TagHelper.SortTags($value)")]
+        [CustomContextMenu("排序", "@ImmunityTags = TagHelper.Sort($value)")]
         [LabelText("ImmunityTags - 持有任意标签不可触发")]
         public GameplayTag[] ImmunityTags;
 
