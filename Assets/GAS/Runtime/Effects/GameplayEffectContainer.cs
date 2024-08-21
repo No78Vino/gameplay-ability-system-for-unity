@@ -49,7 +49,7 @@ namespace GAS.Runtime
             OnGameplayEffectContainerIsDirty -= action;
         }
 
-        public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
+        public void RemoveGameplayEffectWithAnyTags(in GameplayTagSet tags)
         {
             if (tags.Empty) return;
 
@@ -222,7 +222,7 @@ namespace GAS.Runtime
             }
         }
 
-        public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
+        public CooldownTimer CheckCooldownFromTags(in GameplayTagSet tags)
         {
             float longestCooldown = 0;
             float maxDuration = 0;

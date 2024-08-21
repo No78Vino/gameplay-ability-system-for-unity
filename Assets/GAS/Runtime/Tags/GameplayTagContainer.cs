@@ -1,76 +1,81 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace GAS.Runtime
 {
     /// <summary>
-    ///     If the collection of tags is unstable and changable, use this class.
+    /// If the collection of tags is unstable and changable, use this class.
     /// </summary>
     public class GameplayTagContainer
     {
         public List<GameplayTag> Tags { get; }
-        
-        public GameplayTagContainer(params GameplayTag[] tags)
+
+        public GameplayTagContainer(IEnumerable<GameplayTag> tags)
         {
             Tags = new List<GameplayTag>(tags);
         }
 
-        public void AddTag(GameplayTag tag)
+        public void AddTag(in GameplayTag tag)
         {
             if (Tags.Contains(tag)) return;
             Tags.Add(tag);
         }
 
-        public void RemoveTag(GameplayTag tag)
+        public void RemoveTag(in GameplayTag tag)
         {
             Tags.Remove(tag);
         }
 
-        public void AddTag(GameplayTagSet tagSet)
+        public void AddTag(in GameplayTagSet tagSet)
         {
-            if(tagSet.Empty) return;
-            foreach (var tag in tagSet.Tags) AddTag(tag);
+            foreach (var tag in tagSet.Tags)
+                AddTag(tag);
         }
 
-        public void RemoveTag(GameplayTagSet tagSet)
+        public void RemoveTag(in GameplayTagSet tagSet)
         {
-            if(tagSet.Empty) return;
-            foreach (var tag in tagSet.Tags) RemoveTag(tag);
+            foreach (var tag in tagSet.Tags)
+                RemoveTag(tag);
         }
 
-        public bool HasTag(GameplayTag tag)
+        public bool HasTag(in GameplayTag tag)
         {
-            return Tags.Any(t => t.HasTag(tag));
+            foreach (var t in Tags)
+            {
+                if (t.HasTag(tag))
+                    return true;
+            }
+
+            return false;
         }
 
-        public bool HasAllTags(GameplayTagSet other)
+        public bool HasAllTags(in GameplayTagSet other) => HasAllTags(other.Tags);
+
+        public bool HasAllTags(IEnumerable<GameplayTag> tags)
         {
-            return other.Empty || other.Tags.All(HasTag);
+            foreach (var tag in tags)
+            {
+                if (!HasTag(tag))
+                    return false;
+            }
+
+            return true;
         }
 
-        public bool HasAllTags(params GameplayTag[] tags)
+        public bool HasAnyTags(in GameplayTagSet other) => HasAnyTags(other.Tags);
+
+        public bool HasAnyTags(IEnumerable<GameplayTag> tags)
         {
-            return tags.All(HasTag);
+            foreach (var tag in tags)
+            {
+                if (HasTag(tag))
+                    return true;
+            }
+
+            return false;
         }
 
-        public bool HasAnyTags(GameplayTagSet other)
-        {
-            return other.Empty || other.Tags.Any(HasTag);
-        }
+        public bool HasNoneTags(in GameplayTagSet other) => HasNoneTags(other.Tags);
 
-        public bool HasAnyTags(params GameplayTag[] tags)
-        {
-            return tags.Any(HasTag);
-        }
-
-        public bool HasNoneTags(GameplayTagSet other)
-        {
-            return other.Empty || !other.Tags.Any(HasTag);
-        }
-
-        public bool HasNoneTags(params GameplayTag[] tags)
-        {
-            return !tags.Any(HasTag);
-        }
+        public bool HasNoneTags(IEnumerable<GameplayTag> tags) => HasAnyTags(tags) == false;
     }
 }

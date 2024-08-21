@@ -11,17 +11,17 @@ namespace GAS.Runtime
 
         void SetLevel(int level);
 
-        bool HasTag(GameplayTag tag);
+        bool HasTag(in GameplayTag tag);
 
-        bool HasAllTags(GameplayTagSet tags);
+        bool HasAllTags(in GameplayTagSet tags);
 
-        bool HasAnyTags(GameplayTagSet tags);
+        bool HasAnyTags(in GameplayTagSet tags);
 
-        void AddFixedTags(GameplayTagSet tags);
-        void AddFixedTag(GameplayTag gameplayTag);
+        void AddFixedTags(in GameplayTagSet tags);
+        void AddFixedTag(in GameplayTag gameplayTag);
 
-        void RemoveFixedTags(GameplayTagSet tags);
-        void RemoveFixedTag(GameplayTag gameplayTag);
+        void RemoveFixedTags(in GameplayTagSet tags);
+        void RemoveFixedTag(in GameplayTag gameplayTag);
 
         EntityRef<GameplayEffectSpec> ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target);
 
@@ -45,7 +45,7 @@ namespace GAS.Runtime
         bool TryActivateAbility(string abilityName, object arg = null);
         void TryEndAbility(string abilityName);
 
-        CooldownTimer CheckCooldownFromTags(GameplayTagSet tags);
+        CooldownTimer CheckCooldownFromTags(in GameplayTagSet tags);
 
         T AttrSet<T>() where T : AttributeSet;
 

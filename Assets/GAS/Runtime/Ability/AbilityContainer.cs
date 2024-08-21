@@ -94,7 +94,7 @@ namespace GAS.Runtime
             _abilities[abilityName].TryCancelAbility();
         }
 
-        void CancelAbilitiesByTag(GameplayTagSet tags)
+        private void CancelAbilitiesByTag(in GameplayTagSet tags)
         {
             foreach (var kv in _abilities)
             {

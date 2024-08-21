@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -50,21 +49,21 @@ namespace GAS.Runtime
                 i++;
             }
 
-            _shortName = tags.Last();
+            _shortName = tags[^1];
         }
 
         /// <summary>
-        ///     Only For Show.
+        /// Only For Show.
         /// </summary>
         public string Name => _name;
 
         /// <summary>
-        ///     Only For Show.
+        /// Only For Show.
         /// </summary>
         public string ShortName => _shortName;
 
         /// <summary>
-        ///     Actually ,Use the hash code for compare.
+        /// Actually ,Use the hash code for compare.
         /// </summary>
         public int HashCode => _hashCode;
 
@@ -74,37 +73,19 @@ namespace GAS.Runtime
 
         public int[] AncestorHashCodes => _ancestorHashCodes;
 
-        public bool IsDescendantOf(GameplayTag other)
-        {
-            return other._ancestorHashCodes.Contains(HashCode);
-        }
+        public bool IsDescendantOf(in GameplayTag other) => other.HasTag(this);
 
-        public bool Equals(GameplayTag other)
-        {
-            return this == other;
-        }
+        public bool Equals(GameplayTag other) => this == other;
 
-        public override bool Equals(object obj)
-        {
-            return obj is GameplayTag tag && this == tag;
-        }
+        public override bool Equals(object obj) => obj is GameplayTag tag && this == tag;
 
-        public override int GetHashCode()
-        {
-            return HashCode;
-        }
+        public override int GetHashCode() => HashCode;
 
-        public static bool operator ==(GameplayTag x, GameplayTag y)
-        {
-            return x.HashCode == y.HashCode;
-        }
+        public static bool operator ==(GameplayTag x, GameplayTag y) => x.HashCode == y.HashCode;
 
-        public static bool operator !=(GameplayTag x, GameplayTag y)
-        {
-            return x.HashCode != y.HashCode;
-        }
+        public static bool operator !=(GameplayTag x, GameplayTag y) => x.HashCode != y.HashCode;
 
-        public bool HasTag(GameplayTag tag)
+        public readonly bool HasTag(in GameplayTag tag)
         {
             foreach (var ancestorHashCode in _ancestorHashCodes)
                 if (ancestorHashCode == tag.HashCode)

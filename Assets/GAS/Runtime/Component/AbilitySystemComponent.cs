@@ -129,37 +129,37 @@ namespace GAS.Runtime
             Level = level;
         }
 
-        public bool HasTag(GameplayTag gameplayTag)
+        public bool HasTag(in GameplayTag gameplayTag)
         {
             return GameplayTagAggregator.HasTag(gameplayTag);
         }
 
-        public bool HasAllTags(GameplayTagSet tags)
+        public bool HasAllTags(in GameplayTagSet tags)
         {
             return GameplayTagAggregator.HasAllTags(tags);
         }
 
-        public bool HasAnyTags(GameplayTagSet tags)
+        public bool HasAnyTags(in GameplayTagSet tags)
         {
             return GameplayTagAggregator.HasAnyTags(tags);
         }
 
-        public void AddFixedTags(GameplayTagSet tags)
+        public void AddFixedTags(in GameplayTagSet tags)
         {
             GameplayTagAggregator.AddFixedTag(tags);
         }
 
-        public void RemoveFixedTags(GameplayTagSet tags)
+        public void RemoveFixedTags(in GameplayTagSet tags)
         {
             GameplayTagAggregator.RemoveFixedTag(tags);
         }
 
-        public void AddFixedTag(GameplayTag gameplayTag)
+        public void AddFixedTag(in GameplayTag gameplayTag)
         {
             GameplayTagAggregator.AddFixedTag(gameplayTag);
         }
 
-        public void RemoveFixedTag(GameplayTag gameplayTag)
+        public void RemoveFixedTag(in GameplayTag gameplayTag)
         {
             GameplayTagAggregator.RemoveFixedTag(gameplayTag);
         }
@@ -174,7 +174,7 @@ namespace GAS.Runtime
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
         }
 
-        public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
+        public void RemoveGameplayEffectWithAnyTags(in GameplayTagSet tags)
         {
             GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
         }
@@ -359,7 +359,7 @@ namespace GAS.Runtime
             }
         }
 
-        public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
+        public CooldownTimer CheckCooldownFromTags(in GameplayTagSet tags)
         {
             return GameplayEffectContainer.CheckCooldownFromTags(tags);
         }

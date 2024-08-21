@@ -538,7 +538,7 @@ namespace GAS.Runtime
             }
         }
 
-        public void RegisterValue(GameplayTag tag, float value)
+        public void RegisterValue(in GameplayTag tag, float value)
         {
             _valueMapWithTag ??= ObjectPool.Instance.Fetch<Dictionary<GameplayTag, float>>();
             _valueMapWithTag[tag] = value;
@@ -550,7 +550,7 @@ namespace GAS.Runtime
             _valueMapWithName[name] = value;
         }
 
-        public bool UnregisterValue(GameplayTag tag)
+        public bool UnregisterValue(in GameplayTag tag)
         {
             if (_valueMapWithTag == null) return false;
             return _valueMapWithTag.Remove(tag);
@@ -562,7 +562,7 @@ namespace GAS.Runtime
             return _valueMapWithName.Remove(name);
         }
 
-        public float? GetMapValue(GameplayTag tag)
+        public float? GetMapValue(in GameplayTag tag)
         {
             if (_valueMapWithTag == null) return null;
             return _valueMapWithTag.TryGetValue(tag, out var value) ? value : (float?)null;
