@@ -141,6 +141,10 @@ namespace GAS.Editor
                     var directoryInfo = selected.Value is AbilityOverview
                         ? _directoryInfos[3]
                         : selected.Value as DirectoryInfo;
+                    if (directoryInfo == null)
+                    {
+                        return;
+                    }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("浏览")))
                     {
@@ -150,15 +154,13 @@ namespace GAS.Editor
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建子文件夹")))
                     {
                         CreateNewSubDirectory(directoryInfo);
-                        GUIUtility
-                            .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                        GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                     }
 
                     if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建")))
                     {
                         CreateNewAsset(directoryInfo);
-                        GUIUtility
-                            .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                        GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                     }
 
                     if (!directoryInfo.Root)
@@ -166,8 +168,7 @@ namespace GAS.Editor
                         if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
                         {
                             RemoveSubDirectory(directoryInfo);
-                            GUIUtility
-                                .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
+                            GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
                         }
                     }
                 }
@@ -298,7 +299,7 @@ namespace GAS.Editor
                 EditorUtility.DisplayDialog("Warning", "The asset you want to delete is null", "Ok");
                 return;
             }
-            
+
             var assetName = asset.name; // Get the name before deleting
             var assetPath = AssetDatabase.GetAssetPath(asset);
             if (EditorUtility.DisplayDialog("Warning",
