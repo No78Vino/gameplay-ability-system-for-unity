@@ -55,7 +55,6 @@ namespace GAS.Runtime
 
         private int _currentFrame;
         private float _playTotalTime;
-        private float _speed = 1;
 
         public TimelineAbilityPlayer(TimelineAbilitySpecT<AbilityT, AssetT> abilitySpec)
         {
@@ -64,12 +63,6 @@ namespace GAS.Runtime
         }
 
         public bool IsPlaying { get; private set; }
-
-        public float Speed
-        {
-            get => _speed;
-            private set => _speed = Math.Max(0, value);
-        }
 
         public AssetT AbilityAsset => _abilitySpec.Data.AbilityAsset;
         public int FrameCount => AbilityAsset.FrameCount;
@@ -210,9 +203,8 @@ namespace GAS.Runtime
             }
         }
 
-        public void Play(float speed = 1)
+        public void Play()
         {
-            Speed = speed;
             _currentFrame = -1; // 为了播放第0帧
             _playTotalTime = 0;
             IsPlaying = true;
@@ -253,8 +245,10 @@ namespace GAS.Runtime
         {
             if (!IsPlaying) return;
 
-            _playTotalTime += Time.deltaTime;
-            var targetFrame = (int)(_playTotalTime * FrameRate * Speed);
+            var speed = _abilitySpec.GetPlaySpeed();
+            speed = Math.Max(0, speed);
+            _playTotalTime += Time.deltaTime * speed;
+            var targetFrame = (int)(_playTotalTime * FrameRate);
 
             // 追帧
             while (_currentFrame < targetFrame)

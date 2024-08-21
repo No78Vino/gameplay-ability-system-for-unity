@@ -38,8 +38,7 @@ namespace GAS.Runtime
 
         public override void ActivateAbility()
         {
-            var playSpeed = GetPlaySpeed();
-            _player.Play(playSpeed);
+            _player.Play();
         }
 
         public virtual float GetPlaySpeed()
