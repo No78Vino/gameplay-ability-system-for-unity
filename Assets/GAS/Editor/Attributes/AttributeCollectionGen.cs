@@ -28,6 +28,8 @@ namespace GAS.Editor
 
 
             GenerateAttributeCollection(attributeInfos, filePath);
+
+            Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
 
         private static void GenerateAttributeCollection(IEnumerable<AttributeInfo> attributes, string filePath)
@@ -61,9 +63,7 @@ namespace GAS.Editor
                         else writer.WriteLine();
 
                         var validName = EditorUtil.MakeValidIdentifier(attr.Name);
-                        writer.WriteLine("/// <summary>");
-                        writer.WriteLine($"/// {attr.Comment}");
-                        writer.WriteLine("/// </summary>");
+                        writer.WriteLine($"/// <summary>{attr.Comment}</summary>");
                         writer.WriteLine($"public const string {validName} = \"{attr.Name}\";");
                         names.Add(validName);
                     }
@@ -71,13 +71,13 @@ namespace GAS.Editor
                     writer.WriteLine("");
 
                     writer.WriteLine("// For facilitating the creation of a Value Dropdown in the editor.");
-                    writer.WriteLine("public static List<string> AttributeNames = new List<string>()");
+                    writer.WriteLine("public static readonly IReadOnlyList<string> AttributeNames = new List<string>");
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
                         foreach (var name in names)
                         {
-                            writer.WriteLine($"\"{name}\",");
+                            writer.WriteLine($"{name},");
                         }
                     }
                     writer.Indent--;
@@ -88,8 +88,6 @@ namespace GAS.Editor
             }
             writer.Indent--;
             writer.Write("}");
-
-            Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
     }
 }

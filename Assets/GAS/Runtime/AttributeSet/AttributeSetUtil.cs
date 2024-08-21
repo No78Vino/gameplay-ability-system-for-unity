@@ -5,9 +5,9 @@ namespace GAS.Runtime
 {
     public static class AttributeSetUtil
     {
-        public static Dictionary<Type, string> AttrSetNameCache { get; private set; }
+        public static IReadOnlyDictionary<Type, string> AttrSetNameCache { get; private set; }
         
-        public static void Cache(Dictionary<Type,string> typeToName)
+        public static void Cache(IReadOnlyDictionary<Type,string> typeToName)
         {
             AttrSetNameCache = typeToName;
         }

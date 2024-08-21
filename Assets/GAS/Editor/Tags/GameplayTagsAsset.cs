@@ -1,38 +1,38 @@
-#if UNITY_EDITOR
+using System.Collections.Generic;
+using GAS.Runtime;
+using UnityEditor.TreeDataModel;
+using UnityEngine;
+
 namespace GAS.Editor
 {
-	using GAS.Runtime;
-	using System.Collections.Generic;
-	using UnityEditor.TreeDataModel;
-	using UnityEngine;
-	
-	[FilePath(GasDefine.GAS_TAGS_MANAGER_ASSET_PATH)]
-	public class GameplayTagsAsset : ScriptableSingleton<GameplayTagsAsset>
-	{
-		[SerializeField] List<GameplayTagTreeElement> gameplayTagTreeElements = new List<GameplayTagTreeElement>();
+    [FilePath(GasDefine.GAS_TAGS_MANAGER_ASSET_PATH)]
+    public class GameplayTagsAsset : ScriptableSingleton<GameplayTagsAsset>
+    {
+        [SerializeField]
+        List<GameplayTagTreeElement> gameplayTagTreeElements = new List<GameplayTagTreeElement>();
 
-		internal List<GameplayTagTreeElement> GameplayTagTreeElements => gameplayTagTreeElements;
-		
-		[SerializeField] public List<GameplayTag> Tags = new List<GameplayTag>();
+        internal List<GameplayTagTreeElement> GameplayTagTreeElements => gameplayTagTreeElements;
+
+        [SerializeField]
+        public List<GameplayTag> Tags = new();
 
 
-		public void CacheTags()
-		{
-			Tags.Clear();
-			for (int i = 0; i < gameplayTagTreeElements.Count; i++)
-			{
-				ExTreeElement tag = gameplayTagTreeElements[i];
-				if (tag.Depth == -1) continue;
-				string tagName = tag.Name;
-				while (tag.Parent.Depth >=0)
-				{
-					tagName = tag.Parent.Name + "." + tagName;
-					tag = tag.Parent;
-				}
+        public void CacheTags()
+        {
+            Tags.Clear();
+            foreach (var tagTreeElement in gameplayTagTreeElements)
+            {
+                ExTreeElement tag = tagTreeElement;
+                if (tag.Depth == -1) continue;
+                string tagName = tag.Name;
+                while (tag.Parent.Depth >= 0)
+                {
+                    tagName = tag.Parent.Name + "." + tagName;
+                    tag = tag.Parent;
+                }
 
-				Tags.Add(new GameplayTag(tagName));
-			}
-		}
-	}
+                Tags.Add(new(tagName));
+            }
+        }
+    }
 }
-#endif

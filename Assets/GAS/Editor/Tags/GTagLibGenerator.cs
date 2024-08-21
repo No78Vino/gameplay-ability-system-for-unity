@@ -1,17 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using GAS.Runtime;
+using UnityEngine;
 
-#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using GAS.Runtime;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using GAS;
-    using UnityEditor;
-    using UnityEngine;
-    using Editor;
-
     public static class GTagLibGenerator
     {
         public static void Gen(string filePath = null)
@@ -19,6 +14,8 @@ namespace GAS.Editor
             var asset = GameplayTagsAsset.LoadOrCreate();
             var tags = asset.Tags;
             GenerateGTagLib(tags, filePath);
+
+            Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
 
         public static string DefaultFilePath
@@ -31,12 +28,14 @@ namespace GAS.Editor
             }
         }
 
+        private record TagInfo(string Name, string Identifier, string Comment);
+
         // We expose the method as public to facilitate support for extension tools in generating…
         public static void GenerateGTagLib(IEnumerable<GameplayTag> gameplayTags, string filePath = null)
         {
-            var gameplayTagNamesWithIdentifier = gameplayTags
+            var gameplayTagInfos = gameplayTags
                 .OrderBy(x => x.Name)
-                .Select(x => new Tuple<string, string>(x.Name, MakeValidIdentifier(x.Name)))
+                .Select(x => new TagInfo(x.Name, MakeValidIdentifier(x.Name), x.Name))
                 .ToArray();
 
             filePath ??= DefaultFilePath;
@@ -61,23 +60,25 @@ namespace GAS.Editor
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
-                    // Generate members for each tag
-                    foreach (var tuple in gameplayTagNamesWithIdentifier)
+                    bool skippedFirst = false;
+                    foreach (var tagInfo in gameplayTagInfos)
                     {
-                        writer.WriteLine(
-                            $"public static GameplayTag {tuple.Item2} {{ get; }} = new GameplayTag(\"{tuple.Item1}\");");
+                        if (!skippedFirst) skippedFirst = true;
+                        else writer.WriteLine();
+
+                        writer.WriteLine($"/// <summary>{tagInfo.Comment}</summary>");
+                        writer.WriteLine($"public static GameplayTag {tagInfo.Identifier} {{ get; }} = new(\"{tagInfo.Name}\");");
                     }
 
                     writer.WriteLine("");
 
-                    writer.WriteLine(
-                        "public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>");
+                    writer.WriteLine("public static readonly IReadOnlyDictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>");
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
-                        foreach (var tuple in gameplayTagNamesWithIdentifier)
+                        foreach (var tagInfo in gameplayTagInfos)
                         {
-                            writer.WriteLine($"[\"{tuple.Item1}\"] = {tuple.Item2},");
+                            writer.WriteLine($"[\"{tagInfo.Name}\"] = {tagInfo.Identifier},");
                         }
                     }
                     writer.Indent--;
@@ -88,8 +89,6 @@ namespace GAS.Editor
             }
             writer.Indent--;
             writer.Write("}");
-
-            Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
 
         private static string MakeValidIdentifier(string name)
@@ -111,4 +110,3 @@ namespace GAS.Editor
         }
     }
 }
-#endif

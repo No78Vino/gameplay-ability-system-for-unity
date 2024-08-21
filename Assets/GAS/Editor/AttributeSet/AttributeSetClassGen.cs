@@ -1,15 +1,14 @@
-﻿using GAS.Runtime;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using GAS.Runtime;
+using UnityEditor;
+using UnityEngine;
 
-#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using UnityEditor;
-    using UnityEngine;
-
     public static class AttributeSetClassGen
     {
         public static void Gen()
@@ -28,8 +27,7 @@ namespace GAS.Editor
                 {
                     if (!attributeNames.Contains(attributeName))
                     {
-                        var msg =
-                            $"Invalid Attribute(\"{attributeName}\") in AttributeSet(\"{attributeSetConfig.Name}\"), \"{attributeName}\" is not defined in AttributeAsset!";
+                        var msg = $"Invalid Attribute(\"{attributeName}\") in AttributeSet(\"{attributeSetConfig.Name}\"), \"{attributeName}\" is not defined in AttributeAsset!";
                         Debug.LogError(msg);
                         EditorUtility.DisplayDialog("Error", msg, "OK");
                         return;
@@ -54,6 +52,8 @@ namespace GAS.Editor
             var filePath =
                 $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
             GenerateAttributeCollection(attributeSetAsset.AttributeSetConfigs, attributeAsset, filePath);
+
+            Console.WriteLine($"Generated Code Script at path: {filePath}");
         }
 
         private static void GenerateAttributeCollection(List<AttributeSetConfig> attributeSetConfigs,
@@ -96,78 +96,15 @@ namespace GAS.Editor
                             writer.WriteLine($"#region {attributeName}");
                             writer.WriteLine("");
                             {
-                                writer.WriteLine($"/// <summary>");
-                                writer.WriteLine($"/// {attributeAccessor.Comment}");
-                                writer.WriteLine($"/// </summary>");
-                                writer.WriteLine(
-                                    $"public AttributeBase {validAttrName} {{ get; }} = new (\"AS_{validName}\", \"{attributeName}\", {attributeAccessor.DefaultValue}f, CalculateMode.{attributeAccessor.CalculateMode}, (SupportedOperation){(byte)attributeAccessor.SupportedOperation}, {(attributeAccessor.LimitMinValue ? attributeAccessor.MinValue + "f" : "float.MinValue")}, {(attributeAccessor.LimitMaxValue ? attributeAccessor.MaxValue + "f" : "float.MaxValue")});");
-
+                                writer.WriteLine($"/// <summary>{attributeAccessor.Comment}</summary>");
+                                writer.WriteLine($"public AttributeBase {validAttrName} {{ get; }} = new(\"AS_{validName}\", \"{attributeName}\", {attributeAccessor.DefaultValue}f, CalculateMode.{attributeAccessor.CalculateMode}, (SupportedOperation){(byte)attributeAccessor.SupportedOperation}, {(attributeAccessor.LimitMinValue ? attributeAccessor.MinValue + "f" : "float.MinValue")}, {(attributeAccessor.LimitMaxValue ? attributeAccessor.MaxValue + "f" : "float.MaxValue")});");
                                 writer.WriteLine("");
-
-                                writer.WriteLine($"public void Init{validAttrName}(float value)");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                {
-                                    writer.WriteLine($"{validAttrName}.SetBaseValue(value);");
-                                    writer.WriteLine($"{validAttrName}.SetCurrentValue(value);");
-                                }
-                                writer.Indent--;
-                                writer.WriteLine("}");
-
-                                writer.WriteLine("");
-
-                                writer.WriteLine($"public void SetCurrent{validAttrName}(float value)");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                {
-                                    writer.WriteLine($"{validAttrName}.SetCurrentValue(value);");
-                                }
-                                writer.Indent--;
-                                writer.WriteLine("}");
-
-                                writer.WriteLine("");
-
-                                writer.WriteLine($"public void SetBase{validAttrName}(float value)");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                {
-                                    writer.WriteLine($"{validAttrName}.SetBaseValue(value);");
-                                }
-                                writer.Indent--;
-                                writer.WriteLine("}");
-
-                                writer.WriteLine("");
-
-                                writer.WriteLine($"public void SetMin{validAttrName}(float value)");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                {
-                                    writer.WriteLine($"{validAttrName}.SetMinValue(value);");
-                                }
-                                writer.Indent--;
-                                writer.WriteLine("}");
-
-                                writer.WriteLine("");
-
-                                writer.WriteLine($"public void SetMax{validAttrName}(float value)");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                {
-                                    writer.WriteLine($"{validAttrName}.SetMaxValue(value);");
-                                }
-                                writer.Indent--;
-                                writer.WriteLine("}");
-
-                                writer.WriteLine("");
-
-                                writer.WriteLine($"public void SetMinMax{validAttrName}(float min, float max)");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                {
-                                    writer.WriteLine($"{validAttrName}.SetMinMaxValue(min, max);");
-                                }
-                                writer.Indent--;
-                                writer.WriteLine("}");
+                                writer.WriteLine($"public void Init{validAttrName}(float value) => {validAttrName}.Init(value);");
+                                writer.WriteLine($"public void SetCurrent{validAttrName}(float value) => {validAttrName}.SetCurrentValue(value);");
+                                writer.WriteLine($"public void SetBase{validAttrName}(float value) => {validAttrName}.SetBaseValue(value);");
+                                writer.WriteLine($"public void SetMin{validAttrName}(float value) => {validAttrName}.SetMinValue(value);");
+                                writer.WriteLine($"public void SetMax{validAttrName}(float value) => {validAttrName}.SetMaxValue(value);");
+                                writer.WriteLine($"public void SetMinMax{validAttrName}(float min, float max) => {validAttrName}.SetMinMaxValue(min, max);");
                             }
                             writer.WriteLine("");
                             writer.WriteLine($"#endregion {attributeName}");
@@ -263,8 +200,7 @@ namespace GAS.Editor
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
-                    writer.WriteLine(
-                        "public static readonly Dictionary<string, Type> AttrSetTypeDict = new Dictionary<string, Type>()");
+                    writer.WriteLine("public static readonly IReadOnlyDictionary<string, Type> AttrSetTypeDict = new Dictionary<string, Type>");
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
@@ -279,8 +215,7 @@ namespace GAS.Editor
 
                     writer.WriteLine("");
 
-                    writer.WriteLine(
-                        "public static readonly Dictionary<Type, string> TypeToName = new Dictionary<Type, string>");
+                    writer.WriteLine("public static readonly IReadOnlyDictionary<Type, string> TypeToName = new Dictionary<Type, string>");
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
@@ -295,7 +230,7 @@ namespace GAS.Editor
 
                     writer.WriteLine("");
 
-                    writer.WriteLine("public static List<string> AttributeFullNames = new List<string>()");
+                    writer.WriteLine("public static readonly IReadOnlyList<string> AttributeFullNames = new List<string>");
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
@@ -317,8 +252,6 @@ namespace GAS.Editor
             }
             writer.Indent--;
             writer.Write("}");
-            Console.WriteLine($"Generated Code Script at path: {filePath}");
         }
     }
 }
-#endif
