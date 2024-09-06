@@ -82,13 +82,17 @@ namespace GAS.Runtime
             }
 
             var dt = Time.deltaTime;
-            var excessDuration = actualDuration - _spec.Duration;
-            if (excessDuration >= 0)
+
+            if (_spec.DurationPolicy == EffectsDurationPolicy.Duration)
             {
-                // 如果超出了持续时间，就减去超出的时间, 此时应该是最后一次执行
-                dt -= excessDuration;
-                // 为了避免误差, 保证最后一次边界得到执行机会
-                dt += 0.0001f;
+                var excessDuration = actualDuration - _spec.Duration;
+                if (excessDuration >= 0)
+                {
+                    // 如果超出了持续时间，就减去超出的时间, 此时应该是最后一次执行
+                    dt -= excessDuration;
+                    // 为了避免误差, 保证最后一次边界得到执行机会
+                    dt += 0.0001f;
+                }
             }
 
             _periodRemaining -= dt;
