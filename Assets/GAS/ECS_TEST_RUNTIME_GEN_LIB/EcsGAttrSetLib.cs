@@ -30,16 +30,18 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
 
     public static class EcsGAttrSetLib
     {
-        public static AttributeSetConfig AS_FIGHT =
-            new(EcsGAttrSetCode.Fight, new[]
+        public static NewAttributeSetConfig AS_FIGHT = 
+            new(EcsGAttrSetCode.Fight, new AttributeBaseSetting[]
             {
-                EcsGAttrLib.HP, EcsGAttrLib.ATK, EcsGAttrLib.DEF
+                new(EcsGAttrLib.HP, 100, 0,100),
+                new(EcsGAttrLib.ATK, 100, 0,100),
+                new(EcsGAttrLib.DEF, 100, 0,100),
             });
 
-        public static AttributeSetConfig AS_FIGHT_MONSTER =
-            new(EcsGAttrSetCode.Fight_Monster, new[]
+        public static NewAttributeSetConfig AS_FIGHT_MONSTER = 
+            new(EcsGAttrSetCode.Fight_Monster, new AttributeBaseSetting[]
             {
-                EcsGAttrLib.HP
+                new(EcsGAttrLib.HP, 100, 0,1000),
             });
     }
 
@@ -48,15 +50,15 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
     public struct ASCom_FIGHT : IComponentData
     {
         public int CodeValue;
-        public AttributeComponent HP;
-        public AttributeComponent ATK;
-        public AttributeComponent DEF;
+        public AttributeData HP;
+        public AttributeData ATK;
+        public AttributeData DEF;
     }
     
     public struct ASCom_FIGHT_MONSTER : IComponentData
     {
         public int CodeValue;
-        public AttributeComponent HP;
+        public AttributeData HP;
     }
 
     #endregion

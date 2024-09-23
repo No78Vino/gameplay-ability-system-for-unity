@@ -4,10 +4,9 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.AttributeSet.Component
 {
-    public struct AttributeSetComponent : IComponentData
+    public struct AttributeSetComponent : IBufferElementData
     {
         public int Code;
-        public NativeArray<int> attributeCodes;
-        public NativeArray<AttributeComponent> attributes;
+        public NativeArray<AttributeData> Attributes;
     }
 }
