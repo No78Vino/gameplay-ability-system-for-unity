@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GAS.RuntimeWithECS.Attribute;
 using GAS.RuntimeWithECS.Attribute.Component;
 using Unity.Entities;
@@ -9,6 +10,16 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
         public const int HP = 1;
         public const int ATK = 2;
         public const int DEF = 3;
+
+        /// <summary>
+        /// true = 整数；false = 浮点数
+        /// </summary>
+        public static readonly Dictionary<int, bool> AttributeTypeMap = new()
+        {
+            {HP,true},
+            {ATK,false},
+            {DEF,false},
+        };
     }
 
     public static class EcsGAttrSetCode

@@ -7,24 +7,37 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
 {
     public static class AttrSetContainerExtension
     {
-        public static void AddAttrSet(this AttrSetContainer self,int attrSetCode)
-        {
-            // 如果该属性集已经添加过，则直接返回
-            if (!self.TryAddAttrSetCode(attrSetCode)) return;
-            
-            if (attrSetCode == EcsGAttrSetCode.Fight)
-            {
-                self.EntityManager.AddComponentData(self.Entity, new ASCom_FIGHT());
-            }
-            if (attrSetCode == EcsGAttrSetCode.Fight_Monster)
-            {
-                self.EntityManager.AddComponentData(self.Entity, new ASCom_FIGHT_MONSTER());
-            }
-        }
-        
-        // public static AttributeComponent GetAttr(this AttrSetContainer self,int attrSetCode,int attrCode)
+        // public static void AddAttrSet(this AttrSetContainer self,int attrSetCode)
         // {
-        //     return self.GetAttrSet(attrSetCode).GetAttr(attrCode);
+        //     switch (attrSetCode)
+        //     {
+        //         case EcsGAttrSetCode.Fight:
+        //         {
+        //             var com = new ASCom_FIGHT();
+        //             if (self.EntityManager.AddComponentData(self.Entity, com))
+        //                 self.TryAddAttrSetCode(attrSetCode, com);
+        //             break;
+        //         }
+        //         case EcsGAttrSetCode.Fight_Monster:
+        //         {
+        //             var com = new ASCom_FIGHT();
+        //             if (self.EntityManager.AddComponentData(self.Entity, com))
+        //                 self.TryAddAttrSetCode(attrSetCode, com);
+        //             break;
+        //         }
+        //     }
+        // }
+        
+        // public static AttributeComponent GetAttribute(this AttrSetContainer self,int attrSetCode,int attrCode)
+        // {
+        //     // 不存在，直接返回null
+        //     if (!self.AttrSetCodeMap.TryGetValue(attrSetCode, out var attrSetData)) return AttributeComponent.NULL;
+        //     if (attrSetCode == EcsGAttrSetCode.Fight)
+        //     {
+        //         if(attrCode==EcsGAttrLib.HP)
+        //             return ((ASCom_FIGHT)attrSetData).HP;
+        //     }
+        //     return AttributeComponent.NULL;
         // }
     }
 }

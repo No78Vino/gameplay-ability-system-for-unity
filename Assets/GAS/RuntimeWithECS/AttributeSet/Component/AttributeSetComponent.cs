@@ -6,6 +6,8 @@ namespace GAS.RuntimeWithECS.AttributeSet.Component
 {
     public struct AttributeSetComponent : IComponentData
     {
-        public int CodeValue;
+        public int Code;
+        public NativeArray<int> attributeCodes;
+        public NativeArray<AttributeComponent> attributes;
     }
 }

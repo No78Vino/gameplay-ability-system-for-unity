@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using GAS.RuntimeWithECS.Attribute.Component;
+using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using Unity.Entities;
 
@@ -14,16 +16,52 @@ namespace GAS.RuntimeWithECS.AttributeSet
         public Entity Entity { get; private set; }
 
         public EntityManager EntityManager => GASManager.EntityManager;
-
-        public List<int> AttrSetCodeList { get; } = new();
-
-        public bool TryAddAttrSetCode(int attrSetCode)
+    
+        public AttrSetContainerComponent Component  => EntityManager.GetComponentData<AttrSetContainerComponent>(Entity);
+        
+        // 属性集code缓存，便于快速使用
+        private List<int> _attrSetCodeList = new();
+        private Dictionary<int,int> _attrSetCodeIndexMap = new();
+        
+        private AttributeComponent GetAttributeComponent(int attrSetCode,int attrCode)
         {
-            if (AttrSetCodeList.Contains(attrSetCode)) return false;
-            AttrSetCodeList.Add(attrSetCode);
+            // 不存在，直接返回null
+            if (!_attrSetCodeList.Contains(attrSetCode)) return AttributeComponent.NULL;
+            var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
+
+            var attrSetCom = Component.attributeSets[attrSetIndex];
+            var attrIndex = -1;
+            for(var i=0;i<attrSetCom.attributeCodes.Length;i++)
+            {
+                if (attrSetCom.attributeCodes[i] == attrCode)
+                {
+                    attrIndex = i;
+                    break;
+                }
+            }
+            return attrIndex >= 0 ? attrSetCom.attributes[attrIndex] : AttributeComponent.NULL;
+        }
+
+        public bool AddAttrSetCode(int attrSetCode)
+        {
+            if (_attrSetCodeList.Contains(attrSetCode)) return false;
+            _attrSetCodeList.Add(attrSetCode);
+            _attrSetCodeIndexMap.Add(attrSetCode,_attrSetCodeList.Count-1);
+            // TODO:添加属性集数据
+
             return true;
         }
-        // 添加属性集组件的函数在拓展类中实现，详见AttrSetContainerExtension
-        // public void AddAttrSet(int attrSetCode)
+        
+        public float GetBaseValue(int attrSetCode, int attrCode)
+        {
+            var com = GetAttributeComponent(attrSetCode, attrCode);
+            return com.BaseValue;
+        }
+        
+        public float GetCurrentValue(int attrSetCode, int attrCode)
+        {
+            var com = GetAttributeComponent(attrSetCode, attrCode);
+            return com.CurrentValue;
+        }
     }
 }
