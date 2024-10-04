@@ -1,6 +1,8 @@
 using System;
+using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
+using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
@@ -15,13 +17,32 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         private BasicDataComponent BasicData => EntityManager.GetComponentData<BasicDataComponent>(Entity);
 
+        private AttrSetContainer _attrSetContainer;
+
         protected void OnEnable()
         {
             if (GASManager.IsInitialized && !EntityManager.Exists(Entity))
             {
                 Entity = EntityManager.CreateEntity();
+                
+                EntityManager.SetName(Entity,"TestASCBaseCell");
+                
                 EntityManager.AddComponentData(Entity, new BasicDataComponent());
                 EntityManager.AddComponentData(Entity, new GASTagContainer());
+                
+                _attrSetContainer = new AttrSetContainer(Entity);
+                
+                
+                // 测试数据
+                _attrSetContainer.AddAttrSet(EcsGAttrSetLib.AS_FIGHT);
+
+                var v1 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
+                Debug.Log(" v1  == " + v1);
+                
+                _attrSetContainer.InitBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP,50);
+                
+                var v2 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
+                Debug.Log(" v2  == " + v2);
             }
         }
 

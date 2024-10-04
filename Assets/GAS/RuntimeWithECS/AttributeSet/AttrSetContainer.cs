@@ -10,7 +10,6 @@ namespace GAS.RuntimeWithECS.AttributeSet
 {
     public class AttrSetContainer
     {
-        private readonly AttrSetContainerComponent _component;
         // 属性集code缓存，便于快速查找
         private readonly Dictionary<int, int> _attrSetCodeIndexMap = new();
         private readonly List<int> _attrSetCodeList = new();
@@ -18,8 +17,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
         public AttrSetContainer(Entity entity)
         {
             Entity = entity;
-            EntityManager.AddComponentData(Entity, new AttrSetContainerComponent());
-            _component = EntityManager.GetComponentData<AttrSetContainerComponent>(Entity);
+            EntityManager.AddBuffer<AttributeSetComponent>(Entity);
         }
 
         public Entity Entity { get; }
@@ -31,16 +29,10 @@ namespace GAS.RuntimeWithECS.AttributeSet
             // 若不存在，则直接返回NULL
             if (!_attrSetCodeList.Contains(attrSetCode)) return AttributeData.NULL;
             var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
-            var attrSetCom = _component.attributeSets[attrSetIndex];
-            
-            var attrIndex = -1;
-            for (var i = 0; i < attrSetCom.Attributes.Length; i++)
-                if (attrSetCom.Attributes[i].Code == attrCode)
-                {
-                    attrIndex = i;
-                    break;
-                }
+            var attrBuffer = EntityManager.GetBuffer<AttributeSetComponent>(Entity);
+            var attrSetCom = attrBuffer[attrSetIndex];
 
+            var attrIndex = attrSetCom.GetAttrIndexByCode(attrCode);
             return attrIndex >= 0 ? attrSetCom.Attributes[attrIndex] : AttributeData.NULL;
         }
 
@@ -66,12 +58,11 @@ namespace GAS.RuntimeWithECS.AttributeSet
                 };
             }
 
-            var newAttrSet = new AttributeSetComponent
+            attrBuffer.Add(new AttributeSetComponent
             {
                 Code = attrSetCode,
                 Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
-            };
-            attrBuffer.Add(newAttrSet);
+            });
             return true;
         }
 
@@ -86,29 +77,51 @@ namespace GAS.RuntimeWithECS.AttributeSet
             var com = GetAttributeData(attrSetCode, attrCode);
             return com.CurrentValue;
         }
-        
+
+        private void ChangeBaseValue(int attrSetCode, int attrCode, float value, bool triggerEvent)
+        {
+            if (!_attrSetCodeList.Contains(attrSetCode)) return;
+            var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
+            
+            var attrBuffer = EntityManager.GetBuffer<AttributeSetComponent>(Entity);
+            var attrSet = attrBuffer[attrSetIndex];
+            var attrIndex = attrSet.GetAttrIndexByCode(attrCode);
+            
+            var data = attrSet.Attributes[attrIndex];
+            data.BaseValue = value;
+            data.TriggerCueEvent = triggerEvent;
+            // TODO: 重新计算current value
+            // 注意：这里只是设置了Attribute的dirty为true，真正的重计算完成是在RecalculateCurrentValueSystem中。
+            // 【RecalculateCurrentValueSystem会有重计算完成的广播，广播会告知哪些实例的哪些属性重计算的新值。ECS本质是一帧内立即响应，而不是延迟一帧执行。】
+            // 如果是需要初始化BaseValue之后，在接下来的逻辑中立即使用CurrentValue，你还需要额外调用RecalculateCurrentValueImmediately()
+            data.Dirty = true;
+            
+            attrSet.Attributes[attrIndex] = data;
+            attrBuffer[attrSetIndex] = attrSet;
+        }
+
         /// <summary>
-        /// 初始化基础值
-        /// 【不会触发任何事件】
+        ///     初始化基础值
+        ///     【不会触发任何事件，除了重计算current value】
         /// </summary>
         /// <param name="attrSetCode"></param>
         /// <param name="attrCode"></param>
         /// <param name="value"></param>
         public void InitBaseValue(int attrSetCode, int attrCode, float value)
         {
-            // TODO
+            ChangeBaseValue(attrSetCode, attrCode, value, false);
         }
-        
+
         /// <summary>
-        /// 设置基础值
-        /// 【会触发值变化的对应各种事件】
+        ///     设置基础值
+        ///     【会触发值变化的对应各种事件】
         /// </summary>
         /// <param name="attrSetCode"></param>
         /// <param name="attrCode"></param>
         /// <param name="value"></param>
         public void SetBaseValue(int attrSetCode, int attrCode, float value)
         {
-            // TODO
+            ChangeBaseValue(attrSetCode, attrCode, value, true);
         }
     }
 }
