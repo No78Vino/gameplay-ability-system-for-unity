@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
         public AttrSetContainer(Entity entity)
         {
             Entity = entity;
-            EntityManager.AddBuffer<AttributeSetComponent>(Entity);
+            EntityManager.AddBuffer<AttributeSetBufferElement>(Entity);
         }
 
         public Entity Entity { get; }
@@ -29,7 +29,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
             // 若不存在，则直接返回NULL
             if (!_attrSetCodeList.Contains(attrSetCode)) return AttributeData.NULL;
             var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
-            var attrBuffer = EntityManager.GetBuffer<AttributeSetComponent>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
             var attrSetCom = attrBuffer[attrSetIndex];
 
             var attrIndex = attrSetCom.GetAttrIndexByCode(attrCode);
@@ -43,7 +43,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
             _attrSetCodeList.Add(attrSetCode);
             _attrSetCodeIndexMap.Add(attrSetCode, _attrSetCodeList.Count - 1);
             // 添加属性集数据
-            var attrBuffer = EntityManager.GetBuffer<AttributeSetComponent>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
             var newAttrs = new AttributeData[config.Settings.Length];
             for (var i = 0; i < config.Settings.Length; i++)
             {
@@ -58,7 +58,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
                 };
             }
 
-            attrBuffer.Add(new AttributeSetComponent
+            attrBuffer.Add(new AttributeSetBufferElement
             {
                 Code = attrSetCode,
                 Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
@@ -83,7 +83,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
             if (!_attrSetCodeList.Contains(attrSetCode)) return;
             var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
             
-            var attrBuffer = EntityManager.GetBuffer<AttributeSetComponent>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
             var attrSet = attrBuffer[attrSetIndex];
             var attrIndex = attrSet.GetAttrIndexByCode(attrCode);
             
@@ -91,10 +91,11 @@ namespace GAS.RuntimeWithECS.AttributeSet
             data.BaseValue = value;
             data.TriggerCueEvent = triggerEvent;
             // TODO: 重新计算current value
-            // 注意：这里只是设置了Attribute的dirty为true，真正的重计算完成是在RecalculateCurrentValueSystem中。
+            // 注意：这里只是添加了TagAttributeDirty，设置了Attribute的dirty为true，真正的重计算完成是在RecalculateCurrentValueSystem中。
             // 【RecalculateCurrentValueSystem会有重计算完成的广播，广播会告知哪些实例的哪些属性重计算的新值。ECS本质是一帧内立即响应，而不是延迟一帧执行。】
             // 如果是需要初始化BaseValue之后，在接下来的逻辑中立即使用CurrentValue，你还需要额外调用RecalculateCurrentValueImmediately()
             data.Dirty = true;
+            EntityManager.AddComponent<TagAttributeDirty>(Entity);
             
             attrSet.Attributes[attrIndex] = data;
             attrBuffer[attrSetIndex] = attrSet;

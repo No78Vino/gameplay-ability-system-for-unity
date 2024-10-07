@@ -6,7 +6,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.AttributeSet.Component
 {
     [InternalBufferCapacity(50)]
-    public struct AttributeSetComponent : IBufferElementData
+    public struct AttributeSetBufferElement : IBufferElementData
     {
         public int Code;
         public NativeArray<AttributeData> Attributes;
