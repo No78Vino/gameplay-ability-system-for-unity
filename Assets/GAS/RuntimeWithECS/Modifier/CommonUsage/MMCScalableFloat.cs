@@ -1,5 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ namespace GAS.RuntimeWithECS.Modifier.CommonUsage
             return magnitude * k + b;
         }
 
-        public override void InitParameters(float[] floatParams,int[] intParams,string[] stringParams)
+        public override void InitParameters(NativeArray<float> floatParams, NativeArray<int> intParams, NativeArray<FixedString32Bytes> stringParams)
         {
             k = floatParams[0];
             b = floatParams[1];

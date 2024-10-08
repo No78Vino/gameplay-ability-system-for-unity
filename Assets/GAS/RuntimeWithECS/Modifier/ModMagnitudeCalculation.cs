@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using GAS.General;
 using Sirenix.OdinInspector;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -44,6 +45,6 @@ namespace GAS.RuntimeWithECS.Modifier
 
         public abstract float CalculateMagnitude(Entity specEntity, float magnitude);
 
-        public abstract void InitParameters(float[] floatParams,int[] intParams,string[] stringParams);
+        public abstract void InitParameters(NativeArray<float> floatParams,NativeArray<int> intParams,NativeArray<FixedString32Bytes> stringParams);
     }
 }
