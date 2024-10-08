@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
+using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Unity.Entities;
 using UnityEngine;
 
@@ -13,8 +14,8 @@ namespace GAS.RuntimeWithECS.Modifier
         public MMCRuntimeHub()
         {
             _magnitudeCalculations = new Dictionary<Type, ModMagnitudeCalculation>();
-            // TODO 初始化项目内所有类型MMC实例
-
+            // TODO :初始化项目内所有类型MMC实例
+            _magnitudeCalculations.Add(typeof(MMCScalableFloat),new MMCScalableFloat());
         }
 
         public static float Calculate(Entity ge, BuffEleModifier modifier)

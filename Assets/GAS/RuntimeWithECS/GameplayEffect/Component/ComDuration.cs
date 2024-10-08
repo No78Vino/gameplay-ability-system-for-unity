@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
-    public struct GEDuration : IComponentData
+    public struct ComDuration : IComponentData
     {
         public int duration;
         public TimeUnit timeUnit;

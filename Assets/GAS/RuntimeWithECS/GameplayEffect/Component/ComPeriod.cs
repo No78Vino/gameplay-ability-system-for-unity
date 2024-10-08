@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
-    public struct GEPeriod : IComponentData
+    public struct ComPeriod : IComponentData
     {
         public int period;
         public NativeArray<Entity> gameplayEffects;
