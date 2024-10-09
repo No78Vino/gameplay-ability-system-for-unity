@@ -4,6 +4,7 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
 using UnityEngine;
@@ -77,5 +78,86 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             bdc.Level = level;
             EntityManager.SetComponentData(Entity, bdc);
         }
+
+        
+        #region GameplayEffect 相关操作
+        
+        // public NewGameplayEffectSpec ApplyGameplayEffectTo(Entity gameplayEffect, Entity target)
+        // {
+            // var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
+            // var newAttrs = new AttributeData[config.Settings.Length];
+            // for (var i = 0; i < config.Settings.Length; i++)
+            // {
+            //     var setting = config.Settings[i];
+            //     newAttrs[i] = new AttributeData
+            //     {
+            //         Code = setting.Code,
+            //         BaseValue = setting.InitValue,
+            //         CurrentValue = setting.InitValue,
+            //         MinValue = setting.Min,
+            //         MaxValue = setting.Max
+            //     };
+            // }
+            //
+            // attrBuffer.Add(new AttributeSetBufferElement
+            // {
+            //     Code = attrSetCode,
+            //     Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
+            // });
+            // return true;
+            
+            //return target.AddGameplayEffect(this, gameplayEffectSpec);
+        // }
+        
+        // public GameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCellBase target)
+        // {
+        //     return target.AddGameplayEffect(this, gameplayEffectSpec);
+        // }
+
+//         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
+//         {
+//             if (gameplayEffect == null)
+//             {
+// #if UNITY_EDITOR
+//                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
+// #endif
+//                 return null;
+//             }
+//
+//             var spec = gameplayEffect.CreateSpec();
+//             return ApplyGameplayEffectTo(spec, target);
+//         }
+//
+//         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,
+//             int effectLevel)
+//         {
+//             if (gameplayEffect == null)
+//             {
+// #if UNITY_EDITOR
+//                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
+// #endif
+//                 return null;
+//             }
+//
+//             var spec = gameplayEffect.CreateSpec();
+//             spec.SetLevel(effectLevel);
+//             return ApplyGameplayEffectTo(spec, target);
+//         }
+//
+//         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
+//         {
+//             return ApplyGameplayEffectTo(gameplayEffectSpec, this);
+//         }
+//
+//         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
+//         {
+//             return ApplyGameplayEffectTo(gameplayEffect, this);
+//         }
+//
+//         public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
+//         {
+//             GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
+//         }
+        #endregion
     }
 }

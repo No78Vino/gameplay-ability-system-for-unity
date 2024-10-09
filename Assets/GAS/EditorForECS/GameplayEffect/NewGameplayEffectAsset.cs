@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GAS.RuntimeWithECS.GameplayEffect;
+﻿using GAS.RuntimeWithECS.GameplayEffect;
 using UnityEngine;
 
 namespace GAS.EditorForECS.GameplayEffect
