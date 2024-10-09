@@ -82,7 +82,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         
         #region GameplayEffect 相关操作
         
-        // public NewGameplayEffectSpec ApplyGameplayEffectTo(Entity gameplayEffect, Entity target)
+        // private NewGameplayEffectSpec AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
         // {
             // var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
             // var newAttrs = new AttributeData[config.Settings.Length];
