@@ -1,4 +1,5 @@
 using GAS.RuntimeWithECS.AttributeSet.Component;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.Attribute
@@ -8,13 +9,12 @@ namespace GAS.RuntimeWithECS.System.Attribute
         private EntityQuery _query;
         protected override void OnCreate()
         {
-            _query = GetEntityQuery(typeof(TagAttributeDirty));
+            _query = GetEntityQuery(typeof(BuffEleModifier),typeof(TagAttributeDirty));
             RequireForUpdate(_query);    
         }
         
         protected override void OnUpdate()
         {
-            
             // float newValue = _processedAttribute.BaseValue;
             // foreach (var tuple in _modifierCache)
             // {
