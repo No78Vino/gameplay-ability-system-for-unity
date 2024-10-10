@@ -9,13 +9,13 @@ namespace GAS.RuntimeWithECS.Modifier
 {
     public class MMCRuntimeHub
     {
-        private static Dictionary<Type, ModMagnitudeCalculation> _magnitudeCalculations;
+        private static Dictionary<int, ModMagnitudeCalculation> _magnitudeCalculations;
 
         public MMCRuntimeHub()
         {
-            _magnitudeCalculations = new Dictionary<Type, ModMagnitudeCalculation>();
+            _magnitudeCalculations = new Dictionary<int, ModMagnitudeCalculation>();
             // TODO :初始化项目内所有类型MMC实例
-            _magnitudeCalculations.Add(typeof(MMCScalableFloat),new MMCScalableFloat());
+            _magnitudeCalculations.Add(typeof(MMCScalableFloat).GetHashCode(),new MMCScalableFloat());
         }
 
         public static float Calculate(Entity ge, BuffEleModifier modifier)
@@ -26,7 +26,7 @@ namespace GAS.RuntimeWithECS.Modifier
             try
             {
 #endif
-                var mmc = _magnitudeCalculations[setting.Type];
+                var mmc = _magnitudeCalculations[setting.MMCTypeHashCode];
                 mmc.InitParameters(setting.floatParams, setting.intParams, setting.stringParams);
                 result = mmc.CalculateMagnitude(ge, modifier.Magnitude);
 #if UNITY_EDITOR

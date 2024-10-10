@@ -7,7 +7,7 @@ namespace GAS.RuntimeWithECS.Core
     {
         public static EntityManager EntityManager { get; private set; }
 
-        public static World World { get; }
+        //public static World World { get; }
 
         public static TurnController TurnController { get; private set; }
 
