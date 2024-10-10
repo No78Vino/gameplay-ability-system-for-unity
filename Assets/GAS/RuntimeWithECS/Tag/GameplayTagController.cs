@@ -1,4 +1,5 @@
-﻿using GAS.RuntimeWithECS.Core;
+﻿using System.Collections.Generic;
+using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
 
@@ -21,18 +22,44 @@ namespace GAS.RuntimeWithECS.Tag
         {
             var fixedTags = DynamicBufferFixedTags;
             foreach (var t in fixedTags)
-                if (t.tag == tag)
+                if (GameplayTagHub.HasTag(t.tag, tag))
                     return true;
             return false;
         }
-        
+
         private bool HasTemporaryTag(int tag)
         {
             var temporaryTags = DynamicBufferTemporaryTags;
             foreach (var t in temporaryTags)
-                if (t.tag == tag)
+                if (GameplayTagHub.HasTag(t.tag, tag))
                     return true;
             return false;
+        }
+
+        private void KillFixedTag(int tag)
+        {
+            var fixedTags = DynamicBufferFixedTags;
+            int index = -1;
+            for (int i = 0; i < fixedTags.Length; i++)
+            {
+                if (fixedTags[i].tag != tag) continue;
+                index = i;
+                break;
+            }
+            if(index>=0) fixedTags.RemoveAt(index);
+        }
+
+        private void KillTemporaryTag(int tag)
+        {
+            // var tempTags = DynamicBufferTemporaryTags;
+            // List<int> removedIndexList = new List<int>();
+            // for (int i = 0; i < tempTags.Length; i++)
+            // {
+            //     if (tempTags[i].tag != tag) continue;
+            //     index = i;
+            //     break;
+            // }
+            // if(index>=0) fixedTags.RemoveAt(index);
         }
         
         public bool HasTag(int tag)
@@ -43,14 +70,32 @@ namespace GAS.RuntimeWithECS.Tag
             bool hasTemporary = HasTemporaryTag(tag);
             return hasTemporary;
         }
-        
-        public void AddFixedTag(int tag)
+
+
+        /// <summary>
+        /// 固有Tag添加逻辑：固有tag已经存在则不添加；若临时tag中存在，则在固有tag中添加完后，还要移除临时tag中的这个tag
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns>dirty：tag合集是否产生变化</returns>
+        public bool AddFixedTag(int tag)
         {
-            bool contain = HasFixedTag(tag);
-            if(!contain)
+            bool containFixed = HasFixedTag(tag);
+            if (containFixed)
+            {
+                return false;
+            }
+            else
+            {
                 DynamicBufferFixedTags.Add(new BuffElemFixedTag { tag = tag });
-            
-            //
+                bool containTemporary = HasTemporaryTag(tag);
+                if (containTemporary)
+                {
+                    // 从临时tag中剔除
+                    
+                }
+
+                return !containTemporary;
+            }
         }
 
         public void AddFixedTags(int[] tags)

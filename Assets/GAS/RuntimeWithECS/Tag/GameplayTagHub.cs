@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GAS.RuntimeWithECS.Tag
 {
-    public static class TagUtil
+    public static class GameplayTagHub
     {
         private static Dictionary<int, GASTag> _tagMap;
 
@@ -11,7 +11,7 @@ namespace GAS.RuntimeWithECS.Tag
             _tagMap = tagMap;
         }
         
-        public static void AddTagIntoMap(GASTag tag)
+        public static void AddTagToMap(GASTag tag)
         {
             _tagMap ??= new Dictionary<int, GASTag>();
             _tagMap.TryAdd(tag.ENUM, tag);
@@ -22,6 +22,12 @@ namespace GAS.RuntimeWithECS.Tag
             _tagMap?.Remove(tag.ENUM);
         }
         
+        /// <summary>
+        /// TagA是否含有TagB
+        /// </summary>
+        /// <param name="tagA"></param>
+        /// <param name="tagB"></param>
+        /// <returns></returns>
         public static bool HasTag(int tagA, int tagB)
         {
             if (_tagMap.ContainsKey(tagA) && _tagMap.ContainsKey(tagB)) 
