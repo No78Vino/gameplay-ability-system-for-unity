@@ -50481,7 +50481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b906914b1434b4ea44d5956e217f3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGASRunning: 1
+  isGASRunning: 0
 --- !u!114 &936956467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50491,9 +50491,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 936956463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c44c8ee5c5f14f0f9cfaf14f014c27d3, type: 3}
+  m_Script: {fileID: 11500000, guid: cc8bd1e62a8a42b1afbba3805afdd20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ascName: NULL
 --- !u!1 &1014906066
 GameObject:
   m_ObjectHideFlags: 0

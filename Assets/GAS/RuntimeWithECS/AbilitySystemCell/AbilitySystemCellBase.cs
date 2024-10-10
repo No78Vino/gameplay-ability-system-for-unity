@@ -10,49 +10,45 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
 {
-    public class AbilitySystemCellBase : MonoBehaviour
+    public class AbilitySystemCellBase
     {
         public Entity Entity { get; private set; }
-        protected EntityManager EntityManager => GASManager.EntityManager;
+        private EntityManager EntityManager => GASManager.EntityManager;
 
         private BasicDataComponent BasicData => EntityManager.GetComponentData<BasicDataComponent>(Entity);
 
         private AttrSetContainer _attrSetContainer;
 
-        protected void OnEnable()
+        public AbilitySystemCellBase()
         {
-            if (GASManager.IsInitialized && !EntityManager.Exists(Entity))
-            {
-                Entity = EntityManager.CreateEntity();
-                
-                EntityManager.SetName(Entity,"TestASCBaseCell");
-                
-                EntityManager.AddComponentData(Entity, new BasicDataComponent());
-                EntityManager.AddComponentData(Entity, new GASTagContainer());
-                
-                _attrSetContainer = new AttrSetContainer(Entity);
-                
-                
-                // 测试数据
-                _attrSetContainer.AddAttrSet(EcsGAttrSetLib.AS_FIGHT);
+            Entity = EntityManager.CreateEntity();
+            EntityManager.SetName(Entity, $"ASC_V{Entity.Version}_{Entity.Index}");
 
-                var v1 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
-                Debug.Log(" v1  == " + v1);
-                
-                _attrSetContainer.InitBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP,50);
-                
-                var v2 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
-                Debug.Log(" v2  == " + v2);
-            }
+            // 1.基础信息
+            EntityManager.AddComponentData(Entity, new BasicDataComponent());
+            
+            // 2.AttrSet
+            _attrSetContainer = new AttrSetContainer(Entity);
+
+            // 3.Tag
+            EntityManager.AddComponentData(Entity, new GASTagContainer());
+            
+            // 4.GameplayEffect
+            
+            // 5.Ability
+
+
+            // // 测试数据
+            // _attrSetContainer.AddAttrSet(EcsGAttrSetLib.AS_FIGHT);
+            // var v1 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
+            // _attrSetContainer.InitBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP,50);
+            // var v2 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
         }
 
-        protected void OnDisable()
+        protected void Dispose()
         {
-            if (GASManager.IsInitialized && EntityManager.Exists(Entity))
-            {
-                EntityManager.DestroyEntity(Entity);
-                Entity = Entity.Null;
-            }
+            EntityManager.DestroyEntity(Entity);
+            Entity = Entity.Null;
         }
 
         public void Init(int[] baseTags, int[] attrSets, AbilityAsset[] baseAbilities, int level)
