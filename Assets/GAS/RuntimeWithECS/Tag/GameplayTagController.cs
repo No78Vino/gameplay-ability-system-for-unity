@@ -51,15 +51,22 @@ namespace GAS.RuntimeWithECS.Tag
 
         private void KillTemporaryTag(int tag)
         {
-            // var tempTags = DynamicBufferTemporaryTags;
-            // List<int> removedIndexList = new List<int>();
-            // for (int i = 0; i < tempTags.Length; i++)
-            // {
-            //     if (tempTags[i].tag != tag) continue;
-            //     index = i;
-            //     break;
-            // }
-            // if(index>=0) fixedTags.RemoveAt(index);
+            var tempTags = DynamicBufferTemporaryTags;
+            List<int> removedIndexList = new List<int>();
+            for (int i = 0; i < tempTags.Length; i++)
+            {
+                if (tempTags[i].tag == tag)
+                {
+                    removedIndexList.Add(i);
+                }
+            }
+
+            int offset = 0;
+            foreach (var index in removedIndexList)
+            {
+                tempTags.RemoveAt(index-offset);
+                offset++;
+            }
         }
         
         public bool HasTag(int tag)
