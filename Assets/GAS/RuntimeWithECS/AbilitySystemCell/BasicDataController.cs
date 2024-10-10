@@ -24,9 +24,6 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             GasEntityManager.SetComponentData(_asc, bdc);
         }
 
-        public int GetLevel()
-        {
-            return BasicData.Level;
-        }
+        public int GetLevel() => BasicData.Level;
     }
 }

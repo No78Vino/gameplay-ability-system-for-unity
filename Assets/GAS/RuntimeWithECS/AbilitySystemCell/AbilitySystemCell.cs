@@ -13,11 +13,10 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
 {
-    public class AbilitySystemCellBase
+    public class AbilitySystemCell
     {
         public Entity Entity { get; private set; }
         private EntityManager EntityManager => GASManager.EntityManager;
-        
         
         private readonly BasicDataController _basicDataController;
         private readonly AttrSetController _attrSetController;
@@ -25,7 +24,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         private readonly GameplayEffectController _gameplayEffectController;
         private readonly GameplayAbilityController _gameplayAbilityController;
 
-        public AbilitySystemCellBase()
+        public AbilitySystemCell()
         {
             Entity = EntityManager.CreateEntity();
             EntityManager.SetName(Entity, $"ASC_V{Entity.Version}_{Entity.Index}");
@@ -55,14 +54,10 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             Entity = Entity.Null;
         }
 
-        public void Init(int[] baseTags, int[] attrSets, AbilityAsset[] baseAbilities, int level)
+        public void Init(int[] baseTags, int[] attrSets, AbilityAsset[] baseAbilities, int level = 1)
         {
             // 1.初始化基础标签
-            var fixedTags = new DynamicBuffer<int>();
-            foreach (var i in baseTags) fixedTags.Add(i);
-            EntityManager.SetComponentData(Entity,
-                new GASTagContainer { FixedTags = fixedTags, DynamicTags = new DynamicBuffer<int>() });
-            
+            _gameplayTagController.AddFixedTags(baseTags);
             // 2.创建属性集
             
             // 3.初始化基础技能
@@ -71,8 +66,13 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             SetLevel(level);
         }
 
+        #region BasicData 基础信息部分
+
         public void SetLevel(int level) => _basicDataController.SetLevel(level);
         public int GetLevel() => _basicDataController.GetLevel();
+
+        #endregion
+
 
 
 

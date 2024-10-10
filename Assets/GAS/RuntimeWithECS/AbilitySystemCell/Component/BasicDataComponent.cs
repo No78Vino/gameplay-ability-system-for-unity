@@ -7,7 +7,6 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell.Component
     /// </summary>
     public struct BasicDataComponent : IComponentData
     {
-        public int Id;     // 唯一ID
         public int Level;  // ASC当前等级
     }
 }

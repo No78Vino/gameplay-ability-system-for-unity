@@ -29,7 +29,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             geBuffers.Add(new GameplayEffectBufferElement { GameplayEffect = gameplayEffect });
         }
         
-        public NewGameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCellBase target)
+        public NewGameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCell.AbilitySystemCell target)
         {
             AddGameplayEffectEntityTo(gameplayEffect.Entity, target.Entity);
             return gameplayEffect;
