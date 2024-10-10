@@ -8,13 +8,13 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.AttributeSet
 {
-    public class AttrSetContainer
+    public class AttrSetController
     {
         // 属性集code缓存，便于快速查找
         private readonly Dictionary<int, int> _attrSetCodeIndexMap = new();
         private readonly List<int> _attrSetCodeList = new();
 
-        public AttrSetContainer(Entity entity)
+        public AttrSetController(Entity entity)
         {
             Entity = entity;
             EntityManager.AddBuffer<AttributeSetBufferElement>(Entity);

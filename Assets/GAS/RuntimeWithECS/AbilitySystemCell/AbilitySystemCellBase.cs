@@ -4,6 +4,8 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
 using UnityEngine;
@@ -17,7 +19,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         private BasicDataComponent BasicData => EntityManager.GetComponentData<BasicDataComponent>(Entity);
 
-        private AttrSetContainer _attrSetContainer;
+        private AttrSetController _attrSetController;
+        private GameplayTagController _gameplayTagController;
+        private GameplayEffectController _gameplayEffectController;
 
         public AbilitySystemCellBase()
         {
@@ -26,16 +30,13 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
             // 1.基础信息
             EntityManager.AddComponentData(Entity, new BasicDataComponent());
-            
-            // 2.AttrSet
-            _attrSetContainer = new AttrSetContainer(Entity);
-
-            // 3.Tag
-            EntityManager.AddComponentData(Entity, new GASTagContainer());
-            
-            // 4.GameplayEffect
-            
-            // 5.Ability
+            // 2.AttrSet属性集控制器
+            _attrSetController = new AttrSetController(Entity);
+            // 3.Tag控制器
+            _gameplayTagController = new GameplayTagController(Entity);
+            // 4.GameplayEffect控制器
+            _gameplayEffectController = new GameplayEffectController(Entity);
+            // 5.Ability控制器
 
 
             // // 测试数据
