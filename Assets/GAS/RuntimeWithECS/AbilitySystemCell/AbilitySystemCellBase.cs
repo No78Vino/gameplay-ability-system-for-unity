@@ -1,6 +1,7 @@
 using System;
 using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.Core;
@@ -16,12 +17,13 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
     {
         public Entity Entity { get; private set; }
         private EntityManager EntityManager => GASManager.EntityManager;
-
-        private BasicDataComponent BasicData => EntityManager.GetComponentData<BasicDataComponent>(Entity);
-
-        private AttrSetController _attrSetController;
-        private GameplayTagController _gameplayTagController;
-        private GameplayEffectController _gameplayEffectController;
+        
+        
+        private readonly BasicDataController _basicDataController;
+        private readonly AttrSetController _attrSetController;
+        private readonly GameplayTagController _gameplayTagController;
+        private readonly GameplayEffectController _gameplayEffectController;
+        private readonly GameplayAbilityController _gameplayAbilityController;
 
         public AbilitySystemCellBase()
         {
@@ -29,7 +31,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             EntityManager.SetName(Entity, $"ASC_V{Entity.Version}_{Entity.Index}");
 
             // 1.基础信息
-            EntityManager.AddComponentData(Entity, new BasicDataComponent());
+            _basicDataController = new BasicDataController(Entity);
             // 2.AttrSet属性集控制器
             _attrSetController = new AttrSetController(Entity);
             // 3.Tag控制器
@@ -37,6 +39,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             // 4.GameplayEffect控制器
             _gameplayEffectController = new GameplayEffectController(Entity);
             // 5.Ability控制器
+            _gameplayAbilityController = new GameplayAbilityController(Entity);
 
 
             // // 测试数据
@@ -68,43 +71,40 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             SetLevel(level);
         }
 
-        public void SetLevel(int level)
-        {
-            var bdc = BasicData;
-            bdc.Level = level;
-            EntityManager.SetComponentData(Entity, bdc);
-        }
+        public void SetLevel(int level) => _basicDataController.SetLevel(level);
+        public int GetLevel() => _basicDataController.GetLevel();
 
-        
+
+
         #region GameplayEffect 相关操作
-        
+
         // private NewGameplayEffectSpec AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
         // {
-            // var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
-            // var newAttrs = new AttributeData[config.Settings.Length];
-            // for (var i = 0; i < config.Settings.Length; i++)
-            // {
-            //     var setting = config.Settings[i];
-            //     newAttrs[i] = new AttributeData
-            //     {
-            //         Code = setting.Code,
-            //         BaseValue = setting.InitValue,
-            //         CurrentValue = setting.InitValue,
-            //         MinValue = setting.Min,
-            //         MaxValue = setting.Max
-            //     };
-            // }
-            //
-            // attrBuffer.Add(new AttributeSetBufferElement
-            // {
-            //     Code = attrSetCode,
-            //     Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
-            // });
-            // return true;
-            
-            //return target.AddGameplayEffect(this, gameplayEffectSpec);
+        // var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
+        // var newAttrs = new AttributeData[config.Settings.Length];
+        // for (var i = 0; i < config.Settings.Length; i++)
+        // {
+        //     var setting = config.Settings[i];
+        //     newAttrs[i] = new AttributeData
+        //     {
+        //         Code = setting.Code,
+        //         BaseValue = setting.InitValue,
+        //         CurrentValue = setting.InitValue,
+        //         MinValue = setting.Min,
+        //         MaxValue = setting.Max
+        //     };
         // }
-        
+        //
+        // attrBuffer.Add(new AttributeSetBufferElement
+        // {
+        //     Code = attrSetCode,
+        //     Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
+        // });
+        // return true;
+
+        //return target.AddGameplayEffect(this, gameplayEffectSpec);
+        // }
+
         // public GameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCellBase target)
         // {
         //     return target.AddGameplayEffect(this, gameplayEffectSpec);
@@ -154,6 +154,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 //         {
 //             GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
 //         }
+
         #endregion
     }
 }
