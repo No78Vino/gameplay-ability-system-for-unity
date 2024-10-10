@@ -5,7 +5,25 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
     public struct ComBasicInfo : IComponentData
     {
-        public FixedString32Bytes name; // 仅调试显示用，不建议作为运算逻辑的依据
+        /// <summary>
+        /// 仅调试显示用，不建议作为运算逻辑的依据
+        /// </summary>
+        public FixedString32Bytes name; 
+        
+        /// <summary>
+        /// 是否正在使用中【inUsage = false,相当于在缓存池中】
+        /// </summary>
+        public bool inUsage;
+        
+        /// <summary>
+        /// 施加目标
+        /// </summary>
+        public Entity Target;
+        
+        /// <summary>
+        /// 施加来源
+        /// </summary>
+        public Entity Source;
     }
     
     public sealed class ConfBasicInfo:GameplayEffectComponentConfig
@@ -17,7 +35,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             _entityManager.SetName(ge, $"GE_{Name}_V{ge.Version}_{ge.Index}");
             _entityManager.AddComponentData(ge, new ComBasicInfo
             {
-                name = Name
+                name = Name,
+                Target=Entity.Null,
+                Source = Entity.Null,
+                inUsage=false
             });
         }
     }

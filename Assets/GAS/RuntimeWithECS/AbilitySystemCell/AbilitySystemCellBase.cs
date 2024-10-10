@@ -4,7 +4,6 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.Core;
-using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
 using UnityEngine;
