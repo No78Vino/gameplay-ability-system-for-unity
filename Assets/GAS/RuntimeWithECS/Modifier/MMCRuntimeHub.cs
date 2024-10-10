@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Unity.Entities;
@@ -15,7 +16,7 @@ namespace GAS.RuntimeWithECS.Modifier
         {
             _magnitudeCalculations = new Dictionary<int, ModMagnitudeCalculation>();
             // TODO :初始化项目内所有类型MMC实例
-            _magnitudeCalculations.Add(typeof(MMCScalableFloat).GetHashCode(),new MMCScalableFloat());
+            _magnitudeCalculations.Add(MMCTypeToCode.Map[typeof(MMCScalableFloat)],new MMCScalableFloat());
         }
 
         public static float Calculate(Entity ge, BuffEleModifier modifier)
@@ -26,7 +27,7 @@ namespace GAS.RuntimeWithECS.Modifier
             try
             {
 #endif
-                var mmc = _magnitudeCalculations[setting.MMCTypeHashCode];
+                var mmc = _magnitudeCalculations[setting.TypeCode];
                 mmc.InitParameters(setting.floatParams, setting.intParams, setting.stringParams);
                 result = mmc.CalculateMagnitude(ge, modifier.Magnitude);
 #if UNITY_EDITOR
