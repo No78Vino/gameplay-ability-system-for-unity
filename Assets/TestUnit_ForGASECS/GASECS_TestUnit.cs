@@ -1,5 +1,10 @@
-﻿using GAS.RuntimeWithECS.Core;
+﻿using System;
+using GAS.ECS_TEST_RUNTIME_GEN_LIB;
+using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.AttributeSet.Component;
+using GAS.RuntimeWithECS.Core;
 using Sirenix.OdinInspector;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -7,18 +12,73 @@ namespace TestUnit_ForGASECS
 {
     public class GASECS_TestUnit : MonoBehaviour
     {
-        public Entity asc;
+        public Entity EntityASC;
 
         [DisplayAsString] 
         public string _ascName = "NULL";
+        
+        [TabGroup("FixedTags",GroupName = "Tags")]
+        [Sirenix.OdinInspector.ReadOnly]
+        public int[] fixedTags;
+        
+        [TabGroup("TempTags",GroupName = "Tags")]
+        [Sirenix.OdinInspector.ReadOnly]
+        public int[] tempTags;
+        
+        [TabGroup("AttrSets",GroupName = "Tags")]
+        [Sirenix.OdinInspector.ReadOnly]
+        public AttributeSetForShow[] AttrSets;
+        
+        private AbilitySystemCell _asc;
+
+        void RefreshUI()
+        {
+            _ascName = EntityASC.ToString();
+            fixedTags = _asc.FixedTags();
+            //tempTags = _asc.TempTags();
+            var  aSet = _asc.AttrSets();
+            AttrSets = new AttributeSetForShow[aSet.Length];
+            for (int i = 0; i < aSet.Length; i++)
+            {
+                var attrs = new AttributeForShow[aSet[i].Attributes.Length];
+                for (int j = 0; j < aSet[i].Attributes.Length; j++)
+                    attrs[j] = new AttributeForShow
+                    {
+                        Code = aSet[i].Attributes[j].Code,
+                        BaseValue = aSet[i].Attributes[j].BaseValue,
+                        CurrentValue = aSet[i].Attributes[j].CurrentValue,
+                        MinValue = aSet[i].Attributes[j].MinValue,
+                        MaxValue = aSet[i].Attributes[j].MaxValue
+                    };
+                AttrSets[i] = new AttributeSetForShow()
+                {
+                    Code = aSet[i].Code,
+                    Attrs = attrs
+                };
+            }
+        }
+        
+        
+        [Button(ButtonSizes.Medium)]
+        void InitGAS()
+        {
+            GASManager.Initialize();
+            GTagList.InitTagList();
             
+            GASManager.Run();
+        }
+        
         [Button(ButtonSizes.Medium)]
         void CreateASC()
         {
-            asc = GASManager.EntityManager.CreateEntity();
+            _asc = new AbilitySystemCell();
+            EntityASC = _asc.Entity;
+            
+            int[] baseTags = { GTagList.Magic_Fire, GTagList.Magic_Water };
+            int[] attrSets = { EcsGAttrSetCode.Fight_Monster };
+            _asc.Init(baseTags,attrSets,null,1);
 
-            GASManager.EntityManager.SetName(asc, "TestUnit_ASCBaseCell");
-            _ascName = asc.ToString();
+            RefreshUI();
         }
 
         [Button(ButtonSizes.Medium)]
@@ -32,5 +92,22 @@ namespace TestUnit_ForGASECS
         {
             
         }
+    }
+
+    [Serializable]
+    public struct AttributeSetForShow
+    {
+        public int Code;
+        public AttributeForShow[] Attrs;
+    }
+    
+    [Serializable]
+    public struct AttributeForShow
+    {
+        public int Code;
+        public float BaseValue;
+        public float CurrentValue;
+        public float MinValue;
+        public float MaxValue;
     }
 }

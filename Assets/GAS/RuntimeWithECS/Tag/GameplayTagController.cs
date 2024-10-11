@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Tag.Component;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Tag
@@ -11,6 +12,16 @@ namespace GAS.RuntimeWithECS.Tag
         private static EntityManager GasEntityManager => GASManager.EntityManager;
         private DynamicBuffer<BuffElemFixedTag> DynamicBufferFixedTags => GasEntityManager.GetBuffer<BuffElemFixedTag>(_asc);
         private DynamicBuffer<BuffElemTemporaryTag> DynamicBufferTemporaryTags => GasEntityManager.GetBuffer<BuffElemTemporaryTag>(_asc);
+
+#if UNITY_EDITOR
+        public int[] FixedTags()
+        {
+            int[] tags = new int[DynamicBufferFixedTags.Length];
+            for (int i = 0; i < DynamicBufferFixedTags.Length; i++)
+                tags[i] = DynamicBufferFixedTags[i].tag;
+            return tags;
+        }
+#endif
         public GameplayTagController(Entity asc)
         {
             _asc = asc;

@@ -4,6 +4,7 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
+using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Tag;
@@ -59,8 +60,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             // 1.初始化基础标签
             _gameplayTagController.AddFixedTags(baseTags);
             // 2.创建属性集
-            
+            foreach (var attrSetCode in attrSets)
+            {
+                var attrSetConfig = EcsGAttrSetLib.AttributeSetMap[attrSetCode];
+                _attrSetController.AddAttrSet(attrSetConfig);
+            }
+
             // 3.初始化基础技能
+            // TODO
             
             // 4.初始化等级
             SetLevel(level);
@@ -73,9 +80,17 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #endregion
 
+        #region GameplayTag 相关
 
+        //public void AddFixedTag(int tag) => _gameplayTagController.AddFixedTags(tag);
 
+        #endregion
 
+        #region Attribute
+
+        
+
+        #endregion
         #region GameplayEffect 相关操作
 
         // private NewGameplayEffectSpec AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
@@ -156,5 +171,17 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 //         }
 
         #endregion
+        
+        
+        
+#if UNITY_EDITOR
+        public int[] FixedTags() => _gameplayTagController.FixedTags();
+
+        public DynamicBuffer<AttributeSetBufferElement> AttrSets()
+        {
+            var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
+            return attrBuffer;
+        } 
+#endif
     }
 }

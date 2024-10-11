@@ -43,6 +43,12 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
             {
                 new(EcsGAttrLib.HP, 100, 0,1000),
             });
+        
+        public static Dictionary<int,NewAttributeSetConfig> AttributeSetMap = new()
+        {
+            {EcsGAttrSetCode.Fight,AS_FIGHT},
+            {EcsGAttrSetCode.Fight_Monster,AS_FIGHT_MONSTER}
+        };
     }
 
     #region 属性集的Runtime Components
