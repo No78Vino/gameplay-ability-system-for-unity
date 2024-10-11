@@ -84,31 +84,23 @@ namespace GAS.RuntimeWithECS.Tag
         /// </summary>
         /// <param name="tag"></param>
         /// <returns>dirty：tag合集是否产生变化</returns>
-        public bool AddFixedTag(int tag)
+        private bool AddFixedTag(int tag)
         {
-            bool containFixed = HasFixedTag(tag);
-            if (containFixed)
-            {
-                return false;
-            }
-            else
-            {
-                DynamicBufferFixedTags.Add(new BuffElemFixedTag { tag = tag });
-                bool containTemporary = HasTemporaryTag(tag);
-                if (containTemporary)
-                {
-                    // 从临时tag中剔除
-                    
-                }
-
-                return !containTemporary;
-            }
+            if (HasFixedTag(tag)) return false;
+            
+            DynamicBufferFixedTags.Add(new BuffElemFixedTag { tag = tag });
+            bool containTemporary = HasTemporaryTag(tag);
+            // 从临时tag中剔除
+            if (containTemporary) KillTemporaryTag(tag);
+            return !containTemporary;
         }
 
-        public void AddFixedTags(int[] tags)
+        public bool AddFixedTags(int[] tags)
         {
+            bool dirty = false;
             foreach (var tag in tags)
-                AddFixedTag(tag);
+                dirty |= AddFixedTag(tag);
+            return dirty;
         }
 
         public void RemoveFixedTag(int tag)
