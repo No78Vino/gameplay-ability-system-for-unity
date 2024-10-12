@@ -16,6 +16,8 @@ namespace TestUnit_ForGASECS
     {
         public Entity EntityASC;
 
+        private EntityManager GasEntityManager => GASManager.EntityManager;
+        
         [DisplayAsString] 
         public string _ascName = "NULL";
         
@@ -72,15 +74,13 @@ namespace TestUnit_ForGASECS
             {
                 var bf = gameplayEffects[i];
                 var geEntity = bf.GameplayEffect;
+                var basicData = GasEntityManager.GetComponentData<ComBasicInfo>(geEntity);
+                var dur = GasEntityManager.GetComponentData<ComDuration>(geEntity);
                 effects[i] = new EffectForShow()
                 {
-                    name = geEntity.ToString()
-                    // public string Target;
-                    // public string Source;
-                    // // Duration
-                    // public int duration;
-                    // public TimeUnit timeUnit;
-                    // public bool active; 
+                    name = geEntity.ToString(),Target = basicData.Target.ToString(),Source = basicData.Source.ToString(),
+                    // Duration
+                    duration=dur.duration,timeUnit=dur.timeUnit,active = dur.active,
                     // // Period
                     // public int period;
                     // public string[] gameplayEffects;
