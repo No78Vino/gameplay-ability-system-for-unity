@@ -5,6 +5,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
     public struct ComAssetTags : IComponentData
     {
+        /// <summary>
+        /// AssetTags,描述GE性质的Tag。用于Tag相关逻辑判断。
+        /// </summary>
         public NativeArray<int> tags;
     }
     

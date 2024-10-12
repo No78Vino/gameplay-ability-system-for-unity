@@ -10,6 +10,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         /// </summary>
         public FixedString32Bytes name; 
         
+        // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
+        
+        
         /// <summary>
         /// 是否正在使用中【inUsage = false,相当于在缓存池中】
         /// </summary>

@@ -4,6 +4,7 @@ using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
@@ -88,16 +89,18 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium,Name = "创建GE")]
         void CreatGE()
         {
-            GameplayEffectComponentConfig[] configs =
+            GameplayEffectComponentConfig[] cfgBurning =
             {
+                new ConfBasicInfo {Name = "Test_Burning"},
+                new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
             };
-            _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(configs);
+            _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(cfgBurning);
         }
         
         [Button(ButtonSizes.Medium,Name = "施加GE到ASC")]
         void ApplyGEToASC()
         {
-            
+            _asc.A _geSpec
         }
 
         [Button(ButtonSizes.Medium,Name = "从ASC移除GE")]
