@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Modifier
@@ -9,5 +10,14 @@ namespace GAS.RuntimeWithECS.Modifier
         public NativeArray<float> floatParams;
         public NativeArray<int> intParams;
         public NativeArray<FixedString32Bytes> stringParams;
+    }
+    
+    [Serializable]
+    public struct MMCSettingConfig
+    {
+        public int TypeCode;
+        public float[] floatParams;
+        public int[] intParams;
+        public string[] stringParams;
     }
 }
