@@ -7,6 +7,7 @@ using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
@@ -94,6 +95,10 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         
         #region GameplayEffect
 
+        public void ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffectSpec,AbilitySystemCell target)
+        {
+            _gameplayEffectController.ApplyGameplayEffectTo(gameplayEffectSpec, target);
+        }
         // private NewGameplayEffectSpec AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
         // {
         // var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
@@ -188,7 +193,12 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
             return attrBuffer;
-        } 
+        }
+
+        public DynamicBuffer<GameplayEffectBufferElement> GameplayEffects()
+        {
+            return _gameplayEffectController.CurrentGameplayEffects;
+        }
 #endif
     }
 }

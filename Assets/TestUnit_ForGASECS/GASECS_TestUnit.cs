@@ -30,18 +30,22 @@ namespace TestUnit_ForGASECS
         [TabGroup("AttrSets",GroupName = "Tags")]
         [Sirenix.OdinInspector.ReadOnly]
         public AttributeSetForShow[] AttrSets;
+
+        [TabGroup("Effects", GroupName = "Tags")]
+        [Sirenix.OdinInspector.ReadOnly]
+        public EffectForShow[] effects;
         
         private AbilitySystemCell _asc;
         private NewGameplayEffectSpec _geSpec;
-        
+
         void RefreshUI()
         {
             _ascName = EntityASC.ToString();
-            
+
             fixedTags = _asc.FixedTags();
             //tempTags = _asc.TempTags();
-            
-            var  aSet = _asc.AttrSets();
+
+            var aSet = _asc.AttrSets();
             AttrSets = new AttributeSetForShow[aSet.Length];
             for (int i = 0; i < aSet.Length; i++)
             {
@@ -61,9 +65,37 @@ namespace TestUnit_ForGASECS
                     Attrs = attrs
                 };
             }
+
+            var gameplayEffects = _asc.GameplayEffects();
+            effects = new EffectForShow[gameplayEffects.Length];
+            for (int i = 0; i < gameplayEffects.Length; i++)
+            {
+                var bf = gameplayEffects[i];
+                var geEntity = bf.GameplayEffect;
+                effects[i] = new EffectForShow()
+                {
+                    name = geEntity.ToString()
+                    // public string Target;
+                    // public string Source;
+                    // // Duration
+                    // public int duration;
+                    // public TimeUnit timeUnit;
+                    // public bool active; 
+                    // // Period
+                    // public int period;
+                    // public string[] gameplayEffects;
+                    // // Tags
+                    // public int[] AssetTags;
+                    // public int[] GrantedTags;
+                    // public int[] ApplicationRequiredTags;
+                    // public int[] OngoingRequiredTags;
+                    // public int[] ImmunityTags;
+                    // public int[] RemoveEffectWithTags;
+                };
+            }
         }
-        
-        
+
+
         [Button(ButtonSizes.Medium,Name = "初始化GAS")]
         void InitGAS()
         {
@@ -100,7 +132,8 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium,Name = "施加GE到ASC")]
         void ApplyGEToASC()
         {
-            _asc.A _geSpec
+            _asc.ApplyGameplayEffectTo(_geSpec,_asc);
+            RefreshUI();
         }
 
         [Button(ButtonSizes.Medium,Name = "从ASC移除GE")]
@@ -125,5 +158,29 @@ namespace TestUnit_ForGASECS
         public float CurrentValue;
         public float MinValue;
         public float MaxValue;
+    }
+
+    [Serializable]
+    public struct EffectForShow
+    {
+        // BasicData
+        public string name;
+        public string Target;
+        public string Source;
+        // Duration
+        public int duration;
+        public TimeUnit timeUnit;
+        public bool active; 
+        // Period
+        public int period;
+        public string[] gameplayEffects;
+        // Tags
+        public int[] AssetTags;
+        public int[] GrantedTags;
+        public int[] ApplicationRequiredTags;
+        public int[] OngoingRequiredTags;
+        public int[] ImmunityTags;
+        public int[] RemoveEffectWithTags;
+        // Modifiers
     }
 }

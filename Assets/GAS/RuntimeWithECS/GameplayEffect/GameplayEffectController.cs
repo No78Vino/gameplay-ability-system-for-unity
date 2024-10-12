@@ -18,9 +18,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public GameplayEffectController(Entity asc)
         {
             _asc = asc;
+            GasEntityManager.AddBuffer<GameplayEffectBufferElement>(_asc);
         }
         
-        private DynamicBuffer<GameplayEffectBufferElement> CurrentGameplayEffects =>
+        public DynamicBuffer<GameplayEffectBufferElement> CurrentGameplayEffects =>
             GasEntityManager.GetBuffer<GameplayEffectBufferElement>(_asc);
         
         private void AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
