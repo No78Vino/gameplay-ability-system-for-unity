@@ -73,14 +73,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             SetLevel(level);
         }
 
-        #region BasicData 基础信息部分
+        #region BasicData
 
         public void SetLevel(int level) => _basicDataController.SetLevel(level);
         public int GetLevel() => _basicDataController.GetLevel();
 
         #endregion
 
-        #region GameplayTag 相关
+        #region GameplayTag 
 
         //public void AddFixedTag(int tag) => _gameplayTagController.AddFixedTags(tag);
 
@@ -91,7 +91,8 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         
 
         #endregion
-        #region GameplayEffect 相关操作
+        
+        #region GameplayEffect
 
         // private NewGameplayEffectSpec AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
         // {
@@ -171,8 +172,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 //         }
 
         #endregion
+
+        #region Ability
+
+        
+        #endregion
         
         
+    
         
 #if UNITY_EDITOR
         public int[] FixedTags() => _gameplayTagController.FixedTags();

@@ -8,18 +8,28 @@ namespace GAS.RuntimeWithECS.GameplayEffect
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
 
-        public static Entity Create(NewGameplayEffectAsset asset)
+        public static Entity CreateGameplayEffectEntity(NewGameplayEffectAsset asset)
         {
-            return Create(asset.components);
+            return CreateGameplayEffectEntity(asset.components);
         }
 
-        public static Entity Create(GameplayEffectComponentConfig[] componentAssets)
+        public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
         {
             var entity = _entityManager.CreateEntity();
 
             foreach (var config in componentAssets) 
                 config.LoadToGameplayEffectEntity(entity);
             return entity;
+        }
+
+        public static NewGameplayEffectSpec CreateGameplayEffectSpec(NewGameplayEffectAsset asset)
+        {
+            return CreateGameplayEffectSpec(asset.components);
+        }
+        
+        public static NewGameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
+        {
+            return new NewGameplayEffectSpec(componentAssets);
         }
     }
 }

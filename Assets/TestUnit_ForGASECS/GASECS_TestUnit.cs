@@ -3,6 +3,7 @@ using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
@@ -30,12 +31,15 @@ namespace TestUnit_ForGASECS
         public AttributeSetForShow[] AttrSets;
         
         private AbilitySystemCell _asc;
-
+        private NewGameplayEffectSpec _geSpec;
+        
         void RefreshUI()
         {
             _ascName = EntityASC.ToString();
+            
             fixedTags = _asc.FixedTags();
             //tempTags = _asc.TempTags();
+            
             var  aSet = _asc.AttrSets();
             AttrSets = new AttributeSetForShow[aSet.Length];
             for (int i = 0; i < aSet.Length; i++)
@@ -59,7 +63,7 @@ namespace TestUnit_ForGASECS
         }
         
         
-        [Button(ButtonSizes.Medium)]
+        [Button(ButtonSizes.Medium,Name = "初始化GAS")]
         void InitGAS()
         {
             GASManager.Initialize();
@@ -68,7 +72,7 @@ namespace TestUnit_ForGASECS
             GASManager.Run();
         }
         
-        [Button(ButtonSizes.Medium)]
+        [Button(ButtonSizes.Medium,Name = "创建ASC")]
         void CreateASC()
         {
             _asc = new AbilitySystemCell();
@@ -81,13 +85,22 @@ namespace TestUnit_ForGASECS
             RefreshUI();
         }
 
-        [Button(ButtonSizes.Medium)]
+        [Button(ButtonSizes.Medium,Name = "创建GE")]
+        void CreatGE()
+        {
+            GameplayEffectComponentConfig[] configs =
+            {
+            };
+            _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(configs);
+        }
+        
+        [Button(ButtonSizes.Medium,Name = "施加GE到ASC")]
         void ApplyGEToASC()
         {
             
         }
 
-        [Button(ButtonSizes.Medium)]
+        [Button(ButtonSizes.Medium,Name = "从ASC移除GE")]
         void RemoveGEFromASC()
         {
             
