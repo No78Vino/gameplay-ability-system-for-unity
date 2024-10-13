@@ -35,6 +35,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                     for (int i = 0; i < modifierSetting.MMC.stringParams.Length; i++)
                         stringParams[i] = modifierSetting.MMC.stringParams[i];
 
+                var floatParams = modifierSetting.MMC.floatParams ?? Array.Empty<float>();
+                var intParams = modifierSetting.MMC.intParams ?? Array.Empty<int>();
                 buffer.Add(new BuffEleModifier
                 {
                     AttrSetCode = modifierSetting.AttrSetCode,
@@ -44,8 +46,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                     MMC = new MMCSetting
                     {
                         TypeCode = modifierSetting.MMC.TypeCode,
-                        floatParams = new NativeArray<float>(modifierSetting.MMC.floatParams,Allocator.Persistent),
-                        intParams = new NativeArray<int>(modifierSetting.MMC.intParams,Allocator.Persistent),
+                        floatParams = new NativeArray<float>(floatParams,Allocator.Persistent),
+                        intParams = new NativeArray<int>(intParams,Allocator.Persistent),
                         stringParams = new NativeArray<FixedString32Bytes>(stringParams,Allocator.Persistent)
                     }
                 });

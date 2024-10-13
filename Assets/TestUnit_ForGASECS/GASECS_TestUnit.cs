@@ -78,29 +78,38 @@ namespace TestUnit_ForGASECS
                 var bf = gameplayEffects[i];
                 var geEntity = bf.GameplayEffect;
                 var basicData = GasEntityManager.GetComponentData<ComBasicInfo>(geEntity);
-                var dur = GasEntityManager.GetComponentData<ComDuration>(geEntity);
-                var mods = GasEntityManager.GetBuffer<BuffEleModifier>(geEntity);
-                var modifiers = new ModifierSetting[mods.Length];
-                for (int j = 0; j < mods.Length; j++)
-                    modifiers[j] = new ModifierSetting()
-                    {
-                        AttrSetCode = mods[j].AttrSetCode, AttrCode = mods[j].AttrCode,
-                        Operation = mods[j].Operation, Magnitude =  mods[j].Magnitude,
-                        MMC = new MMCSettingConfig()
-                        {
-                            TypeCode =  mods[j].MMC.TypeCode,
-                            floatParams =  mods[j].MMC.floatParams.ToArray(),
-                            intParams =  mods[j].MMC.intParams.ToArray(),
-                            stringParams =  StructForShow.FixedStringToStringArray(mods[j].MMC.stringParams)
-                        }
-                    };
                 
+                bool hasDur = GasEntityManager.HasComponent<ComDuration>(geEntity);
+                var dur = hasDur ? GasEntityManager.GetComponentData<ComDuration>(geEntity) : new ComDuration();
+                
+                bool hasMod = GasEntityManager.HasComponent<BuffEleModifier>(geEntity);
+                var mods = hasMod
+                    ? GasEntityManager.GetBuffer<BuffEleModifier>(geEntity)
+                    : new DynamicBuffer<BuffEleModifier>();
+                var modifiers = new ModifierSetting[mods.Length];
+                if (hasMod)
+                {
+                    for (int j = 0; j < mods.Length; j++)
+                        modifiers[j] = new ModifierSetting()
+                        {
+                            AttrSetCode = mods[j].AttrSetCode, AttrCode = mods[j].AttrCode,
+                            Operation = mods[j].Operation, Magnitude = mods[j].Magnitude,
+                            MMC = new MMCSettingConfig()
+                            {
+                                TypeCode = mods[j].MMC.TypeCode,
+                                floatParams = mods[j].MMC.floatParams.ToArray(),
+                                intParams = mods[j].MMC.intParams.ToArray(),
+                                stringParams = StructForShow.FixedStringToStringArray(mods[j].MMC.stringParams)
+                            }
+                        };
+                }
+
                 effects[i] = new EffectForShow()
                 {
                     name = geEntity.ToString(), Target = basicData.Target.ToString(),
                     Source = basicData.Source.ToString(),
                     // Duration
-                    duration = dur.duration, timeUnit = dur.timeUnit, active = dur.active,
+                    duration = hasDur?dur.duration:0, timeUnit = hasDur?dur.timeUnit:TimeUnit.Frame, active = hasDur && dur.active,
                     // Period
                     // public int period;
                     // public string[] gameplayEffects;
