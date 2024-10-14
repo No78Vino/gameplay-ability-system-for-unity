@@ -99,12 +99,11 @@ namespace TestUnit_ForGASECS
         private void CreateASC()
         {
             _asc = new AbilitySystemCell();
-            EntityASC = _asc.Entity;
-
             int[] baseTags = { GTagList.Magic_Fire, GTagList.Magic_Water };
             int[] attrSets = { EcsGAttrSetCode.Fight_Monster };
             _asc.Init(baseTags, attrSets, null);
-
+            
+            EntityASC = _asc.Entity;
             RefreshUI();
         }
 

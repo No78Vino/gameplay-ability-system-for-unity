@@ -12,12 +12,6 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         
         // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
         
-        
-        /// <summary>
-        /// 是否正在使用中【inUsage = false,相当于在缓存池中】
-        /// </summary>
-        public bool inUsage;
-        
         /// <summary>
         /// 施加目标
         /// </summary>
@@ -27,6 +21,11 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         /// 施加来源
         /// </summary>
         public Entity Source;
+
+        /// <summary>
+        /// 是否合法可生效：检测ApplicationRequiredTags是否满足 
+        /// </summary>
+        public bool Valid;
     }
     
     public sealed class ConfBasicInfo:GameplayEffectComponentConfig
@@ -39,9 +38,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             _entityManager.AddComponentData(ge, new ComBasicInfo
             {
                 name = Name,
-                Target=Entity.Null,
+                Target = Entity.Null,
                 Source = Entity.Null,
-                inUsage=false
+                Valid = true,
             });
         }
     }
