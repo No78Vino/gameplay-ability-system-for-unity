@@ -1,18 +1,19 @@
 using System;
+using Unity.Collections;
 
 namespace GAS.RuntimeWithECS.Tag
 {
-    public class GASTag
+    public struct GASTag
     {
         public readonly int ENUM;
-        public readonly int[] Parents;
-        public readonly int[] Children;
+        public readonly NativeArray<int> Parents;
+        public readonly NativeArray<int> Children;
 
         public GASTag(int tagEnum, int[] parents, int[] children)
         {
             ENUM = tagEnum;
-            Parents = parents ?? Array.Empty<int>();
-            Children = children ?? Array.Empty<int>();
+            Parents = new NativeArray<int>(parents ?? Array.Empty<int>(), Allocator.Persistent);
+            Children = new NativeArray<int>(children ?? Array.Empty<int>(), Allocator.Persistent);
         }
         
         public bool HasTag(int tag)
