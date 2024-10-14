@@ -1,15 +1,8 @@
-﻿using System;
-using GAS.ECS_TEST_RUNTIME_GEN_LIB;
-using GAS.Runtime;
+﻿using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Sirenix.OdinInspector;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -17,33 +10,27 @@ namespace TestUnit_ForGASECS
 {
     public class GASECS_TestUnit : MonoBehaviour
     {
+        [DisplayAsString] public string _ascName = "NULL";
+
+        [TabGroup("FixedTags", GroupName = "Tags")] [ReadOnly]
+        public int[] fixedTags;
+
+        [TabGroup("TempTags", GroupName = "Tags")] [ReadOnly]
+        public int[] tempTags;
+
+        [TabGroup("AttrSets", GroupName = "Tags")] [ReadOnly]
+        public AttributeSetForShow[] AttrSets;
+
+        [TabGroup("Effects", GroupName = "Tags")] [ReadOnly]
+        public EffectForShow[] effects;
+
+        private AbilitySystemCell _asc;
+        private NewGameplayEffectSpec _geSpec;
         public Entity EntityASC;
 
         private EntityManager GasEntityManager => GASManager.EntityManager;
-        
-        [DisplayAsString] 
-        public string _ascName = "NULL";
-        
-        [TabGroup("FixedTags",GroupName = "Tags")]
-        [Sirenix.OdinInspector.ReadOnly]
-        public int[] fixedTags;
-        
-        [TabGroup("TempTags",GroupName = "Tags")]
-        [Sirenix.OdinInspector.ReadOnly]
-        public int[] tempTags;
-        
-        [TabGroup("AttrSets",GroupName = "Tags")]
-        [Sirenix.OdinInspector.ReadOnly]
-        public AttributeSetForShow[] AttrSets;
 
-        [TabGroup("Effects", GroupName = "Tags")]
-        [Sirenix.OdinInspector.ReadOnly]
-        public EffectForShow[] effects;
-        
-        private AbilitySystemCell _asc;
-        private NewGameplayEffectSpec _geSpec;
-
-        void RefreshUI()
+        private void RefreshUI()
         {
             _ascName = EntityASC.ToString();
 
@@ -52,10 +39,10 @@ namespace TestUnit_ForGASECS
 
             var aSet = _asc.AttrSets();
             AttrSets = new AttributeSetForShow[aSet.Length];
-            for (int i = 0; i < aSet.Length; i++)
+            for (var i = 0; i < aSet.Length; i++)
             {
                 var attrs = new AttributeForShow[aSet[i].Attributes.Length];
-                for (int j = 0; j < aSet[i].Attributes.Length; j++)
+                for (var j = 0; j < aSet[i].Attributes.Length; j++)
                     attrs[j] = new AttributeForShow
                     {
                         Code = aSet[i].Attributes[j].Code,
@@ -64,7 +51,7 @@ namespace TestUnit_ForGASECS
                         MinValue = aSet[i].Attributes[j].MinValue,
                         MaxValue = aSet[i].Attributes[j].MaxValue
                     };
-                AttrSets[i] = new AttributeSetForShow()
+                AttrSets[i] = new AttributeSetForShow
                 {
                     Code = aSet[i].Code,
                     Attrs = attrs
@@ -73,161 +60,55 @@ namespace TestUnit_ForGASECS
 
             var gameplayEffects = _asc.GameplayEffects();
             effects = new EffectForShow[gameplayEffects.Length];
-            for (int i = 0; i < gameplayEffects.Length; i++)
+            for (var i = 0; i < gameplayEffects.Length; i++)
             {
                 var bf = gameplayEffects[i];
                 var geEntity = bf.GameplayEffect;
-                var basicData = GasEntityManager.GetComponentData<ComBasicInfo>(geEntity);
-                
-                bool hasDur = GasEntityManager.HasComponent<ComDuration>(geEntity);
-                var dur = hasDur ? GasEntityManager.GetComponentData<ComDuration>(geEntity) : new ComDuration();
-                
-                bool hasMod = GasEntityManager.HasComponent<BuffEleModifier>(geEntity);
-                var mods = hasMod
-                    ? GasEntityManager.GetBuffer<BuffEleModifier>(geEntity)
-                    : new DynamicBuffer<BuffEleModifier>();
-                var modifiers = new ModifierSetting[mods.Length];
-                if (hasMod)
-                {
-                    for (int j = 0; j < mods.Length; j++)
-                        modifiers[j] = new ModifierSetting()
-                        {
-                            AttrSetCode = mods[j].AttrSetCode, AttrCode = mods[j].AttrCode,
-                            Operation = mods[j].Operation, Magnitude = mods[j].Magnitude,
-                            MMC = new MMCSettingConfig()
-                            {
-                                TypeCode = mods[j].MMC.TypeCode,
-                                floatParams = mods[j].MMC.floatParams.ToArray(),
-                                intParams = mods[j].MMC.intParams.ToArray(),
-                                stringParams = StructForShow.FixedStringToStringArray(mods[j].MMC.stringParams)
-                            }
-                        };
-                }
-
-                effects[i] = new EffectForShow()
-                {
-                    name = geEntity.ToString(), Target = basicData.Target.ToString(),
-                    Source = basicData.Source.ToString(),
-                    // Duration
-                    duration = hasDur?dur.duration:0, timeUnit = hasDur?dur.timeUnit:TimeUnit.Frame, active = hasDur && dur.active,
-                    // Period
-                    // public int period;
-                    // public string[] gameplayEffects;
-                    // // Tags
-                    // public int[] AssetTags;
-                    // public int[] GrantedTags;
-                    // public int[] ApplicationRequiredTags;
-                    // public int[] OngoingRequiredTags;
-                    // public int[] ImmunityTags;
-                    // public int[] RemoveEffectWithTags;
-                    // Modifiers
-                    modifiers = modifiers,
-                };
+                var effectForShow = new EffectForShow();
+                effectForShow.SetGameplayEffectEntity(geEntity);
+                effects[i] = effectForShow;
             }
         }
 
 
-        [Button(ButtonSizes.Medium,Name = "初始化GAS")]
-        void InitGAS()
+        [Button(ButtonSizes.Medium, Name = "初始化GAS")]
+        private void InitGAS()
         {
             GASManager.Initialize();
             GTagList.InitTagList();
-            
+
             GASManager.Run();
         }
-        
-        [Button(ButtonSizes.Medium,Name = "创建ASC")]
-        void CreateASC()
+
+        [Button(ButtonSizes.Medium, Name = "创建ASC")]
+        private void CreateASC()
         {
             _asc = new AbilitySystemCell();
             EntityASC = _asc.Entity;
-            
+
             int[] baseTags = { GTagList.Magic_Fire, GTagList.Magic_Water };
             int[] attrSets = { EcsGAttrSetCode.Fight_Monster };
-            _asc.Init(baseTags,attrSets,null,1);
+            _asc.Init(baseTags, attrSets, null);
 
             RefreshUI();
         }
 
-        [Button(ButtonSizes.Medium,Name = "创建GE")]
-        void CreatGE()
+        [Button(ButtonSizes.Medium, Name = "创建GE")]
+        private void CreatGE()
         {
-            GameplayEffectComponentConfig[] cfgBurning =
-            {
-                new ConfBasicInfo {Name = "Test_Burning"},
-                new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
-                new ConfModifiers {modifierSettings = new []
-                {
-                    new ModifierSetting()
-                    {
-                        AttrSetCode = EcsGAttrSetCode.Fight_Monster,
-                        AttrCode = EcsGAttrLib.HP,
-                        Operation = GEOperation.Minus,
-                        Magnitude = 10,
-                        MMC = new MMCSettingConfig()
-                        {
-                            TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                            floatParams = new []{0.5f,0},
-                        }
-                    }
-                }}
-            };
-            _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(cfgBurning);
+            _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
         }
-        
-        [Button(ButtonSizes.Medium,Name = "施加GE到ASC")]
-        void ApplyGEToASC()
+
+        [Button(ButtonSizes.Medium, Name = "施加GE到ASC")]
+        private void ApplyGEToASC()
         {
-            _asc.ApplyGameplayEffectTo(_geSpec,_asc);
+            _asc.ApplyGameplayEffectTo(_geSpec, _asc);
             RefreshUI();
         }
 
-        [Button(ButtonSizes.Medium,Name = "从ASC移除GE")]
-        void RemoveGEFromASC()
+        [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]
+        private void RemoveGEFromASC()
         {
-            
         }
-    }
-
-    [Serializable]
-    public struct AttributeSetForShow
-    {
-        public int Code;
-        public AttributeForShow[] Attrs;
-    }
-    
-    [Serializable]
-    public struct AttributeForShow
-    {
-        public int Code;
-        public float BaseValue;
-        public float CurrentValue;
-        public float MinValue;
-        public float MaxValue;
-    }
-
-    [Serializable]
-    public struct EffectForShow
-    {
-        // BasicData
-        public string name;
-        public string Target;
-        public string Source;
-        // Duration
-        public int duration;
-        public TimeUnit timeUnit;
-        public bool active; 
-        // Period
-        public int period;
-        public string[] gameplayEffects;
-        // Tags
-        public int[] AssetTags;
-        public int[] GrantedTags;
-        public int[] ApplicationRequiredTags;
-        public int[] OngoingRequiredTags;
-        public int[] ImmunityTags;
-        public int[] RemoveEffectWithTags;
-        // Modifiers
-        public ModifierSetting[] modifiers;
     }
 }
