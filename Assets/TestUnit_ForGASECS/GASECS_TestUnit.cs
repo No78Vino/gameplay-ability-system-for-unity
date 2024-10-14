@@ -1,4 +1,5 @@
-﻿using GAS.ECS_TEST_RUNTIME_GEN_LIB;
+﻿using System;
+using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
@@ -29,6 +30,20 @@ namespace TestUnit_ForGASECS
         public Entity EntityASC;
 
         private EntityManager GasEntityManager => GASManager.EntityManager;
+
+        private float _secondCount = 0;
+        private const float UIRefreshDuration = 2;
+
+        private void Update()
+        {
+            if (_secondCount <= 0)
+            {
+                _secondCount = UIRefreshDuration;
+                RefreshUI();
+            }
+
+            _secondCount -= Time.deltaTime;
+        }
 
         private void RefreshUI()
         {
