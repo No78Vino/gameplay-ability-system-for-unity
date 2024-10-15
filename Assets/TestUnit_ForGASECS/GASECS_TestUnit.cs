@@ -25,6 +25,7 @@ namespace TestUnit_ForGASECS
         [TabGroup("Effects", GroupName = "Tags")] [ReadOnly]
         public EffectForShow[] effects;
 
+        
         private AbilitySystemCell _asc;
         private NewGameplayEffectSpec _geSpec;
         public Entity EntityASC;

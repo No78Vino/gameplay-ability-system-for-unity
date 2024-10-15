@@ -6,6 +6,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
+    [UpdateAfter(typeof(SysResetEffectValid))]
     public partial struct SysCheckEffectApplicationValid : ISystem
     {
         [BurstCompile]

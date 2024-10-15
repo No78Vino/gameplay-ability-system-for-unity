@@ -4,6 +4,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
+    [UpdateAfter(typeof(SysApplyEffect))]
     public partial struct SysResetEffectValid : ISystem
     {
         [BurstCompile]

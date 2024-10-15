@@ -26,6 +26,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         
         private void AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
         {
+            GasEntityManager.AddComponent<ComInUsage>(gameplayEffect);
             var geBuffers = GameplayEffectUtils.GameplayEffectsOf(target);
             geBuffers.Add(new GameplayEffectBufferElement { GameplayEffect = gameplayEffect });
         }

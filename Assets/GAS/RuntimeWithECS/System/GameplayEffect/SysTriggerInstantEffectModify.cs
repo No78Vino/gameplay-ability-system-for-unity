@@ -10,6 +10,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
+    [UpdateAfter(typeof(SysRemoveInvalidEffect))]
     public partial struct SysTriggerInstantEffectModify : ISystem
     {
         [BurstCompile]
@@ -22,7 +23,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             
-            foreach (var (modifiers, geEntity) in SystemAPI.Query<DynamicBuffer<BuffEleModifier>>().WithEntityAccess())
+            foreach (var (modifiers,_, geEntity) in SystemAPI.Query<DynamicBuffer<BuffEleModifier>,RefRO<ComInUsage>>().WithEntityAccess())
             {
                 var asc = SystemAPI.GetComponentRO<ComBasicInfo>(geEntity).ValueRO.Target;
                 var attrSets = SystemAPI.GetBuffer<AttributeSetBufferElement>(asc);
@@ -63,7 +64,10 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             
                     attrSet.Attributes[attrIndex] = data;
                     attrSets[attrSetIndex] = attrSet;
+                    
+                    ecb.AppendToBuffer(asc, attrSet);
                 }
+ 
             }
             
             ecb.Playback(state.EntityManager);

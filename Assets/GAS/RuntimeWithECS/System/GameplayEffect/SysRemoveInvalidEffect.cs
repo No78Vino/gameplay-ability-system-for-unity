@@ -5,6 +5,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
+    [UpdateAfter(typeof(SysCheckEffectApplicationValid))]
     public partial struct SysRemoveInvalidEffect : ISystem
     {
         [BurstCompile]

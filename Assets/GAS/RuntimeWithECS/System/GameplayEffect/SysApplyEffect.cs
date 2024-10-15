@@ -1,8 +1,10 @@
-﻿using Unity.Burst;
+﻿using GAS.RuntimeWithECS.System.Core;
+using Unity.Burst;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
+    [UpdateAfter(typeof(SysLaunchGameplayAbilitySystem))]
     public partial struct SysApplyEffect : ISystem
     {
         [BurstCompile]

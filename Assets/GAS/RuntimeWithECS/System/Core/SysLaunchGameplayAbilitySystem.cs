@@ -6,9 +6,6 @@ namespace GAS.RuntimeWithECS.System.Core
 {
     public partial struct SysLaunchGameplayAbilitySystem : ISystem
     {
-        private EntityManager _gasEntityManager;
-        private Entity _singletonEntity;
-        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {

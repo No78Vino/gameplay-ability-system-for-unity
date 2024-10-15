@@ -5,6 +5,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
+    [UpdateAfter(typeof(SysTriggerInstantEffectModify))]
     public partial struct SysRemoveFinishEffect : ISystem
     {
         [BurstCompile]
