@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Modifier
 {
-    public class MMCRuntimeHub
+    public static class MmcHub
     {
         private static Dictionary<int, ModMagnitudeCalculation> _magnitudeCalculations;
 
-        public MMCRuntimeHub()
+        public static void Init()
         {
             _magnitudeCalculations = new Dictionary<int, ModMagnitudeCalculation>();
             // TODO :初始化项目内所有类型MMC实例

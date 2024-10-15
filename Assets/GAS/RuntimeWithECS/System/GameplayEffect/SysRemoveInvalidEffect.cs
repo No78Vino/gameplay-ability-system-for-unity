@@ -17,22 +17,17 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            
-            // foreach (var (vBasicInfo, _,entity) in SystemAPI
-            //              .Query<RefRO<GameplayEffectBufferElement>,  RefRO<ComInUsage>>().WithEntityAccess())
-            // {
-            //     bool isValid = vBasicInfo.ValueRO.Valid;
-            //     if (!isValid)
-            //     {
-            //         // TODO 移除不合法GE
-            //         // 移除【在使用中】的标签
-            //         ecb.RemoveComponent<ComInUsage>(entity);
-            //
-            //         var asc = vBasicInfo.ValueRO.Target;
-            //         var effects = SystemAPI.GetBuffer<GameplayEffectBufferElement>(asc);
-            //         effects.Remove();
-            //     }
-            // }
+
+            foreach (var geBuff in SystemAPI.Query<DynamicBuffer<GameplayEffectBufferElement>>())
+            {
+                for (int i = geBuff.Length - 1; i >= 0; i--)
+                {
+                    var basicData = SystemAPI.GetComponentRO<ComBasicInfo>(geBuff[i].GameplayEffect);
+                    if (basicData.ValueRO.Valid) continue;
+                    ecb.RemoveComponent<ComInUsage>(geBuff[i].GameplayEffect);
+                    geBuff.RemoveAt(i);
+                }
+            }
             
             ecb.Playback(state.EntityManager);
         }
