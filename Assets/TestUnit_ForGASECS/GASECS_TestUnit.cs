@@ -47,6 +47,8 @@ namespace TestUnit_ForGASECS
 
         private void RefreshUI()
         {
+            if (_asc == null) return;
+            
             _ascName = EntityASC.ToString();
 
             fixedTags = _asc.FixedTags();
