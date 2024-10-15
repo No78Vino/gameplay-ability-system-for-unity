@@ -8,33 +8,33 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
     public partial struct SysCheckEffectApplicationValid : ISystem
     {
-        private EntityManager _gasEntityManager;
-
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<SingletonGameplayTagMap>();
             state.RequireForUpdate<ComApplicationRequiredTags>();
             state.RequireForUpdate<ComInUsage>();
             state.RequireForUpdate<ComBasicInfo>();
-            _gasEntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
+            
             foreach (var (vBasicInfo, requiredTags, _) in SystemAPI
                          .Query<RefRW<ComBasicInfo>, RefRO<ComApplicationRequiredTags>, RefRO<ComInUsage>>())
             {
                 var asc = vBasicInfo.ValueRO.Target;
-                var fixedTags = _gasEntityManager.GetBuffer<BuffElemFixedTag>(asc);
-                var tempTags = _gasEntityManager.GetBuffer<BuffElemTemporaryTag>(asc);
+                var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
+                var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
 
                 foreach (var tag in requiredTags.ValueRO.tags)
                 {
                     var hasTag = false;
                     // 遍历固有Tag
                     foreach (var fixedTag in fixedTags)
-                        if (GameplayTagHub.HasTag(fixedTag.tag, tag))
+                        if (tagMap.IsTagAIncludeTagB(fixedTag.tag, tag))
                         {
                             hasTag = true;
                             break;
@@ -43,7 +43,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                     // 遍历临时Tag
                     if (!hasTag)
                         foreach (var tempTag in tempTags)
-                            if (GameplayTagHub.HasTag(tempTag.tag, tag))
+                            if (tagMap.IsTagAIncludeTagB(tempTag.tag, tag))
                             {
                                 hasTag = true;
                                 break;
@@ -54,6 +54,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                         vBasicInfo.ValueRW.Valid = false;
                         break;
                     }
+                    
                 }
             }
         }

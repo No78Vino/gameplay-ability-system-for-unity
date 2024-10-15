@@ -5,20 +5,20 @@ namespace GAS.RuntimeWithECS.Tag
 {
     public struct GASTag
     {
-        public readonly int ENUM;
-        public readonly NativeArray<int> Parents;
-        public readonly NativeArray<int> Children;
+        public readonly int Code;
+        public readonly int[] Parents;
+        public readonly int[] Children;
 
-        public GASTag(int tagEnum, int[] parents, int[] children)
+        public GASTag(int tagCode, int[] parents, int[] children)
         {
-            ENUM = tagEnum;
-            Parents = new NativeArray<int>(parents ?? Array.Empty<int>(), Allocator.Persistent);
-            Children = new NativeArray<int>(children ?? Array.Empty<int>(), Allocator.Persistent);
+            Code = tagCode;
+            Parents = parents ?? Array.Empty<int>();
+            Children = children ?? Array.Empty<int>();
         }
         
         public bool HasTag(int tag)
         {
-            if (ENUM == tag) return true;
+            if (Code == tag) return true;
             foreach (var pTag in Parents)
                 if (pTag == tag)
                     return true;
@@ -48,7 +48,7 @@ namespace GAS.RuntimeWithECS.Tag
         {
             if (this == tag) return true;
             foreach (var pTag in Parents)
-                if (pTag == tag.ENUM)
+                if (pTag == tag.Code)
                     return true;
 
             return false;
@@ -57,7 +57,7 @@ namespace GAS.RuntimeWithECS.Tag
         public bool HasChildTag(GASTag child)
         {
             foreach (var cTag in Children)
-                if (cTag == child.ENUM)
+                if (cTag == child.Code)
                     return true;
 
             return false;
@@ -66,7 +66,7 @@ namespace GAS.RuntimeWithECS.Tag
         public bool HasParentTag(GASTag tag)
         {
             foreach (var pTag in Parents)
-                if (pTag == tag.ENUM)
+                if (pTag == tag.Code)
                     return true;
 
             return false;
@@ -74,12 +74,12 @@ namespace GAS.RuntimeWithECS.Tag
         
         public static bool operator ==(GASTag x, GASTag y)
         {
-            return x.ENUM == y.ENUM;
+            return x.Code == y.Code;
         }
 
         public static bool operator !=(GASTag x, GASTag y)
         {
-            return x.ENUM != y.ENUM;
+            return x.Code != y.Code;
         }
         
         public bool IsRoot => Parents.Length == 0;

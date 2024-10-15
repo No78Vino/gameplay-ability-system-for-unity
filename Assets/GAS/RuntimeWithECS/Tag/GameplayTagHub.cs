@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.Tag.Component;
+using Unity.Collections;
 
 namespace GAS.RuntimeWithECS.Tag
 {
@@ -6,31 +9,36 @@ namespace GAS.RuntimeWithECS.Tag
     {
         private static Dictionary<int, GASTag> _tagMap;
 
-        public static void SetTagMap(Dictionary<int, GASTag> tagMap)
+        /// <summary>
+        ///     初始化TagMap
+        /// </summary>
+        /// <param name="tagMap"></param>
+        public static void InitTagMap(Dictionary<int, GASTag> tagMap)
         {
             _tagMap = tagMap;
-        }
-        
-        public static void AddTagToMap(GASTag tag)
-        {
-            _tagMap ??= new Dictionary<int, GASTag>();
-            _tagMap.TryAdd(tag.ENUM, tag);
+
+            // ECS专用单例TagMap
+            var map = new NativeHashMap<int, ComGameplayTag>(tagMap.Keys.Count, Allocator.Persistent);
+            foreach (var p in tagMap)
+                map.TryAdd(p.Key, new ComGameplayTag
+                {
+                    Code = p.Value.Code,
+                    Children = new NativeArray<int>(p.Value.Children, Allocator.Persistent),
+                    Parents = new NativeArray<int>(p.Value.Parents, Allocator.Persistent)
+                });
+
+            GASManager.EntityManager.CreateSingleton(new SingletonGameplayTagMap { Map = map });
         }
 
-        public static void RemoveTagFromMap(GASTag tag)
-        {
-            _tagMap?.Remove(tag.ENUM);
-        }
-        
         /// <summary>
-        /// TagA是否含有TagB
+        ///     TagA是否含有TagB
         /// </summary>
         /// <param name="tagA"></param>
         /// <param name="tagB"></param>
         /// <returns></returns>
         public static bool HasTag(int tagA, int tagB)
         {
-            if (_tagMap.ContainsKey(tagA) && _tagMap.ContainsKey(tagB)) 
+            if (_tagMap.ContainsKey(tagA) && _tagMap.ContainsKey(tagB))
                 return _tagMap[tagA].HasTag(_tagMap[tagB]);
             return false;
         }

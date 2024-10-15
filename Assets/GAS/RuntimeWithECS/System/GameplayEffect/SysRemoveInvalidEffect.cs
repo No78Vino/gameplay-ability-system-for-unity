@@ -1,33 +1,40 @@
 ﻿using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
     public partial struct SysRemoveInvalidEffect : ISystem
     {
-        private EntityManager _gasEntityManager;
-        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<ComInUsage>();
-            state.RequireForUpdate<ComBasicInfo>();
-            _gasEntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            state.RequireForUpdate<GameplayEffectBufferElement>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (vBasicInfo, _) in SystemAPI
-                         .Query<RefRW<ComBasicInfo>,  RefRO<ComInUsage>>())
-            {
-                bool isValid = vBasicInfo.ValueRO.Valid;
-                if (!isValid)
-                {
-                    // TODO 移除不合法GE
-                }
-            }
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            
+            // foreach (var (vBasicInfo, _,entity) in SystemAPI
+            //              .Query<RefRO<GameplayEffectBufferElement>,  RefRO<ComInUsage>>().WithEntityAccess())
+            // {
+            //     bool isValid = vBasicInfo.ValueRO.Valid;
+            //     if (!isValid)
+            //     {
+            //         // TODO 移除不合法GE
+            //         // 移除【在使用中】的标签
+            //         ecb.RemoveComponent<ComInUsage>(entity);
+            //
+            //         var asc = vBasicInfo.ValueRO.Target;
+            //         var effects = SystemAPI.GetBuffer<GameplayEffectBufferElement>(asc);
+            //         effects.Remove();
+            //     }
+            // }
+            
+            ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]

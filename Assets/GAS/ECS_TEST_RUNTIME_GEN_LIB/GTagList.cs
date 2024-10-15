@@ -16,7 +16,7 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
         
         public static void InitTagList()
         {
-            GameplayTagHub.SetTagMap(new Dictionary<int, GASTag>()
+            GameplayTagHub.InitTagMap(new Dictionary<int, GASTag>()
             {
                 {
                     Magic, new GASTag(Magic, null, new[]
