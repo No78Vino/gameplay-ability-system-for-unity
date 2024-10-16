@@ -130,7 +130,13 @@ namespace TestUnit_ForGASECS
         {
             _asc.ApplyGameplayEffectTo(GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG), _asc);
             RefreshUI();
-            
+        }
+        
+        [Button(ButtonSizes.Medium, Name = "燃烧buff")]
+        private void ApplyBurningToASC()
+        {
+            _asc.ApplyGameplayEffectTo(GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING), _asc);
+            RefreshUI();
         }
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]
         private void RemoveGEFromASC()

@@ -42,6 +42,7 @@ namespace GAS.ECS_TEST_RUNTIME_GEN_LIB
             new(EcsGAttrSetCode.Fight_Monster, new AttributeBaseSetting[]
             {
                 new(EcsGAttrLib.HP, 100, 0,1000),
+                new(EcsGAttrLib.ATK, 10, 0,100),
             });
         
         public static Dictionary<int,NewAttributeSetConfig> AttributeSetMap = new()

@@ -42,7 +42,7 @@ namespace TestUnit_ForGASECS
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_ONEHIT_REQUIRED_EARTH_TAG =
         {
-            new ConfBasicInfo {Name = "Test_OneHit"},
+            new ConfBasicInfo {Name = "Test_OneHit_Earth"},
             new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
             new ConfApplicationRequiredTags{tags = new []{GTagList.Magic_Earth}},
             new ConfModifiers {modifierSettings = new []
@@ -71,24 +71,24 @@ namespace TestUnit_ForGASECS
             new ConfAssetTags { tags = new[] { GTagList.Magic_Fire } },
             new ConfDuration { duration = 60 * 5, timeUnit = TimeUnit.Frame },
             new ConfPeriod { Period = 30, GameplayEffectSettings = new[] { GEConfig_ONEHIT } },
-            // new ConfModifiers
-            // {
-            //     modifierSettings = new[]
-            //     {
-            //         new ModifierSetting()
-            //         {
-            //             AttrSetCode = EcsGAttrSetCode.Fight_Monster,
-            //             AttrCode = EcsGAttrLib.HP,
-            //             Operation = GEOperation.Minus,
-            //             Magnitude = 10,
-            //             MMC = new MMCSettingConfig()
-            //             {
-            //                 TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-            //                 floatParams = new[] { 0.5f, 0 },
-            //             }
-            //         }
-            //     }
-            // }
+            new ConfModifiers
+            {
+                modifierSettings = new[]
+                {
+                    new ModifierSetting()
+                    {
+                        AttrSetCode = EcsGAttrSetCode.Fight_Monster,
+                        AttrCode = EcsGAttrLib.ATK,
+                        Operation = GEOperation.Add,
+                        Magnitude = 66,
+                        MMC = new MMCSettingConfig()
+                        {
+                            TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+                            floatParams = new[] { 1f, 0 },
+                        }
+                    }
+                }
+            }
         };
         
         public static string[] FixedStringToStringArray(NativeArray<FixedString32Bytes> array)
