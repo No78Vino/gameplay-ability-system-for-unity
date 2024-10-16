@@ -1,3 +1,4 @@
+using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Burst;
@@ -13,52 +14,54 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
-            state.RequireForUpdate<ComOngoingRequiredTags>();
-            state.RequireForUpdate<ComInUsage>();
-            state.RequireForUpdate<ComDuration>();
+            state.RequireForUpdate<GameplayEffectBufferElement>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
-            
-            foreach (var (duration, requiredTags, comInUsage) in SystemAPI
-                         .Query<RefRW<ComDuration>, RefRO<ComOngoingRequiredTags>, RefRW<ComInUsage>>())
+            foreach (var (gameplayEffectBuffs, needCheck,asc) in SystemAPI
+                         .Query<DynamicBuffer<GameplayEffectBufferElement>, RefRO<NeedCheckEffects>>().WithEntityAccess())
             {
-                var asc = comInUsage.ValueRO.Target;
-                var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
-                var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
-                
-                duration.ValueRW.active = true;
-                foreach (var tag in requiredTags.ValueRO.tags)
+                foreach (var (duration, requiredTags, comInUsage) in SystemAPI
+                             .Query<RefRW<ComDuration>, RefRO<ComOngoingRequiredTags>, RefRW<ComInUsage>>())
                 {
-                    var hasTag = false;
-                    // 遍历固有Tag
-                    foreach (var fixedTag in fixedTags)
-                        if (tagMap.IsTagAIncludeTagB(fixedTag.tag, tag))
-                        {
-                            hasTag = true;
-                            break;
-                        }
-
-                    // 遍历临时Tag
-                    if (!hasTag)
-                        foreach (var tempTag in tempTags)
-                            if (tagMap.IsTagAIncludeTagB(tempTag.tag, tag))
+                    var asc = comInUsage.ValueRO.Target;
+                    var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
+                    var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
+                
+                    duration.ValueRW.active = true;
+                    foreach (var tag in requiredTags.ValueRO.tags)
+                    {
+                        var hasTag = false;
+                        // 遍历固有Tag
+                        foreach (var fixedTag in fixedTags)
+                            if (tagMap.IsTagAIncludeTagB(fixedTag.tag, tag))
                             {
                                 hasTag = true;
                                 break;
                             }
 
-                    if (!hasTag)
-                    {
-                        duration.ValueRW.active = false;
-                        break;
-                    }
+                        // 遍历临时Tag
+                        if (!hasTag)
+                            foreach (var tempTag in tempTags)
+                                if (tagMap.IsTagAIncludeTagB(tempTag.tag, tag))
+                                {
+                                    hasTag = true;
+                                    break;
+                                }
+
+                        if (!hasTag)
+                        {
+                            duration.ValueRW.active = false;
+                            break;
+                        }
                     
+                    }
                 }
             }
+            
         }
 
         [BurstCompile]
