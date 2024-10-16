@@ -31,7 +31,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                 foreach (var mod in modifiers)
                 {
                     var magnitude = MmcHub.Calculate(geEntity, mod);
-
+                
                     int attrSetIndex = IndexOfAttrSetCode(attrSets, mod.AttrSetCode);
                     var attrSet = attrSets[attrSetIndex];
                     var attributes = attrSet.Attributes;
@@ -61,11 +61,9 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                     data.TriggerCueEvent = true;
                     data.Dirty = true;
                     ecb.AddComponent<TagAttributeDirty>(geEntity);
-            
+                
                     attrSet.Attributes[attrIndex] = data;
                     attrSets[attrSetIndex] = attrSet;
-                    
-                    ecb.AppendToBuffer(asc, attrSet);
                 }
  
             }

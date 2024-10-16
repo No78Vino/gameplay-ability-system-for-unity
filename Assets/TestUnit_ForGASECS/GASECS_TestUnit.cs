@@ -3,6 +3,7 @@ using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
@@ -94,6 +95,7 @@ namespace TestUnit_ForGASECS
         {
             GASManager.Initialize();
             GTagList.InitTagList();
+            MmcHub.Init();
 
             GASManager.Run();
         }

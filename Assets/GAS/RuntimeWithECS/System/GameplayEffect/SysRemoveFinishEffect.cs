@@ -17,18 +17,25 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            //var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             foreach (var (geBuff,asc) in SystemAPI.Query<DynamicBuffer<GameplayEffectBufferElement>>().WithEntityAccess())
             {
                 for (int i = geBuff.Length - 1; i >= 0; i--)
                 {
-                    var isInstant = !SystemAPI.HasComponent<ComDuration>(geBuff[i].GameplayEffect);
-                    if (isInstant) geBuff.RemoveAt(i);
+                    var e = geBuff[i].GameplayEffect;
+                    var isInstant = !SystemAPI.HasComponent<ComDuration>(e);
+                    if (isInstant)
+                    {
+                        ecb.RemoveComponent<ComInUsage>(e);
+                        geBuff.RemoveAt(i);
+                    }
                 }
+
+                //ecb.SetBuffer<GameplayEffectBufferElement>(asc);
             }
-            
-            //ecb.Playback(state.EntityManager);
+
+            ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]
