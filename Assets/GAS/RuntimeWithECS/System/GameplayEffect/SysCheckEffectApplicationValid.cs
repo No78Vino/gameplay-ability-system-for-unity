@@ -6,7 +6,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
-    [UpdateAfter(typeof(SysResetEffectValid))]
+    [UpdateAfter(typeof(SysApplyEffect))]
     public partial struct SysCheckEffectApplicationValid : ISystem
     {
         [BurstCompile]
@@ -30,6 +30,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                 var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
                 var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
 
+                comInUsage.ValueRW.Valid = true;
                 foreach (var tag in requiredTags.ValueRO.tags)
                 {
                     var hasTag = false;
