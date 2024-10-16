@@ -61,29 +61,34 @@ namespace TestUnit_ForGASECS
                 }
             }}
         };
-        
+
         /// <summary>
         /// GE燃烧buff
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_BURNING =
         {
-            new ConfBasicInfo {Name = "Test_Burning"},
-            new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
-            new ConfModifiers {modifierSettings = new []
-            {
-                new ModifierSetting()
-                {
-                    AttrSetCode = EcsGAttrSetCode.Fight_Monster,
-                    AttrCode = EcsGAttrLib.HP,
-                    Operation = GEOperation.Minus,
-                    Magnitude = 10,
-                    MMC = new MMCSettingConfig()
-                    {
-                        TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                        floatParams = new []{0.5f,0},
-                    }
-                }
-            }}
+            new ConfBasicInfo { Name = "Test_Burning" },
+            new ConfAssetTags { tags = new[] { GTagList.Magic_Fire } },
+            new ConfDuration { duration = 60 * 5, timeUnit = TimeUnit.Frame },
+            new ConfPeriod { Period = 30, GameplayEffectSettings = new[] { GEConfig_ONEHIT } },
+            // new ConfModifiers
+            // {
+            //     modifierSettings = new[]
+            //     {
+            //         new ModifierSetting()
+            //         {
+            //             AttrSetCode = EcsGAttrSetCode.Fight_Monster,
+            //             AttrCode = EcsGAttrLib.HP,
+            //             Operation = GEOperation.Minus,
+            //             Magnitude = 10,
+            //             MMC = new MMCSettingConfig()
+            //             {
+            //                 TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+            //                 floatParams = new[] { 0.5f, 0 },
+            //             }
+            //         }
+            //     }
+            // }
         };
         
         public static string[] FixedStringToStringArray(NativeArray<FixedString32Bytes> array)
@@ -156,8 +161,6 @@ namespace TestUnit_ForGASECS
             var has = GasEntityManager.HasComponent<ComBasicInfo>(geEntity);
             var basicData = has ? GasEntityManager.GetComponentData<ComBasicInfo>(geEntity) : new ComBasicInfo();
             name = !has ? "NONE" : geEntity.ToString();
-            Target = !has ? "NONE" : basicData.Target.ToString();
-            Source = !has ? "NONE" : basicData.Source.ToString();
         }
 
         public void SetDuration(Entity geEntity)
@@ -173,12 +176,12 @@ namespace TestUnit_ForGASECS
         {
             var has = GasEntityManager.HasComponent<ComPeriod>(geEntity);
             var p = has ? GasEntityManager.GetComponentData<ComPeriod>(geEntity) : new ComPeriod();
-            var periodGEs = has ? new string[p.gameplayEffects.Length] : null;
+            var periodGEs = has ? new string[p.GameplayEffects.Length] : null;
             if (has)
-                for (var j = 0; j < p.gameplayEffects.Length; j++)
-                    periodGEs[j] = p.gameplayEffects[j].ToString();
+                for (var j = 0; j < p.GameplayEffects.Length; j++)
+                    periodGEs[j] = p.GameplayEffects[j].ToString();
 
-            period = has ? p.period : 0;
+            period = has ? p.Period : 0;
             periodGameplayEffects = periodGEs;
         }
 

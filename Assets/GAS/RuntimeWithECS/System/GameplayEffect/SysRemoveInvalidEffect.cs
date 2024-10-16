@@ -24,8 +24,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             {
                 for (int i = geBuff.Length - 1; i >= 0; i--)
                 {
-                    var basicData = SystemAPI.GetComponentRO<ComBasicInfo>(geBuff[i].GameplayEffect);
-                    if (basicData.ValueRO.Valid) continue;
+                    var comInUsage = SystemAPI.GetComponentRO<ComInUsage>(geBuff[i].GameplayEffect);
+                    if (comInUsage.ValueRO.Valid) continue;
                     ecb.RemoveComponent<ComInUsage>(geBuff[i].GameplayEffect);
                     geBuff.RemoveAt(i);
                 }

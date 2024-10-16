@@ -25,7 +25,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             
             foreach (var (modifiers,_, geEntity) in SystemAPI.Query<DynamicBuffer<BuffEleModifier>,RefRO<ComInUsage>>().WithEntityAccess())
             {
-                var asc = SystemAPI.GetComponentRO<ComBasicInfo>(geEntity).ValueRO.Target;
+                var asc = SystemAPI.GetComponentRO<ComInUsage>(geEntity).ValueRO.Target;
                 var attrSets = SystemAPI.GetBuffer<AttributeSetBufferElement>(asc);
                 
                 foreach (var mod in modifiers)

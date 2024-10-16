@@ -17,9 +17,9 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (vBasicInfo,_) in SystemAPI.Query<RefRW<ComBasicInfo>,RefRO<ComInUsage>>())
+            foreach (var comInUsage in SystemAPI.Query<RefRW<ComInUsage>>())
             {
-                vBasicInfo.ValueRW.Valid = true;
+                comInUsage.ValueRW.Valid = true;
             }
         }
 

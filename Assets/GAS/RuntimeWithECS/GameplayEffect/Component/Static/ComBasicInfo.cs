@@ -11,21 +11,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public FixedString32Bytes name; 
         
         // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
-        
-        /// <summary>
-        /// 施加目标
-        /// </summary>
-        public Entity Target;
-        
-        /// <summary>
-        /// 施加来源
-        /// </summary>
-        public Entity Source;
 
-        /// <summary>
-        /// 是否合法可生效：检测ApplicationRequiredTags是否满足 
-        /// </summary>
-        public bool Valid;
     }
     
     public sealed class ConfBasicInfo:GameplayEffectComponentConfig
@@ -37,10 +23,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             _entityManager.SetName(ge, $"GE_{Name}_V{ge.Version}_{ge.Index}");
             _entityManager.AddComponentData(ge, new ComBasicInfo
             {
-                name = Name,
-                Target = Entity.Null,
-                Source = Entity.Null,
-                Valid = true,
+                name = Name
             });
         }
     }

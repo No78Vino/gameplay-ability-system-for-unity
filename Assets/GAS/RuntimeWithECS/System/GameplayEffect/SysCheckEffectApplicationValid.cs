@@ -23,10 +23,10 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
             
-            foreach (var (vBasicInfo, requiredTags, _) in SystemAPI
-                         .Query<RefRW<ComBasicInfo>, RefRO<ComApplicationRequiredTags>, RefRO<ComInUsage>>())
+            foreach (var (vBasicInfo, requiredTags, comInUsage) in SystemAPI
+                         .Query<RefRW<ComBasicInfo>, RefRO<ComApplicationRequiredTags>, RefRW<ComInUsage>>())
             {
-                var asc = vBasicInfo.ValueRO.Target;
+                var asc = comInUsage.ValueRO.Target;
                 var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
                 var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
 
@@ -52,7 +52,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
 
                     if (!hasTag)
                     {
-                        vBasicInfo.ValueRW.Valid = false;
+                        comInUsage.ValueRW.Valid = false;
                         break;
                     }
                     
