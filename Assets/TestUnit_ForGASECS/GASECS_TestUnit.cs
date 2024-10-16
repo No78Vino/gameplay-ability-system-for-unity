@@ -118,13 +118,20 @@ namespace TestUnit_ForGASECS
             _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
         }
 
-        [Button(ButtonSizes.Medium, Name = "施加GE到ASC")]
+        [Button(ButtonSizes.Medium, Name = "施加普通攻击")]
         private void ApplyGEToASC()
         {
             _asc.ApplyGameplayEffectTo(_geSpec, _asc);
             RefreshUI();
         }
 
+        [Button(ButtonSizes.Medium, Name = "施加要求Earth标签的攻击")]
+        private void ApplyEarthHitToASC()
+        {
+            _asc.ApplyGameplayEffectTo(GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG), _asc);
+            RefreshUI();
+            
+        }
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]
         private void RemoveGEFromASC()
         {

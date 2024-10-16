@@ -18,6 +18,55 @@ namespace TestUnit_ForGASECS
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_ONEHIT =
         {
+            new ConfBasicInfo {Name = "Test_OneHit"},
+            new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
+            new ConfModifiers {modifierSettings = new []
+            {
+                new ModifierSetting()
+                {
+                    AttrSetCode = EcsGAttrSetCode.Fight_Monster,
+                    AttrCode = EcsGAttrLib.HP,
+                    Operation = GEOperation.Minus,
+                    Magnitude = 10,
+                    MMC = new MMCSettingConfig()
+                    {
+                        TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+                        floatParams = new []{0.5f,0},
+                    }
+                }
+            }}
+        };
+        
+        /// <summary>
+        /// GE普通攻击,要求earth tag
+        /// </summary>
+        public static GameplayEffectComponentConfig[] GEConfig_ONEHIT_REQUIRED_EARTH_TAG =
+        {
+            new ConfBasicInfo {Name = "Test_OneHit"},
+            new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
+            new ConfApplicationRequiredTags{tags = new []{GTagList.Magic_Earth}},
+            new ConfModifiers {modifierSettings = new []
+            {
+                new ModifierSetting()
+                {
+                    AttrSetCode = EcsGAttrSetCode.Fight_Monster,
+                    AttrCode = EcsGAttrLib.HP,
+                    Operation = GEOperation.Minus,
+                    Magnitude = 20,
+                    MMC = new MMCSettingConfig()
+                    {
+                        TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+                        floatParams = new []{0.5f,0},
+                    }
+                }
+            }}
+        };
+        
+        /// <summary>
+        /// GE燃烧buff
+        /// </summary>
+        public static GameplayEffectComponentConfig[] GEConfig_BURNING =
+        {
             new ConfBasicInfo {Name = "Test_Burning"},
             new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
             new ConfModifiers {modifierSettings = new []
