@@ -29,7 +29,7 @@ namespace GAS.RuntimeWithECS.Core
             TurnController ??= new TurnController();
             EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             // 系统逻辑帧计时器
-            World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(GlobalFrameTimer));
+            World.DefaultGameObjectInjectionWorld.EntityManager.CreateSingleton<GlobalTimer>();
             IsInitialized = true;
         }
 

@@ -3,29 +3,28 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Core
 {
-    public struct GlobalFrameTimer : IComponentData
+    public struct GlobalTimer : IComponentData
     {
         public int FrameCount;
+        public int Turn;
     }
         
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))] 
     [UpdateAfter(typeof(GASManagerInputSystem))]
-    public partial struct GASTimerSystem : ISystem
+    public partial struct SysGlobalTimer : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<GASRunningTag>();
-            state.RequireForUpdate<GlobalFrameTimer>();
+            state.RequireForUpdate<GlobalTimer>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var timer in SystemAPI.Query<RefRW<GlobalFrameTimer>>())
-            {
-                timer.ValueRW.FrameCount++;
-            }
+            var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+            globalFrameTimer.ValueRW.FrameCount += 1;
         }
 
         [BurstCompile]

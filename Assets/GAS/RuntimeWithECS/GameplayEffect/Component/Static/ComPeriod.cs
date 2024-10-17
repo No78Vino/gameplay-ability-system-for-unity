@@ -6,7 +6,12 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     public struct ComPeriod : IComponentData
     {
         public int Period;
+        public bool ResetTimeCountWhenDeactivated;
+        
         public NativeArray<Entity> GameplayEffects;
+        
+        // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
+        public int startTime;
     }
     
     public sealed class ConfPeriod:GameplayEffectComponentConfig

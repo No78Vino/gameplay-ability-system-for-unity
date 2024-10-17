@@ -6,7 +6,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     public struct ComDuration : IComponentData
     {
         /// <summary>
-        /// 持续时间。 -1表示无限
+        /// 持续时间。 小于等于0 表示无限
         /// </summary>
         public int duration;
         
@@ -16,13 +16,40 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         /// 编辑器可能显示单位秒，实际存储时会换算为Frame逻辑帧
         /// </summary>
         public TimeUnit timeUnit;
+
+        /// <summary>
+        /// 是否在激活时，刷新计时起始时间
+        /// </summary>
+        public bool ResetStartTimeWhenActivated;
+        
+        /// <summary>
+        /// 是否在失活时，停止计时
+        /// </summary>
+        public bool StopTickWhenDeactivated;
         
         // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
         
         /// <summary>
+        /// 开始计时的时间点
+        /// </summary>
+        public int startTime; 
+        
+        /// <summary>
         /// 是否激活生效中。只有Durational GameplayEffect存在激活和失活的概念
         /// </summary>
-        public bool active; 
+        public bool active;
+
+        /// <summary>
+        /// StopTickWhenDeactivated=true时，该字段生效
+        /// 上一次开始计时时间
+        /// </summary>
+        public int lastStartTime;
+        
+        /// <summary>
+        /// StopTickWhenDeactivated=true时，该字段生效
+        /// 剩余持续时间
+        /// </summary>
+        public int remianTime;
     }
     
     public sealed class ConfDuration:GameplayEffectComponentConfig
