@@ -21,18 +21,24 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnUpdate(ref SystemState state)
         {
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
-            foreach (var (gameplayEffectBuffs, needCheck,asc) in SystemAPI
+            foreach (var (gameplayEffectBuffs, _,asc) in SystemAPI
                          .Query<DynamicBuffer<GameplayEffectBufferElement>, RefRO<NeedCheckEffects>>().WithEntityAccess())
             {
-                foreach (var (duration, requiredTags, comInUsage) in SystemAPI
-                             .Query<RefRW<ComDuration>, RefRO<ComOngoingRequiredTags>, RefRW<ComInUsage>>())
-                {
-                    var asc = comInUsage.ValueRO.Target;
-                    var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
-                    var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
+                bool needCheckEffects = SystemAPI.IsComponentEnabled<NeedCheckEffects>(asc);
+                // 过滤掉不需要检测GE的ASC实例
+                if(!needCheckEffects) continue;
                 
+                var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
+                var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
+                
+                foreach (var geElement in gameplayEffectBuffs)
+                {
+                    var geEntity = geElement.GameplayEffect;
+                    var ongoingRequiredTags = SystemAPI.GetComponentRO<ComOngoingRequiredTags>(geEntity);
+                    var duration = SystemAPI.GetComponentRW<ComDuration>(geEntity);
+                    
                     duration.ValueRW.active = true;
-                    foreach (var tag in requiredTags.ValueRO.tags)
+                    foreach (var tag in ongoingRequiredTags.ValueRO.tags)
                     {
                         var hasTag = false;
                         // 遍历固有Tag
@@ -57,7 +63,6 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                             duration.ValueRW.active = false;
                             break;
                         }
-                    
                     }
                 }
             }
