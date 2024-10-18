@@ -23,6 +23,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             {
                 // TODO 激活GE的对应逻辑
                 // TODO 触发各种激活事件，回调
+                // ActivationTime = Time.time;
+                // TriggerOnActivation();
                 
                 // 完成任务后删除执行标签
                 ecb.RemoveComponent<ComNeedActivate>(ge);
