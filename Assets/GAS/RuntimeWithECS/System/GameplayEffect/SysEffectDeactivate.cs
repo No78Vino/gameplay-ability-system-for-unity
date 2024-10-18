@@ -23,7 +23,9 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             {
                 // TODO 失活GE的对应逻辑
                 // TODO 触发各种失活事件，回调
-                // TriggerOnDeactivation();
+                // TriggerCueOnDeactivation();
+                // Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
+                // TryDeactivateGrantedAbilities();
                 
                 // 完成任务后删除执行标签
                 ecb.RemoveComponent<ComNeedDeactivate>(ge);
