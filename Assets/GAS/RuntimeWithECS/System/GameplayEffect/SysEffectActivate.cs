@@ -3,9 +3,9 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
-    [UpdateAfter(typeof(SysCheckEffectOngoingActive))]
-    [UpdateBefore(typeof(SysEffectTicker))]
-    public partial struct SysActivateEffect : ISystem
+    [UpdateAfter(typeof(SysEffectTicker))]
+    [UpdateBefore(typeof(SysRemoveInvalidEffect))]
+    public partial struct SysEffectActivate : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

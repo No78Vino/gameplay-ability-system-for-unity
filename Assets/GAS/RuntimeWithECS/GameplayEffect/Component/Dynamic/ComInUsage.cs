@@ -5,7 +5,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     /// <summary>
     /// 正在使用中的Component
     /// </summary>
-    public struct ComInUsage : IComponentData
+    public struct ComInUsage : IComponentData,IEnableableComponent
     {
         /// <summary>
         /// 施加目标
@@ -16,10 +16,5 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         /// 施加来源
         /// </summary>
         public Entity Source;
-
-        /// <summary>
-        /// 是否合法可生效：检测ApplicationRequiredTags是否满足 
-        /// </summary>
-        public bool Valid;
     }
 }

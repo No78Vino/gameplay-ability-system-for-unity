@@ -6,7 +6,6 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
     [UpdateAfter(typeof(SysCheckEffectOngoingActive))]
-    [UpdateBefore(typeof(SysTriggerInstantEffectModify))]
     public partial struct SysEffectTicker : ISystem
     {
         [BurstCompile]
@@ -34,7 +33,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                         timeEnough = countTime - durRO.lastStartTime < durRO.remianTime;
                     else
                         timeEnough = countTime - durRO.startTime < durRO.duration;
-                    inUsage.ValueRW.Valid = timeEnough;
+                    
+                    SystemAPI.SetComponentEnabled<ComInUsage>(geEntity,timeEnough);
                 }
             }
         }

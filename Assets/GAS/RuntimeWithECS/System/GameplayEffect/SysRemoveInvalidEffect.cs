@@ -2,7 +2,6 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
@@ -21,23 +20,20 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             foreach (var geBuff in SystemAPI.Query<DynamicBuffer<GameplayEffectBufferElement>>())
-            {
-                for (int i = geBuff.Length - 1; i >= 0; i--)
+                for (var i = geBuff.Length - 1; i >= 0; i--)
                 {
-                    var comInUsage = SystemAPI.GetComponentRO<ComInUsage>(geBuff[i].GameplayEffect);
-                    if (comInUsage.ValueRO.Valid) continue;
-                    ecb.RemoveComponent<ComInUsage>(geBuff[i].GameplayEffect);
+                    var ge = geBuff[i].GameplayEffect;
+                    if (SystemAPI.IsComponentEnabled<ComInUsage>(ge)) continue;
                     geBuff.RemoveAt(i);
+                    ecb.DestroyEntity(ge);
                 }
-            }
-            
+
             ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
-
         }
     }
 }

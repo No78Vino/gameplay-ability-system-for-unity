@@ -30,7 +30,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             var comInUsage = GasEntityManager.GetComponentData<ComInUsage>(gameplayEffect);
             comInUsage.Source = _asc;
             comInUsage.Target = target;
-            comInUsage.Valid = true;
+            GasEntityManager.SetComponentEnabled<ComInUsage>(gameplayEffect,true);
             GasEntityManager.SetComponentData(gameplayEffect,comInUsage);
             
             var geBuffers = GameplayEffectUtils.GameplayEffectsOf(target);
