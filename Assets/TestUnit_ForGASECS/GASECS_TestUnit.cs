@@ -28,7 +28,6 @@ namespace TestUnit_ForGASECS
 
         
         private AbilitySystemCell _asc;
-        private NewGameplayEffectSpec _geSpec;
         public Entity EntityASC;
 
         private EntityManager GasEntityManager => GASManager.EntityManager;
@@ -112,30 +111,30 @@ namespace TestUnit_ForGASECS
             RefreshUI();
         }
 
-        [Button(ButtonSizes.Medium, Name = "创建GE")]
-        private void CreatGE()
-        {
-            _geSpec = GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
-        }
-
         [Button(ButtonSizes.Medium, Name = "施加普通攻击")]
         private void ApplyGEToASC()
         {
-            _asc.ApplyGameplayEffectTo(_geSpec, _asc);
+            var geSpec =
+                GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
+            _asc.ApplyGameplayEffectTo(geSpec, _asc);
             RefreshUI();
         }
 
         [Button(ButtonSizes.Medium, Name = "施加要求Earth标签的攻击")]
         private void ApplyEarthHitToASC()
         {
-            _asc.ApplyGameplayEffectTo(GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG), _asc);
+            var geSpec =
+                GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
+            _asc.ApplyGameplayEffectTo(geSpec, _asc);
             RefreshUI();
         }
         
         [Button(ButtonSizes.Medium, Name = "燃烧buff")]
         private void ApplyBurningToASC()
         {
-            _asc.ApplyGameplayEffectTo(GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING), _asc);
+            var geSpec =
+                GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
+            _asc.ApplyGameplayEffectTo(geSpec, _asc);
             RefreshUI();
         }
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]

@@ -19,20 +19,25 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             state.RequireForUpdate<BuffEleModifier>();
         }
-        
+
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            
-            foreach (var (modifiers,_, geEntity) in SystemAPI.Query<DynamicBuffer<BuffEleModifier>,RefRO<ComInUsage>>().WithEntityAccess())
+
+            foreach (var (modifiers, _, geEntity) in SystemAPI
+                         .Query<DynamicBuffer<BuffEleModifier>, RefRO<ComInUsage>>().WithNone<ComDuration>()
+                         .WithEntityAccess())
             {
+                // 过滤掉已经不合法的Instant GE
+                if(!SystemAPI.IsComponentEnabled<ComInUsage>(geEntity)) continue;
+                
                 var asc = SystemAPI.GetComponentRO<ComInUsage>(geEntity).ValueRO.Target;
                 var attrSets = SystemAPI.GetBuffer<AttributeSetBufferElement>(asc);
-                
+
                 foreach (var mod in modifiers)
                 {
                     var magnitude = MmcHub.Calculate(geEntity, mod);
-                
+
                     int attrSetIndex = IndexOfAttrSetCode(attrSets, mod.AttrSetCode);
                     var attrSet = attrSets[attrSetIndex];
                     var attributes = attrSet.Attributes;
@@ -58,17 +63,20 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    
+
                     data.TriggerCueEvent = true;
                     data.Dirty = true;
                     ecb.AddComponent<TagAttributeDirty>(geEntity);
-                
+
                     attrSet.Attributes[attrIndex] = data;
                     attrSets[attrSetIndex] = attrSet;
+                    
+                    // 应用完成的Instant GE，使其不合法
+                    ecb.SetComponentEnabled<ComInUsage>(geEntity, false);
                 }
- 
+
             }
-            
+
             ecb.Playback(state.EntityManager);
         }
 
