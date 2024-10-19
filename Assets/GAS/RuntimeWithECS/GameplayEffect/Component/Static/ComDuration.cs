@@ -32,7 +32,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         /// <summary>
         /// 开始计时的时间点
         /// </summary>
-        public int startTime; 
+        public int activeTime; 
         
         /// <summary>
         /// 是否激活生效中。只有Durational GameplayEffect存在激活和失活的概念
@@ -43,7 +43,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         /// StopTickWhenDeactivated=true时，该字段生效
         /// 上一次开始计时时间
         /// </summary>
-        public int lastStartTime;
+        public int lastActiveTime;
         
         /// <summary>
         /// StopTickWhenDeactivated=true时，该字段生效

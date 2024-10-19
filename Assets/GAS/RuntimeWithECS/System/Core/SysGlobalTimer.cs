@@ -5,7 +5,7 @@ namespace GAS.RuntimeWithECS.Core
 {
     public struct GlobalTimer : IComponentData
     {
-        public int FrameCount;
+        public int Frame;
         public int Turn;
     }
         
@@ -24,7 +24,7 @@ namespace GAS.RuntimeWithECS.Core
         public void OnUpdate(ref SystemState state)
         {
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            globalFrameTimer.ValueRW.FrameCount += 1;
+            globalFrameTimer.ValueRW.Frame += 1;
         }
 
         [BurstCompile]

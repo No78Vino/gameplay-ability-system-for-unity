@@ -117,7 +117,6 @@ namespace TestUnit_ForGASECS
             var geSpec =
                 GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
-            RefreshUI();
         }
 
         [Button(ButtonSizes.Medium, Name = "施加要求Earth标签的攻击")]
@@ -126,7 +125,6 @@ namespace TestUnit_ForGASECS
             var geSpec =
                 GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
-            RefreshUI();
         }
         
         [Button(ButtonSizes.Medium, Name = "燃烧buff")]
@@ -135,7 +133,6 @@ namespace TestUnit_ForGASECS
             var geSpec =
                 GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
-            RefreshUI();
         }
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]
         private void RemoveGEFromASC()

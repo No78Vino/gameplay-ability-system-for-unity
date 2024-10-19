@@ -14,28 +14,26 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<ComDuration>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            var currentFrame = globalFrameTimer.ValueRO.FrameCount;
+            var currentFrame = globalFrameTimer.ValueRO.Frame;
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             foreach (var (duration, inUsage, geEntity) in SystemAPI.Query<RefRW<ComDuration>, RefRW<ComInUsage>>()
                          .WithEntityAccess())
             {
                 // 是否已到达持续时间
-                if (duration.ValueRO.duration > 0)
-                {
-                    var durRO = duration.ValueRO;
-                    var countTime = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
-                    bool timeEnough;
-                    if (duration.ValueRO.StopTickWhenDeactivated)
-                        timeEnough = countTime - durRO.lastStartTime < durRO.remianTime;
-                    else
-                        timeEnough = countTime - durRO.startTime < durRO.duration;
+                if (duration.ValueRO.duration <= 0) continue;
+                var durRO = duration.ValueRO;
+                var countTime = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
+                bool timeEnough;
+                if (duration.ValueRO.StopTickWhenDeactivated)
+                    timeEnough = countTime - durRO.lastActiveTime < durRO.remianTime;
+                else
+                    timeEnough = countTime - durRO.activeTime < durRO.duration;
                     
-                    SystemAPI.SetComponentEnabled<ComInUsage>(geEntity,timeEnough);
-                }
+                SystemAPI.SetComponentEnabled<ComInUsage>(geEntity,timeEnough);
             }
         }
 

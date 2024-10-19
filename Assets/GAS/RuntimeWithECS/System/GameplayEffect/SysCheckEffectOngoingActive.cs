@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<GameplayEffectBufferElement>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
@@ -41,12 +41,17 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                     // 已经不合法的GE不需要校验 是否可激活
                     var valid = SystemAPI.IsComponentEnabled<ComInUsage>(geEntity);
                     if (!valid) continue;
-
-                    var ongoingRequiredTags = SystemAPI.GetComponentRO<ComOngoingRequiredTags>(geEntity);
+                    
                     var duration = SystemAPI.GetComponentRW<ComDuration>(geEntity);
                     var oldActive = duration.ValueRO.active;
-                    var newActive =
-                        IsOngoingRequiredTagsValid(ongoingRequiredTags.ValueRO.tags, fixedTags, tempTags, tagMap);
+                    
+                    var newActive = true;
+                    if (SystemAPI.HasComponent<ComOngoingRequiredTags>(geEntity))
+                    {
+                        var ongoingRequiredTags = SystemAPI.GetComponentRO<ComOngoingRequiredTags>(geEntity);
+                        newActive =
+                            IsOngoingRequiredTagsValid(ongoingRequiredTags.ValueRO.tags, fixedTags, tempTags, tagMap);
+                    }
 
                     // 激活状态发生变化
                     if (oldActive != newActive)
