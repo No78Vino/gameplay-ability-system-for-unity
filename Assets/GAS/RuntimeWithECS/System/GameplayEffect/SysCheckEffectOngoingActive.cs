@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<GameplayEffectBufferElement>();
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);

@@ -18,7 +18,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<ComBasicInfo>();
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();

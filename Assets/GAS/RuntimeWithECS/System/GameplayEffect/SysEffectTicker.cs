@@ -14,7 +14,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<ComDuration>();
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
