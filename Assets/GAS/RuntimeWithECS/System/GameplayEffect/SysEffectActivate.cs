@@ -6,8 +6,8 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
-    [UpdateAfter(typeof(SysEffectTicker))]
-    [UpdateBefore(typeof(SysRemoveInvalidEffect))]
+    [UpdateBefore(typeof(SysEffectTicker))]
+    [UpdateAfter(typeof(SysCheckEffectOngoingActive))]
     public partial struct SysEffectActivate : ISystem
     {
         [BurstCompile]

@@ -27,10 +27,6 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                          .Query<DynamicBuffer<GameplayEffectBufferElement>, RefRO<NeedCheckEffects>>()
                          .WithEntityAccess())
             {
-                var needCheckEffects = SystemAPI.IsComponentEnabled<NeedCheckEffects>(asc);
-                // 过滤掉不需要检测GE的ASC实例
-                if (!needCheckEffects) continue;
-
                 var fixedTags = SystemAPI.GetBuffer<BuffElemFixedTag>(asc);
                 var tempTags = SystemAPI.GetBuffer<BuffElemTemporaryTag>(asc);
 
@@ -65,6 +61,9 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                             ecb.AddComponent<ComNeedDeactivate>(geEntity);
                     }
                 }
+                
+                //  完成后，移除 NeedCheckEffects
+                ecb.RemoveComponent<NeedCheckEffects>(asc);
             }
 
             ecb.Playback(state.EntityManager);
