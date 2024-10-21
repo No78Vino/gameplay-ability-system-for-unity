@@ -34,9 +34,10 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                 {
                     var geEntity = geElement.GameplayEffect;
 
-                    // 已经不合法的GE不需要校验 是否可激活
-                    var valid = SystemAPI.IsComponentEnabled<ComInUsage>(geEntity);
-                    if (!valid) continue;
+                    // 过滤已经不合法的GE
+                    if (!SystemAPI.IsComponentEnabled<ComInUsage>(geEntity)) continue;
+                    // 过滤Instant GE
+                    if (!SystemAPI.HasComponent<ComDuration>(geEntity)) continue;
                     
                     var duration = SystemAPI.GetComponentRW<ComDuration>(geEntity);
                     var oldActive = duration.ValueRO.active;

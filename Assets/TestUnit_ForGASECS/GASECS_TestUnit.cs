@@ -114,16 +114,18 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium, Name = "施加普通攻击")]
         private void ApplyGEToASC()
         {
-            var geSpec =
-                GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
-            _asc.ApplyGameplayEffectTo(geSpec, _asc);
+            // var geSpec =
+            //     GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
+            // _asc.ApplyGameplayEffectTo(geSpec, _asc);
+            var gameplayEffect = GEUtil.CreateGameplayEffectEntity(TestASCUnitUtils.GEConfig_ONEHIT);
+            GEUtil.ApplyGameplayEffectTo(gameplayEffect,_asc.Entity,_asc.Entity);
         }
 
         [Button(ButtonSizes.Medium, Name = "施加要求Earth标签的攻击")]
         private void ApplyEarthHitToASC()
         {
             var geSpec =
-                GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
+                GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
         }
         
@@ -131,7 +133,7 @@ namespace TestUnit_ForGASECS
         private void ApplyBurningToASC()
         {
             var geSpec =
-                GameplayEffectCreator.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
+                GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
         }
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]

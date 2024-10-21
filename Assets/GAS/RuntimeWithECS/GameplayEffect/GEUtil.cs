@@ -1,10 +1,12 @@
 ﻿using GAS.EditorForECS.GameplayEffect;
+using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect
 {
-    public static class GameplayEffectCreator
+    public static class GEUtil
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
 
@@ -30,6 +32,21 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public static NewGameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
         {
             return new NewGameplayEffectSpec(componentAssets);
+        }
+
+        public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
+        {
+            _entityManager.AddComponent<ComNeedInit>(gameplayEffect);
+            _entityManager.AddComponent<ComInUsage>(gameplayEffect);
+            _entityManager.AddComponent<NeedCheckEffects>(target);
+            var comInUsage = _entityManager.GetComponentData<ComInUsage>(gameplayEffect);
+            comInUsage.Source = source;
+            comInUsage.Target = target;
+            _entityManager.SetComponentEnabled<ComInUsage>(gameplayEffect,true);
+            _entityManager.SetComponentData(gameplayEffect,comInUsage);
+            
+            var geBuffers = GameplayEffectUtils.GameplayEffectsOf(target);
+            geBuffers.Add(new GameplayEffectBufferElement { GameplayEffect = gameplayEffect });
         }
     }
 }

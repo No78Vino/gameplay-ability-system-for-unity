@@ -6,7 +6,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
     [UpdateAfter(typeof(SysCheckEffectOngoingActive))]
-    public partial struct SysEffectTicker : ISystem
+    public partial struct SysEffectDurationTicker : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -20,11 +20,15 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
             var currentFrame = globalFrameTimer.ValueRO.Frame;
             var currentTurn = globalFrameTimer.ValueRO.Turn;
-            foreach (var (duration, inUsage, geEntity) in SystemAPI.Query<RefRW<ComDuration>, RefRW<ComInUsage>>()
+            foreach (var (duration, _, geEntity) in SystemAPI.Query<RefRW<ComDuration>, RefRW<ComInUsage>>()
                          .WithEntityAccess())
             {
+                // 过滤已经不合法的GE
+                if (!SystemAPI.IsComponentEnabled<ComInUsage>(geEntity)) continue;
                 // 过滤持续时间无限的GE
                 if (duration.ValueRO.duration <= 0) continue;
+                // 过滤未激活的GE
+                if (!duration.ValueRO.active) continue;
                 
                 var durRO = duration.ValueRO;
                 var countTime = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;

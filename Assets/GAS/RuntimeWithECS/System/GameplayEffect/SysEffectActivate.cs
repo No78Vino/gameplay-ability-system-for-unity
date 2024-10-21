@@ -6,7 +6,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
-    [UpdateBefore(typeof(SysEffectTicker))]
+    [UpdateBefore(typeof(SysEffectDurationTicker))]
     [UpdateAfter(typeof(SysCheckEffectOngoingActive))]
     public partial struct SysEffectActivate : ISystem
     {

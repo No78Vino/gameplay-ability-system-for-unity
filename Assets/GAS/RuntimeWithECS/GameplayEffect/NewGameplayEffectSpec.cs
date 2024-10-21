@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
         public NewGameplayEffectSpec(GameplayEffectComponentConfig[] componentConfigs)
         {
-            Entity = GameplayEffectCreator.CreateGameplayEffectEntity(componentConfigs);
+            Entity = GEUtil.CreateGameplayEffectEntity(componentConfigs);
         }
         
         public NewGameplayEffectSpec(Entity geEntity)

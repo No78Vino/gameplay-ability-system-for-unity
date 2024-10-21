@@ -10,7 +10,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
-    [UpdateAfter(typeof(SysEffectTicker))]
+    [UpdateAfter(typeof(SysEffectDurationTicker))]
     [UpdateBefore(typeof(SysRemoveInvalidEffect))]
     public partial struct SysTriggerInstantEffectModify : ISystem
     {
