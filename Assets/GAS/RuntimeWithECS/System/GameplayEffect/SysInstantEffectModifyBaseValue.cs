@@ -12,7 +12,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
     [UpdateAfter(typeof(SysEffectDurationTicker))]
     [UpdateBefore(typeof(SysRemoveInvalidEffect))]
-    public partial struct SysTriggerInstantEffectModify : ISystem
+    public partial struct SysInstantEffectModifyBaseValue : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
