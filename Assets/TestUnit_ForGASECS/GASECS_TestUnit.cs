@@ -33,7 +33,7 @@ namespace TestUnit_ForGASECS
         private EntityManager GasEntityManager => GASManager.EntityManager;
 
         private float _secondCount = 0;
-        private const float UIRefreshDuration = 2;
+        private const float UIRefreshDuration = 0.5f;
 
         private void Update()
         {

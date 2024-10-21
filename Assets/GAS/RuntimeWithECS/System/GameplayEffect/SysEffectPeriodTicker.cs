@@ -1,5 +1,7 @@
-﻿using GAS.RuntimeWithECS.GameplayEffect.Component;
+﻿using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect
@@ -14,32 +16,47 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<ComPeriod>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            // var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            // var currentFrame = globalFrameTimer.ValueRO.Frame;
-            // var currentTurn = globalFrameTimer.ValueRO.Turn;
-            // foreach (var (duration, _, geEntity) in SystemAPI.Query<RefRW<ComDuration>, RefRW<ComInUsage>>()
-            //              .WithEntityAccess())
-            // {
-            //     // 过滤已经不合法的GE
-            //     if (!SystemAPI.IsComponentEnabled<ComInUsage>(geEntity)) continue;
-            //     // 过滤持续时间无限的GE
-            //     if (duration.ValueRO.duration <= 0) continue;
-            //     // 过滤未激活的GE
-            //     if (!duration.ValueRO.active) continue;
-            //     
-            //     var durRO = duration.ValueRO;
-            //     var countTime = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
-            //     bool timeEnough;
-            //     if (duration.ValueRO.StopTickWhenDeactivated)
-            //         timeEnough = countTime - durRO.lastActiveTime < durRO.remianTime;
-            //     else
-            //         timeEnough = countTime - durRO.activeTime < durRO.duration;
-            //         
-            //     SystemAPI.SetComponentEnabled<ComInUsage>(geEntity,timeEnough);
-            // }
+            var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+            var currentFrame = globalFrameTimer.ValueRO.Frame;
+            var currentTurn = globalFrameTimer.ValueRO.Turn;
+            
+            foreach (var (duration, inUsage,period, geEntity) in SystemAPI.Query<RefRO<ComDuration>, RefRO<ComInUsage>,RefRW<ComPeriod>>()
+                         .WithEntityAccess())
+            {
+                // 过滤不合法的GE
+                if (!SystemAPI.IsComponentEnabled<ComInUsage>(geEntity)) continue;
+                // 过滤未激活的GE
+                if (!duration.ValueRO.active) continue;
+
+                var time = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
+                if (period.ValueRO.StartTime == 0)
+                {
+                    period.ValueRW.StartTime = time - 1 < 0 ? 0 : time;
+                }
+
+                if (time - period.ValueRO.StartTime >= period.ValueRO.Period)
+                {
+                    period.ValueRW.StartTime = time;
+                    foreach (var ge in period.ValueRO.GameplayEffects)
+                    {
+                        // 实例化GE
+                        var instanceGe = GASManager.EntityManager.Instantiate(ge);
+                        GasQueueCenter.AddEffectWaitingForApplication(instanceGe,inUsage.ValueRO.Target,inUsage.ValueRO.Target);
+                    }
+                }
+                // var durRO = duration.ValueRO;
+                // var countTime = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
+                // bool timeEnough;
+                // if (duration.ValueRO.StopTickWhenDeactivated)
+                //     timeEnough = countTime - durRO.lastActiveTime < durRO.remianTime;
+                // else
+                //     timeEnough = countTime - durRO.activeTime < durRO.duration;
+                //     
+                // SystemAPI.SetComponentEnabled<ComInUsage>(geEntity,timeEnough);
+            }
         }
 
         [BurstCompile]

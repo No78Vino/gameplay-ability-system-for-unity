@@ -11,7 +11,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public NativeArray<Entity> GameplayEffects;
         
         // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
-        public int startTime;
+        public int StartTime;
     }
     
     public sealed class ConfPeriod:GameplayEffectComponentConfig
