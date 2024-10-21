@@ -23,8 +23,9 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             foreach (var (duration, inUsage, geEntity) in SystemAPI.Query<RefRW<ComDuration>, RefRW<ComInUsage>>()
                          .WithEntityAccess())
             {
-                // 是否已到达持续时间
+                // 过滤持续时间无限的GE
                 if (duration.ValueRO.duration <= 0) continue;
+                
                 var durRO = duration.ValueRO;
                 var countTime = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
                 bool timeEnough;

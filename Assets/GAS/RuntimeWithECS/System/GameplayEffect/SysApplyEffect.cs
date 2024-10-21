@@ -1,4 +1,5 @@
-﻿using GAS.RuntimeWithECS.System.Core;
+﻿using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.System.Core;
 using Unity.Burst;
 using Unity.Entities;
 
@@ -13,10 +14,15 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-
+            var queue = GasQueueCenter.EffectsWaitingForApplication();
+            foreach (var effect in queue)
+            {
+                // TODO 应用GE
+            }
+            if(queue.Count>0) GasQueueCenter.ClearEffectsWaitingForApplication();
         }
 
         [BurstCompile]
