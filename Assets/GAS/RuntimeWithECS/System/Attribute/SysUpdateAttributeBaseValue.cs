@@ -43,6 +43,7 @@ namespace GAS.RuntimeWithECS.System.Attribute
                 float oldValue = attr.BaseValue;
                 float newValue = updateInfo.Value;
                 // OnChangeBefore
+                // BaseValue 不做钳制，因为Max，Min是只针对Current Value
                 newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(updateInfo.ASC,updateInfo.AttrSetCode,updateInfo.AttrCode,newValue);
                 
                 attr.BaseValue = newValue;
