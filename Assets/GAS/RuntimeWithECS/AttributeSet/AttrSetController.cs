@@ -95,7 +95,7 @@ namespace GAS.RuntimeWithECS.AttributeSet
             // 【RecalculateCurrentValueSystem会有重计算完成的广播，广播会告知哪些实例的哪些属性重计算的新值。ECS本质是一帧内立即响应，而不是延迟一帧执行。】
             // 如果是需要初始化BaseValue之后，在接下来的逻辑中立即使用CurrentValue，你还需要额外调用RecalculateCurrentValueImmediately()
             data.Dirty = true;
-            EntityManager.AddComponent<TagAttributeDirty>(Entity);
+            EntityManager.AddComponent<ComAttributeDirty>(Entity);
             
             attrSet.Attributes[attrIndex] = data;
             attrBuffer[attrSetIndex] = attrSet;

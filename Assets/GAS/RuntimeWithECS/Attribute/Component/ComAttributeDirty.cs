@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.AttributeSet.Component
 {
-    public struct TagAttributeDirty : IComponentData
+    public struct ComAttributeDirty : IComponentData
     {
     }
 }

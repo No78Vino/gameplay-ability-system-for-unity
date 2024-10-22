@@ -9,7 +9,7 @@ namespace GAS.RuntimeWithECS.System.Attribute
         private EntityQuery _query;
         protected override void OnCreate()
         {
-            _query = GetEntityQuery(typeof(BuffEleModifier),typeof(TagAttributeDirty));
+            _query = GetEntityQuery(typeof(BuffEleModifier),typeof(ComAttributeDirty));
             RequireForUpdate(_query);    
         }
         

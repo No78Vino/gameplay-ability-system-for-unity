@@ -2,6 +2,7 @@
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
+using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Modifier;
 using Unity.Burst;
@@ -39,37 +40,47 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                     var magnitude = MmcHub.Calculate(geEntity, mod);
 
                     int attrSetIndex = IndexOfAttrSetCode(attrSets, mod.AttrSetCode);
+                    if(attrSetIndex==-1) continue;
+                    
                     var attrSet = attrSets[attrSetIndex];
                     var attributes = attrSet.Attributes;
+
                     int attrIndex = IndexOfAttrCode(attributes, mod.AttrCode);
+                    if(attrIndex==-1) continue;
+                    
                     var data = attributes[attrIndex];
+                    var baseValue = data.BaseValue;
                     switch (mod.Operation)
                     {
                         case GEOperation.Add:
-                            data.BaseValue += magnitude;
+                            baseValue += magnitude;
                             break;
                         case GEOperation.Minus:
-                            data.BaseValue -= magnitude;
+                            baseValue -= magnitude;
                             break;
                         case GEOperation.Multiply:
-                            data.BaseValue *= magnitude;
+                            baseValue *= magnitude;
                             break;
                         case GEOperation.Divide:
-                            data.BaseValue /= magnitude;
+                            baseValue /= magnitude;
                             break;
                         case GEOperation.Override:
-                            data.BaseValue = magnitude;
+                            baseValue = magnitude;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
 
-                    data.TriggerCueEvent = true;
-                    data.Dirty = true;
-                    ecb.AddComponent<TagAttributeDirty>(geEntity);
-
-                    attrSet.Attributes[attrIndex] = data;
-                    attrSets[attrSetIndex] = attrSet;
+                    // 加入base value 更新队列
+                    GasQueueCenter.AddBaseValueUpdateInfo(asc,mod.AttrSetCode,mod.AttrCode,baseValue);
+                    
+                    
+                    // data.TriggerCueEvent = true;
+                    // data.Dirty = true;
+                    // ecb.AddComponent<ComAttributeDirty>(geEntity);
+                    //
+                    // attrSet.Attributes[attrIndex] = data;
+                    // attrSets[attrSetIndex] = attrSet;
                     
                     // 应用完成的Instant GE，使其不合法
                     ecb.SetComponentEnabled<ComInUsage>(geEntity, false);

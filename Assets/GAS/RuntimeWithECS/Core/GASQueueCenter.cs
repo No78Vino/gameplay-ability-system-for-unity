@@ -33,7 +33,7 @@ namespace GAS.RuntimeWithECS.Core
         {
             return _baseValueUpdateInfos;
         }
-        public static void AddBaseValueUpdateInfo(Entity asc, int attrSetCodee, int attrCode, int value)
+        public static void AddBaseValueUpdateInfo(Entity asc, int attrSetCodee, int attrCode, float value)
         {
             _baseValueUpdateInfos.Enqueue(new AttrBaseValueUpdateInfo(asc, attrSetCodee, attrCode, value));
         }
@@ -65,9 +65,9 @@ namespace GAS.RuntimeWithECS.Core
         public readonly Entity ASC;
         public readonly int AttrSetCodee;
         public readonly int AttrCode;
-        public readonly int Value;
+        public readonly float Value;
         
-        public AttrBaseValueUpdateInfo(Entity asc, int attrSetCodee, int attrCode, int value)
+        public AttrBaseValueUpdateInfo(Entity asc, int attrSetCodee, int attrCode, float value)
         {
             ASC = asc;
             AttrSetCodee = attrSetCodee;
