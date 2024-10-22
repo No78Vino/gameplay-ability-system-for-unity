@@ -16,43 +16,35 @@ namespace GAS.RuntimeWithECS.Core
 
         #region Attribute 事件
 
-        private static readonly Dictionary<Entity, Dictionary<Tuple<int, int>, Action<float>>>
+        private static readonly Dictionary<Entity, Dictionary<Tuple<int, int>, Func<float,float>>>
             _onBaseValueChangeBefore = new();
 
-        public static void RegisterOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode,
-            Action<float> action)
+        public static void SetOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode,
+            Func<float,float> action)
         {
             if (!_onBaseValueChangeBefore.ContainsKey(entity))
-                _onBaseValueChangeBefore.Add(entity, new Dictionary<Tuple<int, int>, Action<float>>());
+                _onBaseValueChangeBefore.Add(entity, new Dictionary<Tuple<int, int>, Func<float,float>>());
 
-            if (!_onBaseValueChangeBefore[entity].ContainsKey(Tuple.Create(attrSetCode, attrCode)))
-                _onBaseValueChangeBefore[entity].Add(Tuple.Create(attrSetCode, attrCode), null);
-
-            _onBaseValueChangeBefore[entity][Tuple.Create(attrSetCode, attrCode)] += action;
+            _onBaseValueChangeBefore[entity][Tuple.Create(attrSetCode, attrCode)] = action;
         }
 
-        public static void UnRegisterOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode,
-            Action<float> action)
+        public static void ClearOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode)
         {
-            if (!_onBaseValueChangeBefore.ContainsKey(entity)) return;
-            if (!_onBaseValueChangeBefore[entity].ContainsKey(Tuple.Create(attrSetCode, attrCode))) return;
-
-            _onBaseValueChangeBefore[entity][Tuple.Create(attrSetCode, attrCode)] -= action;
-
-            var delegateList = _onBaseValueChangeBefore[entity][Tuple.Create(attrSetCode, attrCode)]
-                ?.GetInvocationList();
-            if (delegateList is { Length: 0 })
-                _onBaseValueChangeBefore[entity].Remove(Tuple.Create(attrSetCode, attrCode));
+            if (!_onBaseValueChangeBefore.TryGetValue(entity, out var value)) return;
+            if (!value.ContainsKey(Tuple.Create(attrSetCode, attrCode))) return;
+            _onBaseValueChangeBefore[entity].Remove(Tuple.Create(attrSetCode, attrCode));
 
             if (_onBaseValueChangeBefore[entity].Count == 0) _onBaseValueChangeBefore.Remove(entity);
         }
 
-        public static void InvokeOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode, float value)
+        public static float InvokeOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode, float value)
         {
-            if (!_onBaseValueChangeBefore.TryGetValue(entity, out var dictionary)) return;
+            if (!_onBaseValueChangeBefore.TryGetValue(entity, out var dictionary)) return value;
 
             if (dictionary.TryGetValue(Tuple.Create(attrSetCode, attrCode), out var action))
-                action?.Invoke(value);
+                return action?.Invoke(value) ?? value;
+
+            return value;
         }
 
 

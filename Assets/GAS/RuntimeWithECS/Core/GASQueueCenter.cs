@@ -63,14 +63,14 @@ namespace GAS.RuntimeWithECS.Core
     public struct AttrBaseValueUpdateInfo
     {
         public readonly Entity ASC;
-        public readonly int AttrSetCodee;
+        public readonly int AttrSetCode;
         public readonly int AttrCode;
         public readonly float Value;
         
-        public AttrBaseValueUpdateInfo(Entity asc, int attrSetCodee, int attrCode, float value)
+        public AttrBaseValueUpdateInfo(Entity asc, int attrSetCode, int attrCode, float value)
         {
             ASC = asc;
-            AttrSetCodee = attrSetCodee;
+            AttrSetCode = attrSetCode;
             AttrCode = attrCode;
             Value = value;
         }

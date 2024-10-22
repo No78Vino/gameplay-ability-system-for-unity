@@ -39,13 +39,13 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                 {
                     var magnitude = MmcHub.Calculate(geEntity, mod);
 
-                    int attrSetIndex = IndexOfAttrSetCode(attrSets, mod.AttrSetCode);
+                    int attrSetIndex = attrSets.IndexOfAttrSetCode(mod.AttrSetCode);
                     if(attrSetIndex==-1) continue;
                     
                     var attrSet = attrSets[attrSetIndex];
                     var attributes = attrSet.Attributes;
 
-                    int attrIndex = IndexOfAttrCode(attributes, mod.AttrCode);
+                    int attrIndex = attributes.IndexOfAttrCode(mod.AttrCode);
                     if(attrIndex==-1) continue;
                     
                     var data = attributes[attrIndex];
@@ -95,24 +95,6 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnDestroy(ref SystemState state)
         {
 
-        }
-        
-        private int IndexOfAttrSetCode(DynamicBuffer<AttributeSetBufferElement> attrSets,int attrSetCode)
-        {
-            for (int i = 0; i < attrSets.Length; i++)
-            {
-                if (attrSets[i].Code == attrSetCode) return i;
-            }
-            return -1;
-        }        
-        
-        private int IndexOfAttrCode(NativeArray<AttributeData> attrs,int attrCode)
-        {
-            for (int i = 0; i < attrs.Length; i++)
-            {
-                if (attrs[i].Code == attrCode) return i;
-            }
-            return -1;
         }
     }
 }
