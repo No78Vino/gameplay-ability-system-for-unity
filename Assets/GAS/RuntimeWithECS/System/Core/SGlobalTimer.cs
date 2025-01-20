@@ -11,7 +11,7 @@ namespace GAS.RuntimeWithECS.Core
         
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))] 
     [UpdateAfter(typeof(GASManagerInputSystem))]
-    public partial struct SysGlobalTimer : ISystem
+    public partial struct SGlobalTimer : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
