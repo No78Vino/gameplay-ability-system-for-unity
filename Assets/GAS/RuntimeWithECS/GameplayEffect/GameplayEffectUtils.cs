@@ -10,9 +10,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect
     {
         private static EntityManager GasEntityManager => GASManager.EntityManager;
 
-        public static DynamicBuffer<BuffEleGameplayEffect> GameplayEffectsOf(Entity asc)
+        public static DynamicBuffer<BEGameplayEffect> GameplayEffectsOf(Entity asc)
         {
-            return GasEntityManager.GetBuffer<BuffEleGameplayEffect>(asc);
+            return GasEntityManager.GetBuffer<BEGameplayEffect>(asc);
         }
 
         public static bool CheckAscAttributeDirty(DynamicBuffer<AttributeSetBufferElement> attrSets,DynamicBuffer<BuffEleModifier> modifiers)

@@ -25,7 +25,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             var removeEffectWithTags = comRemoveEffectWithTags.tags;
             if (removeEffectWithTags.Length == 0) return;
 
-            var geBuff = _entityManager.GetBuffer<BuffEleGameplayEffect>(asc);
+            var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
             for (var i = geBuff.Length - 1; i >= 0; i--)
             {
                 var ge = geBuff[i].GameplayEffect;
@@ -156,7 +156,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         public static bool HasGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
-            var geBuff = _entityManager.GetBuffer<BuffEleGameplayEffect>(asc);
+            var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
             foreach (var geElem in geBuff)
                 if (geElem.GameplayEffect == gameplayEffect)
                     return true;
@@ -186,7 +186,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             bool isValueChanged = false;
             var attrSets = _entityManager.GetBuffer<AttributeSetBufferElement>(asc);
-            var effects = _entityManager.GetBuffer<BuffEleGameplayEffect>(asc);
+            var effects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
             for (var attrSetIndex = 0; attrSetIndex < attrSets.Length; attrSetIndex++)
             {
                 var attrSet = attrSets[attrSetIndex];

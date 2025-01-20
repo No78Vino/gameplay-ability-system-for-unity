@@ -10,8 +10,8 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.System.Attribute
 {
-    [UpdateAfter(typeof(SysUpdateAttributeBaseValue))]
-    public partial struct SysUpdateAttributeCurrentValue : ISystem
+    [UpdateAfter(typeof(SUpdateAttributeBaseValue))]
+    public partial struct SUpdateAttributeCurrentValue : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

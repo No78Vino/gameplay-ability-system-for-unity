@@ -31,8 +31,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                 // TODO 初始化，设置Level
                 
                 // 加入GE Container列表
-                var geContainer = SystemAPI.GetBuffer<BuffEleGameplayEffect>(owner);
-                geContainer.Add(new BuffEleGameplayEffect { GameplayEffect = ge });
+                var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(owner);
+                geContainer.Add(new BEGameplayEffect { GameplayEffect = ge });
                 
                 ecb.AddComponent<EffectContainerDirty>(owner);
             }

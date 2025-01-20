@@ -24,7 +24,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         private readonly AttrSetController _attrSetController;
         private readonly GameplayTagController _gameplayTagController;
         private readonly GameplayEffectController _gameplayEffectController;
-        private readonly GameplayAbilityController _gameplayAbilityController;
+        private readonly AbilityController _abilityController;
 
         public AbilitySystemCell()
         {
@@ -40,7 +40,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             // 4.GameplayEffect控制器
             _gameplayEffectController = new GameplayEffectController(Entity);
             // 5.Ability控制器
-            _gameplayAbilityController = new GameplayAbilityController(Entity);
+            _abilityController = new AbilityController(Entity);
 
 
             // // 测试数据
@@ -195,7 +195,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             return attrBuffer;
         }
 
-        public DynamicBuffer<BuffEleGameplayEffect> GameplayEffects()
+        public DynamicBuffer<BEGameplayEffect> GameplayEffects()
         {
             return _gameplayEffectController.CurrentGameplayEffects;
         }

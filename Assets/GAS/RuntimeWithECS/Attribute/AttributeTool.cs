@@ -27,7 +27,7 @@ namespace GAS.RuntimeWithECS.Attribute
 
             attr.CurrentValue = attr.BaseValue;
             // 获取GE
-            var gameplayEffects = _entityManager.GetBuffer<BuffEleGameplayEffect>(asc);
+            var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
             if(gameplayEffects.Length == 0) return attr.CurrentValue;
             
             foreach (var buffer in gameplayEffects)

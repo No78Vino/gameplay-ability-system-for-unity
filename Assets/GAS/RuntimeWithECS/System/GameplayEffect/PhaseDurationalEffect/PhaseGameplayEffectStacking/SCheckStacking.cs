@@ -70,7 +70,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         private Entity GetStackingGameplayEffect(EntityManager entityManager, Entity owner, Entity source,
             CStacking stacking)
         {
-            var effects = entityManager.GetBuffer<BuffEleGameplayEffect>(owner);
+            var effects = entityManager.GetBuffer<BEGameplayEffect>(owner);
             for (var i = 0; i < effects.Length; i++)
             {
                 var effect = effects[i].GameplayEffect;

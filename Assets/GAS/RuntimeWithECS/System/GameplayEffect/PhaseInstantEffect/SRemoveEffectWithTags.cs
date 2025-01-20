@@ -33,7 +33,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                 if (tags.Length == 0) continue;
 
                 var asc = inUsage.ValueRO.Target;
-                var geBuff = SystemAPI.GetBuffer<BuffEleGameplayEffect>(asc);
+                var geBuff = SystemAPI.GetBuffer<BEGameplayEffect>(asc);
                 for (var i = geBuff.Length - 1; i >= 0; i--)
                 {
                     var ge = geBuff[i].GameplayEffect;

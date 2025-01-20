@@ -32,7 +32,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
             {
                 var owner = inUsage.ValueRO.Target;
                 var tags = removeEffectWithTags.ValueRO.tags;
-                var effects = state.EntityManager.GetBuffer<BuffEleGameplayEffect>(owner);
+                var effects = state.EntityManager.GetBuffer<BEGameplayEffect>(owner);
                 for (var i = effects.Length - 1; i >= 0; i--)
                 {
                     var effect = effects[i].GameplayEffect;
