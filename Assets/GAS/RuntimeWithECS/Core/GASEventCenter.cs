@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.RuntimeWithECS.Ability;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Core
@@ -189,6 +190,83 @@ namespace GAS.RuntimeWithECS.Core
                 action?.Invoke(oldStackCount, newStackCount);
         }
 
+        #endregion
+
+        #region Ability 事件
+
+        // protected event Action<AbilityActivateResult> _onActivateResult;
+        // protected event Action _onEndAbility;
+        // protected event Action _onCancelAbility;
+        
+        private static readonly Dictionary<Entity, Action<AbilityActivationResult>> _onActivateResult = new();
+        private static readonly Dictionary<Entity, Action> _onEndAbility = new();
+        private static readonly Dictionary<Entity, Action> _onCancelAbility = new();
+        
+        public static void RegisterOnActivateResult(Entity abilityEntity, Action<AbilityActivationResult> action)
+        {
+            if (!_onActivateResult.TryAdd(abilityEntity, action))
+                _onActivateResult[abilityEntity] = (Action<AbilityActivationResult>)Delegate.Combine(_onActivateResult[abilityEntity], action);
+        }
+        
+        public static void UnRegisterOnActivateResult(Entity abilityEntity, Action<AbilityActivationResult> action)
+        {
+            if (!_onActivateResult.TryGetValue(abilityEntity, out var existingAction)) return;
+            var newAction = (Action<AbilityActivationResult>)Delegate.Remove(existingAction, action);
+            if (newAction == null)
+                _onActivateResult.Remove(abilityEntity);
+            else
+                _onActivateResult[abilityEntity] = newAction;
+        }
+        
+        public static void InvokeOnActivateResult(Entity abilityEntity, AbilityActivationResult result)
+        {
+            if (_onActivateResult.TryGetValue(abilityEntity, out var action))
+                action?.Invoke(result);
+        }
+        
+        public static void RegisterOnEndAbility(Entity abilityEntity, Action action)
+        {
+            if (!_onEndAbility.TryAdd(abilityEntity, action))
+                _onEndAbility[abilityEntity] = (Action)Delegate.Combine(_onEndAbility[abilityEntity], action);
+        }
+        
+        public static void UnRegisterOnEndAbility(Entity abilityEntity, Action action)
+        {
+            if (!_onEndAbility.TryGetValue(abilityEntity, out var existingAction)) return;
+            var newAction = (Action)Delegate.Remove(existingAction, action);
+            if (newAction == null)
+                _onEndAbility.Remove(abilityEntity);
+            else
+                _onEndAbility[abilityEntity] = newAction;
+        }
+        
+        public static void InvokeOnEndAbility(Entity abilityEntity)
+        {
+            if (_onEndAbility.TryGetValue(abilityEntity, out var action))
+                action?.Invoke();
+        }
+        
+        public static void RegisterOnCancelAbility(Entity abilityEntity, Action action)
+        {
+            if (!_onCancelAbility.TryAdd(abilityEntity, action))
+                _onCancelAbility[abilityEntity] = (Action)Delegate.Combine(_onCancelAbility[abilityEntity], action);
+        }
+        
+        public static void UnRegisterOnCancelAbility(Entity abilityEntity, Action action)
+        {
+            if (!_onCancelAbility.TryGetValue(abilityEntity, out var existingAction)) return;
+            var newAction = (Action)Delegate.Remove(existingAction, action);
+            if (newAction == null)
+                _onCancelAbility.Remove(abilityEntity);
+            else
+                _onCancelAbility[abilityEntity] = newAction;
+        }
+        
+        public static void InvokeOnCancelAbility(Entity abilityEntity)
+        {
+            if (_onCancelAbility.TryGetValue(abilityEntity, out var action))
+                action?.Invoke();
+        }
         #endregion
     }
 }
