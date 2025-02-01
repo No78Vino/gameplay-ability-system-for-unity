@@ -105,7 +105,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             }
         }
 
-        public static bool CheckAscHasAllTags(this Entity asc, NativeArray<int> tags)
+        public static bool HasAllTags(Entity asc, NativeArray<int> tags)
         {
             var fixedTags = _entityManager.GetBuffer<BFixedTag>(asc);
             var tempTags = _entityManager.GetBuffer<BTemporaryTag>(asc);
@@ -115,7 +115,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                 var hasTag = false;
 
                 foreach (var fixedTag in fixedTags)
-                    if (GameplayTagHub.HasTag(fixedTag.tag, tag))
+                    if (GTagUtil.HasTag(fixedTag.tag, tag))
                     {
                         hasTag = true;
                         break;
@@ -123,7 +123,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
                 if (!hasTag)
                     foreach (var tempTag in tempTags)
-                        if (GameplayTagHub.HasTag(tempTag.tag, tag))
+                        if (GTagUtil.HasTag(tempTag.tag, tag))
                         {
                             hasTag = true;
                             break;
@@ -135,7 +135,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             return true;
         }
 
-        public static bool CheckAscHasAnyTags(this Entity asc, NativeArray<int> tags)
+        public static bool HasAnyTags(Entity asc, NativeArray<int> tags)
         {
             var fixedTags = _entityManager.GetBuffer<BFixedTag>(asc);
             var tempTags = _entityManager.GetBuffer<BTemporaryTag>(asc);
@@ -143,11 +143,11 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             foreach (var tag in tags)
             {
                 foreach (var fixedTag in fixedTags)
-                    if (GameplayTagHub.HasTag(fixedTag.tag, tag))
+                    if (GTagUtil.HasTag(fixedTag.tag, tag))
                         return true;
 
                 foreach (var tempTag in tempTags)
-                    if (GameplayTagHub.HasTag(tempTag.tag, tag))
+                    if (GTagUtil.HasTag(tempTag.tag, tag))
                         return true;
             }
 

@@ -5,7 +5,7 @@ using Unity.Collections;
 
 namespace GAS.RuntimeWithECS.Tag
 {
-    public static class GameplayTagHub
+    public static class GTagUtil
     {
         private static Dictionary<int, GASTag> _tagMap;
 

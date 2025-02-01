@@ -20,7 +20,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
         public int ActivationCount;
         
         /// <summary>
-        ///  拥有者
+        ///  拥有者ASC
         /// </summary>
         public Entity Owner;
     }

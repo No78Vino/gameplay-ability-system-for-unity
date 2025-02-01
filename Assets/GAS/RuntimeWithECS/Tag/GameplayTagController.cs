@@ -33,7 +33,7 @@ namespace GAS.RuntimeWithECS.Tag
         {
             var fixedTags = DynamicBufferFixedTags;
             foreach (var t in fixedTags)
-                if (GameplayTagHub.HasTag(t.tag, tag))
+                if (GTagUtil.HasTag(t.tag, tag))
                     return true;
             return false;
         }
@@ -42,7 +42,7 @@ namespace GAS.RuntimeWithECS.Tag
         {
             var temporaryTags = DynamicBufferTemporaryTags;
             foreach (var t in temporaryTags)
-                if (GameplayTagHub.HasTag(t.tag, tag))
+                if (GTagUtil.HasTag(t.tag, tag))
                     return true;
             return false;
         }

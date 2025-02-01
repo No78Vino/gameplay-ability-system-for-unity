@@ -111,7 +111,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         {
             if (!_entityManager.HasComponent<CApplicationRequiredTags>(gameplayEffect)) return true;
             var requiredTags = _entityManager.GetComponentData<CApplicationRequiredTags>(gameplayEffect);
-            return asc.CheckAscHasAllTags(requiredTags.tags);
+            return ASCUtil.HasAllTags(asc, requiredTags.tags);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         {
             if (!_entityManager.HasComponent<COngoingRequiredTags>(gameplayEffect)) return true;
             var requiredTags = _entityManager.GetComponentData<COngoingRequiredTags>(gameplayEffect);
-            return asc.CheckAscHasAllTags(requiredTags.tags);
+            return ASCUtil.HasAllTags(asc, requiredTags.tags);
 
         }
 
@@ -138,7 +138,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         {
             if (!_entityManager.HasComponent<CImmunityTags>(gameplayEffect)) return false;
             var immunityTags = _entityManager.GetComponentData<CImmunityTags>(gameplayEffect);
-            return asc.CheckAscHasAnyTags(immunityTags.tags);
+            return ASCUtil.HasAnyTags(asc, immunityTags.tags);
         }
 
         public static void InitGameplayEffect(this Entity gameplayEffect, Entity source, Entity target, int level)
@@ -187,7 +187,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
                 foreach (var assetTag in assetTags)
                 foreach (var tag in tags)
-                    if (GameplayTagHub.HasTag(assetTag, tag))
+                    if (GTagUtil.HasTag(assetTag, tag))
                         return true;
             }
 
@@ -197,7 +197,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
                 var grantedTags = _entityManager.GetComponentData<CGrantedTags>(gameplayEffect).tags;
                 foreach (var grantedTag in grantedTags)
                 foreach (var tag in tags)
-                    if (GameplayTagHub.HasTag(grantedTag, tag))
+                    if (GTagUtil.HasTag(grantedTag, tag))
                         return true;
             }
 
