@@ -24,7 +24,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (_, attrSets, asc) in SystemAPI
-                         .Query<RefRO<CAttributeIsDirty>, DynamicBuffer<AttributeSetBufferElement>>()
+                         .Query<RefRO<CAttributeIsDirty>, DynamicBuffer<BEAttributeSet>>()
                          .WithEntityAccess())
             {
                 for (var index = 0; index < attrSets.Length; index++)

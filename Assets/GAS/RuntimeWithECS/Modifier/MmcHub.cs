@@ -20,7 +20,7 @@ namespace GAS.RuntimeWithECS.Modifier
             _magnitudeCalculations.Add(MMCTypeToCode.Map[typeof(MMCScalableFloat)],new MMCScalableFloat());
         }
 
-        public static float Calculate(Entity ge, BuffEleModifier modifier)
+        public static float Calculate(Entity ge, BEModifier modifier)
         {
             var setting = modifier.MMC;
             float result;
@@ -42,7 +42,7 @@ namespace GAS.RuntimeWithECS.Modifier
             return result;
         }
         
-        public static float Calculate(Entity ge, BuffEleModifier modifier, float sourceValue)
+        public static float Calculate(Entity ge, BEModifier modifier, float sourceValue)
         {
             var result = sourceValue;
             var magnitude = Calculate(ge, modifier);

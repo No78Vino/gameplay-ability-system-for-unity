@@ -13,7 +13,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Aspect
         private readonly RefRO<CInUsage> _inUsage;
         private readonly RefRO<CValidEffect> _comValidEffect;
         private readonly RefRO<CInApplicationProgress> _inApplicationProgress;
-        private readonly DynamicBuffer<BuffEleModifier> _modifiers;
+        private readonly DynamicBuffer<BEModifier> _modifiers;
 
         public Entity ASC => _inUsage.ValueRO.Target;
         
@@ -25,7 +25,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Aspect
 
             var asc = _inUsage.ValueRO.Target;
             bool changed = false;
-            var attrSets = GASManager.EntityManager.GetBuffer<AttributeSetBufferElement>(asc);
+            var attrSets = GASManager.EntityManager.GetBuffer<BEAttributeSet>(asc);
             foreach (var mod in _modifiers)
             {
                 var attrSetIndex = attrSets.IndexOfAttrSetCode(mod.AttrSetCode);

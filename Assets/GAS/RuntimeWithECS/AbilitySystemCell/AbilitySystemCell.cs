@@ -189,9 +189,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 #if UNITY_EDITOR
         public int[] FixedTags() => _gameplayTagController.FixedTags();
 
-        public DynamicBuffer<AttributeSetBufferElement> AttrSets()
+        public DynamicBuffer<BEAttributeSet> AttrSets()
         {
-            var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<BEAttributeSet>(Entity);
             return attrBuffer;
         }
 

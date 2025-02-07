@@ -6,7 +6,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
-    public struct BuffEleModifier : IBufferElementData
+    public struct BEModifier : IBufferElementData
     {
         public int AttrSetCode;
         public int AttrCode;
@@ -21,10 +21,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            if(!_entityManager.HasBuffer<BuffEleModifier>(ge))
-                _entityManager.AddBuffer<BuffEleModifier>(ge);
+            if(!_entityManager.HasBuffer<BEModifier>(ge))
+                _entityManager.AddBuffer<BEModifier>(ge);
 
-            var buffer = _entityManager.GetBuffer<BuffEleModifier>(ge);
+            var buffer = _entityManager.GetBuffer<BEModifier>(ge);
             foreach (var modifierSetting in modifierSettings)
             {
                 var stringParams = modifierSetting.MMC.stringParams == null
@@ -37,7 +37,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
                 var floatParams = modifierSetting.MMC.floatParams ?? Array.Empty<float>();
                 var intParams = modifierSetting.MMC.intParams ?? Array.Empty<int>();
-                buffer.Add(new BuffEleModifier
+                buffer.Add(new BEModifier
                 {
                     AttrSetCode = modifierSetting.AttrSetCode,
                     AttrCode = modifierSetting.AttrCode,

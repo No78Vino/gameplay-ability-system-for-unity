@@ -192,10 +192,10 @@ namespace TestUnit_ForGASECS
 
         public void SetModifier(Entity geEntity)
         {
-            var has = GasEntityManager.HasComponent<BuffEleModifier>(geEntity);
+            var has = GasEntityManager.HasComponent<BEModifier>(geEntity);
             var mods = has
-                ? GasEntityManager.GetBuffer<BuffEleModifier>(geEntity)
-                : new DynamicBuffer<BuffEleModifier>();
+                ? GasEntityManager.GetBuffer<BEModifier>(geEntity)
+                : new DynamicBuffer<BEModifier>();
             var settings = new ModifierSetting[mods.Length];
             if (has)
                 for (var j = 0; j < mods.Length; j++)

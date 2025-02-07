@@ -13,7 +13,7 @@ namespace GAS.RuntimeWithECS.Attribute
         public static float RecalculateCurrentValue(Entity asc,int attrSetCode,int attrCode)
         {
             // 获取属性集
-            var attrSets = _entityManager.GetBuffer<AttributeSetBufferElement>(asc);
+            var attrSets = _entityManager.GetBuffer<BEAttributeSet>(asc);
             var attrSetIndex = attrSets.IndexOfAttrSetCode(attrSetCode);
             if (attrSetIndex == -1) return 0;
             var attrSet = attrSets[attrSetIndex];
@@ -37,9 +37,9 @@ namespace GAS.RuntimeWithECS.Attribute
                 var cDuration = _entityManager.GetComponentData<CDuration>(ge);
                 if(!cDuration.active) continue;
                 // 获取GE的属性修改器
-                bool hasMods = _entityManager.HasBuffer<BuffEleModifier>(ge);
+                bool hasMods = _entityManager.HasBuffer<BEModifier>(ge);
                 if (!hasMods) continue;
-                var mods = _entityManager.GetBuffer<BuffEleModifier>(ge);
+                var mods = _entityManager.GetBuffer<BEModifier>(ge);
                 foreach (var mod in mods)
                 {
                     if (mod.AttrSetCode != attrSetCode || mod.AttrCode != attrCode) continue;

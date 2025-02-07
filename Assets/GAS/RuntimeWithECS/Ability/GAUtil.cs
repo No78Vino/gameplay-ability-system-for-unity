@@ -1,8 +1,13 @@
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.Attribute.Component;
+using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
+using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Collections;
 using Unity.Entities;
@@ -98,62 +103,64 @@ namespace GAS.RuntimeWithECS.Ability
 
         public static bool CheckCost(Entity ability)
         {
-            // TODO
             bool hasCostComponent = _entityManager.HasComponent<CAbilityCostGameplayEffect>(ability);
             if (!hasCostComponent) return true;
             
             var costComponent = _entityManager.GetComponentData<CAbilityCostGameplayEffect>(ability);
-            bool isInstantEffect = !_entityManager.HasComponent<CDuration>(costComponent.CostGameplayEffect);
+            bool isInstantEffect = !_entityManager.HasComponent<CDuration>(costComponent.ProtoGameplayEffectCost);
             if (!isInstantEffect) return true;
             
-            var modifierBuffer = _entityManager.GetBuffer<BEGameplayEffect>(costComponent.CostGameplayEffect);
+            var modifierBuffer = _entityManager.GetBuffer<BEModifier>(costComponent.ProtoGameplayEffectCost);
+            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+            var attrSets = _entityManager.GetBuffer<BEAttributeSet>(owner);
             foreach (var modifier in modifierBuffer)
             {
-                // var gameplayEffect = modifier.GameplayEffect;
-                // var gameplayEffectSpec = _entityManager.GetComponentData<CGameplayEffectSpec>(gameplayEffect);
-                // var costSpec = _entityManager.GetComponentData<CGameplayEffectSpec>(gameplayEffectSpec.CostSpec);
-                // var costValue = _entityManager.GetComponentData<CGameplayEffectMagnitude>(costSpec.Magnitude);
-                // var attributeCurrentValue = _entityManager.GetComponentData<CAttributeData>(
-                //     _entityManager.GetComponentData<CGameplayEffectAttribute>(costSpec.Attribute).Attribute).Value;
-                // if (costValue.Value < 0)
-                // {
-                //     if (attributeCurrentValue + costValue.Value < 0) return false;
-                // }
-                // else
-                // {
-                //     if (attributeCurrentValue - costValue.Value < 0) return false;
-                // }
+                var opt = modifier.Operation;
+                if (opt != GEOperation.Add && opt != GEOperation.Minus) continue;
+                
+                var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
+                if (attrSetIndex == -1) continue;
+
+                var attrSet = attrSets[attrSetIndex];
+                var attributes = attrSet.Attributes;
+
+                var attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
+                if (attrIndex == -1) continue;
+                
+                var attr = attributes[attrIndex];
+                var costValue = MmcHub.Calculate(costComponent.ProtoGameplayEffectCost, modifier);
+                var attributeCurrentValue = attr.CurrentValue;
+                switch (modifier.Operation)
+                {
+                    case GEOperation.Add when attributeCurrentValue + costValue < 0:
+                    case GEOperation.Minus when attributeCurrentValue - costValue < 0:
+                        return false;
+                }
             }
-            // foreach (var modifier in Ability.Cost.Modifiers)
-            // {
-            //     // 常规来说消耗是减法, 但是加一个负数也应该被视为减法
-            //     if (modifier.Operation != GEOperation.Add && modifier.Operation != GEOperation.Minus) continue;
-            //
-            //     var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
-            //     var attributeCurrentValue =
-            //         Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
-            //     
-            //     if(modifier.Operation == GEOperation.Add)
-            //         if (attributeCurrentValue + costValue < 0) return false;
-            //     
-            //     if(modifier.Operation == GEOperation.Minus)
-            //         if (attributeCurrentValue - costValue < 0) return false;
-            // }
 
             return true;
         }
 
         public static bool CheckCooldownReady(Entity ability)
         {
-            // TODO
-            return true;
+            bool hasCooldownComponent = _entityManager.HasComponent<CAbilityCooldown>(ability);
+            if (!hasCooldownComponent) return true;
+            
+            CAbilityCooldown cooldown = _entityManager.GetComponentData<CAbilityCooldown>(ability);
+            // 没有激活的实例,说明冷却已经结束
+            return cooldown.CooldownGameplayEffectInstance == Entity.Null;
         }
 
         public static void DoCost(Entity ability)
         {
-            // TODO
+            if (!_entityManager.HasComponent<CAbilityCostGameplayEffect>(ability)) return;
+            
+            var costComponent = _entityManager.GetComponentData<CAbilityCostGameplayEffect>(ability);
+            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+            GEUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
+        // TODO
         public static bool TryActivateAbility(Entity ability)
         {
             // var result = CanActivateAbility(ability);
@@ -165,15 +172,30 @@ namespace GAS.RuntimeWithECS.Ability
             return true;
         }
 
+        // TODO
         public static bool TryEndAbility(Entity ability)
         {
-            // if(!_entityManager.HasComponent<CAbilityActive>(ability))
-            //     return false;
-            //
-            // _entityManager.RemoveComponent<CAbilityActive>(ability);
-            return true;
+            // if (!IsActive) return;
+            // IsActive = false;
+            // Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            // EndAbility();
+            
+            bool result = _entityManager.HasComponent<CAbilityActive>(ability);
+
+            if (result)
+            {
+                _entityManager.RemoveComponent<CAbilityActive>(ability);
+                // TODO RestoreGameplayAbilityDynamicTags
+                // RestoreGameplayAbilityDynamicTags(this);
+                var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
+                abilityLogic.Logic.EndAbility();
+                GASEventCenter.InvokeOnEndAbility(ability);
+            }
+            
+            return result;
         }
 
+        // TODO
         public static bool TryCancelAbility(Entity ability)
         {
             // if(!_entityManager.HasComponent<CAbilityActive>(ability))

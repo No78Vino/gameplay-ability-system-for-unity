@@ -5,7 +5,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.AttributeSet.Component
 {
     [InternalBufferCapacity(50)]
-    public struct AttributeSetBufferElement : IBufferElementData
+    public struct BEAttributeSet : IBufferElementData
     {
         public int Code;
         public NativeArray<AttributeData> Attributes;
@@ -13,7 +13,7 @@ namespace GAS.RuntimeWithECS.AttributeSet.Component
 
     public static class AttributeSetBufferElementExtension
     {
-        public static int IndexOfAttrSetCode(this DynamicBuffer<AttributeSetBufferElement> attrSets, int attrSetCode)
+        public static int IndexOfAttrSetCode(this DynamicBuffer<BEAttributeSet> attrSets, int attrSetCode)
         {
             for (var i = 0; i < attrSets.Length; i++)
                 if (attrSets[i].Code == attrSetCode)
