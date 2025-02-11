@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS.Tag;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Core
@@ -267,6 +268,34 @@ namespace GAS.RuntimeWithECS.Core
             if (_onCancelAbility.TryGetValue(abilityEntity, out var action))
                 action?.Invoke();
         }
+        #endregion
+
+        #region Tag 事件
+
+        private static readonly Dictionary<Entity, Action<Entity,int,GameplayTagChangeEvent>> _onTagIsDirty = new();
+        
+        public static void RegisterOnTagIsDirty(Entity entity, Action<Entity,int,GameplayTagChangeEvent> action)
+        {
+            if (!_onTagIsDirty.TryAdd(entity, action))
+                _onTagIsDirty[entity] = (Action<Entity,int,GameplayTagChangeEvent>)Delegate.Combine(_onTagIsDirty[entity], action);
+        }
+        
+        public static void UnRegisterOnTagIsDirty(Entity entity, Action<Entity,int,GameplayTagChangeEvent> action)
+        {
+            if (!_onTagIsDirty.TryGetValue(entity, out var existingAction)) return;
+            var newAction = (Action<Entity,int,GameplayTagChangeEvent>)Delegate.Remove(existingAction, action);
+            if (newAction == null)
+                _onTagIsDirty.Remove(entity);
+            else
+                _onTagIsDirty[entity] = newAction;
+        }
+        
+        public static void InvokeOnTagIsDirty(Entity entity, int tag, GameplayTagChangeEvent changeEvent)
+        {
+            if (_onTagIsDirty.TryGetValue(entity, out var action))
+                action?.Invoke(entity,tag,changeEvent);
+        }
+
         #endregion
     }
 }

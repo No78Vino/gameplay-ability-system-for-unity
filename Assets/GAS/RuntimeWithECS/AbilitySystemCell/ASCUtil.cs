@@ -1,5 +1,6 @@
 ﻿using System;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
@@ -226,6 +227,89 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             }
 
             return isValueChanged;
+        }
+
+        #endregion
+
+
+        #region Tag管理相关工具函数
+
+        private static bool TryRemoveDynamicAddedTag(Entity asc,Entity source,int tag)
+        {
+            var dirty = false;
+
+            // if (source is GameplayEffectSpec || source is AbilitySpec)
+            // {
+            //     var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
+            //     if (hasValue)
+            //     {
+            //         tagList.Remove(source);
+            //
+            //         dirty = tagList.Count == 0;
+            //         if (dirty)
+            //         {
+            //             _pool.Return(tagList);
+            //             
+            //             dynamicTag.Remove(tag); // 有 GC
+            //         }
+            //     }
+            // }
+            
+            return dirty;
+        }
+        
+        // TODO
+        public static void RestoreDynamicTags(Entity asc,Entity source,NativeArray<int> tags)
+        {
+            var tagIsDirty = false;
+            foreach (var tag in tags)
+            {
+                var dirty = TryRemoveDynamicAddedTag(asc,source, tag);
+                tagIsDirty = tagIsDirty || dirty;
+            }
+
+            if (tagIsDirty)
+            {
+                if (tags.Length > 0)
+                {
+                    //GASEventCenter.InvokeOnTagIsDirty(asc,tag,eventType);
+                }
+            }
+        }
+        
+        public static void RestoreDynamicTags(Entity source)
+        {
+            // 如果是ability
+            bool hasAbilityBaseInfo = _entityManager.HasComponent<CAbilityBaseInfo>(source);
+            if (hasAbilityBaseInfo)
+            {
+                bool hasActivationOwnedTags = _entityManager.HasComponent<CAbilityActivationOwnedTags>(source);
+                if (hasActivationOwnedTags)
+                {
+                    var activationOwnedTags = _entityManager.GetComponentData<CAbilityActivationOwnedTags>(source);
+                    if (_entityManager.HasComponent<CAbilityBaseInfo>(source))
+                    {
+                        var abilityBaseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(source);
+                        RestoreDynamicTags(abilityBaseInfo.Owner, source,activationOwnedTags.tags);
+                    }
+                }
+            }
+            
+            // 如果是durational effect
+            bool hasDuration = _entityManager.HasComponent<CDuration>(source);
+            if (hasDuration)
+            {
+                bool hasGrantedTags = _entityManager.HasComponent<CGrantedTags>(source);
+                if (hasGrantedTags)
+                {
+                    var grantedTags = _entityManager.GetComponentData<CGrantedTags>(source);
+                    if (_entityManager.HasComponent<CInUsage>(source))
+                    {
+                        var inUsage = _entityManager.GetComponentData<CInUsage>(source);
+                        RestoreDynamicTags(inUsage.Target,source,grantedTags.tags);
+                    }
+                }
+            }
         }
 
         #endregion

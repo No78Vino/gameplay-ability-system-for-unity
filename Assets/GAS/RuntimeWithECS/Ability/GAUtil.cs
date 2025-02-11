@@ -185,7 +185,8 @@ namespace GAS.RuntimeWithECS.Ability
             if (result)
             {
                 _entityManager.RemoveComponent<CAbilityActive>(ability);
-                RestoreDynamicTags(ability);
+                var abilityBaseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(ability);
+                ASCUtil.RestoreDynamicTags(ability);
                 var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
                 abilityLogic.Logic.EndAbility();
                 GASEventCenter.InvokeOnEndAbility(ability);
@@ -221,20 +222,6 @@ namespace GAS.RuntimeWithECS.Ability
                 if (GTagUtil.HasTag(assetTag, tag))
                     return true;
             return false;
-        }
-        
-        // TODO
-        public static void RestoreDynamicTags(Entity source)
-        {
-            // 
-            var tagIsDirty = false;
-            // foreach (var tag in tagSet.Tags)
-            // {
-            //     var dirty = TryRemoveDynamicAddedTag(source, tag);
-            //     tagIsDirty = tagIsDirty || dirty;
-            // }
-            //
-            // if (tagIsDirty) TagIsDirty(tagSet);
         }
     }
 }
