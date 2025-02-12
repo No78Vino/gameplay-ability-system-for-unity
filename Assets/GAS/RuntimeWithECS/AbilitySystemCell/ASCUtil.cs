@@ -258,23 +258,11 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             return dirty;
         }
         
-        // TODO
         public static void RestoreDynamicTags(Entity asc,Entity source,NativeArray<int> tags)
         {
-            var tagIsDirty = false;
             foreach (var tag in tags)
-            {
-                var dirty = TryRemoveDynamicAddedTag(asc,source, tag);
-                tagIsDirty = tagIsDirty || dirty;
-            }
-
-            if (tagIsDirty)
-            {
-                if (tags.Length > 0)
-                {
-                    //GASEventCenter.InvokeOnTagIsDirty(asc,tag,eventType);
-                }
-            }
+                if( TryRemoveDynamicAddedTag(asc,source, tag))
+                    GASEventCenter.InvokeOnTagIsDirty(asc,tag,GameplayTagChangeEvent.RemoveTag);
         }
         
         public static void RestoreDynamicTags(Entity source)

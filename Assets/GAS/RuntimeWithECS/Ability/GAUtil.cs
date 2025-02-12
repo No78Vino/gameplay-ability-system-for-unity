@@ -171,21 +171,13 @@ namespace GAS.RuntimeWithECS.Ability
             // _entityManager.AddComponentData(ability, new CAbilityActive());
             return true;
         }
-
-        // TODO
+        
         public static bool TryEndAbility(Entity ability)
         {
-            // if (!IsActive) return;
-            // IsActive = false;
-            // Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
-            // EndAbility();
-            
             bool result = _entityManager.HasComponent<CAbilityActive>(ability);
-
             if (result)
             {
                 _entityManager.RemoveComponent<CAbilityActive>(ability);
-                var abilityBaseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(ability);
                 ASCUtil.RestoreDynamicTags(ability);
                 var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
                 abilityLogic.Logic.EndAbility();
