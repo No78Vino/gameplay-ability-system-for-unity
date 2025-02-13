@@ -238,6 +238,41 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             var dirty = false;
 
+            // effect
+            if (_entityManager.HasComponent<CInUsage>(source))
+            {
+                var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
+                if (hasValue)
+                {
+                    tagList.Remove(source);
+                
+                    dirty = tagList.Count == 0;
+                    if (dirty)
+                    {
+                        _pool.Return(tagList);
+                        dynamicTag.Remove(tag); // 有 GC
+                    }
+                }
+            }
+            
+            // ability
+            if (_entityManager.HasComponent<CAbilityBaseInfo>(source))
+            {
+                //     var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
+                //     if (hasValue)
+                //     {
+                //         tagList.Remove(source);
+                //
+                //         dirty = tagList.Count == 0;
+                //         if (dirty)
+                //         {
+                //             _pool.Return(tagList);
+                //             
+                //             dynamicTag.Remove(tag); // 有 GC
+                //         }
+                //     }
+            }
+            
             // if (source is GameplayEffectSpec || source is AbilitySpec)
             // {
             //     var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
