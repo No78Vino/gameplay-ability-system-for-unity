@@ -182,10 +182,10 @@ MonoBehaviour:
   m_LegacyBlendHint: 0
   m_YAxis:
     Value: 1
-    m_SpeedMode: 0
+    m_SpeedMode: 1
     m_MaxSpeed: 0
-    m_AccelTime: 0.2
-    m_DecelTime: 0.1
+    m_AccelTime: 0
+    m_DecelTime: 0.05
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 0
@@ -233,13 +233,13 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_BindingMode: 5
-  m_SplineCurvature: 0.2
+  m_SplineCurvature: 0.432
   m_Orbits:
-  - m_Height: 5
-    m_Radius: 3
-  - m_Height: 2
-    m_Radius: 2
-  - m_Height: 0.5
+  - m_Height: 5.74
+    m_Radius: 3.46
+  - m_Height: 2.6
+    m_Radius: 4.07
+  - m_Height: 0
     m_Radius: 3
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
@@ -255,7 +255,7 @@ Transform:
   m_GameObject: {fileID: 97749091}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4870443, y: 6, z: -2.6055133}
+  m_LocalPosition: {x: 1.7150577, y: 6.74, z: -3.0050254}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -437,7 +437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240533488}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.47622654, y: -0.22313084, z: 0.12633453, w: 0.8411067}
+  m_LocalRotation: {x: 0.4753653, y: -0.22326002, z: 0.12610608, w: 0.8415937}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -621,7 +621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758145697}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.46084845, y: -0.22539195, z: 0.122255035, w: 0.8496299}
+  m_LocalRotation: {x: 0.45997858, y: -0.22551689, z: 0.12202421, w: 0.8501012}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -806,8 +806,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.47622654, y: -0.22313085, z: 0.12633453, w: 0.8411067}
-  m_LocalPosition: {x: 1.4870443, y: 6, z: -2.6055133}
+  m_LocalRotation: {x: 0.47536543, y: -0.22326006, z: 0.12610611, w: 0.8415937}
+  m_LocalPosition: {x: 1.7150577, y: 6.74, z: -3.0050254}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -921,10 +921,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5, z: -3}
+  m_FollowOffset: {x: 0, y: 5.74, z: -3.46}
   m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_YDamping: 12
+  m_ZDamping: 12.9
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -1186,10 +1186,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5, z: -3}
+  m_FollowOffset: {x: 0, y: 5.74, z: -3.46}
   m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_YDamping: 13.8
+  m_ZDamping: 13.7
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -1387,11 +1387,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 10
-  jumpHeight: 2
-  gravity: -20
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
   freeLookCamera: {fileID: 97749092}
   cameraSensitivity: 2
 --- !u!1 &1983821808
@@ -1465,8 +1460,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1983821808}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4453591, y: -0.22757268, z: 0.11814595, w: 0.85785055}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.03511052, y: -0.25624406, z: -0.009314225, w: 0.9659293}
+  m_LocalPosition: {x: -0.2280134, y: -5.74, z: 0.39951205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1547,10 +1542,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5, z: -3}
+  m_FollowOffset: {x: 0, y: 5.74, z: -3.46}
   m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_YDamping: 13.1
+  m_ZDamping: 14.4
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0

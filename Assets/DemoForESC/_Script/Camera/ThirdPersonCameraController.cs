@@ -4,16 +4,11 @@ using UnityEngine;
 namespace DemoForESC._Script.Camera
 {
     [RequireComponent(typeof(CharacterController))]
-    public class ThirdPersonController : MonoBehaviour
+    public class ThirdPersonCameraController : MonoBehaviour
     {
         [Header("Movement")]
         public float moveSpeed = 5f;
         public float rotationSpeed = 10f;
-    
-        [Header("Jump")]
-        public float jumpHeight = 2f;
-        public float gravity = -20f;
-        public LayerMask groundLayer;
     
         [Header("Camera")]
         public CinemachineFreeLook freeLookCamera;
@@ -42,7 +37,6 @@ namespace DemoForESC._Script.Camera
         {
             HandleMovement();
             HandleCameraRotation();
-            HandleJump();
         }
 
         private void HandleMovement()
@@ -85,25 +79,6 @@ namespace DemoForESC._Script.Camera
             // 控制相机旋转
             freeLookCamera.m_XAxis.Value += mouseX;
             freeLookCamera.m_YAxis.Value -= mouseY; // 注意Y轴需要反转
-        }
-
-        private void HandleJump()
-        {
-            _isGrounded = _controller.isGrounded;
-
-            if (_isGrounded)
-            {
-                _verticalVelocity = -1f; // 轻微向下的力确保接地
-
-                if (Input.GetButtonDown("Jump"))
-                {
-                    _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                }
-            }
-
-            _verticalVelocity += gravity * Time.deltaTime;
-            _velocity.y = _verticalVelocity;
-            _controller.Move(_velocity * Time.deltaTime);
         }
     }
 }
