@@ -3,82 +3,167 @@ using UnityEngine;
 
 namespace DemoForESC._Script.Camera
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(CinemachineFreeLook))]
     public class ThirdPersonCameraController : MonoBehaviour
     {
-        [Header("Movement")]
-        public float moveSpeed = 5f;
-        public float rotationSpeed = 10f;
-    
-        [Header("Camera")]
-        public CinemachineFreeLook freeLookCamera;
-        public float cameraSensitivity = 2f;
+        [Header("核心配置")]
+        [Tooltip("锁定跟踪的目标物体")]
+        public Transform trackingTarget;
+        [Range(1f, 15f), Tooltip("相机跟随距离")]
+        public float followDistance = 5f;
 
-        private CharacterController _controller;
-        private Vector3 _velocity;
-        private float _verticalVelocity;
-        private bool _isGrounded;
+        [Header("灵敏度控制")]
+        [Range(0.1f, 5f), Tooltip("水平旋转灵敏度")]
+        public float xSensitivity = 1.5f;
+        [Range(0.1f, 5f), Tooltip("垂直旋转灵敏度")]
+        public float ySensitivity = 0.8f;
+
+        [Header("阻尼系统")]
+        [Range(0f, 1f), Tooltip("水平阻尼时间")]
+        public float xDamping = 0.2f;
+        [Range(0f, 1f), Tooltip("垂直阻尼时间")]
+        public float yDamping = 0.3f;
+        [Range(0f, 2f), Tooltip("自动回中时间")]
+        public float autoCenterDelay = 1f;
+
+        [Header("轨道配置")]
+        [SerializeField, Range(0.5f, 5f)] 
+        private float _topRigHeight = 4f;
+        [SerializeField, Range(0.5f, 5f)] 
+        private float _middleRigHeight = 2.5f;
+        [SerializeField, Range(0.5f, 5f)] 
+        private float _bottomRigHeight = 1f;
+        [SerializeField] 
+        private Vector3 _followOffset = new Vector3(0, 1.8f, 0);
+
+        [Header("碰撞检测")]
+        [Range(0.1f, 3f), Tooltip("避障检测距离")]
+        public float collisionDistance = 1f;
+        [Range(0f, 1f), Tooltip("避障阻尼")]
+        public float collisionDamping = 0.2f;
+
+        private CinemachineFreeLook _freeLookCam;
+        private CinemachineCollider _cameraCollider;
+        private float _xVelocity;
+        private float _yVelocity;
 
         private void Awake()
         {
-            _controller = GetComponent<CharacterController>();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            InitializeComponents();
+            ConfigureCamera();
+            SetupCollisionSystem();
+        }
 
-            // 配置相机输入
-            if (freeLookCamera)
+        private void InitializeComponents()
+        {
+            _freeLookCam = GetComponent<CinemachineFreeLook>();
+            _cameraCollider = GetComponent<CinemachineCollider>() ?? gameObject.AddComponent<CinemachineCollider>();
+        }
+
+        private void ConfigureCamera()
+        {
+            if (trackingTarget)
             {
-                freeLookCamera.m_XAxis.m_MaxSpeed = 0; // 禁用Cinemachine自带的X轴控制
-                freeLookCamera.m_YAxis.m_MaxSpeed = 0; // 禁用Y轴控制
+                _freeLookCam.Follow = trackingTarget;
+                _freeLookCam.LookAt = trackingTarget;
             }
+
+            // 初始化轨道参数
+            UpdateOrbitParameters();
+            ApplyCommonSettings();
+        }
+
+        private void ApplyCommonSettings()
+        {
+            // 基础配置
+            _freeLookCam.m_Lens.FieldOfView = 40;
+            _freeLookCam.m_CommonLens = true;
+
+            // 禁用Cinemachine自带输入
+            _freeLookCam.m_XAxis.m_MaxSpeed = 0;
+            _freeLookCam.m_YAxis.m_MaxSpeed = 0;
+
+            // 自动居中配置
+            var recenter = _freeLookCam.m_RecenterToTargetHeading;
+            recenter.m_enabled = true;
+            recenter.m_WaitTime = autoCenterDelay;
+            recenter.m_RecenteringTime = autoCenterDelay * 0.5f;
+        }
+
+        private void SetupCollisionSystem()
+        {
+            _cameraCollider.m_Strategy = CinemachineCollider.ResolutionStrategy.PullCameraForward;
+            _cameraCollider.m_DistanceLimit = collisionDistance;
+            _cameraCollider.m_Damping = collisionDamping;
         }
 
         private void Update()
         {
-            HandleMovement();
+            if (!trackingTarget) return;
+
             HandleCameraRotation();
-        }
-
-        private void HandleMovement()
-        {
-            // 获取输入
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-
-            // 获取相机方向
-            Vector3 cameraForward = freeLookCamera.transform.forward;
-            Vector3 cameraRight = freeLookCamera.transform.right;
-            cameraForward.y = 0;
-            cameraRight.y = 0;
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            // 计算移动方向
-            Vector3 moveDirection = (cameraForward * vertical + cameraRight * horizontal).normalized;
-            Vector3 movement = moveDirection * moveSpeed * Time.deltaTime;
-
-            // 应用移动
-            _controller.Move(movement);
-
-            // 角色朝向移动方向
-            if (moveDirection != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            }
+            UpdateDynamicParameters();
         }
 
         private void HandleCameraRotation()
         {
-            if (!freeLookCamera) return;
+            float targetX = Input.GetAxis("Mouse X") * xSensitivity;
+            float targetY = Input.GetAxis("Mouse Y") * ySensitivity;
 
-            // 获取鼠标输入
-            float mouseX = Input.GetAxis("Mouse X") * cameraSensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * cameraSensitivity;
+            _freeLookCam.m_XAxis.Value += Mathf.SmoothDamp(0, targetX, ref _xVelocity, xDamping);
+            _freeLookCam.m_YAxis.Value -= Mathf.SmoothDamp(0, targetY, ref _yVelocity, yDamping);
+        }
 
-            // 控制相机旋转
-            freeLookCamera.m_XAxis.Value += mouseX;
-            freeLookCamera.m_YAxis.Value -= mouseY; // 注意Y轴需要反转
+        private void UpdateDynamicParameters()
+        {
+            // 更新轨道参数
+            UpdateOrbitParameters();
+
+            // 更新跟踪偏移
+            var composer = _freeLookCam.GetRig(0).GetCinemachineComponent<CinemachineComposer>();
+            composer.m_TrackedObjectOffset = _followOffset;
+
+            // 更新碰撞参数
+            _cameraCollider.m_DistanceLimit = collisionDistance;
+            _cameraCollider.m_Damping = collisionDamping;
+        }
+
+        private void UpdateOrbitParameters()
+        {
+            SetOrbit(0, _topRigHeight);    // 上轨道
+            SetOrbit(1, _middleRigHeight);  // 中轨道
+            SetOrbit(2, _bottomRigHeight);  // 下轨道
+        }
+
+        private void SetOrbit(int rigIndex, float height)
+        {
+            var orbit = _freeLookCam.m_Orbits[rigIndex];
+            orbit.m_Height = height;
+            orbit.m_Radius = followDistance;
+            _freeLookCam.m_Orbits[rigIndex] = orbit;
+        }
+
+        private void OnValidate()
+        {
+            if (!_freeLookCam)
+            {
+                _freeLookCam = GetComponent<CinemachineFreeLook>();
+                _cameraCollider = GetComponent<CinemachineCollider>() ?? gameObject.AddComponent<CinemachineCollider>();
+            }
+            if (_freeLookCam) UpdateDynamicParameters();
+        }
+
+        public void SetTrackingTarget(Transform newTarget)
+        {
+            trackingTarget = newTarget;
+            _freeLookCam.Follow = trackingTarget;
+            _freeLookCam.LookAt = trackingTarget;
+        }
+
+        public void ResetCameraRotation()
+        {
+            _freeLookCam.m_XAxis.Value = 0;
+            _freeLookCam.m_YAxis.Value = 0.5f; // 默认中间视角
         }
     }
 }
