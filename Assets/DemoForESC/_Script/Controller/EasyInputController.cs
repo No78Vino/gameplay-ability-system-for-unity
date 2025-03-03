@@ -72,9 +72,9 @@ namespace DemoForESC._Script.Controller
 
                 // 移动执行
                 var motion = _movement * _currentSpeed * Time.deltaTime;
-                transform.localPosition +=motion;
-                //_controller.Move(motion);
+                _controller.Move(motion);
             }
+            Debug.Log("UpdateMovement:"+_movement);
         }
 
         // 供动画系统调用的参数

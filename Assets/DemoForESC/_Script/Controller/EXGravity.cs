@@ -2,7 +2,6 @@
 
 namespace DemoForESC._Script
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class EXGravity : MonoBehaviour
     {
         [Header("基础设置")] [Tooltip("启用/禁用重力")] public bool gravityEnabled = true;
@@ -19,12 +18,8 @@ namespace DemoForESC._Script
         private float _groundAngleThreshold;
         private bool _isGrounded;
 
-        private Rigidbody _rb;
-
         private void Awake()
         {
-            _rb = GetComponent<Rigidbody>();
-            _rb.useGravity = false; // 禁用Unity原生重力
             _groundAngleThreshold = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
         }
 
@@ -53,7 +48,8 @@ namespace DemoForESC._Script
         private void ApplyCustomGravity()
         {
             var gravity = gravityScale * Physics.gravity;
-            _rb.AddForce(gravity, ForceMode.Acceleration);
+            var motion = gravity * Time.fixedDeltaTime;
+            transform.position += motion;
         }
 
         private void CheckGroundStatus()
