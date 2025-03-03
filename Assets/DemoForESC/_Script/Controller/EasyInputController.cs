@@ -14,9 +14,7 @@ namespace DemoForESC._Script.Controller
 
         [SerializeField] [Range(0f, 0.3f)] private float rotationOffset = 0.1f; // 转身缓冲
 
-        [Header("地面检测")] [SerializeField] private LayerMask groundLayer = 1; // 地面层级
 
-        [SerializeField] [Range(0.1f, 1f)] private float groundCheckDistance = 0.5f;
 
         private Vector3 _cameraForward;
 
@@ -36,7 +34,6 @@ namespace DemoForESC._Script.Controller
         {
             HandleInput();
             UpdateMovement();
-            ApplyGravity();
         }
 
         private void HandleInput()
@@ -77,21 +74,6 @@ namespace DemoForESC._Script.Controller
                 var motion = _movement * _currentSpeed * Time.deltaTime;
                 _controller.Move(motion);
             }
-        }
-
-        private void ApplyGravity()
-        {
-            if (!IsGrounded()) _controller.Move(Physics.gravity * Time.deltaTime);
-        }
-
-        private bool IsGrounded()
-        {
-            return Physics.Raycast(
-                transform.position + _controller.center,
-                Vector3.down,
-                _controller.height / 2 + groundCheckDistance,
-                groundLayer
-            );
         }
 
         // 供动画系统调用的参数
