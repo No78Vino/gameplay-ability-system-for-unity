@@ -10,7 +10,7 @@ namespace DemoForESC._Script.Controller
 
         [SerializeField] [Range(5f, 10f)] private float runSpeed = 5f; // 奔跑速度
 
-        [SerializeField] [Range(0.1f, 1f)] private float acceleration = 0.5f; // 加速时间
+        [SerializeField] [Range(0.1f, 3f)] private float acceleration = 0.5f; // 加速时间
 
         [SerializeField] [Range(0f, 0.3f)] private float rotationOffset = 0.1f; // 转身缓冲
 
@@ -72,7 +72,8 @@ namespace DemoForESC._Script.Controller
 
                 // 移动执行
                 var motion = _movement * _currentSpeed * Time.deltaTime;
-                _controller.Move(motion);
+                transform.Translate(motion);
+                //_controller.Move(motion);
             }
         }
 
