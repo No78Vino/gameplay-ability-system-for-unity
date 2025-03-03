@@ -89,7 +89,20 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region Attribute
 
-        
+        public bool TryActivateAbility(int abilityCode, params object[] args)
+        {
+            return _abilityController.TryActivateAbility(abilityCode, args);
+        }
+
+        public void TryEndAbility(int abilityCode)
+        {
+            _abilityController.EndAbility(abilityCode);
+        }
+
+        public void TryCancelAbility(int abilityCode)
+        {
+            _abilityController.CancelAbility(abilityCode);
+        }
 
         #endregion
         

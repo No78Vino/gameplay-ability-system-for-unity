@@ -1338,9 +1338,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a097f0a3c3224932b1b4aff70bde44ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0.11
-  runSpeed: 5
-  acceleration: 0.1
+  walkSpeed: 3
+  runSpeed: 6
+  acceleration: 3
   rotationOffset: 0.1
 --- !u!143 &1602959553
 CharacterController:
@@ -1381,7 +1381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityEnabled: 1
-  gravityScale: 2.15
+  gravityScale: 1
   groundLayer:
     serializedVersion: 2
     m_Bits: 1

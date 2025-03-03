@@ -78,7 +78,7 @@ namespace GAS.RuntimeWithECS.Ability
             return false;
         }
         
-        public void TryActivateAbility(int abilityCode, params object[] args)
+        public bool TryActivateAbility(int abilityCode, params object[] args)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)
@@ -93,6 +93,8 @@ namespace GAS.RuntimeWithECS.Ability
                     break;
                 }
             }
+
+            return false;
         }
         
         public void EndAbility(int abilityCode)
