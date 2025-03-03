@@ -5,10 +5,10 @@ namespace DemoForESC._Script.Controller
     [RequireComponent(typeof(CharacterController))]
     public class EasyInputController : MonoBehaviour
     {
-        [Header("移动参数")] [SerializeField] [Range(1f, 5f)]
+        [Header("移动参数")] [SerializeField] [Range(0f, 5f)]
         private float walkSpeed = 2.5f; // 行走速度
 
-        [SerializeField] [Range(5f, 10f)] private float runSpeed = 5f; // 奔跑速度
+        [SerializeField] [Range(0f, 10f)] private float runSpeed = 5f; // 奔跑速度
 
         [SerializeField] [Range(0.1f, 3f)] private float acceleration = 0.5f; // 加速时间
 
@@ -72,7 +72,7 @@ namespace DemoForESC._Script.Controller
 
                 // 移动执行
                 var motion = _movement * _currentSpeed * Time.deltaTime;
-                transform.Translate(motion);
+                transform.localPosition +=motion;
                 //_controller.Move(motion);
             }
         }
