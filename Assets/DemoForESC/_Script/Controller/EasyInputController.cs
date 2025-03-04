@@ -14,6 +14,8 @@ namespace DemoForESC._Script.Controller
 
         [SerializeField] [Range(0f, 0.3f)] private float rotationOffset = 0.1f; // 转身缓冲
 
+        [SerializeField]
+        private DemoPlayer demoPlayer;
 
 
         private Vector3 _cameraForward;
@@ -62,19 +64,19 @@ namespace DemoForESC._Script.Controller
             // 应用移动
             if (_movement.magnitude > 0.1f)
             {
-                // 保持角色面向相机方向（带缓冲）
-                var targetRotation = Quaternion.LookRotation(_cameraForward);
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    targetRotation,
-                    rotationOffset * Time.deltaTime * 100
-                );
-
-                // 移动执行
-                var motion = _movement * _currentSpeed * Time.deltaTime;
-                _controller.Move(motion);
+                if(demoPlayer != null) demoPlayer.Move(_movement);
+                // // 保持角色面向相机方向（带缓冲）
+                // var targetRotation = Quaternion.LookRotation(_cameraForward);
+                // transform.rotation = Quaternion.Slerp(
+                //     transform.rotation,
+                //     targetRotation,
+                //     rotationOffset * Time.deltaTime * 100
+                // );
+                //
+                // // 移动执行
+                // var motion = _movement * _currentSpeed * Time.deltaTime;
+                // _controller.Move(motion);
             }
-            Debug.Log("UpdateMovement:"+_movement);
         }
 
         // 供动画系统调用的参数
