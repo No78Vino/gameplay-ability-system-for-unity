@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Core;
 using Unity.Entities;
@@ -78,7 +79,7 @@ namespace GAS.RuntimeWithECS.Ability
             return false;
         }
         
-        public bool TryActivateAbility(int abilityCode, params object[] args)
+        public void TryActivateAbility(int abilityCode, params object[] args)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)
@@ -87,14 +88,10 @@ namespace GAS.RuntimeWithECS.Ability
                 var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code == abilityCode)
                 {
-                    // TODO
-                    // var ability = GasEntityManager.GetComponentObject<AbstractAbility>(a);
-                    // ability.TryActivateAbility(args);
+                    GasEntityManager.AddComponent<CAbilityInTryActivate>(a);
                     break;
                 }
             }
-
-            return false;
         }
         
         public void EndAbility(int abilityCode)

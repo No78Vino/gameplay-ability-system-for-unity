@@ -19,7 +19,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             _abilitySystemCell.Init(baseTags, attrSets, null);
         }
 
-        public bool TryActivateAbility(int abilityId, params object[] args) =>
+        public void TryActivateAbility(int abilityId, params object[] args) =>
             _abilitySystemCell.TryActivateAbility(abilityId, args);
 
         public void TryEndAbility(int abilityCode) => _abilitySystemCell.TryEndAbility(abilityCode);

@@ -1,9 +1,9 @@
-using Unity.Burst;
+using GAS.RuntimeWithECS.System.SystemGroup.LogicTick;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.SystemGroup
 {
-    [UpdateInGroup(typeof(SysGroupLogic))]
+    [UpdateInGroup(typeof(SysGroupTickAbility))]
     public partial class SysGroupAbility : ComponentSystemGroup
     {
     }
