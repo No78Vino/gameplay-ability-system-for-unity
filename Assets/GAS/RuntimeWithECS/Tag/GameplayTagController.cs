@@ -38,7 +38,7 @@ namespace GAS.RuntimeWithECS.Tag
             return false;
         }
 
-        private bool HasTemporaryTag(int tag)
+        private bool HasAnyTemporaryTag(int tag)
         {
             var temporaryTags = DynamicBufferTemporaryTags;
             foreach (var t in temporaryTags)
@@ -47,6 +47,8 @@ namespace GAS.RuntimeWithECS.Tag
             return false;
         }
 
+        private bool HasTemporaryTag(Entity source, int tag) => GTagUtil.HasTemporaryTag(_asc, source, tag);
+        
         private void KillFixedTag(int tag)
         {
             var fixedTags = DynamicBufferFixedTags;
@@ -85,7 +87,7 @@ namespace GAS.RuntimeWithECS.Tag
             bool hasFixedTag = HasFixedTag(tag);
             if (hasFixedTag) return true;
 
-            bool hasTemporary = HasTemporaryTag(tag);
+            bool hasTemporary = HasAnyTemporaryTag(tag);
             return hasTemporary;
         }
 
@@ -100,7 +102,7 @@ namespace GAS.RuntimeWithECS.Tag
             if (HasFixedTag(tag)) return false;
             
             DynamicBufferFixedTags.Add(new BFixedTag { tag = tag });
-            bool containTemporary = HasTemporaryTag(tag);
+            bool containTemporary = HasAnyTemporaryTag(tag);
             // 从临时tag中剔除
             if (containTemporary) KillTemporaryTag(tag);
             return !containTemporary;
@@ -114,14 +116,14 @@ namespace GAS.RuntimeWithECS.Tag
             return dirty;
         }
 
-        public void RemoveFixedTag(int tag)
+        public bool AddTemporaryTag(Entity source, int tag) => GTagUtil.AddTemporaryTagTo(_asc, source, tag);
+        
+        public bool AddTemporaryTags(Entity source,int[] tags)
         {
-            
-        }
-
-        public void RemoveTags(int[] tags)
-        {
-            
+            bool dirty = false;
+            foreach (var tag in tags)
+                dirty |= AddTemporaryTag(source,tag);
+            return dirty;
         }
     }
 }

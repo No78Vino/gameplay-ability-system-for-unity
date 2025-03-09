@@ -6,6 +6,5 @@ namespace GAS.RuntimeWithECS.Tag.Component
     {
         public int tag;
         public Entity source;
-        public GameplayTagSourceType sourceType;
     }
 }

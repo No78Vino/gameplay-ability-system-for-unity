@@ -30,11 +30,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                 var tags = grantedTags.ValueRO.tags;
                 var buff = state.EntityManager.GetBuffer<BTemporaryTag>(owner);
                 foreach (var tag in tags)
-                {
-                    var temTag = new BTemporaryTag
-                        { tag = tag, source = ge, sourceType = GameplayTagSourceType.GameplayEffect };
-                    buff.Add(temTag);
-                }
+                    buff.Add(new BTemporaryTag { tag = tag, source = ge });
             }
         }
 

@@ -160,16 +160,23 @@ namespace GAS.RuntimeWithECS.Ability
             GEUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
-        // TODO
-        public static bool TryActivateAbility(Entity ability)
+        public static AbilityActivationResult TryActivateAbility(Entity ability)
         {
-            // var result = CanActivateAbility(ability);
-            // if (result != AbilityActivationResult.Success)
-            //     return false;
-            //
-            // DoCost(ability);
-            // _entityManager.AddComponentData(ability, new CAbilityActive());
-            return true;
+            var result = CanActivateAbility(ability);
+            if (result == AbilityActivationResult.Success)
+            {
+                var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+                var abilityActivationOwnedTags = _entityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
+                foreach (var tag in abilityActivationOwnedTags.tags)
+                    GTagUtil.AddTemporaryTagTo(owner, ability, tag);
+                
+                _entityManager.AddComponentData(ability, new CAbilityActive());
+                
+                var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
+                abilityLogic.Logic.ActivateAbility();
+            }
+            GASEventCenter.InvokeOnActivateResult(ability, result);
+            return result;
         }
         
         public static bool TryEndAbility(Entity ability)
@@ -186,14 +193,18 @@ namespace GAS.RuntimeWithECS.Ability
             
             return result;
         }
-
-        // TODO
+        
         public static bool TryCancelAbility(Entity ability)
         {
-            // if(!_entityManager.HasComponent<CAbilityActive>(ability))
-            //     return false;
-            //
-            // _entityManager.RemoveComponent<CAbilityActive>(ability);
+            bool result = _entityManager.HasComponent<CAbilityActive>(ability);
+            if (result)
+            {
+                _entityManager.RemoveComponent<CAbilityActive>(ability);
+                ASCUtil.RestoreDynamicTags(ability);
+                var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
+                abilityLogic.Logic.CancelAbility();
+                GASEventCenter.InvokeOnCancelAbility(ability);
+            }
             return true;
         }
 

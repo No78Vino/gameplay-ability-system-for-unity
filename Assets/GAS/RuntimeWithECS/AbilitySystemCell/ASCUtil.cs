@@ -234,6 +234,11 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region Tag管理相关工具函数
 
+        public static void TryAddDynamicAddedTag(Entity asc, Entity source, int tag)
+        {
+            GTagUtil.AddTemporaryTagTo(asc, source, tag);
+        }
+        
         private static bool TryRemoveDynamicAddedTag(Entity asc,Entity source,int tag)
         {
             var dirty = false;

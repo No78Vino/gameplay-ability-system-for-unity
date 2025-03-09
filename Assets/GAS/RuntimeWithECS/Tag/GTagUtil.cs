@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
+using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Tag
 {
@@ -41,6 +42,24 @@ namespace GAS.RuntimeWithECS.Tag
             if (_tagMap.ContainsKey(tagA) && _tagMap.ContainsKey(tagB))
                 return _tagMap[tagA].HasTag(_tagMap[tagB]);
             return false;
+        }
+        
+        public static bool HasTemporaryTag(Entity asc,Entity source,int tag)
+        {
+            var temporaryTags = GASManager.EntityManager.GetBuffer<BTemporaryTag>(asc);
+            foreach (var t in temporaryTags)
+                if (t.source==source && HasTag(t.tag, tag))
+                    return true;
+            return false;
+        }
+
+        public static bool AddTemporaryTagTo(Entity ascTarget,Entity source,int tag)
+        {
+            var temporaryTags = GASManager.EntityManager.GetBuffer<BTemporaryTag>(ascTarget);
+            if(HasTemporaryTag(ascTarget,source,tag))
+                return false;
+            temporaryTags.Add(new BTemporaryTag {source = source,tag = tag});
+            return true;
         }
     }
 }
