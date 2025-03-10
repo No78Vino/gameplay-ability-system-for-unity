@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GAS.RuntimeWithECS.Ability.Component;
+using UnityEngine;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
 {
@@ -19,8 +20,8 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             _abilitySystemCell.Init(baseTags, attrSets, null);
         }
 
-        public void TryActivateAbility(int abilityId, params object[] args) =>
-            _abilitySystemCell.TryActivateAbility(abilityId, args);
+        public void TryActivateAbility(int abilityId, AbilityParamBase param = null) =>
+            _abilitySystemCell.TryActivateAbility(abilityId, param);
 
         public void TryEndAbility(int abilityCode) => _abilitySystemCell.TryEndAbility(abilityCode);
 

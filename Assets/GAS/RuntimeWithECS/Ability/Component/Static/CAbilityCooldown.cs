@@ -1,3 +1,5 @@
+using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability.Component.Static
@@ -17,5 +19,21 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
         ///  冷却GE的实例
         /// </summary>
         public Entity CooldownGameplayEffectInstance;
+    }
+    
+    public sealed class ConfAbilityCooldown:GameplayAbilityComponentConfig
+    {
+        public float Cooldown;
+        public GameplayEffectComponentConfig[] CooldownComponentConfigs;
+        
+        public override void LoadToGameplayAbilityEntity(Entity ability)
+        {
+            
+            _entityManager.AddComponentData(ability, new CAbilityCooldown
+            {
+                Cooldown = Cooldown,
+                ProtoGameplayEffectCooldown = GEUtil.CreateGameplayEffectEntity(CooldownComponentConfigs),
+            });
+        }
     }
 }

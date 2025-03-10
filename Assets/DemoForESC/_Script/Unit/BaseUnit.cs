@@ -1,4 +1,5 @@
 using DemoForESC._Script.Gen;
+using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,7 +20,8 @@ namespace DemoForESC._Script
         
         public virtual void Move(Vector3 direction)
         {
-            _abilitySystemCellMono.TryActivateAbility(Gen_AbilityCode.Move, direction);
+            var param = new AbilityParamVector3(direction);
+            _abilitySystemCellMono.TryActivateAbility(Gen_AbilityCode.Move,param);
         }
         
         public virtual void Jump()

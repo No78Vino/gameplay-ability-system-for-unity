@@ -103,10 +103,10 @@ namespace GAS.RuntimeWithECS.Ability
 
         public static bool CheckCost(Entity ability)
         {
-            bool hasCostComponent = _entityManager.HasComponent<CAbilityCostGameplayEffect>(ability);
+            bool hasCostComponent = _entityManager.HasComponent<CAbilityCost>(ability);
             if (!hasCostComponent) return true;
             
-            var costComponent = _entityManager.GetComponentData<CAbilityCostGameplayEffect>(ability);
+            var costComponent = _entityManager.GetComponentData<CAbilityCost>(ability);
             bool isInstantEffect = !_entityManager.HasComponent<CDuration>(costComponent.ProtoGameplayEffectCost);
             if (!isInstantEffect) return true;
             
@@ -153,9 +153,9 @@ namespace GAS.RuntimeWithECS.Ability
 
         public static void DoCost(Entity ability)
         {
-            if (!_entityManager.HasComponent<CAbilityCostGameplayEffect>(ability)) return;
+            if (!_entityManager.HasComponent<CAbilityCost>(ability)) return;
             
-            var costComponent = _entityManager.GetComponentData<CAbilityCostGameplayEffect>(ability);
+            var costComponent = _entityManager.GetComponentData<CAbilityCost>(ability);
             var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
             GEUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }

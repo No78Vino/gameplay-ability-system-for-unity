@@ -1,3 +1,4 @@
+using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability.Component.Static
@@ -9,19 +10,30 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
         /// </summary>
         public int Code;
         
+        
+        //////////////////////// 以下为运行时变量不用配置load ////////////////////////
+        
         /// <summary>
         /// 等级
         /// </summary>
         public int Level;
         
         /// <summary>
-        /// 激活次数
-        /// </summary>
-        public int ActivationCount;
-        
-        /// <summary>
         ///  拥有者ASC
         /// </summary>
         public Entity Owner;
+    }
+    
+    public sealed class ConfAbilityBaseInfo:GameplayAbilityComponentConfig
+    {
+        public int Code;
+
+        public override void LoadToGameplayAbilityEntity(Entity ability)
+        {
+            _entityManager.AddComponentData(ability, new CAbilityBaseInfo
+            {
+                Code = Code,
+            });
+        }
     }
 }

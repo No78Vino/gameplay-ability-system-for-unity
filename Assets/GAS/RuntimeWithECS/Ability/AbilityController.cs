@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Core;
@@ -79,7 +80,7 @@ namespace GAS.RuntimeWithECS.Ability
             return false;
         }
         
-        public void TryActivateAbility(int abilityCode, params object[] args)
+        public void TryActivateAbility(int abilityCode, AbilityParamBase param = null)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)
