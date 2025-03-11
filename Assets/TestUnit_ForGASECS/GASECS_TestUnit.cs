@@ -1,4 +1,5 @@
 ﻿using System;
+using DemoForESC._Script.Gen;
 using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
@@ -94,6 +95,7 @@ namespace TestUnit_ForGASECS
         {
             GASManager.Initialize();
             GTagList.InitTagList();
+            Gen_AbilityCode.LoadAbilityCode();
             MmcHub.Init();
 
             GASManager.Run();

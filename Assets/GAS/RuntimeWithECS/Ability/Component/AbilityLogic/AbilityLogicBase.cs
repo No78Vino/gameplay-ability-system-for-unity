@@ -7,6 +7,10 @@ namespace GAS.RuntimeWithECS.Ability.Component
         protected AbilityParamBase _param;
         protected Entity _abilityEntity;
 
+        public AbilityLogicBase()
+        {
+        }
+        
         protected AbilityLogicBase(Entity ability)
         {
             _abilityEntity = ability;
@@ -23,6 +27,11 @@ namespace GAS.RuntimeWithECS.Ability.Component
         public virtual void SetParam(AbilityParamBase abilityParam)
         {
             _param = abilityParam;
+        }
+        
+        public void SetAbilityEntity(Entity abilityEntity)
+        {
+            _abilityEntity = abilityEntity;
         }
     }
 }

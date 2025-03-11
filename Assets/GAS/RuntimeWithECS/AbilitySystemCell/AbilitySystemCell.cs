@@ -57,7 +57,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             Entity = Entity.Null;
         }
 
-        public void Init(int[] baseTags, int[] attrSets, AbilityAsset[] baseAbilities, int level = 1)
+        public void Init(int[] baseTags, int[] attrSets, AbilityConfig[] baseAbilities, int level = 1)
         {
             // 1.初始化基础标签
             _gameplayTagController.AddFixedTags(baseTags);
@@ -67,9 +67,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                 var attrSetConfig = EcsGAttrSetLib.AttributeSetMap[attrSetCode];
                 _attrSetController.AddAttrSet(attrSetConfig);
             }
-
+            
             // 3.初始化基础技能
-            // TODO
+            foreach (var abilityConfig in baseAbilities)
+            {
+                var ability = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
+                _abilityController.GrantAbility(ability);
+            }
+           
             
             // 4.初始化等级
             SetLevel(level);

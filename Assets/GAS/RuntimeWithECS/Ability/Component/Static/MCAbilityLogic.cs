@@ -1,3 +1,4 @@
+using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability.Component.Static
@@ -13,6 +14,17 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
         
         public MCAbilityLogic()
         {
+        }
+    }
+    
+    public sealed class MCConfAbilityLogic:GameplayAbilityComponentConfig
+    {
+        public int AbilityLogicCode;
+        private AbilityLogicBase Logic => AbilityHelper.TryCreateAbilityLogic(AbilityLogicCode);
+        
+        public override void LoadToGameplayAbilityEntity(Entity ability)
+        {
+            _entityManager.AddComponentData(ability, new MCAbilityLogic(Logic));
         }
     }
 }
