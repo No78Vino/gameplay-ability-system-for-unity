@@ -27,12 +27,14 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
     public sealed class ConfAbilityBaseInfo:GameplayAbilityComponentConfig
     {
         public int Code;
+        public int Level;
 
         public override void LoadToGameplayAbilityEntity(Entity ability)
         {
             _entityManager.AddComponentData(ability, new CAbilityBaseInfo
             {
                 Code = Code,
+                Level = Level
             });
         }
     }

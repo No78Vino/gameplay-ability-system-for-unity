@@ -166,10 +166,14 @@ namespace GAS.RuntimeWithECS.Ability
             if (result == AbilityActivationResult.Success)
             {
                 var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-                var abilityActivationOwnedTags = _entityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
-                foreach (var tag in abilityActivationOwnedTags.tags)
-                    GTagUtil.AddTemporaryTagTo(owner, ability, tag);
-                
+                if (_entityManager.HasComponent<CAbilityActivationOwnedTags>(ability))
+                {
+                    var abilityActivationOwnedTags =
+                        _entityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
+                    foreach (var tag in abilityActivationOwnedTags.tags)
+                        GTagUtil.AddTemporaryTagTo(owner, ability, tag);
+                }
+
                 _entityManager.AddComponentData(ability, new CAbilityActive());
                 
                 var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);

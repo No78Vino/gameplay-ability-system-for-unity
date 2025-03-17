@@ -6,11 +6,11 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
     public class ALDebugLog : AbilityLogicBase
     {
         private AbilityParamString _logString;
-
+        
         public ALDebugLog(Entity ability) : base(ability)
         {
         }
-
+        
         public override void AbilityTick()
         {
             Debug.Log($"Entity:{_abilityEntity} AbilityTick: {_logString.Value}");

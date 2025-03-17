@@ -1,5 +1,8 @@
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
+using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.System.SystemGroup;
 using Unity.Burst;
 using Unity.Collections;
@@ -23,7 +26,15 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (_,ability) in SystemAPI.Query<RefRO<CAbilityInTryCancel>>().WithEntityAccess())
             {
-                GAUtil.TryCancelAbility(ability);
+                bool result = state.EntityManager.HasComponent<CAbilityActive>(ability);
+                if (result)
+                {
+                    ecb.RemoveComponent<CAbilityActive>(ability);
+                    ASCUtil.RestoreDynamicTags(ability);
+                    var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
+                    abilityLogic.Logic.CancelAbility();
+                    GASEventCenter.InvokeOnCancelAbility(ability);
+                }
                 ecb.RemoveComponent<CAbilityInTryCancel>(ability);
             }
             ecb.Playback(state.EntityManager);

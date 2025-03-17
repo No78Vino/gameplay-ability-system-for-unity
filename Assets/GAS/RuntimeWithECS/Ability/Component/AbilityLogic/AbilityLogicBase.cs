@@ -6,10 +6,6 @@ namespace GAS.RuntimeWithECS.Ability.Component
     {
         protected AbilityParamBase _param;
         protected Entity _abilityEntity;
-
-        public AbilityLogicBase()
-        {
-        }
         
         protected AbilityLogicBase(Entity ability)
         {

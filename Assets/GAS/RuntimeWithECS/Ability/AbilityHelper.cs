@@ -27,13 +27,13 @@ namespace GAS.RuntimeWithECS.Ability
             RegisterAbilityLogic(code, typeof(T));
         }
 
-        public static AbilityLogicBase TryCreateAbilityLogic(int code)
+        public static AbilityLogicBase TryCreateAbilityLogic(int code,Entity ability)
         {
             if (AbilityLogicMap.TryGetValue(code, out var type))
                 try
                 {
-                    var ability = Activator.CreateInstance(type) as AbilityLogicBase;
-                    return ability;
+                    var abilityLogic = Activator.CreateInstance(type,ability) as AbilityLogicBase;
+                    return abilityLogic;
                 }
                 catch (MissingMethodException e)
                 {

@@ -5,6 +5,11 @@ namespace GAS.RuntimeWithECS.Ability.Component
         private string _value;
         public string Value => _value;
         
+        public AbilityParamString(string value)
+        {
+            SetValue(value);
+        }
+        
         public void SetValue(string value)
         {
             _value = value;

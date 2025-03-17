@@ -20,11 +20,12 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
     public sealed class MCConfAbilityLogic:GameplayAbilityComponentConfig
     {
         public int AbilityLogicCode;
-        private AbilityLogicBase Logic => AbilityHelper.TryCreateAbilityLogic(AbilityLogicCode);
+        private AbilityLogicBase GetAbilityLogic(Entity ability) => AbilityHelper.TryCreateAbilityLogic(AbilityLogicCode,ability);
         
         public override void LoadToGameplayAbilityEntity(Entity ability)
         {
-            _entityManager.AddComponentData(ability, new MCAbilityLogic(Logic));
+            var logic = GetAbilityLogic(ability);
+            _entityManager.AddComponentData(ability, new MCAbilityLogic(logic));
         }
     }
 }

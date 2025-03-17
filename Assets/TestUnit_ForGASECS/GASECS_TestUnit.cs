@@ -1,6 +1,8 @@
 ﻿using System;
 using DemoForESC._Script.Gen;
 using GAS.ECS_TEST_RUNTIME_GEN_LIB;
+using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
@@ -93,11 +95,7 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium, Name = "初始化GAS")]
         private void InitGAS()
         {
-            GASManager.Initialize();
-            GTagList.InitTagList();
-            Gen_AbilityCode.LoadAbilityCode();
-            MmcHub.Init();
-
+            GEN_GASLauncher.Launch();
             GASManager.Run();
         }
 
@@ -107,7 +105,11 @@ namespace TestUnit_ForGASECS
             _asc = new AbilitySystemCell();
             int[] baseTags = { GTagList.Magic_Fire, GTagList.Magic_Water };
             int[] attrSets = { EcsGAttrSetCode.Fight_Monster };
-            _asc.Init(baseTags, attrSets, null);
+            AbilityConfig[] abilityConfigs =
+            {
+                TestASCUnitUtils.AbilityConfig_Debug,
+            };
+            _asc.Init(baseTags, attrSets, abilityConfigs);
             
             EntityASC = _asc.Entity;
             RefreshUI();
@@ -141,6 +143,20 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]
         private void RemoveGEFromASC()
         {
+        }
+        
+        [Button(ButtonSizes.Medium, Name = "启用/关闭debug能力")]
+        private void SwitchAbilityDebugLog()
+        {
+            bool isActivated = _asc.IsAbilityActive(Gen_AbilityCode.DebugLog);
+            if (!isActivated)
+            {
+                _asc.TryActivateAbility(Gen_AbilityCode.DebugLog);
+                _asc.SetAbilityParam(Gen_AbilityCode.DebugLog, new AbilityParamString("Hello,World!"+Time.time));
+            }
+            else
+                _asc.TryEndAbility(Gen_AbilityCode.DebugLog);
+            
         }
     }
 }

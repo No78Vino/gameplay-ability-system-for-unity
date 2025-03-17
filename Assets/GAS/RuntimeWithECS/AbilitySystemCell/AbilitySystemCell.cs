@@ -74,7 +74,6 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                 var ability = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
                 _abilityController.GrantAbility(ability);
             }
-           
             
             // 4.初始化等级
             SetLevel(level);
@@ -109,7 +108,16 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             _abilityController.CancelAbility(abilityCode);
         }
+        
+        public bool IsAbilityActive(int abilityCode)
+        {
+            return _abilityController.IsAbilityActive(abilityCode);
+        }
 
+        public void SetAbilityParam(int abilityCode, AbilityParamBase param)
+        {
+            _abilityController.SetAbilityParam(abilityCode, param);
+        }
         #endregion
         
         #region GameplayEffect
