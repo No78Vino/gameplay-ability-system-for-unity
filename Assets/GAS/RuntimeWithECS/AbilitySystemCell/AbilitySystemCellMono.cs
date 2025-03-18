@@ -12,12 +12,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             _abilitySystemCell = new AbilitySystemCell();
         }
 
-        public void Init()
+        public void Init(AbilitySystemCellConfig config)
         {
-            var baseTags = new[] { 1, 2, 3 };
-            var attrSets = new[] { 1, 2, 3 };
-            //var baseAbilities = null;
-            _abilitySystemCell.Init(baseTags, attrSets, null);
+            _abilitySystemCell.Init(config.BaseTags, config.AttrSets, config.BaseAbilities, config.Level);
         }
 
         public void TryActivateAbility(int abilityId, AbilityParamBase param = null) =>

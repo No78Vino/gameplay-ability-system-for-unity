@@ -13,9 +13,13 @@ namespace DemoForESC._Script
     {
         private AbilitySystemCellMono _abilitySystemCellMono;
         
+        [SerializeField]
+        private AbilitySystemCellConfigAsset _configAsset;
+        
         private void Awake()
         {
             _abilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
+            _abilitySystemCellMono.Init(_configAsset.GetConfig());
         }
         
         public virtual void Move(Vector3 direction)

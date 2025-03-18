@@ -1,7 +1,8 @@
+using System;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Unity.Collections;
 using Unity.Entities;
-using NotImplementedException = System.NotImplementedException;
+using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Ability.Component.Static
 {
@@ -20,6 +21,20 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });
+        }
+    }
+
+    [Serializable]
+    public class ConfAssetAbilityActivationBlockedTags:IGameplayAbilityComponentConfigAsset
+    {
+        [SerializeField] private int[] tags;
+        
+        public GameplayAbilityComponentConfig GetConfig()
+        {
+            return new ConfAbilityActivationBlockedTags
+            {
+                tags = tags
+            };
         }
     }
 }
