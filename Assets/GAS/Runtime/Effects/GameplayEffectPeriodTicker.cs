@@ -105,8 +105,8 @@ namespace GAS.Runtime
 
             _periodRemaining -= dt;
 
-            // period可能导致_spec失活/移除
-            while (_spec.IsValid && _spec.IsActive && _periodRemaining < 0)
+            // period触发的行为可能导致所属的GE(_spec)失活/移除, 所属GE移除时会将_spec设置为null
+            while (_periodRemaining < 0 && _spec is { IsValid: true, IsActive: true })
             {
                 // 不能直接将_periodRemaining重置为Period, 这将累计误差
                 _periodRemaining += Period;
