@@ -1,10 +1,12 @@
 using System;
 using GAS.General;
+using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS.AbilitySystemCell;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell
+namespace GAS.RuntimeDataHelper.ASCPreset
 {
     [CreateAssetMenu(fileName = "AbilitySystemCellConfigAsset", menuName = "EX-GAS/ASC", order = 0)]
     public class AbilitySystemCellConfigAsset : ScriptableObject

@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -21,20 +24,6 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });
-        }
-    }
-
-    [Serializable]
-    public class ConfAssetAbilityActivationBlockedTags:IGameplayAbilityComponentConfigAsset
-    {
-        [SerializeField] private int[] tags;
-        
-        public GameplayAbilityComponentConfig GetConfig()
-        {
-            return new ConfAbilityActivationBlockedTags
-            {
-                tags = tags
-            };
         }
     }
 }

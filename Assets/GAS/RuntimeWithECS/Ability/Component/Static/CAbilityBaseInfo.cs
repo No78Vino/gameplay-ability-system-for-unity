@@ -1,3 +1,4 @@
+using System;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Unity.Entities;
 
