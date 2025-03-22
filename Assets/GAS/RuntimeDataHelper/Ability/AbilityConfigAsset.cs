@@ -97,8 +97,8 @@ namespace GAS.RuntimeDataHelper.Ability
         {
             if (element is ConfAssetAbilityBaseInfo)
             {
-                Debug.LogWarning("禁止删除ClassB！");
-                EXEditorHelper.ShowNotification("禁止删除ClassB！");
+                Debug.LogWarning("禁止删除组件【ConfAssetAbilityBaseInfo】！");
+                EXEditorHelper.ShowNotification("禁止删除组件【ConfAssetAbilityBaseInfo】！");
                 return false; // 返回false表示阻止删除
             }
             return true; // 允许删除其他类型
