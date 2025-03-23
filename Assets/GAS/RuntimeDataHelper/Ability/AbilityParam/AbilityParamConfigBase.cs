@@ -8,4 +8,9 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
     {
         public abstract AbilityParamBase GetConfig();
     }
+    
+    [Serializable]
+    public abstract class AbilityParamConfigBase<T>:AbilityParamConfigBase where T:AbilityParamBase
+    {
+    }
 }

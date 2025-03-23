@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 namespace GAS.RuntimeDataHelper.Ability.AbilityParam
 {
     [Serializable]
-    public class AbilityParamConfigArrayFloat: AbilityParamConfigBase
+    public class AbilityParamConfigArrayFloat: AbilityParamConfigBase<AbilityParamArrayFloat>
     {
         public override AbilityParamBase GetConfig()
         {

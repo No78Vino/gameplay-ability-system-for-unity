@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeWithECS.Ability.Component;
@@ -67,6 +66,7 @@ namespace GAS.RuntimeDataHelper.Helper
         #region Ability
 
         private static IEnumerable<Type> _cachedAbilityComponentSubTypes;
+
         public static IEnumerable<Type> GetCachedAbilityComponentSubTypes()
         {
             if (_cachedAbilityComponentSubTypes != null) return _cachedAbilityComponentSubTypes;
@@ -82,8 +82,9 @@ namespace GAS.RuntimeDataHelper.Helper
 
             return _cachedAbilityComponentSubTypes;
         }
-        
+
         private static IEnumerable<Type> _cachedAbilityLogicTypes;
+
         public static IEnumerable<Type> GetCachedAbilityLogicTypes()
         {
             if (_cachedAbilityLogicTypes != null) return _cachedAbilityLogicTypes;
@@ -98,8 +99,9 @@ namespace GAS.RuntimeDataHelper.Helper
 
             return _cachedAbilityLogicTypes;
         }
-        
+
         private static ValueDropdownItem[] _abilityLogicChoices;
+
         public static IEnumerable<ValueDropdownItem> AbilityLogicChoices
         {
             get
@@ -111,11 +113,13 @@ namespace GAS.RuntimeDataHelper.Helper
                         .Select(type => new ValueDropdownItem(type.Name, type.FullName))
                         .ToArray();
                 }
+
                 return _abilityLogicChoices;
             }
         }
-        
+
         private static IEnumerable<Type> _cachedAbilityParamConfigTypes;
+
         public static IEnumerable<Type> GetCachedAbilityParamConfigTypes()
         {
             if (_cachedAbilityParamConfigTypes != null) return _cachedAbilityParamConfigTypes;
@@ -132,36 +136,81 @@ namespace GAS.RuntimeDataHelper.Helper
             return _cachedAbilityParamConfigTypes;
         }
 
-        private static Dictionary<string,Type> _cachedAbilityLogicToAbilityParamConfigTypeMap;
-        public static Dictionary<string,Type> GetCachedAbilityLogicToAbilityParamConfigTypeMap()
+
+        private static Dictionary<Type, Type> _cachedAbilityParamTypeToAbilityParamConfigTypeMap;
+
+        public static Dictionary<Type, Type> GetCachedAbilityParamTypeToAbilityParamConfigTypeMap()
         {
-            if (_cachedAbilityLogicToAbilityParamConfigTypeMap != null) return _cachedAbilityLogicToAbilityParamConfigTypeMap;
-            var types = GetCachedAbilityLogicTypes();
-            _cachedAbilityLogicToAbilityParamConfigTypeMap = new();
+            if (_cachedAbilityParamTypeToAbilityParamConfigTypeMap != null)
+                return _cachedAbilityParamTypeToAbilityParamConfigTypeMap;
+            var types = GetCachedAbilityParamConfigTypes();
+            _cachedAbilityParamTypeToAbilityParamConfigTypeMap = new Dictionary<Type, Type>();
             foreach (var derivedType in types)
             {
-                Type baseType = derivedType.BaseType;  // 获取基类类型
+                var baseType = derivedType.BaseType; // 获取基类类型
+
+                if (baseType != null && baseType.IsGenericType)
+                {
+                    // 获取泛型类型定义（如 AbilityParamConfigBase<>）
+                    var genericBaseDef = baseType.GetGenericTypeDefinition();
+
+                    // 确认是否是所需的基类泛型定义
+                    if (genericBaseDef == typeof(AbilityParamConfigBase<>))
+                    {
+                        // 获取实际使用的泛型参数（如 AbilityParamString）
+                        var genericArgs = baseType.GetGenericArguments();
+                        var paramType = genericArgs[0];
+
+                        _cachedAbilityParamTypeToAbilityParamConfigTypeMap[paramType] = derivedType;
+                    }
+                }
+            }
+
+            return _cachedAbilityParamTypeToAbilityParamConfigTypeMap;
+        }
+
+
+        private static Dictionary<string, Type> _cachedAbilityLogicToAbilityParamConfigTypeMap;
+
+        public static Dictionary<string, Type> GetCachedAbilityLogicToAbilityParamConfigTypeMap()
+        {
+            if (_cachedAbilityLogicToAbilityParamConfigTypeMap != null)
+                return _cachedAbilityLogicToAbilityParamConfigTypeMap;
+            var types = GetCachedAbilityLogicTypes();
+            _cachedAbilityLogicToAbilityParamConfigTypeMap = new Dictionary<string, Type>();
+            foreach (var derivedType in types)
+            {
+                var baseType = derivedType.BaseType; // 获取基类类型
 
                 if (baseType != null && baseType.IsGenericType)
                 {
                     // 获取泛型类型定义（如 AbilityLogicBase<>）
-                    Type genericBaseDef = baseType.GetGenericTypeDefinition();
-    
+                    var genericBaseDef = baseType.GetGenericTypeDefinition();
+
                     // 确认是否是所需的基类泛型定义
                     if (genericBaseDef == typeof(AbilityLogicBase<>))
                     {
                         // 获取实际使用的泛型参数（如 AbilityParamString）
-                        Type[] genericArgs = baseType.GetGenericArguments();
-                        Type paramType = genericArgs[0];
+                        var genericArgs = baseType.GetGenericArguments();
+                        var paramType = genericArgs[0];
 
                         if (derivedType.FullName != null)
-                            _cachedAbilityLogicToAbilityParamConfigTypeMap[derivedType.FullName] = paramType;
+                        {
+                            var param2ParamConfigMap = GetCachedAbilityParamTypeToAbilityParamConfigTypeMap();
+                            if (!param2ParamConfigMap.ContainsKey(paramType))
+                                ShowNotification(
+                                    $"未找到对应的能力参数配置，请检查类【{derivedType.FullName}】是否继承自AbilityParamConfigBase<T>");
+                            else
+                                _cachedAbilityLogicToAbilityParamConfigTypeMap[derivedType.FullName] =
+                                    param2ParamConfigMap[paramType];
+                        }
                     }
                 }
             }
 
             return _cachedAbilityLogicToAbilityParamConfigTypeMap;
         }
+
         #endregion
     }
 }

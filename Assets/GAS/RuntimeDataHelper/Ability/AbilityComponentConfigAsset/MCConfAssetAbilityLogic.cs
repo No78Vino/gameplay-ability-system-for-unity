@@ -5,6 +5,7 @@ using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
 {
@@ -17,9 +18,8 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
         [LabelText("能力逻辑")]
         public string AbilityLogicType;
 
-        [TabGroup("AbilityLogic", "能力执行逻辑")] [LabelText("能力参数")] [TypeFilter(nameof(GetAbilityParamConfigSubTypes))]
-        public AbilityParamConfigBase abilityParamConfig =
-            Activator.CreateInstance(typeof(AbilityParamConfigNone)) as AbilityParamConfigBase;
+        [TabGroup("AbilityLogic", "能力执行逻辑")] [LabelText("能力参数")]
+        public AbilityParamConfigBase abilityParamConfig;
 
         public override GameplayAbilityComponentConfig GetConfig()
         {
