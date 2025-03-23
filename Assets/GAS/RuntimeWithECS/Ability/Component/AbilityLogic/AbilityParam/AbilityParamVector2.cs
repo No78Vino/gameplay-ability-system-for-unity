@@ -9,5 +9,10 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             _value = value;
         }
+        
+        public AbilityParamVector2(UnityEngine.Vector2 value)
+        {
+            _value = value;
+        }
     }
 }

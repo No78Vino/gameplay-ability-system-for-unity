@@ -37,24 +37,15 @@ namespace GAS.RuntimeDataHelper.Ability
         }
 
         #region 编辑器工具
-
-        // 动态获取所有子类类型
-        private static IEnumerable<Type> _cachedTypes;
-
-        private IEnumerable<Type> GetFilteredTypes()
-        {
-            var allSubTypes = GetCachedSubTypes();
-            var existingTypes = ComponentConfigs
-                .Where(item => item != null)
-                .Select(item => item.GetType())
-                .ToHashSet();
-            return allSubTypes.Where(type => !existingTypes.Contains(type));
-        }
+        private IEnumerable<Type> GetFilteredTypes() => EXEditorHelper.GetCachedAbilityComponentSubTypes();
 
         [OnInspectorInit]
         private void InitializeList()
         {
-            // 确保列表初始化时至少有一个ClassB
+            // 确保列表初始化时至少有一个ConfAssetAbilityBaseInfo
+            if (!ComponentConfigs.Any(item => item is ConfAssetAbilityBaseInfo))
+                ComponentConfigs.Add(new ConfAssetAbilityBaseInfo());
+            // 确保列表初始化时至少有一个ConfAssetAbilityBaseInfo
             if (!ComponentConfigs.Any(item => item is ConfAssetAbilityBaseInfo))
                 ComponentConfigs.Add(new ConfAssetAbilityBaseInfo());
         }

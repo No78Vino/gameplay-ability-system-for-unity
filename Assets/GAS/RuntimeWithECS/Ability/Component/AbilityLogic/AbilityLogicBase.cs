@@ -4,7 +4,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
 {
     public abstract class AbilityLogicBase
     {
-        protected AbilityParamBase _param;
+        protected AbilityParamBase _paramRaw;
         protected Entity _abilityEntity;
         
         protected AbilityLogicBase(Entity ability)
@@ -20,14 +20,34 @@ namespace GAS.RuntimeWithECS.Ability.Component
         
         public abstract void AbilityTick();
         
-        public virtual void SetParam(AbilityParamBase abilityParam)
-        {
-            _param = abilityParam;
-        }
-        
         public void SetAbilityEntity(Entity abilityEntity)
         {
             _abilityEntity = abilityEntity;
+        }
+        
+        public virtual void SetParam(AbilityParamBase abilityParam)
+        {
+            _paramRaw = abilityParam;
+        }
+    }
+
+    public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:AbilityParamBase
+    {
+        protected T _param;
+        
+        protected AbilityLogicBase(Entity ability) : base(ability)
+        {
+        }
+
+        public override void SetParam(AbilityParamBase abilityParam)
+        {
+            base.SetParam(abilityParam);
+            SetParam((T)abilityParam);
+        }
+        
+        public void SetParam(T abilityParam)
+        {
+            _param = abilityParam;
         }
     }
 }

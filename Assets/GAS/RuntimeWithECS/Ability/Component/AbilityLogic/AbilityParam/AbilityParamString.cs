@@ -14,5 +14,10 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             _value = value;
         }
+        
+        public override string ToString()
+        {
+            return _value;
+        }
     }
 }

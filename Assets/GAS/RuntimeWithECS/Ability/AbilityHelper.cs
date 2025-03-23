@@ -10,6 +10,7 @@ namespace GAS.RuntimeWithECS.Ability
 {
     public static class AbilityHelper
     {
+        #region AbilityLogic
         private static readonly Dictionary<int, Type> AbilityLogicMap = new();
 
         public static void RegisterAbilityLogic(int code, Type logicType)
@@ -50,6 +51,7 @@ namespace GAS.RuntimeWithECS.Ability
 
             return null;
         }
+        #endregion
         
         public static Entity CreateAbilityEntity(GameplayAbilityComponentConfig[] configs)
         {
@@ -59,5 +61,6 @@ namespace GAS.RuntimeWithECS.Ability
                 config.LoadToGameplayAbilityEntity(entity);
             return entity;
         }
+        
     }
 }

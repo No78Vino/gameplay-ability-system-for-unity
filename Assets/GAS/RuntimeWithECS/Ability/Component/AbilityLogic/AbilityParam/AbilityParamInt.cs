@@ -9,5 +9,10 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             _value = value;
         }
+        
+        public AbilityParamInt(int value)
+        {
+            _value = value;
+        }
     }
 }
