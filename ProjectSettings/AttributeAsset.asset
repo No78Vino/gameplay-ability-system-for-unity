@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attributes:
   - Name: HP
-    Comment: 
+    Comment: "\u751F\u547D\u503C"
     CalculateMode: 0
     SupportedOperation: 31
     DefaultValue: 0
@@ -23,7 +23,7 @@ MonoBehaviour:
     LimitMaxValue: 0
     MaxValue: 3.4028235e+38
   - Name: MP
-    Comment: 
+    Comment: "\u6CD5\u529B\u503C"
     CalculateMode: 0
     SupportedOperation: 31
     DefaultValue: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
     LimitMaxValue: 0
     MaxValue: 3.4028235e+38
   - Name: STAMINA
-    Comment: 
+    Comment: "\u8010\u529B\u503C"
     CalculateMode: 0
     SupportedOperation: 31
     DefaultValue: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
     LimitMaxValue: 0
     MaxValue: 3.4028235e+38
   - Name: POSTURE
-    Comment: 
+    Comment: "\u59FF\u6001"
     CalculateMode: 0
     SupportedOperation: 31
     DefaultValue: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
     LimitMaxValue: 0
     MaxValue: 3.4028235e+38
   - Name: SPEED
-    Comment: 
+    Comment: "\u79FB\u52A8\u901F\u5EA6"
     CalculateMode: 0
     SupportedOperation: 31
     DefaultValue: 0

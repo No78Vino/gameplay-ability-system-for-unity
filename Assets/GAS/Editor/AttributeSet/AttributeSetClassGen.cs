@@ -100,7 +100,6 @@ namespace GAS.Editor
                                 writer.WriteLine($"public AttributeBase {validAttrName} {{ get; }} = new(\"AS_{validName}\", \"{attributeName}\", {attributeAccessor.DefaultValue}f, CalculateMode.{attributeAccessor.CalculateMode}, (SupportedOperation){(byte)attributeAccessor.SupportedOperation}, {(attributeAccessor.LimitMinValue ? attributeAccessor.MinValue + "f" : "float.MinValue")}, {(attributeAccessor.LimitMaxValue ? attributeAccessor.MaxValue + "f" : "float.MaxValue")});");
                                 writer.WriteLine("");
                                 writer.WriteLine($"public void Init{validAttrName}(float value) => {validAttrName}.Init(value);");
-                                writer.WriteLine($"public void SetCurrent{validAttrName}(float value) => {validAttrName}.SetCurrentValue(value);");
                                 writer.WriteLine($"public void SetBase{validAttrName}(float value) => {validAttrName}.SetBaseValue(value);");
                                 writer.WriteLine($"public void SetMin{validAttrName}(float value) => {validAttrName}.SetMinValue(value);");
                                 writer.WriteLine($"public void SetMax{validAttrName}(float value) => {validAttrName}.SetMaxValue(value);");

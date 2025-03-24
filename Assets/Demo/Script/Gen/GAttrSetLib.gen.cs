@@ -16,7 +16,6 @@ namespace GAS.Runtime
         public AttributeBase ATK { get; } = new("AS_Fight", "ATK", 0f, CalculateMode.Stacking, (SupportedOperation)31, float.MinValue, float.MaxValue);
 
         public void InitATK(float value) => ATK.Init(value);
-        public void SetCurrentATK(float value) => ATK.SetCurrentValue(value);
         public void SetBaseATK(float value) => ATK.SetBaseValue(value);
         public void SetMinATK(float value) => ATK.SetMinValue(value);
         public void SetMaxATK(float value) => ATK.SetMaxValue(value);
@@ -26,11 +25,10 @@ namespace GAS.Runtime
 
         #region HP
 
-        /// <summary></summary>
+        /// <summary>生命值</summary>
         public AttributeBase HP { get; } = new("AS_Fight", "HP", 0f, CalculateMode.Stacking, (SupportedOperation)31, float.MinValue, float.MaxValue);
 
         public void InitHP(float value) => HP.Init(value);
-        public void SetCurrentHP(float value) => HP.SetCurrentValue(value);
         public void SetBaseHP(float value) => HP.SetBaseValue(value);
         public void SetMinHP(float value) => HP.SetMinValue(value);
         public void SetMaxHP(float value) => HP.SetMaxValue(value);
@@ -40,11 +38,10 @@ namespace GAS.Runtime
 
         #region MP
 
-        /// <summary></summary>
+        /// <summary>法力值</summary>
         public AttributeBase MP { get; } = new("AS_Fight", "MP", 0f, CalculateMode.Stacking, (SupportedOperation)31, float.MinValue, float.MaxValue);
 
         public void InitMP(float value) => MP.Init(value);
-        public void SetCurrentMP(float value) => MP.SetCurrentValue(value);
         public void SetBaseMP(float value) => MP.SetBaseValue(value);
         public void SetMinMP(float value) => MP.SetMinValue(value);
         public void SetMaxMP(float value) => MP.SetMaxValue(value);
@@ -54,11 +51,10 @@ namespace GAS.Runtime
 
         #region POSTURE
 
-        /// <summary></summary>
+        /// <summary>姿态</summary>
         public AttributeBase POSTURE { get; } = new("AS_Fight", "POSTURE", 0f, CalculateMode.Stacking, (SupportedOperation)31, float.MinValue, float.MaxValue);
 
         public void InitPOSTURE(float value) => POSTURE.Init(value);
-        public void SetCurrentPOSTURE(float value) => POSTURE.SetCurrentValue(value);
         public void SetBasePOSTURE(float value) => POSTURE.SetBaseValue(value);
         public void SetMinPOSTURE(float value) => POSTURE.SetMinValue(value);
         public void SetMaxPOSTURE(float value) => POSTURE.SetMaxValue(value);
@@ -68,11 +64,10 @@ namespace GAS.Runtime
 
         #region SPEED
 
-        /// <summary></summary>
+        /// <summary>移动速度</summary>
         public AttributeBase SPEED { get; } = new("AS_Fight", "SPEED", 0f, CalculateMode.Stacking, (SupportedOperation)31, float.MinValue, float.MaxValue);
 
         public void InitSPEED(float value) => SPEED.Init(value);
-        public void SetCurrentSPEED(float value) => SPEED.SetCurrentValue(value);
         public void SetBaseSPEED(float value) => SPEED.SetBaseValue(value);
         public void SetMinSPEED(float value) => SPEED.SetMinValue(value);
         public void SetMaxSPEED(float value) => SPEED.SetMaxValue(value);
@@ -82,11 +77,10 @@ namespace GAS.Runtime
 
         #region STAMINA
 
-        /// <summary></summary>
+        /// <summary>耐力值</summary>
         public AttributeBase STAMINA { get; } = new("AS_Fight", "STAMINA", 0f, CalculateMode.Stacking, (SupportedOperation)31, float.MinValue, float.MaxValue);
 
         public void InitSTAMINA(float value) => STAMINA.Init(value);
-        public void SetCurrentSTAMINA(float value) => STAMINA.SetCurrentValue(value);
         public void SetBaseSTAMINA(float value) => STAMINA.SetBaseValue(value);
         public void SetMinSTAMINA(float value) => STAMINA.SetMinValue(value);
         public void SetMaxSTAMINA(float value) => STAMINA.SetMaxValue(value);

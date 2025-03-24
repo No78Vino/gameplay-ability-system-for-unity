@@ -74,7 +74,7 @@ namespace GAS.Runtime
             SetCurrentValue(baseValue);
         }
 
-        public void SetCurrentValue(float value)
+        internal void SetCurrentValue(float value)
         {
             value = Mathf.Clamp(value, _value.MinValue, _value.MaxValue);
 
@@ -101,7 +101,7 @@ namespace GAS.Runtime
                 _onPostBaseValueChange?.Invoke(this, oldValue, value);
         }
 
-        public void SetCurrentValueWithoutEvent(float value)
+        internal void SetCurrentValueWithoutEvent(float value)
         {
             _value.SetCurrentValue(value);
         }
