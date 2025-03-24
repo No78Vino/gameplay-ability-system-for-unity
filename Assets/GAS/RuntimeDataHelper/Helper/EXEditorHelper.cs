@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using GAS.General;
+using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeWithECS.Ability.Component;
@@ -63,6 +66,61 @@ namespace GAS.RuntimeDataHelper.Helper
             return paths;
         }
 
+        #region GameplayTag
+
+        private static GameplayTag[] _gameplayTags;
+
+        public static IEnumerable<GameplayTag> GameplayTags
+        {
+            get
+            {
+                _gameplayTags ??= LoadTags();
+                return _gameplayTags;
+            }
+        }
+
+        private static GameplayTag[] LoadTags()
+        {
+            var tagLibType = TypeUtil.FindTypeInAllAssemblies("GAS.Runtime.GTagLib");
+            if (tagLibType == null)
+            {
+                Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");
+                return Array.Empty<GameplayTag>();
+            }
+
+            const string fieldName = "TagMap";
+            var field = tagLibType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
+            if (field == null)
+            {
+                Debug.LogError($"[EX] Field {fieldName} not found in GTagLib!");
+                return Array.Empty<GameplayTag>();
+            }
+
+            var value = field.GetValue(null);
+            if (value is not Dictionary<string, GameplayTag> tagMap)
+            {
+                Debug.LogError($"[EX] Field {fieldName} is not a Dictionary<string, GameplayTag> in GTagLib!");
+                return Array.Empty<GameplayTag>();
+            }
+
+            return tagMap.Values.ToArray();
+        }
+        
+        private static ValueDropdownItem[] _gameplayTagChoices;
+        
+        public static IEnumerable<ValueDropdownItem> GameplayTagCodeChoices
+        {
+            get
+            {
+                _gameplayTagChoices ??= ReflectionHelper.GameplayTags
+                    .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag.HashCode))
+                    .ToArray();
+                return _gameplayTagChoices;
+            }
+        }
+
+        #endregion
+        
         #region Ability
 
         private static IEnumerable<Type> _cachedAbilityComponentSubTypes;

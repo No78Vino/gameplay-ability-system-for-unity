@@ -8,8 +8,10 @@ using UnityEngine;
 namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
 {
     [Serializable]
-    public class ConfAssetAbilityActivationBlockedTags:BaseGameplayAbilityComponentConfigAsset
+    public class ConfAssetAbilityAssetTags:BaseGameplayAbilityComponentConfigAsset
     {
+        [TabGroup("AbilityAssetTags","能力描述标签")]
+        [LabelText("标签")]
         [SerializeField] 
         [ListDrawerSettings]
         [ValueDropdown("@EXEditorHelper.GameplayTagCodeChoices", 
@@ -19,7 +21,7 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
         
         public override GameplayAbilityComponentConfig GetConfig()
         {
-            return new ConfAbilityActivationBlockedTags
+            return new ConfAbilityAssetTags
             {
                 tags = tags.ToArray()
             };

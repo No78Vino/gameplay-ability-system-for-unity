@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
 {
     [Serializable]
-    public class ConfAssetAbilityActivationBlockedTags:BaseGameplayAbilityComponentConfigAsset
+    public class ConfAssetAbilityActivationRequiredTags : BaseGameplayAbilityComponentConfigAsset
     {
         [SerializeField] 
         [ListDrawerSettings]
@@ -19,7 +19,7 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
         
         public override GameplayAbilityComponentConfig GetConfig()
         {
-            return new ConfAbilityActivationBlockedTags
+            return new ConfAbilityActivationRequiredTags
             {
                 tags = tags.ToArray()
             };

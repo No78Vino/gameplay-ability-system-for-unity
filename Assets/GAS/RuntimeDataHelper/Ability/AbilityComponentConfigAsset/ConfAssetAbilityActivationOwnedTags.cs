@@ -10,7 +10,17 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
     [Serializable]
     public class ConfAssetAbilityActivationOwnedTags : BaseGameplayAbilityComponentConfigAsset
     {
-        [SerializeField] [ListDrawerSettings] public List<int> tags = new();
+        [TabGroup(
+            "AbilityActivationOwnedTags",
+            "能力激活时额外持有标签",
+            SdfIconType.TagsFill, TextColor = "#45B188", Order = 1)]
+        [LabelText("标签")]
+        [SerializeField] 
+        [ListDrawerSettings]
+        [ValueDropdown("@EXEditorHelper.GameplayTagCodeChoices", 
+            IsUniqueList = true, 
+            HideChildProperties = true)]
+        public List<int> tags = new();
 
         public override GameplayAbilityComponentConfig GetConfig()
         {
