@@ -8,9 +8,9 @@ using UnityEngine;
 namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
 {
     [Serializable]
-    public class ConfAssetAbilityAssetTags:BaseGameplayAbilityComponentConfigAsset
+    public class ConfAssetBlockAbilityTags : BaseGameplayAbilityComponentConfigAsset
     {
-        [TabGroup("AbilityAssetTags","能力描述标签",SdfIconType.TagsFill)]
+        [TabGroup("BlockAbilityTags","暂时打断含有以下标签的能力",SdfIconType.TagsFill, TextColor = "#99B188")]
         [LabelText("标签")]
         [SerializeField] 
         [ListDrawerSettings]
@@ -18,10 +18,10 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
             IsUniqueList = true, 
             HideChildProperties = true)]
         public List<int> tags = new();
-        
+
         public override GameplayAbilityComponentConfig GetConfig()
         {
-            return new ConfAbilityAssetTags
+            return new ConfBlockAbilityTags
             {
                 tags = tags.ToArray()
             };

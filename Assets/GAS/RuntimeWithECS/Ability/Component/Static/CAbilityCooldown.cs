@@ -6,7 +6,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
 {
     public struct CAbilityCooldown : IComponentData
     {
-        public float Cooldown;
+        public int Cooldown;
         
         /// <summary>
         ///  冷却GE的原型
@@ -23,7 +23,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.Static
     
     public sealed class ConfAbilityCooldown:GameplayAbilityComponentConfig
     {
-        public float Cooldown;
+        public int Cooldown;
         public GameplayEffectComponentConfig[] CooldownComponentConfigs;
         
         public override void LoadToGameplayAbilityEntity(Entity ability)

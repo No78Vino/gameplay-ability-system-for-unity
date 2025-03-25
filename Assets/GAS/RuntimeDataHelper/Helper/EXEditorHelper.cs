@@ -6,6 +6,7 @@ using GAS.General;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
+using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeWithECS.Ability.Component;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
@@ -66,6 +67,11 @@ namespace GAS.RuntimeDataHelper.Helper
             return paths;
         }
 
+        public static int GetFrameRate()
+        {
+            return (int)Math.Round(1 / Time.fixedDeltaTime);
+        }
+        
         #region GameplayTag
 
         private static GameplayTag[] _gameplayTags;
@@ -267,6 +273,28 @@ namespace GAS.RuntimeDataHelper.Helper
             }
 
             return _cachedAbilityLogicToAbilityParamConfigTypeMap;
+        }
+
+        #endregion
+
+        #region GameplayEffect
+        
+        private static IEnumerable<Type> _cachedEffectComponentSubTypes;
+        
+        public static IEnumerable<Type> GetCachedEffectComponentSubTypes()
+        {
+            if (_cachedEffectComponentSubTypes != null) return _cachedEffectComponentSubTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedEffectComponentSubTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(BaseGameplayEffectComponentConfigAsset)) &&
+                    !type.IsAbstract &&
+                    type.IsDefined(typeof(SerializableAttribute), false)
+                )
+                .ToList();
+
+            return _cachedEffectComponentSubTypes;
         }
 
         #endregion

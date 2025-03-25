@@ -10,7 +10,10 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
     [Serializable]
     public class ConfAssetAbilityActivationRequiredTags : BaseGameplayAbilityComponentConfigAsset
     {
-        [SerializeField] 
+        [TabGroup(
+            "ActivationRequiredTags",
+            "能力激活所需标签",
+            SdfIconType.TagsFill, TextColor = "#33B188", Order = 1)]
         [ListDrawerSettings]
         [ValueDropdown("@EXEditorHelper.GameplayTagCodeChoices", 
             IsUniqueList = true, 

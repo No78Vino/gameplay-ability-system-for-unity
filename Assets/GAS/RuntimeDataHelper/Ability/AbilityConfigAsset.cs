@@ -81,13 +81,13 @@ namespace GAS.RuntimeDataHelper.Ability
             return messages.Count == 0;
         }
 
-        private bool OnListRemove(BaseGameplayAbilityComponentConfigAsset element)
+        private void OnListRemove(BaseGameplayAbilityComponentConfigAsset element)
         {
             if (element is ConfAssetAbilityBaseInfo)
             {
                 Debug.LogWarning("禁止删除组件【ConfAssetAbilityBaseInfo】！");
                 EXEditorHelper.ShowNotification("禁止删除组件【ConfAssetAbilityBaseInfo】！");
-                return false; // 返回false表示阻止删除
+                return; 
             }
 
             // 禁止删除MCConfAssetAbilityLogic
@@ -95,10 +95,10 @@ namespace GAS.RuntimeDataHelper.Ability
             {
                 Debug.LogWarning("禁止删除组件【MCConfAssetAbilityLogic】！");
                 EXEditorHelper.ShowNotification("禁止删除组件【MCConfAssetAbilityLogic】！");
-                return false; // 返回false表示阻止删除
+                return;
             }
-
-            return true; // 允许删除其他类型
+            
+            ComponentConfigs.Remove(element);
         }
 
         #endregion
