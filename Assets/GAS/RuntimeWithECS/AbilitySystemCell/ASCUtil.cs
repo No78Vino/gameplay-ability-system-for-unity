@@ -327,10 +327,10 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             bool hasDuration = _entityManager.HasComponent<CDuration>(source);
             if (hasDuration)
             {
-                bool hasGrantedTags = _entityManager.HasComponent<CGrantedTags>(source);
+                bool hasGrantedTags = _entityManager.HasComponent<CEffectGrantedTags>(source);
                 if (hasGrantedTags)
                 {
-                    var grantedTags = _entityManager.GetComponentData<CGrantedTags>(source);
+                    var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(source);
                     if (_entityManager.HasComponent<CInUsage>(source))
                     {
                         var inUsage = _entityManager.GetComponentData<CInUsage>(source);

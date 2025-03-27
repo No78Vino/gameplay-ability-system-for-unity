@@ -14,7 +14,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            _entityManager.AddComponentData(ge, new CAssetTags
+            _entityManager.AddComponentData(ge, new CEffectAssetTags
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });

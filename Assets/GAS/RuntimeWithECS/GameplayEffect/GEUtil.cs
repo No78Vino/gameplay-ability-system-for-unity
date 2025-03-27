@@ -136,8 +136,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         /// <returns></returns>
         public static bool CheckImmunityTags(this Entity gameplayEffect, Entity asc)
         {
-            if (!_entityManager.HasComponent<CImmunityTags>(gameplayEffect)) return false;
-            var immunityTags = _entityManager.GetComponentData<CImmunityTags>(gameplayEffect);
+            if (!_entityManager.HasComponent<CEffectImmunityTags>(gameplayEffect)) return false;
+            var immunityTags = _entityManager.GetComponentData<CEffectImmunityTags>(gameplayEffect);
             return ASCUtil.HasAnyTags(asc, immunityTags.tags);
         }
 
@@ -181,9 +181,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public static bool CheckEffectHasAnyTags(this Entity gameplayEffect, NativeArray<int> tags)
         {
             // 1.判断AssetTags
-            if (_entityManager.HasComponent<CAssetTags>(gameplayEffect))
+            if (_entityManager.HasComponent<CEffectAssetTags>(gameplayEffect))
             {
-                var assetTags = _entityManager.GetComponentData<CAssetTags>(gameplayEffect).tags;
+                var assetTags = _entityManager.GetComponentData<CEffectAssetTags>(gameplayEffect).tags;
 
                 foreach (var assetTag in assetTags)
                 foreach (var tag in tags)
@@ -192,9 +192,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             }
 
             //2.判断GrantedTags
-            if (_entityManager.HasComponent<CGrantedTags>(gameplayEffect))
+            if (_entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
             {
-                var grantedTags = _entityManager.GetComponentData<CGrantedTags>(gameplayEffect).tags;
+                var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect).tags;
                 foreach (var grantedTag in grantedTags)
                 foreach (var tag in tags)
                     if (GTagUtil.HasTag(grantedTag, tag))
@@ -207,9 +207,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public static bool CheckEffectHasAnyTags(this Entity gameplayEffect,  SingletonGameplayTagMap singletonGameplayTagMap ,EntityManager entityManager ,NativeArray<int> tags)
         {
             // 1.判断AssetTags
-            if (entityManager.HasComponent<CAssetTags>(gameplayEffect))
+            if (entityManager.HasComponent<CEffectAssetTags>(gameplayEffect))
             {
-                var assetTags = entityManager.GetComponentData<CAssetTags>(gameplayEffect).tags;
+                var assetTags = entityManager.GetComponentData<CEffectAssetTags>(gameplayEffect).tags;
 
                 foreach (var assetTag in assetTags)
                 foreach (var tag in tags)
@@ -218,9 +218,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             }
 
             //2.判断GrantedTags
-            if (entityManager.HasComponent<CGrantedTags>(gameplayEffect))
+            if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
             {
-                var grantedTags = entityManager.GetComponentData<CGrantedTags>(gameplayEffect).tags;
+                var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect).tags;
                 foreach (var grantedTag in grantedTags)
                 foreach (var tag in tags)
                     if (singletonGameplayTagMap.IsTagAIncludeTagB(grantedTag, tag))

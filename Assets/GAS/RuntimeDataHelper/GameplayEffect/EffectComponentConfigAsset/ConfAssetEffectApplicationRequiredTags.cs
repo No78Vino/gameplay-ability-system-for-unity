@@ -7,9 +7,9 @@ using UnityEngine;
 namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
 {
     [System.Serializable]
-    public class ConfAssetAssetTags: BaseGameplayEffectComponentConfigAsset
+    public class ConfAssetEffectApplicationRequiredTags: BaseGameplayEffectComponentConfigAsset
     {
-        [TabGroup("AbilityAssetTags","效果描述标签",SdfIconType.TagsFill)]
+        [TabGroup("AbilityAssetTags","效果应用需求标签",SdfIconType.TagsFill)]
         [LabelText("标签")]
         [SerializeField] 
         [ListDrawerSettings]
@@ -20,7 +20,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         
         public override GameplayEffectComponentConfig GetConfig()
         {
-            return new ConfAssetTags()
+            return new ConfApplicationRequiredTags()
             {
                 tags = tags.ToArray()
             };

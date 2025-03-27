@@ -49,8 +49,8 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
         private void InitializeList()
         {
             // 确保列表初始化时必须有一个ConfBasicInfo
-            if (!ComponentConfigs.Any(item => item is ConfAssetBasicInfo))
-                ComponentConfigs.Add(new ConfAssetBasicInfo());
+            if (!ComponentConfigs.Any(item => item is ConfAssetEffectBasicInfo))
+                ComponentConfigs.Add(new ConfAssetEffectBasicInfo());
         }
 
         private bool ValidateList(List<BaseGameplayEffectComponentConfigAsset> list, ref string errorMsg)
@@ -68,7 +68,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
                 }
             }
 
-            if (!list.Any(item => item is ConfAssetBasicInfo))
+            if (!list.Any(item => item is ConfAssetEffectBasicInfo))
                 messages.Add("列表必须包含一个ConfAssetBasicInfo元素！");
 
             errorMsg = messages.Count > 0 ? string.Join("\n", messages) : null;
@@ -77,7 +77,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
 
         private void OnListRemove(BaseGameplayEffectComponentConfigAsset element)
         {
-            if (element is ConfAssetBasicInfo)
+            if (element is ConfAssetEffectBasicInfo)
             {
                 Debug.LogWarning("禁止删除组件【ConfAssetBasicInfo】！");
                 EXEditorHelper.ShowNotification("禁止删除组件【ConfAssetBasicInfo】！");

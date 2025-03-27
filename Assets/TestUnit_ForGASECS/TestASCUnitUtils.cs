@@ -23,7 +23,7 @@ namespace TestUnit_ForGASECS
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_ONEHIT =
         {
-            new ConfBasicInfo {Name = "Test_OneHit"},
+            new ConfEffectBasicInfo {Name = "Test_OneHit"},
             new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
             new ConfModifiers {modifierSettings = new []
             {
@@ -51,7 +51,7 @@ namespace TestUnit_ForGASECS
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_ONEHIT_REQUIRED_EARTH_TAG =
         {
-            new ConfBasicInfo {Name = "Test_OneHit_Earth"},
+            new ConfEffectBasicInfo {Name = "Test_OneHit_Earth"},
             new ConfAssetTags {tags = new []{GTagList.Magic_Fire}},
             new ConfApplicationRequiredTags{tags = new []{GTagList.Magic_Earth}},
             new ConfModifiers {modifierSettings = new []
@@ -76,7 +76,7 @@ namespace TestUnit_ForGASECS
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_BURNING =
         {
-            new ConfBasicInfo { Name = "Test_Burning" },
+            new ConfEffectBasicInfo { Name = "Test_Burning" },
             new ConfAssetTags { tags = new[] { GTagList.Magic_Fire } },
             new ConfDuration { duration = 60 * 5, timeUnit = TimeUnit.Frame },
             new ConfPeriod { Period = 30, GameplayEffectSettings = new[] { GEConfig_ONEHIT } },

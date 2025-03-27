@@ -16,14 +16,14 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         {
             state.RequireForUpdate<CInUsage>();
             state.RequireForUpdate<CInActivationProgress>();
-            state.RequireForUpdate<CGrantedTags>();
+            state.RequireForUpdate<CEffectGrantedTags>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             foreach (var (inUsage, _, grantedTags, ge) in SystemAPI
-                         .Query<RefRO<CInUsage>, RefRO<CInActivationProgress>, RefRO<CGrantedTags>>()
+                         .Query<RefRO<CInUsage>, RefRO<CInActivationProgress>, RefRO<CEffectGrantedTags>>()
                          .WithEntityAccess())
             {
                 var owner = inUsage.ValueRO.Target;

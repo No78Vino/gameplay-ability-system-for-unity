@@ -11,7 +11,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public NativeArray<Entity> cues;
     }
     
-    public sealed class ConfComCueOnAdd:GameplayEffectComponentConfig
+    public sealed class ConfCueOnAdd:GameplayEffectComponentConfig
     {
         public CueInstant[] cues;
         

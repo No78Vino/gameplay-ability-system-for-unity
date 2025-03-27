@@ -14,7 +14,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
     }
     
-    public sealed class ConfBasicInfo:GameplayEffectComponentConfig
+    public sealed class ConfEffectBasicInfo:GameplayEffectComponentConfig
     {
         public string Name;
 

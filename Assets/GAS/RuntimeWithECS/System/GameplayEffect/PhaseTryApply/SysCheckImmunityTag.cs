@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
-            state.RequireForUpdate<CImmunityTags>();
+            state.RequireForUpdate<CEffectImmunityTags>();
             state.RequireForUpdate<CInUsage>();
             state.RequireForUpdate<CValidEffect>();
         }
@@ -29,7 +29,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
 
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (immunityTags, comInUsage, _,ge) in SystemAPI
-                         .Query<RefRO<CImmunityTags>, RefRW<CInUsage>,RefRO<CValidEffect>>().WithEntityAccess())
+                         .Query<RefRO<CEffectImmunityTags>, RefRW<CInUsage>,RefRO<CValidEffect>>().WithEntityAccess())
             {
                 var asc = comInUsage.ValueRO.Target;
                 var fixedTags = SystemAPI.GetBuffer<BFixedTag>(asc);

@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
 {
     [Serializable]
-    public class ConfAssetBasicInfo: BaseGameplayEffectComponentConfigAsset
+    public class ConfAssetEffectBasicInfo: BaseGameplayEffectComponentConfigAsset
     {
         [TabGroup("Base","GE效果基础信息",SdfIconType.Activity)]
         [LabelText("名称")]
@@ -18,7 +18,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         
         public override GameplayEffectComponentConfig GetConfig()
         {
-            return new ConfBasicInfo()
+            return new ConfEffectBasicInfo()
             {
                 Name = Name
             };
