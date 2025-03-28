@@ -50,12 +50,12 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
                 if (expired)
                 {
                     // 根据Stacking的配置类型，决定过期逻辑
-                    if(stacking.ValueRO.expirationPolicy == ExpirationPolicy.ClearEntireStack)
+                    if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.ClearEntireStack)
                     {   // 清除整个Stack，相当于直接销毁
                         ecb.RemoveComponent<CValidEffect>(geEntity);
                         ecb.AddComponent<CDestroy>(geEntity);
                     }
-                    else if(stacking.ValueRO.expirationPolicy == ExpirationPolicy.RemoveSingleStackAndRefreshDuration)
+                    else if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.RemoveSingleStackAndRefreshDuration)
                     {
                         // 1.移除一层stack
                         SCheckStacking.TryChangeStackCount(
@@ -68,7 +68,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
                         // 2.刷新持续时间
                         SActivateEffect.UpdateActiveTime(ref duration.ValueRW, globalFrameTimer.ValueRO);
                     }
-                    else if(stacking.ValueRO.expirationPolicy == ExpirationPolicy.RefreshDuration)
+                    else if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.RefreshDuration)
                     {
                         // 刷新持续时间
                         SActivateEffect.UpdateActiveTime(ref duration.ValueRW, globalFrameTimer.ValueRO);

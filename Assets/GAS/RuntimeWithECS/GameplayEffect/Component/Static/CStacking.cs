@@ -33,7 +33,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         ResetOnSuccessfulApplication //每次apply成功后重置Effect的周期计时
     }
 
-    public enum ExpirationPolicy
+    public enum EffectExpirationPolicy
     {
         [LabelText("ClearEntireStack - 持续时间结束时, 清除所有层数", SdfIconType.TrashFill)]
         ClearEntireStack, //持续时间结束时,清除所有层数
@@ -55,7 +55,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
         public EffectDurationRefreshPolicy EffectDurationRefreshPolicy;
         public EffectPeriodResetPolicy EffectPeriodResetPolicy;
-        public ExpirationPolicy expirationPolicy;
+        public EffectExpirationPolicy EffectExpirationPolicy;
 
         // Overflow 溢出逻辑处理
         public bool denyOverflowApplication; //对应于StackDurationRefreshPolicy，如果为True则多余的Apply不会刷新Duration
@@ -65,5 +65,43 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         
         // -------------------------------------以下是RUNTIME数据，不需要初始化---------------------------------------//
         public int StackCount;
+    }
+    
+    public sealed class ConfStacking:GameplayEffectComponentConfig
+    {
+        public EffectStackType StackType;
+        public int StackingCode;
+        public int LimitCount;
+
+        public EffectDurationRefreshPolicy EffectDurationRefreshPolicy;
+        public EffectPeriodResetPolicy EffectPeriodResetPolicy;
+        public EffectExpirationPolicy EffectExpirationPolicy;
+
+        public bool denyOverflowApplication;
+        public bool clearStackOnOverflow;
+        public GameplayEffectConfig[] overflowEffects;
+
+        public override void LoadToGameplayEffectEntity(Entity ge)
+        {
+            var overflowEntities = new NativeArray<Entity>(overflowEffects.Length, Allocator.Persistent);
+            for (var i = 0; i < overflowEffects.Length; i++)
+            {
+                var comConfig = overflowEffects[i];
+                overflowEntities[i] = GEUtil.CreateGameplayEffectEntity(comConfig.ComponentConfigs);
+            }
+
+            _entityManager.AddComponentData(ge, new CStacking
+            {
+                StackType = StackType,
+                StackingCode = StackingCode,
+                LimitCount = LimitCount,
+                EffectDurationRefreshPolicy = EffectDurationRefreshPolicy,
+                EffectPeriodResetPolicy = EffectPeriodResetPolicy,
+                EffectExpirationPolicy = EffectExpirationPolicy,
+                denyOverflowApplication = denyOverflowApplication,
+                clearStackOnOverflow = clearStackOnOverflow,
+                overflowEffects = overflowEntities,
+            });
+        }
     }
 }
