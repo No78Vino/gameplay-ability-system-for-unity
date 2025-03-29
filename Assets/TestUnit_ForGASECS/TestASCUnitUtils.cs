@@ -174,8 +174,8 @@ namespace TestUnit_ForGASECS
 
         public void SetBasicData(Entity geEntity)
         {
-            var has = GasEntityManager.HasComponent<CBasicInfo>(geEntity);
-            var basicData = has ? GasEntityManager.GetComponentData<CBasicInfo>(geEntity) : new CBasicInfo();
+            var has = GasEntityManager.HasComponent<CEffectBasicInfo>(geEntity);
+            var basicData = has ? GasEntityManager.GetComponentData<CEffectBasicInfo>(geEntity) : new CEffectBasicInfo();
             name = !has ? "NONE" : geEntity.ToString();
         }
 

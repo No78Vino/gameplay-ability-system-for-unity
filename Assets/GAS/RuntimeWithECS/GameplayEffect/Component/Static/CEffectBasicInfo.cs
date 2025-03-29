@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
-    public struct CBasicInfo : IComponentData
+    public struct CEffectBasicInfo : IComponentData
     {
         /// <summary>
         /// 仅调试显示用，不建议作为运算逻辑的依据
@@ -21,7 +21,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
             _entityManager.SetName(ge, $"GE_{Name}_V{ge.Version}_{ge.Index}");
-            _entityManager.AddComponentData(ge, new CBasicInfo
+            _entityManager.AddComponentData(ge, new CEffectBasicInfo
             {
                 name = Name
             });
