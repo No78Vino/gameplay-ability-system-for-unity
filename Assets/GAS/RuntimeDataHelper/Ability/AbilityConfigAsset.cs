@@ -136,6 +136,7 @@ namespace GAS.RuntimeDataHelper.Ability
         {
             _jsonData = JsonProxyHelper.Serialize(ComponentConfigs);
             EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 
         #endregion
