@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # idea
 .idea/*
+
+#Test
+/[Aa]ssets/_Test/*
