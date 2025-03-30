@@ -20,6 +20,7 @@ namespace GAS.RuntimeDataHelper.Ability
         /// </summary>
         [SerializeField] [HideInInspector] private string _jsonData;
 
+        
         [ShowInInspector]
         [InlineProperty]
         [TypeFilter(nameof(GetFilteredTypes))]
@@ -32,6 +33,7 @@ namespace GAS.RuntimeDataHelper.Ability
         [ValidateInput(nameof(ValidateList), ContinuousValidationCheck = true)]
         [LabelText("能力组件配置")]
         [OnValueChanged(nameof(OnValueChange))]
+        [PropertyOrder(0)]
         public List<BaseGameplayAbilityComponentConfigAsset> ComponentConfigs;
 
         public AbilityConfig GetConfig()
@@ -139,6 +141,9 @@ namespace GAS.RuntimeDataHelper.Ability
             AssetDatabase.SaveAssets();
         }
 
+        [PropertyOrder(-1)]
+        [Button("保存", ButtonSizes.Large, ButtonStyle.FoldoutButton)]
+        private void ManualSave()=> OnValueChange();
         #endregion
     }
 }
