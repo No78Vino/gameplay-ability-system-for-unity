@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb99ef947e149f490ed4eecea63d38d, type: 3}
+  m_Name: A_Move
+  m_EditorClassIdentifier: 
+  _jsonData: '{"Items":[{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo","Data":"{\"name\":\"move\",\"description\":\"\",\"Level\":0}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic","Data":"{\"AbilityLogicType\":\"DemoForESC._Script.Gas.Ability.ALMove\"}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityActivationOwnedTags","Data":"{\"tags\":[798883614]}"}]}'
