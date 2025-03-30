@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb99ef947e149f490ed4eecea63d38d, type: 3}
   m_Name: AbilityConfigAsset
   m_EditorClassIdentifier: 
+  _jsonData: '{"Items":[{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo","Data":"{\"name\":\"test\",\"description\":\"\",\"Level\":0}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic","Data":"{\"AbilityLogicType\":\"GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog\"}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityCooldown","Data":"{\"timeUnit\":0,\"cooldown\":0.0,\"useDefaultCooldown\":true,\"geAssetCooldown\":{\"instanceID\":0}}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityActivationBlockedTags","Data":"{\"tags\":[]}"}]}'

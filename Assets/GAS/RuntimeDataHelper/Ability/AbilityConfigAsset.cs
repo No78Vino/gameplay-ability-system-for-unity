@@ -6,6 +6,7 @@ using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using MCConfAssetAbilityLogic = GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic;
 
@@ -14,6 +15,11 @@ namespace GAS.RuntimeDataHelper.Ability
     [CreateAssetMenu(fileName = "AbilityConfigAsset", menuName = "EX-GAS/Ability", order = 0)]
     public class AbilityConfigAsset : ScriptableObject
     {
+        /// <summary>
+        ///     用于保存数据的Json字符串
+        /// </summary>
+        [SerializeField] [HideInInspector] private string _jsonData;
+
         [ShowInInspector]
         [InlineProperty]
         [TypeFilter(nameof(GetFilteredTypes))]
@@ -25,9 +31,8 @@ namespace GAS.RuntimeDataHelper.Ability
             ShowFoldout = false)]
         [ValidateInput(nameof(ValidateList), ContinuousValidationCheck = true)]
         [LabelText("能力组件配置")]
-        public List<BaseGameplayAbilityComponentConfigAsset> ComponentConfigs =
-            new();
-
+        [OnValueChanged(nameof(OnValueChange))]
+        public List<BaseGameplayAbilityComponentConfigAsset> ComponentConfigs;
 
         public AbilityConfig GetConfig()
         {
@@ -49,12 +54,37 @@ namespace GAS.RuntimeDataHelper.Ability
         [OnInspectorInit]
         private void InitializeList()
         {
-            // 确保列表初始化时必须有一个ConfAssetAbilityBaseInfo
-            if (!ComponentConfigs.Any(item => item is ConfAssetAbilityBaseInfo))
-                ComponentConfigs.Add(new ConfAssetAbilityBaseInfo());
-            // 确保列表初始化时必须有一个MCConfAssetAbilityLogic
-            if (!ComponentConfigs.Any(item => item is MCConfAssetAbilityLogic))
-                ComponentConfigs.Add(new MCConfAssetAbilityLogic());
+            if (string.IsNullOrEmpty(_jsonData))
+            {
+                // 确保列表初始化时必须有一个ConfAssetAbilityBaseInfo
+                // 确保列表初始化时必须有一个MCConfAssetAbilityLogic
+                ComponentConfigs = new List<BaseGameplayAbilityComponentConfigAsset>
+                {
+                    new ConfAssetAbilityBaseInfo(),
+                    new MCConfAssetAbilityLogic()
+                };
+                OnValueChange();
+            }
+            else
+            {
+                ComponentConfigs = JsonProxyHelper.Deserialize<BaseGameplayAbilityComponentConfigAsset>(_jsonData);
+                // 确保列表初始化时必须有一个ConfAssetAbilityBaseInfo
+                // 确保列表初始化时必须有一个MCConfAssetAbilityLogic
+                var isChanged = false;
+                if (!ComponentConfigs.Any(item => item is ConfAssetAbilityBaseInfo))
+                {
+                    ComponentConfigs.Insert(0, new ConfAssetAbilityBaseInfo());
+                    isChanged = true;
+                }
+
+                if (!ComponentConfigs.Any(item => item is MCConfAssetAbilityLogic))
+                {
+                    ComponentConfigs.Insert(1, new MCConfAssetAbilityLogic());
+                    isChanged = true;
+                }
+
+                if (isChanged) OnValueChange();
+            }
         }
 
         private bool ValidateList(List<BaseGameplayAbilityComponentConfigAsset> list, ref string errorMsg)
@@ -87,7 +117,7 @@ namespace GAS.RuntimeDataHelper.Ability
             {
                 Debug.LogWarning("禁止删除组件【ConfAssetAbilityBaseInfo】！");
                 EXEditorHelper.ShowNotification("禁止删除组件【ConfAssetAbilityBaseInfo】！");
-                return; 
+                return;
             }
 
             // 禁止删除MCConfAssetAbilityLogic
@@ -97,8 +127,15 @@ namespace GAS.RuntimeDataHelper.Ability
                 EXEditorHelper.ShowNotification("禁止删除组件【MCConfAssetAbilityLogic】！");
                 return;
             }
-            
+
             ComponentConfigs.Remove(element);
+        }
+
+        // 自动保存
+        private void OnValueChange()
+        {
+            _jsonData = JsonProxyHelper.Serialize(ComponentConfigs);
+            EditorUtility.SetDirty(this);
         }
 
         #endregion
