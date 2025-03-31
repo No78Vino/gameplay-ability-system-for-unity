@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb99ef947e149f490ed4eecea63d38d, type: 3}
   m_Name: A_Move
   m_EditorClassIdentifier: 
-  _jsonData: '{"Items":[{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo","Data":"{\"name\":\"move\",\"description\":\"\",\"Level\":0}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic","Data":"{\"AbilityLogicType\":\"DemoForESC._Script.Gas.Ability.ALMove\"}"},{"TypeFullName":"GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityActivationOwnedTags","Data":"{\"tags\":[798883614]}"}]}'
+  configTypes:
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityCost
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityAssetTags
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo
+  ConfAssetAbilityBaseInfo:
+    name: 56
+    description: 'test
+
+'
+    Level: 9
+  MCConfAssetAbilityLogic:
+    AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog

@@ -67,10 +67,8 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
         private bool ValidateUniqueName(string abilityName)
         {
             foreach (var configAsset in EXEditorHelper.FindAll<AbilityConfigAsset>())
-            foreach (var componentConfig in configAsset.ComponentConfigs)
-                if (componentConfig != this &&
-                    componentConfig is ConfAssetAbilityBaseInfo baseInfo &&
-                    baseInfo.name == abilityName)
+                if (configAsset.ConfAssetAbilityBaseInfo != this &&
+                    configAsset.ConfAssetAbilityBaseInfo.name == abilityName)
                     return false;
             return true;
         }

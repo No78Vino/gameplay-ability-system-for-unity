@@ -147,6 +147,19 @@ namespace GAS.RuntimeDataHelper.Helper
             return _cachedAbilityComponentSubTypes;
         }
 
+        private static ValueDropdownItem[] _abilityComponentTypeChoices;
+        
+        public static IEnumerable<ValueDropdownItem> AbilityComponentTypeChoices
+        {
+            get
+            {
+                _abilityComponentTypeChoices ??= GetCachedAbilityComponentSubTypes()
+                    .Select(type => new ValueDropdownItem(type.FullName, type.FullName))
+                    .ToArray();
+                return _abilityComponentTypeChoices;
+            }
+        }
+        
         private static IEnumerable<Type> _cachedAbilityLogicTypes;
 
         public static IEnumerable<Type> GetCachedAbilityLogicTypes()
