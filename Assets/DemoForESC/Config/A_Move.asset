@@ -18,10 +18,8 @@ MonoBehaviour:
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityAssetTags
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo
   ConfAssetAbilityBaseInfo:
-    name: 56
-    description: 'test
-
-'
-    Level: 9
+    name: wwww
+    description: testtttt
+    Level: 46
   MCConfAssetAbilityLogic:
     AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog
