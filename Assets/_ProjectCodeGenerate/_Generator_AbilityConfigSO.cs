@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using GAS.Editor;
+using GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset;
+using GAS.RuntimeDataHelper.Helper;
 using UnityEditor;
+using UnityEngine;
 
 namespace _ProjectCodeGenerate
 {
@@ -12,16 +15,68 @@ namespace _ProjectCodeGenerate
         {
             // var asset = GameplayTagsAsset.LoadOrCreate();
             // var tags = asset.Tags;
-            // GenerateAbilityConfigtSO(tags, filePath);
+            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+            var filePath = $"{pathWithoutAssets}/Assets/GAS/RuntimeDataHelper/Ability/GEN_AbilityConfigSO.cs";
+            GenerateAbilityConfigSO(filePath);
         }
         
          public static void GenerateAbilityConfigSO(string filePath)
         {
-            // var gameplayTagNamesWithIdentifier = gameplayTags
-            //     .OrderBy(x => x.Name)
-            //     .Select(x => new Tuple<string, string>(x.Name, MakeValidIdentifier(x.Name)))
-            //     .ToArray();
-
+            // using System.Collections.Generic;
+            // using System.Linq;
+            // using GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset;
+            // using Sirenix.OdinInspector;
+            // using UnityEditor;
+            // using UnityEngine;
+            //
+            // namespace GAS.RuntimeDataHelper.Ability
+            // {
+            //     public class GEN_AbilityConfigSO:ScriptableObject
+            //     {
+            //         [TabGroup("AbilityConfig","能力组件类型控制",SdfIconType.TagsFill)]
+            //         [ValueDropdown("@EXEditorHelper.AbilityComponentTypeChoices", 
+            //             IsUniqueList = true, 
+            //             HideChildProperties = true)]
+            //         public List<string> configTypes = new();
+            //         
+            //         [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
+            //         [LabelText("基础信息")]
+            //         [ShowIf(nameof(HasConfAssetAbilityBaseInfo))]
+            //         [OnValueChanged(nameof(OnConfigValueChanged))]
+            //         public ConfAssetAbilityBaseInfo ConfAssetAbilityBaseInfo;
+            //
+            //         [TabGroup("AbilityConfig","组件配置详情")]
+            //         [LabelText("能力逻辑")]
+            //         [ShowIf(nameof(HasMCConfAssetAbilityLogic))]
+            //         public MCConfAssetAbilityLogic MCConfAssetAbilityLogic;
+            //         
+            //         protected bool HasConfAssetAbilityBaseInfo => 
+            //             configTypes.Any( x => x == typeof(ConfAssetAbilityBaseInfo).FullName);
+            //         
+            //         protected bool HasMCConfAssetAbilityLogic =>
+            //             configTypes.Any(x => x == typeof(MCConfAssetAbilityLogic).FullName);
+            //
+            //         protected void OnConfigValueChanged()
+            //         {
+            //             EditorUtility.SetDirty(this);
+            //             AssetDatabase.SaveAssets();
+            //         }
+            //         
+            //         protected BaseGameplayAbilityComponentConfigAsset GetConfigAsset(string type)
+            //         {
+            //             return type switch
+            //             {
+            //                 nameof(ConfAssetAbilityBaseInfo) => HasConfAssetAbilityBaseInfo?ConfAssetAbilityBaseInfo:null,
+            //                 nameof(MCConfAssetAbilityLogic) => HasMCConfAssetAbilityLogic?MCConfAssetAbilityLogic:null,
+            //                 _ => null
+            //             };
+            //         }
+            //     }
+            // protected virtual bool ValidateList(List<string> _, ref string errorMsg)
+            // {
+            //     return false;
+            // }
+            // }
             using var writer = new IndentedWriter(new StreamWriter(filePath));
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("//// This is a generated file. ////");
@@ -31,44 +86,73 @@ namespace _ProjectCodeGenerate
             writer.WriteLine("");
 
             writer.WriteLine("using System.Collections.Generic;");
-
+            writer.WriteLine("using System.Linq;");
+            writer.WriteLine("using GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset;");
+            writer.WriteLine("using Sirenix.OdinInspector;");
+            writer.WriteLine("using UnityEditor;");
+            writer.WriteLine("using UnityEngine;");
+            
             writer.WriteLine("");
-
-            writer.WriteLine("namespace GAS.Runtime");
+            
+            writer.WriteLine("namespace GAS.RuntimeDataHelper.Ability");
             writer.WriteLine("{");
-            writer.Indent++;
+            writer.WriteLine("  public class GEN_AbilityConfigSO:ScriptableObject");
+            writer.WriteLine("  {");
+            writer.WriteLine("    [TabGroup(\"AbilityConfig\",\"能力组件类型控制\",SdfIconType.TagsFill)]");
+            writer.WriteLine("    [ValueDropdown(\"@EXEditorHelper.AbilityComponentTypeChoices\", IsUniqueList = true, HideChildProperties = true)]");
+            writer.WriteLine("    public List<string> configTypes = new();");
+            writer.WriteLine("");
+            var subTypes = EXEditorHelper.AbilityComponentTypeChoices;
+            
+            foreach (var subType in subTypes)
             {
-                writer.WriteLine("public static class GTagLib");
-                writer.WriteLine("{");
-                writer.Indent++;
-                {
-                    // Generate members for each tag
-                    // foreach (var tuple in gameplayTagNamesWithIdentifier)
-                    // {
-                    //     writer.WriteLine(
-                    //         $"public static GameplayTag {tuple.Item2} {{ get; }} = new GameplayTag(\"{tuple.Item1}\");");
-                    // }
-
-                    writer.WriteLine("");
-
-                    writer.WriteLine(
-                        "public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>");
-                    writer.WriteLine("{");
-                    writer.Indent++;
-                    // {
-                    //     foreach (var tuple in gameplayTagNamesWithIdentifier)
-                    //     {
-                    //         writer.WriteLine($"[\"{tuple.Item1}\"] = {tuple.Item2},");
-                    //     }
-                    // }
-                    writer.Indent--;
-                    writer.WriteLine("};");
-                }
-                writer.Indent--;
-                writer.WriteLine("}");
+                writer.WriteLine($"    [TabGroup(\"AbilityConfig\",\"组件配置详情\",SdfIconType.Activity)]");
+                writer.WriteLine($"    [LabelText(\"{subType.Text}\")]");
+                writer.WriteLine($"    [ShowIf(nameof(Has{subType.Text}))]");
+                writer.WriteLine($"    [OnValueChanged(nameof(OnConfigValueChanged))]");
+                if(subType.Text is nameof(ConfAssetAbilityBaseInfo) or nameof(MCConfAssetAbilityLogic))
+                    writer.WriteLine($"    [PropertyOrder(-1)]");
+                writer.WriteLine($"    public {subType.Text} {subType.Text};");
+                writer.WriteLine("");
             }
-            writer.Indent--;
-            writer.Write("}");
+            
+            foreach (var subType in subTypes)
+            {
+                writer.WriteLine($"    protected bool Has{subType.Text} => ");
+                writer.WriteLine($"        configTypes.Any( x => x == typeof({subType.Text}).FullName);");
+            }
+            
+            writer.WriteLine("");
+            
+            writer.WriteLine("    protected void OnConfigValueChanged()");
+            writer.WriteLine("    {");
+            writer.WriteLine("        EditorUtility.SetDirty(this);");
+            writer.WriteLine("        AssetDatabase.SaveAssets();");
+            writer.WriteLine("    }");
+            
+            writer.WriteLine("");
+            
+            writer.WriteLine("    protected BaseGameplayAbilityComponentConfigAsset GetConfigAsset(string type)");
+            writer.WriteLine("    {");
+            writer.WriteLine("        return type switch");
+            writer.WriteLine("        {");
+            foreach (var subType in subTypes)
+            {
+                writer.WriteLine($"            nameof({subType.Text}) => Has{subType.Text}?{subType.Text}:null,");
+            }
+            writer.WriteLine("            _ => null");
+            writer.WriteLine("        };");
+            writer.WriteLine("    }");
+            
+            writer.WriteLine("    protected virtual bool ValidateList(List<string> _, ref string errorMsg)");
+            writer.WriteLine("    {");
+            writer.WriteLine("        return false;");
+            writer.WriteLine("    }");
+        
+            
+            writer.WriteLine("  }");
+            writer.WriteLine("}");
+            
 
             Console.WriteLine($"Generated GEN_AbilityConfigSO at path: {filePath}");
         }

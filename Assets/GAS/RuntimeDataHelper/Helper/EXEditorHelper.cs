@@ -154,7 +154,7 @@ namespace GAS.RuntimeDataHelper.Helper
             get
             {
                 _abilityComponentTypeChoices ??= GetCachedAbilityComponentSubTypes()
-                    .Select(type => new ValueDropdownItem(type.FullName, type.FullName))
+                    .Select(type => new ValueDropdownItem(type.Name, type.FullName))
                     .ToArray();
                 return _abilityComponentTypeChoices;
             }

@@ -14,12 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configTypes:
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityCost
-  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityAssetTags
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityCooldown
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic
+  ConfAssetAbilityActivationBlockedTags:
+    tags: 
+  ConfAssetAbilityActivationOwnedTags:
+    tags: 
+  ConfAssetAbilityActivationRequiredTags:
+    tags: 
+  ConfAssetAbilityAssetTags:
+    tags: d5ce176b6d09848ece984a2cbf654062
   ConfAssetAbilityBaseInfo:
     name: wwww
     description: testtttt
     Level: 46
+  ConfAssetAbilityCooldown:
+    timeUnit: 0
+    cooldown: 4.3
+    useDefaultCooldown: 1
+    geAssetCooldown: {fileID: 0}
+  ConfAssetBlockAbilityTags:
+    tags: 
+  ConfAssetCancelAbilityTags:
+    tags: 
   MCConfAssetAbilityLogic:
     AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog
