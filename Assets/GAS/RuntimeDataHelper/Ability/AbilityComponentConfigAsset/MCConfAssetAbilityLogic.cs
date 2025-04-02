@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using GAS.Editor;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
@@ -15,13 +17,17 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
     {
         [ValueDropdown("@EXEditorHelper.AbilityLogicChoices", IsUniqueList = true, HideChildProperties = true)]
         [TabGroup("AbilityLogic", "能力执行逻辑", SdfIconType.Activity, TextColor = "#D6626E")]
-        [OnValueChanged(nameof(OnAbilityLogicTypeChanged))]
+        [OnValueChanged(nameof(OnValueChanged))]
         [LabelText("能力逻辑")]
         public string AbilityLogicType;
 
-        [TabGroup("AbilityLogic", "能力执行逻辑")] 
+        [SerializeField] [HideInInspector] private JsonConfigData _jsonAbilityParamConfig;
+
+        [TabGroup("AbilityLogic", "能力执行逻辑")]
         [TypeFilter(nameof(GetAbilityParamConfigType))]
         [LabelText("能力参数")]
+        [ShowInInspector]
+        [OnValueChanged(nameof(OnValueChanged))]
         public AbilityParamConfigBase abilityParamConfig;
 
         public override GameplayAbilityComponentConfig GetConfig()
@@ -32,28 +38,36 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
             };
         }
 
-        private void OnAbilityLogicTypeChanged()
+        protected override void OnValueChanged()
         {
+            abilityParamConfig ??= new AbilityParamConfigNone();
+            _jsonAbilityParamConfig.TypeFullName = abilityParamConfig.GetType().FullName;
+            _jsonAbilityParamConfig.Data = JsonProxyHelper.Serialize(abilityParamConfig);
+            
             var typeMap = EXEditorHelper.GetCachedAbilityLogicToAbilityParamConfigTypeMap();
             if (typeMap.TryGetValue(AbilityLogicType, out var value))
                 abilityParamConfig = Activator.CreateInstance(value) as AbilityParamConfigBase;
             else
                 EXEditorHelper.ShowNotification($"未找到对应的能力参数配置，请检查类【{AbilityLogicType}】是否继承自AbilityParamConfigBase<T>");
+            
+            base.OnValueChanged();
         }
-        
+
         private IEnumerable<Type> GetAbilityParamConfigType()
         {
             var typeMap = EXEditorHelper.GetCachedAbilityLogicToAbilityParamConfigTypeMap();
             if (typeMap.TryGetValue(AbilityLogicType, out var value))
-                return new[] {value};
-            return new[] {typeof(AbilityParamConfigNone)};
+                return new[] { value };
+            return new[] { typeof(AbilityParamConfigNone) };
         }
-        
+
         [OnInspectorInit]
         private void InitializeList()
         {
-            AbilityLogicType = typeof(ALDebugLog).FullName;
-            OnAbilityLogicTypeChanged();
+            if(string.IsNullOrEmpty(AbilityLogicType)) AbilityLogicType = typeof(ALDebugLog).FullName;
+            if (!string.IsNullOrEmpty(_jsonAbilityParamConfig.TypeFullName))
+                abilityParamConfig = JsonProxyHelper.Deserialize<AbilityParamConfigBase>(_jsonAbilityParamConfig);
+            OnValueChanged();
         }
     }
 }

@@ -103,8 +103,9 @@ namespace GAS.RuntimeDataHelper.Ability
 
     protected void OnConfigValueChanged()
     {
+        CheckComponentConfigOwnAsset();
         EditorUtility.SetDirty(this);
-        AssetDatabase.SaveAssets();
+        //AssetDatabase.SaveAssets();
     }
 
     protected BaseGameplayAbilityComponentConfigAsset GetConfigAsset(string type)
@@ -127,6 +128,25 @@ namespace GAS.RuntimeDataHelper.Ability
     protected virtual bool ValidateList(List<string> _, ref string errorMsg)
     {
         return false;
+    }
+    [OnInspectorInit]
+    private void InitializeList()
+    {
+        CheckComponentConfigOwnAsset();
+    }
+
+    protected void CheckComponentConfigOwnAsset()
+    {
+        ConfAssetAbilityActivationBlockedTags?.SetOwnAsset(this);
+        ConfAssetAbilityActivationOwnedTags?.SetOwnAsset(this);
+        ConfAssetAbilityActivationRequiredTags?.SetOwnAsset(this);
+        ConfAssetAbilityAssetTags?.SetOwnAsset(this);
+        ConfAssetAbilityBaseInfo?.SetOwnAsset(this);
+        ConfAssetAbilityCooldown?.SetOwnAsset(this);
+        ConfAssetAbilityCost?.SetOwnAsset(this);
+        ConfAssetBlockAbilityTags?.SetOwnAsset(this);
+        ConfAssetCancelAbilityTags?.SetOwnAsset(this);
+        MCConfAssetAbilityLogic?.SetOwnAsset(this);
     }
   }
 }

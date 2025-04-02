@@ -126,8 +126,9 @@ namespace _ProjectCodeGenerate
             
             writer.WriteLine("    protected void OnConfigValueChanged()");
             writer.WriteLine("    {");
+            writer.WriteLine("        CheckComponentConfigOwnAsset();");
             writer.WriteLine("        EditorUtility.SetDirty(this);");
-            writer.WriteLine("        AssetDatabase.SaveAssets();");
+            writer.WriteLine("        //AssetDatabase.SaveAssets();");
             writer.WriteLine("    }");
             
             writer.WriteLine("");
@@ -148,8 +149,22 @@ namespace _ProjectCodeGenerate
             writer.WriteLine("    {");
             writer.WriteLine("        return false;");
             writer.WriteLine("    }");
-        
             
+            writer.WriteLine("    [OnInspectorInit]");
+            writer.WriteLine("    private void InitializeList()");
+            writer.WriteLine("    {");
+            writer.WriteLine("        CheckComponentConfigOwnAsset();");
+            writer.WriteLine("    }");
+                
+            writer.WriteLine("");
+            
+            writer.WriteLine("    protected void CheckComponentConfigOwnAsset()");
+            writer.WriteLine("    {");
+            foreach (var subType in subTypes)
+            {
+                writer.WriteLine($"        {subType.Text}?.SetOwnAsset(this);");
+            }
+            writer.WriteLine("    }");
             writer.WriteLine("  }");
             writer.WriteLine("}");
             

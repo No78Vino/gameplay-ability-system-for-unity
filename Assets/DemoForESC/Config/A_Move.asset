@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: A_Move
   m_EditorClassIdentifier: 
   configTypes:
-  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityCost
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityAssetTags
-  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityCooldown
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic
   ConfAssetAbilityActivationBlockedTags:
@@ -25,7 +23,7 @@ MonoBehaviour:
   ConfAssetAbilityActivationRequiredTags:
     tags: 
   ConfAssetAbilityAssetTags:
-    tags: d5ce176b6d09848ece984a2cbf65406278f0f6be
+    tags: 1eff9d2f
   ConfAssetAbilityBaseInfo:
     name: move
     description: "\u79FB\u52A8\u80FD\u529B"
@@ -41,3 +39,6 @@ MonoBehaviour:
     tags: 
   MCConfAssetAbilityLogic:
     AbilityLogicType: DemoForESC._Script.Gas.Ability.ALMove
+    _jsonAbilityParamConfig:
+      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigString
+      Data: '{"value":""}'
