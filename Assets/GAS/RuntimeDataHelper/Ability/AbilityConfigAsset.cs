@@ -15,6 +15,7 @@ namespace GAS.RuntimeDataHelper.Ability
         [ValidateInput(nameof(ValidateConfig), ContinuousValidationCheck = true)]
         [DisplayAsString(TextAlignment.Left)]
         [TitleGroup("能力配置",HorizontalLine = true)]
+        [HideLabel]
         public string __ => "";
         
         public AbilityConfig GetConfig()

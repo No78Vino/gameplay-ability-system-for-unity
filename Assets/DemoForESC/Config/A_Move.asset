@@ -25,11 +25,11 @@ MonoBehaviour:
   ConfAssetAbilityActivationRequiredTags:
     tags: 
   ConfAssetAbilityAssetTags:
-    tags: d5ce176b6d09848ece984a2cbf654062
+    tags: d5ce176b6d09848ece984a2cbf65406278f0f6be
   ConfAssetAbilityBaseInfo:
-    name: wwww
-    description: testtttt
-    Level: 46
+    name: move
+    description: "\u79FB\u52A8\u80FD\u529B"
+    Level: 0
   ConfAssetAbilityCooldown:
     timeUnit: 0
     cooldown: 4.3
@@ -40,4 +40,4 @@ MonoBehaviour:
   ConfAssetCancelAbilityTags:
     tags: 
   MCConfAssetAbilityLogic:
-    AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog
+    AbilityLogicType: DemoForESC._Script.Gas.Ability.ALMove
