@@ -14,6 +14,7 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
         }
         
         [LabelText("值")]
+        [OnValueChanged(nameof(OnAbilityParamValueChange))]
         public List<float> value=new();
     }
 }

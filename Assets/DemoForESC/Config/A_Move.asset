@@ -40,5 +40,5 @@ MonoBehaviour:
   MCConfAssetAbilityLogic:
     AbilityLogicType: DemoForESC._Script.Gas.Ability.ALMove
     _jsonAbilityParamConfig:
-      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigString
-      Data: '{"value":""}'
+      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigVector3
+      Data: '{"value":{"x":1.0,"y":1.0,"z":1.0}}'

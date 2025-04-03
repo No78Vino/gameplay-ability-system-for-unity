@@ -13,6 +13,7 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
         }
         
         [LabelText("值")]
+        [OnValueChanged(nameof(OnAbilityParamValueChange))]
         public UnityEngine.Vector2 value;
     }
 }
