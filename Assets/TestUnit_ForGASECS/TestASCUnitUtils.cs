@@ -3,6 +3,7 @@ using DemoForESC._Script.Gen;
 using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using GAS.RuntimeWithECS.Core;
@@ -110,9 +111,9 @@ namespace TestUnit_ForGASECS
 
         public static AbilityConfig AbilityConfig_Debug = new(new GameplayAbilityComponentConfig[]
         {
-            new ConfAbilityBaseInfo { Code = Gen_AbilityCode.DebugLog },
+            new ConfAbilityBaseInfo { Code = GEN_AbilityCode.DebugLog },
             new ConfAbilityAssetTags { tags = new[] { GTagList.Magic_Fire } },
-            new MCConfAbilityLogic() { AbilityLogicCode = Gen_AbilityCode.DebugLog },
+            new MCConfAbilityLogic { AbilityLogicType = typeof(ALDebugLog).FullName },
         });
     }
 

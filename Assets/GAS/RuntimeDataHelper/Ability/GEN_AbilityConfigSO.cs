@@ -110,20 +110,27 @@ namespace GAS.RuntimeDataHelper.Ability
 
     protected BaseGameplayAbilityComponentConfigAsset GetConfigAsset(string type)
     {
-        return type switch
-        {
-            nameof(ConfAssetAbilityActivationBlockedTags) => HasConfAssetAbilityActivationBlockedTags?ConfAssetAbilityActivationBlockedTags:null,
-            nameof(ConfAssetAbilityActivationOwnedTags) => HasConfAssetAbilityActivationOwnedTags?ConfAssetAbilityActivationOwnedTags:null,
-            nameof(ConfAssetAbilityActivationRequiredTags) => HasConfAssetAbilityActivationRequiredTags?ConfAssetAbilityActivationRequiredTags:null,
-            nameof(ConfAssetAbilityAssetTags) => HasConfAssetAbilityAssetTags?ConfAssetAbilityAssetTags:null,
-            nameof(ConfAssetAbilityBaseInfo) => HasConfAssetAbilityBaseInfo?ConfAssetAbilityBaseInfo:null,
-            nameof(ConfAssetAbilityCooldown) => HasConfAssetAbilityCooldown?ConfAssetAbilityCooldown:null,
-            nameof(ConfAssetAbilityCost) => HasConfAssetAbilityCost?ConfAssetAbilityCost:null,
-            nameof(ConfAssetBlockAbilityTags) => HasConfAssetBlockAbilityTags?ConfAssetBlockAbilityTags:null,
-            nameof(ConfAssetCancelAbilityTags) => HasConfAssetCancelAbilityTags?ConfAssetCancelAbilityTags:null,
-            nameof(MCConfAssetAbilityLogic) => HasMCConfAssetAbilityLogic?MCConfAssetAbilityLogic:null,
-            _ => null
-        };
+            if(type==typeof(ConfAssetAbilityActivationBlockedTags).FullName)
+                return HasConfAssetAbilityActivationBlockedTags?ConfAssetAbilityActivationBlockedTags:null;
+            if(type==typeof(ConfAssetAbilityActivationOwnedTags).FullName)
+                return HasConfAssetAbilityActivationOwnedTags?ConfAssetAbilityActivationOwnedTags:null;
+            if(type==typeof(ConfAssetAbilityActivationRequiredTags).FullName)
+                return HasConfAssetAbilityActivationRequiredTags?ConfAssetAbilityActivationRequiredTags:null;
+            if(type==typeof(ConfAssetAbilityAssetTags).FullName)
+                return HasConfAssetAbilityAssetTags?ConfAssetAbilityAssetTags:null;
+            if(type==typeof(ConfAssetAbilityBaseInfo).FullName)
+                return HasConfAssetAbilityBaseInfo?ConfAssetAbilityBaseInfo:null;
+            if(type==typeof(ConfAssetAbilityCooldown).FullName)
+                return HasConfAssetAbilityCooldown?ConfAssetAbilityCooldown:null;
+            if(type==typeof(ConfAssetAbilityCost).FullName)
+                return HasConfAssetAbilityCost?ConfAssetAbilityCost:null;
+            if(type==typeof(ConfAssetBlockAbilityTags).FullName)
+                return HasConfAssetBlockAbilityTags?ConfAssetBlockAbilityTags:null;
+            if(type==typeof(ConfAssetCancelAbilityTags).FullName)
+                return HasConfAssetCancelAbilityTags?ConfAssetCancelAbilityTags:null;
+            if(type==typeof(MCConfAssetAbilityLogic).FullName)
+                return HasMCConfAssetAbilityLogic?MCConfAssetAbilityLogic:null;
+            return null;
     }
     protected virtual bool ValidateList(List<string> _, ref string errorMsg)
     {

@@ -1,4 +1,5 @@
 using DemoForESC._Script.Gen;
+using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.ASCPreset;
 using GAS.RuntimeWithECS.Ability.Component;
@@ -27,17 +28,17 @@ namespace DemoForESC._Script
         public virtual void Move(Vector3 direction)
         {
             var param = new AbilityParamVector3(direction);
-            _abilitySystemCellMono.TryActivateAbility(Gen_AbilityCode.Move,param);
+            _abilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.Move,param);
         }
         
         public virtual void Jump()
         {
-            _abilitySystemCellMono.TryActivateAbility(Gen_AbilityCode.Jump);
+            _abilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.Jump);
         }
         
         public virtual void Attack()
         {
-            _abilitySystemCellMono.TryActivateAbility(Gen_AbilityCode.Attack);
+            _abilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.Attack);
         }
     }
 }

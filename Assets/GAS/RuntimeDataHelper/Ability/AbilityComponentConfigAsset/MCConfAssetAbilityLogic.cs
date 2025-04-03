@@ -29,9 +29,11 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
 
         public override GameplayAbilityComponentConfig GetConfig()
         {
+            var realConfig = JsonProxyHelper.Deserialize<AbilityParamConfigBase>(_jsonAbilityParamConfig);
             return new MCConfAbilityLogic
             {
-                abilityParam = abilityParamConfig.GetConfig()
+                AbilityLogicType = AbilityLogicType,
+                abilityParam = realConfig.GetConfig()
             };
         }
 

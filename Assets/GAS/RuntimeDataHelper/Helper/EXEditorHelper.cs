@@ -288,6 +288,12 @@ namespace GAS.RuntimeDataHelper.Helper
             return _cachedAbilityLogicToAbilityParamConfigTypeMap;
         }
 
+        
+        public static List<AbilityConfigAsset> GetAllAbilityConfigAssets()
+        {
+            var abilityConfigAssets = FindAll<AbilityConfigAsset>();
+            return abilityConfigAssets;
+        }
         #endregion
 
         #region GameplayEffect

@@ -11,26 +11,26 @@ namespace GAS.RuntimeWithECS.Ability
     public static class AbilityHelper
     {
         #region AbilityLogic
-        private static readonly Dictionary<int, Type> AbilityLogicMap = new();
+        private static readonly Dictionary<string, Type> AbilityLogicMap = new();
 
-        public static void RegisterAbilityLogic(int code, Type logicType)
+        public static void RegisterAbilityLogic(string sType, Type logicType)
         {
-            AbilityLogicMap[code] = logicType;
+            AbilityLogicMap[sType] = logicType;
         }
 
-        public static Type GetAbilityLogicType(int code)
+        public static Type GetAbilityLogicType(string sType)
         {
-            return AbilityLogicMap[code];
+            return AbilityLogicMap[sType];
         }
 
-        public static void RegisterAbilityLogic<T>(int code) where T : AbilityLogicBase
+        public static void RegisterAbilityLogic<T>(string sType) where T : AbilityLogicBase
         {
-            RegisterAbilityLogic(code, typeof(T));
+            RegisterAbilityLogic(sType, typeof(T));
         }
 
-        public static AbilityLogicBase TryCreateAbilityLogic(int code,Entity ability)
+        public static AbilityLogicBase TryCreateAbilityLogic(string logicType,Entity ability)
         {
-            if (AbilityLogicMap.TryGetValue(code, out var type))
+            if (AbilityLogicMap.TryGetValue(logicType, out var type))
                 try
                 {
                     var abilityLogic = Activator.CreateInstance(type,ability) as AbilityLogicBase;
@@ -45,7 +45,7 @@ namespace GAS.RuntimeWithECS.Ability
                     throw;
                 }
 #if UNITY_EDITOR
-            Debug.LogError($"[EX] 创建AbilityLogic失败:Can't find AbilityLogic for code [{code}]. " +
+            Debug.LogError($"[EX] 创建AbilityLogic失败:Can't find AbilityLogic for logicType [{logicType}]. " +
                            "AbilityLogic的Type映射脚本错误，请重新生成。");
 #endif
 

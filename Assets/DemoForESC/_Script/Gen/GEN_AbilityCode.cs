@@ -1,8 +1,6 @@
-using GAS.RuntimeWithECS.Ability;
-
-namespace DemoForESC._Script.Gen
+namespace GAS.Runtime
 {
-    public static class Gen_AbilityCode
+    public static class GEN_AbilityCode
     {
         public const int DebugLog = 0;
         public const int Move = 1;
@@ -12,7 +10,8 @@ namespace DemoForESC._Script.Gen
         
         public static void LoadAbilityCode()
         {
-            AbilityHelper.RegisterAbilityLogic(DebugLog, typeof(GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog));
+            var AlDebugLog = typeof(GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog);
+            GAS.RuntimeWithECS.Ability.AbilityHelper.RegisterAbilityLogic(AlDebugLog.FullName, AlDebugLog);
             // AbilityHelper.RegisterAbilityLogic(Move, new AbilityLogic_Move());
             // AbilityHelper.RegisterAbilityLogic(Jump, new AbilityLogic_Jump());
             // AbilityHelper.RegisterAbilityLogic(Attack, new AbilityLogic_Attack());
