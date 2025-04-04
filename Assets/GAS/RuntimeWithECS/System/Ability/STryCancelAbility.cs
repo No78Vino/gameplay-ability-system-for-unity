@@ -24,6 +24,7 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
             foreach (var (_,ability) in SystemAPI.Query<RefRO<CAbilityInTryCancel>>().WithEntityAccess())
             {
                 bool result = state.EntityManager.HasComponent<CAbilityActive>(ability);
@@ -32,7 +33,7 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
                     ecb.RemoveComponent<CAbilityActive>(ability);
                     ASCUtil.RestoreDynamicTags(ability);
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
-                    abilityLogic.Logic.CancelAbility();
+                    abilityLogic.Logic.CancelAbility(globalTimer.ValueRO);
                     GASEventCenter.InvokeOnCancelAbility(ability);
                 }
                 ecb.RemoveComponent<CAbilityInTryCancel>(ability);

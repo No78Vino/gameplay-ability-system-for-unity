@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf62a9aa7db48b38f37313afe3e6ef5, type: 3}
   m_Name: GASSettingAsset
   m_EditorClassIdentifier: 
-  CodeGeneratePath: Assets/Demo/Script/Gen
+  CodeGeneratePath: Assets/DemoForESC/_Script/Gen
   GASConfigAssetPath: Assets/Demo/Resources/GAS_Setting/Config

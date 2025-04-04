@@ -160,57 +160,57 @@ namespace GAS.RuntimeWithECS.Ability
             GEUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
-        public static AbilityActivationResult TryActivateAbility(Entity ability)
-        {
-            var result = CanActivateAbility(ability);
-            if (result == AbilityActivationResult.Success)
-            {
-                var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-                if (_entityManager.HasComponent<CAbilityActivationOwnedTags>(ability))
-                {
-                    var abilityActivationOwnedTags =
-                        _entityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
-                    foreach (var tag in abilityActivationOwnedTags.tags)
-                        GTagUtil.AddTemporaryTagTo(owner, ability, tag);
-                }
-
-                _entityManager.AddComponentData(ability, new CAbilityActive());
-                
-                var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
-                abilityLogic.Logic.ActivateAbility();
-            }
-            GASEventCenter.InvokeOnActivateResult(ability, result);
-            return result;
-        }
+        // public static AbilityActivationResult TryActivateAbility(Entity ability)
+        // {
+        //     var result = CanActivateAbility(ability);
+        //     if (result == AbilityActivationResult.Success)
+        //     {
+        //         var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+        //         if (_entityManager.HasComponent<CAbilityActivationOwnedTags>(ability))
+        //         {
+        //             var abilityActivationOwnedTags =
+        //                 _entityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
+        //             foreach (var tag in abilityActivationOwnedTags.tags)
+        //                 GTagUtil.AddTemporaryTagTo(owner, ability, tag);
+        //         }
+        //
+        //         _entityManager.AddComponentData(ability, new CAbilityActive());
+        //         
+        //         var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
+        //         abilityLogic.Logic.ActivateAbility();
+        //     }
+        //     GASEventCenter.InvokeOnActivateResult(ability, result);
+        //     return result;
+        // }
         
-        public static bool TryEndAbility(Entity ability)
-        {
-            bool result = _entityManager.HasComponent<CAbilityActive>(ability);
-            if (result)
-            {
-                _entityManager.RemoveComponent<CAbilityActive>(ability);
-                ASCUtil.RestoreDynamicTags(ability);
-                var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
-                abilityLogic.Logic.EndAbility();
-                GASEventCenter.InvokeOnEndAbility(ability);
-            }
-            
-            return result;
-        }
+        // public static bool TryEndAbility(Entity ability)
+        // {
+        //     bool result = _entityManager.HasComponent<CAbilityActive>(ability);
+        //     if (result)
+        //     {
+        //         _entityManager.RemoveComponent<CAbilityActive>(ability);
+        //         ASCUtil.RestoreDynamicTags(ability);
+        //         var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
+        //         abilityLogic.Logic.EndAbility();
+        //         GASEventCenter.InvokeOnEndAbility(ability);
+        //     }
+        //     
+        //     return result;
+        // }
         
-        public static bool TryCancelAbility(Entity ability)
-        {
-            bool result = _entityManager.HasComponent<CAbilityActive>(ability);
-            if (result)
-            {
-                _entityManager.RemoveComponent<CAbilityActive>(ability);
-                ASCUtil.RestoreDynamicTags(ability);
-                var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
-                abilityLogic.Logic.CancelAbility();
-                GASEventCenter.InvokeOnCancelAbility(ability);
-            }
-            return true;
-        }
+        // public static bool TryCancelAbility(Entity ability)
+        // {
+        //     bool result = _entityManager.HasComponent<CAbilityActive>(ability);
+        //     if (result)
+        //     {
+        //         _entityManager.RemoveComponent<CAbilityActive>(ability);
+        //         ASCUtil.RestoreDynamicTags(ability);
+        //         var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
+        //         abilityLogic.Logic.CancelAbility();
+        //         GASEventCenter.InvokeOnCancelAbility(ability);
+        //     }
+        //     return true;
+        // }
 
         /// <summary>
         ///     检查是否有指定标签，能力的tag校验只校验AssetTag

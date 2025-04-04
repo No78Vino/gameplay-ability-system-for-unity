@@ -62,7 +62,7 @@ namespace GAS.RuntimeDataHelper.Ability
                     {
                         var abilityName = abilityConfigAsset.ConfAssetAbilityBaseInfo.name;
                         var hashCode = abilityConfigAsset.ConfAssetAbilityBaseInfo.Code;
-                        writer.WriteLine($"public const int {abilityName} = {hashCode};");
+                        writer.WriteLine($"public const int ABILITY_{abilityName} = {hashCode};");
                     }
 
                     writer.WriteLine("");
@@ -85,6 +85,8 @@ namespace GAS.RuntimeDataHelper.Ability
                 writer.Indent--;
                 writer.WriteLine("}");
             }
+            
+            writer.WriteLine("}");
         }
     }
 }

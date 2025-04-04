@@ -1,3 +1,4 @@
+using GAS.RuntimeWithECS.Core;
 using Unity.Entities;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
         {
         }
         
-        public override void AbilityTick()
+        public override void AbilityTick(GlobalTimer timer)
         {
             Debug.Log($"Entity:{_abilityEntity} AbilityTick: {_param.Value}");
         }
@@ -19,17 +20,17 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
             base.SetParam(abilityParam);
         }
 
-        public override void ActivateAbility()
+        public override void ActivateAbility(GlobalTimer timer)
         {
             Debug.Log($"Entity:{_abilityEntity}  ActivateAbility");
         }
 
-        public override void CancelAbility()
+        public override void CancelAbility(GlobalTimer timer)
         {
             Debug.Log($"Entity:{_abilityEntity}  CancelAbility");
         }
 
-        public override void EndAbility()
+        public override void EndAbility(GlobalTimer timer)
         {
             Debug.Log($"Entity:{_abilityEntity}  EndAbility");
         }

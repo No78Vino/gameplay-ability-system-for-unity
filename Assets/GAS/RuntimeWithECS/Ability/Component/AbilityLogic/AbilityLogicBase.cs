@@ -1,3 +1,4 @@
+using GAS.RuntimeWithECS.Core;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability.Component
@@ -12,13 +13,13 @@ namespace GAS.RuntimeWithECS.Ability.Component
             _abilityEntity = ability;
         }
         
-        public abstract void ActivateAbility();
+        public abstract void ActivateAbility(GlobalTimer timer);
 
-        public abstract void CancelAbility();
+        public abstract void CancelAbility(GlobalTimer timer);
 
-        public abstract void EndAbility();
+        public abstract void EndAbility(GlobalTimer timer);
         
-        public abstract void AbilityTick();
+        public abstract void AbilityTick(GlobalTimer timer);
         
         public void SetAbilityEntity(Entity abilityEntity)
         {

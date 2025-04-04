@@ -149,14 +149,14 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium, Name = "启用/关闭debug能力")]
         private void SwitchAbilityDebugLog()
         {
-            bool isActivated = _asc.IsAbilityActive(GEN_AbilityCode.DebugLog);
-            if (!isActivated)
-            {
-                _asc.TryActivateAbility(GEN_AbilityCode.DebugLog);
-                _asc.SetAbilityParam(GEN_AbilityCode.DebugLog, new AbilityParamString("Hello,World!"+Time.time));
-            }
-            else
-                _asc.TryEndAbility(GEN_AbilityCode.DebugLog);
+            // bool isActivated = _asc.IsAbilityActive(GEN_AbilityCode.DebugLog);
+            // if (!isActivated)
+            // {
+            //     _asc.TryActivateAbility(GEN_AbilityCode.DebugLog);
+            //     _asc.SetAbilityParam(GEN_AbilityCode.DebugLog, new AbilityParamString("Hello,World!"+Time.time));
+            // }
+            // else
+            //     _asc.TryEndAbility(GEN_AbilityCode.DebugLog);
             
         }
     }

@@ -111,7 +111,7 @@ namespace TestUnit_ForGASECS
 
         public static AbilityConfig AbilityConfig_Debug = new(new GameplayAbilityComponentConfig[]
         {
-            new ConfAbilityBaseInfo { Code = GEN_AbilityCode.DebugLog },
+            //new ConfAbilityBaseInfo { Code = GEN_AbilityCode.DebugLog },
             new ConfAbilityAssetTags { tags = new[] { GTagList.Magic_Fire } },
             new MCConfAbilityLogic { AbilityLogicType = typeof(ALDebugLog).FullName },
         });

@@ -23,6 +23,7 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
             foreach (var (_,basicInfo,ability) in SystemAPI.Query<RefRO<CAbilityInTryActivate>,RefRO<CAbilityBaseInfo>>().WithEntityAccess())
             {
                 //GAUtil.TryActivateAbility(ability);
@@ -42,7 +43,7 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
                     ecb.AddComponent(ability, new CAbilityActive());
                     // 激活能力【自定义逻辑】
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
-                    abilityLogic.Logic.ActivateAbility();
+                    abilityLogic.Logic.ActivateAbility(globalTimer.ValueRO);
                 }
                 GASEventCenter.InvokeOnActivateResult(ability, result);
                 
