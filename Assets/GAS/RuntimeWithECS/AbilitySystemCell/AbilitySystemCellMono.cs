@@ -23,5 +23,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         public void TryEndAbility(int abilityCode) => _abilitySystemCell.TryEndAbility(abilityCode);
 
         public void TryCancelAbility(int abilityCode)=> _abilitySystemCell.TryCancelAbility(abilityCode);
+
+        public AbilitySystemCell Cell => _abilitySystemCell;
     }
 }

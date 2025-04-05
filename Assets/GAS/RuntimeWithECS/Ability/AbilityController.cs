@@ -82,6 +82,20 @@ namespace GAS.RuntimeWithECS.Ability
             return false;
         }
 
+        public MCAbilityLogic GetAbilityLogic(int abilityCode)
+        {
+            var buffer = CurrentAbilities;
+            for (var i = 0; i < buffer.Length; i++)
+            {
+                var a = buffer[i].Ability;
+                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                if (abi.Code == abilityCode)
+                    return GasEntityManager.GetComponentData<MCAbilityLogic>(a);
+            }
+
+            return default;
+        }
+        
         public bool IsAbilityActive(int abilityCode)
         {
             var buffer = CurrentAbilities;

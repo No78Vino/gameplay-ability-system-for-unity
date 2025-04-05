@@ -3,6 +3,7 @@ using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.AttributeSet.Component;
@@ -88,36 +89,12 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region GameplayTag 
 
+        public bool HasTag(int tag) => _gameplayTagController.HasTag(tag);
         //public void AddFixedTag(int tag) => _gameplayTagController.AddFixedTags(tag);
 
         #endregion
 
         #region Attribute
-
-        public void TryActivateAbility(int abilityCode, AbilityParamBase param = null)
-        {
-            _abilityController.TryActivateAbility(abilityCode, param);
-        }
-
-        public void TryEndAbility(int abilityCode)
-        {
-            _abilityController.EndAbility(abilityCode);
-        }
-
-        public void TryCancelAbility(int abilityCode)
-        {
-            _abilityController.CancelAbility(abilityCode);
-        }
-        
-        public bool IsAbilityActive(int abilityCode)
-        {
-            return _abilityController.IsAbilityActive(abilityCode);
-        }
-
-        public void SetAbilityParam(int abilityCode, AbilityParamBase param)
-        {
-            _abilityController.SetAbilityParam(abilityCode, param);
-        }
         #endregion
         
         #region GameplayEffect
@@ -207,7 +184,35 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region Ability
 
+        public void TryActivateAbility(int abilityCode, AbilityParamBase param = null)
+        {
+            _abilityController.TryActivateAbility(abilityCode, param);
+        }
+
+        public void TryEndAbility(int abilityCode)
+        {
+            _abilityController.EndAbility(abilityCode);
+        }
+
+        public void TryCancelAbility(int abilityCode)
+        {
+            _abilityController.CancelAbility(abilityCode);
+        }
         
+        public bool IsAbilityActive(int abilityCode)
+        {
+            return _abilityController.IsAbilityActive(abilityCode);
+        }
+
+        public void SetAbilityParam(int abilityCode, AbilityParamBase param)
+        {
+            _abilityController.SetAbilityParam(abilityCode, param);
+        }
+        
+        public MCAbilityLogic GetAbilityLogic(int abilityCode)
+        {
+            return _abilityController.GetAbilityLogic(abilityCode);
+        }
         #endregion
         
         

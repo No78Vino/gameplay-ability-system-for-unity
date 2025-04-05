@@ -17,7 +17,7 @@ namespace DemoForESC._Script.Gen
         {
             LoadGenCache();
             GASManager.Initialize();
-            GTagList.InitTagList();
+            GEN_GameplayTagCode.InitTagList();
         }
     }
 }

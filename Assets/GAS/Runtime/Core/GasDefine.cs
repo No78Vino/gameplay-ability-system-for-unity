@@ -11,11 +11,12 @@
         public const string GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME = "GAttrSetLib.gen.cs";
 
         public const string GAS_ABILITY_LIB_CSHARP_SCRIPT_NAME = "GAbilityLib.gen.cs";
-        
-        public const string GAS_ABILITY_CODE_LIB_CSHARP_SCRIPT_NAME = "GEN_AbilityCode.gen.cs";
 
         public const string GAS_ASCUTIL_CSHARP_SCRIPT_NAME = "AbilitySystemComponentExtension.gen.cs";
 
+        public const string GAS_ABILITY_CODE_LIB_CSHARP_SCRIPT_NAME = "GEN_AbilityCode.gen.cs";
+        public const string GAS_GAMEPLAY_TAG_CODE_LIB_CSHARP_SCRIPT_NAME = "GEN_GameplayTagCode.gen.cs";
+        
         /// <summary>
         /// TODO
         /// I will try to make an Ability-Script-Generator in the future. 

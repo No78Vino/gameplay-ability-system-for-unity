@@ -1,3 +1,4 @@
+using DemoForESC._Script.Gas.Ability;
 using DemoForESC._Script.Gen;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
@@ -14,21 +15,33 @@ namespace DemoForESC._Script
     /// </summary>
     public class BaseUnit : MonoBehaviour
     {
-        private AbilitySystemCellMono _abilitySystemCellMono;
-        
+        protected AbilityParamMove _cacheParamMove = new AbilityParamMove();
+
+        public AbilitySystemCellMono AbilitySystemCellMono { get; private set; }
+
         [SerializeField]
         private AbilitySystemCellConfigAsset _configAsset;
         
-        private void Awake()
+        protected virtual void Awake()
         {
-            _abilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
-            _abilitySystemCellMono.Init(_configAsset.GetConfig());
+            AbilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
+            AbilitySystemCellMono.Init(_configAsset.GetConfig());
+            var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(GEN_AbilityCode.ABILITY_move);
+            ((ALMove)abilityLogic.Logic).SetUnit(this);
         }
         
         public virtual void Move(Vector3 direction)
         {
-            var param = new AbilityParamVector3(direction);
-            _abilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_move,param);
+            if(!IsMoving()) AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
+            
+            var viewPointForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            _cacheParamMove.SetValue(direction,viewPointForward,0.1f);
+            AbilitySystemCellMono.Cell.SetAbilityParam(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
+        }
+        
+        public virtual void StopMove()
+        {
+            if(IsMoving()) AbilitySystemCellMono.TryEndAbility(GEN_AbilityCode.ABILITY_move);
         }
         
         public virtual void Jump()
@@ -39,6 +52,11 @@ namespace DemoForESC._Script
         public virtual void Attack()
         {
             //_abilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.Attack);
+        }
+
+        public bool IsMoving()
+        {
+            return AbilitySystemCellMono.Cell.HasTag(GTagLib.Event_Moving.HashCode);
         }
     }
 }

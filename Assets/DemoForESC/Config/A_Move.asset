@@ -16,10 +16,11 @@ MonoBehaviour:
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityAssetTags
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityBaseInfo
   - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.MCConfAssetAbilityLogic
+  - GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset.ConfAssetAbilityActivationOwnedTags
   ConfAssetAbilityActivationBlockedTags:
     tags: 
   ConfAssetAbilityActivationOwnedTags:
-    tags: 
+    tags: 1eff9d2f
   ConfAssetAbilityActivationRequiredTags:
     tags: 
   ConfAssetAbilityAssetTags:
@@ -40,5 +41,5 @@ MonoBehaviour:
   MCConfAssetAbilityLogic:
     AbilityLogicType: DemoForESC._Script.Gas.Ability.ALMove
     _jsonAbilityParamConfig:
-      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigVector3
-      Data: '{"value":{"x":1.0,"y":1.0,"z":1.0}}'
+      TypeFullName: DemoForESC._Script.Gas.Ability.AbilityParam.AbilityParamConfMove
+      Data: '{"rotationOffset":0.20000000298023225}'

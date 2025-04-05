@@ -104,13 +104,13 @@ namespace TestUnit_ForGASECS
         private void CreateASC()
         {
             _asc = new AbilitySystemCell();
-            int[] baseTags = { GTagList.Magic_Fire, GTagList.Magic_Water };
+            //int[] baseTags = { GEN_GameplayTagCode.Magic_Fire, GEN_GameplayTagCode.Magic_Water };
             int[] attrSets = { EcsGAttrSetCode.Fight_Monster };
             AbilityConfig[] abilityConfigs =
             {
                 TestASCUnitUtils.AbilityConfig_Debug,
             };
-            _asc.Init(baseTags, attrSets, abilityConfigs);
+            //_asc.Init(baseTags, attrSets, abilityConfigs);
             
             EntityASC = _asc.Entity;
             RefreshUI();

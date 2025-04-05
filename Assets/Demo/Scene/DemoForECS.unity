@@ -1386,7 +1386,6 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 6
   acceleration: 3
-  rotationOffset: 0.1
   demoPlayer: {fileID: 1602959555}
 --- !u!143 &1602959553
 CharacterController:
