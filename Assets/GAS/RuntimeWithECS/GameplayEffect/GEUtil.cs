@@ -1,13 +1,10 @@
-﻿using GAS.EditorForECS.GameplayEffect;
-using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.AbilitySystemCell.Component;
+﻿using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine.Profiling;
 
 namespace GAS.RuntimeWithECS.GameplayEffect
 {
@@ -61,11 +58,6 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         
         
         
-        
-        public static Entity CreateGameplayEffectEntity(NewGameplayEffectAsset asset)
-        {
-            return CreateGameplayEffectEntity(asset.components);
-        }
 
         public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
         {
@@ -74,11 +66,6 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             foreach (var config in componentAssets)
                 config.LoadToGameplayEffectEntity(entity);
             return entity;
-        }
-
-        public static NewGameplayEffectSpec CreateGameplayEffectSpec(NewGameplayEffectAsset asset)
-        {
-            return CreateGameplayEffectSpec(asset.components);
         }
 
         public static NewGameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
