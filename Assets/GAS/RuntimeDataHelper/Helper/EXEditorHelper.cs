@@ -317,5 +317,50 @@ namespace GAS.RuntimeDataHelper.Helper
         }
 
         #endregion
+
+        #region Attribute
+
+        private static ValueDropdownItem[] _attributeSetChoices;
+        
+        private static string[] LoadAttributeSetNames()
+        {
+            var libType = TypeUtil.FindTypeInAllAssemblies("GAS.Runtime.GAttrSetLib");
+            if (libType == null)
+            {
+                Debug.LogError("[EX] Type 'GAttrSetLib' not found. Please generate the GAttrSetLib CODE first!");
+                return Array.Empty<string>();
+            }
+
+            const string fieldName = "AttrSetTypeDict";
+            var field = libType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
+            if (field == null)
+            {
+                Debug.LogError($"[EX] Field \"{fieldName}\" not found in GAttrSetLib!");
+                return Array.Empty<string>();
+            }
+
+            var value = field.GetValue(null);
+            if (value is not Dictionary<string, Type> dict)
+            {
+                Debug.LogError($"[EX] Field \"{fieldName}\" is not a Dictionary<string, Type> in GAttrSetLib!");
+                return Array.Empty<string>();
+            }
+
+            return dict.Keys.ToArray();
+        }
+        
+        public static IEnumerable<ValueDropdownItem> AttributeSetChoices
+        {
+            get
+            {
+                _attributeSetChoices ??= LoadAttributeSetNames()
+                    .Select(name => new ValueDropdownItem(name, name))
+                    .ToArray();
+                return _attributeSetChoices;
+            }
+        }
+
+
+        #endregion
     }
 }

@@ -26,21 +26,21 @@ namespace TestUnit_ForGASECS
         {
             new ConfEffectBasicInfo {Name = "Test_OneHit"},
             //new ConfAssetTags {tags = new []{GEN_GameplayTagCode.Magic_Fire}},
-            new ConfModifiers {modifierSettings = new []
-            {
-                new ModifierSetting()
-                {
-                    AttrSetCode = EcsGAttrSetCode.Fight_Monster,
-                    AttrCode = EcsGAttrLib.HP,
-                    Operation = GEOperation.Minus,
-                    Magnitude = 10,
-                    MMC = new MMCSettingConfig()
-                    {
-                        TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                        floatParams = new []{0.5f,0},
-                    }
-                }
-            }},
+            // new ConfModifiers {modifierSettings = new []
+            // {
+            //     new ModifierSetting()
+            //     {
+            //         AttrSetCode = GEN_AttrSetCode.Fight_Monster,
+            //         AttrCode = GEN_AttributeCode.HP,
+            //         Operation = GEOperation.Minus,
+            //         Magnitude = 10,
+            //         MMC = new MMCSettingConfig()
+            //         {
+            //             TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+            //             floatParams = new []{0.5f,0},
+            //         }
+            //     }
+            // }},
             new ConfCueOnExecution()
             {
                 cues = new CueInstant[]{ new CueLog(new CueLogParameters(){Message = "普通攻击",SourceType = CueSourceType.GameplayEffect})} 
@@ -59,8 +59,8 @@ namespace TestUnit_ForGASECS
             {
                 new ModifierSetting()
                 {
-                    AttrSetCode = EcsGAttrSetCode.Fight_Monster,
-                    AttrCode = EcsGAttrLib.HP,
+                    //AttrSetCode = GEN_AttrSetCode.Fight_Monster,
+                    AttrCode = GEN_AttributeCode.HP,
                     Operation = GEOperation.Minus,
                     Magnitude = 20,
                     MMC = new MMCSettingConfig()
@@ -87,8 +87,8 @@ namespace TestUnit_ForGASECS
                 {
                     new ModifierSetting()
                     {
-                        AttrSetCode = EcsGAttrSetCode.Fight_Monster,
-                        AttrCode = EcsGAttrLib.ATK,
+                        //AttrSetCode = GEN_AttrSetCode.Fight_Monster,
+                        AttrCode = GEN_AttributeCode.ATK,
                         Operation = GEOperation.Add,
                         Magnitude = 66,
                         MMC = new MMCSettingConfig()

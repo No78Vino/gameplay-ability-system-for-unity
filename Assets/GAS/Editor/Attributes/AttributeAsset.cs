@@ -181,14 +181,23 @@ namespace GAS.Editor
             [LabelText("属性名"), LabelWidth(LabelWidth)]
             [DelayedProperty]
             [ValidateInput("@OnNameChanged($value)", "Attribute name is invalid!")]
+            [OnValueChanged(nameof(OnNameChangeSaveCode))]
             [PropertyOrder(1)]
             public string Name = "Unnamed";
+
+            [HideInInspector]
+            public int Code;
 
             private bool OnNameChanged(string value)
             {
                 if (ParentAsset == null) return true;
 
                 return Validations.IsValidVariableName(value);
+            }   
+            
+            private void OnNameChangeSaveCode()
+            {
+                Code = Name.GetHashCode();
             }
 
             [FoldoutGroup("$DisplayName")]
@@ -257,6 +266,12 @@ namespace GAS.Editor
             [EnableIf("LimitMaxValue")]
             [HorizontalGroup("$DisplayName/Values")]
             public float MaxValue = float.MaxValue;
+            
+            public int GetCode()
+            {
+                if(Code == 0) Code = Name.GetHashCode();
+                return Code;
+            }
         }
     }
 }

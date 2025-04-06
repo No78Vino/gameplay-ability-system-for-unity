@@ -27,8 +27,17 @@ namespace GAS.Editor
             VisibleIf = "ExistDuplicatedAttribute")]
         [InfoBox(GASTextDefine.ERROR_Empty, InfoMessageType.Error, VisibleIf = "EmptyAttribute")]
         [InfoBox(GASTextDefine.ERROR_EmptyName, InfoMessageType.Error, VisibleIf = "EmptyAttributeSetName")]
+        [OnValueChanged(nameof(OnNameChanged))]
         public string Name = "Unnamed";
 
+        private void OnNameChanged()
+        {
+            Code = Name.GetHashCode();
+        }
+        
+        [HideInInspector]
+        public int Code;
+        
         [Space]
         [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false,
             OnTitleBarGUI = "DrawAttributeNamesButtons")]
@@ -91,6 +100,12 @@ namespace GAS.Editor
                 .Select(group => group.Key)
                 .ToList();
             return duplicates.Count > 0;
+        }
+        
+        public int GetCode()
+        {
+            if (Code == 0) Code = Name.GetHashCode();
+            return Code;
         }
     }
 

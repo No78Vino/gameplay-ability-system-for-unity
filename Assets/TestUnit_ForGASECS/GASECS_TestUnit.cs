@@ -105,7 +105,7 @@ namespace TestUnit_ForGASECS
         {
             _asc = new AbilitySystemCell();
             //int[] baseTags = { GEN_GameplayTagCode.Magic_Fire, GEN_GameplayTagCode.Magic_Water };
-            int[] attrSets = { EcsGAttrSetCode.Fight_Monster };
+            // int[] attrSets = { GEN_AttrSetCode.Fight_Monster };
             AbilityConfig[] abilityConfigs =
             {
                 TestASCUnitUtils.AbilityConfig_Debug,
