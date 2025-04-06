@@ -115,7 +115,23 @@ namespace GAS.RuntimeDataHelper.Tag
                         }
 
                         writer.Indent--;
-                        writer.WriteLine("});");
+                        writer.WriteLine("},");
+
+                        writer.WriteLine("new Dictionary<int, string>()");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            foreach (var tagAsset in allTagAsset)
+                            {
+                                var tag = tagAsset.Item1;
+                                var tagName = tagAsset.Item2;
+                                writer.WriteLine(
+                                    $"{{ {tagName}, \"{tag.Name}\" }},");
+                            }
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine(");");
                     }
 
                     writer.Indent--;

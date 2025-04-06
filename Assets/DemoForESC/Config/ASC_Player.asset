@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093bd1aed1c44ae694f6a7a1998ecb38, type: 3}
   m_Name: ASC_Player
   m_EditorClassIdentifier: 
-  baseTags: 
+  baseTags: 616c653d
   _attributeSets: 
   baseAbilities:
   - {fileID: 11400000, guid: 339b214404679a1428ed7d544d5d1571, type: 2}

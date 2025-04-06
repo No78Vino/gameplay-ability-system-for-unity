@@ -81,7 +81,44 @@ namespace GAS.Runtime
                 { State_Debuff_Death, new GASTag(State_Debuff_Death, new int[] { State, State_Debuff }, new int[] { State, State_Debuff }) },
                 { State_Debuff_LoseBalance, new GASTag(State_Debuff_LoseBalance, new int[] { State, State_Debuff }, new int[] { State, State_Debuff }) },
                 { State_Debuff_Stun, new GASTag(State_Debuff_Stun, new int[] { State, State_Debuff }, new int[] { State, State_Debuff }) },
-            });
+            },
+            new Dictionary<int, string>()
+            {
+                { Ability, "Ability" },
+                { Ability_Attack, "Ability.Attack" },
+                { Ability_Defend, "Ability.Defend" },
+                { Ability_Die, "Ability.Die" },
+                { Ability_Dodge, "Ability.Dodge" },
+                { Ability_Jump, "Ability.Jump" },
+                { Ability_Move, "Ability.Move" },
+                { Ban, "Ban" },
+                { Ban_Motion, "Ban.Motion" },
+                { CD, "CD" },
+                { CD_Dodge, "CD.Dodge" },
+                { CD_FireBullet, "CD.FireBullet" },
+                { CD_Skill0, "CD.Skill0" },
+                { CD_Skill1, "CD.Skill1" },
+                { Event, "Event" },
+                { Event_Attacking, "Event.Attacking" },
+                { Event_Defending, "Event.Defending" },
+                { Event_Dodging, "Event.Dodging" },
+                { Event_Dying, "Event.Dying" },
+                { Event_InAir, "Event.InAir" },
+                { Event_Moving, "Event.Moving" },
+                { Event_PerfectDefending, "Event.PerfectDefending" },
+                { Faction, "Faction" },
+                { Faction_Enemy, "Faction.Enemy" },
+                { Faction_Player, "Faction.Player" },
+                { State, "State" },
+                { State_Buff, "State.Buff" },
+                { State_Buff_BulkUp, "State.Buff.BulkUp" },
+                { State_Buff_DefendBuff, "State.Buff.DefendBuff" },
+                { State_Debuff, "State.Debuff" },
+                { State_Debuff_Death, "State.Debuff.Death" },
+                { State_Debuff_LoseBalance, "State.Debuff.LoseBalance" },
+                { State_Debuff_Stun, "State.Debuff.Stun" },
+            }
+            );
         }
     }
 }

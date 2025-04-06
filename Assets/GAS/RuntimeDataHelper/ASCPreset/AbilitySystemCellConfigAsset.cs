@@ -16,8 +16,9 @@ namespace GAS.RuntimeDataHelper.ASCPreset
 
         [TabGroup("Base", GASTextDefine.ASC_BASE_TAG, SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 3)]
         [LabelText(GASTextDefine.ASC_BASE_TAG)]
-        //[ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, OnTitleBarGUI = "DrawBaseTagsButtons")]
-        //[ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [ValueDropdown("@EXEditorHelper.GameplayTagCodeChoices", 
+            IsUniqueList = true, 
+            HideChildProperties = true)]
         public int[] baseTags;
 
         [ShowInInspector]

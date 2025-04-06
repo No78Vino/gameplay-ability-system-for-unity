@@ -3,21 +3,25 @@ using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Tag
 {
     public static class GTagUtil
     {
         private static Dictionary<int, GASTag> _tagMap;
-
+        private static Dictionary<int, string> _tagCode2TagName;
+        
         /// <summary>
         ///     初始化TagMap
         /// </summary>
         /// <param name="tagMap"></param>
-        public static void InitTagMap(Dictionary<int, GASTag> tagMap)
+        /// <param name="tagCode2TagName"></param>
+        public static void InitTagMap(Dictionary<int, GASTag> tagMap,Dictionary<int, string> tagCode2TagName)
         {
             _tagMap = tagMap;
-
+            _tagCode2TagName = tagCode2TagName;
+            
             // ECS专用单例TagMap
             var map = new NativeHashMap<int, ComGameplayTag>(tagMap.Keys.Count, Allocator.Persistent);
             foreach (var p in tagMap)
@@ -60,6 +64,19 @@ namespace GAS.RuntimeWithECS.Tag
                 return false;
             temporaryTags.Add(new BTemporaryTag {source = source,tag = tag});
             return true;
+        }
+        
+        public static string GetTagFullName(int tagCode)
+        {
+            if (_tagCode2TagName.TryGetValue(tagCode, out var tagName))
+            {
+                return tagName;
+            }
+            
+#if UNITY_EDITOR
+            Debug.LogError($"[GEN] 标签码[{tagCode}]不存在!   请检查代码生成器是否正确生成了标签码!");
+#endif
+            return null;
         }
     }
 }
