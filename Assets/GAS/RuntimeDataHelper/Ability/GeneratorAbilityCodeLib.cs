@@ -11,7 +11,7 @@ namespace GAS.RuntimeDataHelper.Ability
     /// </summary>
     public static class GeneratorAbilityCodeLib
     {
-        [MenuItem("EX-GAS/CodeGenerate/AbilityCodeLib")]
+        [MenuItem("EX-GAS/CodeGenerate/AbilityCode")]
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
@@ -22,21 +22,6 @@ namespace GAS.RuntimeDataHelper.Ability
 
         public static void GenerateAbilityCodeLib(string filePath)
         {
-            // public static class GEN_AbilityCode
-            // {
-            //     public const int DebugLog = 0;
-            //     public const int Move = 1;
-            //     public const int Jump = 2;
-            //     public const int Attack = 3;
-            //     public const int Attack_Monster = 4;
-            //
-            //     public static void LoadAbilityCode()
-            //     {
-            //         var AlDebugLog = typeof(GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog);
-            //         GAS.RuntimeWithECS.Ability.AbilityHelper.RegisterAbilityLogic(AlDebugLog.FullName, AlDebugLog);
-            //     }
-            // }
-
             using var writer = new IndentedWriter(new StreamWriter(filePath));
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("//// This is a generated file. ////");

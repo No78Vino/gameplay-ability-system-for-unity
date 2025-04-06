@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.Helper;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Sirenix.OdinInspector;
@@ -52,7 +54,7 @@ namespace GAS.Editor
         [ShowIf(nameof(IsEntityValid))]
         [ShowInInspector]
         [DisplayAsString]
-        [HideLabel]
+        [LabelText(" ")]
         [ListDrawerSettings(IsReadOnly = true, Expanded = true)]
         private List<string> _ascAttributes = new();
 
@@ -77,7 +79,7 @@ namespace GAS.Editor
         [ShowIf(nameof(IsEntityValid))]
         [ShowInInspector]
         [DisplayAsString]
-        [HideLabel]
+        [LabelText(" ")]
         [ListDrawerSettings(IsReadOnly = true, Expanded = true)]
         private List<string> _ascAbilities = new();
 
@@ -85,7 +87,7 @@ namespace GAS.Editor
         [ShowIf(nameof(IsEntityValid))]
         [ShowInInspector]
         [DisplayAsString]
-        [HideLabel]
+        [LabelText(" ")]
         [ListDrawerSettings(IsReadOnly = true, Expanded = true)]
         private List<string> _ascGameplayEffects = new();
 
@@ -139,6 +141,28 @@ namespace GAS.Editor
             get { return _ascEntityChoices ?? new ValueDropdownItem[] { }; }
         }
 
+        private static Dictionary<int, string> _cacheAbilityCode2Name;
+        
+        private static Dictionary<int, string> CacheAbilityCode2Name
+        {
+            get
+            {
+                if (_cacheAbilityCode2Name == null)
+                {
+                    _cacheAbilityCode2Name = new Dictionary<int, string>();
+                    var allAbilityAssets = EXEditorHelper.FindAll<AbilityConfigAsset>();
+                    foreach (var abilityAsset in allAbilityAssets)
+                    {
+                        var abilityBasicInfo = abilityAsset.ConfAssetAbilityBaseInfo;
+                        var abilityCode = abilityBasicInfo.Code;
+                        var abilityName = abilityBasicInfo.name;
+                        _cacheAbilityCode2Name.TryAdd(abilityCode, abilityName);
+                    }
+                }
+
+                return _cacheAbilityCode2Name;
+            }
+        }
         #endregion
 
         #region content update
@@ -187,9 +211,8 @@ namespace GAS.Editor
             foreach (var tag in dynamicTagBuffer)
             {
                 var tagName = GTagUtil.GetTagFullName(tag.tag);
-                var sourceName = GASManager.EntityManager.GetName(tag.source);
-                if (string.IsNullOrEmpty(sourceName)) sourceName =  tag.source.ToString();
-                if (tagName != null) _ascTempTags.Add($"{tagName} ->FROM: {sourceName}");
+                var sourceName = ExGasHelper.GetEntityName(tag.source);
+                if (tagName != null) _ascTempTags.Add($"{tagName} ->来源: {sourceName}");
             }
         }
 
@@ -215,10 +238,11 @@ namespace GAS.Editor
             var abilityBuffer = GASManager.EntityManager.GetBuffer<BEAbility>(ascEntity);
             foreach (var ability in abilityBuffer)
             {
-                var abilityName = GASManager.EntityManager.GetName(ability.Ability);
                 var abilityBasicInfo = GASManager.EntityManager.GetComponentData<CAbilityBaseInfo>(ability.Ability);
-                
-                var text = $"Lv.{abilityBasicInfo.Level} - {abilityName}[{abilityBasicInfo.Code}]";
+                var abilityEntityName = ExGasHelper.GetEntityName(ability.Ability);
+                var text = $"Lv.{abilityBasicInfo.Level} " +
+                           $"- {CacheAbilityCode2Name[abilityBasicInfo.Code]} " +
+                           $"[{abilityEntityName}]";
                 _ascAbilities.Add(text);
             }
         }
