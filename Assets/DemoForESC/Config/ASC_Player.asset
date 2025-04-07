@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ASC_Player
   m_EditorClassIdentifier: 
   baseTags: 616c653d
-  _attributeSets: 
+  _attributeSets: 041c8906
   baseAbilities:
   - {fileID: 11400000, guid: 339b214404679a1428ed7d544d5d1571, type: 2}

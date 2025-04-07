@@ -185,10 +185,11 @@ namespace GAS.Editor
             foreach (var attrSet in attrSetBuffer)
             {
                 var attrSetCode = attrSet.Code;
+                _ascAttributes.Add($"属性集:{"name todo"}[{attrSetCode}]");
                 var attributes = attrSet.Attributes;
                 foreach (var attribute in attributes)
                     _ascAttributes.Add(
-                        $"{attrSetCode} - {attribute.Code} : {attribute.CurrentValue}"
+                        $"--- {"属性名"}[{attribute.Code}] : {attribute.CurrentValue} (BaseValue:{attribute.BaseValue})"
                     );
             }
         }
