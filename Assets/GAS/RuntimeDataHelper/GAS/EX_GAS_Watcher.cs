@@ -50,6 +50,12 @@ namespace GAS.Editor
         [HideLabel]
         [OnValueChanged(nameof(OnWatchEntityChanged))]
         public Entity entityWatching = Entity.Null;
+        
+        [HorizontalGroup("ASC/Top",order:0)]
+        [ShowIf(nameof(IsEditorPlaying))]
+        [DisplayAsString(EnableRichText = true)]
+        [HideLabel]
+        public string ascName => $"<b><color=yellow>{ExGasHelper.GetEntityName(entityWatching)}</color></b>";
 
         [TabGroup("ASC/Content", "属性")]
         [ShowIf(nameof(IsEntityValid))]

@@ -43,13 +43,6 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             _gameplayEffectController = new GameplayEffectController(Entity);
             // 5.Ability控制器
             _abilityController = new AbilityController(Entity);
-
-
-            // // 测试数据
-            // _attrSetContainer.AddAttrSet(EcsGAttrSetLib.AS_FIGHT);
-            // var v1 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
-            // _attrSetContainer.InitBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP,50);
-            // var v2 = _attrSetContainer.GetBaseValue(EcsGAttrSetLib.AS_FIGHT.Code, EcsGAttrLib.HP);
         }
 
         protected void Dispose()

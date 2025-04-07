@@ -56,7 +56,7 @@ namespace GAS.RuntimeWithECS.Ability
         public static Entity CreateAbilityEntity(GameplayAbilityComponentConfig[] configs)
         {
             var entity = GASManager.EntityManager.CreateEntity();
-
+            GASManager.EntityManager.SetName(entity, $"Ability_{entity.ToString()}");
             foreach (var config in configs)
                 config.LoadToGameplayAbilityEntity(entity);
             return entity;
