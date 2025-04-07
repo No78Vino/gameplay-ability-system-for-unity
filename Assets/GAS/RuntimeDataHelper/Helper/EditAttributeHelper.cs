@@ -33,16 +33,6 @@ namespace GAS.RuntimeDataHelper.Helper
                 _attributeSetChoices ??= LoadAttributeSet()
                     .Select(attrSetAsset => new ValueDropdownItem(attrSetAsset.Name, attrSetAsset.GetCode()))
                     .ToArray();
-                
-                // if (_attributeSetChoices != null) return _attributeSetChoices;
-                // var attrSetAssets = LoadAttributeSet();
-                // _attributeSetChoices =
-                //     new ValueDropdownItem[attrSetAssets.Count];
-                // for (var i = 0; i < attrSetAssets.Count; i++)
-                // {
-                //     var attrSetAsset = attrSetAssets[i];
-                //     _attributeSetChoices[i] = new ValueDropdownItem(attrSetAsset.Name, attrSetAsset.GetCode());
-                // }
 
                 return _attributeSetChoices;
             }

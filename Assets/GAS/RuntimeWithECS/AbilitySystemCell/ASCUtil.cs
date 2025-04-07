@@ -234,6 +234,16 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region Tag管理相关工具函数
 
+        public static DynamicBuffer<BFixedTag> GetDynamicBufferFixedTags(Entity asc)
+        {
+            return _entityManager.GetBuffer<BFixedTag>(asc);
+        }
+        
+        public static DynamicBuffer<BTemporaryTag> GetDynamicBufferTemporaryTags(Entity asc)
+        {
+            return _entityManager.GetBuffer<BTemporaryTag>(asc);
+        }
+        
         public static void TryAddDynamicAddedTag(Entity asc, Entity source, int tag)
         {
             GTagUtil.AddTemporaryTagTo(asc, source, tag);
@@ -242,58 +252,21 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         private static bool TryRemoveDynamicAddedTag(Entity asc,Entity source,int tag)
         {
             var dirty = false;
+            var tempTags = GetDynamicBufferTemporaryTags(asc);
+            int index = -1;
+            for (var i = 0; i < tempTags.Length; i++)
+            {
+                if (tempTags[i].tag != tag) continue;
+                if (tempTags[i].source != source) continue;
+                index = i;
+                break;
+            }
 
-            // effect
-            if (_entityManager.HasComponent<CInUsage>(source))
+            if (index >= 0)
             {
-                // var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
-                // if (hasValue)
-                // {
-                //     tagList.Remove(source);
-                //
-                //     dirty = tagList.Count == 0;
-                //     if (dirty)
-                //     {
-                //         _pool.Return(tagList);
-                //         dynamicTag.Remove(tag); // 有 GC
-                //     }
-                // }
+                dirty = true;
+                tempTags.RemoveAt(index);
             }
-            
-            // ability
-            if (_entityManager.HasComponent<CAbilityBaseInfo>(source))
-            {
-                //     var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
-                //     if (hasValue)
-                //     {
-                //         tagList.Remove(source);
-                //
-                //         dirty = tagList.Count == 0;
-                //         if (dirty)
-                //         {
-                //             _pool.Return(tagList);
-                //             
-                //             dynamicTag.Remove(tag); // 有 GC
-                //         }
-                //     }
-            }
-            
-            // if (source is GameplayEffectSpec || source is AbilitySpec)
-            // {
-            //     var hasValue = dynamicTag.TryGetValue(tag, out var tagList);
-            //     if (hasValue)
-            //     {
-            //         tagList.Remove(source);
-            //
-            //         dirty = tagList.Count == 0;
-            //         if (dirty)
-            //         {
-            //             _pool.Return(tagList);
-            //             
-            //             dynamicTag.Remove(tag); // 有 GC
-            //         }
-            //     }
-            // }
             
             return dirty;
         }

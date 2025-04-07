@@ -15,7 +15,8 @@ namespace DemoForESC._Script
 
         public override void Move(Vector3 direction)
         {
-            if(!IsMoving()) AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
+            if(!AbilitySystemCellMono.Cell.IsAbilityActive(GEN_AbilityCode.ABILITY_move))
+                AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
             
             var viewPointForward = Vector3.ProjectOnPlane(_mainCamera.transform.forward, Vector3.up).normalized;
             _cacheParamMove.SetValue(direction,viewPointForward,0.1f);

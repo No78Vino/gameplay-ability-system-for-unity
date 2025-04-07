@@ -25,7 +25,7 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            foreach (var (_,ability) in SystemAPI.Query<RefRO<CAbilityInTryEnd>>().WithEntityAccess())
+            foreach (var (_,baseInfo,ability) in SystemAPI.Query<RefRO<CAbilityInTryEnd>,RefRO<CAbilityBaseInfo>>().WithEntityAccess())
             {
                 bool result = state.EntityManager.HasComponent<CAbilityActive>(ability);
                 if (result)

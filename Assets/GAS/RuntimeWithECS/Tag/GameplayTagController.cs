@@ -49,7 +49,7 @@ namespace GAS.RuntimeWithECS.Tag
 
         private bool HasTemporaryTag(Entity source, int tag) => GTagUtil.HasTemporaryTag(_asc, source, tag);
         
-        private void KillFixedTag(int tag)
+        public void KillFixedTag(int tag)
         {
             var fixedTags = DynamicBufferFixedTags;
             int index = -1;

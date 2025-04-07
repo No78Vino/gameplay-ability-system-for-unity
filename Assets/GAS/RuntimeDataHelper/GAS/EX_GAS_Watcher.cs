@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Helper;
+using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
@@ -111,11 +112,11 @@ namespace GAS.Editor
             RefreshASCContent();
         }
 
-        #region ASC entity cache
+        #region cache
 
         private static readonly List<(string, Entity)> _cachedAscEntities = new();
 
-        [HorizontalGroup("ASC/Top")]
+        [HorizontalGroup("ASC/Top",width:200)]
         [Button("刷新当前ASC列表")]
         [ShowIf(nameof(IsEditorPlaying))]
         private static void RefreshAscEntitiesCache()
@@ -163,6 +164,50 @@ namespace GAS.Editor
                 return _cacheAbilityCode2Name;
             }
         }
+        
+        private static Dictionary<int, string> _cacheAttributeCode2Name;
+        
+        private static Dictionary<int, string> CacheAttributeCode2Name
+        {
+            get
+            {
+                if (_cacheAttributeCode2Name == null)
+                {
+                    _cacheAttributeCode2Name = new Dictionary<int, string>();
+                    var attributeAsset = AttributeAsset.LoadOrCreate();
+                    foreach (var attribute in attributeAsset.attributes)
+                    {
+                        var attributeCode = attribute.GetCode();
+                        var attributeName = attribute.Name;
+                        _cacheAttributeCode2Name.TryAdd(attributeCode, attributeName);
+                    }
+                }
+
+                return _cacheAttributeCode2Name;
+            }
+        }
+        
+        private static Dictionary<int, string> _cacheAttrSetCode2Name;
+        
+        private static Dictionary<int, string> CacheAttrSetCode2Name
+        {
+            get
+            {
+                if (_cacheAttrSetCode2Name == null)
+                {
+                    _cacheAttrSetCode2Name = new Dictionary<int, string>();
+                    var attributeSetAsset = AttributeSetAsset.LoadOrCreate();
+                    foreach (var attributeSet in attributeSetAsset.AttributeSetConfigs)
+                    {
+                        var attrSetCode = attributeSet.GetCode();
+                        var attrSetName = attributeSet.Name;
+                        _cacheAttrSetCode2Name.TryAdd(attrSetCode, attrSetName);
+                    }
+                }
+
+                return _cacheAttrSetCode2Name;
+            }
+        }
         #endregion
 
         #region content update
@@ -185,11 +230,11 @@ namespace GAS.Editor
             foreach (var attrSet in attrSetBuffer)
             {
                 var attrSetCode = attrSet.Code;
-                _ascAttributes.Add($"属性集:{"name todo"}[{attrSetCode}]");
+                _ascAttributes.Add($"属性集:{CacheAttrSetCode2Name[attrSetCode]} - [{attrSetCode}]");
                 var attributes = attrSet.Attributes;
                 foreach (var attribute in attributes)
                     _ascAttributes.Add(
-                        $"--- {"属性名"}[{attribute.Code}] : {attribute.CurrentValue} (BaseValue:{attribute.BaseValue})"
+                        $"--- {CacheAttributeCode2Name[attribute.Code]} : {attribute.CurrentValue} (BaseValue:{attribute.BaseValue})"
                     );
             }
         }
@@ -244,6 +289,8 @@ namespace GAS.Editor
                 var text = $"Lv.{abilityBasicInfo.Level} " +
                            $"- {CacheAbilityCode2Name[abilityBasicInfo.Code]} " +
                            $"[{abilityEntityName}]";
+                if(GASManager.EntityManager.HasComponent<CAbilityActive>(ability.Ability))
+                    text += " - 激活中";
                 _ascAbilities.Add(text);
             }
         }

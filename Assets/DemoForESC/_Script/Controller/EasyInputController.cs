@@ -63,17 +63,6 @@ namespace DemoForESC._Script.Controller
             if (_movement.magnitude > 0.1f)
             {
                 if(demoPlayer != null) demoPlayer.Move(_movement);
-                // // 保持角色面向相机方向（带缓冲）
-                // var targetRotation = Quaternion.LookRotation(_cameraForward);
-                // transform.rotation = Quaternion.Slerp(
-                //     transform.rotation,
-                //     targetRotation,
-                //     rotationOffset * Time.deltaTime * 100
-                // );
-                //
-                // // 移动执行
-                // var motion = _movement * _currentSpeed * Time.deltaTime;
-                // _controller.Move(motion);
             }
             else
             {

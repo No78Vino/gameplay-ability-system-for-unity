@@ -90,11 +90,13 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         #region GameplayTag 
 
         public bool HasTag(int tag) => _gameplayTagController.HasTag(tag);
-        //public void AddFixedTag(int tag) => _gameplayTagController.AddFixedTags(tag);
+        
+        public void KillFixedTag(int tag) => _gameplayTagController.KillFixedTag(tag);
 
         #endregion
 
         #region Attribute
+        
         #endregion
         
         #region GameplayEffect
