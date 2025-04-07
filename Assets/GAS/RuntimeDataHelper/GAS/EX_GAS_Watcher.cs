@@ -54,6 +54,7 @@ namespace GAS.Editor
         [HorizontalGroup("ASC/Top",order:0)]
         [ShowIf(nameof(IsEditorPlaying))]
         [DisplayAsString(EnableRichText = true)]
+        [ShowInInspector]
         [HideLabel]
         public string ascName => $"<b><color=yellow>{ExGasHelper.GetEntityName(entityWatching)}</color></b>";
 
