@@ -25,8 +25,7 @@ namespace GAS.RuntimeDataHelper.ASCPreset
         [TabGroup("Base", GASTextDefine.ASC_AttributeSet, SdfIconType.PersonLinesFill, TextColor = "#FF7F00",
             Order = 2)]
         [LabelText(GASTextDefine.ASC_AttributeSet)]
-        [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false, OnTitleBarGUI = "DrawAttributeSetsButtons")]
-        [ValueDropdown("@ValueDropdownHelper.AttributeSetChoices", IsUniqueList = true)]
+        [ValueDropdown("@EditAttributeHelper.AttributeSetChoices", IsUniqueList = true)]
         public int[] _attributeSets;
 
         [ShowInInspector]
