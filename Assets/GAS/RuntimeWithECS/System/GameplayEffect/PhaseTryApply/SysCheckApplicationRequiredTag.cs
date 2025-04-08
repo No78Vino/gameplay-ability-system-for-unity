@@ -58,7 +58,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                     if (!hasTag)
                     {
                         ecb.RemoveComponent<CValidEffect>(ge);
-                        ecb.AddComponent<CDestroy>(ge);
+                        ecb.AddComponent<CEffectDestroy>(ge);
                         break;
                     }
 

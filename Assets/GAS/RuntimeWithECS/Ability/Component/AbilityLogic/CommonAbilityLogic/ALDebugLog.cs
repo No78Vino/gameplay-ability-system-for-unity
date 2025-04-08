@@ -15,11 +15,6 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
             Debug.Log($"Entity:{_abilityEntity} AbilityTick: {_param.Value}");
         }
 
-        public override void SetParam(AbilityParamBase abilityParam)
-        {
-            base.SetParam(abilityParam);
-        }
-
         public override void ActivateAbility(GlobalTimer timer)
         {
             Debug.Log($"Entity:{_abilityEntity}  ActivateAbility");

@@ -1,4 +1,5 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.Common.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
@@ -86,6 +87,13 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             
             // var geBuffers = GameplayEffectUtils.GameplayEffectsOf(target);
             // geBuffers.Add(new BuffEleGameplayEffect { GameplayEffect = gameplayEffect });
+        }
+        
+        public static void RemoveGameplayEffect(Entity gameplayEffect)
+        {
+            if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
+            _entityManager.RemoveComponent<CValidEffect>(gameplayEffect);
+            _entityManager.AddComponent<CEffectDestroy>(gameplayEffect);
         }
 
         /// <summary>

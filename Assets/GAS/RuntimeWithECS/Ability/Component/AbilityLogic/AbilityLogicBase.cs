@@ -5,6 +5,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
 {
     public abstract class AbilityLogicBase
     {
+        protected static EntityManager _entityManager => GASManager.EntityManager;
         protected AbilityParamBase _paramRaw;
         protected Entity _abilityEntity;
         

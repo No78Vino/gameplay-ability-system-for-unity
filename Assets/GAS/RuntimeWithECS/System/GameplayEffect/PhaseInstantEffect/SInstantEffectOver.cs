@@ -26,7 +26,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                          .WithNone<CDuration>()
                          .WithEntityAccess())
             {
-                ecb.AddComponent<CDestroy>(ge);
+                ecb.AddComponent<CEffectDestroy>(ge);
             }
             ecb.Playback(state.EntityManager);
             ecb.Dispose();

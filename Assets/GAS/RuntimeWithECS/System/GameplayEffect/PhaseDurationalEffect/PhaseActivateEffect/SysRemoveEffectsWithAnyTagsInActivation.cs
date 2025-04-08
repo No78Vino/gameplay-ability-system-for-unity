@@ -39,7 +39,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                     if (effect.CheckEffectHasAnyTags(tagMap, state.EntityManager, tags))
                     {
                         ecb.RemoveComponent<CValidEffect>(effect);
-                        ecb.AddComponent<CDestroy>(effect);
+                        ecb.AddComponent<CEffectDestroy>(effect);
                         effects.RemoveAt(i);
                     }
                 }

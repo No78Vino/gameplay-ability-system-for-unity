@@ -49,7 +49,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
                 if (expired)
                 {
                     ecb.RemoveComponent<CValidEffect>(geEntity);
-                    ecb.AddComponent<CDestroy>(geEntity);
+                    ecb.AddComponent<CEffectDestroy>(geEntity);
                 }
             }
 

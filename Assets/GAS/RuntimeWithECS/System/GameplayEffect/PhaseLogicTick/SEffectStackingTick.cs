@@ -53,7 +53,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
                     if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.ClearEntireStack)
                     {   // 清除整个Stack，相当于直接销毁
                         ecb.RemoveComponent<CValidEffect>(geEntity);
-                        ecb.AddComponent<CDestroy>(geEntity);
+                        ecb.AddComponent<CEffectDestroy>(geEntity);
                     }
                     else if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.RemoveSingleStackAndRefreshDuration)
                     {

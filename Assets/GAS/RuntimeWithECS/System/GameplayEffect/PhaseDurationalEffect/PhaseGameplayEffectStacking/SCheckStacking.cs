@@ -42,7 +42,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                     // 1.叠加的GE不走Activate流程，并且直接销毁
                     ecb.RemoveComponent<CInApplicationProgress>(ge);
                     ecb.RemoveComponent<CValidEffect>(ge);
-                    ecb.AddComponent<CDestroy>(ge);
+                    ecb.AddComponent<CEffectDestroy>(ge);
 
                     // 2.尝试更新Stack层数，触发OnStackCountChanged事件
                     // 3.如果层数改变，额外触发OnGameplayEffectContainerIsDirty
@@ -146,7 +146,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                         {
                             // 移除自身
                             entityManager.RemoveComponent<CValidEffect>(ge);
-                            entityManager.AddComponent<CDestroy>(ge);
+                            entityManager.AddComponent<CEffectDestroy>(ge);
                         }
                     }
                     else
