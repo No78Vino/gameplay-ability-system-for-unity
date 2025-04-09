@@ -52,7 +52,7 @@ namespace _ProjectCodeGenerate
             foreach (var subType in subTypes)
             {
                 writer.WriteLine($"    [TabGroup(\"AbilityConfig\",\"组件配置详情\",SdfIconType.Activity)]");
-                writer.WriteLine($"    [LabelText(\"{subType.Text}\")]");
+                writer.WriteLine($"    [HideLabel]");
                 writer.WriteLine($"    [ShowIf(nameof(Has{subType.Text}))]");
                 writer.WriteLine($"    [OnValueChanged(nameof(OnConfigValueChanged))]");
                 if(subType.Text is nameof(ConfAssetAbilityBaseInfo) or nameof(MCConfAssetAbilityLogic))

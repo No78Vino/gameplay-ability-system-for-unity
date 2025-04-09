@@ -19,62 +19,62 @@ namespace GAS.RuntimeDataHelper.Ability
     public List<string> configTypes = new();
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityActivationBlockedTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityActivationBlockedTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetAbilityActivationBlockedTags ConfAssetAbilityActivationBlockedTags;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityActivationOwnedTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityActivationOwnedTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetAbilityActivationOwnedTags ConfAssetAbilityActivationOwnedTags;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityActivationRequiredTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityActivationRequiredTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetAbilityActivationRequiredTags ConfAssetAbilityActivationRequiredTags;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityAssetTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityAssetTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetAbilityAssetTags ConfAssetAbilityAssetTags;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityBaseInfo")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityBaseInfo))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     [PropertyOrder(-1)]
     public ConfAssetAbilityBaseInfo ConfAssetAbilityBaseInfo;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityCooldown")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityCooldown))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetAbilityCooldown ConfAssetAbilityCooldown;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetAbilityCost")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetAbilityCost))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetAbilityCost ConfAssetAbilityCost;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetBlockAbilityTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetBlockAbilityTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetBlockAbilityTags ConfAssetBlockAbilityTags;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetCancelAbilityTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetCancelAbilityTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetCancelAbilityTags ConfAssetCancelAbilityTags;
 
     [TabGroup("AbilityConfig","组件配置详情",SdfIconType.Activity)]
-    [LabelText("MCConfAssetAbilityLogic")]
+    [HideLabel]
     [ShowIf(nameof(HasMCConfAssetAbilityLogic))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     [PropertyOrder(-1)]
