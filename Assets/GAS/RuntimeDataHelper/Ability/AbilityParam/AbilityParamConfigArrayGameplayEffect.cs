@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
+using Sirenix.OdinInspector;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityParam
 {
@@ -9,9 +12,16 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
     {
         public override AbilityParamBase GetConfig()
         {
-            return new AbilityParamArrayGameplayEffect(Array.Empty<GameplayEffectConfig>());
+            List<GameplayEffectConfig> configs = new List<GameplayEffectConfig>();
+            foreach (var config in gameplayEffectConfigs)
+            {
+                configs.Add(config.GetConfig());
+            }
+            return new AbilityParamArrayGameplayEffect(configs.ToArray());
         }
         
-        // TODO 添加GE的配置
+        [LabelText("生效GE队列")]
+        [OnValueChanged(nameof(OnAbilityParamValueChange))]
+        public List<GameplayEffectConfigAsset> gameplayEffectConfigs = new();
     }
 }

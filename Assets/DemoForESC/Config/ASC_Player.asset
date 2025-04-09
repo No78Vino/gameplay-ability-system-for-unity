@@ -16,3 +16,4 @@ MonoBehaviour:
   _attributeSets: 041c8906
   baseAbilities:
   - {fileID: 11400000, guid: 339b214404679a1428ed7d544d5d1571, type: 2}
+  - {fileID: 11400000, guid: a2032c6b2f268f346b21aacb700cc0fc, type: 2}
