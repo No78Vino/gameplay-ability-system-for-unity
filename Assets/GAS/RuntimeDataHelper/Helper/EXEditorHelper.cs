@@ -295,27 +295,5 @@ namespace GAS.RuntimeDataHelper.Helper
             return abilityConfigAssets;
         }
         #endregion
-
-        #region GameplayEffect
-        
-        private static IEnumerable<Type> _cachedEffectComponentSubTypes;
-        
-        public static IEnumerable<Type> GetCachedEffectComponentSubTypes()
-        {
-            if (_cachedEffectComponentSubTypes != null) return _cachedEffectComponentSubTypes;
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            _cachedEffectComponentSubTypes = assemblies
-                .SelectMany(asm => asm.GetTypes())
-                .Where(type =>
-                    type.IsSubclassOf(typeof(BaseGameplayEffectComponentConfigAsset)) &&
-                    !type.IsAbstract &&
-                    type.IsDefined(typeof(SerializableAttribute), false)
-                )
-                .ToList();
-
-            return _cachedEffectComponentSubTypes;
-        }
-
-        #endregion
     }
 }

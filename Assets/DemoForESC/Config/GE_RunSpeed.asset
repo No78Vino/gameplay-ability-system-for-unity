@@ -12,3 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21794bf2d8354d85bc3f2aab006bd37f, type: 3}
   m_Name: GE_RunSpeed
   m_EditorClassIdentifier: 
+  config:
+    configTypes:
+    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectBasicInfo
+    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetDuration
+    ConfAssetEffectApplicationRequiredTags:
+      tags: 
+    ConfAssetEffectAssetTags:
+      tags: 
+    ConfAssetEffectBasicInfo:
+      Name: SpeedUp_Run
+      Desc: "\u5954\u8DD1\u52A0\u901F"
+    ConfAssetEffectGrantedTags:
+      tags: 
+    ConfAssetEffectImmunityTags:
+      tags: 
+    ConfAssetOngoingRequiredTags:
+      tags: 
+    ConfAssetPeriod:
+      Period: 0
+      GameplayEffectSettings: []
+    ConfAssetRemoveEffectWithTags:
+      tags: 
+    ConfAssetStacking:
+      StackType: 0
+      StackingCode: 0
+      LimitCount: 0
+      EffectDurationRefreshPolicy: 0
+      EffectPeriodResetPolicy: 0
+      expirationPolicy: 0
+      denyOverflowApplication: 0
+      clearStackOnOverflow: 0
+      overflowEffects: []
