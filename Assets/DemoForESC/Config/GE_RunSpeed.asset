@@ -16,11 +16,7 @@ MonoBehaviour:
     configTypes:
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectBasicInfo
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectDuration
-    confAssetEffectDuration:
-      duration: -1
-      timeUnit: 0
-      ResetStartTimeWhenActivated: 0
-      StopTickWhenDeactivated: 0
+    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetModifiers
     ConfAssetEffectApplicationRequiredTags:
       tags: 
     ConfAssetEffectAssetTags:
@@ -28,10 +24,26 @@ MonoBehaviour:
     ConfAssetEffectBasicInfo:
       Name: SpeedUp_Run
       Desc: "\u5954\u8DD1\u52A0\u901F"
+    ConfAssetEffectDuration:
+      duration: 0
+      timeUnit: 0
+      ResetStartTimeWhenActivated: 0
+      StopTickWhenDeactivated: 0
     ConfAssetEffectGrantedTags:
       tags: 
     ConfAssetEffectImmunityTags:
       tags: 
+    ConfAssetModifiers:
+      modifiers:
+      - AttrSetCode: 0
+        AttrCode: 0
+        Operation: 0
+        Magnitude: 0
+        MMC:
+          TypeCode: 0
+          floatParams: []
+          intParams: 
+          stringParams: []
     ConfAssetOngoingRequiredTags:
       tags: 
     ConfAssetPeriod:
