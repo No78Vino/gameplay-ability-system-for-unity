@@ -40,5 +40,5 @@ MonoBehaviour:
   MCConfAssetAbilityLogic:
     AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALApplyEffect
     _jsonAbilityParamConfig:
-      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigString
-      Data: '{"value":""}'
+      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigArrayGameplayEffect
+      Data: '{"gameplayEffectConfigs":[{"instanceID":22688}]}'
