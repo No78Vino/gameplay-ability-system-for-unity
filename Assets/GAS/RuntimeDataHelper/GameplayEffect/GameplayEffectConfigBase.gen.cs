@@ -9,7 +9,7 @@ using System.Linq;
 using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset;
 using Sirenix.OdinInspector;
-
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime
 {
@@ -21,80 +21,81 @@ namespace GAS.Runtime
     public List<string> configTypes = new();
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetApplicationCondition")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetApplicationCondition))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetApplicationCondition ConfAssetApplicationCondition;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetCueOnAdd")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetCueOnAdd))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetCueOnAdd ConfAssetCueOnAdd;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetCueOnExecution")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetCueOnExecution))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetCueOnExecution ConfAssetCueOnExecution;
 
+    [FormerlySerializedAs("ConfAssetDuration")]
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetDuration")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetDuration))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
-    public ConfAssetDuration ConfAssetDuration;
+    public ConfAssetEffectDuration confAssetEffectDuration;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetEffectApplicationRequiredTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetEffectApplicationRequiredTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetEffectApplicationRequiredTags ConfAssetEffectApplicationRequiredTags;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetEffectAssetTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetEffectAssetTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetEffectAssetTags ConfAssetEffectAssetTags;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetEffectBasicInfo")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetEffectBasicInfo))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     [PropertyOrder(-1)]
     public ConfAssetEffectBasicInfo ConfAssetEffectBasicInfo;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetEffectGrantedTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetEffectGrantedTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetEffectGrantedTags ConfAssetEffectGrantedTags;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetEffectImmunityTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetEffectImmunityTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetEffectImmunityTags ConfAssetEffectImmunityTags;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetOngoingRequiredTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetOngoingRequiredTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetOngoingRequiredTags ConfAssetOngoingRequiredTags;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetPeriod")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetPeriod))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetPeriod ConfAssetPeriod;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetRemoveEffectWithTags")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetRemoveEffectWithTags))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetRemoveEffectWithTags ConfAssetRemoveEffectWithTags;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
-    [LabelText("ConfAssetStacking")]
+    [HideLabel]
     [ShowIf(nameof(HasConfAssetStacking))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetStacking ConfAssetStacking;
@@ -106,7 +107,7 @@ namespace GAS.Runtime
     protected bool HasConfAssetCueOnExecution => 
         configTypes.Any( x => x == typeof(ConfAssetCueOnExecution).FullName);
     protected bool HasConfAssetDuration => 
-        configTypes.Any( x => x == typeof(ConfAssetDuration).FullName);
+        configTypes.Any( x => x == typeof(ConfAssetEffectDuration).FullName);
     protected bool HasConfAssetEffectApplicationRequiredTags => 
         configTypes.Any( x => x == typeof(ConfAssetEffectApplicationRequiredTags).FullName);
     protected bool HasConfAssetEffectAssetTags => 
@@ -141,8 +142,8 @@ namespace GAS.Runtime
                 return HasConfAssetCueOnAdd?ConfAssetCueOnAdd:null;
             if(type==typeof(ConfAssetCueOnExecution).FullName)
                 return HasConfAssetCueOnExecution?ConfAssetCueOnExecution:null;
-            if(type==typeof(ConfAssetDuration).FullName)
-                return HasConfAssetDuration?ConfAssetDuration:null;
+            if(type==typeof(ConfAssetEffectDuration).FullName)
+                return HasConfAssetDuration?confAssetEffectDuration:null;
             if(type==typeof(ConfAssetEffectApplicationRequiredTags).FullName)
                 return HasConfAssetEffectApplicationRequiredTags?ConfAssetEffectApplicationRequiredTags:null;
             if(type==typeof(ConfAssetEffectAssetTags).FullName)
@@ -178,7 +179,7 @@ namespace GAS.Runtime
         ConfAssetApplicationCondition?.SetOwnAsset(this);
         ConfAssetCueOnAdd?.SetOwnAsset(this);
         ConfAssetCueOnExecution?.SetOwnAsset(this);
-        ConfAssetDuration?.SetOwnAsset(this);
+        confAssetEffectDuration?.SetOwnAsset(this);
         ConfAssetEffectApplicationRequiredTags?.SetOwnAsset(this);
         ConfAssetEffectAssetTags?.SetOwnAsset(this);
         ConfAssetEffectBasicInfo?.SetOwnAsset(this);

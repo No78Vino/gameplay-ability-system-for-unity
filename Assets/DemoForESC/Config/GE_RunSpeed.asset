@@ -15,7 +15,12 @@ MonoBehaviour:
   config:
     configTypes:
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectBasicInfo
-    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetDuration
+    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectDuration
+    confAssetEffectDuration:
+      duration: -1
+      timeUnit: 0
+      ResetStartTimeWhenActivated: 0
+      StopTickWhenDeactivated: 0
     ConfAssetEffectApplicationRequiredTags:
       tags: 
     ConfAssetEffectAssetTags:

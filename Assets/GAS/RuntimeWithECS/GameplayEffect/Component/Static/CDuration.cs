@@ -56,6 +56,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     {
         public int duration;
         public TimeUnit timeUnit;
+        public bool ResetStartTimeWhenActivated;
+        public bool StopTickWhenDeactivated;
 
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
@@ -63,6 +65,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             {
                 duration = duration,
                 timeUnit = timeUnit,
+                ResetStartTimeWhenActivated = ResetStartTimeWhenActivated,
+                StopTickWhenDeactivated = StopTickWhenDeactivated,
                 active = false
             });
         }
