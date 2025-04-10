@@ -13,7 +13,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Aspect
         private readonly RefRO<CInUsage> _inUsage;
         private readonly RefRO<CValidEffect> _comValidEffect;
         private readonly RefRO<CInApplicationProgress> _inApplicationProgress;
-        private readonly DynamicBuffer<BEModifier> _modifiers;
+        private readonly DynamicBuffer<EffectModifier> _modifiers;
 
         public Entity ASC => _inUsage.ValueRO.Target;
         

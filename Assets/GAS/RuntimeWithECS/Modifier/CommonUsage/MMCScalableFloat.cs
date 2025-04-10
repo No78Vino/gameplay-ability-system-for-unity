@@ -1,4 +1,5 @@
 ﻿using System;
+using GAS.RuntimeWithECS.Modifier.MmcParameter;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace GAS.RuntimeWithECS.Modifier.CommonUsage
 {
     [Serializable]
-    public class MMCScalableFloat:ModMagnitudeCalculation
+    public class MMCScalableFloat:ModMagnitudeCalculationBase<MmcParaFloatScale>
     {
         private const string Desc = "计算公式：ModifierMagnitude * k + b";
 
@@ -22,12 +23,6 @@ namespace GAS.RuntimeWithECS.Modifier.CommonUsage
         public override float CalculateMagnitude(Entity specEntity, float magnitude)
         {
             return magnitude * k + b;
-        }
-
-        public override void InitParameters(NativeArray<float> floatParams, NativeArray<int> intParams, NativeArray<FixedString32Bytes> stringParams)
-        {
-            k = floatParams[0];
-            b = floatParams[1];
         }
     }
 }

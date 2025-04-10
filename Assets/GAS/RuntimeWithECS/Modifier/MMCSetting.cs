@@ -1,23 +1,24 @@
 ﻿using System;
+using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Modifier
 {
-    public struct MMCSetting : IComponentData
-    {
-        public int TypeCode;
-        public NativeArray<float> floatParams;
-        public NativeArray<int> intParams;
-        public NativeArray<FixedString32Bytes> stringParams;
-    }
-    
     [Serializable]
-    public struct MMCSettingConfig
+    public class MMCSettingConfig
     {
         public int TypeCode;
         public float[] floatParams;
         public int[] intParams;
         public string[] stringParams;
+        
+        // TODO
+        public ModMagnitudeCalculationBase CreateMmc()
+        {
+            // var mmc = MmcHub.CreateMmc(TypeCode);
+            // mmc.InitParameters(this);
+            return null;
+        }
     }
 }

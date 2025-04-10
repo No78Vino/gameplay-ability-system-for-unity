@@ -15,7 +15,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             return GasEntityManager.GetBuffer<BEGameplayEffect>(asc);
         }
 
-        public static bool CheckAscAttributeDirty(DynamicBuffer<BEAttributeSet> attrSets,DynamicBuffer<BEModifier> modifiers)
+        public static bool CheckAscAttributeDirty(DynamicBuffer<BEAttributeSet> attrSets,DynamicBuffer<EffectModifier> modifiers)
         {
             var isDirty = false;
             foreach (var modifier in modifiers)

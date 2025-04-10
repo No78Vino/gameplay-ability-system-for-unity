@@ -48,7 +48,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         public static void ApplyModFromInstantGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
             var attrSets = _entityManager.GetBuffer<BEAttributeSet>(asc);
-            var modifiers = _entityManager.GetBuffer<BEModifier>(gameplayEffect);
+            var modifiers = _entityManager.GetBuffer<EffectModifier>(gameplayEffect);
             foreach (var mod in modifiers)
             {
                 var magnitude = MmcHub.Calculate(gameplayEffect, mod);
@@ -203,7 +203,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                     foreach (var element in effects)
                     {
                         var ge = element.GameplayEffect;
-                        var mods = _entityManager.GetBuffer<BEModifier>(ge);
+                        var mods = _entityManager.GetBuffer<EffectModifier>(ge);
                         foreach (var modElement in mods)
                             if (modElement.AttrSetCode == attrSet.Code && modElement.AttrCode == attr.Code)
                                 newValue = MmcHub.Calculate(ge, modElement, newValue);

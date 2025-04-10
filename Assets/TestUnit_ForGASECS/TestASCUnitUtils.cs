@@ -204,27 +204,27 @@ namespace TestUnit_ForGASECS
 
         public void SetModifier(Entity geEntity)
         {
-            var has = GasEntityManager.HasComponent<BEModifier>(geEntity);
-            var mods = has
-                ? GasEntityManager.GetBuffer<BEModifier>(geEntity)
-                : new DynamicBuffer<BEModifier>();
-            var settings = new ModifierSetting[mods.Length];
-            if (has)
-                for (var j = 0; j < mods.Length; j++)
-                    settings[j] = new ModifierSetting
-                    {
-                        AttrSetCode = mods[j].AttrSetCode, AttrCode = mods[j].AttrCode,
-                        Operation = mods[j].Operation, Magnitude = mods[j].Magnitude,
-                        MMC = new MMCSettingConfig
-                        {
-                            TypeCode = mods[j].MMC.TypeCode,
-                            floatParams = mods[j].MMC.floatParams.ToArray(),
-                            intParams = mods[j].MMC.intParams.ToArray(),
-                            stringParams = TestASCUnitUtils.FixedStringToStringArray(mods[j].MMC.stringParams)
-                        }
-                    };
-
-            modifiers = settings;
+            var has = GasEntityManager.HasComponent<EffectModifier>(geEntity);
+            // var mods = has
+            //     ? GasEntityManager.GetBuffer<EffectModifier>(geEntity)
+            //     : new DynamicBuffer<EffectModifier>();
+            // var settings = new ModifierSetting[mods.Length];
+            // if (has)
+            //     for (var j = 0; j < mods.Length; j++)
+            //         settings[j] = new ModifierSetting
+            //         {
+            //             AttrSetCode = mods[j].AttrSetCode, AttrCode = mods[j].AttrCode,
+            //             Operation = mods[j].Operation, Magnitude = mods[j].Magnitude,
+            //             MMC = new MMCSettingConfig
+            //             {
+            //                 TypeCode = mods[j].MMC.TypeCode,
+            //                 floatParams = mods[j].MMC.floatParams.ToArray(),
+            //                 intParams = mods[j].MMC.intParams.ToArray(),
+            //                 stringParams = TestASCUnitUtils.FixedStringToStringArray(mods[j].MMC.stringParams)
+            //             }
+            //         };
+            //
+            // modifiers = settings;
         }
     }
 }

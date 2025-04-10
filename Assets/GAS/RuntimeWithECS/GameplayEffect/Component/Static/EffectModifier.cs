@@ -9,13 +9,28 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
-    public struct BEModifier : IBufferElementData
+
+    public class MCModifiers:IComponentData
+    {
+        public EffectModifier[] Modifiers;
+        
+        public MCModifiers(EffectModifier[] modifiers)
+        {
+            Modifiers = modifiers;
+        }
+        
+        public MCModifiers()
+        {
+        }
+    }
+
+    public struct EffectModifier
     {
         public int AttrSetCode;
         public int AttrCode;
         public GEOperation Operation;
         public float Magnitude;
-        public MMCSetting MMC;
+        public ModMagnitudeCalculationBase MMC;
     }
 
     public sealed class ConfModifiers : GameplayEffectComponentConfig
@@ -24,37 +39,24 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            if (!_entityManager.HasBuffer<BEModifier>(ge))
-                _entityManager.AddBuffer<BEModifier>(ge);
+            if (!_entityManager.HasComponent<MCModifiers>(ge))
+                _entityManager.AddComponent<MCModifiers>(ge);
 
-            var buffer = _entityManager.GetBuffer<BEModifier>(ge);
-            foreach (var modifierSetting in modifierSettings)
+            EffectModifier[] effectModifiers = new EffectModifier[modifierSettings.Length];
+            for (var i = 0; i < modifierSettings.Length; i++)
             {
-                var stringParams = modifierSetting.MMC.stringParams == null
-                    ? Array.Empty<FixedString32Bytes>()
-                    : new FixedString32Bytes[modifierSetting.MMC.stringParams.Length];
-
-                if (modifierSetting.MMC.stringParams != null)
-                    for (var i = 0; i < modifierSetting.MMC.stringParams.Length; i++)
-                        stringParams[i] = modifierSetting.MMC.stringParams[i];
-
-                var floatParams = modifierSetting.MMC.floatParams ?? Array.Empty<float>();
-                var intParams = modifierSetting.MMC.intParams ?? Array.Empty<int>();
-                buffer.Add(new BEModifier
+                var modifierSetting = modifierSettings[i];
+                effectModifiers[i] = new EffectModifier
                 {
                     AttrSetCode = modifierSetting.AttrSetCode,
                     AttrCode = modifierSetting.AttrCode,
                     Operation = modifierSetting.Operation,
                     Magnitude = modifierSetting.Magnitude,
-                    MMC = new MMCSetting
-                    {
-                        TypeCode = modifierSetting.MMC.TypeCode,
-                        floatParams = new NativeArray<float>(floatParams, Allocator.Persistent),
-                        intParams = new NativeArray<int>(intParams, Allocator.Persistent),
-                        stringParams = new NativeArray<FixedString32Bytes>(stringParams, Allocator.Persistent)
-                    }
-                });
+                    MMC = modifierSetting.MMC.CreateMmc()
+                };
             }
+            MCModifiers mcModifiers = new MCModifiers(effectModifiers);
+            _entityManager.SetComponentData(ge,mcModifiers);
         }
     }
 

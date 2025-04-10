@@ -11,26 +11,26 @@ namespace GAS.RuntimeWithECS.Modifier
 {
     public static class MmcHub
     {
-        private static Dictionary<int, ModMagnitudeCalculation> _magnitudeCalculations;
+        private static Dictionary<int, ModMagnitudeCalculationBase> _magnitudeCalculations;
 
         public static void Init()
         {
-            _magnitudeCalculations = new Dictionary<int, ModMagnitudeCalculation>();
+            _magnitudeCalculations = new Dictionary<int, ModMagnitudeCalculationBase>();
             // TODO :初始化项目内所有类型MMC实例
             _magnitudeCalculations.Add(MMCTypeToCode.Map[typeof(MMCScalableFloat)],new MMCScalableFloat());
         }
 
-        public static float Calculate(Entity ge, BEModifier modifier)
+        public static float Calculate(Entity ge, EffectModifier modifier)
         {
             var setting = modifier.MMC;
-            float result;
+            float result = 0;
 #if UNITY_EDITOR
             try
             {
 #endif
-                var mmc = _magnitudeCalculations[setting.TypeCode];
-                mmc.InitParameters(setting.floatParams, setting.intParams, setting.stringParams);
-                result = mmc.CalculateMagnitude(ge, modifier.Magnitude);
+                // var mmc = _magnitudeCalculations[setting.TypeCode];
+                // mmc.InitParameters(setting.floatParams, setting.intParams, setting.stringParams);
+                // result = mmc.CalculateMagnitude(ge, modifier.Magnitude);
 #if UNITY_EDITOR
             }
             catch (Exception e)
@@ -42,7 +42,7 @@ namespace GAS.RuntimeWithECS.Modifier
             return result;
         }
         
-        public static float Calculate(Entity ge, BEModifier modifier, float sourceValue)
+        public static float Calculate(Entity ge, EffectModifier modifier, float sourceValue)
         {
             var result = sourceValue;
             var magnitude = Calculate(ge, modifier);

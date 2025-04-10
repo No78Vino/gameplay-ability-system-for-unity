@@ -37,9 +37,9 @@ namespace GAS.RuntimeWithECS.Attribute
                 var cDuration = _entityManager.GetComponentData<CDuration>(ge);
                 if(!cDuration.active) continue;
                 // 获取GE的属性修改器
-                bool hasMods = _entityManager.HasBuffer<BEModifier>(ge);
+                bool hasMods = _entityManager.HasBuffer<EffectModifier>(ge);
                 if (!hasMods) continue;
-                var mods = _entityManager.GetBuffer<BEModifier>(ge);
+                var mods = _entityManager.GetBuffer<EffectModifier>(ge);
                 foreach (var mod in mods)
                 {
                     if (mod.AttrSetCode != attrSetCode || mod.AttrCode != attrCode) continue;

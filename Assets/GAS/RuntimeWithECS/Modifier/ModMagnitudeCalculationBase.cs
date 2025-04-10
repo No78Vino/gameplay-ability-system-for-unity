@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using GAS.General;
+using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Modifier
 {
-    public abstract class ModMagnitudeCalculation
+    public abstract class ModMagnitudeCalculationBase
     {
         protected const int WIDTH_LABEL = 70;
 
@@ -43,8 +44,24 @@ namespace GAS.RuntimeWithECS.Modifier
         public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
 #endif
 
-        public abstract float CalculateMagnitude(Entity specEntity, float magnitude);
+        public abstract float CalculateMagnitude(Entity geEntity, float magnitude);
 
-        public abstract void InitParameters(NativeArray<float> floatParams,NativeArray<int> intParams,NativeArray<FixedString32Bytes> stringParams);
+        public abstract void InitParameters(IMmcParameter parameter);
+    }
+    
+    public abstract class ModMagnitudeCalculationBase<T> : ModMagnitudeCalculationBase
+        where T : IMmcParameter
+    {
+        public T Parameter { get; private set; }
+        
+        public override void InitParameters(IMmcParameter parameter)
+        {
+            if (parameter is T t)
+                Parameter = t;
+#if UNITY_EDITOR
+            else
+                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {parameter.GetType()}");
+#endif
+        }
     }
 }

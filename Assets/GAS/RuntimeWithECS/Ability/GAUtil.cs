@@ -110,7 +110,7 @@ namespace GAS.RuntimeWithECS.Ability
             bool isInstantEffect = !_entityManager.HasComponent<CDuration>(costComponent.ProtoGameplayEffectCost);
             if (!isInstantEffect) return true;
             
-            var modifierBuffer = _entityManager.GetBuffer<BEModifier>(costComponent.ProtoGameplayEffectCost);
+            var modifierBuffer = _entityManager.GetBuffer<EffectModifier>(costComponent.ProtoGameplayEffectCost);
             var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
             var attrSets = _entityManager.GetBuffer<BEAttributeSet>(owner);
             foreach (var modifier in modifierBuffer)
