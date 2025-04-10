@@ -71,6 +71,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
         [LabelText("通用基础模值")] public float Magnitude;
 
+        [Title("MMC设置",horizontalLine:true)]
         [HideLabel]
         public MMCSettingConfig MMC;
 
