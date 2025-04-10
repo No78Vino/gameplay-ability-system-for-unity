@@ -25,7 +25,7 @@ MonoBehaviour:
       Name: SpeedUp_Run
       Desc: "\u5954\u8DD1\u52A0\u901F"
     ConfAssetEffectDuration:
-      duration: 0
+      duration: -1
       timeUnit: 0
       ResetStartTimeWhenActivated: 0
       StopTickWhenDeactivated: 0
@@ -35,10 +35,10 @@ MonoBehaviour:
       tags: 
     ConfAssetModifiers:
       modifiers:
-      - AttrSetCode: 0
-        AttrCode: 0
-        Operation: 0
-        Magnitude: 0
+      - AttrSetCode: 109648900
+        AttrCode: 2025855271
+        Operation: 1
+        Magnitude: 2
         MMC:
           TypeCode: 0
           floatParams: []

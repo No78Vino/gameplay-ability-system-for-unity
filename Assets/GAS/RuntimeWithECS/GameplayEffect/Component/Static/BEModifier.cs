@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using GAS.Runtime;
+using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Modifier;
+using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -14,14 +17,14 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public float Magnitude;
         public MMCSetting MMC;
     }
-    
-    public sealed class ConfModifiers:GameplayEffectComponentConfig
+
+    public sealed class ConfModifiers : GameplayEffectComponentConfig
     {
         public ModifierSetting[] modifierSettings;
-        
+
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            if(!_entityManager.HasBuffer<BEModifier>(ge))
+            if (!_entityManager.HasBuffer<BEModifier>(ge))
                 _entityManager.AddBuffer<BEModifier>(ge);
 
             var buffer = _entityManager.GetBuffer<BEModifier>(ge);
@@ -30,9 +33,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 var stringParams = modifierSetting.MMC.stringParams == null
                     ? Array.Empty<FixedString32Bytes>()
                     : new FixedString32Bytes[modifierSetting.MMC.stringParams.Length];
-                
+
                 if (modifierSetting.MMC.stringParams != null)
-                    for (int i = 0; i < modifierSetting.MMC.stringParams.Length; i++)
+                    for (var i = 0; i < modifierSetting.MMC.stringParams.Length; i++)
                         stringParams[i] = modifierSetting.MMC.stringParams[i];
 
                 var floatParams = modifierSetting.MMC.floatParams ?? Array.Empty<float>();
@@ -46,9 +49,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                     MMC = new MMCSetting
                     {
                         TypeCode = modifierSetting.MMC.TypeCode,
-                        floatParams = new NativeArray<float>(floatParams,Allocator.Persistent),
-                        intParams = new NativeArray<int>(intParams,Allocator.Persistent),
-                        stringParams = new NativeArray<FixedString32Bytes>(stringParams,Allocator.Persistent)
+                        floatParams = new NativeArray<float>(floatParams, Allocator.Persistent),
+                        intParams = new NativeArray<int>(intParams, Allocator.Persistent),
+                        stringParams = new NativeArray<FixedString32Bytes>(stringParams, Allocator.Persistent)
                     }
                 });
             }
@@ -58,10 +61,24 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     [Serializable]
     public struct ModifierSetting
     {
+        [LabelText("生效的属性集")] [ValueDropdown("@EditAttributeHelper.AttributeSetChoices", IsUniqueList = true)]
         public int AttrSetCode;
+
+        [LabelText("生效的属性")] [ValueDropdown(nameof(AttributeChoice), IsUniqueList = true)]
         public int AttrCode;
-        public GEOperation Operation;
-        public float Magnitude;
+
+        [LabelText("操作类型")] public GEOperation Operation;
+
+        [LabelText("通用基础模值")] public float Magnitude;
+
+        [HideLabel]
         public MMCSettingConfig MMC;
+
+#if UNITY_EDITOR
+        private IEnumerable<ValueDropdownItem> AttributeChoice()
+        {
+            return EditAttributeHelper.GetAttributeChoiceByAttrSet(AttrSetCode);
+        }
+#endif
     }
 }
