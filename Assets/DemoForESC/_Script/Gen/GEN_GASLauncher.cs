@@ -9,7 +9,7 @@ namespace DemoForESC._Script.Gen
     {
         public static void LoadGenCache()
         {
-            MmcHub.Init();
+            MmcHelper.Init();
             GEN_AbilityCode.LoadAbilityCode();
         }
         

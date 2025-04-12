@@ -110,10 +110,10 @@ namespace GAS.RuntimeWithECS.Ability
             bool isInstantEffect = !_entityManager.HasComponent<CDuration>(costComponent.ProtoGameplayEffectCost);
             if (!isInstantEffect) return true;
             
-            var modifierBuffer = _entityManager.GetBuffer<EffectModifier>(costComponent.ProtoGameplayEffectCost);
+            var mcModifiers = _entityManager.GetComponentData<MCModifiers>(costComponent.ProtoGameplayEffectCost);
             var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
             var attrSets = _entityManager.GetBuffer<BEAttributeSet>(owner);
-            foreach (var modifier in modifierBuffer)
+            foreach (var modifier in mcModifiers.Modifiers)
             {
                 var opt = modifier.Operation;
                 if (opt != GEOperation.Add && opt != GEOperation.Minus) continue;
@@ -128,14 +128,8 @@ namespace GAS.RuntimeWithECS.Ability
                 if (attrIndex == -1) continue;
                 
                 var attr = attributes[attrIndex];
-                var costValue = MmcHub.Calculate(costComponent.ProtoGameplayEffectCost, modifier);
-                var attributeCurrentValue = attr.CurrentValue;
-                switch (modifier.Operation)
-                {
-                    case GEOperation.Add when attributeCurrentValue + costValue < 0:
-                    case GEOperation.Minus when attributeCurrentValue - costValue < 0:
-                        return false;
-                }
+                var resultValue = MmcHelper.Calculate(costComponent.ProtoGameplayEffectCost, modifier, attr.CurrentValue);
+                return resultValue >= 0;
             }
 
             return true;

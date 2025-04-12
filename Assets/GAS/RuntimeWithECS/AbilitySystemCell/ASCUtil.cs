@@ -48,11 +48,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         public static void ApplyModFromInstantGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
             var attrSets = _entityManager.GetBuffer<BEAttributeSet>(asc);
-            var modifiers = _entityManager.GetBuffer<EffectModifier>(gameplayEffect);
-            foreach (var mod in modifiers)
+            var modifiers = _entityManager.GetComponentData<MCModifiers>(gameplayEffect);
+            foreach (var mod in modifiers.Modifiers)
             {
-                var magnitude = MmcHub.Calculate(gameplayEffect, mod);
-
                 var attrSetIndex = attrSets.IndexOfAttrSetCode(mod.AttrSetCode);
                 if (attrSetIndex == -1) continue;
 
@@ -64,28 +62,8 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
                 var attr = attributes[attrIndex];
                 var oldValue = attr.BaseValue;
-                var newValue = oldValue;
-                switch (mod.Operation)
-                {
-                    case GEOperation.Add:
-                        newValue += magnitude;
-                        break;
-                    case GEOperation.Minus:
-                        newValue -= magnitude;
-                        break;
-                    case GEOperation.Multiply:
-                        newValue *= magnitude;
-                        break;
-                    case GEOperation.Divide:
-                        newValue /= magnitude;
-                        break;
-                    case GEOperation.Override:
-                        newValue = magnitude;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
+                var newValue = MmcHelper.Calculate(gameplayEffect, mod, attr.BaseValue);
+                    
                 // OnChangeBefore
                 // BaseValue 不做钳制，因为Max，Min是只针对Current Value
                 newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(asc, mod.AttrSetCode, mod.AttrCode, newValue);
@@ -203,10 +181,10 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                     foreach (var element in effects)
                     {
                         var ge = element.GameplayEffect;
-                        var mods = _entityManager.GetBuffer<EffectModifier>(ge);
-                        foreach (var modElement in mods)
+                        var mods = _entityManager.GetComponentData<MCModifiers>(ge);
+                        foreach (var modElement in mods.Modifiers)
                             if (modElement.AttrSetCode == attrSet.Code && modElement.AttrCode == attr.Code)
-                                newValue = MmcHub.Calculate(ge, modElement, newValue);
+                                newValue = MmcHelper.Calculate(ge, modElement, newValue);
                     }
 
                     attr.CurrentValue = newValue;

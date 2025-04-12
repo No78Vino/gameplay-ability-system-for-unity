@@ -15,10 +15,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             return GasEntityManager.GetBuffer<BEGameplayEffect>(asc);
         }
 
-        public static bool CheckAscAttributeDirty(DynamicBuffer<BEAttributeSet> attrSets,DynamicBuffer<EffectModifier> modifiers)
+        public static bool CheckAscAttributeDirty(DynamicBuffer<BEAttributeSet> attrSets,MCModifiers modifiers)
         {
             var isDirty = false;
-            foreach (var modifier in modifiers)
+            foreach (var modifier in modifiers.Modifiers)
             {
                 int attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
                 if(attrSetIndex==-1) continue;
