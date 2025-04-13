@@ -11,31 +11,12 @@ namespace GAS.Runtime
 {
     public static class MmcHelper
     {
-        #region MMC
-        private static readonly Dictionary<string, Type> MmcTypeMap = new();
-
-        public static void RegisterMmc(string sType, Type logicType)
-        {
-            MmcTypeMap[sType] = logicType;
-        }
-
-        public static Type GetMmcType(string sType)
-        {
-            return MmcTypeMap[sType];
-        }
-
-        public static void RegisterMmc<T>(string sType) where T : ModMagnitudeCalculationBase
-        {
-            RegisterMmc(sType, typeof(T));
-        }
-        #endregion
-
         public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, MmcParamConfigBase param)
         {
             return TryCreateMmc(mmcType, param.GetConfig());
         }
 
-        public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType,IMmcParameter param)
+        public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, IMmcParameter param)
         {
             if (MmcTypeMap.TryGetValue(mmcType, out var type))
                 try
@@ -90,20 +71,27 @@ namespace GAS.Runtime
             }
 
             return result;
-        }    
-        
-        // public static ModMagnitudeCalculationBase CreateMmc(string mmcType,MmcParamConfigBase mmcParamConfig)
-        // {
-        //     var mmc =  
-        //     if (mmc == null)
-        //     {
-        //         throw new ArgumentException($"No MMCCalculation found for type {mmcType}");
-        //     }
-        //     var mmcInstance = mmc.CreateMmc();
-        //     mmcInstance.SetConfAssetMmc(mmcParamConfig);
-        //     return mmcInstance;
-        // }
-    }
-    
+        }
 
+        #region MMC
+
+        private static readonly Dictionary<string, Type> MmcTypeMap = new();
+
+        public static void RegisterMmc(string sType, Type logicType)
+        {
+            MmcTypeMap[sType] = logicType;
+        }
+
+        public static Type GetMmcType(string sType)
+        {
+            return MmcTypeMap[sType];
+        }
+
+        public static void RegisterMmc<T>(string sType) where T : ModMagnitudeCalculationBase
+        {
+            RegisterMmc(sType, typeof(T));
+        }
+
+        #endregion
+    }
 }

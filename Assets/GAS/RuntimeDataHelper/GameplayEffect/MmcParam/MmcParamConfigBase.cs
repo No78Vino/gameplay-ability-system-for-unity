@@ -1,6 +1,4 @@
 using System;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS.Modifier.CommonUsage;
 
 namespace GAS.RuntimeDataHelper.GameplayEffect.MmcParam
@@ -8,16 +6,16 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.MmcParam
     [Serializable]
     public abstract class MmcParamConfigBase
     {
-        protected MCConfModifiers McConfAsset;
+        protected MMCSettingConfig setting;
 
-        public virtual void SetConfAssetMmc(MCConfModifiers config)
+        public virtual void SetConfAssetMmc(MMCSettingConfig config)
         {
-            McConfAsset = config;
+            setting = config;
         }
 
         public virtual void OnAbilityParamValueChange()
         {
-            McConfAsset?.TriggerOnValueChanged();
+            setting?.TriggerOnValueChanged();
         }
 
         public abstract IMmcParameter GetConfig();

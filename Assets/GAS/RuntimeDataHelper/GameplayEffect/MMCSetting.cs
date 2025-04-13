@@ -54,8 +54,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
                     $"未找到对应的MMC参数配置，请检查类【{MmcType}】是否继承自ModMagnitudeCalculationBase<T>");
             }
 
-            //mmcParamConfig?.SetConfAssetMmc(this);
-            //base.OnValueChanged();
+            mmcParamConfig?.SetConfAssetMmc(this);
         }
 
         private IEnumerable<Type> GetMmcParamConfigType() => null;

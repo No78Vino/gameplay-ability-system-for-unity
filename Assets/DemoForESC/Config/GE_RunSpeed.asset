@@ -42,8 +42,8 @@ MonoBehaviour:
         MMC:
           MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCScalableFloat
           _jsonMmcParamConfig:
-            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
-            Data: '{}'
+            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigFloatScale
+            Data: '{"k":0.7099999785423279,"b":0.0}'
     ConfAssetOngoingRequiredTags:
       tags: 
     ConfAssetPeriod:
