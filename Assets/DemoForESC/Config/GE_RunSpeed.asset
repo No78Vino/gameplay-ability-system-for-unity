@@ -16,7 +16,7 @@ MonoBehaviour:
     configTypes:
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectBasicInfo
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectDuration
-    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetModifiers
+    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.MCConfAssetModifiers
     ConfAssetEffectApplicationRequiredTags:
       tags: 
     ConfAssetEffectAssetTags:
@@ -33,17 +33,17 @@ MonoBehaviour:
       tags: 
     ConfAssetEffectImmunityTags:
       tags: 
-    ConfAssetModifiers:
+    mcConfAssetModifiers:
       modifiers:
       - AttrSetCode: 109648900
         AttrCode: 2025855271
         Operation: 1
         Magnitude: 2
         MMC:
-          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone
+          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCScalableFloat
           _jsonMmcParamConfig:
-            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigFloatScale
-            Data: '{"k":0.0,"b":0.0}'
+            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
+            Data: '{}'
     ConfAssetOngoingRequiredTags:
       tags: 
     ConfAssetPeriod:

@@ -1,7 +1,5 @@
-using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Core;
-using GAS.RuntimeWithECS.Modifier;
 
 namespace DemoForESC._Script.Gen
 {
@@ -10,6 +8,7 @@ namespace DemoForESC._Script.Gen
         public static void LoadGenCache()
         {
             GEN_AbilityCode.LoadAbilityCode();
+            GEN_MmcCode.LoadMmcType();
         }
         
         public static void Launch()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GAS.Runtime;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Modifier;
@@ -28,12 +29,10 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
         [ShowInInspector]
         public MmcParamConfigBase mmcParamConfig;
         
-        // TODO
+        
         public ModMagnitudeCalculationBase CreateMmc()
         {
-            // var mmc = MmcHub.CreateMmc(TypeCode);
-            // mmc.InitParameters(this);
-            return null;
+            return MmcHelper.TryCreateMmc(MmcType,mmcParamConfig);
         }
         
         protected void OnValueChanged()

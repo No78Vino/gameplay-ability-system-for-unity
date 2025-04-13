@@ -1,13 +1,8 @@
-﻿using System;
-using DemoForESC._Script.Gen;
-using GAS.ECS_TEST_RUNTIME_GEN_LIB;
-using GAS.Runtime;
+﻿using DemoForESC._Script.Gen;
 using GAS.RuntimeWithECS.Ability;
-using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
@@ -16,6 +11,7 @@ namespace TestUnit_ForGASECS
 {
     public class GASECS_TestUnit : MonoBehaviour
     {
+        private const float UIRefreshDuration = 0.5f;
         [DisplayAsString] public string _ascName = "NULL";
 
         [TabGroup("FixedTags", GroupName = "Tags")] [ReadOnly]
@@ -30,14 +26,13 @@ namespace TestUnit_ForGASECS
         [TabGroup("Effects", GroupName = "Tags")] [ReadOnly]
         public EffectForShow[] effects;
 
-        
+
         private AbilitySystemCell _asc;
+
+        private float _secondCount;
         public Entity EntityASC;
 
         private EntityManager GasEntityManager => GASManager.EntityManager;
-
-        private float _secondCount = 0;
-        private const float UIRefreshDuration = 0.5f;
 
         private void Update()
         {
@@ -53,7 +48,7 @@ namespace TestUnit_ForGASECS
         private void RefreshUI()
         {
             if (_asc == null) return;
-            
+
             _ascName = EntityASC.ToString();
 
             fixedTags = _asc.FixedTags();
@@ -108,10 +103,10 @@ namespace TestUnit_ForGASECS
             // int[] attrSets = { GEN_AttrSetCode.Fight_Monster };
             AbilityConfig[] abilityConfigs =
             {
-                TestASCUnitUtils.AbilityConfig_Debug,
+                TestASCUnitUtils.AbilityConfig_Debug
             };
             //_asc.Init(baseTags, attrSets, abilityConfigs);
-            
+
             EntityASC = _asc.Entity;
             RefreshUI();
         }
@@ -123,7 +118,7 @@ namespace TestUnit_ForGASECS
             //     GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
             // _asc.ApplyGameplayEffectTo(geSpec, _asc);
             var gameplayEffect = GEUtil.CreateGameplayEffectEntity(TestASCUnitUtils.GEConfig_ONEHIT);
-            GEUtil.ApplyGameplayEffectTo(gameplayEffect,_asc.Entity,_asc.Entity);
+            GEUtil.ApplyGameplayEffectTo(gameplayEffect, _asc.Entity, _asc.Entity);
         }
 
         [Button(ButtonSizes.Medium, Name = "施加要求Earth标签的攻击")]
@@ -133,7 +128,7 @@ namespace TestUnit_ForGASECS
                 GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
         }
-        
+
         [Button(ButtonSizes.Medium, Name = "燃烧buff")]
         private void ApplyBurningToASC()
         {
@@ -141,11 +136,12 @@ namespace TestUnit_ForGASECS
                 GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
         }
+
         [Button(ButtonSizes.Medium, Name = "从ASC移除GE")]
         private void RemoveGEFromASC()
         {
         }
-        
+
         [Button(ButtonSizes.Medium, Name = "启用/关闭debug能力")]
         private void SwitchAbilityDebugLog()
         {
@@ -157,7 +153,6 @@ namespace TestUnit_ForGASECS
             // }
             // else
             //     _asc.TryEndAbility(GEN_AbilityCode.DebugLog);
-            
         }
     }
 }

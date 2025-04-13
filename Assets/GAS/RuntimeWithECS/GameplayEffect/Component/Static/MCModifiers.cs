@@ -86,7 +86,6 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 #if UNITY_EDITOR
         public void OnValueChanged() => MMC?.TriggerOnValueChanged();
         
-        
         private IEnumerable<ValueDropdownItem> AttributeChoice()
         {
             return EditAttributeHelper.GetAttributeChoiceByAttrSet(AttrSetCode);

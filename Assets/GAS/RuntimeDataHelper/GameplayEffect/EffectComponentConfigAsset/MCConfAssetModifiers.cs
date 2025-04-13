@@ -14,9 +14,6 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         [LabelText("")]
         [SerializeField] 
         [ListDrawerSettings]
-        // [ValueDropdown("@EXEditorHelper.GameplayTagCodeChoices", 
-        //     IsUniqueList = true, 
-        //     HideChildProperties = true)]
         public List<ModifierSetting> modifiers = new();
         
         public override GameplayEffectComponentConfig GetConfig()

@@ -1,32 +1,25 @@
-using System;
-using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
-using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Entities;
-using UnityEngine;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
 {
     public class AbilitySystemCell
     {
-        public Entity Entity { get; private set; }
-        private EntityManager EntityManager => GASManager.EntityManager;
-        
-        private readonly BasicDataController _basicDataController;
-        private readonly AttrSetController _attrSetController;
-        private readonly GameplayTagController _gameplayTagController;
-        private readonly GameplayEffectController _gameplayEffectController;
         private readonly AbilityController _abilityController;
+        private readonly AttrSetController _attrSetController;
+
+        private readonly BasicDataController _basicDataController;
+        private readonly GameplayEffectController _gameplayEffectController;
+        private readonly GameplayTagController _gameplayTagController;
 
         public AbilitySystemCell()
         {
@@ -45,6 +38,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             _abilityController = new AbilityController(Entity);
         }
 
+        public Entity Entity { get; private set; }
+        private EntityManager EntityManager => GASManager.EntityManager;
+
         protected void Dispose()
         {
             EntityManager.DestroyEntity(Entity);
@@ -61,40 +57,21 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                 var attrSetConfig = GEN_AttrSetCode.AttributeSetMap[attrSetCode];
                 _attrSetController.AddAttrSet(attrSetConfig);
             }
-            
+
             // 3.初始化基础技能
             foreach (var abilityConfig in baseAbilities)
             {
                 var ability = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
                 _abilityController.GrantAbility(ability);
             }
-            
+
             // 4.初始化等级
             SetLevel(level);
         }
 
-        #region BasicData
-
-        public void SetLevel(int level) => _basicDataController.SetLevel(level);
-        public int GetLevel() => _basicDataController.GetLevel();
-
-        #endregion
-
-        #region GameplayTag 
-
-        public bool HasTag(int tag) => _gameplayTagController.HasTag(tag);
-        
-        public void KillFixedTag(int tag) => _gameplayTagController.KillFixedTag(tag);
-
-        #endregion
-
-        #region Attribute
-        
-        #endregion
-        
         #region GameplayEffect
 
-        public void ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffectSpec,AbilitySystemCell target)
+        public void ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffectSpec, AbilitySystemCell target)
         {
             _gameplayEffectController.ApplyGameplayEffectTo(gameplayEffectSpec, target);
         }
@@ -177,6 +154,38 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #endregion
 
+        #region BasicData
+
+        public void SetLevel(int level)
+        {
+            _basicDataController.SetLevel(level);
+        }
+
+        public int GetLevel()
+        {
+            return _basicDataController.GetLevel();
+        }
+
+        #endregion
+
+        #region GameplayTag
+
+        public bool HasTag(int tag)
+        {
+            return _gameplayTagController.HasTag(tag);
+        }
+
+        public void KillFixedTag(int tag)
+        {
+            _gameplayTagController.KillFixedTag(tag);
+        }
+
+        #endregion
+
+        #region Attribute
+
+        #endregion
+
         #region Ability
 
         public void TryActivateAbility(int abilityCode, AbilityParamBase param = null)
@@ -193,7 +202,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             _abilityController.CancelAbility(abilityCode);
         }
-        
+
         public bool IsAbilityActive(int abilityCode)
         {
             return _abilityController.IsAbilityActive(abilityCode);
@@ -203,18 +212,20 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             _abilityController.SetAbilityParam(abilityCode, param);
         }
-        
+
         public MCAbilityLogic GetAbilityLogic(int abilityCode)
         {
             return _abilityController.GetAbilityLogic(abilityCode);
         }
+
         #endregion
-        
-        
-    
-        
+
+
 #if UNITY_EDITOR
-        public int[] FixedTags() => _gameplayTagController.FixedTags();
+        public int[] FixedTags()
+        {
+            return _gameplayTagController.FixedTags();
+        }
 
         public DynamicBuffer<BEAttributeSet> AttrSets()
         {

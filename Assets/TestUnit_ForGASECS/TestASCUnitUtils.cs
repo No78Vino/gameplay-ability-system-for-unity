@@ -1,8 +1,4 @@
 using System;
-using DemoForESC._Script.Gen;
-using GAS.ECS_TEST_RUNTIME_GEN_LIB;
-using GAS.Runtime;
-using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
@@ -11,8 +7,6 @@ using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -21,11 +15,11 @@ namespace TestUnit_ForGASECS
     public class TestASCUnitUtils
     {
         /// <summary>
-        /// GE普通攻击
+        ///     GE普通攻击
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_ONEHIT =
         {
-            new ConfEffectBasicInfo {Name = "Test_OneHit"},
+            new ConfEffectBasicInfo { Name = "Test_OneHit" },
             //new ConfAssetTags {tags = new []{GEN_GameplayTagCode.Magic_Fire}},
             // new ConfModifiers {modifierSettings = new []
             // {
@@ -42,66 +36,74 @@ namespace TestUnit_ForGASECS
             //         }
             //     }
             // }},
-            new ConfCueOnExecution()
+            new ConfCueOnExecution
             {
-                cues = new CueInstant[]{ new CueLog(new CueLogParameters(){Message = "普通攻击",SourceType = CueSourceType.GameplayEffect})} 
+                cues = new CueInstant[]
+                    { new CueLog(new CueLogParameters { Message = "普通攻击", SourceType = CueSourceType.GameplayEffect }) }
             }
-        };
-        
-        /// <summary>
-        /// GE普通攻击,要求earth tag
-        /// </summary>
-        public static GameplayEffectComponentConfig[] GEConfig_ONEHIT_REQUIRED_EARTH_TAG =
-        {
-            new ConfEffectBasicInfo {Name = "Test_OneHit_Earth"},
-            //new ConfAssetTags {tags = new []{GEN_GameplayTagCode.Magic_Fire}},
-            //new ConfApplicationRequiredTags{tags = new []{GEN_GameplayTagCode.Magic_Earth}},
-            new MCConfModifiers {modifierSettings = new []
-            {
-                new ModifierSetting()
-                {
-                    //AttrSetCode = GEN_AttrSetCode.Fight_Monster,
-                    AttrCode = GEN_AttributeCode.HP,
-                    Operation = GEOperation.Minus,
-                    Magnitude = 20,
-                    // MMC = new MMCSettingConfig()
-                    // {
-                    //     TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                    //     floatParams = new []{0.5f,0},
-                    // }
-                }
-            }}
         };
 
         /// <summary>
-        /// GE燃烧buff
+        ///     GE普通攻击,要求earth tag
+        /// </summary>
+        public static GameplayEffectComponentConfig[] GEConfig_ONEHIT_REQUIRED_EARTH_TAG =
+        {
+            new ConfEffectBasicInfo { Name = "Test_OneHit_Earth" }
+            //new ConfAssetTags {tags = new []{GEN_GameplayTagCode.Magic_Fire}},
+            //new ConfApplicationRequiredTags{tags = new []{GEN_GameplayTagCode.Magic_Earth}},
+            // new MCConfModifiers {modifierSettings = new []
+            // {
+            //     new ModifierSetting()
+            //     {
+            //         //AttrSetCode = GEN_AttrSetCode.Fight_Monster,
+            //         AttrCode = GEN_AttributeCode.HP,
+            //         Operation = GEOperation.Minus,
+            //         Magnitude = 20,
+            //         // MMC = new MMCSettingConfig()
+            //         // {
+            //         //     TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+            //         //     floatParams = new []{0.5f,0},
+            //         // }
+            //     }
+            // }}
+        };
+
+        /// <summary>
+        ///     GE燃烧buff
         /// </summary>
         public static GameplayEffectComponentConfig[] GEConfig_BURNING =
         {
             new ConfEffectBasicInfo { Name = "Test_Burning" },
             //new ConfAssetTags { tags = new[] { GEN_GameplayTagCode.Magic_Fire } },
             new ConfDuration { duration = 60 * 5, timeUnit = TimeUnit.Frame },
-            new ConfPeriod { Period = 30, GameplayEffectSettings = new[] { GEConfig_ONEHIT } },
-            new MCConfModifiers
-            {
-                modifierSettings = new[]
-                {
-                    new ModifierSetting()
-                    {
-                        //AttrSetCode = GEN_AttrSetCode.Fight_Monster,
-                        AttrCode = GEN_AttributeCode.ATK,
-                        Operation = GEOperation.Add,
-                        Magnitude = 66,
-                        // MMC = new MMCSettingConfig()
-                        // {
-                        //     TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                        //     floatParams = new[] { 1f, 0 },
-                        // }
-                    }
-                }
-            }
+            new ConfPeriod { Period = 30, GameplayEffectSettings = new[] { GEConfig_ONEHIT } }
+            // new MCConfModifiers
+            // {
+            //     modifierSettings = new[]
+            //     {
+            //         new ModifierSetting()
+            //         {
+            //             //AttrSetCode = GEN_AttrSetCode.Fight_Monster,
+            //             AttrCode = GEN_AttributeCode.ATK,
+            //             Operation = GEOperation.Add,
+            //             Magnitude = 66,
+            //             // MMC = new MMCSettingConfig()
+            //             // {
+            //             //     TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+            //             //     floatParams = new[] { 1f, 0 },
+            //             // }
+            //         }
+            //     }
+            // }
         };
-        
+
+        public static AbilityConfig AbilityConfig_Debug = new(new GameplayAbilityComponentConfig[]
+        {
+            //new ConfAbilityBaseInfo { Code = GEN_AbilityCode.DebugLog },
+            //new ConfAbilityAssetTags { tags = new[] { GEN_GameplayTagCode.Magic_Fire } },
+            new MCConfAbilityLogic { AbilityLogicType = typeof(ALDebugLog).FullName }
+        });
+
         public static string[] FixedStringToStringArray(NativeArray<FixedString32Bytes> array)
         {
             var strings = new string[array.Length];
@@ -109,13 +111,6 @@ namespace TestUnit_ForGASECS
                 strings[i] = array[i].ToString();
             return strings;
         }
-
-        public static AbilityConfig AbilityConfig_Debug = new(new GameplayAbilityComponentConfig[]
-        {
-            //new ConfAbilityBaseInfo { Code = GEN_AbilityCode.DebugLog },
-            //new ConfAbilityAssetTags { tags = new[] { GEN_GameplayTagCode.Magic_Fire } },
-            new MCConfAbilityLogic { AbilityLogicType = typeof(ALDebugLog).FullName },
-        });
     }
 
     [Serializable]
@@ -134,7 +129,7 @@ namespace TestUnit_ForGASECS
         public float MinValue;
         public float MaxValue;
     }
-    
+
     [Serializable]
     public struct EffectForShow
     {
@@ -161,7 +156,7 @@ namespace TestUnit_ForGASECS
         public int[] RemoveEffectWithTags;
 
         // Modifiers
-        public ModifierSetting[] modifiers;
+        //public ModifierSetting[] modifiers;
 
 
         public static EntityManager GasEntityManager => GASManager.EntityManager;
@@ -177,7 +172,8 @@ namespace TestUnit_ForGASECS
         public void SetBasicData(Entity geEntity)
         {
             var has = GasEntityManager.HasComponent<CEffectBasicInfo>(geEntity);
-            var basicData = has ? GasEntityManager.GetComponentData<CEffectBasicInfo>(geEntity) : new CEffectBasicInfo();
+            var basicData =
+                has ? GasEntityManager.GetComponentData<CEffectBasicInfo>(geEntity) : new CEffectBasicInfo();
             name = !has ? "NONE" : geEntity.ToString();
         }
 

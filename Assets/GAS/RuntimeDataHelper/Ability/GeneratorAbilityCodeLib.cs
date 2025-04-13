@@ -1,10 +1,9 @@
 using System.IO;
-using GAS.Editor;
 using GAS.RuntimeDataHelper.Helper;
 using UnityEditor;
 using UnityEngine;
 
-namespace GAS.RuntimeDataHelper.Ability
+namespace GAS.Editor
 {
     /// <summary>
     /// 能力代码库脚本生成器

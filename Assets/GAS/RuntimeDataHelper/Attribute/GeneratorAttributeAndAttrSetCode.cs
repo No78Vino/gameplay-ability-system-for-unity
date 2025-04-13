@@ -118,30 +118,4 @@ namespace GAS.RuntimeDataHelper.Attribute
             Console.WriteLine($"Generated GTagLib at path: {filePath}");
         }
     }
-    //     public static class AttributeCollectionGen
-    // {
-    //     private sealed class AttributeInfo
-    //     {
-    //         public string Name;
-    //         public string Comment;
-    //     }
-    //
-    //     public static void Gen()
-    //     {
-    //         var asset = AttributeAsset.LoadOrCreate();
-    //         string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-    //         var filePath =
-    //             $"{pathWithoutAssets}/{GASSettingAsset.CodeGenPath}/{GasDefine.GAS_ATTRIBUTE_LIB_CSHARP_SCRIPT_NAME}";
-    //
-    //
-    //         var attributeInfos = (from t in asset.attributes
-    //             where !string.IsNullOrWhiteSpace(t.Name)
-    //             select new AttributeInfo { Name = t.Name, Comment = t.Comment }).ToList();
-    //
-    //
-    //         GenerateAttributeCollection(attributeInfos, filePath);
-    //     }
-    //
-
-    // }
 }
