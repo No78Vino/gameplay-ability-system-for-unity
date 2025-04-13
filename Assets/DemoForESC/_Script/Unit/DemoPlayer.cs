@@ -1,4 +1,5 @@
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Ability.Component;
 using UnityEngine;
 
 namespace DemoForESC._Script
@@ -7,6 +8,9 @@ namespace DemoForESC._Script
     {
         UnityEngine.Camera _mainCamera;
 
+        private AbilityParamArrayGameplayEffect _cacheParamRun = new();
+
+        
         protected override void Awake()
         {
             base.Awake();
@@ -21,6 +25,18 @@ namespace DemoForESC._Script
             var viewPointForward = Vector3.ProjectOnPlane(_mainCamera.transform.forward, Vector3.up).normalized;
             _cacheParamMove.SetValue(direction,viewPointForward,0.1f);
             AbilitySystemCellMono.Cell.SetAbilityParam(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
+        }
+
+        public void StartRun()
+        {
+            if(!AbilitySystemCellMono.Cell.IsAbilityActive(GEN_AbilityCode.ABILITY_RunSpeedUp))
+                AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_RunSpeedUp,_cacheParamRun);
+        }
+
+        public void StopRun()
+        {
+            if(AbilitySystemCellMono.Cell.IsAbilityActive(GEN_AbilityCode.ABILITY_RunSpeedUp)) 
+                AbilitySystemCellMono.TryEndAbility(GEN_AbilityCode.ABILITY_RunSpeedUp);
         }
     }
 }

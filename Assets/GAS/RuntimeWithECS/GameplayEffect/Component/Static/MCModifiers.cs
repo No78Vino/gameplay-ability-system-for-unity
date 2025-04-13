@@ -59,7 +59,29 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             MCModifiers mcModifiers = new MCModifiers(effectModifiers);
             _entityManager.SetComponentData(ge,mcModifiers);
         }
-        
+
+        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
+        {
+            if (!_entityManager.HasComponent<MCModifiers>(ge))
+                ecb.AddComponent<MCModifiers>(ge);
+
+            EffectModifier[] effectModifiers = new EffectModifier[modifierSettings.Length];
+            for (var i = 0; i < modifierSettings.Length; i++)
+            {
+                var modifierSetting = modifierSettings[i];
+                effectModifiers[i] = new EffectModifier
+                {
+                    AttrSetCode = modifierSetting.AttrSetCode,
+                    AttrCode = modifierSetting.AttrCode,
+                    Operation = modifierSetting.Operation,
+                    Magnitude = modifierSetting.Magnitude,
+                    MMC = modifierSetting.MMC.CreateMmc()
+                };
+            }
+            MCModifiers mcModifiers = new MCModifiers(effectModifiers);
+            ecb.SetComponent(ge,mcModifiers);
+        }
+
         public void TriggerOnValueChanged()
         {
             foreach (var mod in modifierSettings)

@@ -17,8 +17,7 @@ namespace DemoForESC._Script.Controller
 
 
         private Vector3 _cameraForward;
-
-        private CharacterController _controller;
+        
         private float _currentSpeed;
         private bool _isRunning;
         private UnityEngine.Camera _mainCamera;
@@ -26,7 +25,6 @@ namespace DemoForESC._Script.Controller
 
         private void Awake()
         {
-            _controller = GetComponent<CharacterController>();
             _mainCamera = UnityEngine.Camera.main;
         }
 
@@ -48,9 +46,12 @@ namespace DemoForESC._Script.Controller
 
             // 构建移动向量
             _movement = (_cameraForward * vertical + cameraRight * horizontal).normalized;
-
-            // 奔跑控制
-            _isRunning = Input.GetKey(KeyCode.LeftShift);
+            
+            // 奔跑开关
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                demoPlayer.StartRun();
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+                demoPlayer.StopRun();
         }
 
         private void UpdateMovement()

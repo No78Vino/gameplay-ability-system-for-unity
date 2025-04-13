@@ -16,5 +16,9 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             _value = value;
         }
+        
+        public AbilityParamArrayGameplayEffect()
+        {
+        }
     }
 }

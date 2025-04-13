@@ -33,7 +33,9 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
                     ecb.RemoveComponent<CAbilityActive>(ability);
                     ASCUtil.RestoreDynamicTags(ability);
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
+                    abilityLogic.Logic.UpdateEntityCommandBuffer(ecb);
                     abilityLogic.Logic.EndAbility( globalTimer.ValueRO);
+                    abilityLogic.Logic.RemoveEntityCommandBuffer();
                     GASEventCenter.InvokeOnEndAbility(ability);
                 }
                 ecb.RemoveComponent<CAbilityInTryEnd>(ability);

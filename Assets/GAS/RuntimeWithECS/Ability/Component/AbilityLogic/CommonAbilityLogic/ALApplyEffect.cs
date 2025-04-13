@@ -31,7 +31,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
             var owner = baseInfo.Owner;
             foreach (var effect in _param.Value)
             {
-                var geEntity = effect.CreateGameplayEffectEntity();
+                var geEntity = CreateGameplayEffectEntity(effect);
                 GEUtil.ApplyGameplayEffectTo(geEntity, owner,owner);
                 _appliedGEEntities.Add(geEntity);
             }

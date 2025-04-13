@@ -20,7 +20,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<EffectModifier>();
+            state.RequireForUpdate<MCModifiers>();
             state.RequireForUpdate<CInApplicationProgress>();
             state.RequireForUpdate<CValidEffect>();
             state.RequireForUpdate<CInUsage>();

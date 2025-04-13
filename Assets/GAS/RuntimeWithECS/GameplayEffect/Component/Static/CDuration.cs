@@ -1,5 +1,6 @@
 using GAS.RuntimeWithECS.Core;
 using Unity.Entities;
+using NotImplementedException = System.NotImplementedException;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
@@ -62,6 +63,18 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
             _entityManager.AddComponentData(ge, new CDuration
+            {
+                duration = duration,
+                timeUnit = timeUnit,
+                ResetStartTimeWhenActivated = ResetStartTimeWhenActivated,
+                StopTickWhenDeactivated = StopTickWhenDeactivated,
+                active = false
+            });
+        }
+
+        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
+        {
+            ecb.AddComponent(ge, new CDuration
             {
                 duration = duration,
                 timeUnit = timeUnit,

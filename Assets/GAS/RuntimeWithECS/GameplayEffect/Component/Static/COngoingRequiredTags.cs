@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Entities;
+using NotImplementedException = System.NotImplementedException;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
@@ -15,6 +16,14 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
             _entityManager.AddComponentData(ge, new COngoingRequiredTags
+            {
+                tags = new NativeArray<int>(tags, Allocator.Persistent)
+            });
+        }
+
+        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
+        {
+            ecb.AddComponent(ge, new COngoingRequiredTags
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });
