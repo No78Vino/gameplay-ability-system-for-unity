@@ -48,6 +48,11 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             return GEUtil.CreateGameplayEffectEntity(config.ComponentConfigs,_ecb);
         } 
+        
+        protected void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
+        {
+            GEUtil.ApplyGameplayEffectTo(gameplayEffect, target,source,_ecb);
+        } 
     }
 
     public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:AbilityParamBase

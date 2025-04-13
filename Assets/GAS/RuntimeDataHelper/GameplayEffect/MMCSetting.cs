@@ -32,7 +32,12 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
         
         public ModMagnitudeCalculationBase CreateMmc()
         {
-            return MmcHelper.TryCreateMmc(MmcType,mmcParamConfig);
+            var typeMap = EditGameplayEffectHelper.GetCachedMmcToMmcParamConfigTypeMap();
+            MmcParamConfigBase config = null;
+            if (typeMap.TryGetValue(MmcType, out var value))
+                config = Activator.CreateInstance(value) as MmcParamConfigBase;
+            
+            return MmcHelper.TryCreateMmc(MmcType,config);
         }
         
         protected void OnValueChanged()

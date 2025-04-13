@@ -32,7 +32,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
             foreach (var effect in _param.Value)
             {
                 var geEntity = CreateGameplayEffectEntity(effect);
-                GEUtil.ApplyGameplayEffectTo(geEntity, owner,owner);
+                ApplyGameplayEffectTo(geEntity, owner, owner);
                 _appliedGEEntities.Add(geEntity);
             }
         }

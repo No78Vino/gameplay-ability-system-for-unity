@@ -62,8 +62,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
         public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
         {
-            if (!_entityManager.HasComponent<MCModifiers>(ge))
-                ecb.AddComponent<MCModifiers>(ge);
+            //if (!_entityManager.HasComponent<MCModifiers>(ge)) 
+            ecb.AddComponent<MCModifiers>(ge);
 
             EffectModifier[] effectModifiers = new EffectModifier[modifierSettings.Length];
             for (var i = 0; i < modifierSettings.Length; i++)
