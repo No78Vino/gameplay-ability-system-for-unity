@@ -34,7 +34,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public ModMagnitudeCalculationBase MMC;
     }
 
-    public sealed class ConfModifiers : GameplayEffectComponentConfig
+    public sealed class MCConfModifiers : GameplayEffectComponentConfig
     {
         public ModifierSetting[] modifierSettings;
 

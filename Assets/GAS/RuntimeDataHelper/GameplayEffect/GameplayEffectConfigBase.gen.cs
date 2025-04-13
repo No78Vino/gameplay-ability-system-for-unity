@@ -9,6 +9,7 @@ using System.Linq;
 using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime
 {
@@ -74,11 +75,12 @@ namespace GAS.Runtime
     [OnValueChanged(nameof(OnConfigValueChanged))]
     public ConfAssetEffectImmunityTags ConfAssetEffectImmunityTags;
 
+    [FormerlySerializedAs("ConfAssetModifiers")]
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
     [HideLabel]
     [ShowIf(nameof(HasConfAssetModifiers))]
     [OnValueChanged(nameof(OnConfigValueChanged))]
-    public ConfAssetModifiers ConfAssetModifiers;
+    public MCConfAssetModifiers mcConfAssetModifiers;
 
     [TabGroup("EffectConfig","配置详情",SdfIconType.Activity)]
     [HideLabel]
@@ -123,7 +125,7 @@ namespace GAS.Runtime
     protected bool HasConfAssetEffectImmunityTags => 
         configTypes.Any( x => x == typeof(ConfAssetEffectImmunityTags).FullName);
     protected bool HasConfAssetModifiers => 
-        configTypes.Any( x => x == typeof(ConfAssetModifiers).FullName);
+        configTypes.Any( x => x == typeof(MCConfAssetModifiers).FullName);
     protected bool HasConfAssetOngoingRequiredTags => 
         configTypes.Any( x => x == typeof(ConfAssetOngoingRequiredTags).FullName);
     protected bool HasConfAssetPeriod => 
@@ -160,8 +162,8 @@ namespace GAS.Runtime
                 return HasConfAssetEffectGrantedTags?ConfAssetEffectGrantedTags:null;
             if(type==typeof(ConfAssetEffectImmunityTags).FullName)
                 return HasConfAssetEffectImmunityTags?ConfAssetEffectImmunityTags:null;
-            if(type==typeof(ConfAssetModifiers).FullName)
-                return HasConfAssetModifiers?ConfAssetModifiers:null;
+            if(type==typeof(MCConfAssetModifiers).FullName)
+                return HasConfAssetModifiers?mcConfAssetModifiers:null;
             if(type==typeof(ConfAssetOngoingRequiredTags).FullName)
                 return HasConfAssetOngoingRequiredTags?ConfAssetOngoingRequiredTags:null;
             if(type==typeof(ConfAssetPeriod).FullName)
@@ -193,7 +195,7 @@ namespace GAS.Runtime
         ConfAssetEffectDuration?.SetOwnAsset(this);
         ConfAssetEffectGrantedTags?.SetOwnAsset(this);
         ConfAssetEffectImmunityTags?.SetOwnAsset(this);
-        ConfAssetModifiers?.SetOwnAsset(this);
+        mcConfAssetModifiers?.SetOwnAsset(this);
         ConfAssetOngoingRequiredTags?.SetOwnAsset(this);
         ConfAssetPeriod?.SetOwnAsset(this);
         ConfAssetRemoveEffectWithTags?.SetOwnAsset(this);

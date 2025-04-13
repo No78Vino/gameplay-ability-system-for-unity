@@ -8,16 +8,16 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.MmcParam
     [Serializable]
     public abstract class MmcParamConfigBase
     {
-        protected ConfModifiers ConfAsset;
+        protected MCConfModifiers McConfAsset;
 
-        public virtual void SetConfAssetMmc(ConfModifiers config)
+        public virtual void SetConfAssetMmc(MCConfModifiers config)
         {
-            ConfAsset = config;
+            McConfAsset = config;
         }
 
         public virtual void OnAbilityParamValueChange()
         {
-            ConfAsset?.TriggerOnValueChanged();
+            McConfAsset?.TriggerOnValueChanged();
         }
 
         public abstract IMmcParameter GetConfig();

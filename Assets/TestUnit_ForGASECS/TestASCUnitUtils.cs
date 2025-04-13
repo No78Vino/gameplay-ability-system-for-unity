@@ -56,7 +56,7 @@ namespace TestUnit_ForGASECS
             new ConfEffectBasicInfo {Name = "Test_OneHit_Earth"},
             //new ConfAssetTags {tags = new []{GEN_GameplayTagCode.Magic_Fire}},
             //new ConfApplicationRequiredTags{tags = new []{GEN_GameplayTagCode.Magic_Earth}},
-            new ConfModifiers {modifierSettings = new []
+            new MCConfModifiers {modifierSettings = new []
             {
                 new ModifierSetting()
                 {
@@ -82,7 +82,7 @@ namespace TestUnit_ForGASECS
             //new ConfAssetTags { tags = new[] { GEN_GameplayTagCode.Magic_Fire } },
             new ConfDuration { duration = 60 * 5, timeUnit = TimeUnit.Frame },
             new ConfPeriod { Period = 30, GameplayEffectSettings = new[] { GEConfig_ONEHIT } },
-            new ConfModifiers
+            new MCConfModifiers
             {
                 modifierSettings = new[]
                 {

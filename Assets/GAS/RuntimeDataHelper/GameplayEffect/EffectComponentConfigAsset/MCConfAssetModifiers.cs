@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
 {
     [Serializable]
-    public class ConfAssetModifiers: BaseGameplayEffectComponentConfigAsset
+    public class MCConfAssetModifiers: BaseGameplayEffectComponentConfigAsset
     {
         [TabGroup("Modifiers","修改器",SdfIconType.TagsFill)]
         [LabelText("")]
@@ -21,7 +21,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         
         public override GameplayEffectComponentConfig GetConfig()
         {
-            return new ConfModifiers()
+            return new MCConfModifiers()
             {
                 modifierSettings = modifiers.ToArray()
             };
