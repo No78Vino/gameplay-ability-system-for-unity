@@ -40,10 +40,10 @@ MonoBehaviour:
         Operation: 1
         Magnitude: 2
         MMC:
-          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCScalableFloat
+          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone
           _jsonMmcParamConfig:
-            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
-            Data: '{}'
+            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigFloatScale
+            Data: '{"k":0.0,"b":0.0}'
     ConfAssetOngoingRequiredTags:
       tags: 
     ConfAssetPeriod:
