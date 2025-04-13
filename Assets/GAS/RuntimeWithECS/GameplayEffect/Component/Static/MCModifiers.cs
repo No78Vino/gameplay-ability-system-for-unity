@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GAS.Runtime;
+using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
@@ -58,6 +59,12 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             MCModifiers mcModifiers = new MCModifiers(effectModifiers);
             _entityManager.SetComponentData(ge,mcModifiers);
         }
+        
+        public void TriggerOnValueChanged()
+        {
+            foreach (var mod in modifierSettings)
+                mod.OnValueChanged();
+        }
     }
 
     [Serializable]
@@ -72,12 +79,14 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         [LabelText("操作类型")] public GEOperation Operation;
 
         [LabelText("通用基础模值")] public float Magnitude;
-
-        [Title("MMC设置",horizontalLine:true)]
+        
         [HideLabel]
         public MMCSettingConfig MMC;
 
 #if UNITY_EDITOR
+        public void OnValueChanged() => MMC?.TriggerOnValueChanged();
+        
+        
         private IEnumerable<ValueDropdownItem> AttributeChoice()
         {
             return EditAttributeHelper.GetAttributeChoiceByAttrSet(AttrSetCode);

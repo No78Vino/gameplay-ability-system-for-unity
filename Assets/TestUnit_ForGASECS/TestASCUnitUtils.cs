@@ -2,6 +2,7 @@ using System;
 using DemoForESC._Script.Gen;
 using GAS.ECS_TEST_RUNTIME_GEN_LIB;
 using GAS.Runtime;
+using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
@@ -63,11 +64,11 @@ namespace TestUnit_ForGASECS
                     AttrCode = GEN_AttributeCode.HP,
                     Operation = GEOperation.Minus,
                     Magnitude = 20,
-                    MMC = new MMCSettingConfig()
-                    {
-                        TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                        floatParams = new []{0.5f,0},
-                    }
+                    // MMC = new MMCSettingConfig()
+                    // {
+                    //     TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+                    //     floatParams = new []{0.5f,0},
+                    // }
                 }
             }}
         };
@@ -91,11 +92,11 @@ namespace TestUnit_ForGASECS
                         AttrCode = GEN_AttributeCode.ATK,
                         Operation = GEOperation.Add,
                         Magnitude = 66,
-                        MMC = new MMCSettingConfig()
-                        {
-                            TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
-                            floatParams = new[] { 1f, 0 },
-                        }
+                        // MMC = new MMCSettingConfig()
+                        // {
+                        //     TypeCode = MMCTypeToCode.Map[typeof(MMCScalableFloat)],
+                        //     floatParams = new[] { 1f, 0 },
+                        // }
                     }
                 }
             }
