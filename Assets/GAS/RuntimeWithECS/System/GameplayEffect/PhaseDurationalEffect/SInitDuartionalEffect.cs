@@ -7,8 +7,8 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
 {
-    [UpdateInGroup( typeof( SysGroupDurationalEffect ) )]
-    public partial struct SysInitDuartionalEffect : ISystem
+    [UpdateInGroup( typeof(SysGroupDurationalEffect) )]
+    public partial struct SInitDuartionalEffect : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

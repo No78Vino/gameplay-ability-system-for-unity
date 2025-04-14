@@ -5,7 +5,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.SystemGroup
 {
     [UpdateInGroup(typeof(SysGroupDurationalEffect))]
-    [UpdateBefore(typeof(SysInitDuartionalEffect))]
+    [UpdateBefore(typeof(SInitDuartionalEffect))]
     public partial class SysGroupApplicationGameplayEffectStacking : ComponentSystemGroup
     {
     }

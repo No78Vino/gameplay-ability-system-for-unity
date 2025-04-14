@@ -7,7 +7,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupDurationalEffect))]
-    [UpdateAfter(typeof(SysInitDuartionalEffect))]
+    [UpdateAfter(typeof(SInitDuartionalEffect))]
     public partial struct SysInvokeEffectContainerIsDirtyEvent : ISystem
     {
         [BurstCompile]
