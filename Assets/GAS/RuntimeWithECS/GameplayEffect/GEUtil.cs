@@ -115,6 +115,13 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             _entityManager.AddComponent<CEffectDestroy>(gameplayEffect);
         }
 
+        public static void RemoveGameplayEffect(Entity gameplayEffect,EntityCommandBuffer ecb)
+        {
+            //if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
+            ecb.RemoveComponent<CValidEffect>(gameplayEffect);
+            ecb.AddComponent<CEffectDestroy>(gameplayEffect);
+        }
+        
         /// <summary>
         ///     检测应用标签
         /// </summary>

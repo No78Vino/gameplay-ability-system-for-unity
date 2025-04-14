@@ -45,7 +45,7 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
         public override void EndAbility(GlobalTimer timer)
         {
             foreach (var geEntity in _appliedGEEntities)
-                GEUtil.RemoveGameplayEffect(geEntity);
+                GEUtil.RemoveGameplayEffect(geEntity,_ecb);
             
             _appliedGEEntities.Clear();
         }
