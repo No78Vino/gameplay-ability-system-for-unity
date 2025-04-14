@@ -35,5 +35,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             AddGameplayEffectEntityTo(gameplayEffect.Entity, target.Entity);
             return gameplayEffect;
         }
+        
+        public void RemoveGameplayEffect(Entity gameplayEffect)
+        {
+            GEUtil.RemoveGameplayEffect(gameplayEffect);
+        }
     }
 }

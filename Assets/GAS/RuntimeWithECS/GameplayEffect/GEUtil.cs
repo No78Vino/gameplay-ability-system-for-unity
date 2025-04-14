@@ -118,6 +118,17 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
             _entityManager.RemoveComponent<CValidEffect>(gameplayEffect);
             _entityManager.AddComponent<CEffectDestroy>(gameplayEffect);
+            // 从ASC容器中移除
+            var inUsage = _entityManager.GetComponentData<CInUsage>(gameplayEffect);
+            var target = inUsage.Target;
+            
+            var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(target);;
+            for (var i = 0; i < gameplayEffects.Length; i++)
+            {
+                if (gameplayEffects[i].GameplayEffect != gameplayEffect) continue;
+                gameplayEffects.RemoveAt(i);
+                break;
+            }
         }
 
         public static void RemoveGameplayEffect(Entity gameplayEffect,EntityCommandBuffer ecb)
@@ -125,6 +136,17 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             //if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
             ecb.RemoveComponent<CValidEffect>(gameplayEffect);
             ecb.AddComponent<CEffectDestroy>(gameplayEffect);
+            
+            // 从ASC容器中移除
+            var inUsage = _entityManager.GetComponentData<CInUsage>(gameplayEffect);
+            var target = inUsage.Target;
+            var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(target);
+            for (var i = 0; i < gameplayEffects.Length; i++)
+            {
+                if (gameplayEffects[i].GameplayEffect != gameplayEffect) continue;
+                gameplayEffects.RemoveAt(i);
+                break;
+            }
         }
         
         /// <summary>
