@@ -278,12 +278,17 @@ namespace GAS.Editor
             foreach (var gameplayEffect in gameplayEffectBuffer)
             {
                 var gameplayEffectName = GASManager.EntityManager.GetName(gameplayEffect.GameplayEffect);
-                if (gameplayEffectName != null)
+                if (gameplayEffectName != null  
+                    && gameplayEffectName!="ENTITY_NOT_FOUND")
                 {
                     var inUsage = GASManager.EntityManager.GetComponentData<CInUsage>(gameplayEffect.GameplayEffect);
                     var source = ExGasHelper.GetEntityName(inUsage.Source);
                     var text = $"[来源:{source}] Lv.{inUsage.Level} - {gameplayEffectName}";
                     _ascGameplayEffects.Add(text);
+                }
+                else
+                {
+                    _ascGameplayEffects.Add("ERROR: GE已被销毁，但未被移出容器！");
                 }
             }
         }
