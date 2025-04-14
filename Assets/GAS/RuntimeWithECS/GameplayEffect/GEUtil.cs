@@ -68,6 +68,11 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             return entity;
         }
 
+        /// <summary>
+        /// 特别注意
+        /// </summary>
+        /// <param name="componentAssets"></param>
+        /// <param name="ecb"></param>
         public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets,EntityCommandBuffer ecb)
         {
             var entity = ecb.CreateEntity();

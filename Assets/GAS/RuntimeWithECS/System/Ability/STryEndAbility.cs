@@ -7,6 +7,7 @@ using GAS.RuntimeWithECS.System.SystemGroup;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
 {
@@ -34,7 +35,7 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
                     ASCUtil.RestoreDynamicTags(ability);
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
                     abilityLogic.Logic.UpdateEntityCommandBuffer(ecb);
-                    abilityLogic.Logic.EndAbility( globalTimer.ValueRO);
+                    abilityLogic.Logic.EndAbility(globalTimer.ValueRO);
                     abilityLogic.Logic.RemoveEntityCommandBuffer();
                     GASEventCenter.InvokeOnEndAbility(ability);
                 }

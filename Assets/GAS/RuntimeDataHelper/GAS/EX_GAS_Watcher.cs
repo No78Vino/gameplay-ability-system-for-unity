@@ -6,6 +6,7 @@ using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Helper;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
@@ -272,16 +273,19 @@ namespace GAS.Editor
         private void RefreshGameplayEffects()
         {
             _ascGameplayEffects.Clear();
-            // var ascEntity = entityWatching;
-            // var gameplayEffectBuffer = GASManager.EntityManager.GetBuffer<BEGameplayEffect>(ascEntity);
-            // foreach (var gameplayEffect in gameplayEffectBuffer)
-            // {
-            //     var gameplayEffectName = GASManager.EntityManager.GetName(gameplayEffect.GameplayEffect);
-            //     if (gameplayEffectName != null)
-            //     {
-            //         _ascGameplayEffects.Add(gameplayEffectName);
-            //     }
-            // }
+            var ascEntity = entityWatching;
+            var gameplayEffectBuffer = GASManager.EntityManager.GetBuffer<BEGameplayEffect>(ascEntity);
+            foreach (var gameplayEffect in gameplayEffectBuffer)
+            {
+                var gameplayEffectName = GASManager.EntityManager.GetName(gameplayEffect.GameplayEffect);
+                if (gameplayEffectName != null)
+                {
+                    var inUsage = GASManager.EntityManager.GetComponentData<CInUsage>(gameplayEffect.GameplayEffect);
+                    var source = ExGasHelper.GetEntityName(inUsage.Source);
+                    var text = $"[来源:{source}] Lv.{inUsage.Level} - {gameplayEffectName}";
+                    _ascGameplayEffects.Add(text);
+                }
+            }
         }
 
         private void RefreshAbilities()

@@ -1,5 +1,7 @@
+using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability.Component
@@ -28,6 +30,16 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             _abilityEntity = abilityEntity;
         }
+
+        public Entity GetOwnerAsc()
+        {
+            if (_entityManager.HasComponent<CAbilityBaseInfo>(_abilityEntity))
+            {
+                var basicInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
+                return basicInfo.Owner;
+            }
+            return Entity.Null;
+        }
         
         public virtual void SetParam(AbilityParamBase abilityParam)
         {
@@ -52,7 +64,16 @@ namespace GAS.RuntimeWithECS.Ability.Component
         protected void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
             GEUtil.ApplyGameplayEffectTo(gameplayEffect, target,source,_ecb);
-        } 
+            _ecb.AddComponent(gameplayEffect,new CCreatedByAbility()
+            {
+                sourceAbility = _abilityEntity
+            });
+        }
+
+        protected void RemoveGameplayEffect(Entity geEntity)
+        {
+            GEUtil.RemoveGameplayEffect(geEntity,_ecb);
+        }
     }
 
     public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:AbilityParamBase

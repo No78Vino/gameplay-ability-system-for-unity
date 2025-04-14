@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 using UnityEngine;
 
@@ -9,8 +11,6 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
 {
     public class ALApplyEffect: AbilityLogicBase<AbilityParamArrayGameplayEffect>
     {
-        private List<Entity> _appliedGEEntities = new();
-        
         public void InitGameplayEffects(GameplayEffectConfig[] effects)
         {
             _param.SetValue(effects);
@@ -26,14 +26,12 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
 
         public override void ActivateAbility(GlobalTimer timer)
         {
-            _appliedGEEntities.Clear();
             var baseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
             var owner = baseInfo.Owner;
             foreach (var effect in _param.Value)
             {
                 var geEntity = CreateGameplayEffectEntity(effect);
                 ApplyGameplayEffectTo(geEntity, owner, owner);
-                _appliedGEEntities.Add(geEntity);
             }
         }
 
@@ -44,10 +42,18 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
 
         public override void EndAbility(GlobalTimer timer)
         {
-            foreach (var geEntity in _appliedGEEntities)
-                GEUtil.RemoveGameplayEffect(geEntity,_ecb);
-            
-            _appliedGEEntities.Clear();
+            var ownerAsc = GetOwnerAsc();
+            var geEntities = _entityManager.GetBuffer<BEGameplayEffect>(ownerAsc);
+            foreach (var beEffect in geEntities)
+            {
+                var effect = beEffect.GameplayEffect;
+                if (_entityManager.HasComponent<CCreatedByAbility>(effect))
+                {
+                    var createdByAbility = _entityManager.GetComponentData<CCreatedByAbility>(effect);
+                    if(createdByAbility.sourceAbility==_abilityEntity)
+                        RemoveGameplayEffect(effect);
+                }
+            }
         }
     }
 }
