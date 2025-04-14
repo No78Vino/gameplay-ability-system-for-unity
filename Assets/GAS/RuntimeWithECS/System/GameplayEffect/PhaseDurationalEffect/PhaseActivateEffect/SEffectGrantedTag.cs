@@ -1,6 +1,5 @@
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.System.SystemGroup;
-using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Burst;
 using Unity.Entities;
@@ -8,8 +7,8 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupActivateEffect))]
-    [UpdateBefore(typeof(SysActivateEnd))]
-    public partial struct SysEffectGrantedTag : ISystem
+    [UpdateBefore(typeof(SActivateEnd))]
+    public partial struct SEffectGrantedTag : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

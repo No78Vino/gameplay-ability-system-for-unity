@@ -8,7 +8,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupActivateEffect))]
-    [UpdateBefore(typeof(SysActivateEnd))]
+    [UpdateBefore(typeof(SActivateEnd))]
     public partial struct SActivateEffect : ISystem
     {
         [BurstCompile]
@@ -24,30 +24,10 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            // var currentFrame = globalFrameTimer.ValueRO.Frame;
-            // var currentTurn = globalFrameTimer.ValueRO.Turn;
             //  更新激活时间
             foreach (var (_, duration) in SystemAPI.Query<RefRO<CInActivationProgress>, RefRW<CDuration>>())
             {
                 UpdateActiveTime(ref duration.ValueRW,globalFrameTimer.ValueRO);
-                // // 过滤已经激活的GE
-                // if (duration.ValueRO.active) continue;
-                //
-                // duration.ValueRW.active = true;
-                // if (duration.ValueRO.timeUnit == TimeUnit.Frame)
-                // {
-                //     if (duration.ValueRO.activeTime == 0 || duration.ValueRO.ResetStartTimeWhenActivated)
-                //         duration.ValueRW.activeTime = currentFrame;
-                //
-                //     duration.ValueRW.lastActiveTime = currentFrame;
-                // }
-                // else
-                // {
-                //     if (duration.ValueRO.activeTime == 0 || duration.ValueRO.ResetStartTimeWhenActivated)
-                //         duration.ValueRW.activeTime = currentTurn;
-                //
-                //     duration.ValueRW.lastActiveTime = currentTurn;
-                // }
             }
 
             ecb.Playback(state.EntityManager);

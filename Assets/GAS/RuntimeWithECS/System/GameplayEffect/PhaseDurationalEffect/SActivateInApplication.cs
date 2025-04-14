@@ -6,7 +6,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupDurationalEffect))]
     [ UpdateAfter(typeof(SysInvokeEffectContainerIsDirtyEvent))]
-    public partial struct SysActivateInApplication : ISystem
+    public partial struct SActivateInApplication : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

@@ -8,7 +8,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupDurationalEffect))]
     [UpdateAfter(typeof(SysInitDuartionalEffect))]
-    public partial struct SysTriggerCueOnAdd : ISystem
+    public partial struct STriggerCueOnAdd : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
