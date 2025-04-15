@@ -18,12 +18,12 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            foreach (var (_, ge) in SystemAPI.Query<RefRO<CInActivationProgress>>().WithEntityAccess())
-                ecb.RemoveComponent<CInActivationProgress>(ge);
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            // foreach (var (_, ge) in SystemAPI.Query<RefRO<CInActivationProgress>>().WithEntityAccess())
+            //     ecb.RemoveComponent<CInActivationProgress>(ge);
+            //
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
         }
 
         [BurstCompile]

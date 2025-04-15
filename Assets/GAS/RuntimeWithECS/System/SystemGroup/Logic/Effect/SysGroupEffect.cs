@@ -1,11 +1,11 @@
 using GAS.RuntimeWithECS.System.SystemGroup;
-using GAS.RuntimeWithECS.System.SystemGroup.LogicTick;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SysGroupLogic))]
-    public partial class SysGroupAbility : ComponentSystemGroup
+    [UpdateAfter(typeof(SysGroupAbility))]
+    public partial class SysGroupEffect : ComponentSystemGroup
     {
     }
 }

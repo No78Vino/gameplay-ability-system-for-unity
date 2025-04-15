@@ -22,10 +22,10 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var aspect in SystemAPI.Query<AspCueOnAdd>())
-            {
-                aspect.Trigger(state.EntityManager);
-            }
+            // foreach (var aspect in SystemAPI.Query<AspCueOnAdd>())
+            // {
+            //     aspect.Trigger(state.EntityManager);
+            // }
         }
 
         [BurstCompile]

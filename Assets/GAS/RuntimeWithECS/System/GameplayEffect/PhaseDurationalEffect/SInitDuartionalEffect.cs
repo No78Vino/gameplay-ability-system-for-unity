@@ -22,22 +22,22 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            
-            foreach (var (inUsage,_,_,_,ge) in 
-                     SystemAPI.Query<RefRW<CInUsage>,RefRO<CInApplicationProgress>,RefRO<CValidEffect>,RefRO<CDuration>>().WithEntityAccess())
-            {
-                var owner = inUsage.ValueRO.Target;
-                // TODO 初始化，设置Level
-                
-                // 加入GE Container列表
-                var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(owner);
-                geContainer.Add(new BEGameplayEffect { GameplayEffect = ge });
-                
-                ecb.AddComponent<EffectContainerDirty>(owner);
-            }
-            
-            ecb.Playback(state.EntityManager);
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            //
+            // foreach (var (inUsage,_,_,_,ge) in 
+            //          SystemAPI.Query<RefRW<CInUsage>,RefRO<CInApplicationProgress>,RefRO<CValidEffect>,RefRO<CDuration>>().WithEntityAccess())
+            // {
+            //     var owner = inUsage.ValueRO.Target;
+            //     // TODO 初始化，设置Level
+            //     
+            //     // 加入GE Container列表
+            //     var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(owner);
+            //     geContainer.Add(new BEGameplayEffect { GameplayEffect = ge });
+            //     
+            //     ecb.AddComponent<EffectContainerDirty>(owner);
+            // }
+            //
+            // ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]

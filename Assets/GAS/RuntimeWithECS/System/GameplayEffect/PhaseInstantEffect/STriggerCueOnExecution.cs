@@ -22,10 +22,10 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var aspect in SystemAPI.Query<AspCueOnExecution>())
-            {
-                aspect.Trigger(state.EntityManager);
-            }
+            // foreach (var aspect in SystemAPI.Query<AspCueOnExecution>())
+            // {
+            //     aspect.Trigger(state.EntityManager);
+            // }
         }
 
         [BurstCompile]

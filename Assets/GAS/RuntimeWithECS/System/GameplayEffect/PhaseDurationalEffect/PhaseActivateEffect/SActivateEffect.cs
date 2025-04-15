@@ -21,17 +21,17 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-
-            var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            //  更新激活时间
-            foreach (var (_, duration) in SystemAPI.Query<RefRO<CInActivationProgress>, RefRW<CDuration>>())
-            {
-                UpdateActiveTime(ref duration.ValueRW,globalFrameTimer.ValueRO);
-            }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            //
+            // var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+            // //  更新激活时间
+            // foreach (var (_, duration) in SystemAPI.Query<RefRO<CInActivationProgress>, RefRW<CDuration>>())
+            // {
+            //     UpdateActiveTime(ref duration.ValueRW,globalFrameTimer.ValueRO);
+            // }
+            //
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
         }
 
         [BurstCompile]

@@ -1,8 +1,8 @@
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Core;
-using GAS.RuntimeWithECS.System.SystemGroup;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Burst;
 using Unity.Collections;
@@ -24,7 +24,8 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-            foreach (var (_,basicInfo,ability) in SystemAPI.Query<RefRO<CAbilityInTryActivate>,RefRO<CAbilityBaseInfo>>().WithEntityAccess())
+            foreach (var (_, basicInfo, ability) in SystemAPI
+                         .Query<RefRO<CAbilityInTryActivate>, RefRO<CAbilityBaseInfo>>().WithEntityAccess())
             {
                 var result = GAUtil.CanActivateAbility(ability);
                 if (result == AbilityActivationResult.Success)
@@ -44,19 +45,20 @@ namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
                     abilityLogic.Logic.UpdateEntityCommandBuffer(ecb);
                     abilityLogic.Logic.ActivateAbility(globalTimer.ValueRO);
-                    abilityLogic.Logic.RemoveEntityCommandBuffer(); 
+                    abilityLogic.Logic.RemoveEntityCommandBuffer();
                 }
+
                 GASEventCenter.InvokeOnActivateResult(ability, result);
-                
+
                 ecb.RemoveComponent<CAbilityInTryActivate>(ability);
             }
+
             ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
-
         }
     }
 }

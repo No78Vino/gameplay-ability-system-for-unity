@@ -7,7 +7,7 @@ using UnityEngine;
 namespace GAS.RuntimeWithECS.System.GameplayEffect
 {
     [UpdateInGroup(typeof(SysGroupTryApplyEffect))]
-    public partial struct SysCheckApplicationCondition : ISystem
+    public partial struct SCheckApplicationCondition : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

@@ -26,37 +26,37 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
-            foreach (var (inUsage, _, stacking,duration, ge) in SystemAPI
-                         .Query<RefRO<CInUsage>, RefRO<CInActivationProgress>, RefRO<CStacking>,RefRW<CDuration>>()
-                         .WithEntityAccess())
-            {
-                // 判断是否是新添加的GE
-                var stackingGe = GetStackingGameplayEffect(state.EntityManager, 
-                    inUsage.ValueRO.Target,
-                    inUsage.ValueRO.Source,
-                    stacking.ValueRO);
-                if (stackingGe != Entity.Null)
-                {
-                    // 1.叠加的GE不走Activate流程，并且直接销毁
-                    ecb.RemoveComponent<CInApplicationProgress>(ge);
-                    ecb.RemoveComponent<CValidEffect>(ge);
-                    ecb.AddComponent<CEffectDestroy>(ge);
-
-                    // 2.尝试更新Stack层数，触发OnStackCountChanged事件
-                    // 3.如果层数改变，额外触发OnGameplayEffectContainerIsDirty
-                    TryChangeStackCount(
-                        state.EntityManager, 
-                        stackingGe, stacking.ValueRO,
-                        stacking.ValueRO.StackCount+1,
-                        duration,
-                        globalFrameTimer);
-                }
-            }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            // var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
+            // foreach (var (inUsage, _, stacking,duration, ge) in SystemAPI
+            //              .Query<RefRO<CInUsage>, RefRO<CInActivationProgress>, RefRO<CStacking>,RefRW<CDuration>>()
+            //              .WithEntityAccess())
+            // {
+            //     // 判断是否是新添加的GE
+            //     var stackingGe = GetStackingGameplayEffect(state.EntityManager, 
+            //         inUsage.ValueRO.Target,
+            //         inUsage.ValueRO.Source,
+            //         stacking.ValueRO);
+            //     if (stackingGe != Entity.Null)
+            //     {
+            //         // 1.叠加的GE不走Activate流程，并且直接销毁
+            //         ecb.RemoveComponent<CInApplicationProgress>(ge);
+            //         ecb.RemoveComponent<CValidEffect>(ge);
+            //         ecb.AddComponent<CEffectDestroy>(ge);
+            //
+            //         // 2.尝试更新Stack层数，触发OnStackCountChanged事件
+            //         // 3.如果层数改变，额外触发OnGameplayEffectContainerIsDirty
+            //         TryChangeStackCount(
+            //             state.EntityManager, 
+            //             stackingGe, stacking.ValueRO,
+            //             stacking.ValueRO.StackCount+1,
+            //             duration,
+            //             globalFrameTimer);
+            //     }
+            // }
+            //
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
         }
 
         [BurstCompile]

@@ -7,7 +7,7 @@ using Unity.Entities;
 namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseApplicationEnd
 {
     [UpdateInGroup(typeof(SysGroupApplicationEnd))]
-    public partial struct SysRemoveApplicationProgressTag : ISystem
+    public partial struct SRemoveApplicationProgressTag : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -18,16 +18,16 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseApplicationEnd
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            
-            foreach (var (_,ge) in SystemAPI.Query<RefRO<CInApplicationProgress>>().WithEntityAccess())
-            {
-                ecb.RemoveComponent<CInApplicationProgress>(ge);
-                if(SystemAPI.HasComponent<CValidEffect>(ge))
-                    ecb.RemoveComponent<CValidEffect>(ge);
-            }
-            
-            ecb.Playback(state.EntityManager);
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            //
+            // foreach (var (_,ge) in SystemAPI.Query<RefRO<CInApplicationProgress>>().WithEntityAccess())
+            // {
+            //     ecb.RemoveComponent<CInApplicationProgress>(ge);
+            //     if(SystemAPI.HasComponent<CValidEffect>(ge))
+            //         ecb.RemoveComponent<CValidEffect>(ge);
+            // }
+            //
+            // ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]

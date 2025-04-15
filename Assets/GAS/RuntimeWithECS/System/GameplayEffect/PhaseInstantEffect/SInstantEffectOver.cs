@@ -20,16 +20,16 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            foreach (var (_, ge) in SystemAPI
-                         .Query<RefRW<CInUsage>>()
-                         .WithNone<CDuration>()
-                         .WithEntityAccess())
-            {
-                ecb.AddComponent<CEffectDestroy>(ge);
-            }
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            // foreach (var (_, ge) in SystemAPI
+            //              .Query<RefRW<CInUsage>>()
+            //              .WithNone<CDuration>()
+            //              .WithEntityAccess())
+            // {
+            //     ecb.AddComponent<CEffectDestroy>(ge);
+            // }
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
         }
 
         [BurstCompile]

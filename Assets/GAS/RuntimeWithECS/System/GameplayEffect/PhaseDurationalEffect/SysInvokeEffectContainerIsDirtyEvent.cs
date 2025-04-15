@@ -19,16 +19,16 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
-            foreach (var (_, asc) in SystemAPI.Query<RefRW<EffectContainerDirty>>().WithEntityAccess())
-            {
-                // 触发ASC的EffectContainerDirty事件
-                GASEventCenter.InvokeOnGameplayEffectContainerIsDirty(asc);
-                
-                ecb.RemoveComponent<EffectContainerDirty>(asc);
-            }
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            // var ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
+            // foreach (var (_, asc) in SystemAPI.Query<RefRW<EffectContainerDirty>>().WithEntityAccess())
+            // {
+            //     // 触发ASC的EffectContainerDirty事件
+            //     GASEventCenter.InvokeOnGameplayEffectContainerIsDirty(asc);
+            //     
+            //     ecb.RemoveComponent<EffectContainerDirty>(asc);
+            // }
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
         }
 
         [BurstCompile]
