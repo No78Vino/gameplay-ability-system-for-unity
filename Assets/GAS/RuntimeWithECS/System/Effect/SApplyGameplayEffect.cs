@@ -1,5 +1,10 @@
 using GAS.Runtime;
+using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.Common.Component;
+using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
@@ -10,21 +15,12 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<CInUsage>();
         }
 
         #region MyRegion
-
-        // if (!effectSpec.GameplayEffect.CanApplyTo(_owner)) return null;
- //            
- //            if (effectSpec.GameplayEffect.IsImmune(_owner))
- //            {
- //                // TODO 免疫Cue触发
- //                // var lv = overwriteEffectLevel ? effectLevel : source.Level;
- //                // effectSpec.Init(source, _owner, lv);
- //                // effectSpec.TriggerOnImmunity();
- //                return null;
- //            }
- //            
+        
+    
  //            var level = overwriteEffectLevel ? effectLevel : source.Level;
  //            if (effectSpec.DurationPolicy == EffectsDurationPolicy.Instant)
  //            {
@@ -66,10 +62,31 @@ namespace GAS.Runtime
  //            return null;
 
         #endregion
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            var ecb = new EntityCommandBuffer( Allocator.Temp);
+            var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+
+            foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CInUsage>>()
+                         .WithEntityAccess())
+            {
+                var target = inUsage.ValueRO.Target;
+                var source = inUsage.ValueRO.Source;
+                // 1.校验 ApplicationRequiredTags
+                if(!CheckCanApply(state.EntityManager,ge,target,ecb))
+                    continue;
+                
+                // 2.校验免疫
+                if(!CheckImmunity(state.EntityManager,ge,target,ecb))
+                    continue;
+                
+                // 3.校验是否是Durational GE
+                if(!CheckDuration(state.EntityManager,ge,target,ecb))
+                    continue;
+            }
             
+            ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]
@@ -77,5 +94,54 @@ namespace GAS.Runtime
         {
 
         }
+
+
+        #region 各个阶段的GE处理，之后优化一个一个分离出System
+
+        private bool CheckCanApply(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
+        {
+            bool hasRequiredTags = entityManager.HasComponent<CApplicationRequiredTags>(ge);
+            if(!hasRequiredTags) return true;
+            
+            var requiredTags = entityManager.GetComponentData<CApplicationRequiredTags>(ge);
+            bool hasAllTags = ASCUtil.HasAllTags(asc, requiredTags.tags);
+
+            // 不满足则直接销毁GE
+            if (!hasAllTags) ecb.AddComponent<CEffectDestroy>(ge);
+            
+            return hasAllTags;
+        }
+
+        private bool CheckImmunity(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
+        {
+            bool hasImmunityTag = entityManager.HasComponent<CEffectImmunityTags>(ge);
+            if(!hasImmunityTag) return true;
+
+            var immunityTags = entityManager.GetComponentData<CEffectImmunityTags>(ge);
+            bool hasAnyTags = ASCUtil.HasAnyTags(asc,immunityTags.tags);
+            
+            // 有任意免疫标签，则直接销毁
+            if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
+
+            return !hasAnyTags;
+        }
+        
+        // TODO
+        private bool CheckDuration(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
+        {
+            return true;
+            // bool hasImmunityTag = entityManager.HasComponent<CEffectImmunityTags>(ge);
+            // if(!hasImmunityTag) return true;
+            //
+            // var immunityTags = entityManager.GetComponentData<CEffectImmunityTags>(ge);
+            // bool hasAnyTags = ASCUtil.HasAnyTags(asc,immunityTags.tags);
+            //
+            // // 有任意免疫标签，则直接销毁
+            // if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
+            //
+            // return !hasAnyTags;
+        }
+
+        #endregion
     }
 }
