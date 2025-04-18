@@ -155,16 +155,6 @@ namespace GAS.Runtime
             }
             
             return true;
-            // bool hasImmunityTag = entityManager.HasComponent<CEffectImmunityTags>(ge);
-            // if(!hasImmunityTag) return true;
-            //
-            // var immunityTags = entityManager.GetComponentData<CEffectImmunityTags>(ge);
-            // bool hasAnyTags = ASCUtil.HasAnyTags(asc,immunityTags.tags);
-            //
-            // // 有任意免疫标签，则直接销毁
-            // if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
-            //
-            // return !hasAnyTags;
         }
         
         // TODO
