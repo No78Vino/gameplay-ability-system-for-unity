@@ -58,7 +58,31 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         
         
         
-        
+        public static bool HasAnyTags(Entity ge, NativeArray<int> tags)
+        {
+            // 1.判断AssetTags
+            if (_entityManager.HasComponent<CEffectAssetTags>(ge))
+            {
+                var assetTags = _entityManager.GetComponentData<CEffectAssetTags>(ge).tags;
+
+                foreach (var assetTag in assetTags)
+                foreach (var tag in tags)
+                    if (GTagUtil.HasTag(assetTag, tag))
+                        return true;
+            }
+
+            //2.判断GrantedTags
+            if (_entityManager.HasComponent<CEffectGrantedTags>(ge))
+            {
+                var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(ge).tags;
+                foreach (var grantedTag in grantedTags)
+                foreach (var tag in tags)
+                    if (GTagUtil.HasTag(grantedTag, tag))
+                        return true;
+            }
+
+            return false;
+        }
 
         public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
         {

@@ -1,7 +1,11 @@
+using System;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.Attribute.Component;
+using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Common.Component;
 using GAS.RuntimeWithECS.Core;
+using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
 using Unity.Collections;
@@ -143,11 +147,71 @@ namespace GAS.Runtime
         {
             if (!entityManager.HasComponent<CDuration>(ge))
             {
-                // Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
-                //     .RemoveGameplayEffectsWithTags);
+                // 1.移除指定Tag的GE
+                if (entityManager.HasComponent<CRemoveEffectWithTags>(ge))
+                {
+                    var removeEffectWithTags = entityManager.GetComponentData<CRemoveEffectWithTags>(ge);
+                    // 获取ASC的GE容器
+                    var geContainer = entityManager.GetBuffer<BEGameplayEffect>(asc);
+                    // 遍历ASC的GE，销毁移除符合条件的GE
+                    for (var i = 0; i < geContainer.Length; i++)
+                    {
+                        var effect = geContainer[i].GameplayEffect;
+                        bool geHasAnyTag = GEUtil.HasAnyTags(effect, removeEffectWithTags.tags);
+                        if (!geHasAnyTag) continue;
+                        // 2.添加到销毁ge集合中
+                        ecb.AddComponent<CEffectDestroy>(effect);
+                    }
+                }
                 
-                // Owner.ApplyModFromInstantGameplayEffect(this);
-                //
+                // 2.执行Instant GE的修改器
+                if (entityManager.HasComponent<MCModifiers>(ge))
+                {
+                    bool change = false;
+                    var modifiers = entityManager.GetComponentData<MCModifiers>(ge);
+                    var attrSets = entityManager.GetBuffer<BEAttributeSet>(asc);
+                    foreach (var modifier in modifiers.Modifiers)
+                    {
+                        var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
+                        if (attrSetIndex == -1) continue;
+                        
+                        var attrSet = attrSets[attrSetIndex];
+                        var attributes = attrSet.Attributes;
+                        
+                        var attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
+                        if (attrIndex == -1) continue;
+                        
+                        var data = attributes[attrIndex];
+                        var oldValue = data.BaseValue;
+                        var newValue = MmcHelper.Calculate(ge, modifier, data.BaseValue);
+                        
+                        // OnChangeBefore
+                        // BaseValue 不做钳制，因为Max，Min是只针对Current Value
+                        newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(asc, modifier.AttrSetCode, modifier.AttrCode,
+                            newValue);
+                        
+                        data.BaseValue = newValue;
+                        
+                        // OnChangeAfter
+                        if (newValue != oldValue)
+                        {
+                            // BaseValue 改变，需要标记Dirty
+                            data.Dirty = true;
+                            change = true;
+                            GASEventCenter.InvokeOnBaseValueChangeAfter(asc, modifier.AttrSetCode, modifier.AttrCode, oldValue,
+                                newValue);
+                        }
+                        
+                        attrSet.Attributes[attrIndex] = data;
+                        attrSets[attrSetIndex] = attrSet;
+                    }
+                    
+                    // TODO 触发刷新CurrentValue的事件
+                    if (change) ecb.AddComponent<CAttributeIsDirty>(asc);
+                }
+                
+                // TODO
+                // 3.执行GE的OnExecute的Cue逻辑
                 // TriggerCueOnExecute();
                 
                 ecb.AddComponent<CEffectDestroy>(ge);
@@ -160,17 +224,12 @@ namespace GAS.Runtime
         // TODO
         private bool CheckDuration(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
         {
-            return true;
-            // bool hasImmunityTag = entityManager.HasComponent<CEffectImmunityTags>(ge);
-            // if(!hasImmunityTag) return true;
-            //
-            // var immunityTags = entityManager.GetComponentData<CEffectImmunityTags>(ge);
-            // bool hasAnyTags = ASCUtil.HasAnyTags(asc,immunityTags.tags);
-            //
-            // // 有任意免疫标签，则直接销毁
-            // if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
-            //
-            // return !hasAnyTags;
+            if (entityManager.HasComponent<CDuration>(ge))
+            {
+                // Operation_AddNewGameplayEffectSpec
+            }
+            ecb.AddComponent<CEffectDestroy>(ge);
+            return false;
         }
 
         #endregion
