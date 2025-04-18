@@ -81,12 +81,17 @@ namespace GAS.Runtime
                 if(!CheckImmunity(state.EntityManager,ge,target,ecb))
                     continue;
                 
-                // 3.校验是否是Durational GE
+                // 4.Instant GE应用逻辑
+                if(!TryExecuteInstantEffect(state.EntityManager,ge,target,ecb))
+                    continue;
+                
+                // 3.Durational GE逻辑
                 if(!CheckDuration(state.EntityManager,ge,target,ecb))
                     continue;
             }
             
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]
@@ -124,6 +129,42 @@ namespace GAS.Runtime
             if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
 
             return !hasAnyTags;
+        }
+        
+        /// <summary>
+        /// 执行Instant GE
+        /// </summary>
+        /// <param name="entityManager"></param>
+        /// <param name="ge"></param>
+        /// <param name="asc"></param>
+        /// <param name="ecb"></param>
+        /// <returns></returns>
+        private bool TryExecuteInstantEffect(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
+        {
+            if (!entityManager.HasComponent<CDuration>(ge))
+            {
+                // Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
+                //     .RemoveGameplayEffectsWithTags);
+                
+                // Owner.ApplyModFromInstantGameplayEffect(this);
+                //
+                // TriggerCueOnExecute();
+                
+                ecb.AddComponent<CEffectDestroy>(ge);
+                return false;
+            }
+            
+            return true;
+            // bool hasImmunityTag = entityManager.HasComponent<CEffectImmunityTags>(ge);
+            // if(!hasImmunityTag) return true;
+            //
+            // var immunityTags = entityManager.GetComponentData<CEffectImmunityTags>(ge);
+            // bool hasAnyTags = ASCUtil.HasAnyTags(asc,immunityTags.tags);
+            //
+            // // 有任意免疫标签，则直接销毁
+            // if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
+            //
+            // return !hasAnyTags;
         }
         
         // TODO
