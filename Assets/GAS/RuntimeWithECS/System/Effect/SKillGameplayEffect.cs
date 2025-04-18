@@ -1,4 +1,3 @@
-using GAS.Runtime;
 using GAS.RuntimeWithECS.Common.Component;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
@@ -27,21 +26,16 @@ namespace GAS.Runtime
                          .WithEntityAccess())
             {
                 // 1.如果是持续型buff， 先尝试从asc的ge容器中移除
-                bool hasDuration = SystemAPI.HasComponent<CDuration>(ge);
-                if (hasDuration)
+                if (SystemAPI.HasComponent<CDuration>(ge) && SystemAPI.HasComponent<CInUsage>(ge))
                 {
-                    bool hasInUsage = SystemAPI.HasComponent<CInUsage>(ge);
-                    if (hasInUsage)
+                    var inUsage = SystemAPI.GetComponentRO<CInUsage>(ge);
+                    var targetAsc = inUsage.ValueRO.Target;
+                    var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(targetAsc);
+                    for (var i = 0; i < geContainer.Length; i++)
                     {
-                        var inUsage = SystemAPI.GetComponentRO<CInUsage>(ge);
-                        var targetAsc = inUsage.ValueRO.Target;
-                        var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(targetAsc);
-                        for (var i = 0; i < geContainer.Length; i++)
-                        {
-                            if (geContainer[i].GameplayEffect != ge) continue;
-                            geContainer.RemoveAt(i);
-                            break;
-                        }
+                        if (geContainer[i].GameplayEffect != ge) continue;
+                        geContainer.RemoveAt(i);
+                        break;
                     }
                 }
 
@@ -56,7 +50,6 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
-
         }
     }
 }
