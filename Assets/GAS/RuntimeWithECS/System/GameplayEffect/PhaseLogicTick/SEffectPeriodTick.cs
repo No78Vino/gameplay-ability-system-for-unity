@@ -16,7 +16,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             state.RequireForUpdate<GlobalTimer>();
             state.RequireForUpdate<CPeriod>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CDuration>();
             state.RequireForUpdate<CInUsage>();
         }
@@ -29,7 +29,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (duration, inUsage, period,_, geEntity) in SystemAPI
-                         .Query<RefRO<CDuration>, RefRO<CInUsage>, RefRW<CPeriod>,RefRO<CValidEffect>>()
+                         .Query<RefRO<CDuration>, RefRO<CInUsage>, RefRW<CPeriod>,RefRO<CIsEffectApplied>>()
                          .WithNone<CInApplicationProgress>()
                          .WithEntityAccess())
             {
@@ -46,7 +46,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
                     {
                         // 实例化GE
                         var instanceGe = state.EntityManager.Instantiate(ge);
-                        ecb.AddComponent<CValidEffect>(instanceGe);
+                        ecb.AddComponent<CIsEffectApplied>(instanceGe);
                         ecb.AddComponent<CInApplicationProgress>(instanceGe);
                         ecb.AddComponent<CInUsage>(instanceGe);
                         ecb.SetComponent(instanceGe, new CInUsage()

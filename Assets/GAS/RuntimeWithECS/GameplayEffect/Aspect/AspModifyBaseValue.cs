@@ -11,7 +11,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Aspect
     {
         public readonly Entity self;
         private readonly RefRO<CInUsage> _inUsage;
-        private readonly RefRO<CValidEffect> _comValidEffect;
+        private readonly RefRO<CIsEffectApplied> _comValidEffect;
         private readonly RefRO<CInApplicationProgress> _inApplicationProgress;
         //private readonly MCModifiers _modifiers;
 

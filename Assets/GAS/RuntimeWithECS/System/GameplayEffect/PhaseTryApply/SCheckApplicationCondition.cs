@@ -13,7 +13,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<CInUsage>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CApplicationCondition>();
         }
 

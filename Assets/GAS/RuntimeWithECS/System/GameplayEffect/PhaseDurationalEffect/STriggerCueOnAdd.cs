@@ -15,7 +15,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         {
             state.RequireForUpdate<CInUsage>();
             state.RequireForUpdate<CInApplicationProgress>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CCueOnAdd>();
         }
 
@@ -39,7 +39,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
     {
         public readonly Entity self;
         private readonly RefRO<CInUsage> _inUsage;
-        private readonly RefRO<CValidEffect> _comValidEffect;
+        private readonly RefRO<CIsEffectApplied> _comValidEffect;
         private readonly RefRO<CInApplicationProgress> _inApplicationProgress;
         private readonly RefRO<CCueOnAdd> _cueOnAdd;
 

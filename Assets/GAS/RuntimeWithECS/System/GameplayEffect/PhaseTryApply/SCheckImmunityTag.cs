@@ -19,7 +19,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             state.RequireForUpdate<SingletonGameplayTagMap>();
             state.RequireForUpdate<CEffectImmunityTags>();
             state.RequireForUpdate<CInUsage>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
         }
 
         //[BurstCompile]

@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
         {
             state.RequireForUpdate<GlobalTimer>();
             state.RequireForUpdate<CDuration>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CInUsage>();
         }
 
@@ -29,7 +29,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (duration, _, _, geEntity) in SystemAPI
-                         .Query<RefRW<CDuration>, RefRO<CValidEffect>, RefRO<CInUsage>>()
+                         .Query<RefRW<CDuration>, RefRO<CIsEffectApplied>, RefRO<CInUsage>>()
                          .WithNone<CStacking>()
                          .WithEntityAccess())
             {
@@ -48,7 +48,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
                 // 过期的GE无效化，并销毁
                 if (expired)
                 {
-                    ecb.RemoveComponent<CValidEffect>(geEntity);
+                    ecb.RemoveComponent<CIsEffectApplied>(geEntity);
                     ecb.AddComponent<CEffectDestroy>(geEntity);
                 }
             }

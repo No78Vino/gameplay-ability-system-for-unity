@@ -145,7 +145,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                         if (stacking.clearStackOnOverflow)
                         {
                             // 移除自身
-                            entityManager.RemoveComponent<CValidEffect>(ge);
+                            entityManager.RemoveComponent<CIsEffectApplied>(ge);
                             entityManager.AddComponent<CEffectDestroy>(ge);
                         }
                     }

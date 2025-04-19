@@ -141,6 +141,15 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                     return true;
             return false;
         }
+        
+        public static void TryAddGameplayEffect(this Entity asc, Entity gameplayEffect)
+        {
+            var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
+            foreach (var geElem in geBuff)
+                if (geElem.GameplayEffect == gameplayEffect)
+                    return;
+            geBuff.Add(new BEGameplayEffect { GameplayEffect = gameplayEffect });
+        }
 
         /// <summary>
         ///     GE列表为脏，需要重新计算Attribute的Current Value

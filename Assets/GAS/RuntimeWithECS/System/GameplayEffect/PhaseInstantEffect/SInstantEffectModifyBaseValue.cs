@@ -22,7 +22,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             state.RequireForUpdate<MCModifiers>();
             state.RequireForUpdate<CInApplicationProgress>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CInUsage>();
         }
 

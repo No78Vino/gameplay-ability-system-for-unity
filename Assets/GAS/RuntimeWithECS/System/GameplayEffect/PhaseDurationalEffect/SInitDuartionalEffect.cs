@@ -15,7 +15,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         {
             state.RequireForUpdate<CInUsage>();
             state.RequireForUpdate<CInApplicationProgress>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CDuration>();
         }
 

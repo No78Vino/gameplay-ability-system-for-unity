@@ -155,9 +155,9 @@ namespace GAS.RuntimeWithECS.Core
                 _onGameplayEffectContainerIsDirty[entity] = newAction;
         }
 
-        public static void InvokeOnGameplayEffectContainerIsDirty(Entity entity)
+        public static void InvokeOnGameplayEffectContainerIsDirty(Entity dirtyAsc)
         {
-            if (_onGameplayEffectContainerIsDirty.TryGetValue(entity, out var action))
+            if (_onGameplayEffectContainerIsDirty.TryGetValue(dirtyAsc, out var action))
                 action?.Invoke();
         }
 

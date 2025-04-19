@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<CInApplicationProgress>();
-            state.RequireForUpdate<CValidEffect>();
+            state.RequireForUpdate<CIsEffectApplied>();
             state.RequireForUpdate<CInUsage>();
         }
 
@@ -27,7 +27,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             
             foreach (var (inUsage,_,_,ge) in 
-                     SystemAPI.Query<RefRW<CInUsage>,RefRO<CInApplicationProgress>,RefRO<CValidEffect>>().WithNone<CDuration>().WithEntityAccess())
+                     SystemAPI.Query<RefRW<CInUsage>,RefRO<CInApplicationProgress>,RefRO<CIsEffectApplied>>().WithNone<CDuration>().WithEntityAccess())
             {
                 // TODO 初始化
             }
