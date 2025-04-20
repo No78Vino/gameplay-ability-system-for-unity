@@ -7,7 +7,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
+namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SysGroupTickGameplayEffect))]
     [UpdateAfter(typeof(SEffectPeriodTick))]
@@ -16,7 +16,6 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-
             state.RequireForUpdate<GlobalTimer>();
             state.RequireForUpdate<CEffectApplied>();
             state.RequireForUpdate<CEffectInUsage>();

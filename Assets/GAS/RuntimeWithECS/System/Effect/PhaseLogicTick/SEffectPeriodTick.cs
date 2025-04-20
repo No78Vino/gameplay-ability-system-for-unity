@@ -1,12 +1,11 @@
 ﻿using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick;
 using GAS.RuntimeWithECS.System.SystemGroup.LogicTick;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect
+namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SysGroupTickGameplayEffect))]
     public partial struct SEffectPeriodTick : ISystem
