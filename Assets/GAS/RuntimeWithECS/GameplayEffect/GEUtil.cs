@@ -122,19 +122,15 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             _entityManager.SetComponentData(gameplayEffect, comInUsage);
         }
 
-        public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source,
+        public static void ApplyGameplayEffectTo(Entity gameplayEffect, 
+            Entity target, Entity source,
             EntityCommandBuffer ecb)
         {
-            ecb.AddComponent<CInApplicationProgress>(gameplayEffect);
-            ecb.AddComponent<CEffectInUsage>(gameplayEffect);
-            ecb.AddComponent<CEffectApplied>(gameplayEffect);
-
-            var comInUsage = new CEffectInUsage
+            ecb.AddComponent(gameplayEffect, new CEffectInUsage
             {
                 Source = source,
                 Target = target
-            };
-            ecb.SetComponent(gameplayEffect, comInUsage);
+            });
         }
         
         public static void RemoveGameplayEffect(Entity gameplayEffect)
