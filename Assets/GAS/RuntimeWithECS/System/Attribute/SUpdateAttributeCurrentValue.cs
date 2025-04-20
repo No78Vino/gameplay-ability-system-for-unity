@@ -36,17 +36,9 @@ namespace GAS.Runtime
                         var attr = attrSet.Attributes[j];
                         if (!attr.Dirty) continue;
 
-                        float resultValue = attr.BaseValue;
-                        foreach (var geElem in effects)
-                        {
-                            var ge = geElem.GameplayEffect;
-                            var modifiers = state.EntityManager.GetComponentData<MCModifiers>(ge);
-                            foreach (var modifier in modifiers.Modifiers)
-                                if (modifier.AttrSetCode == attrSet.Code && modifier.AttrCode == attr.Code)
-                                    AttributeHelper.RecalculateCurrentValue(asc, attrSet.Code, attr.Code);
-                            
-                        }
+                        var newCurrentValue = AttributeHelper.RecalculateCurrentValue(asc, attrSet.Code, attr.Code);
 
+                        attr.CurrentValue = newCurrentValue;
                         attr.Dirty = false;
                         attrSet.Attributes[j] = attr;
                     }
