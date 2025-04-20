@@ -19,6 +19,8 @@ namespace GAS.Runtime
     public partial struct SApplyGameplayEffect : ISystem
     {
         private GlobalTimer _globalTimer;
+        private EntityCommandBuffer _ecb;
+        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
@@ -30,6 +32,7 @@ namespace GAS.Runtime
         {
             _globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
             var ecb = new EntityCommandBuffer( Allocator.Temp);
+            _ecb = ecb;
             foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {
@@ -250,7 +253,34 @@ namespace GAS.Runtime
                     $"This may indicate a problem with the RemoveGameplayEffectsWithTags.");
             }
 #endif
-            
+            if (entityManager.HasComponent<MCModifiers>(gameplayEffect))
+            {
+                // 标记相关属性为Dirty
+                var modifiers = entityManager.GetComponentData<MCModifiers>(gameplayEffect);
+                var attrSets = entityManager.GetBuffer<BEAttributeSet>(targetAsc);
+                bool isAttrDirty = false;
+                foreach (var modifier in modifiers.Modifiers)
+                {
+                    var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
+                    if (attrSetIndex == -1) continue;
+                    
+                    var attrSet = attrSets[attrSetIndex];
+                    var attributes = attrSet.Attributes;
+                    
+                    var attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
+                    if (attrIndex == -1) continue;
+                    
+                    var data = attributes[attrIndex];
+                    data.Dirty = true;
+                    attributes[attrIndex] = data;
+                    attrSet.Attributes = attributes;
+                    attrSets[attrSetIndex] = attrSet;
+                    
+                    isAttrDirty = true;
+                }
+                if(isAttrDirty) ecb.AddComponent<CAttributeIsDirty>(targetAsc);
+            }
+
             GASEventCenter.InvokeOnGameplayEffectContainerIsDirty(targetAsc);
         }
 
@@ -375,8 +405,8 @@ namespace GAS.Runtime
                         if (stacking.clearStackOnOverflow)
                         {
                             // 移除自身
-                            entityManager.RemoveComponent<CEffectApplied>(ge);
-                            entityManager.AddComponent<CEffectDestroy>(ge);
+                            _ecb.RemoveComponent<CEffectApplied>(ge);
+                            _ecb.AddComponent<CEffectDestroy>(ge);
                         }
                     }
                     else
