@@ -184,10 +184,10 @@ namespace GAS.RuntimeWithECS.Core
                 _onTryChangeGameplayEffectStackCount[entity] = newAction;
         }
 
-        public static void InvokeOnTryChangeGameplayEffectStackCount(Entity entity, int oldStackCount,
+        public static void InvokeOnTryChangeGameplayEffectStackCount(Entity gameplayEffect, int oldStackCount,
             int newStackCount)
         {
-            if (_onTryChangeGameplayEffectStackCount.TryGetValue(entity, out var action))
+            if (_onTryChangeGameplayEffectStackCount.TryGetValue(gameplayEffect, out var action))
                 action?.Invoke(oldStackCount, newStackCount);
         }
 
