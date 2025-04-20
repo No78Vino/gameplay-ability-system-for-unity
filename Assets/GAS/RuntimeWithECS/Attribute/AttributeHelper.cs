@@ -7,7 +7,7 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Attribute
 {
-    public static class AttributeTool
+    public static class AttributeHelper
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
         public static float RecalculateCurrentValue(Entity asc,int attrSetCode,int attrCode)

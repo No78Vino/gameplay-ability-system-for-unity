@@ -1,4 +1,4 @@
-using Unity.Burst;
+using GAS.Runtime;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.SystemGroup.LogicTick

@@ -1,4 +1,5 @@
-﻿using GAS.RuntimeWithECS.Attribute.Component;
+﻿using GAS.RuntimeWithECS.Attribute;
+using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
@@ -8,9 +9,9 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.System.Attribute
+namespace GAS.Runtime
 {
-    [UpdateAfter(typeof(SUpdateAttributeBaseValue))]
+    [UpdateInGroup(typeof(SysGroupAttribute))]
     public partial struct SUpdateAttributeCurrentValue : ISystem
     {
         [BurstCompile]
@@ -19,87 +20,92 @@ namespace GAS.RuntimeWithECS.System.Attribute
             
         }
 
-        // [BurstCompile]
-        // public void OnUpdate(ref SystemState state)
-        // {
-        //     var ecb = new EntityCommandBuffer(Allocator.Temp);
-        //     
-        //     // 1，先更新由BaseValue和GE更新引起的CurrentValue更新
-        //     foreach (var (_,attrSets,asc) in SystemAPI.Query<RefRO<AttributeIsDirty>,DynamicBuffer<AttributeSetBufferElement>>().WithEntityAccess())
-        //     {
-        //         var effects = SystemAPI.GetBuffer<GameplayEffectBufferElement>(asc);
-        //         foreach (var attrSet in attrSets)
-        //         {
-        //             foreach (var attr in attrSet.Attributes)
-        //             {
-        //                 if(!attr.Dirty) continue;
-        //
-        //                 foreach (var geElem in effects)
-        //                 {
-        //                     var ge = geElem.GameplayEffect;
-        //                     var modifiers = SystemAPI.GetBuffer<BuffEleModifier>(ge);
-        //                     foreach (var modifier in modifiers)
-        //                     {
-        //                         if (modifier.AttrSetCode == attrSet.Code && modifier.AttrCode == attr.Code)
-        //                         {
-        //                             // TODO
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         
-        //         ecb.RemoveComponent<AttributeIsDirty>(asc);
-        //     }
-        //     
-        //     // 2。再更新由AttrBasedMMC引起的CurrentValue连锁更新
-        //     // TODO
-        //     
-        //     ecb.Playback(state.EntityManager);
-        //     ecb.Dispose();
-        //     // var baseValueUpdateInfos = GasQueueCenter.BaseValueUpdateInfos();
-        //     //
-        //     // foreach (var updateInfo in baseValueUpdateInfos)
-        //     // {
-        //     //     var asc = updateInfo.ASC;
-        //     //     var attrSets = SystemAPI.GetBuffer<AttributeSetBufferElement>(asc);
-        //     //     
-        //     //     int attrSetIndex = attrSets.IndexOfAttrSetCode(updateInfo.AttrSetCode);
-        //     //     if(attrSetIndex==-1) continue;
-        //     //         
-        //     //     var attrSet = attrSets[attrSetIndex];
-        //     //     var attributes = attrSet.Attributes;
-        //     //
-        //     //     int attrIndex = attributes.IndexOfAttrCode(updateInfo.AttrCode);
-        //     //     if(attrIndex==-1) continue;
-        //     //         
-        //     //     var attr = attributes[attrIndex];
-        //     //
-        //     //     
-        //     //     
-        //     //     float oldValue = attr.BaseValue;
-        //     //     float newValue = updateInfo.Value;
-        //     //     // OnChangeBefore
-        //     //     // BaseValue 不做钳制，因为Max，Min是只针对Current Value
-        //     //     newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(updateInfo.ASC,updateInfo.AttrSetCode,updateInfo.AttrCode,newValue);
-        //     //     
-        //     //     attr.BaseValue = newValue;
-        //     //     
-        //     //     // OnChangeAfter
-        //     //     if (newValue != oldValue)
-        //     //     {
-        //     //         attr.TriggerCueEvent = true;
-        //     //         attr.Dirty = true;
-        //     //         GASManager.EntityManager.AddComponent<ComAttributeDirty>(asc);
-        //     //         GASEventCenter.InvokeOnBaseValueChangeAfter(updateInfo.ASC,updateInfo.AttrSetCode,updateInfo.AttrCode,oldValue,newValue);
-        //     //     }
-        //     //     
-        //     //     attrSet.Attributes[attrIndex] = attr;
-        //     //     attrSets[attrSetIndex] = attrSet;
-        //     // }
-        //     //
-        //     // GasQueueCenter.ClearBaseValueUpdateInfos();
-        // }
+        //[BurstCompile]
+        public void OnUpdate(ref SystemState state)
+        {
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            
+            foreach (var (_,attrSets,asc) in SystemAPI.Query<RefRO<CAttributeIsDirty>,DynamicBuffer<BEAttributeSet>>().WithEntityAccess())
+            {
+                var effects = SystemAPI.GetBuffer<BEGameplayEffect>(asc);
+                for (var i = 0; i < attrSets.Length; i++)
+                {
+                    var attrSet = attrSets[i];
+                    for (var j = 0; j < attrSet.Attributes.Length; j++)
+                    {
+                        var attr = attrSet.Attributes[j];
+                        if (!attr.Dirty) continue;
+
+                        float resultValue = attr.BaseValue;
+                        foreach (var geElem in effects)
+                        {
+                            var ge = geElem.GameplayEffect;
+                            var modifiers = state.EntityManager.GetComponentData<MCModifiers>(ge);
+                            foreach (var modifier in modifiers.Modifiers)
+                                if (modifier.AttrSetCode == attrSet.Code && modifier.AttrCode == attr.Code)
+                                    AttributeHelper.RecalculateCurrentValue(asc, attrSet.Code, attr.Code);
+                            
+                        }
+
+                        attr.Dirty = false;
+                        attrSet.Attributes[j] = attr;
+                    }
+                }
+
+                ecb.RemoveComponent<CAttributeIsDirty>(asc);
+            }
+            
+            // 2。再更新由AttrBasedMMC引起的CurrentValue连锁更新
+            // TODO
+            
+            ecb.Playback(state.EntityManager);
+            ecb.Dispose();
+            
+            
+            
+            // var baseValueUpdateInfos = GasQueueCenter.BaseValueUpdateInfos();
+            //
+            // foreach (var updateInfo in baseValueUpdateInfos)
+            // {
+            //     var asc = updateInfo.ASC;
+            //     var attrSets = SystemAPI.GetBuffer<AttributeSetBufferElement>(asc);
+            //     
+            //     int attrSetIndex = attrSets.IndexOfAttrSetCode(updateInfo.AttrSetCode);
+            //     if(attrSetIndex==-1) continue;
+            //         
+            //     var attrSet = attrSets[attrSetIndex];
+            //     var attributes = attrSet.Attributes;
+            //
+            //     int attrIndex = attributes.IndexOfAttrCode(updateInfo.AttrCode);
+            //     if(attrIndex==-1) continue;
+            //         
+            //     var attr = attributes[attrIndex];
+            //
+            //     
+            //     
+            //     float oldValue = attr.BaseValue;
+            //     float newValue = updateInfo.Value;
+            //     // OnChangeBefore
+            //     // BaseValue 不做钳制，因为Max，Min是只针对Current Value
+            //     newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(updateInfo.ASC,updateInfo.AttrSetCode,updateInfo.AttrCode,newValue);
+            //     
+            //     attr.BaseValue = newValue;
+            //     
+            //     // OnChangeAfter
+            //     if (newValue != oldValue)
+            //     {
+            //         attr.TriggerCueEvent = true;
+            //         attr.Dirty = true;
+            //         GASManager.EntityManager.AddComponent<ComAttributeDirty>(asc);
+            //         GASEventCenter.InvokeOnBaseValueChangeAfter(updateInfo.ASC,updateInfo.AttrSetCode,updateInfo.AttrCode,oldValue,newValue);
+            //     }
+            //     
+            //     attrSet.Attributes[attrIndex] = attr;
+            //     attrSets[attrSetIndex] = attrSet;
+            // }
+            //
+            // GasQueueCenter.ClearBaseValueUpdateInfos();
+        }
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
