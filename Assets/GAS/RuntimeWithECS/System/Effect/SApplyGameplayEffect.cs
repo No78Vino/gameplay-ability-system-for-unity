@@ -28,8 +28,6 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer( Allocator.Temp);
-            var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
-
             foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {
@@ -43,13 +41,12 @@ namespace GAS.Runtime
                 if(!CheckImmunity(state.EntityManager,ge,target,ecb))
                     continue;
                 
-                // 4.Instant GE应用逻辑
+                // 3.Instant GE应用逻辑
                 if(!TryExecuteInstantEffect(state.EntityManager,ge,target,ecb))
                     continue;
                 
-                // 3.Durational GE逻辑
-                if(!CheckDurationAndStacking(state.EntityManager,ge,target,ecb))
-                    continue;
+                // 4.Durational GE逻辑
+                CheckDurationAndStacking(state.EntityManager, ge, target, ecb);
             }
             
             ecb.Playback(state.EntityManager);
