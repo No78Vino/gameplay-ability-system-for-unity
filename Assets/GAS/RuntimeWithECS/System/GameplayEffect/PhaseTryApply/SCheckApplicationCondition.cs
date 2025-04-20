@@ -12,8 +12,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CInUsage>();
-            state.RequireForUpdate<CIsEffectApplied>();
+            state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<CEffectApplied>();
             state.RequireForUpdate<CApplicationCondition>();
         }
 

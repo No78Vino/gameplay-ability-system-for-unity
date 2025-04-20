@@ -14,8 +14,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<CInApplicationProgress>();
-            state.RequireForUpdate<CIsEffectApplied>();
-            state.RequireForUpdate<CInUsage>();
+            state.RequireForUpdate<CEffectApplied>();
+            state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<CCueOnExecution>();
         }
 
@@ -38,8 +38,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
     public readonly partial struct AspCueOnExecution : IAspect
     {
         public readonly Entity self;
-        private readonly RefRO<CInUsage> _inUsage;
-        private readonly RefRO<CIsEffectApplied> _comValidEffect;
+        private readonly RefRO<CEffectInUsage> _inUsage;
+        private readonly RefRO<CEffectApplied> _comValidEffect;
         private readonly RefRO<CInApplicationProgress> _inApplicationProgress;
         private readonly RefRO<CCueOnExecution> _cueOnExecution;
 

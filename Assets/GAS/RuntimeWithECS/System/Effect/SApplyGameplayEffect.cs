@@ -20,7 +20,7 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CInUsage>();
+            state.RequireForUpdate<CEffectInUsage>();
         }
         
         //[BurstCompile]
@@ -29,7 +29,7 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer( Allocator.Temp);
             var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
 
-            foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CInUsage>>()
+            foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {
                 var target = inUsage.ValueRO.Target;
@@ -228,17 +228,20 @@ namespace GAS.Runtime
 
             TriggerCueOnAdd(gameplayEffect,targetAsc);
             
-            if (entityManager.HasComponent<CIsEffectApplied>(gameplayEffect)) return;
-            ecb.AddComponent<CIsEffectApplied>(gameplayEffect);
+            if (entityManager.HasComponent<CEffectApplied>(gameplayEffect)) return;
+            ecb.AddComponent<CEffectApplied>(gameplayEffect);
             
-            if (GameplayEffect.CanRunning(Owner))
+            if (CheckOngoingRequiredTags(gameplayEffect,targetAsc,entityManager))
             {
-                //Activate();
-                if (!entityManager.HasComponent<CEffectActive>())
+                var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
+                if (!duration.active)
                 {
-                    IsActive = true;
-                    ActivationTime = Time.time;
-                    TriggerOnActivation( gameplayEffect, targetAsc);
+                    duration.active = true;
+                    var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+                    duration.activeTime = duration.timeUnit == TimeUnit.Frame
+                        ? globalTimer.ValueRO.Frame
+                        : globalTimer.ValueRO.Turn;
+                    TriggerOnActivation(gameplayEffect, targetAsc);
                 }
             }
 
@@ -256,6 +259,13 @@ namespace GAS.Runtime
             //OnGameplayEffectContainerIsDirty?.Invoke();
         }
 
+        private bool CheckOngoingRequiredTags(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager)
+        {
+            if (!entityManager.HasComponent<COngoingRequiredTags>(gameplayEffect)) return true;
+            var ongoingRequiredTags = entityManager.GetComponentData<COngoingRequiredTags>(gameplayEffect);
+            return ASCUtil.HasAllTags(targetAsc,ongoingRequiredTags.tags);
+        }
+        
         // TODO 激活 CueOnAdd
         private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc)
         {

@@ -13,7 +13,7 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CInUsage>();
+            state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<CEffectDestroy>();
         }
 
@@ -26,9 +26,9 @@ namespace GAS.Runtime
                          .WithEntityAccess())
             {
                 // 1.如果是持续型buff， 先尝试从asc的ge容器中移除
-                if (SystemAPI.HasComponent<CDuration>(ge) && SystemAPI.HasComponent<CInUsage>(ge))
+                if (SystemAPI.HasComponent<CDuration>(ge) && SystemAPI.HasComponent<CEffectInUsage>(ge))
                 {
-                    var inUsage = SystemAPI.GetComponentRO<CInUsage>(ge);
+                    var inUsage = SystemAPI.GetComponentRO<CEffectInUsage>(ge);
                     var targetAsc = inUsage.ValueRO.Target;
                     var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(targetAsc);
                     for (var i = 0; i < geContainer.Length; i++)

@@ -291,9 +291,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
                 if (hasGrantedTags)
                 {
                     var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(source);
-                    if (_entityManager.HasComponent<CInUsage>(source))
+                    if (_entityManager.HasComponent<CEffectInUsage>(source))
                     {
-                        var inUsage = _entityManager.GetComponentData<CInUsage>(source);
+                        var inUsage = _entityManager.GetComponentData<CEffectInUsage>(source);
                         RestoreDynamicTags(inUsage.Target,source,grantedTags.tags);
                     }
                 }

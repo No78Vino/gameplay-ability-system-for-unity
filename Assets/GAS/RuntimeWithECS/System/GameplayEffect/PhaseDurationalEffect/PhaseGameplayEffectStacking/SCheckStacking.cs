@@ -84,7 +84,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                             return effect;
                         if (stacking.StackType == EffectStackType.AggregateBySource)
                         {
-                            var inUsage = entityManager.GetComponentData<CInUsage>(effect);
+                            var inUsage = entityManager.GetComponentData<CEffectInUsage>(effect);
                             if (inUsage.Source == source)
                                 return effect;
                         }
@@ -130,7 +130,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                 // 溢出GE生效
                 if (stacking.overflowEffects.Length > 0)
                 {
-                    var inUsage = entityManager.GetComponentData<CInUsage>(ge);
+                    var inUsage = entityManager.GetComponentData<CEffectInUsage>(ge);
                     var target = inUsage.Target;
                     var source = inUsage.Source;
                     foreach (var overflowEffect in stacking.overflowEffects)
@@ -145,7 +145,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
                         if (stacking.clearStackOnOverflow)
                         {
                             // 移除自身
-                            entityManager.RemoveComponent<CIsEffectApplied>(ge);
+                            entityManager.RemoveComponent<CEffectApplied>(ge);
                             entityManager.AddComponent<CEffectDestroy>(ge);
                         }
                     }
@@ -162,7 +162,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
             
             if (oldStackCount != newStackCount)
             {
-                var inUsage = entityManager.GetComponentData<CInUsage>(ge);
+                var inUsage = entityManager.GetComponentData<CEffectInUsage>(ge);
                 GASEventCenter.InvokeOnGameplayEffectContainerIsDirty(inUsage.Target);
             }
         }

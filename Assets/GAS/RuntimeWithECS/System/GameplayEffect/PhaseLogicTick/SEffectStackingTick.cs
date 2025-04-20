@@ -18,8 +18,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
         {
 
             state.RequireForUpdate<GlobalTimer>();
-            state.RequireForUpdate<CIsEffectApplied>();
-            state.RequireForUpdate<CInUsage>();
+            state.RequireForUpdate<CEffectApplied>();
+            state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<CStacking>();
         }
 
@@ -31,7 +31,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (duration, stacking,_, _, geEntity) in SystemAPI
-                         .Query<RefRW<CDuration>,RefRW<CStacking>, RefRO<CIsEffectApplied>, RefRO<CInUsage>>()
+                         .Query<RefRW<CDuration>,RefRW<CStacking>, RefRO<CEffectApplied>, RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {
                 // 过滤：
@@ -52,7 +52,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseLogicTick
                     // 根据Stacking的配置类型，决定过期逻辑
                     if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.ClearEntireStack)
                     {   // 清除整个Stack，相当于直接销毁
-                        ecb.RemoveComponent<CIsEffectApplied>(geEntity);
+                        ecb.RemoveComponent<CEffectApplied>(geEntity);
                         ecb.AddComponent<CEffectDestroy>(geEntity);
                     }
                     else if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.RemoveSingleStackAndRefreshDuration)

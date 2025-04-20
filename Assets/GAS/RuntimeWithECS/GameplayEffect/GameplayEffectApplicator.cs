@@ -32,7 +32,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             }
             
             // 4. 设置source，target
-            _entityManager.SetComponentData(gameplayEffect, new CInUsage { Source = source, Target = target });
+            _entityManager.SetComponentData(gameplayEffect, new CEffectInUsage { Source = source, Target = target });
             
             // 5. 根据ge类型处理
             bool hasDuration = _entityManager.HasComponent<CDuration>(gameplayEffect);

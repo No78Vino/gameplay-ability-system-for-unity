@@ -13,7 +13,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CInUsage>();
+            state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<CInActivationProgress>();
             state.RequireForUpdate<CEffectGrantedTags>();
         }

@@ -17,8 +17,8 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             state.RequireForUpdate<CRemoveEffectWithTags>();
             state.RequireForUpdate<CInApplicationProgress>();
-            state.RequireForUpdate<CIsEffectApplied>();
-            state.RequireForUpdate<CInUsage>();
+            state.RequireForUpdate<CEffectApplied>();
+            state.RequireForUpdate<CEffectInUsage>();
         }
 
         // [BurstCompile]

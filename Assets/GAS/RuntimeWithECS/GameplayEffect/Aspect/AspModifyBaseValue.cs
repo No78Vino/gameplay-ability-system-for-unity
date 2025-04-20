@@ -10,8 +10,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Aspect
     public readonly partial struct AspModifyBaseValue : IAspect
     {
         public readonly Entity self;
-        private readonly RefRO<CInUsage> _inUsage;
-        private readonly RefRO<CIsEffectApplied> _comValidEffect;
+        private readonly RefRO<CEffectInUsage> _inUsage;
+        private readonly RefRO<CEffectApplied> _comValidEffect;
         private readonly RefRO<CInApplicationProgress> _inApplicationProgress;
         //private readonly MCModifiers _modifiers;
 

@@ -113,10 +113,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
             _entityManager.AddComponent<CInApplicationProgress>(gameplayEffect);
-            _entityManager.AddComponent<CInUsage>(gameplayEffect);
-            _entityManager.AddComponent<CIsEffectApplied>(gameplayEffect);
+            _entityManager.AddComponent<CEffectInUsage>(gameplayEffect);
+            _entityManager.AddComponent<CEffectApplied>(gameplayEffect);
 
-            var comInUsage = _entityManager.GetComponentData<CInUsage>(gameplayEffect);
+            var comInUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             comInUsage.Source = source;
             comInUsage.Target = target;
             _entityManager.SetComponentData(gameplayEffect, comInUsage);
@@ -126,10 +126,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             EntityCommandBuffer ecb)
         {
             ecb.AddComponent<CInApplicationProgress>(gameplayEffect);
-            ecb.AddComponent<CInUsage>(gameplayEffect);
-            ecb.AddComponent<CIsEffectApplied>(gameplayEffect);
+            ecb.AddComponent<CEffectInUsage>(gameplayEffect);
+            ecb.AddComponent<CEffectApplied>(gameplayEffect);
 
-            var comInUsage = new CInUsage
+            var comInUsage = new CEffectInUsage
             {
                 Source = source,
                 Target = target
@@ -139,11 +139,11 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         
         public static void RemoveGameplayEffect(Entity gameplayEffect)
         {
-            if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
-            _entityManager.RemoveComponent<CIsEffectApplied>(gameplayEffect);
+            if (!_entityManager.HasComponent<CEffectInUsage>(gameplayEffect)) return;
+            _entityManager.RemoveComponent<CEffectApplied>(gameplayEffect);
             _entityManager.AddComponent<CEffectDestroy>(gameplayEffect);
             // 从ASC容器中移除
-            var inUsage = _entityManager.GetComponentData<CInUsage>(gameplayEffect);
+            var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             var target = inUsage.Target;
             
             var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(target);;
@@ -158,11 +158,11 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public static void RemoveGameplayEffect(Entity gameplayEffect,EntityCommandBuffer ecb)
         {
             //if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
-            ecb.RemoveComponent<CIsEffectApplied>(gameplayEffect);
+            ecb.RemoveComponent<CEffectApplied>(gameplayEffect);
             ecb.AddComponent<CEffectDestroy>(gameplayEffect);
             
             // 从ASC容器中移除
-            var inUsage = _entityManager.GetComponentData<CInUsage>(gameplayEffect);
+            var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             var target = inUsage.Target;
             var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(target);
             for (var i = 0; i < gameplayEffects.Length; i++)
@@ -215,10 +215,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
         public static void InitGameplayEffect(this Entity gameplayEffect, Entity source, Entity target, int level)
         {
-            if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
+            if (!_entityManager.HasComponent<CEffectInUsage>(gameplayEffect)) return;
 
             _entityManager.SetComponentData(gameplayEffect,
-                new CInUsage { Source = source, Target = target, Level = level });
+                new CEffectInUsage { Source = source, Target = target, Level = level });
 
             if (_entityManager.HasComponent<CDuration>(gameplayEffect))
                 if (_entityManager.HasComponent<CPeriod>(gameplayEffect))
@@ -235,9 +235,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
         public static void TriggerOnExecute(this Entity gameplayEffect)
         {
-            if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
+            if (!_entityManager.HasComponent<CEffectInUsage>(gameplayEffect)) return;
 
-            var inUsage = _entityManager.GetComponentData<CInUsage>(gameplayEffect);
+            var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             var owner = inUsage.Target;
             // 1.移除GameplayEffectWithAnyTags
             owner.RemoveGameplayEffectWithAnyTags(gameplayEffect);
@@ -304,11 +304,11 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         
         public static void EffectApply(this Entity gameplayEffect)
         {
-            if (_entityManager.HasComponent<CIsEffectApplied>(gameplayEffect)) return;
-            _entityManager.AddComponent<CIsEffectApplied>(gameplayEffect);
+            if (_entityManager.HasComponent<CEffectApplied>(gameplayEffect)) return;
+            _entityManager.AddComponent<CEffectApplied>(gameplayEffect);
             
             // 校验是否可激活
-            var owner = _entityManager.GetComponentData<CInUsage>(gameplayEffect).Target;
+            var owner = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect).Target;
             if (gameplayEffect.CheckOngoingRequiredTags(owner))
                 gameplayEffect.EffectActivate();
         }

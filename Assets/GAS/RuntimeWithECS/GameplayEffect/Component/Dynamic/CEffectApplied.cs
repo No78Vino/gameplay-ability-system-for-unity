@@ -11,7 +11,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     /// 4.Duration 超时过期
     /// 5.外部干涉，设置GE为无效
     /// </summary>
-    public struct CIsEffectApplied : IComponentData
+    public struct CEffectApplied : IComponentData
     {
     }
 }
