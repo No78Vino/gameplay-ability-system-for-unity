@@ -118,7 +118,7 @@ namespace TestUnit_ForGASECS
             //     GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
             // _asc.ApplyGameplayEffectTo(geSpec, _asc);
             var gameplayEffect = GEUtil.CreateGameplayEffectEntity(TestASCUnitUtils.GEConfig_ONEHIT);
-            GEUtil.ApplyGameplayEffectTo(gameplayEffect, _asc.Entity, _asc.Entity);
+            //GEUtil.ApplyGameplayEffectTo(gameplayEffect, _asc.Entity, _asc.Entity);
         }
 
         [Button(ButtonSizes.Medium, Name = "施加要求Earth标签的攻击")]

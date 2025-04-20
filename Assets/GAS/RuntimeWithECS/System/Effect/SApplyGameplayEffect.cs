@@ -203,8 +203,10 @@ namespace GAS.Runtime
                         
                     TryChangeStackCount(entityManager, ge, stacking, stacking.StackCount + 1,duration);
                 }
-                
+
+                return true;
             }
+
             ecb.AddComponent<CEffectDestroy>(ge);
             return false;
         }
