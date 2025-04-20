@@ -18,6 +18,7 @@ namespace GAS.Runtime
     [UpdateInGroup(typeof(SysGroupEffect))]
     public partial struct SApplyGameplayEffect : ISystem
     {
+        private GlobalTimer _globalTimer;
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
@@ -27,6 +28,7 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            _globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
             var ecb = new EntityCommandBuffer( Allocator.Temp);
             foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
@@ -46,7 +48,8 @@ namespace GAS.Runtime
                     continue;
                 
                 // 4.Durational GE逻辑
-                CheckDurationAndStacking(state.EntityManager, ge, target, ecb);
+                var duration = SystemAPI.GetComponentRW<CDuration>(ge);
+                CheckDurationAndStacking(state.EntityManager, ge, target, ecb,duration);
             }
             
             ecb.Playback(state.EntityManager);
@@ -176,7 +179,7 @@ namespace GAS.Runtime
             return true;
         }
         
-        private bool CheckDurationAndStacking(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
+        private bool CheckDurationAndStacking(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb,RefRW<CDuration> duration)
         {
             if (entityManager.HasComponent<CDuration>(ge))
             {
@@ -198,7 +201,7 @@ namespace GAS.Runtime
                     if (stackGe == Entity.Null)
                         Operation_AddNewGameplayEffect(ge, inUsage.Source, inUsage.Target, entityManager, ecb);
                         
-                    TryChangeStackCount(entityManager, ge, stacking, stacking.StackCount + 1);
+                    TryChangeStackCount(entityManager, ge, stacking, stacking.StackCount + 1,duration);
                 }
                 
             }
@@ -230,10 +233,9 @@ namespace GAS.Runtime
                 if (!duration.active)
                 {
                     duration.active = true;
-                    var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
                     duration.activeTime = duration.timeUnit == TimeUnit.Frame
-                        ? globalTimer.ValueRO.Frame
-                        : globalTimer.ValueRO.Turn;
+                        ? _globalTimer.Frame
+                        : _globalTimer.Turn;
                     TriggerOnActivation(gameplayEffect, targetAsc);
                 }
             }
@@ -317,11 +319,10 @@ namespace GAS.Runtime
             return Entity.Null;
         }
         
-        private  void TryChangeStackCount(EntityManager entityManager, Entity ge,CStacking stacking, int stackCount)
+        private  void TryChangeStackCount(EntityManager entityManager, Entity ge,CStacking stacking, int stackCount,RefRW<CDuration> duration)
         {
             // 获取旧Stacking数据
-            var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
-            var duration = SystemAPI.GetComponentRW<CDuration>(ge);
+            var globalFrameTimer = _globalTimer;
             var oldStackCount = entityManager.GetComponentData<CStacking>(ge).StackCount;
             int newStackCount = stackCount;
             if (stackCount <= stacking.LimitCount)
