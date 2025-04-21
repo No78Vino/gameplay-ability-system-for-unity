@@ -51,8 +51,7 @@ namespace GAS.Runtime
                     continue;
                 
                 // 4.Durational GE逻辑
-                var duration = SystemAPI.GetComponentRW<CDuration>(ge);
-                CheckDurationAndStacking(state.EntityManager, ge, target, ecb,duration);
+                CheckDurationAndStacking(state.EntityManager, ge, target, ecb);
             }
             
             ecb.Playback(state.EntityManager);
@@ -182,7 +181,7 @@ namespace GAS.Runtime
             return true;
         }
         
-        private bool CheckDurationAndStacking(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb,RefRW<CDuration> duration)
+        private bool CheckDurationAndStacking(EntityManager entityManager,Entity ge,Entity asc,EntityCommandBuffer ecb)
         {
             if (entityManager.HasComponent<CDuration>(ge))
             {
@@ -204,7 +203,7 @@ namespace GAS.Runtime
                     if (stackGe == Entity.Null)
                         Operation_AddNewGameplayEffect(ge, inUsage.Source, inUsage.Target, entityManager, ecb);
                         
-                    TryChangeStackCount(entityManager, ge, stacking, stacking.StackCount + 1,duration);
+                    TryChangeStackCount(entityManager, ge, stacking, stacking.StackCount + 1);
                 }
 
                 return true;
@@ -241,6 +240,7 @@ namespace GAS.Runtime
                     duration.activeTime = duration.timeUnit == TimeUnit.Frame
                         ? _globalTimer.Frame
                         : _globalTimer.Turn;
+                    entityManager.SetComponentData(gameplayEffect,duration);
                     TriggerOnActivation(gameplayEffect, targetAsc);
                 }
             }
@@ -351,7 +351,7 @@ namespace GAS.Runtime
             return Entity.Null;
         }
         
-        private  void TryChangeStackCount(EntityManager entityManager, Entity ge,CStacking stacking, int stackCount,RefRW<CDuration> duration)
+        private  void TryChangeStackCount(EntityManager entityManager, Entity ge,CStacking stacking, int stackCount)
         {
             // 获取旧Stacking数据
             var globalFrameTimer = _globalTimer;
@@ -367,7 +367,9 @@ namespace GAS.Runtime
                 // 是否刷新Duration
                 if (stacking.EffectDurationRefreshPolicy == EffectDurationRefreshPolicy.RefreshOnSuccessfulApplication)
                 {
-                    UpdateActiveTime(ref duration.ValueRW,globalFrameTimer);
+                    var duration = entityManager.GetComponentData<CDuration>(ge);
+                    duration = UpdateActiveTime(duration,globalFrameTimer);
+                    entityManager.SetComponentData(ge,duration);
                 }
                 // 是否重置Period
                 if (stacking.EffectPeriodResetPolicy == EffectPeriodResetPolicy.ResetOnSuccessfulApplication)
@@ -379,7 +381,8 @@ namespace GAS.Runtime
                         var period = entityManager.GetComponentData<CPeriod>(ge);
                         var currentFrame = globalFrameTimer.Frame;
                         var currentTurn = globalFrameTimer.Turn;
-                        var time = duration.ValueRO.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
+                        var duration = entityManager.GetComponentData<CDuration>(ge);
+                        var time = duration.timeUnit == TimeUnit.Frame ? currentFrame : currentTurn;
                         period.StartTime = time;
                         entityManager.SetComponentData(ge,period);
                     }
@@ -412,7 +415,9 @@ namespace GAS.Runtime
                     else
                     {
                         // 刷新Duration
-                        UpdateActiveTime(ref duration.ValueRW,globalFrameTimer);
+                        var duration = entityManager.GetComponentData<CDuration>(ge);
+                        duration = UpdateActiveTime(duration,globalFrameTimer);
+                        entityManager.SetComponentData(ge,duration);
                     }
                 }
             }
@@ -427,12 +432,12 @@ namespace GAS.Runtime
             }
         }
          
-        public void UpdateActiveTime(ref CDuration duration, GlobalTimer globalFrameTimer)
+        public CDuration UpdateActiveTime(CDuration duration, GlobalTimer globalFrameTimer)
         {
             var currentFrame = globalFrameTimer.Frame;
             var currentTurn = globalFrameTimer.Turn;
             //  更新激活时间
-            if (duration.active) return;
+            if (duration.active) return duration;
             duration.active = true;
             if (duration.timeUnit == TimeUnit.Frame)
             {
@@ -448,6 +453,8 @@ namespace GAS.Runtime
 
                 duration.lastActiveTime = currentTurn;
             }
+
+            return duration;
         }
         #endregion
     }

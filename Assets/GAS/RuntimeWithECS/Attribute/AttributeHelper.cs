@@ -28,8 +28,6 @@ namespace GAS.RuntimeWithECS.Attribute
             attr.CurrentValue = attr.BaseValue;
             // 获取GE
             var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
-            if(gameplayEffects.Length == 0) return attr.CurrentValue;
-            
             foreach (var buffer in gameplayEffects)
             {
                 var ge = buffer.GameplayEffect;
@@ -47,6 +45,7 @@ namespace GAS.RuntimeWithECS.Attribute
                 }
             }
 
+            attr.Dirty = false;
             var newCurrentValue = attr.CurrentValue;
             attrSet.Attributes[attrIndex] = attr;
             attrSets[attrSetIndex] = attrSet;
