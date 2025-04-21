@@ -52,7 +52,7 @@ namespace GAS.Runtime
                 {
                     _effectPreviewInstance = Instantiate(VfxPrefab, preview.transform);
                     _effectPreviewInstance.name = VfxPrefab.name;
-                    _effectPreviewInstance.transform.localPosition = Offset;
+                    _effectPreviewInstance.transform.localPosition += Offset;
                     _effectPreviewInstance.transform.localEulerAngles = Rotation;
                     _effectPreviewInstance.transform.localScale = Scale;
                 }
@@ -94,7 +94,7 @@ namespace GAS.Runtime
                     ? Object.Instantiate(cue.VfxPrefab, Owner.transform)
                     : Object.Instantiate(cue.VfxPrefab, Owner.transform.position, Quaternion.identity);
 
-                _vfxInstance.transform.localPosition = cue.Offset;
+                _vfxInstance.transform.localPosition += cue.Offset;
                 _vfxInstance.transform.localEulerAngles = cue.Rotation;
                 _vfxInstance.transform.localScale = cue.Scale;
                 _vfxInstance.SetActive(cue.ActiveWhenAdded);
