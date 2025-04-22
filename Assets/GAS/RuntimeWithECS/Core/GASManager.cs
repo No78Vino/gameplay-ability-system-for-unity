@@ -1,3 +1,4 @@
+using GAS.RuntimeWithECS.System.Attribute;
 using Unity.Entities;
 using UnityEngine;
 
@@ -50,8 +51,36 @@ namespace GAS.Runtime
 
         private static void CreateGasSystems()
         {
+            var handle = ExWorld.GetOrCreateSystem<STestSystem>();
+            ref STestSystem sTest = ref ExWorld.Unmanaged.GetUnsafeSystemRef<STestSystem>(handle);
+   
             // Create the system groups
-            ExWorld.CreateSystem(typeof(SysGroupLogic));
+            ExWorld.CreateSystem<FixedStepSimulationSystemGroup>();
+            
+            ExWorld.CreateSystem<SysGroupLogic>();
+            ExWorld.CreateSystem<SysGroupAbility>();
+            ExWorld.CreateSystem<SysGroupAttribute>();
+            ExWorld.CreateSystem<SysGroupEffect>();
+            
+            ExWorld.CreateSystem<SysGroupLogicTick>();
+            ExWorld.CreateSystem<SysGroupTickAbility>();
+            ExWorld.CreateSystem<SysGroupTickGameplayEffect>();
+            
+            // Create the systems
+            
+            // Core
+            ExWorld.CreateSystem<SGlobalTimer>();
+            
+            // Ability
+            ExWorld.CreateSystem<SAbilityTick>();
+            ExWorld.CreateSystem<STryActivateAbility>();
+            ExWorld.CreateSystem<STryCancelAbility>();
+            ExWorld.CreateSystem<STryEndAbility>();
+            
+            // Attribute
+            ExWorld.CreateSystem<SUpdateAttributeCurrentValue>();
+            ExWorld.CreateSystem<SUpdateAttributeBaseValue>();
+
         }
     }
 }

@@ -9,14 +9,15 @@ namespace GAS.Runtime
         public int Turn;
     }
         
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))] 
-    [UpdateAfter(typeof(GASManagerInputSystem))]
+    //[UpdateAfter(typeof(GASManagerInputSystem))]
     public partial struct SGlobalTimer : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<GASRunningTag>();
+            //state.RequireForUpdate<GASRunningTag>();
             state.RequireForUpdate<GlobalTimer>();
         }
 

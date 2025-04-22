@@ -1,6 +1,6 @@
-using System;
 using DemoForESC._Script.Gen;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.GameplayEffect.Component;
 using UnityEngine;
 
 namespace DemoForESC._Script
@@ -11,6 +11,10 @@ namespace DemoForESC._Script
         {
             GEN_GASLauncher.Launch();
             GASManager.Run();
+
+            var testE = GASManager.EntityManager.CreateEntity();
+            GASManager.EntityManager.SetName(testE,"TestEntity");
+            GASManager.EntityManager.AddComponent<CDuration>(testE);
         }
     }
 }
