@@ -1,7 +1,6 @@
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 

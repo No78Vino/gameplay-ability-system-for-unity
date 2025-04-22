@@ -1,5 +1,4 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Core;
 
 namespace DemoForESC._Script.Gen
 {

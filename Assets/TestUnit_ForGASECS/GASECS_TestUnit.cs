@@ -1,7 +1,7 @@
 ﻿using DemoForESC._Script.Gen;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;
 using Unity.Entities;

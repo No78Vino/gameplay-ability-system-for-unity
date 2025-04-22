@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Core
+namespace GAS.Runtime
 {
     public static class GasQueueCenter
     {

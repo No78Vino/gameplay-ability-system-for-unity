@@ -1,7 +1,8 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.SystemGroup.LogicTick
+namespace GAS.Runtime
 {
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(SysGroupLogicTick))]
     public partial class SysGroupTickAbility : ComponentSystemGroup
     {

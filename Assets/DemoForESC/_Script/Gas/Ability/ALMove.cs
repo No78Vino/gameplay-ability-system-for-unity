@@ -1,5 +1,5 @@
 using GAS.RuntimeWithECS.Ability.Component;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using Unity.Entities;
 using UnityEngine;
 

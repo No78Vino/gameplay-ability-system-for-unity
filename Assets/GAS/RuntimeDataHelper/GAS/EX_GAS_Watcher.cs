@@ -5,7 +5,7 @@ using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Helper;
 using GAS.RuntimeWithECS.Tag;

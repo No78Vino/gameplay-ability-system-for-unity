@@ -1,12 +1,11 @@
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Core;
-using GAS.RuntimeWithECS.System.SystemGroup.LogicTick;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.Ability
+namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SysGroupTickAbility))]
     public partial struct SAbilityTick : ISystem

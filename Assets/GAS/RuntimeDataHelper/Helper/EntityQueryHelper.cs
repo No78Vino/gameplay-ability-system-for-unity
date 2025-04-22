@@ -1,7 +1,7 @@
 using Unity.Entities;
 using Unity.Collections;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 
 namespace GAS.RuntimeDataHelper.Helper
 {

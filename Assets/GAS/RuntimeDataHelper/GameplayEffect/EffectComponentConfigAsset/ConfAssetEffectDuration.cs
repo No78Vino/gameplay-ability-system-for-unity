@@ -1,6 +1,6 @@
 using System;
 using GAS.RuntimeDataHelper.Helper;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Sirenix.OdinInspector;

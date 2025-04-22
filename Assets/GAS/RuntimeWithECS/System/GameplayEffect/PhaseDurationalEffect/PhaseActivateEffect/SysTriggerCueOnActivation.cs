@@ -1,4 +1,4 @@
-using GAS.RuntimeWithECS.System.SystemGroup;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 

@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Core
+namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     public partial class GASManagerInputSystem : SystemBase

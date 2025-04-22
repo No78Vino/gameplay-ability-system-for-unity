@@ -2,13 +2,12 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
+namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SysGroupAbility))]
     public partial struct STryActivateAbility : ISystem

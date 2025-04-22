@@ -4,7 +4,7 @@ using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Core
+namespace GAS.Runtime
 {
     public static class GASEventCenter
     {

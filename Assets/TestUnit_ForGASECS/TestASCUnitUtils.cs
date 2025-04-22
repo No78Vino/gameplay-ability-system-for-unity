@@ -3,7 +3,7 @@ using GAS.RuntimeWithECS.Ability;
 using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.Ability.ComponentConfig;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;

@@ -1,6 +1,6 @@
 using Sirenix.OdinInspector;
 
-namespace GAS.RuntimeWithECS.Core
+namespace GAS.Runtime
 {
     public enum TimeUnit
     {

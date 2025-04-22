@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using GAS.RuntimeWithECS.Attribute;
 using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using Unity.Collections;
 using Unity.Entities;
 

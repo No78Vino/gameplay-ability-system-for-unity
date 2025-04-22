@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Core
+namespace GAS.Runtime
 {
     public struct GASRunningTag : IComponentData
     {

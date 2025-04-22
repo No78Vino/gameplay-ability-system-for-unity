@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
 using Unity.Entities;

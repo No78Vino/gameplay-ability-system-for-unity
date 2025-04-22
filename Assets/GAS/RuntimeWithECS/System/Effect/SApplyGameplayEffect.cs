@@ -5,7 +5,6 @@ using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Common.Component;
-using GAS.RuntimeWithECS.Core;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect;

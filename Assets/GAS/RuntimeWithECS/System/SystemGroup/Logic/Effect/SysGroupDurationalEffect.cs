@@ -1,8 +1,8 @@
-﻿using GAS.Runtime;
-using Unity.Entities;
+﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.SystemGroup
+namespace GAS.Runtime
 {
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(SysGroupLogic))]
     [UpdateAfter(typeof(SysGroupInstantEffect))]
     public partial class SysGroupDurationalEffect : ComponentSystemGroup

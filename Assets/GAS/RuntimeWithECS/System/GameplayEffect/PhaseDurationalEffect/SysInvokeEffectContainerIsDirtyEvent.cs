@@ -1,6 +1,5 @@
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
-using GAS.RuntimeWithECS.Core;
-using GAS.RuntimeWithECS.System.SystemGroup;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 

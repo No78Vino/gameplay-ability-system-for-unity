@@ -1,9 +1,9 @@
 using GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect;
-using Unity.Burst;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.SystemGroup
+namespace GAS.Runtime
 {
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(SysGroupDurationalEffect))]
     [UpdateBefore(typeof(SInitDuartionalEffect))]
     public partial class SysGroupApplicationGameplayEffectStacking : ComponentSystemGroup

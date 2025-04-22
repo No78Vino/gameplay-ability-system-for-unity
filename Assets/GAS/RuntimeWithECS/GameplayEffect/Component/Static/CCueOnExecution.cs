@@ -1,4 +1,4 @@
-﻿using GAS.RuntimeWithECS.Core;
+﻿using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.Cue.Component;
 using Unity.Collections;

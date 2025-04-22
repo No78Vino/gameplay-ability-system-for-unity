@@ -6,7 +6,6 @@ using Demo.Script.Map;
 using Demo.Script.UI;
 using EXMaidForUI.Runtime.EXMaid;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Core;
 using UnityEngine;
 
 namespace Demo.Script

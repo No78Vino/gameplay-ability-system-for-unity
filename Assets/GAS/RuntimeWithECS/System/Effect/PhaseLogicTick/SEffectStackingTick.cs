@@ -1,8 +1,7 @@
 using GAS.RuntimeWithECS.Common.Component;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect;
-using GAS.RuntimeWithECS.System.SystemGroup.LogicTick;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

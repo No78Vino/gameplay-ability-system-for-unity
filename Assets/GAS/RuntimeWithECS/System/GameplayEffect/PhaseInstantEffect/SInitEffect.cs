@@ -1,5 +1,5 @@
 using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.System.SystemGroup;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

@@ -2,7 +2,7 @@
 using GAS.RuntimeWithECS.Ability.Component;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability

@@ -1,6 +1,6 @@
 using System;
 using DemoForESC._Script.Gen;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using UnityEngine;
 
 namespace DemoForESC._Script

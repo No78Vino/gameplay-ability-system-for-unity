@@ -1,5 +1,5 @@
 using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.System.SystemGroup.LogicTick;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 

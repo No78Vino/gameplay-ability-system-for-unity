@@ -1,4 +1,4 @@
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using Unity.Entities;
 using UnityEngine;
 

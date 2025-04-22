@@ -1,14 +1,14 @@
-using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.Ability.PhaseActivation
+namespace GAS.Runtime
 {
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(SysGroupAbility))]
     [UpdateAfter(typeof(STryActivateAbility))]
     public partial struct STryCancelAbility : ISystem

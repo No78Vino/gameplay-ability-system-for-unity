@@ -1,4 +1,4 @@
-namespace GAS.RuntimeWithECS.Core
+namespace GAS.Runtime
 {
     public class TurnController
     {

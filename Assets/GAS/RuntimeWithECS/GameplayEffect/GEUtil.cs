@@ -1,6 +1,6 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Common.Component;
-using GAS.RuntimeWithECS.Core;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;

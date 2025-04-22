@@ -1,6 +1,6 @@
 ﻿using GAS.RuntimeWithECS.Common.Component;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
-using GAS.RuntimeWithECS.System.SystemGroup;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Burst;
