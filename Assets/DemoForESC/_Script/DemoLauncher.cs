@@ -17,10 +17,5 @@ namespace DemoForESC._Script
             GASManager.EntityManager.SetName(testE,"TestEntity");
             GASManager.EntityManager.AddComponent<CDuration>(testE);
         }
-
-        private void FixedUpdate()
-        {
-            GASManager.FixedUpdate();
-        }
     }
 }
