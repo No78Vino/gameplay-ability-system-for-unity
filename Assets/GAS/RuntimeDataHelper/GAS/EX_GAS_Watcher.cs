@@ -57,7 +57,7 @@ namespace GAS.Editor
         [DisplayAsString(EnableRichText = true)]
         [ShowInInspector]
         [HideLabel]
-        public string ascName => $"<b><color=yellow>{ExGasHelper.GetEntityName(entityWatching)}</color></b>";
+        public string ascName => $"<b><color=yellow>{(entityWatching==Entity.Null?"NULL":ExGasHelper.GetEntityName(entityWatching))}</color></b>";
 
         [TabGroup("ASC/Content", "属性")]
         [ShowIf(nameof(IsEntityValid))]
