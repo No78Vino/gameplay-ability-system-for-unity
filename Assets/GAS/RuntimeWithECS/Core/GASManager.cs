@@ -51,14 +51,14 @@ namespace GAS.Runtime
 
         private static void CreateGasSystems()
         {
-            // Create the base system group
+            // 创建基础系统组
             var sgInitialization = ExWorld.CreateSystemManaged<InitializationSystemGroup>();
             var sgSimulation = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
             var sgPresentation = ExWorld.CreateSystemManaged<PresentationSystemGroup>();
             var sgFixedStepSimulation = ExWorld.CreateSystemManaged<FixedStepSimulationSystemGroup>();
             sgSimulation.AddSystemToUpdateList(sgFixedStepSimulation);
 
-            // Create the system groups
+            // 创建系统组
             var sgLogic = ExWorld.CreateSystemManaged<SysGroupLogic>();
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogic);
 
@@ -77,21 +77,20 @@ namespace GAS.Runtime
             sgLogicTick.AddSystemToUpdateList(sgTickAbility);
             sgLogicTick.AddSystemToUpdateList(sgTickGameplayEffect);
             
-            // Create the systems
-
+            // 创建系统
             // Core
             sgLogic.AddSystemToUpdateList(
                 ExWorld.CreateSystem<SGlobalTimer>());
             
             // Ability
-            // tick
-            sgTickAbility.AddSystemToUpdateList(ExWorld.CreateSystem<SAbilityTick>());
-            sgTickAbility.SortSystems();
             // logic
             sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryActivateAbility>());
             sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryCancelAbility>());
             sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryEndAbility>());
             sgAbility.SortSystems();
+            // tick
+            sgTickAbility.AddSystemToUpdateList(ExWorld.CreateSystem<SAbilityTick>());
+            sgTickAbility.SortSystems();
 
             // Attribute
             sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeCurrentValue>());
