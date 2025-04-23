@@ -51,6 +51,7 @@ namespace GAS.Runtime
 
         private static void CreateGasSystems()
         {
+            // Create the base system group
             var sgInitialization = ExWorld.CreateSystemManaged<InitializationSystemGroup>();
             var sgSimulation = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
             var sgPresentation = ExWorld.CreateSystemManaged<PresentationSystemGroup>();
@@ -75,8 +76,7 @@ namespace GAS.Runtime
             var sgTickGameplayEffect = ExWorld.CreateSystemManaged<SysGroupTickGameplayEffect>();
             sgLogicTick.AddSystemToUpdateList(sgTickAbility);
             sgLogicTick.AddSystemToUpdateList(sgTickGameplayEffect);
-
-
+            
             // Create the systems
 
             // Core
@@ -84,17 +84,32 @@ namespace GAS.Runtime
                 ExWorld.CreateSystem<SGlobalTimer>());
             
             // Ability
-            ExWorld.CreateSystem<SAbilityTick>();
-            ExWorld.CreateSystem<STryActivateAbility>();
-            ExWorld.CreateSystem<STryCancelAbility>();
-            ExWorld.CreateSystem<STryEndAbility>();
+            // tick
+            sgTickAbility.AddSystemToUpdateList(ExWorld.CreateSystem<SAbilityTick>());
+            sgTickAbility.SortSystems();
+            // logic
+            sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryActivateAbility>());
+            sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryCancelAbility>());
+            sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryEndAbility>());
+            sgAbility.SortSystems();
 
             // Attribute
-            ExWorld.CreateSystem<SUpdateAttributeCurrentValue>();
-            ExWorld.CreateSystem<SUpdateAttributeBaseValue>();
-
-
-
+            sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeCurrentValue>());
+            sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeBaseValue>());
+            sgAttribute.SortSystems();
+            
+            // GameplayEffect
+            // logic
+            sgEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SApplyGameplayEffect>());
+            sgEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SKillGameplayEffect>());
+            sgEffect.SortSystems();
+            
+            // tick
+            sgTickGameplayEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectDurationTick>());
+            sgTickGameplayEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectPeriodTick>());
+            sgTickGameplayEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectStackingTick>());
+            sgTickGameplayEffect.SortSystems();
+            
             // 将world更新同步PlayerLoop
             ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);
         }
