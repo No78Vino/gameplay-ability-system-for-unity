@@ -51,50 +51,52 @@ namespace GAS.Runtime
 
         private static void CreateGasSystems()
         {
-            ExWorld.CreateSystemManaged<InitializationSystemGroup>();
-            var sss = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
-            ExWorld.CreateSystemManaged<PresentationSystemGroup>();
-            
-            ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);
-            
-            var testGroup = ExWorld.GetOrCreateSystemManaged<SysGroupTest>();
-            var test = ExWorld.GetOrCreateSystem<STestSystem>();
-            sss.AddSystemToUpdateList(test);
+            var sgInitialization = ExWorld.CreateSystemManaged<InitializationSystemGroup>();
+            var sgSimulation = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
+            var sgPresentation = ExWorld.CreateSystemManaged<PresentationSystemGroup>();
+            var sgFixedStepSimulation = ExWorld.CreateSystemManaged<FixedStepSimulationSystemGroup>();
+            sgSimulation.AddSystemToUpdateList(sgFixedStepSimulation);
 
             // Create the system groups
-      
-            ExWorld.CreateSystemManaged<FixedStepSimulationSystemGroup>();
-            
-            ExWorld.CreateSystemManaged<SysGroupLogic>();
-            ExWorld.CreateSystemManaged<SysGroupAbility>();
-            ExWorld.CreateSystemManaged<SysGroupAttribute>();
-            ExWorld.CreateSystemManaged<SysGroupEffect>();
-            
-            ExWorld.CreateSystemManaged<SysGroupLogicTick>();
-            var s = ExWorld.CreateSystemManaged<SysGroupTickAbility>();
-            
+            var sgLogic = ExWorld.CreateSystemManaged<SysGroupLogic>();
+            sgFixedStepSimulation.AddSystemToUpdateList(sgLogic);
 
-            ExWorld.CreateSystemManaged<SysGroupTickGameplayEffect>();
-            
+            var sgAbility = ExWorld.CreateSystemManaged<SysGroupAbility>();
+            var sgAttribute = ExWorld.CreateSystemManaged<SysGroupAttribute>();
+            var sgEffect = ExWorld.CreateSystemManaged<SysGroupEffect>();
+            sgLogic.AddSystemToUpdateList(sgAbility);
+            sgLogic.AddSystemToUpdateList(sgAttribute);
+            sgLogic.AddSystemToUpdateList(sgEffect);
+
+            var sgLogicTick = ExWorld.CreateSystemManaged<SysGroupLogicTick>();
+            sgFixedStepSimulation.AddSystemToUpdateList(sgLogicTick);
+
+            var sgTickAbility = ExWorld.CreateSystemManaged<SysGroupTickAbility>();
+            var sgTickGameplayEffect = ExWorld.CreateSystemManaged<SysGroupTickGameplayEffect>();
+            sgLogicTick.AddSystemToUpdateList(sgTickAbility);
+            sgLogicTick.AddSystemToUpdateList(sgTickGameplayEffect);
+
+
             // Create the systems
-            
+
             // Core
-            ExWorld.CreateSystem<SGlobalTimer>();
+            sgLogic.AddSystemToUpdateList(
+                ExWorld.CreateSystem<SGlobalTimer>());
             
             // Ability
             ExWorld.CreateSystem<SAbilityTick>();
             ExWorld.CreateSystem<STryActivateAbility>();
             ExWorld.CreateSystem<STryCancelAbility>();
             ExWorld.CreateSystem<STryEndAbility>();
-            
+
             // Attribute
             ExWorld.CreateSystem<SUpdateAttributeCurrentValue>();
             ExWorld.CreateSystem<SUpdateAttributeBaseValue>();
-        }
 
-        public static void FixedUpdate()
-        {
-            ExWorld.Update();
+
+
+            // 将world更新同步PlayerLoop
+            ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);
         }
     }
 }
