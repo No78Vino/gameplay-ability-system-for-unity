@@ -1,6 +1,7 @@
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -12,12 +13,13 @@ namespace GAS.Runtime
         {
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var inUsage in SystemAPI.Query<RefRW<CDuration>>())
+            foreach (var (inUsage,e) in SystemAPI.Query<RefRW<CDuration>>().WithEntityAccess())
             {
                 inUsage.ValueRW.duration -= 1;
+                Debug.Log($"{e.ToString()} : duration:{inUsage.ValueRW.duration}");
             }
         }
 

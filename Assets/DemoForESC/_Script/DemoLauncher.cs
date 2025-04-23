@@ -1,3 +1,4 @@
+using System;
 using DemoForESC._Script.Gen;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
@@ -15,6 +16,11 @@ namespace DemoForESC._Script
             var testE = GASManager.EntityManager.CreateEntity();
             GASManager.EntityManager.SetName(testE,"TestEntity");
             GASManager.EntityManager.AddComponent<CDuration>(testE);
+        }
+
+        private void FixedUpdate()
+        {
+            GASManager.FixedUpdate();
         }
     }
 }

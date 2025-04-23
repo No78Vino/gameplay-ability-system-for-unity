@@ -51,20 +51,30 @@ namespace GAS.Runtime
 
         private static void CreateGasSystems()
         {
-            var handle = ExWorld.GetOrCreateSystem<STestSystem>();
-            ref STestSystem sTest = ref ExWorld.Unmanaged.GetUnsafeSystemRef<STestSystem>(handle);
-   
+            ExWorld.CreateSystemManaged<InitializationSystemGroup>();
+            var sss = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
+            ExWorld.CreateSystemManaged<PresentationSystemGroup>();
+            
+            ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);
+            
+            var testGroup = ExWorld.GetOrCreateSystemManaged<SysGroupTest>();
+            var test = ExWorld.GetOrCreateSystem<STestSystem>();
+            sss.AddSystemToUpdateList(test);
+
             // Create the system groups
-            ExWorld.CreateSystem<FixedStepSimulationSystemGroup>();
+      
+            ExWorld.CreateSystemManaged<FixedStepSimulationSystemGroup>();
             
-            ExWorld.CreateSystem<SysGroupLogic>();
-            ExWorld.CreateSystem<SysGroupAbility>();
-            ExWorld.CreateSystem<SysGroupAttribute>();
-            ExWorld.CreateSystem<SysGroupEffect>();
+            ExWorld.CreateSystemManaged<SysGroupLogic>();
+            ExWorld.CreateSystemManaged<SysGroupAbility>();
+            ExWorld.CreateSystemManaged<SysGroupAttribute>();
+            ExWorld.CreateSystemManaged<SysGroupEffect>();
             
-            ExWorld.CreateSystem<SysGroupLogicTick>();
-            ExWorld.CreateSystem<SysGroupTickAbility>();
-            ExWorld.CreateSystem<SysGroupTickGameplayEffect>();
+            ExWorld.CreateSystemManaged<SysGroupLogicTick>();
+            var s = ExWorld.CreateSystemManaged<SysGroupTickAbility>();
+            
+
+            ExWorld.CreateSystemManaged<SysGroupTickGameplayEffect>();
             
             // Create the systems
             
@@ -80,7 +90,11 @@ namespace GAS.Runtime
             // Attribute
             ExWorld.CreateSystem<SUpdateAttributeCurrentValue>();
             ExWorld.CreateSystem<SUpdateAttributeBaseValue>();
+        }
 
+        public static void FixedUpdate()
+        {
+            ExWorld.Update();
         }
     }
 }
