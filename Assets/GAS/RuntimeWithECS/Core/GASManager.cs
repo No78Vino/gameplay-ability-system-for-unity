@@ -81,6 +81,7 @@ namespace GAS.Runtime
             // Core
             sgLogic.AddSystemToUpdateList(
                 ExWorld.CreateSystem<SGlobalTimer>());
+            sgLogic.SortSystems();
             
             // Ability
             // logic
