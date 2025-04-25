@@ -56,6 +56,7 @@ namespace GAS.Runtime
             var sgSimulation = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
             var sgPresentation = ExWorld.CreateSystemManaged<PresentationSystemGroup>();
             var sgFixedStepSimulation = ExWorld.CreateSystemManaged<FixedStepSimulationSystemGroup>();
+            sgFixedStepSimulation.RateManager = new RateUtils.FixedRateSimpleManager(Time.fixedDeltaTime);
             sgSimulation.AddSystemToUpdateList(sgFixedStepSimulation);
 
             // 创建系统组
