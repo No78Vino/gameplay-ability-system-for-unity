@@ -45,7 +45,7 @@ namespace GAS.Editor
             ShowIndexLabels = false, 
             ShowItemCount = false, 
             ShowPaging = false,
-            OnTitleBarGUI = "DrawAttributeNamesButtons")]
+            OnTitleBarGUI = nameof(DrawAttributeNamesButtons))]
         [ValueDropdown("AttributeChoices", IsUniqueList = true)]
         [LabelText("Attributes")]
         [OnValueChanged(nameof(OnAttritesChange))]
@@ -56,6 +56,7 @@ namespace GAS.Editor
             if (SirenixEditorGUI.ToolbarButton(SdfIconType.SortAlphaDown))
             {
                 AttributeNames = AttributeNames.OrderBy(x => x).ToList();
+                OnAttritesChange();
                 ParentAsset.SaveAsset();
             }
         }
@@ -117,6 +118,7 @@ namespace GAS.Editor
         [LabelText(" ")]
         [TableList(AlwaysExpanded = true,
             DrawScrollView = false,
+            IsReadOnly = true,
             HideToolbar = true)]
         public List<AttrInASCustomConfig> Attributes = new List<AttrInASCustomConfig>();
 
@@ -128,6 +130,7 @@ namespace GAS.Editor
             {
                 AttrInASCustomConfig item = new AttrInASCustomConfig();
                 item.AttrCode = name.GetHashCode();
+                item.attrName = name;
                 foreach (var cfg in lastData)
                 {
                     if (cfg.AttrCode == item.AttrCode)

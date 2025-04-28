@@ -9,26 +9,37 @@ namespace GAS.Runtime
     {
         [HideInInspector]
         public int AttrCode;
+
+        [VerticalGroup("属性",PaddingTop = 3f,Order = -1)]
+        [ShowInInspector]
+        [DisplayAsString(EnableRichText = true)]
+        [HideLabel]
+        public string attrName;
         
         [VerticalGroup("启用默认初始值",PaddingTop = 3f)]
         [HideLabel]
         public bool UseValueInit;
         
+        [VerticalGroup("默认初始值")]
+        [HideLabel]
         [ShowIf(nameof(UseValueInit))]
-        [LabelText("默认初始值")]
         public float ValueDefaultInit;
-        
-        [LabelText("钳制最小值")]
+
+        [VerticalGroup("钳制最小值")]
+        [HideLabel]
         public bool ClampMin;
-        
-        [LabelText("最小值")]
+
+        [VerticalGroup("最小值")]
+        [HideLabel]
         [ShowIf(nameof(ClampMin))]
         public float ValueMin;
         
-        [LabelText("钳制最大值")]
+        [VerticalGroup("钳制最大值")]
+        [HideLabel]
         public bool ClampMax;
         
-        [LabelText("最大值")]
+        [VerticalGroup("最大值")]
+        [HideLabel]
         [ShowIf(nameof(ClampMax))]
         public float ValueMax;
 
