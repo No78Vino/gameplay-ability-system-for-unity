@@ -31,25 +31,32 @@ namespace GAS.Editor
         [OnValueChanged(nameof(OnNameChanged))]
         public string Name = "Unnamed";
 
-        private void OnNameChanged()
-        {
-            Code = Name.GetHashCode();
-        }
-        
-        [HideInInspector]
-        public int Code;
-        
+        [HideInInspector] public int Code;
+
         [HorizontalGroup("B")]
-        [HorizontalGroup("B/L", order: 0, Width = 300)]
-        [ListDrawerSettings(ShowFoldout = false, 
-            ShowIndexLabels = false, 
-            ShowItemCount = false, 
+        [HorizontalGroup("B/L", order: 0, Width = 150)]
+        [ListDrawerSettings(ShowFoldout = false,
+            ShowIndexLabels = false,
+            ShowItemCount = false,
             ShowPaging = false,
             OnTitleBarGUI = nameof(DrawAttributeNamesButtons))]
         [ValueDropdown("AttributeChoices", IsUniqueList = true)]
         [LabelText("Attributes")]
         [OnValueChanged(nameof(OnAttritesChange))]
-        public List<string> AttributeNames = new List<string>();
+        public List<string> AttributeNames = new();
+
+        [HorizontalGroup("B/L")]
+        [LabelText(" ")]
+        [TableList(AlwaysExpanded = true,
+            DrawScrollView = false,
+            IsReadOnly = true,
+            HideToolbar = true)]
+        public List<AttrInASCustomConfig> Attributes = new();
+
+        private void OnNameChanged()
+        {
+            Code = Name.GetHashCode();
+        }
 
         private void DrawAttributeNamesButtons()
         {
@@ -79,10 +86,7 @@ namespace GAS.Editor
         public static void SetAttributeChoices(List<string> attributeChoices)
         {
             var choices = new ValueDropdownList<string>();
-            foreach (var attribute in attributeChoices)
-            {
-                choices.Add(attribute, attribute);
-            }
+            foreach (var attribute in attributeChoices) choices.Add(attribute, attribute);
 
             AttributeChoices = choices;
         }
@@ -107,20 +111,12 @@ namespace GAS.Editor
                 .ToList();
             return duplicates.Count > 0;
         }
-        
+
         public int GetCode()
         {
             if (Code == 0) Code = Name.GetHashCode();
             return Code;
         }
-        
-        [HorizontalGroup("B/L")]
-        [LabelText(" ")]
-        [TableList(AlwaysExpanded = true,
-            DrawScrollView = false,
-            IsReadOnly = true,
-            HideToolbar = true)]
-        public List<AttrInASCustomConfig> Attributes = new List<AttrInASCustomConfig>();
 
         private void OnAttritesChange()
         {
@@ -128,19 +124,19 @@ namespace GAS.Editor
             Attributes.Clear();
             foreach (var name in AttributeNames)
             {
-                AttrInASCustomConfig item = new AttrInASCustomConfig();
+                var item = new AttrInASCustomConfig();
                 item.AttrCode = name.GetHashCode();
                 item.attrName = name;
                 foreach (var cfg in lastData)
-                {
                     if (cfg.AttrCode == item.AttrCode)
                     {
                         item = cfg;
                         break;
                     }
-                }
+
                 Attributes.Add(item);
             }
+
             ParentAsset.SaveAsset();
         }
     }
@@ -150,17 +146,25 @@ namespace GAS.Editor
     {
         [BoxGroup("Warning", order: -1)]
         [HideLabel]
-        [ShowIf("ExistDuplicatedAttributeSetName")]
+        [ShowIf(nameof(ExistDuplicatedAttributeSetName))]
         [DisplayAsString(TextAlignment.Left, true)]
         public string ERROR_DuplicatedAttributeSet = "";
 
-        [VerticalGroup("AttributeSetConfigs", order: 1)]
-        [ListDrawerSettings(ShowFoldout = true,
-            CustomAddFunction = "OnAddAttributeSet",
-            CustomRemoveElementFunction = "OnRemoveElement",
-            CustomRemoveIndexFunction = "OnRemoveIndex", OnTitleBarGUI = "DrawAttributeSetConfigsButtons")]
+        [VerticalGroup("AttributeSetConfigs", 1)]
+        [ListDrawerSettings(ShowFoldout = false,
+            CustomAddFunction = nameof(OnAddAttributeSet),
+            CustomRemoveElementFunction = nameof(OnRemoveElement),
+            CustomRemoveIndexFunction = nameof(OnRemoveIndex),
+            OnTitleBarGUI = nameof(DrawAttributeSetConfigsButtons))]
         [Searchable]
-        public List<AttributeSetConfig> AttributeSetConfigs = new List<AttributeSetConfig>();
+        public List<AttributeSetConfig> AttributeSetConfigs = new();
+
+        private void OnEnable()
+        {
+            AttributeSetConfig.ParentAsset = this;
+            var asset = AttributeAsset.LoadOrCreate();
+            AttributeSetConfig.SetAttributeChoices(asset?.AttributeNames);
+        }
 
         private void DrawAttributeSetConfigsButtons()
         {
@@ -171,13 +175,9 @@ namespace GAS.Editor
             }
         }
 
-        private void OnEnable()
-        {
-            AttributeSetConfig.ParentAsset = this;
-            var asset = AttributeAsset.LoadOrCreate();
-            AttributeSetConfig.SetAttributeChoices(asset?.AttributeNames);
-        }
-
+        [HorizontalGroup("GEN",order:0,width:100)]
+        [GUIColor(0, 0.6f, 0.6f)]
+        [Button(SdfIconType.Save, "保存", ButtonHeight = 30, Expanded = true)]
         public void SaveAsset()
         {
             EditorUtility.SetDirty(this);
@@ -186,7 +186,7 @@ namespace GAS.Editor
             Debug.Log("[EX] AttributeSetAsset save!");
         }
 
-        [VerticalGroup("Generate AttributeSet Code", order: 0)]
+        [HorizontalGroup("GEN")]
         [GUIColor(0, 0.9f, 0)]
         [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeSetCode, ButtonHeight = 30, Expanded = true)]
         [InfoBox(GASTextDefine.ERROR_InElements, InfoMessageType.Error, VisibleIf = "ErrorInElements")]
@@ -204,7 +204,7 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
 
-        bool ErrorInElements()
+        private bool ErrorInElements()
         {
             return AttributeSetConfigs.Any(attribute =>
                 attribute.EmptyAttribute() ||
@@ -212,7 +212,7 @@ namespace GAS.Editor
                 attribute.EmptyAttributeSetName());
         }
 
-        bool ExistDuplicatedAttributeSetName()
+        private bool ExistDuplicatedAttributeSetName()
         {
             var duplicates = AttributeSetConfigs
                 .Where(a => !string.IsNullOrEmpty(a.Name))
@@ -233,23 +233,18 @@ namespace GAS.Editor
 
         private void OnAddAttributeSet()
         {
-            StringEditWindow.OpenWindow("AttributeSet Name", "", (newName) =>
+            StringEditWindow.OpenWindow("AttributeSet Name", "", newName =>
                 {
                     var validateVariableName = Validations.ValidateVariableName(newName);
 
-                    if (!validateVariableName.IsValid)
-                    {
-                        return validateVariableName;
-                    }
+                    if (!validateVariableName.IsValid) return validateVariableName;
 
                     if (AttributeSetConfigs.Exists(x => x.Name == newName))
-                    {
                         return ValidationResult.Invalid($"The name(\"{newName}\") already exists!");
-                    }
 
                     return ValidationResult.Valid;
                 },
-                attributeSetName => AttributeSetConfigs.Add(new AttributeSetConfig() { Name = attributeSetName }),
+                attributeSetName => AttributeSetConfigs.Add(new AttributeSetConfig { Name = attributeSetName }),
                 "Create new AttributeSet");
             GUIUtility.ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
         }
