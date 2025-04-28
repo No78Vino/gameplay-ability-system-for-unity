@@ -176,7 +176,7 @@ namespace GAS.Editor
         }
 
         [HorizontalGroup("GEN",order:0,width:100)]
-        [GUIColor(0, 0.6f, 0.6f)]
+        [GUIColor(0.8f, 0.6f, 0.2f)]
         [Button(SdfIconType.Save, "保存", ButtonHeight = 30, Expanded = true)]
         public void SaveAsset()
         {
