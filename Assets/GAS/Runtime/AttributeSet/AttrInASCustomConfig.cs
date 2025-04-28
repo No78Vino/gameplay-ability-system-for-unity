@@ -5,29 +5,30 @@ using UnityEngine;
 namespace GAS.Runtime
 {
     [Serializable]
-    public struct AttrInASCustomConfig
+    public class AttrInASCustomConfig
     {
         [HideInInspector]
         public int AttrCode;
         
-        [HorizontalGroup("A",order:1)]
+        [VerticalGroup("启用默认初始值",PaddingTop = 3f)]
+        [HideLabel]
         public bool UseValueInit;
         
-        [HorizontalGroup("A",order:2)]
         [ShowIf(nameof(UseValueInit))]
+        [LabelText("默认初始值")]
         public float ValueDefaultInit;
         
-        [HorizontalGroup("A",order:3)]
+        [LabelText("钳制最小值")]
         public bool ClampMin;
         
-        [HorizontalGroup("A",order:4)]
+        [LabelText("最小值")]
         [ShowIf(nameof(ClampMin))]
         public float ValueMin;
         
-        [HorizontalGroup("A",order:5)]
+        [LabelText("钳制最大值")]
         public bool ClampMax;
         
-        [HorizontalGroup("A",order:6)]
+        [LabelText("最大值")]
         [ShowIf(nameof(ClampMax))]
         public float ValueMax;
 

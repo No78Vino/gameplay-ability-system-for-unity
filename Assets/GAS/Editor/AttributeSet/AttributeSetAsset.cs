@@ -41,7 +41,10 @@ namespace GAS.Editor
         
         [HorizontalGroup("B")]
         [HorizontalGroup("B/L", order: 0, Width = 300)]
-        [ListDrawerSettings(ShowFoldout = false, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false,
+        [ListDrawerSettings(ShowFoldout = false, 
+            ShowIndexLabels = false, 
+            ShowItemCount = false, 
+            ShowPaging = false,
             OnTitleBarGUI = "DrawAttributeNamesButtons")]
         [ValueDropdown("AttributeChoices", IsUniqueList = true)]
         [LabelText("Attributes")]
@@ -111,14 +114,10 @@ namespace GAS.Editor
         }
         
         [HorizontalGroup("B/L")]
-        [ListDrawerSettings(ShowFoldout = false,
-            ShowIndexLabels = false, 
-            DraggableItems = false,
-            ShowItemCount = true,
-            HideAddButton = true,
-            HideRemoveButton = true)]
-        // [ValueDropdown("AttributeChoices", IsUniqueList = true)]
-        [HideLabel]
+        [LabelText(" ")]
+        [TableList(AlwaysExpanded = true,
+            DrawScrollView = false,
+            HideToolbar = true)]
         public List<AttrInASCustomConfig> Attributes = new List<AttrInASCustomConfig>();
 
         private void OnAttritesChange()
