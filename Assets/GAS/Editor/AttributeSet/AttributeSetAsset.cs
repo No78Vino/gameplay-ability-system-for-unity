@@ -141,6 +141,7 @@ namespace GAS.Editor
                 }
                 Attributes.Add(item);
             }
+            ParentAsset.SaveAsset();
         }
     }
 

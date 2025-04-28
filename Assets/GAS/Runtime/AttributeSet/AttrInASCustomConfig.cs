@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GAS.Runtime
 {
     [Serializable]
-    public class AttrInASCustomConfig
+    public struct AttrInASCustomConfig
     {
         [HideInInspector]
         public int AttrCode;
