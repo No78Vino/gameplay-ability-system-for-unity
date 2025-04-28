@@ -5,6 +5,7 @@ using System.Linq;
 using GAS.Editor.General;
 using GAS.General;
 using GAS.General.Validation;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
@@ -38,12 +39,13 @@ namespace GAS.Editor
         [HideInInspector]
         public int Code;
         
-        [Space]
-        [ListDrawerSettings(ShowFoldout = true, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false,
+        [HorizontalGroup("B")]
+        [HorizontalGroup("B/L", order: 0, Width = 300)]
+        [ListDrawerSettings(ShowFoldout = false, ShowIndexLabels = false, ShowItemCount = false, ShowPaging = false,
             OnTitleBarGUI = "DrawAttributeNamesButtons")]
         [ValueDropdown("AttributeChoices", IsUniqueList = true)]
         [LabelText("Attributes")]
-        [Searchable]
+        [OnValueChanged(nameof(OnAttritesChange))]
         public List<string> AttributeNames = new List<string>();
 
         private void DrawAttributeNamesButtons()
@@ -106,6 +108,37 @@ namespace GAS.Editor
         {
             if (Code == 0) Code = Name.GetHashCode();
             return Code;
+        }
+        
+        [HorizontalGroup("B/L")]
+        [ListDrawerSettings(ShowFoldout = false,
+            ShowIndexLabels = false, 
+            DraggableItems = false,
+            ShowItemCount = true,
+            HideAddButton = true,
+            HideRemoveButton = true)]
+        // [ValueDropdown("AttributeChoices", IsUniqueList = true)]
+        [HideLabel]
+        public List<AttrInASCustomConfig> Attributes = new List<AttrInASCustomConfig>();
+
+        private void OnAttritesChange()
+        {
+            var lastData = new List<AttrInASCustomConfig>(Attributes);
+            Attributes.Clear();
+            foreach (var name in AttributeNames)
+            {
+                AttrInASCustomConfig item = new AttrInASCustomConfig();
+                item.AttrCode = name.GetHashCode();
+                foreach (var cfg in lastData)
+                {
+                    if (cfg.AttrCode == item.AttrCode)
+                    {
+                        item = cfg;
+                        break;
+                    }
+                }
+                Attributes.Add(item);
+            }
         }
     }
 
