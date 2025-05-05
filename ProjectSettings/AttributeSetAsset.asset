@@ -16,10 +16,60 @@ MonoBehaviour:
     ->  Fight</color></color></b></size>"
   AttributeSetConfigs:
   - Name: Fight
+    Code: 0
     AttributeNames:
-    - HP
     - MP
     - STAMINA
     - POSTURE
     - ATK
     - SPEED
+    - HP
+    Attributes:
+    - AttrCode: 119047825
+      attrName: MP
+      UseValueInit: 1
+      ValueDefaultInit: 0
+      ClampMin: 0
+      ValueMin: 0
+      ClampMax: 0
+      ValueMax: 0
+    - AttrCode: -987323975
+      attrName: STAMINA
+      UseValueInit: 0
+      ValueDefaultInit: 0
+      ClampMin: 0
+      ValueMin: 0
+      ClampMax: 0
+      ValueMax: 0
+    - AttrCode: 985802258
+      attrName: POSTURE
+      UseValueInit: 0
+      ValueDefaultInit: 0
+      ClampMin: 1
+      ValueMin: 1.39
+      ClampMax: 0
+      ValueMax: 0
+    - AttrCode: -1844636348
+      attrName: ATK
+      UseValueInit: 0
+      ValueDefaultInit: 0
+      ClampMin: 1
+      ValueMin: 0
+      ClampMax: 0
+      ValueMax: 0
+    - AttrCode: 2025855271
+      attrName: SPEED
+      UseValueInit: 0
+      ValueDefaultInit: 0
+      ClampMin: 0
+      ValueMin: 0
+      ClampMax: 0
+      ValueMax: 0
+    - AttrCode: 119047830
+      attrName: HP
+      UseValueInit: 0
+      ValueDefaultInit: 0
+      ClampMin: 0
+      ValueMin: 0
+      ClampMax: 0
+      ValueMax: 0
