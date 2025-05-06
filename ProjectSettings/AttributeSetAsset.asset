@@ -55,11 +55,11 @@ MonoBehaviour:
       ValueMax: 0
     - AttrCode: 2025855271
       attrName: SPEED
-      ValueDefaultInit: 0
-      ClampMin: 0
-      ValueMin: 0
-      ClampMax: 0
-      ValueMax: 0
+      ValueDefaultInit: 100
+      ClampMin: 1
+      ValueMin: 1
+      ClampMax: 1
+      ValueMax: 150
     - AttrCode: 119047830
       attrName: HP
       ValueDefaultInit: 0
