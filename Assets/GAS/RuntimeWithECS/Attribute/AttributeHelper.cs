@@ -2,6 +2,7 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace GAS.RuntimeWithECS.Attribute
 {
@@ -40,6 +41,9 @@ namespace GAS.RuntimeWithECS.Attribute
                 {
                     if (mod.AttrSetCode != attrSetCode || mod.AttrCode != attrCode) continue;
                     attr.CurrentValue = MmcHelper.Calculate(ge, mod, attr.CurrentValue);
+                    // 钳制计算处理
+                    if (attr.IsClampMin) attr.CurrentValue = math.max(attr.CurrentValue, attr.MinValue);
+                    if (attr.IsClampMax) attr.CurrentValue = math.min(attr.CurrentValue, attr.MaxValue);
                 }
             }
 
