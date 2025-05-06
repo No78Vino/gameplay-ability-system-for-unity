@@ -17,6 +17,7 @@ MonoBehaviour:
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectBasicInfo
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectDuration
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.MCConfAssetModifiers
+    - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetCueOnAdd
     ConfAssetEffectApplicationRequiredTags:
       tags: 
     ConfAssetEffectAssetTags:
