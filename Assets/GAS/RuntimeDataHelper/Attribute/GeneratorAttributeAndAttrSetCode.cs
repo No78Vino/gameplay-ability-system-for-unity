@@ -79,12 +79,16 @@ namespace GAS.RuntimeDataHelper.Attribute
                         writer.WriteLine("{");
                         writer.Indent++;
                         {
-                            foreach (var attr in attrSet.AttributeNames)
+                            foreach (var attr in attrSet.Attributes)
                             {
-                                // TODO
-                                // 初始值，最小值，最大值
+                                // 初始值，钳制最小值，钳制最大值，最小值，最大值
                                 writer.WriteLine(
-                                    $"new(GEN_AttributeCode.{attr},{100},{0},{100}),");
+                                    $"new(GEN_AttributeCode.{attr.attrName}," +
+                                    $"{attr.ValueDefaultInit}," +
+                                    $"{attr.ClampMin.ToString().ToLower()}," +
+                                    $"{attr.ClampMax.ToString().ToLower()}," +
+                                    $"{attr.ValueMin}f," +
+                                    $"{attr.ValueMax}f),");
                             }
                         }
                         writer.Indent--;

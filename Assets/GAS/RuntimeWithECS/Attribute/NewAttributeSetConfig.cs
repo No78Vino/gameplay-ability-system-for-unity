@@ -18,13 +18,17 @@ namespace GAS.RuntimeWithECS.Attribute
         public readonly float InitValue;
         public readonly float Min;
         public readonly float Max;
+        public readonly bool IsClampMin;
+        public readonly bool IsClampMax;
         
-        public AttributeBaseSetting(int code, float initValue,float min,float max)
+        public AttributeBaseSetting(int code, float initValue,bool isClampMin,bool isClampMax,float min,float max)
         {
             Code = code;
             InitValue = initValue;
             Min = min;
             Max = max;
+            IsClampMin = isClampMin;
+            IsClampMax = isClampMax;
         }
     }
 }

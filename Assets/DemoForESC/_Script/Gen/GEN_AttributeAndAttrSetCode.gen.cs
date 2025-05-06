@@ -22,12 +22,12 @@ namespace GAS.Runtime
         public const int Fight = 109648900;
         public static NewAttributeSetConfig AS_Fight = new(Fight, new AttributeBaseSetting[]
         {
-            new(GEN_AttributeCode.HP,100,0,100),
-            new(GEN_AttributeCode.MP,100,0,100),
-            new(GEN_AttributeCode.STAMINA,100,0,100),
-            new(GEN_AttributeCode.POSTURE,100,0,100),
-            new(GEN_AttributeCode.ATK,100,0,100),
-            new(GEN_AttributeCode.SPEED,100,0,100),
+            new(GEN_AttributeCode.MP,0,false,false,0f,0f),
+            new(GEN_AttributeCode.STAMINA,0,false,false,0f,0f),
+            new(GEN_AttributeCode.POSTURE,0,true,false,1.39f,0f),
+            new(GEN_AttributeCode.ATK,0,true,false,0f,0f),
+            new(GEN_AttributeCode.SPEED,0,false,false,0f,0f),
+            new(GEN_AttributeCode.HP,0,false,false,0f,0f),
         });
         public static Dictionary<int,NewAttributeSetConfig> AttributeSetMap = new()
         {

@@ -59,7 +59,8 @@ namespace GAS.RuntimeWithECS.AttributeSet
                     CurrentValue = setting.InitValue,
                     MinValue = setting.Min,
                     MaxValue = setting.Max,
-                    //Tracker = tracker,
+                    IsClampMin = setting.IsClampMin,
+                    IsClampMax = setting.IsClampMax,
                 };
             }
 

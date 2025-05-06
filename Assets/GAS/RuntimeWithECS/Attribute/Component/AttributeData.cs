@@ -8,6 +8,8 @@ namespace GAS.Runtime
         public int Code;
         public float BaseValue;
         public float CurrentValue;
+        public bool IsClampMin;
+        public bool IsClampMax;
         public float MinValue;
         public float MaxValue;
         public bool Dirty;

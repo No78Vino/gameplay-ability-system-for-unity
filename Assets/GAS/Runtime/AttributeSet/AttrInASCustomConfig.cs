@@ -16,13 +16,8 @@ namespace GAS.Runtime
         [HideLabel]
         public string attrName;
         
-        [VerticalGroup("启用默认初始值",PaddingTop = 3f)]
-        [HideLabel]
-        public bool UseValueInit;
-        
         [VerticalGroup("默认初始值")]
         [HideLabel]
-        [ShowIf(nameof(UseValueInit))]
         public float ValueDefaultInit;
 
         [VerticalGroup("钳制最小值")]
