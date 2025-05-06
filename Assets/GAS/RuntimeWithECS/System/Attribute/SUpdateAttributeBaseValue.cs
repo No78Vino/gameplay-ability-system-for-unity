@@ -1,7 +1,4 @@
-﻿using GAS.RuntimeWithECS.Attribute.Component;
-using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.Runtime;
-using GAS.RuntimeWithECS.System.GameplayEffect;
+﻿using GAS.RuntimeWithECS.System.GameplayEffect;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;

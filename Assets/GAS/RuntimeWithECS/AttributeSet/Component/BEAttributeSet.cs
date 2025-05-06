@@ -1,4 +1,4 @@
-using GAS.RuntimeWithECS.Attribute.Component;
+using GAS.Runtime;
 using Unity.Collections;
 using Unity.Entities;
 

@@ -1,7 +1,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Attribute.Component
+namespace GAS.Runtime
 {
     public struct AttributeData : IComponentData
     {

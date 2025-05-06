@@ -1,6 +1,5 @@
 ﻿using System;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Attribute.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect.Aspect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
