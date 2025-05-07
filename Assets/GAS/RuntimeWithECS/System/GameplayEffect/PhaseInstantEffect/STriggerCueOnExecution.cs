@@ -47,7 +47,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect
         {
             foreach (var entity in _cueOnExecution.ValueRO.cues)
             {
-                var cue = entityManager.GetComponentData<ComInstantCue>(entity);
+                var cue = entityManager.GetComponentData<MCInstantCue>(entity);
                 cue.cue.TryTrigger();
             }
         }

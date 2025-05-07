@@ -2,15 +2,15 @@ using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Cue.Component
 {
-    public class ComInstantCue : IComponentData
+    public class MCInstantCue : IComponentData
     {
         public CueInstant cue;
         
-        public ComInstantCue()
+        public MCInstantCue()
         {
         }
         
-        public ComInstantCue(CueInstant cue)
+        public MCInstantCue(CueInstant cue)
         {
             this.cue = cue;
         }

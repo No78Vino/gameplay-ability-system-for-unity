@@ -22,8 +22,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             for (int i = 0; i < cues.Length; i++)
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
-                GASManager.EntityManager.AddComponent<ComInstantCue>(entities[i]);
-                GASManager.EntityManager.SetComponentData(entities[i],new ComInstantCue(cues[i]));
+                GASManager.EntityManager.AddComponent<MCInstantCue>(entities[i]);
+                GASManager.EntityManager.SetComponentData(entities[i],new MCInstantCue(cues[i]));
             }
             _entityManager.AddComponentData(ge, new CCueOnAdd
             {
@@ -37,8 +37,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             for (int i = 0; i < cues.Length; i++)
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
-                ecb.AddComponent<ComInstantCue>(entities[i]);
-                ecb.SetComponent(entities[i],new ComInstantCue(cues[i]));
+                ecb.AddComponent<MCInstantCue>(entities[i]);
+                ecb.SetComponent(entities[i],new MCInstantCue(cues[i]));
             }
             ecb.AddComponent(ge, new CCueOnAdd
             {

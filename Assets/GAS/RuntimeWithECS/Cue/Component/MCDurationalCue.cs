@@ -2,15 +2,15 @@
 
 namespace GAS.RuntimeWithECS.Cue.Component
 {
-    public class ComDurationalCue : IComponentData
+    public class MCDurationalCue : IComponentData
     {
         public CueDurational cue;
         
-        public ComDurationalCue()
+        public MCDurationalCue()
         {
         }
         
-        public ComDurationalCue(CueDurational cue)
+        public MCDurationalCue(CueDurational cue)
         {
             this.cue = cue;
         }
