@@ -18,6 +18,7 @@
         public const string GAS_GAMEPLAY_TAG_CODE_LIB_CSHARP_SCRIPT_NAME = "GEN_GameplayTagCode.gen.cs";
         public const string GAS_ATTRIBUTE_AND_ATTR_SET_CODE_CSHARP_SCRIPT_NAME = "GEN_AttributeAndAttrSetCode.gen.cs";
         public const string GAS_MMC_CODE_CSHARP_SCRIPT_NAME = "GEN_MmcCode.gen.cs";
+        public const string GAS_CUE_CODE_CSHARP_SCRIPT_NAME = "GEN_CueCode.gen.cs";
         
         /// <summary>
         /// TODO

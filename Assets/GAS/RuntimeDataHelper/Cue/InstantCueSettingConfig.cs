@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeDataHelper.Helper;
+using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Sirenix.OdinInspector;
@@ -29,14 +30,14 @@ namespace GAS.Editor
         public CueParamConfigBase cueParamConfig;
         
         
-        public ModMagnitudeCalculationBase CreateCue()
+        public CueInstant CreateCue()
         {
             var typeMap = EditGameplayEffectHelper.GetCachedMmcToMmcParamConfigTypeMap();
-            MmcParamConfigBase config = null;
+            CueParamConfigBase config = null;
             if (typeMap.TryGetValue(CueType, out var value))
-                config = Activator.CreateInstance(value) as MmcParamConfigBase;
+                config = Activator.CreateInstance(value) as CueParamConfigBase;
             
-            return MmcHelper.TryCreateMmc(CueType,config);
+            return CueHelper.TryCreateInstantCue(CueType,config);
         }
         
         protected void OnValueChanged()
@@ -55,7 +56,7 @@ namespace GAS.Editor
             else
             {
                 EXEditorHelper.ShowNotification(
-                    $"未找到对应的MMC参数配置，请检查类【{CueType}】是否继承自ModMagnitudeCalculationBase<T>");
+                    $"未找到对应的Cue参数配置，请检查类【{CueType}】是否继承自CueInstant<T>");
             }
 
             cueParamConfig?.SetConfAssetCue(this);
@@ -66,7 +67,7 @@ namespace GAS.Editor
         [OnInspectorInit]
         private void InitializeList()
         {
-            if (string.IsNullOrEmpty(CueType)) CueType = typeof(MMCNone).FullName;
+            if (string.IsNullOrEmpty(CueType)) CueType = typeof(CueLog).FullName;
             if (!string.IsNullOrEmpty(_jsonCueParamConfig.TypeFullName))
                 cueParamConfig = JsonProxyHelper.Deserialize<CueParamConfigBase>(_jsonCueParamConfig);
             OnValueChanged();
