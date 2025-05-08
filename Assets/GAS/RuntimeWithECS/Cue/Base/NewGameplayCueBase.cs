@@ -68,20 +68,17 @@ namespace GAS.RuntimeWithECS.Cue
             return true;
         }
 
-        protected NewGameplayCueParametersBase _p;
-        public NewGameplayCueBase(NewGameplayCueParametersBase p)
-        {
-            _p = p;
-        }
+        protected Entity _sourceEntity;
+        protected CueSourceType _sourceType;
         
         public void SetSourceEntity(Entity e)
         {
-            _p.entity = e;
+            _sourceEntity = e;
         }
         
         public void SetSourceType(CueSourceType sourceType)
         {
-            _p.SourceType = sourceType;
+            _sourceType = sourceType;
         }
         
         public abstract void InitParameters(ICueParameter parameter);

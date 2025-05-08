@@ -14,17 +14,13 @@ namespace GAS.RuntimeWithECS.Cue
         }
 
         protected abstract void Trigger();
-
-        protected CueInstant(NewGameplayCueParametersBase p) : base(p)
-        {
-        }
     }
     
     public abstract class CueInstant<T> : CueInstant where T : ICueParameter
     {
         public T Parameter { get; private set; }
         
-        public override void InitParameters(IMmcParameter parameter)
+        public override void InitParameters(ICueParameter parameter)
         {
             if (parameter is T t)
                 Parameter = t;
