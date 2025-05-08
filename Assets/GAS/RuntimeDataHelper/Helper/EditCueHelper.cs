@@ -13,6 +13,7 @@ namespace GAS.Editor
         private static Dictionary<Type, Type> _cachedCueParamTypeToCueParamConfigTypeMap;
         private static Dictionary<string, Type> _cachedCueToCueParamConfigTypeMap;
         private static IEnumerable<Type> _cachedCueParamConfigTypes;
+        private static IEnumerable<Type> _cachedCueTypes;
         
         public static IEnumerable<Type> GetCachedCueParamConfigTypes()
         {
@@ -99,6 +100,21 @@ namespace GAS.Editor
             }
 
             return _cachedCueToCueParamConfigTypeMap;
+        }
+        
+        public static IEnumerable<Type> GetCachedCueTypes()
+        {
+            if (_cachedCueTypes != null) return _cachedCueTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedCueTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(NewGameplayCueBase)) &&
+                    !type.IsAbstract
+                )
+                .ToList();
+
+            return _cachedCueTypes;
         }
         
         #region Instant Cue
