@@ -63,7 +63,7 @@ namespace GAS.Editor
         {
             if (_cachedCueToCueParamConfigTypeMap != null)
                 return _cachedCueToCueParamConfigTypeMap;
-            var instantTypes = GetCachedInstantCueTypes();
+            var instantTypes = GetCachedInstantCueTypes() ;
             var durationalTypes = GetCachedDurationalCueTypes();
             _cachedCueToCueParamConfigTypeMap = new Dictionary<string, Type>();
 

@@ -22,17 +22,17 @@ MonoBehaviour:
       cues:
       - requiredTags: 
         immunityTags: 
-        MMC:
-          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone
-          _jsonMmcParamConfig:
-            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
+        cue:
+          CueType: GAS.Runtime.CueLog
+          _jsonCueParamConfig:
+            TypeFullName: GAS.Editor.CueParamConfigNone
             Data: '{}'
       - requiredTags: 
         immunityTags: 
-        MMC:
-          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone
-          _jsonMmcParamConfig:
-            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
+        cue:
+          CueType: GAS.Runtime.CueLog
+          _jsonCueParamConfig:
+            TypeFullName: GAS.Editor.CueParamConfigNone
             Data: '{}'
     ConfAssetEffectApplicationRequiredTags:
       tags: 
