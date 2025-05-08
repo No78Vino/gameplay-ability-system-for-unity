@@ -1,25 +1,24 @@
+using GAS.RuntimeWithECS.Cue;
+using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Cue
+namespace GAS.Runtime
 {
-    public class CueLog : CueInstant
+    public class CueLog : CueInstant<CueParamString>
     {
-        CueLogParameters Parameters;
-
         protected override void Trigger()
         {
             Debug.Log(
-                $"SourceType:{Parameters.SourceType.ToString()}, Entity:{Parameters.entity} ,Msg:{Parameters.Message}");
-        }
-
-        public CueLog(CueLogParameters p) : base(p)
-        {
-            Parameters = p;
+                $"SourceType:{_sourceType.ToString()}, Entity:{_sourceEntity} ,Msg:{Parameter.Value}");
         }
 
         public void SetMessage(string message)
         {
-            Parameters.Message = message;
+            Parameter.SetValue(message);
+        }
+
+        public CueLog(Entity sourceEntity, CueSourceType sourceType, CueParamString parameter) : base(sourceEntity, sourceType, parameter)
+        {
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GAS.Runtime;
 using GAS.RuntimeWithECS.Modifier.CommonUsage;
+using Unity.Entities;
 using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Cue
@@ -28,6 +29,13 @@ namespace GAS.RuntimeWithECS.Cue
             else
                 Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {parameter.GetType()}");
 #endif
+        }
+        
+        public CueInstant(Entity sourceEntity,CueSourceType sourceType,T parameter)
+        {
+            _sourceType = sourceType;
+            _sourceEntity = sourceEntity;
+            Parameter = parameter;
         }
     }
 }

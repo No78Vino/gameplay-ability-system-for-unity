@@ -46,11 +46,11 @@ namespace GAS.Editor
             _jsonCueParamConfig.Data = JsonProxyHelper.Serialize(cueParamConfig);
 
 
-            var typeMap = EditCueHelper.GetCachedMmcToMmcParamConfigTypeMap();
+            var typeMap = EditCueHelper.GetCachedCueToCueParamConfigTypeMap();
             if (typeMap.TryGetValue(CueType, out var value))
             {
                 if (cueParamConfig.GetType() != value)
-                    cueParamConfig = Activator.CreateInstance(value) as MmcParamConfigBase;
+                    cueParamConfig = Activator.CreateInstance(value) as CueParamConfigBase;
             }
             else
             {
@@ -68,7 +68,7 @@ namespace GAS.Editor
         {
             if (string.IsNullOrEmpty(CueType)) CueType = typeof(MMCNone).FullName;
             if (!string.IsNullOrEmpty(_jsonCueParamConfig.TypeFullName))
-                cueParamConfig = JsonProxyHelper.Deserialize<MmcParamConfigBase>(_jsonCueParamConfig);
+                cueParamConfig = JsonProxyHelper.Deserialize<CueParamConfigBase>(_jsonCueParamConfig);
             OnValueChanged();
         }
 

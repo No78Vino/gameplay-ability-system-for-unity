@@ -36,11 +36,6 @@ namespace TestUnit_ForGASECS
             //         }
             //     }
             // }},
-            new ConfCueOnExecution
-            {
-                cues = new CueInstant[]
-                    { new CueLog(new CueLogParameters { Message = "普通攻击", SourceType = CueSourceType.GameplayEffect }) }
-            }
         };
 
         /// <summary>

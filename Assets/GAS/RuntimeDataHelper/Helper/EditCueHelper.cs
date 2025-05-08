@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GAS.Runtime;
+using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Cue;
 using Sirenix.OdinInspector;
 
@@ -8,8 +10,53 @@ namespace GAS.Editor
 {
     public static class EditCueHelper
     {
-        private static Dictionary<Type, Type> _cachedMmcParamTypeToMmcParamConfigTypeMap;
+        private static Dictionary<Type, Type> _cachedCueParamTypeToCueParamConfigTypeMap;
         private static Dictionary<string, Type> _cachedCueToCueParamConfigTypeMap;
+        private static IEnumerable<Type> _cachedCueParamConfigTypes;
+        
+        public static IEnumerable<Type> GetCachedCueParamConfigTypes()
+        {
+            if (_cachedCueParamConfigTypes != null) return _cachedCueParamConfigTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedCueParamConfigTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(CueParamConfigBase)) &&
+                    !type.IsAbstract &&
+                    type.IsDefined(typeof(SerializableAttribute), false)
+                )
+                .ToList();
+            return _cachedCueParamConfigTypes;
+        }
+        
+        public static Dictionary<Type, Type> GetCachedCueParamTypeToCueParamConfigTypeMap()
+        {
+            if (_cachedCueParamTypeToCueParamConfigTypeMap != null)
+                return _cachedCueParamTypeToCueParamConfigTypeMap;
+            var types = GetCachedCueParamConfigTypes();
+            _cachedCueParamTypeToCueParamConfigTypeMap = new Dictionary<Type, Type>();
+            foreach (var derivedType in types)
+            {
+                var baseType = derivedType.BaseType; // 获取基类类型
+
+                if (baseType != null && baseType.IsGenericType)
+                {
+                    // 获取泛型类型定义（如 CueParamConfigBase<>）
+                    var genericBaseDef = baseType.GetGenericTypeDefinition();
+
+                    // 确认是否是所需的基类泛型定义
+                    if (genericBaseDef == typeof(CueParamConfigBase<>))
+                    {
+                        var genericArgs = baseType.GetGenericArguments();
+                        var paramType = genericArgs[0];
+
+                        _cachedCueParamTypeToCueParamConfigTypeMap[paramType] = derivedType;
+                    }
+                }
+            }
+
+            return _cachedCueParamTypeToCueParamConfigTypeMap;
+        }
         
         public static Dictionary<string, Type> GetCachedCueToCueParamConfigTypeMap()
         {
@@ -18,8 +65,11 @@ namespace GAS.Editor
             var instantTypes = GetCachedInstantCueTypes();
             var durationalTypes = GetCachedDurationalCueTypes();
             _cachedCueToCueParamConfigTypeMap = new Dictionary<string, Type>();
+
+            var allTypes = new List<Type>(instantTypes);
+            allTypes.AddRange(durationalTypes);
             
-            foreach (var derivedType in instantTypes)
+            foreach (var derivedType in allTypes)
             {
                 var baseType = derivedType.BaseType; // 获取基类类型
 
@@ -29,7 +79,7 @@ namespace GAS.Editor
                     var genericBaseDef = baseType.GetGenericTypeDefinition();
 
                     // 确认是否是所需的基类泛型定义
-                    if (genericBaseDef == typeof(CueInstant<>))
+                    if (genericBaseDef == typeof(CueInstant<>)||genericBaseDef == typeof(CueDurational<>))
                     {
                         // 获取实际使用的泛型参数（如 MmcParamString）
                         var genericArgs = baseType.GetGenericArguments();
@@ -37,13 +87,12 @@ namespace GAS.Editor
 
                         if (derivedType.FullName != null)
                         {
-                            var param2ParamConfigMap = GetCachedMmcParamTypeToMmcParamConfigTypeMap();
-                            if (!param2ParamConfigMap.ContainsKey(paramType))
+                            var param2ParamConfigMap = GetCachedCueParamTypeToCueParamConfigTypeMap();
+                            if (!param2ParamConfigMap.TryGetValue(paramType, out var value))
                                 EXEditorHelper.ShowNotification(
-                                    $"未找到对应的能力参数配置，请检查类【{derivedType.FullName}】是否继承自MmcParamConfigBase<T>");
+                                    $"未找到对应的能力参数配置，请检查类【{derivedType.FullName}】是否继承自CueParamConfigBase<T>");
                             else
-                                _cachedCueToCueParamConfigTypeMap[derivedType.FullName] =
-                                    param2ParamConfigMap[paramType];
+                                _cachedCueToCueParamConfigTypeMap[derivedType.FullName] = value;
                         }
                     }
                 }
@@ -86,6 +135,45 @@ namespace GAS.Editor
                 .ToList();
 
             return _cachedInstantCueTypes;
+        }
+        
+        #endregion
+        
+        
+        #region Durational Cue
+        
+        private static ValueDropdownItem[] _durationalCueChoices;
+        private static IEnumerable<Type> _cachedDurationalCueTypes;
+
+        public static IEnumerable<ValueDropdownItem> DurationalCueChoices
+        {
+            get
+            {
+                if (_durationalCueChoices == null || _durationalCueChoices.Length == 0)
+                {
+                    var types = GetCachedDurationalCueTypes();
+                    _durationalCueChoices = types
+                        .Select(type => new ValueDropdownItem(type.Name, type.FullName))
+                        .ToArray();
+                }
+
+                return _durationalCueChoices;
+            }
+        }
+        
+        public static IEnumerable<Type> GetCachedDurationalCueTypes()
+        {
+            if (_cachedDurationalCueTypes != null) return _cachedDurationalCueTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedDurationalCueTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(CueDurational)) &&
+                    !type.IsAbstract
+                )
+                .ToList();
+
+            return _cachedDurationalCueTypes;
         }
         
         #endregion

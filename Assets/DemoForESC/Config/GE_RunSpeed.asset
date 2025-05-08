@@ -18,6 +18,22 @@ MonoBehaviour:
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetEffectDuration
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.MCConfAssetModifiers
     - GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset.ConfAssetCueOnAdd
+    ConfAssetCueOnAdd:
+      cues:
+      - requiredTags: 
+        immunityTags: 
+        MMC:
+          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone
+          _jsonMmcParamConfig:
+            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
+            Data: '{}'
+      - requiredTags: 
+        immunityTags: 
+        MMC:
+          MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone
+          _jsonMmcParamConfig:
+            TypeFullName: GAS.RuntimeDataHelper.GameplayEffect.MmcParam.MmcParamConfigNone
+            Data: '{}'
     ConfAssetEffectApplicationRequiredTags:
       tags: 
     ConfAssetEffectAssetTags:
