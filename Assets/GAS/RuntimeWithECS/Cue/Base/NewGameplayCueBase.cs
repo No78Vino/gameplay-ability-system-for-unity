@@ -83,5 +83,7 @@ namespace GAS.RuntimeWithECS.Cue
         {
             _p.SourceType = sourceType;
         }
+        
+        public abstract void InitParameters(ICueParameter parameter);
     }
 }

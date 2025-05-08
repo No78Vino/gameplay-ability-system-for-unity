@@ -11,20 +11,12 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
     [Serializable]
     public class ConfAssetCueOnAdd: BaseGameplayEffectComponentConfigAsset
     {
-        [TabGroup("Modifiers","添加时Cue",SdfIconType.TagsFill)]
-        [LabelText("")]
+        [TabGroup("Cue","添加时Cue",SdfIconType.MusicNote)]
+        [LabelText(" ")]
         [SerializeField] 
         [ListDrawerSettings]
         public List<InstantCueSetting> cues = new();
-        
-        // public override GameplayEffectComponentConfig GetConfig()
-        // {
-        //     return new MCConfModifiers()
-        //     {
-        //         modifierSettings = modifiers.ToArray()
-        //     };
-        // }
-        
+
         // TODO
         public override GameplayEffectComponentConfig GetConfig()
         {
