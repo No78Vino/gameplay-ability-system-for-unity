@@ -293,7 +293,7 @@ namespace GAS.Runtime
             // TODO
         }
         
-        // TODO 激活 CueOnAdd
+        // TODO 激活 CueOnActivation
         private void TriggerOnActivation(Entity gameplayEffect,Entity targetAsc)
         {
             // TriggerCueOnActivation();

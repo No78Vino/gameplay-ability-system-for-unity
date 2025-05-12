@@ -16,11 +16,13 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         [SerializeField] 
         [ListDrawerSettings]
         public List<InstantCueSetting> cues = new();
-
-        // TODO
+        
         public override GameplayEffectComponentConfig GetConfig()
         {
-            return new ConfCueOnAdd();
+            return new ConfCueOnAdd()
+            {
+                cues = cues.ToArray()
+            };
         }
     }
 }

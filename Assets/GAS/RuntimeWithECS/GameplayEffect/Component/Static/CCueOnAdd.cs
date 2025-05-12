@@ -1,30 +1,50 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.Cue.Component;
 using Unity.Collections;
 using Unity.Entities;
-using NotImplementedException = System.NotImplementedException;
 
 namespace GAS.RuntimeWithECS.GameplayEffect.Component
 {
     public struct CCueOnAdd : IComponentData
     {
+        /// <summary>
+        ///     cue entity
+        /// </summary>
         public NativeArray<Entity> cues;
     }
-    
-    public sealed class ConfCueOnAdd:GameplayEffectComponentConfig
+
+    public sealed class ConfCueOnAdd : GameplayEffectComponentConfig
     {
-        public CueInstant[] cues;
-        
+        public InstantCueSetting[] cues;
+
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            Entity[] entities = new Entity[cues.Length];
-            for (int i = 0; i < cues.Length; i++)
+            var entities = new Entity[cues.Length];
+            for (var i = 0; i < cues.Length; i++)
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
+                var c = cues[i];
                 GASManager.EntityManager.AddComponent<MCInstantCue>(entities[i]);
-                GASManager.EntityManager.SetComponentData(entities[i],new MCInstantCue(cues[i]));
+                GASManager.EntityManager.SetComponentData(entities[i], new MCInstantCue(c.cue.CreateCue()));
+                if (c.immunityTags.Count > 0)
+                {
+                    GASManager.EntityManager.AddComponent<CPlayImmunitedTags>(entities[i]);
+                    GASManager.EntityManager.SetComponentData(entities[i], new CPlayImmunitedTags
+                    {
+                        tags = new NativeArray<int>(c.immunityTags.ToArray(), Allocator.Persistent)
+                    });
+                }
+
+                if (c.requiredTags.Count > 0)
+                {
+                    GASManager.EntityManager.AddComponent<CPlayRequiredTags>(entities[i]);
+                    GASManager.EntityManager.SetComponentData(entities[i], new CPlayRequiredTags
+                    {
+                        tags = new NativeArray<int>(c.requiredTags.ToArray(), Allocator.Persistent)
+                    });
+                }
             }
+
             _entityManager.AddComponentData(ge, new CCueOnAdd
             {
                 cues = new NativeArray<Entity>(entities, Allocator.Persistent)
@@ -33,13 +53,32 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
         public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
         {
-            Entity[] entities = new Entity[cues.Length];
-            for (int i = 0; i < cues.Length; i++)
+            var entities = new Entity[cues.Length];
+            for (var i = 0; i < cues.Length; i++)
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
+                var c = cues[i];
                 ecb.AddComponent<MCInstantCue>(entities[i]);
-                ecb.SetComponent(entities[i],new MCInstantCue(cues[i]));
+                ecb.SetComponent(entities[i], new MCInstantCue(c.cue.CreateCue()));
+                if (c.immunityTags.Count > 0)
+                {
+                    ecb.AddComponent<CPlayImmunitedTags>(entities[i]);
+                    ecb.SetComponent(entities[i], new CPlayImmunitedTags
+                    {
+                        tags = new NativeArray<int>(c.immunityTags.ToArray(), Allocator.Persistent)
+                    });
+                }
+
+                if (c.requiredTags.Count > 0)
+                {
+                    ecb.AddComponent<CPlayRequiredTags>(entities[i]);
+                    ecb.SetComponent(entities[i], new CPlayRequiredTags
+                    {
+                        tags = new NativeArray<int>(c.requiredTags.ToArray(), Allocator.Persistent)
+                    });
+                }
             }
+
             ecb.AddComponent(ge, new CCueOnAdd
             {
                 cues = new NativeArray<Entity>(entities, Allocator.Persistent)
