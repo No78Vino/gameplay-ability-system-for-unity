@@ -88,5 +88,7 @@ namespace GAS.RuntimeWithECS.Cue
         }
         
         public abstract void InitParameters(ICueParameter parameter);
+
+        public abstract void Reset();
     }
 }

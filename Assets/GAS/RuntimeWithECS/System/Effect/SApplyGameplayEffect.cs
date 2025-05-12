@@ -3,6 +3,7 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Common.Component;
+using GAS.RuntimeWithECS.Cue.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
@@ -222,7 +223,7 @@ namespace GAS.Runtime
             
             targetAsc.TryAddGameplayEffect(gameplayEffect);
 
-            TriggerCueOnAdd(gameplayEffect,targetAsc);
+            TriggerCueOnAdd(gameplayEffect,targetAsc,entityManager,ecb);
             
             if (entityManager.HasComponent<CEffectApplied>(gameplayEffect)) return;
             ecb.AddComponent<CEffectApplied>(gameplayEffect);
@@ -288,13 +289,31 @@ namespace GAS.Runtime
         }
         
         // TODO 激活 CueOnAdd
-        private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc)
+        private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager,EntityCommandBuffer ecb)
         {
             // TODO
-            // 1.先判断tag是否可以播放cue
-            
-            // 2.激活Cue
-            
+            if (!entityManager.HasComponent<CCueOnAdd>(gameplayEffect)) return;
+
+            var cues = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect).cues;
+            foreach (var cueEntity in cues)
+            {
+                // 1.先判断tag是否可以播放cue
+                if (entityManager.HasComponent<CPlayRequiredTags>(cueEntity))
+                {
+                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(cueEntity);
+                    if(!ASCUtil.HasAllTags(targetAsc,requiredTags.tags)) continue;
+                }
+                if (entityManager.HasComponent<CPlayImmunitedTags>(cueEntity))
+                {
+                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(cueEntity);
+                    if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
+                }
+                // 2.重置Cue逻辑单元
+                var cueLogic = entityManager.GetComponentData<MCInstantCue>(cueEntity);
+                cueLogic.cue.Reset();
+                // 3.挂载激活Cue Tag
+                ecb.AddComponent<CCuePlaying>(cueEntity);
+            }
         }
         
         // TODO 激活 CueOnActivation

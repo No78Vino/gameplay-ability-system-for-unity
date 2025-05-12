@@ -20,5 +20,10 @@ namespace GAS.Runtime
         public CueLog(Entity sourceEntity, CueSourceType sourceType, CueParamString parameter) : base(sourceEntity, sourceType, parameter)
         {
         }
+
+        public override void Reset()
+        {
+            
+        }
     }
 }
