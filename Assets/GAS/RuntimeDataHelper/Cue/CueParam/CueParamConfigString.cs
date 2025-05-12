@@ -8,7 +8,9 @@ namespace GAS.Editor
     public class CueParamConfigString : CueParamConfigBase<CueParamString>
     {
         [LabelText("文本")]
+        [OnValueChanged(nameof(OnParamValueChange))]
         public string message;
+        
         public override ICueParameter GetConfig()
         {
             return new CueParamString(message);

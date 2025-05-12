@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GAS.Editor;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeDataHelper.GameplayEffect;
@@ -33,13 +34,15 @@ public static class JsonProxyHelper
         var abstractEffectComponentType = typeof(BaseGameplayEffectComponentConfigAsset);
         var abstractAbilityParamConfigType = typeof(AbilityParamConfigBase);
         var abstractMmcParamConfigType = typeof(MmcParamConfigBase);
+        var abstractCueParamConfigType = typeof(CueParamConfigBase);
         foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()))
         {
             if (type.IsAbstract) continue;
             if (!abstractAbilityComponentType.IsAssignableFrom(type) 
                 && !abstractEffectComponentType.IsAssignableFrom(type)
                 && !abstractAbilityParamConfigType.IsAssignableFrom(type)
-                && !abstractMmcParamConfigType.IsAssignableFrom(type) ) continue;
+                && !abstractMmcParamConfigType.IsAssignableFrom(type)
+                && !abstractCueParamConfigType.IsAssignableFrom(type) ) continue;
             if (type.FullName != null) _typeCache[type.FullName] = type;
         }
 
