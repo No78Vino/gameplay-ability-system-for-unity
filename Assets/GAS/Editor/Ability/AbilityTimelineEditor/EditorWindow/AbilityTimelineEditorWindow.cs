@@ -26,7 +26,6 @@ namespace GAS.Editor
 
         public TimelineInspector TimelineInspector { get; private set; }
 
-        private static EditorWindow _childInspector;
 
         public void CreateGUI()
         {
@@ -43,6 +42,9 @@ namespace GAS.Editor
             TimerShaftView = new TimerShaftView(_root);
             TrackView = new TimelineTrackView(_root);
             TimelineInspector = new TimelineInspector(_root);
+            InitClipInspector();
+            InitSplitter();
+            InitSyncScrollViews();
         }
 
         /// <summary>
@@ -53,14 +55,15 @@ namespace GAS.Editor
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
             wnd.InitAbility(asset);
-
-            // 打开子Inspector
-            EditorApplication.delayCall += () => wnd.ShowChildInspector();
         }
 
         public void Save()
         {
-            AbilityAsset.Save();
+            // Debug.Log("数据保存了！");
+            // Undo.RecordObject(AbilityAsset, "Change Audio Clip");
+            // EditorUtility.SetDirty(AbilityAsset); // 标记资产已修改
+            DirtyManager.MarkDirty(AbilityAsset);
+            // AbilityAsset.Save(); //标脏后依托unity 的自动保存处理机制不需要手动保存 需要立即生效的修改再调用目前暂时不需要
         }
 
         private void InitAbility(TimelineAbilityAssetBase asset)
@@ -76,6 +79,20 @@ namespace GAS.Editor
         {
             EditorUtility.SetDirty(AbilityAsset);
             AssetDatabase.SaveAssetIfDirty(AbilityAsset);
+        }
+
+        private void OnDestroy()
+        {
+            // DragSplitter
+            splitter.UnregisterCallback<MouseDownEvent>(OnSplitterMouseDown);
+            splitter.UnregisterCallback<MouseUpEvent>(OnSplitterMouseUp);
+            splitter.UnregisterCallback<MouseMoveEvent>(OnSplitterMouseMove);
+            EditorPrefs.SetFloat("InspectorWidth", rightPanel.resolvedStyle.width);
+
+            // ClipInspector
+            if (cachedEditor != null)
+                DestroyImmediate(cachedEditor);
+            Selection.selectionChanged -= UpdateClipInspector;
         }
 
         #region Config
@@ -139,23 +156,8 @@ namespace GAS.Editor
             BtnBackToScene = _root.Q<Button>(nameof(BtnBackToScene));
             BtnBackToScene.clickable.clicked += BackToScene;
 
-            BtnChildInspector = _root.Q<Button>(nameof(BtnChildInspector));
-            BtnChildInspector.clickable.clicked += ShowChildInspector;
-
             _previewObjectField = _root.Q<ObjectField>("PreviewInstance");
             _previewObjectField.RegisterValueChangedCallback(OnPreviewObjectChanged);
-        }
-
-        private void ShowChildInspector()
-        {
-            if (_childInspector == null)
-            {
-                _childInspector = GetInspectTarget();
-                _childInspector.Show();
-            }
-
-            EditorApplication.delayCall += () =>
-                DockUtilities.DockWindow(this, _childInspector, DockUtilities.DockPosition.Right);
         }
 
         private void OnPreviewObjectChanged(ChangeEvent<Object> evt)
@@ -177,14 +179,16 @@ namespace GAS.Editor
         {
             // 记录当前Scene
             _previousScenePath = SceneManager.GetActiveScene().path;
+            EditorSceneManager.OpenScene("Assets/0_Unicorn/EditRes/pveEditor.unity");
+
             // 创建一个新的Scene
-            var newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            //var newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             // 在这里添加临时预览的内容，例如放置一些对象
             // 这里只是演示，具体可以根据需求添加你的内容
             // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             // SceneManager.MoveGameObjectToScene(cube, newScene);
             // 激活新创建的Scene
-            SceneManager.SetActiveScene(newScene);
+            //SceneManager.SetActiveScene(newScene);
         }
 
         #endregion
@@ -198,7 +202,7 @@ namespace GAS.Editor
         public int CurrentMaxFrame
         {
             get => _currentMaxFrame;
-            private set
+            set
             {
                 if (AbilityAsset == null)
                 {
@@ -253,6 +257,7 @@ namespace GAS.Editor
         private Button BtnPlay;
         private Button BtnLeftFrame;
         private Button BtnRightFrame;
+        private Button BtnLoop;
         private IntegerField CurrentFrame;
         private IntegerField MaxFrame;
 
@@ -266,6 +271,9 @@ namespace GAS.Editor
 
             BtnRightFrame = _root.Q<Button>(nameof(BtnRightFrame));
             BtnRightFrame.clickable.clicked += OnRightFrame;
+
+            BtnLoop = _root.Q<Button>(nameof(BtnLoop));
+            BtnLoop.clickable.clicked += OnSetloop;
 
             CurrentFrame = _root.Q<IntegerField>(nameof(CurrentFrame));
             CurrentFrame.RegisterValueChangedCallback(OnCurrentFrameChanged);
@@ -287,12 +295,12 @@ namespace GAS.Editor
 
         private void RefreshPlayButton()
         {
-            BtnPlay.text = !IsPlaying ? "▶" : "⏹";
+            BtnPlay.text = !IsPlaying ? "▶" : "■";
             BtnPlay.style.backgroundColor =
                 !IsPlaying ? new Color(0.5f, 0.5f, 0.5f, 0.5f) : new Color(0.1f, 0.8f, 0.1f, 0.5f);
         }
 
-        private void OnPlay()
+        public void OnPlay()
         {
             if (AbilityAsset == null) return;
             IsPlaying = !IsPlaying;
@@ -310,6 +318,11 @@ namespace GAS.Editor
             if (AbilityAsset == null) return;
             IsPlaying = false;
             CurrentSelectFrameIndex += 1;
+        }
+
+        private void OnSetloop()
+        {
+            IsLoop = !IsLoop;
         }
 
         #endregion
@@ -331,21 +344,36 @@ namespace GAS.Editor
         private DateTime _startTime;
         private int _startPlayFrameIndex;
         private bool _isPlaying;
+        private bool _isLoop;
 
         public bool IsPlaying
         {
             get => _isPlaying;
             private set
             {
-                _isPlaying = CanPlay() && value;
-
+                //_isPlaying = CanPlay() && value;
+                _isPlaying = value;
                 if (_isPlaying)
                 {
                     _startTime = DateTime.Now;
+                    if (CurrentSelectFrameIndex == CurrentMaxFrame)
+                    {
+                        CurrentSelectFrameIndex = 0;
+                    }
                     _startPlayFrameIndex = CurrentSelectFrameIndex;
                 }
 
                 RefreshPlayButton();
+            }
+        }
+
+        public bool IsLoop
+        {
+            get => _isLoop;
+            private set
+            {
+                _isLoop = value;
+                BtnLoop.style.backgroundColor = value ? new Color(0.1f, 0.8f, 0.1f, 0.5f) : new Color(0.5f, 0.5f, 0.5f, 0.5f);
             }
         }
 
@@ -355,10 +383,16 @@ namespace GAS.Editor
             {
                 var deltaTime = (DateTime.Now - _startTime).TotalSeconds;
                 var frameIndex = (int)(deltaTime * Config.DefaultFrameRate) + _startPlayFrameIndex;
-                if (frameIndex >= CurrentMaxFrame)
+                if (frameIndex > CurrentMaxFrame)
                 {
-                    frameIndex = CurrentMaxFrame;
-                    IsPlaying = false;
+                    if (IsLoop)
+                    {
+                        frameIndex = 0;
+                        _startPlayFrameIndex = 0;
+                        _startTime = DateTime.Now;
+                    }
+                    else
+                        IsPlaying = false;
                 }
 
                 CurrentSelectFrameIndex = frameIndex;
@@ -381,17 +415,152 @@ namespace GAS.Editor
 
         #endregion
 
+        #region DragSplitter
 
-        #region Another Inspector
+        private VisualElement splitter;
+        private VisualElement leftPanel;
+        private VisualElement rightPanel;
+        private bool isDragging;
+        private float initialMouseX;
+        private float initialLeftWidth;
 
-        private static EditorWindow GetInspectTarget(Object targetGO = null)
+        // 添加初始化分隔条的方法
+        private void InitSplitter()
         {
-            Type inspectorType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.InspectorWindow");
-            EditorWindow inspectorInstance = CreateInstance(inspectorType) as EditorWindow;
-            if (targetGO) Selection.activeObject = targetGO;
-            return inspectorInstance;
+            splitter = _root.Q<VisualElement>("Splitter");
+            leftPanel = _root.Q<VisualElement>("LeftPanel");
+            rightPanel = _root.Q<VisualElement>("InspectorPanel");
+
+            // 加载保存的宽度
+            rightPanel.style.width = EditorPrefs.GetFloat("InspectorWidth", 400);
+
+            // 绑定事件
+            splitter.RegisterCallback<MouseDownEvent>(OnSplitterMouseDown);
+            splitter.RegisterCallback<MouseUpEvent>(OnSplitterMouseUp);
+            splitter.RegisterCallback<MouseMoveEvent>(OnSplitterMouseMove);
+        }
+
+        // 添加事件处理方法
+        private void OnSplitterMouseDown(MouseDownEvent evt)
+        {
+            if (evt.button == 0)
+            {
+                isDragging = true;
+                initialMouseX = evt.mousePosition.x;
+                initialLeftWidth = leftPanel.resolvedStyle.width;
+                splitter.CaptureMouse();
+                evt.StopPropagation();
+            }
+        }
+
+        private void OnSplitterMouseUp(MouseUpEvent evt)
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                splitter.ReleaseMouse();
+                evt.StopPropagation();
+                EditorPrefs.SetFloat("InspectorWidth", rightPanel.resolvedStyle.width);
+            }
+        }
+
+        private void OnSplitterMouseMove(MouseMoveEvent evt)
+        {
+            if (isDragging)
+            {
+                float delta = evt.mousePosition.x - initialMouseX;
+                float newLeftWidth = initialLeftWidth + delta;
+                float newRightWidth = rootVisualElement.resolvedStyle.width - newLeftWidth - splitter.resolvedStyle.width;
+
+                newRightWidth = Mathf.Clamp(newRightWidth, 200, 600);
+                rightPanel.style.width = newRightWidth;
+
+                evt.StopPropagation();
+            }
         }
 
         #endregion
+
+        #region ClipInspector
+
+        private IMGUIContainer inspectorContainer;
+        private UnityEditor.Editor cachedEditor;
+
+        public void InitClipInspector()
+        {
+            // 获取ClipInspector容器
+            inspectorContainer = _root.Q<IMGUIContainer>("NativeInspector");
+
+            if (Selection.activeObject != null)
+            {
+                if (cachedEditor != null)
+                    DestroyImmediate(cachedEditor);
+                cachedEditor = UnityEditor.Editor.CreateEditor(Selection.activeObject);
+            }
+
+            inspectorContainer.onGUIHandler = DrawInspectorGUI;
+
+            // 监听选中对象变化
+            Selection.selectionChanged += UpdateClipInspector;
+        }
+
+        private void UpdateClipInspector()
+        {
+            // 当选中对象变化时更新
+            if (Selection.activeObject != null && Selection.activeObject.GetType().Namespace.StartsWith("GAS.Editor"))
+            {
+                if (cachedEditor != null)
+                    DestroyImmediate(cachedEditor);
+                cachedEditor = UnityEditor.Editor.CreateEditor(Selection.activeObject);
+                //Debug.Log("SelectionOBJ = "+ Selection.activeObject.GetType().Namespace.StartsWith("GAS.Editor")+" == " + Selection.activeObject.GetType());
+            }
+
+            // 触发重绘
+            inspectorContainer.MarkDirtyRepaint();
+        }
+
+        private void DrawInspectorGUI()
+        {
+            if (cachedEditor != null)
+            {
+                cachedEditor.OnInspectorGUI();
+            }
+            else
+            {
+                GUILayout.Label("No object selected", EditorStyles.centeredGreyMiniLabel);
+            }
+        }
+        #endregion
+
+        #region SyncScrollViews
+
+        private ScrollView trackMenuScroll;
+        private ScrollView mainContentScroll;
+        private void InitSyncScrollViews()
+        {
+            trackMenuScroll = _root.Q<ScrollView>("TrackMenuScroll");
+            mainContentScroll = _root.Q<ScrollView>("MainContent");
+
+            // 监听 TrackMenuScroll 的滚动事件
+            trackMenuScroll.verticalScroller.valueChanged += value =>
+            {
+                if (Math.Abs(mainContentScroll.verticalScroller.value - value) > 0.01f)
+                {
+                    mainContentScroll.verticalScroller.value = value;
+                }
+            };
+
+            // 监听 MainContentScroll 的滚动事件
+            mainContentScroll.verticalScroller.valueChanged += value =>
+            {
+                if (Math.Abs(trackMenuScroll.verticalScroller.value - value) > 0.01f)
+                {
+                    trackMenuScroll.verticalScroller.value = value;
+                }
+            };
+        }
+
+        #endregion
+
     }
 }
