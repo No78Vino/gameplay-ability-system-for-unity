@@ -288,10 +288,9 @@ namespace GAS.Runtime
             return ASCUtil.HasAllTags(targetAsc,ongoingRequiredTags.tags);
         }
         
-        // TODO 激活 CueOnAdd
+        // 激活 CueOnAdd
         private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager,EntityCommandBuffer ecb)
         {
-            // TODO
             if (!entityManager.HasComponent<CCueOnAdd>(gameplayEffect)) return;
 
             var cues = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect).cues;
@@ -312,7 +311,8 @@ namespace GAS.Runtime
                 var cueLogic = entityManager.GetComponentData<MCInstantCue>(cueEntity);
                 cueLogic.cue.Reset();
                 // 3.挂载激活Cue Tag
-                ecb.AddComponent<CCuePlaying>(cueEntity);
+                if(!entityManager.HasComponent<CCuePlaying>(cueEntity))
+                    ecb.AddComponent<CCuePlaying>(cueEntity);
             }
         }
         
