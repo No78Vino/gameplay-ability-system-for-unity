@@ -291,6 +291,10 @@ namespace GAS.Runtime
         private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc)
         {
             // TODO
+            // 1.先判断tag是否可以播放cue
+            
+            // 2.激活Cue
+            
         }
         
         // TODO 激活 CueOnActivation

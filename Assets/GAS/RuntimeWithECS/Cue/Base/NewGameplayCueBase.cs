@@ -70,10 +70,16 @@ namespace GAS.RuntimeWithECS.Cue
 
         protected Entity _sourceEntity;
         protected CueSourceType _sourceType;
+        protected Entity _targetAscEntity;
         
         public void SetSourceEntity(Entity e)
         {
             _sourceEntity = e;
+        }
+        
+        public void SetTargetAscEntity(Entity e)
+        {
+            _targetAscEntity = e;
         }
         
         public void SetSourceType(CueSourceType sourceType)
