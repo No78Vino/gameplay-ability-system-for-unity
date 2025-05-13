@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using GAS.Editor;
 using GAS.RuntimeWithECS.Cue;
+using Unity.Burst;
+using Unity.Entities;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -59,7 +61,7 @@ namespace GAS.Runtime
             CueTypeMap[sType] = logicType;
         }
 
-        public static Type GetMmcType(string sType)
+        public static Type GetCueType(string sType)
         {
             return CueTypeMap[sType];
         }
@@ -70,5 +72,19 @@ namespace GAS.Runtime
         }
 
         #endregion
+
+        [BurstCompile]
+        public static void StopCue(Entity cueEntity,EntityManager entityManager)
+        {
+            if (entityManager.IsComponentEnabled<ECCuePlaying>(cueEntity))
+                entityManager.SetComponentEnabled<ECCuePlayable>(cueEntity,false);
+        }
+        
+        [BurstCompile]
+        public static void PlayCue(Entity cueEntity,EntityManager entityManager)
+        {
+            if (!entityManager.IsComponentEnabled<ECCuePlaying>(cueEntity))
+                entityManager.SetComponentEnabled<ECCuePlayable>(cueEntity,true);
+        }
     }
 }
