@@ -73,6 +73,21 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 var c = cues[i];
                 ecb.AddComponent<MCInstantCue>(entities[i]);
+                
+                // Cue是否播放组件
+                ecb.AddComponent<ECCuePlayable>(entities[i]);
+                ecb.SetComponentEnabled<ECCuePlayable>(entities[i],false);
+                
+                // Cue是否播放组件
+                ecb.AddComponent<ECCuePlaying>(entities[i]);
+                ecb.SetComponentEnabled<ECCuePlaying>(entities[i],false);
+                
+                // Cue逻辑
+                ecb.AddComponent<MCInstantCue>(entities[i]);
+                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCInstantCue(c.cue.CreateCue()),entities[i],ge);
+                ecb.SetComponent(entities[i], instantCue);
+                
+                
                 ecb.SetComponent(entities[i], new MCInstantCue(c.cue.CreateCue()));
                 if (c.immunityTags.Count > 0)
                 {

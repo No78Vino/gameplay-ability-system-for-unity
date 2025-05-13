@@ -54,17 +54,8 @@ namespace GAS.RuntimeWithECS.Cue
         [LabelText("ImmunityTags - 持有任意标签不可触发")]
         public GameplayTag[] ImmunityTags;
 
-        public virtual bool Triggerable()
+        protected virtual bool Triggerable()
         {
-            // if (owner == null) return false;
-            // // 持有【所有】RequiredTags才可触发
-            // if (!owner.HasAllTags(new GameplayTagSet(RequiredTags)))
-            //     return false;
-            //
-            // // 持有【任意】ImmunityTags不可触发
-            // if (owner.HasAnyTags(new GameplayTagSet(ImmunityTags)))
-            //     return false;
-
             return true;
         }
 

@@ -5,7 +5,7 @@ namespace GAS.Runtime
 {
     [DisableAutoCreation]
     [UpdateInGroup(typeof(SysGroupDisplay))]
-    [UpdateAfter(typeof(SCueEnd))]
+    [UpdateAfter(typeof(SCueTick))]
     public partial struct SCueEnd : ISystem
     {
         [BurstCompile]
