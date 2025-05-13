@@ -310,6 +310,7 @@ namespace GAS.Runtime
                 // 2.重置Cue逻辑单元
                 var cueLogic = entityManager.GetComponentData<MCInstantCue>(cueEntity);
                 cueLogic.cue.Reset();
+                cueLogic.cue.SetTargetAscEntity(targetAsc);
                 // 3.激活CuePlaying
                 entityManager.SetComponentEnabled<ECCuePlayable>(cueEntity,true);
                 entityManager.SetComponentEnabled<ECCuePlaying>(cueEntity,false);

@@ -1,4 +1,5 @@
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.Cue.Component;
 using Unity.Collections;
 using Unity.Entities;
@@ -34,7 +35,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 
                 // Cue逻辑
                 GASManager.EntityManager.AddComponent<MCInstantCue>(entities[i]);
-                GASManager.EntityManager.SetComponentData(entities[i], new MCInstantCue(c.cue.CreateCue()));
+                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCInstantCue(c.cue.CreateCue()),entities[i],ge);
+                GASManager.EntityManager.SetComponentData(entities[i], instantCue);
                 
                 // cue播放免疫tag
                 if (c.immunityTags.Count > 0)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GAS.Editor;
 using GAS.RuntimeWithECS.Cue;
+using GAS.RuntimeWithECS.Cue.Component;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
@@ -85,6 +86,14 @@ namespace GAS.Runtime
         {
             if (!entityManager.IsComponentEnabled<ECCuePlaying>(cueEntity))
                 entityManager.SetComponentEnabled<ECCuePlayable>(cueEntity,true);
+        }
+
+        public static MCInstantCue InitInstantCueFromGameplayEffect(MCInstantCue instantCue,Entity cueEntity,Entity ge)
+        {
+            instantCue.cue.SetSourceEntity(ge);
+            instantCue.cue.SetSourceType(CueSourceType.GameplayEffect);
+            instantCue.cue.SetCueEntity(cueEntity);
+            return instantCue;
         }
     }
 }

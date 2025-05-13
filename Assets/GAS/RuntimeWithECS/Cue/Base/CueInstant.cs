@@ -30,12 +30,5 @@ namespace GAS.RuntimeWithECS.Cue
                 Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {parameter.GetType()}");
 #endif
         }
-        
-        public CueInstant(Entity sourceEntity,CueSourceType sourceType,T parameter)
-        {
-            _sourceType = sourceType;
-            _sourceEntity = sourceEntity;
-            Parameter = parameter;
-        }
     }
 }

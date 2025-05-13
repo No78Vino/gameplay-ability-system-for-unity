@@ -8,6 +8,7 @@ namespace DemoForESC._Script.Gen
         {
             GEN_AbilityCode.LoadAbilityCode();
             GEN_MmcCode.LoadMmcType();
+            GEN_CueCode.LoadCueType();
         }
         
         public static void Launch()

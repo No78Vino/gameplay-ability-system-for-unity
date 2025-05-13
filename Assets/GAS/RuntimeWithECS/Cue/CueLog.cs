@@ -17,10 +17,6 @@ namespace GAS.Runtime
             Parameter.SetValue(message);
         }
 
-        public CueLog(Entity sourceEntity, CueSourceType sourceType, CueParamString parameter) : base(sourceEntity, sourceType, parameter)
-        {
-        }
-
         public override void Reset()
         {
             

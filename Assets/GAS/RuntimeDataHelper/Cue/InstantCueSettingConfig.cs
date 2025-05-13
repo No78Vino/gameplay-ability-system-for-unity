@@ -32,11 +32,7 @@ namespace GAS.Editor
         
         public CueInstant CreateCue()
         {
-            var typeMap = EditGameplayEffectHelper.GetCachedMmcToMmcParamConfigTypeMap();
-            CueParamConfigBase config = null;
-            if (typeMap.TryGetValue(CueType, out var value))
-                config = Activator.CreateInstance(value) as CueParamConfigBase;
-            
+            var config = JsonProxyHelper.Deserialize<CueParamConfigBase>(_jsonCueParamConfig);
             return CueHelper.TryCreateInstantCue(CueType,config);
         }
         
