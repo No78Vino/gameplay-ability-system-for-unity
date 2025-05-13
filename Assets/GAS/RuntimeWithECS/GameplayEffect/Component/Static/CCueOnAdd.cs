@@ -24,8 +24,15 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 var c = cues[i];
+                // Cue是否播放组件
+                GASManager.EntityManager.AddComponent<ECCuePlaying>(entities[i]);
+                GASManager.EntityManager.SetComponentEnabled<ECCuePlaying>(entities[i],false);
+                
+                // Cue逻辑
                 GASManager.EntityManager.AddComponent<MCInstantCue>(entities[i]);
                 GASManager.EntityManager.SetComponentData(entities[i], new MCInstantCue(c.cue.CreateCue()));
+                
+                // cue播放免疫tag
                 if (c.immunityTags.Count > 0)
                 {
                     GASManager.EntityManager.AddComponent<CPlayImmunitedTags>(entities[i]);
@@ -35,6 +42,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                     });
                 }
 
+                // cue播放需求tag
                 if (c.requiredTags.Count > 0)
                 {
                     GASManager.EntityManager.AddComponent<CPlayRequiredTags>(entities[i]);

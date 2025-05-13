@@ -68,9 +68,15 @@ namespace GAS.RuntimeWithECS.Cue
             return true;
         }
 
+        protected Entity _cueEntity;
         protected Entity _sourceEntity;
         protected CueSourceType _sourceType;
         protected Entity _targetAscEntity;
+        
+        public void SetCueEntity(Entity e)
+        {
+            _cueEntity = e;
+        }
         
         public void SetSourceEntity(Entity e)
         {
@@ -90,5 +96,10 @@ namespace GAS.RuntimeWithECS.Cue
         public abstract void InitParameters(ICueParameter parameter);
 
         public abstract void Reset();
+
+        public void StopPlaying()
+        {
+            GASManager.EntityManager.IsComponentEnabled<ECCuePlaying>(_cueEntity);
+        }
     }
 }
