@@ -3,9 +3,9 @@
 namespace GAS.Runtime
 {
     /// <summary>
-    /// cue 播放中标签
+    /// Cue可播放
     /// </summary>
-    public struct ECCuePlaying : IComponentData, IEnableableComponent
+    public struct ECCuePlayable : IComponentData,IEnableableComponent
     {
         
     }

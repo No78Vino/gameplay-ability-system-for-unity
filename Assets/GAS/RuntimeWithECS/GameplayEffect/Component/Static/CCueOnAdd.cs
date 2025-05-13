@@ -25,6 +25,10 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 var c = cues[i];
                 // Cue是否播放组件
+                GASManager.EntityManager.AddComponent<ECCuePlayable>(entities[i]);
+                GASManager.EntityManager.SetComponentEnabled<ECCuePlayable>(entities[i],false);
+                
+                // Cue是否播放组件
                 GASManager.EntityManager.AddComponent<ECCuePlaying>(entities[i]);
                 GASManager.EntityManager.SetComponentEnabled<ECCuePlaying>(entities[i],false);
                 

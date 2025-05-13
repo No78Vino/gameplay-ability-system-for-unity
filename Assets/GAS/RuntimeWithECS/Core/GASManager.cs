@@ -60,6 +60,7 @@ namespace GAS.Runtime
             sgSimulation.AddSystemToUpdateList(sgFixedStepSimulation);
 
             // 创建系统组
+            // 逻辑帧 系统组
             var sgLogic = ExWorld.CreateSystemManaged<SysGroupLogic>();
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogic);
 
@@ -77,6 +78,11 @@ namespace GAS.Runtime
             var sgTickGameplayEffect = ExWorld.CreateSystemManaged<SysGroupTickGameplayEffect>();
             sgLogicTick.AddSystemToUpdateList(sgTickAbility);
             sgLogicTick.AddSystemToUpdateList(sgTickGameplayEffect);
+            
+            // 表现帧 系统组
+            var sgDisplay = ExWorld.CreateSystemManaged<SysGroupDisplay>();
+            sgSimulation.AddSystemToUpdateList(sgDisplay);
+            sgSimulation.SortSystems();
             
             // 创建系统
             // Core
@@ -110,6 +116,12 @@ namespace GAS.Runtime
             sgTickGameplayEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectPeriodTick>());
             sgTickGameplayEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectStackingTick>());
             sgTickGameplayEffect.SortSystems();
+            
+            // Cue
+            sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueStart>());
+            sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueTick>());
+            sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueEnd>());
+            sgDisplay.SortSystems();
             
             // 将world更新同步PlayerLoop
             ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);

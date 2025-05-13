@@ -1,21 +1,23 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
 
-namespace GAS.Runtime.Cue
+namespace GAS.Runtime
 {
     [DisableAutoCreation]
+    [UpdateInGroup(typeof(SysGroupDisplay))]
     public partial struct SCueStart : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            
+            state.RequireForUpdate<ECCuePlayable>();
+            state.RequireForUpdate<ECCuePlaying>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-
+            
         }
 
         [BurstCompile]
