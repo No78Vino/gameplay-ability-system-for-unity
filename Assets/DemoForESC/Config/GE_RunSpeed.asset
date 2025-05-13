@@ -25,15 +25,8 @@ MonoBehaviour:
         cue:
           CueType: GAS.Runtime.CueLog
           _jsonCueParamConfig:
-            TypeFullName: GAS.Editor.CueParamConfigNone
-            Data: '{}'
-      - requiredTags: 
-        immunityTags: 
-        cue:
-          CueType: GAS.Runtime.CueLog
-          _jsonCueParamConfig:
-            TypeFullName: GAS.Editor.CueParamConfigNone
-            Data: '{}'
+            TypeFullName: GAS.Editor.CueParamConfigString
+            Data: "{\"message\":\"test\u662F\"}"
     ConfAssetEffectApplicationRequiredTags:
       tags: 
     ConfAssetEffectAssetTags:
