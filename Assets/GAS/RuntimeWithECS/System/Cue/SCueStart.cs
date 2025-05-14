@@ -18,25 +18,21 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (playable,playing, cue) in 
-                     SystemAPI.Query<RefRO<ECCuePlayable>,RefRO<ECCuePlaying>>()
+            foreach (var (playable, cue) in
+                     SystemAPI.Query<RefRO<ECCuePlayable>>()
+                         .WithDisabled<ECCuePlaying>()
                          .WithEntityAccess())
             {
-                bool isPlayable = SystemAPI.IsComponentEnabled<ECCuePlayable>(cue);
-                bool isPlaying = SystemAPI.IsComponentEnabled<ECCuePlaying>(cue);
-                if (isPlayable && !isPlaying)
+                SystemAPI.SetComponentEnabled<ECCuePlaying>(cue, true);
+
+                // Instant cue
+                if (state.EntityManager.HasComponent<MCInstantCue>(cue))
                 {
-                    SystemAPI.SetComponentEnabled<ECCuePlaying>(cue,true);
-                    
-                    // Instant cue
-                    if (state.EntityManager.HasComponent<MCInstantCue>(cue))
-                    {
-                        var instantCue = state.EntityManager.GetComponentData<MCInstantCue>(cue);
-                        instantCue.cue.TryTrigger();
-                    }
-                    // TODO Durational cue
-                    // TODO 触发Cue开始播放事件
+                    var instantCue = state.EntityManager.GetComponentData<MCInstantCue>(cue);
+                    instantCue.cue.TryTrigger();
                 }
+                // TODO Durational cue
+                // TODO 触发Cue开始播放事件
             }
         }
 
