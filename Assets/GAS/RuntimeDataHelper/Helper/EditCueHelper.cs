@@ -63,14 +63,9 @@ namespace GAS.Editor
         {
             if (_cachedCueToCueParamConfigTypeMap != null)
                 return _cachedCueToCueParamConfigTypeMap;
-            var instantTypes = GetCachedInstantCueTypes() ;
-            var durationalTypes = GetCachedDurationalCueTypes();
+            var cueTypes = GetCachedInstantCueTypes() ;
             _cachedCueToCueParamConfigTypeMap = new Dictionary<string, Type>();
-
-            var allTypes = new List<Type>(instantTypes);
-            allTypes.AddRange(durationalTypes);
-            
-            foreach (var derivedType in allTypes)
+            foreach (var derivedType in cueTypes)
             {
                 var baseType = derivedType.BaseType; // 获取基类类型
 
@@ -80,7 +75,7 @@ namespace GAS.Editor
                     var genericBaseDef = baseType.GetGenericTypeDefinition();
 
                     // 确认是否是所需的基类泛型定义
-                    if (genericBaseDef == typeof(CueInstant<>)||genericBaseDef == typeof(CueDurational<>))
+                    if (genericBaseDef == typeof(GameplayCueBase<>))
                     {
                         // 获取实际使用的泛型参数（如 MmcParamString）
                         var genericArgs = baseType.GetGenericArguments();
@@ -109,7 +104,7 @@ namespace GAS.Editor
             _cachedCueTypes = assemblies
                 .SelectMany(asm => asm.GetTypes())
                 .Where(type =>
-                    type.IsSubclassOf(typeof(NewGameplayCueBase)) &&
+                    type.IsSubclassOf(typeof(GameplayCueBase)) &&
                     !type.IsAbstract
                 )
                 .ToList();
@@ -145,51 +140,12 @@ namespace GAS.Editor
             _cachedInstantCueTypes = assemblies
                 .SelectMany(asm => asm.GetTypes())
                 .Where(type =>
-                    type.IsSubclassOf(typeof(CueInstant)) &&
+                    type.IsSubclassOf(typeof(GameplayCueBase)) &&
                     !type.IsAbstract
                 )
                 .ToList();
 
             return _cachedInstantCueTypes;
-        }
-        
-        #endregion
-        
-        
-        #region Durational Cue
-        
-        private static ValueDropdownItem[] _durationalCueChoices;
-        private static IEnumerable<Type> _cachedDurationalCueTypes;
-
-        public static IEnumerable<ValueDropdownItem> DurationalCueChoices
-        {
-            get
-            {
-                if (_durationalCueChoices == null || _durationalCueChoices.Length == 0)
-                {
-                    var types = GetCachedDurationalCueTypes();
-                    _durationalCueChoices = types
-                        .Select(type => new ValueDropdownItem(type.Name, type.FullName))
-                        .ToArray();
-                }
-
-                return _durationalCueChoices;
-            }
-        }
-        
-        public static IEnumerable<Type> GetCachedDurationalCueTypes()
-        {
-            if (_cachedDurationalCueTypes != null) return _cachedDurationalCueTypes;
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            _cachedDurationalCueTypes = assemblies
-                .SelectMany(asm => asm.GetTypes())
-                .Where(type =>
-                    type.IsSubclassOf(typeof(CueDurational)) &&
-                    !type.IsAbstract
-                )
-                .ToList();
-
-            return _cachedDurationalCueTypes;
         }
         
         #endregion

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class CueLog : CueInstant<CueParamString>
+    public class GameplayCueLog : GameplayCueBase<CueParamString>
     {
         protected override void Trigger()
         {

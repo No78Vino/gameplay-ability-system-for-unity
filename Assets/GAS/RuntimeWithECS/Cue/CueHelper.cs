@@ -11,27 +11,22 @@ namespace GAS.Runtime
 {
     public static class CueHelper
     {
-        public static CueInstant TryCreateInstantCue(string cueType, CueParamConfigBase param)
+        public static GameplayCueBase TryCreateInstantCue(string cueType, CueParamConfigBase param)
         {
-            return TryCreateCue( cueType,  param) as CueInstant;
+            return TryCreateCue( cueType,  param);
         }
 
-        public static CueDurational TryCreateDurationalCue(string cueType, CueParamConfigBase param)
-        {
-            return TryCreateCue(cueType, param) as CueDurational;
-        }
-
-        public static NewGameplayCueBase TryCreateCue(string cueType, CueParamConfigBase param)
+        public static GameplayCueBase TryCreateCue(string cueType, CueParamConfigBase param)
         {
             return TryCreateCue(cueType, param.GetConfig());
         }
         
-        public static NewGameplayCueBase TryCreateCue(string cueType, ICueParameter param)
+        public static GameplayCueBase TryCreateCue(string cueType, ICueParameter param)
         {
             if (CueTypeMap.TryGetValue(cueType, out var type))
                 try
                 {
-                    if (Activator.CreateInstance(type) is NewGameplayCueBase cue)
+                    if (Activator.CreateInstance(type) is GameplayCueBase cue)
                     {
                         cue.InitParameters(param);
                         return cue;
@@ -67,7 +62,7 @@ namespace GAS.Runtime
             return CueTypeMap[sType];
         }
 
-        public static void RegisterCue<T>(string sType) where T : NewGameplayCueBase
+        public static void RegisterCue<T>(string sType) where T : GameplayCueBase
         {
             RegisterCue(sType, typeof(T));
         }
@@ -88,12 +83,12 @@ namespace GAS.Runtime
                 entityManager.SetComponentEnabled<ECCuePlayable>(cueEntity,true);
         }
 
-        public static MCInstantCue InitInstantCueFromGameplayEffect(MCInstantCue instantCue,Entity cueEntity,Entity ge)
+        public static MCCue InitInstantCueFromGameplayEffect(MCCue cue,Entity cueEntity,Entity ge)
         {
-            instantCue.cue.SetSourceEntity(ge);
-            instantCue.cue.SetSourceType(CueSourceType.GameplayEffect);
-            instantCue.cue.SetCueEntity(cueEntity);
-            return instantCue;
+            cue.cue.SetSourceEntity(ge);
+            cue.cue.SetSourceType(CueSourceType.GameplayEffect);
+            cue.cue.SetCueEntity(cueEntity);
+            return cue;
         }
     }
 }

@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.Runtime;
-using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Cue;
-using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace GAS.Editor
 {
     [Serializable]
-    public class InstantCueSettingConfig:ICueSettingConfig
+    public class CueSettingConfig : ICueSettingConfig
     {
         [ValueDropdown("@EditCueHelper.InstantCueChoices", IsUniqueList = true, HideChildProperties = true)]
         [TabGroup("CueLogic", "即时Cue", SdfIconType.FileMusic, TextColor = "#D6626E")]
@@ -28,14 +24,19 @@ namespace GAS.Editor
         [LabelText("Cue参数")]
         [ShowInInspector]
         public CueParamConfigBase cueParamConfig;
-        
-        
-        public CueInstant CreateCue()
+
+        public void TriggerOnValueChanged()
+        {
+            OnValueChanged();
+        }
+
+
+        public GameplayCueBase CreateCue()
         {
             var config = JsonProxyHelper.Deserialize<CueParamConfigBase>(_jsonCueParamConfig);
-            return CueHelper.TryCreateInstantCue(CueType,config);
+            return CueHelper.TryCreateCue(CueType, config);
         }
-        
+
         protected void OnValueChanged()
         {
             cueParamConfig ??= new CueParamConfigNone();
@@ -58,19 +59,17 @@ namespace GAS.Editor
             cueParamConfig?.SetConfAssetCue(this);
         }
 
-        private IEnumerable<Type> GetCueParamConfigType() => null;
+        private IEnumerable<Type> GetCueParamConfigType()
+        {
+            return null;
+        }
 
         [OnInspectorInit]
         private void InitializeList()
         {
-            if (string.IsNullOrEmpty(CueType)) CueType = typeof(CueLog).FullName;
+            if (string.IsNullOrEmpty(CueType)) CueType = typeof(GameplayCueLog).FullName;
             if (!string.IsNullOrEmpty(_jsonCueParamConfig.TypeFullName))
                 cueParamConfig = JsonProxyHelper.Deserialize<CueParamConfigBase>(_jsonCueParamConfig);
-            OnValueChanged();
-        }
-
-        public void TriggerOnValueChanged()
-        {
             OnValueChanged();
         }
     }

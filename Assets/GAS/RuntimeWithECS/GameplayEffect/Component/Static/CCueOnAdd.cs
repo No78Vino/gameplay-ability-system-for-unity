@@ -34,8 +34,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 GASManager.EntityManager.SetComponentEnabled<ECCuePlaying>(entities[i],false);
                 
                 // Cue逻辑
-                GASManager.EntityManager.AddComponent<MCInstantCue>(entities[i]);
-                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCInstantCue(c.cue.CreateCue()),entities[i],ge);
+                GASManager.EntityManager.AddComponent<MCCue>(entities[i]);
+                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
                 GASManager.EntityManager.SetComponentData(entities[i], instantCue);
                 
                 // cue播放免疫tag
@@ -72,7 +72,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 var c = cues[i];
-                ecb.AddComponent<MCInstantCue>(entities[i]);
+                ecb.AddComponent<MCCue>(entities[i]);
                 
                 // Cue是否播放组件
                 ecb.AddComponent<ECCuePlayable>(entities[i]);
@@ -83,12 +83,12 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 ecb.SetComponentEnabled<ECCuePlaying>(entities[i],false);
                 
                 // Cue逻辑
-                ecb.AddComponent<MCInstantCue>(entities[i]);
-                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCInstantCue(c.cue.CreateCue()),entities[i],ge);
+                ecb.AddComponent<MCCue>(entities[i]);
+                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
                 ecb.SetComponent(entities[i], instantCue);
                 
                 
-                ecb.SetComponent(entities[i], new MCInstantCue(c.cue.CreateCue()));
+                ecb.SetComponent(entities[i], new MCCue(c.cue.CreateCue()));
                 if (c.immunityTags.Count > 0)
                 {
                     ecb.AddComponent<CPlayImmunitedTags>(entities[i]);

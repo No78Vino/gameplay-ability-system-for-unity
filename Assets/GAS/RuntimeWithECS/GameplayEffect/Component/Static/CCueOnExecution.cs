@@ -14,7 +14,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
     
     public sealed class ConfCueOnExecution:GameplayEffectComponentConfig
     {
-        public CueInstant[] cues;
+        public GameplayCueBase[] cues;
         
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
@@ -22,9 +22,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             for (int i = 0; i < cues.Length; i++)
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
-                GASManager.EntityManager.AddComponent<MCInstantCue>(entities[i]);
+                GASManager.EntityManager.AddComponent<MCCue>(entities[i]);
                 cues[i].SetSourceEntity(ge);
-                GASManager.EntityManager.SetComponentData(entities[i],new MCInstantCue(cues[i]));
+                GASManager.EntityManager.SetComponentData(entities[i],new MCCue(cues[i]));
             }
             _entityManager.AddComponentData(ge, new CCueOnExecution
             {
@@ -38,9 +38,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             for (int i = 0; i < cues.Length; i++)
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
-                ecb.AddComponent<MCInstantCue>(entities[i]);
+                ecb.AddComponent<MCCue>(entities[i]);
                 cues[i].SetSourceEntity(ge);
-                ecb.SetComponent(entities[i],new MCInstantCue(cues[i]));
+                ecb.SetComponent(entities[i],new MCCue(cues[i]));
             }
             ecb.AddComponent(ge, new CCueOnExecution
             {

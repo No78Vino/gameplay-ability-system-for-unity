@@ -9,7 +9,7 @@ namespace GAS.RuntimeWithECS.Cue
         GameplayEffect
     }
     
-    public class NewGameplayCueParametersBase
+    public class GameplayCueParametersBase
     {
         public CueSourceType SourceType;
         public Entity entity;

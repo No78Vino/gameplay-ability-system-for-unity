@@ -18,20 +18,15 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (playable, cue) in
+            foreach (var (_, cue) in
                      SystemAPI.Query<RefRO<ECCuePlayable>>()
                          .WithDisabled<ECCuePlaying>()
                          .WithEntityAccess())
             {
                 SystemAPI.SetComponentEnabled<ECCuePlaying>(cue, true);
-
-                // Instant cue
-                if (state.EntityManager.HasComponent<MCInstantCue>(cue))
-                {
-                    var instantCue = state.EntityManager.GetComponentData<MCInstantCue>(cue);
-                    instantCue.cue.TryTrigger();
-                }
-                // TODO Durational cue
+                
+                var mcCue = state.EntityManager.GetComponentData<MCCue>(cue);
+                mcCue.cue.TryTrigger();
                 // TODO 触发Cue开始播放事件
             }
         }

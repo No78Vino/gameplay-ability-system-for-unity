@@ -7,15 +7,15 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Cue.Component
 {
-    public class MCInstantCue : IComponentData
+    public class MCCue : IComponentData
     {
-        public CueInstant cue;
+        public GameplayCueBase cue;
         
-        public MCInstantCue()
+        public MCCue()
         {
         }
         
-        public MCInstantCue(CueInstant cue)
+        public MCCue(GameplayCueBase cue)
         {
             this.cue = cue;
         }
@@ -41,6 +41,6 @@ namespace GAS.RuntimeWithECS.Cue.Component
         public List<int> immunityTags;
 
         [HideLabel]
-        public InstantCueSettingConfig cue;
+        public CueSettingConfig cue;
     }
 }
