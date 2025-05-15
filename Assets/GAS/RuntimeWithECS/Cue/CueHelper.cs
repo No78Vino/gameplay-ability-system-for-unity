@@ -85,8 +85,7 @@ namespace GAS.Runtime
 
         public static MCCue InitInstantCueFromGameplayEffect(MCCue cue,Entity cueEntity,Entity ge)
         {
-            cue.cue.SetSourceEntity(ge);
-            cue.cue.SetSourceType(CueSourceType.GameplayEffect);
+            cue.cue.SetSourceEntity(ge,CueSourceType.GameplayEffect);
             cue.cue.SetCueEntity(cueEntity);
             return cue;
         }

@@ -1,6 +1,7 @@
 ﻿using GAS.RuntimeWithECS.Cue.Component;
 using Unity.Burst;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -18,16 +19,14 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, cue) in
-                     SystemAPI.Query<RefRO<ECCuePlayable>>()
+            foreach (var (_,mcCue, cue) in
+                     SystemAPI.Query<RefRO<ECCuePlayable>,MCCue>()
                          .WithDisabled<ECCuePlaying>()
                          .WithEntityAccess())
             {
                 SystemAPI.SetComponentEnabled<ECCuePlaying>(cue, true);
-                
-                var mcCue = state.EntityManager.GetComponentData<MCCue>(cue);
-                mcCue.cue.TryTrigger();
-                // TODO 触发Cue开始播放事件
+                // 激活Cue
+                mcCue.cue.OnActivate(Time.time);
             }
         }
 

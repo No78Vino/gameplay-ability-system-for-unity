@@ -87,8 +87,6 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
                 ecb.SetComponent(entities[i], instantCue);
                 
-                
-                ecb.SetComponent(entities[i], new MCCue(c.cue.CreateCue()));
                 if (c.immunityTags.Count > 0)
                 {
                     ecb.AddComponent<CPlayImmunitedTags>(entities[i]);

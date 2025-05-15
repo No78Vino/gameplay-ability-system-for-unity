@@ -48,7 +48,7 @@ namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
             foreach (var entity in _cueOnAdd.ValueRO.cues)
             {
                 var cue = entityManager.GetComponentData<MCCue>(entity);
-                cue.cue.TryTrigger();
+                //cue.cue.TryTrigger();
             }
         }
     }

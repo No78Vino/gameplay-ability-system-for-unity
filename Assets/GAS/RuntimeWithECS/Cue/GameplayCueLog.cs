@@ -1,15 +1,18 @@
 using GAS.RuntimeWithECS.Cue;
-using Unity.Entities;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
     public class GameplayCueLog : GameplayCueBase<CueParamString>
     {
-        protected override void Trigger()
+        public override void OnActivate(float time)
         {
+            base.OnActivate(time);
             Debug.Log(
-                $"SourceType:{_sourceType.ToString()}, Entity:{_sourceEntity} ,Msg:{Parameter.Value}");
+                $"[{time}]SourceType:{_sourceType.ToString()}, Entity:{_sourceEntity} ,Msg:{Parameter.Value}");
+            
+            StopImmediate();
+            RemoveFromTargetAsc();
         }
 
         public void SetMessage(string message)

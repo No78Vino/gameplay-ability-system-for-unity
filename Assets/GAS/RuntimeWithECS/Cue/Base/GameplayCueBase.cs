@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using GAS.General;
-using GAS.Runtime;
-using Sirenix.OdinInspector;
+﻿using GAS.Runtime;
 using Unity.Entities;
 using UnityEngine;
 
@@ -9,75 +6,105 @@ namespace GAS.RuntimeWithECS.Cue
 {
     public abstract class GameplayCueBase
     {
-        protected const int WIDTH_LABEL = 70;
-        
         protected Entity _cueEntity;
         protected Entity _sourceEntity;
         protected CueSourceType _sourceType;
         protected Entity _targetAscEntity;
+
+        protected static EntityManager EntityManager => GASManager.EntityManager; 
         
-        protected virtual bool Triggerable()
-        {
-            return true;
-        }
+        public abstract void InitParameters(ICueParameter parameter);
+        public abstract void Reset();
         
         public void SetCueEntity(Entity e)
         {
             _cueEntity = e;
         }
 
-        public void SetSourceEntity(Entity e)
+        public void SetSourceEntity(Entity e,CueSourceType sourceType)
         {
             _sourceEntity = e;
-        }
-
-        public void SetTargetAscEntity(Entity e)
-        {
-            _targetAscEntity = e;
-        }
-
-        public void SetSourceType(CueSourceType sourceType)
-        {
             _sourceType = sourceType;
         }
 
-        public abstract void InitParameters(ICueParameter parameter);
-
-        public abstract void Reset();
-
-        protected abstract void Trigger();
-
-        public void StopPlaying()
+        /// <summary>
+        /// 添加Cue到目标ASC
+        /// </summary>
+        /// <param name="e"></param>
+        public void AddToTargetAsc(Entity e)
         {
-            GASManager.EntityManager.IsComponentEnabled<ECCuePlaying>(_cueEntity);
+            if (e != Entity.Null)
+            {
+                _targetAscEntity = e;
+                OnAdd(Time.time);
+            }
+        }
+        
+        /// <summary>
+        /// cue从目标ASC移除
+        /// </summary>
+        public void RemoveFromTargetAsc()
+        {
+            OnRemove(Time.time);
+            _targetAscEntity = Entity.Null;
+        }
+   
+        /// <summary>
+        /// 自定义能否播放cue逻辑
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool CanPlay()
+        {
+            return true;
+        }
+        
+        /// <summary>
+        /// 播放Cue
+        /// </summary>
+        /// <param name="replay"> 是否从头播放 </param>
+        public void Play(bool replay = false)
+        {
+            if (CanPlay())
+            {
+                EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
+                if (replay)
+                {
+                    Reset();
+                    EntityManager.SetComponentEnabled<ECCuePlaying>(_cueEntity,false);
+                }
+            }
         }
 
+        /// <summary>
+        /// 停止Cue
+        /// </summary>
+        /// <param name="immediate"> 是否立即停止 </param>
+        public void Stop(bool immediate = false)
+        {
+            EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
+        }
+        
+        public void StopImmediate() => Stop(true);
+        
         #region system function
 
-        public bool TryTrigger()
-        {
-            var triggerable = Triggerable();
-            if (triggerable) Trigger();
-            return triggerable;
-        }
-
-        public virtual void OnAdd()
+        public virtual void OnAdd(float time)
         {
         }
 
-        public virtual void OnRemove()
+        public virtual void OnRemove(float time)
         {
         }
 
-        public virtual void OnGameplayEffectActivate()
+        public virtual void OnActivate(float time)
         {
         }
 
-        public virtual void OnGameplayEffectDeactivate()
+        public virtual void OnDeactivate(float time)
         {
         }
 
-        public virtual void OnTick()
+        public virtual void OnTick(float time)
         {
         }
 

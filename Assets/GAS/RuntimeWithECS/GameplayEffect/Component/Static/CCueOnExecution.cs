@@ -23,7 +23,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 GASManager.EntityManager.AddComponent<MCCue>(entities[i]);
-                cues[i].SetSourceEntity(ge);
+                cues[i].SetSourceEntity(ge,CueSourceType.GameplayEffect);
                 GASManager.EntityManager.SetComponentData(entities[i],new MCCue(cues[i]));
             }
             _entityManager.AddComponentData(ge, new CCueOnExecution
@@ -39,7 +39,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 ecb.AddComponent<MCCue>(entities[i]);
-                cues[i].SetSourceEntity(ge);
+                cues[i].SetSourceEntity(ge,CueSourceType.GameplayEffect);
                 ecb.SetComponent(entities[i],new MCCue(cues[i]));
             }
             ecb.AddComponent(ge, new CCueOnExecution
