@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Cue.Component
+namespace GAS.Runtime
 {
     public struct CPlayImmunitedTags : IComponentData
     {

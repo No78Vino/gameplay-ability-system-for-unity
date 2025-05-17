@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GAS.Editor;
 using GAS.RuntimeWithECS.Cue;
-using GAS.RuntimeWithECS.Cue.Component;
+using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
@@ -24,27 +24,32 @@ namespace GAS.Runtime
         public static GameplayCueBase TryCreateCue(string cueType, ICueParameter param)
         {
             if (CueTypeMap.TryGetValue(cueType, out var type))
-                try
-                {
-                    if (Activator.CreateInstance(type) is GameplayCueBase cue)
-                    {
-                        cue.InitParameters(param);
-                        return cue;
-                    }
-                }
-                catch (MissingMethodException e)
-                {
-                    Debug.LogError("[EX] 创建Cue失败: " +
-                                   $"请检查这个类【'{type.FullName}'】是否继承自NewGameplayCueBase;" +
-                                   "或者，ModMagnitudeCalculation的Type映射脚本是否更新，重新生成。" +
-                                   $"Error Exception:{e.Message}");
-                    throw;
-                }
+                TryCreateCue(type, param);
 #if UNITY_EDITOR
             Debug.LogError($"[EX] 创建Cue失败:Can't find Cue for cueType [{cueType}]. " +
                            "Cue的Type映射脚本错误，请重新生成。");
 #endif
+            return null;
+        }
 
+        public static GameplayCueBase TryCreateCue(Type type, ICueParameter param)
+        {
+            try
+            {
+                if (Activator.CreateInstance(type) is GameplayCueBase cue)
+                {
+                    cue.InitParameters(param);
+                    return cue;
+                }
+            }
+            catch (MissingMethodException e)
+            {
+                Debug.LogError("[EX] 创建Cue失败: " +
+                               $"请检查这个类【'{type.FullName}'】是否继承自NewGameplayCueBase;" +
+                               "或者，ModMagnitudeCalculation的Type映射脚本是否更新，重新生成。" +
+                               $"Error Exception:{e.Message}");
+                throw;
+            }
             return null;
         }
 
@@ -89,5 +94,15 @@ namespace GAS.Runtime
             cue.cue.SetCueEntity(cueEntity);
             return cue;
         }
+
+        #region 通用型工具接口
+
+        public static void KillCue(Entity cueEntity)
+        {
+            GASManager.EntityManager.AddComponent<ECKillCue>(cueEntity);
+        }
+        
+
+        #endregion
     }
 }

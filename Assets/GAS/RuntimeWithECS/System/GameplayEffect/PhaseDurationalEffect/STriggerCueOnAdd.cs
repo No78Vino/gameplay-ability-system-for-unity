@@ -1,5 +1,4 @@
-﻿using GAS.RuntimeWithECS.Cue.Component;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
+﻿using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Cue.Component;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Sirenix.OdinInspector;

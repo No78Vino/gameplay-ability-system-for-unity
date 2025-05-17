@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using GAS.Editor;
+using GAS.RuntimeWithECS.Cue;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Cue.Component
+namespace GAS.Runtime
 {
     public class MCCue : IComponentData
     {

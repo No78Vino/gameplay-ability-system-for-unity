@@ -1,4 +1,4 @@
-﻿using GAS.RuntimeWithECS.Cue.Component;
+﻿using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
