@@ -1,8 +1,6 @@
 using System;
-using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Cue;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -45,12 +43,17 @@ namespace GAS.Runtime
             var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _cueParameter));
             mcCue.cue.SetCueEntity(_cueEntity);
             mcCue.cue.SetSourceEntity(Entity.Null, CueSourceType.None);
-            EntityManager.AddComponentData(_cueEntity,mcCue);
-            EntityManager.AddComponentData(_cueEntity, new ECCuePlayable());
-            EntityManager.AddComponentData(_cueEntity, new ECCuePlaying());
-            EntityManager.AddComponentData(_cueEntity, new ECKillCue());
+            EntityHelper.AddManagedComponent<MCCue>(_cueEntity);
+            EntityHelper.SetManagedComponent(_cueEntity,mcCue);
             
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            EntityHelper.AddComponent<ECCuePlayable>(_cueEntity);
+            EntityHelper.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
+            
+            EntityHelper.AddComponent<ECCuePlaying>(_cueEntity);
+            EntityHelper.SetComponentEnabled<ECCuePlaying>(_cueEntity,false);
+            
+            EntityHelper.AddComponent<ECKillCue>(_cueEntity);
+            EntityHelper.SetComponentEnabled<ECKillCue>(_cueEntity,false);
         }
         
         public void Destroy()
