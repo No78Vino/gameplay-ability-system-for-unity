@@ -20,6 +20,13 @@ namespace GAS.Runtime
         
         private static EntityManager EntityManager=>GASManager.EntityManager;
         
+        /// <summary>
+        /// GameplayCue独立控制单位
+        /// </summary>
+        /// <param name="cueType">Cue 类型</param>
+        /// <param name="parameter">Cue 对应的自定义参数</param>
+        /// <param name="requiredTags">可选：添加到ASC时，ASC播放需求的tag</param>
+        /// <param name="immunityTags">>可选：添加到ASC时，ASC播放免疫的tag</param>
         public GameplayCueUnit(Type cueType,ICueParameter parameter,int[] requiredTags = null, int[] immunityTags = null)
         {
             _cueType = cueType;
@@ -28,6 +35,22 @@ namespace GAS.Runtime
             _immunityTags = immunityTags;
         }
 
+        private bool CheckCueEntity()
+        {
+            if (_cueEntity == Entity.Null || !EntityManager.Exists(_cueEntity))
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"[EX] cue运行用实例不存在，请先创建cue. 【 调用Create() 】");
+#endif
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 创建GameplayCue运行用的实例
+        /// </summary>
         public void Create()
         {
             if (_cueEntity != Entity.Null && EntityManager.Exists(_cueEntity))
@@ -58,6 +81,15 @@ namespace GAS.Runtime
         
         public void Destroy()
         {
+            
+            if (!CheckCueEntity())
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"[EX] Cue没有创建过或已被销毁，不能重复销毁。");
+#endif
+                return;
+            }
+
             EntityManager.SetComponentEnabled<ECKillCue>(_cueEntity,true);
             var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
             mcCue.cue.OnRemove(Time.time);
@@ -66,11 +98,13 @@ namespace GAS.Runtime
         
         public bool AddToAsc(AbilitySystemCell asc)
         {
-           return AddToAsc(asc.Entity);
+            return CheckCueEntity() && AddToAsc(asc.Entity);
         }
         
         public bool AddToAsc(Entity asc)
         {
+            if (!CheckCueEntity()) return false;
+            
             if (_requiredTags != null)
             {
                 if(!ASCUtil.HasAllTags(asc,_requiredTags)) return false;
@@ -88,17 +122,21 @@ namespace GAS.Runtime
         
         public void RemoveFromAsc()
         {
+            if (!CheckCueEntity()) return;
+            
             var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
             mcCue.cue.RemoveFromTargetAsc();
         }
         
         public void Play()
         {
+            if (!CheckCueEntity()) return;
             EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
         }
         
         public void Stop()
         {
+            if (!CheckCueEntity()) return;
             EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
         }
     }
