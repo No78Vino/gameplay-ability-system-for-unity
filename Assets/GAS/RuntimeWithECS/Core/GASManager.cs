@@ -121,6 +121,7 @@ namespace GAS.Runtime
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueStart>());
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueTick>());
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueEnd>());
+            sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueDestroy>());
             sgDisplay.SortSystems();
             
             // 将world更新同步PlayerLoop

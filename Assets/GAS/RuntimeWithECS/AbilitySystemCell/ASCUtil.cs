@@ -112,6 +112,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             return true;
         }
 
+        public static bool HasAllTags(Entity asc, int[] tags)
+        {
+            var nativeTags = new NativeArray<int>(tags, Allocator.Temp);
+            var result = HasAllTags(asc, nativeTags);
+            nativeTags.Dispose();
+            return result;
+        }
+
         public static bool HasAnyTags(Entity asc, NativeArray<int> tags)
         {
             var fixedTags = _entityManager.GetBuffer<BFixedTag>(asc);
@@ -129,6 +137,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             }
 
             return false;
+        }
+        
+        public static bool HasAnyTags(Entity asc, int[] tags)
+        {
+            var nativeTags = new NativeArray<int>(tags, Allocator.Temp);
+            var result = HasAnyTags(asc, nativeTags);
+            nativeTags.Dispose();
+            return result;
         }
 
         public static bool HasGameplayEffect(this Entity asc, Entity gameplayEffect)

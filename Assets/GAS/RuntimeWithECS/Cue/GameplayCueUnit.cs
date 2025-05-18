@@ -1,5 +1,8 @@
 using System;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.Cue;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -14,13 +17,17 @@ namespace GAS.Runtime
         private Entity _cueEntity;
         private Type _cueType;
         private ICueParameter _cueParameter;
+        private int[] _requiredTags;
+        private int[] _immunityTags;
         
         private static EntityManager EntityManager=>GASManager.EntityManager;
         
-        public GameplayCueUnit(Type cueType,ICueParameter parameter)
+        public GameplayCueUnit(Type cueType,ICueParameter parameter,int[] requiredTags = null, int[] immunityTags = null)
         {
             _cueType = cueType;
             _cueParameter = parameter;
+            _requiredTags = requiredTags;
+            _immunityTags = immunityTags;
         }
 
         public void Create()
@@ -36,12 +43,50 @@ namespace GAS.Runtime
             EntityManager.SetName(_cueEntity,$"Cue_{_cueType.Name}_{_cueEntity.Version}_{_cueEntity.Index}");
             
             var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _cueParameter));
+            mcCue.cue.SetCueEntity(_cueEntity);
+            mcCue.cue.SetSourceEntity(Entity.Null, CueSourceType.None);
             EntityManager.AddComponentData(_cueEntity,mcCue);
             EntityManager.AddComponentData(_cueEntity, new ECCuePlayable());
             EntityManager.AddComponentData(_cueEntity, new ECCuePlaying());
             EntityManager.AddComponentData(_cueEntity, new ECKillCue());
             
-            mcCue.cue.OnAdd(Time.time);
+            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+        }
+        
+        public void Destroy()
+        {
+            EntityManager.SetComponentEnabled<ECKillCue>(_cueEntity,true);
+            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            mcCue.cue.OnRemove(Time.time);
+            _cueEntity = Entity.Null;
+        }
+        
+        public bool AddToAsc(AbilitySystemCell asc)
+        {
+           return AddToAsc(asc.Entity);
+        }
+        
+        public bool AddToAsc(Entity asc)
+        {
+            if (_requiredTags != null)
+            {
+                if(!ASCUtil.HasAllTags(asc,_requiredTags)) return false;
+            }
+            
+            if (_immunityTags != null)
+            {
+                if(ASCUtil.HasAnyTags(asc,_immunityTags)) return false;
+            }
+
+            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            mcCue.cue.AddToTargetAsc(asc);
+            return true;
+        }
+        
+        public void RemoveFromAsc()
+        {
+            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            mcCue.cue.RemoveFromTargetAsc();
         }
         
         public void Play()
@@ -52,14 +97,6 @@ namespace GAS.Runtime
         public void Stop()
         {
             EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
-        }
-        
-        public void Destroy()
-        {
-            EntityManager.SetComponentEnabled<ECKillCue>(_cueEntity,true);
-            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
-            mcCue.cue.OnRemove(Time.time);
-            _cueEntity = Entity.Null;
         }
     }
 }

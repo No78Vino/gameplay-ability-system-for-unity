@@ -108,6 +108,9 @@ namespace GAS.RuntimeWithECS.Cue
         {
         }
 
+        public virtual void OnDestroy(float time)
+        {
+        }
         #endregion
     }
 
