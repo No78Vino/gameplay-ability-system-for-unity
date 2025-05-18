@@ -30,7 +30,7 @@ namespace GAS.Runtime
 
         public void Create()
         {
-            if (_cueEntity != Entity.Null)
+            if (_cueEntity != Entity.Null && EntityManager.Exists(_cueEntity))
             {
 #if UNITY_EDITOR
                 Debug.LogError($"[EX] Cue已经创建过了，不能重复创建。");
