@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

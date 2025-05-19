@@ -1,10 +1,11 @@
 ﻿using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 using NotImplementedException = System.NotImplementedException;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CCueOnExecution : IComponentData
     {
@@ -20,28 +21,13 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             Entity[] entities = new Entity[cues.Length];
             for (int i = 0; i < cues.Length; i++)
             {
-                entities[i] = GASManager.EntityManager.CreateEntity();
-                GASManager.EntityManager.AddComponent<MCCue>(entities[i]);
+                entities[i] = EntityHelper.CreateEntity();
+                EntityHelper.AddManagedComponent<MCCue>(entities[i]);
                 cues[i].SetSourceEntity(ge,CueSourceType.GameplayEffect);
-                GASManager.EntityManager.SetComponentData(entities[i],new MCCue(cues[i]));
+                EntityHelper.SetManagedComponent(entities[i],new MCCue(cues[i]));
             }
-            _entityManager.AddComponentData(ge, new CCueOnExecution
-            {
-                cues = new NativeArray<Entity>(entities, Allocator.Persistent)
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            Entity[] entities = new Entity[cues.Length];
-            for (int i = 0; i < cues.Length; i++)
-            {
-                entities[i] = GASManager.EntityManager.CreateEntity();
-                ecb.AddComponent<MCCue>(entities[i]);
-                cues[i].SetSourceEntity(ge,CueSourceType.GameplayEffect);
-                ecb.SetComponent(entities[i],new MCCue(cues[i]));
-            }
-            ecb.AddComponent(ge, new CCueOnExecution
+            EntityHelper.AddComponent<CCueOnExecution>(ge);
+            EntityHelper.SetComponent(ge, new CCueOnExecution
             {
                 cues = new NativeArray<Entity>(entities, Allocator.Persistent)
             });

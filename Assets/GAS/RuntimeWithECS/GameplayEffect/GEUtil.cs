@@ -1,7 +1,6 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Common.Component;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
@@ -86,24 +85,24 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
         public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
         {
-            var entity = _entityManager.CreateEntity();
+            var entity = EntityHelper.CreateEntity();
             foreach (var config in componentAssets)
                 config.LoadToGameplayEffectEntity(entity);
             return entity;
         }
 
-        /// <summary>
-        /// 特别注意
-        /// </summary>
-        /// <param name="componentAssets"></param>
-        /// <param name="ecb"></param>
-        public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets,EntityCommandBuffer ecb)
-        {
-            var entity = ecb.CreateEntity();
-            foreach (var config in componentAssets)
-                config.LoadToGameplayEffectEntity(entity,ecb);
-            return entity;
-        }
+        // /// <summary>
+        // /// 特别注意
+        // /// </summary>
+        // /// <param name="componentAssets"></param>
+        // /// <param name="ecb"></param>
+        // public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
+        // {
+        //     var entity = ecb.CreateEntity();
+        //     foreach (var config in componentAssets)
+        //         config.LoadToGameplayEffectEntity(entity,ecb);
+        //     return entity;
+        // }
         
         public static NewGameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
         {

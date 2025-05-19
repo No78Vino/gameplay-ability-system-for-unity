@@ -1,6 +1,5 @@
 ﻿using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect

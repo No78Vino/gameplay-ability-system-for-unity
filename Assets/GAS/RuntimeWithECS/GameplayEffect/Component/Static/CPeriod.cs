@@ -1,8 +1,9 @@
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 using NotImplementedException = System.NotImplementedException;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CPeriod : IComponentData
     {
@@ -28,26 +29,12 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 var comConfigs = GameplayEffectSettings[i];
                 geEntities[i] = GEUtil.CreateGameplayEffectEntity(comConfigs);
             }
-
-            _entityManager.AddComponentData(ge, new CPeriod
+            
+            EntityHelper.AddComponent<CPeriod>(ge);
+            EntityHelper.SetComponent(ge, new CPeriod
             {
                 Period = Period,
-                GameplayEffects = geEntities,
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            var geEntities = new NativeArray<Entity>(GameplayEffectSettings.Length, Allocator.Persistent);
-            for (var i = 0; i < GameplayEffectSettings.Length; i++)
-            {
-                var comConfigs = GameplayEffectSettings[i];
-                geEntities[i] = GEUtil.CreateGameplayEffectEntity(comConfigs);
-            }
-
-            ecb.AddComponent(ge, new CPeriod
-            {
-                Period = Period,
+                ResetTimeCountWhenDeactivated = true,
                 GameplayEffects = geEntities,
             });
         }

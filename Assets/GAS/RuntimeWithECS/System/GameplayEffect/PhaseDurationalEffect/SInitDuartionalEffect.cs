@@ -1,5 +1,4 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell.Component;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;

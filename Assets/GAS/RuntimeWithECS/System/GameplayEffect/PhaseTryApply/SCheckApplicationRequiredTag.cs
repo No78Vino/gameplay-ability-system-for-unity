@@ -1,5 +1,4 @@
 ﻿using GAS.RuntimeWithECS.Common.Component;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;

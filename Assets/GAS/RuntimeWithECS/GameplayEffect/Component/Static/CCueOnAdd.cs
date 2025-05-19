@@ -1,9 +1,10 @@
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CCueOnAdd : IComponentData
     {
@@ -22,26 +23,26 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
             var entities = new Entity[cues.Length];
             for (var i = 0; i < cues.Length; i++)
             {
-                entities[i] = GASManager.EntityManager.CreateEntity();
+                entities[i] = EntityHelper.CreateEntity();
                 var c = cues[i];
                 // Cue是否播放组件
-                GASManager.EntityManager.AddComponent<ECCuePlayable>(entities[i]);
-                GASManager.EntityManager.SetComponentEnabled<ECCuePlayable>(entities[i],false);
+                EntityHelper.AddComponent<ECCuePlayable>(entities[i]);
+                EntityHelper.SetComponentEnabled<ECCuePlayable>(entities[i],false);
                 
                 // Cue是否播放组件
-                GASManager.EntityManager.AddComponent<ECCuePlaying>(entities[i]);
-                GASManager.EntityManager.SetComponentEnabled<ECCuePlaying>(entities[i],false);
+                EntityHelper.AddComponent<ECCuePlaying>(entities[i]);
+                EntityHelper.SetComponentEnabled<ECCuePlaying>(entities[i],false);
                 
                 // Cue逻辑
-                GASManager.EntityManager.AddComponent<MCCue>(entities[i]);
+                EntityHelper.AddManagedComponent<MCCue>(entities[i]);
                 var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
-                GASManager.EntityManager.SetComponentData(entities[i], instantCue);
+                EntityHelper.SetManagedComponent(entities[i], instantCue);
                 
                 // cue播放免疫tag
                 if (c.immunityTags.Count > 0)
                 {
-                    GASManager.EntityManager.AddComponent<CPlayImmunitedTags>(entities[i]);
-                    GASManager.EntityManager.SetComponentData(entities[i], new CPlayImmunitedTags
+                    EntityHelper.AddComponent<CPlayImmunitedTags>(entities[i]);
+                    EntityHelper.SetComponent(entities[i], new CPlayImmunitedTags
                     {
                         tags = new NativeArray<int>(c.immunityTags.ToArray(), Allocator.Persistent)
                     });
@@ -50,62 +51,16 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 // cue播放需求tag
                 if (c.requiredTags.Count > 0)
                 {
-                    GASManager.EntityManager.AddComponent<CPlayRequiredTags>(entities[i]);
-                    GASManager.EntityManager.SetComponentData(entities[i], new CPlayRequiredTags
+                    EntityHelper.AddComponent<CPlayRequiredTags>(entities[i]);
+                    EntityHelper.SetComponent(entities[i], new CPlayRequiredTags
                     {
                         tags = new NativeArray<int>(c.requiredTags.ToArray(), Allocator.Persistent)
                     });
                 }
             }
 
-            _entityManager.AddComponentData(ge, new CCueOnAdd
-            {
-                cues = new NativeArray<Entity>(entities, Allocator.Persistent)
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            var entities = new Entity[cues.Length];
-            for (var i = 0; i < cues.Length; i++)
-            {
-                entities[i] = GASManager.EntityManager.CreateEntity();
-                var c = cues[i];
-                ecb.AddComponent<MCCue>(entities[i]);
-                
-                // Cue是否播放组件
-                ecb.AddComponent<ECCuePlayable>(entities[i]);
-                ecb.SetComponentEnabled<ECCuePlayable>(entities[i],false);
-                
-                // Cue是否播放组件
-                ecb.AddComponent<ECCuePlaying>(entities[i]);
-                ecb.SetComponentEnabled<ECCuePlaying>(entities[i],false);
-                
-                // Cue逻辑
-                ecb.AddComponent<MCCue>(entities[i]);
-                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
-                ecb.SetComponent(entities[i], instantCue);
-                
-                if (c.immunityTags.Count > 0)
-                {
-                    ecb.AddComponent<CPlayImmunitedTags>(entities[i]);
-                    ecb.SetComponent(entities[i], new CPlayImmunitedTags
-                    {
-                        tags = new NativeArray<int>(c.immunityTags.ToArray(), Allocator.Persistent)
-                    });
-                }
-
-                if (c.requiredTags.Count > 0)
-                {
-                    ecb.AddComponent<CPlayRequiredTags>(entities[i]);
-                    ecb.SetComponent(entities[i], new CPlayRequiredTags
-                    {
-                        tags = new NativeArray<int>(c.requiredTags.ToArray(), Allocator.Persistent)
-                    });
-                }
-            }
-
-            ecb.AddComponent(ge, new CCueOnAdd
+            EntityHelper.AddComponent<CCueOnAdd>(ge);
+            EntityHelper.SetComponent(ge, new CCueOnAdd
             {
                 cues = new NativeArray<Entity>(entities, Allocator.Persistent)
             });

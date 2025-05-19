@@ -1,8 +1,10 @@
-﻿using Unity.Collections;
+﻿using GAS.Runtime;
+using GAS.RuntimeWithECS.GameplayEffect;
+using Unity.Collections;
 using Unity.Entities;
 using NotImplementedException = System.NotImplementedException;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CEffectBasicInfo : IComponentData
     {
@@ -22,16 +24,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
             _entityManager.SetName(ge, $"GE_{Name}_V{ge.Version}_{ge.Index}");
-            _entityManager.AddComponentData(ge, new CEffectBasicInfo
-            {
-                name = Name
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            ecb.SetName(ge, $"GE_{Name}_V{ge.Version}_{ge.Index}");
-            ecb.AddComponent(ge, new CEffectBasicInfo
+            EntityHelper.AddComponent<CEffectBasicInfo>(ge);
+            EntityHelper.SetComponent(ge, new CEffectBasicInfo
             {
                 name = Name
             });

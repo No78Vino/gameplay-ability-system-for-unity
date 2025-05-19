@@ -1,6 +1,6 @@
 using System;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 
 namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset

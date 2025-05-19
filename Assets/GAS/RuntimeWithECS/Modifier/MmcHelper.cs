@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS.Modifier.CommonUsage;
 using Unity.Entities;

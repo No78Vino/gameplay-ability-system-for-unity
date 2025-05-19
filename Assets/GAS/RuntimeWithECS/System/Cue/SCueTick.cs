@@ -1,5 +1,4 @@
-﻿using GAS.Runtime;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
@@ -19,16 +18,13 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_,mcCue) in SystemAPI.Query<RefRO<ECCuePlaying>,MCCue>())
-            {
+            foreach (var (_, mcCue) in SystemAPI.Query<RefRO<ECCuePlaying>, MCCue>()) 
                 mcCue.cue.OnTick(Time.time);
-            }
         }
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
-
         }
     }
 }

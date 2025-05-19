@@ -2,7 +2,6 @@ using System;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

@@ -1,7 +1,6 @@
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.Ability.Component
@@ -58,7 +57,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
         
         protected Entity CreateGameplayEffectEntity(GameplayEffectConfig config)
         {
-            return GEUtil.CreateGameplayEffectEntity(config.ComponentConfigs,_ecb);
+            return GEUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
         } 
         
         protected void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)

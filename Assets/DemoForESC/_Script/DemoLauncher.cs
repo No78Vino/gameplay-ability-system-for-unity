@@ -1,7 +1,6 @@
 using System;
 using DemoForESC._Script.Gen;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using UnityEngine;
 
 namespace DemoForESC._Script

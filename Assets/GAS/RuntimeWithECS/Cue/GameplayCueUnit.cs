@@ -79,6 +79,9 @@ namespace GAS.Runtime
             EntityHelper.SetComponentEnabled<ECKillCue>(_cueEntity,false);
         }
         
+        /// <summary>
+        ///  销毁GameplayCue运行用的实例
+        /// </summary>
         public void Destroy()
         {
             
@@ -96,11 +99,21 @@ namespace GAS.Runtime
             _cueEntity = Entity.Null;
         }
         
+        /// <summary>
+        ///    添加GameplayCue到ASC
+        /// </summary>
+        /// <param name="asc"></param>
+        /// <returns></returns>
         public bool AddToAsc(AbilitySystemCell asc)
         {
             return CheckCueEntity() && AddToAsc(asc.Entity);
         }
         
+        /// <summary>
+        ///   添加GameplayCue到ASC
+        /// </summary>
+        /// <param name="asc"></param>
+        /// <returns></returns>
         public bool AddToAsc(Entity asc)
         {
             if (!CheckCueEntity()) return false;
@@ -120,6 +133,10 @@ namespace GAS.Runtime
             return true;
         }
         
+        
+        /// <summary>
+        ///     从ASC移除GameplayCue
+        /// </summary>
         public void RemoveFromAsc()
         {
             if (!CheckCueEntity()) return;
@@ -128,16 +145,35 @@ namespace GAS.Runtime
             mcCue.cue.RemoveFromTargetAsc();
         }
         
+        /// <summary>
+        ///   播放GameplayCue
+        /// </summary>
         public void Play()
         {
             if (!CheckCueEntity()) return;
             EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
         }
         
+        /// <summary>
+        ///     停止GameplayCue
+        /// </summary>
         public void Stop()
         {
             if (!CheckCueEntity()) return;
             EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
+        }
+        
+        /// <summary>
+        ///   设置GameplayCue来源
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="sourceType"></param>
+        public void SetSource(Entity source, CueSourceType sourceType)
+        {
+            if (!CheckCueEntity()) return;
+            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            mcCue.cue.SetSourceEntity(source, sourceType);
+            EntityHelper.SetManagedComponent(_cueEntity,mcCue);
         }
     }
 }

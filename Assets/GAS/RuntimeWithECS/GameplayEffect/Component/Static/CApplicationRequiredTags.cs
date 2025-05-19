@@ -1,8 +1,10 @@
+using GAS.Runtime;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 using NotImplementedException = System.NotImplementedException;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CApplicationRequiredTags : IComponentData
     {
@@ -15,15 +17,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            _entityManager.AddComponentData(ge, new CApplicationRequiredTags
-            {
-                tags = new NativeArray<int>(tags, Allocator.Persistent)
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            ecb.AddComponent(ge, new CApplicationRequiredTags
+            EntityHelper.AddComponent<CApplicationRequiredTags>(ge);
+            EntityHelper.SetComponent(ge, new CApplicationRequiredTags
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });

@@ -17,10 +17,5 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         {
             return GEUtil.CreateGameplayEffectEntity(_componentConfigs);
         }
-        
-        public Entity CreateGameplayEffectEntity(EntityCommandBuffer ecb)
-        {
-            return GEUtil.CreateGameplayEffectEntity(_componentConfigs,ecb);
-        }
     }
 }

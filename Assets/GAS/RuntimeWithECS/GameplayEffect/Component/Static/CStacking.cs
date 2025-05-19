@@ -1,9 +1,10 @@
+using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
 using NotImplementedException = System.NotImplementedException;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public enum EffectStackType
     {
@@ -90,31 +91,9 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 var comConfig = overflowEffects[i];
                 overflowEntities[i] = GEUtil.CreateGameplayEffectEntity(comConfig.ComponentConfigs);
             }
-
-            _entityManager.AddComponentData(ge, new CStacking
-            {
-                StackType = StackType,
-                StackingCode = StackingCode,
-                LimitCount = LimitCount,
-                EffectDurationRefreshPolicy = EffectDurationRefreshPolicy,
-                EffectPeriodResetPolicy = EffectPeriodResetPolicy,
-                EffectExpirationPolicy = EffectExpirationPolicy,
-                denyOverflowApplication = denyOverflowApplication,
-                clearStackOnOverflow = clearStackOnOverflow,
-                overflowEffects = overflowEntities,
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            var overflowEntities = new NativeArray<Entity>(overflowEffects.Length, Allocator.Persistent);
-            for (var i = 0; i < overflowEffects.Length; i++)
-            {
-                var comConfig = overflowEffects[i];
-                overflowEntities[i] = GEUtil.CreateGameplayEffectEntity(comConfig.ComponentConfigs);
-            }
-
-            ecb.AddComponent(ge, new CStacking
+            
+            EntityHelper.AddComponent<CStacking>(ge);
+            EntityHelper.SetComponent(ge, new CStacking
             {
                 StackType = StackType,
                 StackingCode = StackingCode,

@@ -4,7 +4,6 @@ using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Common.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

@@ -2,7 +2,6 @@
 using GAS.Runtime;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect.Aspect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Modifier;
 using Unity.Burst;
 using Unity.Collections;

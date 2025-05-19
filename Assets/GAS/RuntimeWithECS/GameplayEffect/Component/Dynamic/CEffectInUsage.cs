@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     /// <summary>
     /// 正在使用中的Component

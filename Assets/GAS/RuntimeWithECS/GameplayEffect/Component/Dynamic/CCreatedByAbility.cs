@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CCreatedByAbility : IComponentData
     {

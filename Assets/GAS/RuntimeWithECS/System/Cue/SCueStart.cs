@@ -1,5 +1,4 @@
-﻿using GAS.Runtime;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
@@ -19,8 +18,8 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_,mcCue, cue) in
-                     SystemAPI.Query<RefRO<ECCuePlayable>,MCCue>()
+            foreach (var (_, mcCue, cue) in
+                     SystemAPI.Query<RefRO<ECCuePlayable>, MCCue>()
                          .WithDisabled<ECCuePlaying>()
                          .WithEntityAccess())
             {
@@ -33,7 +32,6 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
-
         }
     }
 }

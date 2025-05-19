@@ -13,7 +13,5 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         /// </summary>
         /// <param name="ge"></param>
         public abstract void LoadToGameplayEffectEntity(Entity ge);
-
-        public abstract void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb);
     }
 }

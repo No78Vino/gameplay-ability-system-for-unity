@@ -1,8 +1,9 @@
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 using NotImplementedException = System.NotImplementedException;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     public struct CRemoveEffectWithTags : IComponentData
     {
@@ -15,15 +16,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
         
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            _entityManager.AddComponentData(ge, new CRemoveEffectWithTags
-            {
-                tags = new NativeArray<int>(tags, Allocator.Persistent)
-            });
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            ecb.AddComponent(ge, new CRemoveEffectWithTags
+            EntityHelper.AddComponent<CRemoveEffectWithTags>(ge);
+            EntityHelper.SetComponent(ge, new CRemoveEffectWithTags
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });

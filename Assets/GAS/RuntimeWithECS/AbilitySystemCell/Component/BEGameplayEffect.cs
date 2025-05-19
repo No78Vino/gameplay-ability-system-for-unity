@@ -1,7 +1,7 @@
 using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
     [InternalBufferCapacity(GASParameterSetting.ASC_MAX_GAMEPLAY_EFFECT_COUNT)]
     public struct BEGameplayEffect : IBufferElementData

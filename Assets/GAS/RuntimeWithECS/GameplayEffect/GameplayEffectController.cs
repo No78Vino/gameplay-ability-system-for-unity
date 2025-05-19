@@ -1,7 +1,6 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.GameplayEffect

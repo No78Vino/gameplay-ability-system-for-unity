@@ -3,7 +3,6 @@ using GAS.Runtime;
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS.Tag;
 using GAS.RuntimeWithECS.Tag.Component;

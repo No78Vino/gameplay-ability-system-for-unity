@@ -6,7 +6,6 @@ using GAS.RuntimeWithECS.Ability.ComponentConfig;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.GameplayEffect.Component;
 using Unity.Collections;
 using Unity.Entities;
 

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.Helper;
+using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Component
+namespace GAS.Runtime
 {
 
     public class MCModifiers:IComponentData
@@ -40,8 +41,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
 
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            if (!_entityManager.HasComponent<MCModifiers>(ge))
-                _entityManager.AddComponent<MCModifiers>(ge);
+            EntityHelper.AddManagedComponent<MCModifiers>(ge);
 
             EffectModifier[] effectModifiers = new EffectModifier[modifierSettings.Length];
             for (var i = 0; i < modifierSettings.Length; i++)
@@ -57,29 +57,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect.Component
                 };
             }
             MCModifiers mcModifiers = new MCModifiers(effectModifiers);
-            _entityManager.SetComponentData(ge,mcModifiers);
-        }
-
-        public override void LoadToGameplayEffectEntity(Entity ge, EntityCommandBuffer ecb)
-        {
-            //if (!_entityManager.HasComponent<MCModifiers>(ge)) 
-            ecb.AddComponent<MCModifiers>(ge);
-
-            EffectModifier[] effectModifiers = new EffectModifier[modifierSettings.Length];
-            for (var i = 0; i < modifierSettings.Length; i++)
-            {
-                var modifierSetting = modifierSettings[i];
-                effectModifiers[i] = new EffectModifier
-                {
-                    AttrSetCode = modifierSetting.AttrSetCode,
-                    AttrCode = modifierSetting.AttrCode,
-                    Operation = modifierSetting.Operation,
-                    Magnitude = modifierSetting.Magnitude,
-                    MMC = modifierSetting.MMC.CreateMmc()
-                };
-            }
-            MCModifiers mcModifiers = new MCModifiers(effectModifiers);
-            ecb.SetComponent(ge,mcModifiers);
+            EntityHelper.SetManagedComponent(ge, mcModifiers);
         }
 
         public void TriggerOnValueChanged()
