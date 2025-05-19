@@ -50,7 +50,7 @@ namespace DemoForESC._Script.Controller
             // 奔跑开关
             if (Input.GetKeyDown(KeyCode.LeftShift))
                 demoPlayer.StartRun();
-            else if (Input.GetKeyUp(KeyCode.RightShift))
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
                 demoPlayer.StopRun();
         }
 

@@ -111,19 +111,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
         public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
-            _entityManager.AddComponent<CEffectInUsage>(gameplayEffect);
-            _entityManager.SetComponentData(gameplayEffect, new CEffectInUsage
-            {
-                Source = source,
-                Target = target
-            });
-        }
-
-        public static void ApplyGameplayEffectTo(Entity gameplayEffect, 
-            Entity target, Entity source,
-            EntityCommandBuffer ecb)
-        {
-            ecb.AddComponent(gameplayEffect, new CEffectInUsage
+            EntityHelper.AddComponent<CEffectInUsage>(gameplayEffect);
+            EntityHelper.SetComponent(gameplayEffect, new CEffectInUsage
             {
                 Source = source,
                 Target = target
@@ -133,8 +122,8 @@ namespace GAS.RuntimeWithECS.GameplayEffect
         public static void RemoveGameplayEffect(Entity gameplayEffect)
         {
             if (!_entityManager.HasComponent<CEffectInUsage>(gameplayEffect)) return;
-            _entityManager.RemoveComponent<CEffectApplied>(gameplayEffect);
-            _entityManager.AddComponent<CEffectDestroy>(gameplayEffect);
+            EntityHelper.RemoveComponent<CEffectApplied>(gameplayEffect);
+            EntityHelper.AddComponent<CEffectDestroy>(gameplayEffect);
             // 从ASC容器中移除
             var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             var target = inUsage.Target;

@@ -7,7 +7,6 @@ namespace GAS.RuntimeWithECS.Ability.Component
 {
     public abstract class AbilityLogicBase
     {
-        protected EntityCommandBuffer _ecb;
         protected static EntityManager _entityManager => GASManager.EntityManager;
         protected AbilityParamBase _paramRaw;
         protected Entity _abilityEntity;
@@ -45,16 +44,6 @@ namespace GAS.RuntimeWithECS.Ability.Component
             _paramRaw = abilityParam;
         }
         
-        public void UpdateEntityCommandBuffer(EntityCommandBuffer ecb)
-        {
-            _ecb = ecb;
-        }
-        
-        public void RemoveEntityCommandBuffer()
-        {
-            _ecb = default;
-        }
-        
         protected Entity CreateGameplayEffectEntity(GameplayEffectConfig config)
         {
             return GEUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
@@ -62,8 +51,9 @@ namespace GAS.RuntimeWithECS.Ability.Component
         
         protected void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
-            GEUtil.ApplyGameplayEffectTo(gameplayEffect, target,source,_ecb);
-            _ecb.AddComponent(gameplayEffect,new CCreatedByAbility()
+            GEUtil.ApplyGameplayEffectTo(gameplayEffect, target,source);
+            EntityHelper.AddComponent<CCreatedByAbility>(gameplayEffect);
+            EntityHelper.SetComponent(gameplayEffect,new CCreatedByAbility()
             {
                 sourceAbility = _abilityEntity
             });
@@ -71,7 +61,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
 
         protected void RemoveGameplayEffect(Entity geEntity)
         {
-            GEUtil.RemoveGameplayEffect(geEntity,_ecb);
+            GEUtil.RemoveGameplayEffect(geEntity);
         }
     }
 

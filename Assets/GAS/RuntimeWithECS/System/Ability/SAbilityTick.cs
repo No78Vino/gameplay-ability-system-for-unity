@@ -19,15 +19,17 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            EntityHelper.RegisterEntityCommandBuffer(ecb);
+            
             var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+            
             foreach (var (_, abilityLogic) in SystemAPI.Query<RefRO<CAbilityActive>, MCAbilityLogic>())
             {
-                abilityLogic.Logic.UpdateEntityCommandBuffer(ecb);
                 abilityLogic.Logic.AbilityTick(globalTimer.ValueRO);
-                abilityLogic.Logic.RemoveEntityCommandBuffer();
             }
             
             ecb.Playback(state.EntityManager);
+            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

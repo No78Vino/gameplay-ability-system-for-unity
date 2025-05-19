@@ -22,7 +22,10 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            EntityHelper.RegisterEntityCommandBuffer(ecb);
+            
             var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+            
             foreach (var (_, basicInfo, ability) in SystemAPI
                          .Query<RefRO<CAbilityInTryActivate>, RefRO<CAbilityBaseInfo>>().WithEntityAccess())
             {
@@ -42,9 +45,7 @@ namespace GAS.Runtime
                     ecb.AddComponent(ability, new CAbilityActive());
                     // 激活能力【自定义逻辑】
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
-                    abilityLogic.Logic.UpdateEntityCommandBuffer(ecb);
                     abilityLogic.Logic.ActivateAbility(globalTimer.ValueRO);
-                    abilityLogic.Logic.RemoveEntityCommandBuffer();
                 }
 
                 GASEventCenter.InvokeOnActivateResult(ability, result);
@@ -53,6 +54,7 @@ namespace GAS.Runtime
             }
 
             ecb.Playback(state.EntityManager);
+            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

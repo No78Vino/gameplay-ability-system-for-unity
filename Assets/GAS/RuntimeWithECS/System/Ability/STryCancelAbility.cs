@@ -23,7 +23,9 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            EntityHelper.RegisterEntityCommandBuffer(ecb);
             var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+            
             foreach (var (_,ability) in SystemAPI.Query<RefRO<CAbilityInTryCancel>>().WithEntityAccess())
             {
                 bool result = state.EntityManager.HasComponent<CAbilityActive>(ability);
@@ -32,14 +34,13 @@ namespace GAS.Runtime
                     ecb.RemoveComponent<CAbilityActive>(ability);
                     ASCUtil.RestoreDynamicTags(ability);
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
-                    abilityLogic.Logic.UpdateEntityCommandBuffer(ecb);
                     abilityLogic.Logic.CancelAbility(globalTimer.ValueRO);
-                    abilityLogic.Logic.RemoveEntityCommandBuffer();
                     GASEventCenter.InvokeOnCancelAbility(ability);
                 }
                 ecb.RemoveComponent<CAbilityInTryCancel>(ability);
             }
             ecb.Playback(state.EntityManager);
+            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

@@ -97,14 +97,14 @@ namespace GAS.Runtime
         }
 
         /// <summary>
-        ///   创建实例
+        ///     创建实例
         /// </summary>
         /// <returns></returns>
         public static Entity CreateEntity()
         {
             return _usingEcb ? _ecb.CreateEntity() : _entityManager.CreateEntity();
         }
-        
+
         /// <summary>
         ///     摧毁实例
         /// </summary>
@@ -123,11 +123,35 @@ namespace GAS.Runtime
         /// <param name="entity"></param>
         /// <param name="enable"></param>
         /// <typeparam name="T"></typeparam>
-        public static void SetComponentEnabled<T>(Entity entity, bool enable) where T : IEnableableComponent
+        public static void SetComponentEnabled<T>(Entity entity, bool enable) where T :struct, IEnableableComponent
         {
-            _entityManager.SetComponentEnabled<T>(entity, enable);
+            if (_usingEcb)
+                _ecb.SetComponentEnabled<T>(entity, enable);
+            else
+                _entityManager.SetComponentEnabled<T>(entity, enable);
+        }
+        
+        /// <summary>
+        ///     设置能变组件状态
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="enable"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void SetComponentManagedEnabled<T>(Entity entity, bool enable) where T :class, IEnableableComponent,new()
+        {
+            if (_usingEcb)
+                _ecb.SetComponentEnabled<T>(entity, enable);
+            else
+                _entityManager.SetComponentEnabled<T>(entity, enable);
         }
 
+        public static void SetName(Entity entity, string name)
+        {
+            if (_usingEcb)
+                _ecb.SetName(entity, name);
+            else
+                _entityManager.SetName(entity, name);
+        }
 
         #region GameObject绑定
 

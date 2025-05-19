@@ -24,7 +24,7 @@ namespace GAS.Runtime
         public static GameplayCueBase TryCreateCue(string cueType, ICueParameter param)
         {
             if (CueTypeMap.TryGetValue(cueType, out var type))
-                TryCreateCue(type, param);
+                return TryCreateCue(type, param);
 #if UNITY_EDITOR
             Debug.LogError($"[EX] 创建Cue失败:Can't find Cue for cueType [{cueType}]. " +
                            "Cue的Type映射脚本错误，请重新生成。");

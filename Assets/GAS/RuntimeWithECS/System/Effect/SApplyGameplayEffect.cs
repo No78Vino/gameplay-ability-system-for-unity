@@ -14,7 +14,6 @@ namespace GAS.Runtime
     public partial struct SApplyGameplayEffect : ISystem
     {
         private GlobalTimer _globalTimer;
-        private EntityCommandBuffer _ecb;
         
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -27,7 +26,7 @@ namespace GAS.Runtime
         {
             _globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
             var ecb = new EntityCommandBuffer( Allocator.Temp);
-            _ecb = ecb;
+            EntityHelper.RegisterEntityCommandBuffer(ecb);
             foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {
@@ -51,6 +50,7 @@ namespace GAS.Runtime
             
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
+            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]
@@ -425,8 +425,8 @@ namespace GAS.Runtime
                         if (stacking.clearStackOnOverflow)
                         {
                             // 移除自身
-                            _ecb.RemoveComponent<CEffectApplied>(ge);
-                            _ecb.AddComponent<CEffectDestroy>(ge);
+                            EntityHelper.RemoveComponent<CEffectApplied>(ge);
+                            EntityHelper.AddComponent<CEffectDestroy>(ge);
                         }
                     }
                     else
