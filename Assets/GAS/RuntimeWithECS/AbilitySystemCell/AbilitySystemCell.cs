@@ -8,6 +8,7 @@ using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect.Component;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
 {
@@ -40,9 +41,9 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         public Entity Entity { get; private set; }
         private EntityManager EntityManager => GASManager.EntityManager;
 
-        protected void Dispose()
+        public void Dispose()
         {
-            EntityManager.DestroyEntity(Entity);
+            EntityHelper.DestroyEntity(Entity);
             Entity = Entity.Null;
         }
 
@@ -68,6 +69,8 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             SetLevel(level);
         }
 
+        public GameObject GameObject => EntityHelper.GetGameObjectFromEntity(Entity);
+        
         #region GameplayEffect
 
         public void ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffectSpec, AbilitySystemCell target)

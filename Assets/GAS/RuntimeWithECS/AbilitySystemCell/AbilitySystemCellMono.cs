@@ -1,4 +1,5 @@
-﻿using GAS.RuntimeWithECS.Ability.Component;
+﻿using GAS.Runtime;
+using GAS.RuntimeWithECS.Ability.Component;
 using UnityEngine;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
@@ -10,6 +11,13 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         private void Awake()
         {
             _abilitySystemCell = new AbilitySystemCell();
+            EntityHelper.BindGameObjectToEntity(_abilitySystemCell.Entity, gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            EntityHelper.UnbindGameObjectToEntity(_abilitySystemCell.Entity);
+            _abilitySystemCell.Dispose();
         }
 
         public void Init(AbilitySystemCellConfig config)
