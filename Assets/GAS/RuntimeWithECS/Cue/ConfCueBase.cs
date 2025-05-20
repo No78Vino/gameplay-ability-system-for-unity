@@ -1,0 +1,56 @@
+using GAS.Runtime;
+using GAS.RuntimeWithECS.GameplayEffect;
+using Unity.Collections;
+using Unity.Entities;
+
+namespace GAS.RuntimeWithECS.Cue
+{
+    public abstract class ConfCueBase: GameplayEffectComponentConfig
+    {
+        public CueSetting[] cues;
+
+        public NativeArray<Entity> CreateCueEntityArray(Entity ge)
+        {
+            var entities = new Entity[cues.Length];
+            for (var i = 0; i < cues.Length; i++)
+            {
+                entities[i] = GASManager.EntityManager.CreateEntity();
+                var c = cues[i];
+                // Cue是否播放组件
+                EntityHelper.AddComponent<ECCuePlayable>(entities[i]);
+                EntityHelper.SetComponentEnabled<ECCuePlayable>(entities[i],false);
+                
+                // Cue是否播放组件
+                EntityHelper.AddComponent<ECCuePlaying>(entities[i]);
+                EntityHelper.SetComponentEnabled<ECCuePlaying>(entities[i],false);
+                
+                // Cue逻辑
+                EntityHelper.AddManagedComponent<MCCue>(entities[i]);
+                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
+                EntityHelper.SetManagedComponent(entities[i], instantCue);
+                
+                // cue播放免疫tag
+                if (c.immunityTags.Count > 0)
+                {
+                    EntityHelper.AddComponent<CPlayImmunitedTags>(entities[i]);
+                    EntityHelper.SetComponent(entities[i], new CPlayImmunitedTags
+                    {
+                        tags = new NativeArray<int>(c.immunityTags.ToArray(), Allocator.Persistent)
+                    });
+                }
+
+                // cue播放需求tag
+                if (c.requiredTags.Count > 0)
+                {
+                    EntityHelper.AddComponent<CPlayRequiredTags>(entities[i]);
+                    EntityHelper.SetComponent(entities[i], new CPlayRequiredTags
+                    {
+                        tags = new NativeArray<int>(c.requiredTags.ToArray(), Allocator.Persistent)
+                    });
+                }
+            }
+
+            return new NativeArray<Entity>(entities, Allocator.Persistent);
+        }
+    }
+}

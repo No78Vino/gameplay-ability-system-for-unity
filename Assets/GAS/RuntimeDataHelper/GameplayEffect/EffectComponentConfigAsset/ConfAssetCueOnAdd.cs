@@ -14,7 +14,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         [LabelText(" ")]
         [SerializeField] 
         [ListDrawerSettings]
-        public List<InstantCueSetting> cues = new();
+        public List<CueSetting> cues = new();
         
         public override GameplayEffectComponentConfig GetConfig()
         {

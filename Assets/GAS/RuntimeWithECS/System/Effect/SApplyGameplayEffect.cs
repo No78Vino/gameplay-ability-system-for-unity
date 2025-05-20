@@ -165,9 +165,8 @@ namespace GAS.Runtime
                     if (change) ecb.AddComponent<CAttributeIsDirty>(asc);
                 }
                 
-                // TODO
                 // 3.执行GE的OnExecute的Cue逻辑
-                // TriggerCueOnExecute();
+                TriggerCueOnExecute(ge,asc,entityManager);
                 
                 ecb.AddComponent<CEffectDestroy>(ge);
                 return false;
@@ -286,6 +285,32 @@ namespace GAS.Runtime
             return ASCUtil.HasAllTags(targetAsc,ongoingRequiredTags.tags);
         }
         
+        private void TriggerCueOnExecute(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager)
+        {
+            if (!entityManager.HasComponent<CCueOnExecution>(gameplayEffect)) return;
+
+            var cues = entityManager.GetComponentData<CCueOnExecution>(gameplayEffect).cues;
+            foreach (var cueEntity in cues)
+            {
+                // 1.先判断tag是否可以播放cue
+                if (entityManager.HasComponent<CPlayRequiredTags>(cueEntity))
+                {
+                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(cueEntity);
+                    if(!ASCUtil.HasAllTags(targetAsc,requiredTags.tags)) continue;
+                }
+                if (entityManager.HasComponent<CPlayImmunitedTags>(cueEntity))
+                {
+                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(cueEntity);
+                    if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
+                }
+                // 2.重置Cue逻辑单元
+                var cueLogic = entityManager.GetComponentData<MCCue>(cueEntity);
+                cueLogic.cue.Reset();
+                cueLogic.cue.AddToTargetAsc(targetAsc);
+                // 3.激活CuePlaying
+                cueLogic.cue.Play(true);
+            }
+        }
         // 激活 CueOnAdd
         private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager)
         {

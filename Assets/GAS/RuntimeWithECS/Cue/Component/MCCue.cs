@@ -23,7 +23,7 @@ namespace GAS.Runtime
     }
     
     [Serializable]
-    public struct InstantCueSetting
+    public struct CueSetting
     {
         [LabelText("播放的需求Tags")]
         [SerializeField] 

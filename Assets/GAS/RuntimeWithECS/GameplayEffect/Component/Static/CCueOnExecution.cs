@@ -12,24 +12,15 @@ namespace GAS.Runtime
         public NativeArray<Entity> cues;
     }
     
-    public sealed class ConfCueOnExecution:GameplayEffectComponentConfig
+    public sealed class ConfCueOnExecution:ConfCueBase
     {
-        public GameplayCueBase[] cues;
-        
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            Entity[] entities = new Entity[cues.Length];
-            for (int i = 0; i < cues.Length; i++)
-            {
-                entities[i] = GASManager.EntityManager.CreateEntity();
-                EntityHelper.AddManagedComponent<MCCue>(entities[i]);
-                cues[i].SetSourceEntity(ge,CueSourceType.GameplayEffect);
-                EntityHelper.SetManagedComponent(entities[i],new MCCue(cues[i]));
-            }
+            var entities = CreateCueEntityArray(ge);
             EntityHelper.AddComponent<CCueOnExecution>(ge);
-            EntityHelper.SetComponent(ge, new CCueOnExecution
+            EntityHelper.SetComponent(ge, new CCueOnExecution 
             {
-                cues = new NativeArray<Entity>(entities, Allocator.Persistent)
+                cues = entities
             });
         }
     }
