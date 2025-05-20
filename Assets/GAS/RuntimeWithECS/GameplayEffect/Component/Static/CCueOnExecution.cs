@@ -21,7 +21,7 @@ namespace GAS.Runtime
             Entity[] entities = new Entity[cues.Length];
             for (int i = 0; i < cues.Length; i++)
             {
-                entities[i] = EntityHelper.CreateEntity();
+                entities[i] = GASManager.EntityManager.CreateEntity();
                 EntityHelper.AddManagedComponent<MCCue>(entities[i]);
                 cues[i].SetSourceEntity(ge,CueSourceType.GameplayEffect);
                 EntityHelper.SetManagedComponent(entities[i],new MCCue(cues[i]));

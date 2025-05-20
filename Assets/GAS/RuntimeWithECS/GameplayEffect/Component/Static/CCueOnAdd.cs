@@ -23,7 +23,7 @@ namespace GAS.Runtime
             var entities = new Entity[cues.Length];
             for (var i = 0; i < cues.Length; i++)
             {
-                entities[i] = EntityHelper.CreateEntity();
+                entities[i] = GASManager.EntityManager.CreateEntity();
                 var c = cues[i];
                 // Cue是否播放组件
                 EntityHelper.AddComponent<ECCuePlayable>(entities[i]);

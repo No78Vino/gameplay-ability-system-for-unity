@@ -85,7 +85,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
 
         public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
         {
-            var entity = EntityHelper.CreateEntity();
+            var entity = _entityManager.CreateEntity();
             foreach (var config in componentAssets)
                 config.LoadToGameplayEffectEntity(entity);
             return entity;

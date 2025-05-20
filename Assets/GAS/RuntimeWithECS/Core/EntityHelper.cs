@@ -95,16 +95,7 @@ namespace GAS.Runtime
             else
                 _entityManager.SetComponentData(entity, component);
         }
-
-        /// <summary>
-        ///     创建实例
-        /// </summary>
-        /// <returns></returns>
-        public static Entity CreateEntity()
-        {
-            return _usingEcb ? _ecb.CreateEntity() : _entityManager.CreateEntity();
-        }
-
+        
         /// <summary>
         ///     摧毁实例
         /// </summary>
