@@ -1,6 +1,4 @@
-using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
-using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -20,7 +18,7 @@ namespace GAS.Runtime
         {
             var entities = CreateCueEntityArray(ge);
             EntityHelper.AddComponent<CCueOnAdd>(ge);
-            EntityHelper.SetComponent(ge, new CCueOnAdd 
+            EntityHelper.SetComponent(ge, new CCueOnAdd
             {
                 cues = entities
             });
