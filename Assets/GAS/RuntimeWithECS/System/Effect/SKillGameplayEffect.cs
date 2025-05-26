@@ -39,7 +39,10 @@ namespace GAS.Runtime
                     }
                 }
 
-                // 2.销毁ge
+                // 2.销毁绑定的entity：各类cue组件，派生ge等等
+                // TODO
+                
+                // 3.销毁ge
                 ecb.DestroyEntity(ge);
             }
 

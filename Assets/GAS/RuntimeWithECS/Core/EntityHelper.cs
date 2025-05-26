@@ -107,6 +107,16 @@ namespace GAS.Runtime
             else
                 _entityManager.DestroyEntity(entity);
         }
+        
+        /// <summary>
+        ///   实例化实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static Entity Instantiate(Entity entity)
+        {
+            return _usingEcb ? _ecb.Instantiate(entity) : _entityManager.Instantiate(entity);
+        }
 
         /// <summary>
         ///     设置能变组件状态

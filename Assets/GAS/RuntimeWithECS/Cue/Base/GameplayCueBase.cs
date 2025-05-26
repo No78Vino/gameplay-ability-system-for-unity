@@ -85,6 +85,11 @@ namespace GAS.RuntimeWithECS.Cue
         }
         
         public void StopImmediate() => Stop(true);
+
+        public void KillSelf()
+        {
+            EntityManager.SetComponentEnabled<ECKillCue>(_cueEntity,true);
+        }
         
         #region system function
 

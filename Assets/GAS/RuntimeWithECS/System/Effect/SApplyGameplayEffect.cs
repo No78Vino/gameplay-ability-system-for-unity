@@ -315,28 +315,48 @@ namespace GAS.Runtime
         private void TriggerCueOnAdd(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager)
         {
             if (!entityManager.HasComponent<CCueOnAdd>(gameplayEffect)) return;
-
-            var cues = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect).cues;
-            foreach (var cueEntity in cues)
+            
+            // 0.先清楚已实例化的cue
+            var cueInstances = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect).runtimeCues;
+            foreach (var cueInstance in cueInstances)
             {
-                // 1.先判断tag是否可以播放cue
-                if (entityManager.HasComponent<CPlayRequiredTags>(cueEntity))
+                if (entityManager.Exists(cueInstance))
                 {
-                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(cueEntity);
+                    var mcCue = entityManager.GetComponentData<MCCue>(cueInstance);
+                    mcCue.cue.KillSelf();
+                }
+            }
+            // 1.实例化Cue
+            var cueOnAdd = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect);
+            var prefabCue = cueOnAdd.cues;
+            var cueEntities = new NativeArray<Entity>(prefabCue.Length, Allocator.Persistent);
+            for (var i = 0; i < prefabCue.Length; i++)
+            {
+                var prefabEntity = prefabCue[i];
+                // 1.先判断tag是否可以播放cue
+                if (entityManager.HasComponent<CPlayRequiredTags>(prefabEntity))
+                {
+                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
                     if(!ASCUtil.HasAllTags(targetAsc,requiredTags.tags)) continue;
                 }
-                if (entityManager.HasComponent<CPlayImmunitedTags>(cueEntity))
+                if (entityManager.HasComponent<CPlayImmunitedTags>(prefabEntity))
                 {
-                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(cueEntity);
+                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(prefabEntity);
                     if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
                 }
+                
+                cueEntities[i] = EntityHelper.Instantiate(prefabEntity);
+                
                 // 2.重置Cue逻辑单元
-                var cueLogic = entityManager.GetComponentData<MCCue>(cueEntity);
+                // TODO 分系统实现，ecb逻辑分离
+                var cueLogic = entityManager.GetComponentData<MCCue>(cueEntities[i]);
                 cueLogic.cue.Reset();
                 cueLogic.cue.AddToTargetAsc(targetAsc);
                 // 3.激活CuePlaying
                 cueLogic.cue.Play(true);
             }
+            cueOnAdd.runtimeCues = cueEntities;
+            entityManager.SetComponentData(gameplayEffect,cueOnAdd);
         }
         
         // TODO 激活 CueOnActivation
