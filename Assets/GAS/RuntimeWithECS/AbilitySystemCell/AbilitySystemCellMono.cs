@@ -40,7 +40,17 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         {
             return _abilitySystemCell.GetAttrCurrentValue(attrSetCode,attributeCode);
         }
+        
+        public float GetAttrBaseValue(int attrSetCode,int attributeCode)
+        {
+            return _abilitySystemCell.GetAttrBaseValue(attrSetCode,attributeCode);
+        }
 
+        public void SetAttrBaseValue(int attrSetCode,int attributeCode,float value)
+        {
+            _abilitySystemCell.SetAttrBaseValue(attrSetCode,attributeCode,value);
+        }
+        
         #endregion
     }
 }
