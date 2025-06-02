@@ -59,7 +59,7 @@ MonoBehaviour:
       ClampMin: 1
       ValueMin: 1
       ClampMax: 1
-      ValueMax: 150
+      ValueMax: 500
     - AttrCode: 119047830
       attrName: HP
       ValueDefaultInit: 0

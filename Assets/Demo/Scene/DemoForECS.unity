@@ -1383,8 +1383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a097f0a3c3224932b1b4aff70bde44ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
-  runSpeed: 6
   acceleration: 3
   demoPlayer: {fileID: 1602959555}
 --- !u!143 &1602959553

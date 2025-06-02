@@ -33,5 +33,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
         public void TryCancelAbility(int abilityCode)=> _abilitySystemCell.TryCancelAbility(abilityCode);
 
         public AbilitySystemCell Cell => _abilitySystemCell;
+
+        #region Attribute
+
+        public float GetAttrCurrentValue(int attrSetCode,int attributeCode)
+        {
+            return _abilitySystemCell.GetAttrCurrentValue(attrSetCode,attributeCode);
+        }
+
+        #endregion
     }
 }

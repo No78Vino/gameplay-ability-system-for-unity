@@ -185,6 +185,10 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region Attribute
 
+        public float GetAttrCurrentValue(int attrSetCode,int attributeCode)
+        {
+            return _attrSetController.GetCurrentValue(attrSetCode,attributeCode);
+        }
         #endregion
 
         #region Ability

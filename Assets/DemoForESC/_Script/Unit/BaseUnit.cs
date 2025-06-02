@@ -60,5 +60,14 @@ namespace DemoForESC._Script
         {
             return AbilitySystemCellMono.Cell.HasTag(GTagLib.Event_Moving.HashCode);
         }
+
+        #region Attributes
+
+        public float GetSpeed()
+        {
+            return AbilitySystemCellMono.GetAttrCurrentValue(GEN_AttrSetCode.Fight ,GEN_AttributeCode.SPEED)/100;
+        }
+
+        #endregion
     }
 }

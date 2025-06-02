@@ -5,10 +5,7 @@ namespace DemoForESC._Script.Controller
     [RequireComponent(typeof(CharacterController))]
     public class EasyInputController : MonoBehaviour
     {
-        [Header("移动参数")] [SerializeField] [Range(0f, 5f)]
-        private float walkSpeed = 2.5f; // 行走速度
-
-        [SerializeField] [Range(0f, 10f)] private float runSpeed = 5f; // 奔跑速度
+        private float Speed => demoPlayer.GetSpeed(); // 行走速度
 
         [SerializeField] [Range(0.1f, 3f)] private float acceleration = 0.5f; // 加速时间
         
@@ -59,8 +56,7 @@ namespace DemoForESC._Script.Controller
         private void UpdateMovement()
         {
             // 速度控制
-            var targetSpeed = _isRunning ? runSpeed : walkSpeed;
-            _currentSpeed = Mathf.Lerp(_currentSpeed, targetSpeed, acceleration * Time.deltaTime);
+            _currentSpeed = Mathf.Lerp(_currentSpeed, Speed, acceleration * Time.deltaTime);
 
             // 应用移动
             if (_movement.magnitude > 0.1f)
