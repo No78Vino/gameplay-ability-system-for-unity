@@ -94,6 +94,14 @@ namespace GAS.Runtime
             cue.cue.SetCueEntity(cueEntity);
             return cue;
         }
+        
+        public static MCCue CopyCueComponent(MCCue cue)
+        {
+            return new MCCue()
+            {
+                cue = cue.cue
+            };
+        }
 
         #region 通用型工具接口
 

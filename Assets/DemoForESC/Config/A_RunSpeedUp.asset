@@ -41,4 +41,4 @@ MonoBehaviour:
     AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALApplyEffect
     _jsonAbilityParamConfig:
       TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigArrayGameplayEffect
-      Data: '{"gameplayEffectConfigs":[{"instanceID":37926}]}'
+      Data: '{"gameplayEffectConfigs":[{"instanceID":37918}]}'

@@ -155,13 +155,14 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             return false;
         }
         
-        public static void TryAddGameplayEffect(this Entity asc, Entity gameplayEffect)
+        public static bool TryAddGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
             var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
             foreach (var geElem in geBuff)
                 if (geElem.GameplayEffect == gameplayEffect)
-                    return;
+                    return false;
             geBuff.Add(new BEGameplayEffect { GameplayEffect = gameplayEffect });
+            return true;
         }
 
         /// <summary>

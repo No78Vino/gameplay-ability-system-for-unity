@@ -41,6 +41,13 @@ namespace GAS.Runtime
 
                 // 2.销毁绑定的entity：各类cue组件，派生ge等等
                 // TODO
+                // CueOnAdd
+                if (SystemAPI.HasComponent<CCueOnAdd>(ge))
+                {
+                    var cueOnAdd = SystemAPI.GetComponentRO<CCueOnAdd>(ge);
+                    ecb.DestroyEntity(cueOnAdd.ValueRO.cues);
+                    ecb.DestroyEntity(cueOnAdd.ValueRO.runtimeCues);
+                }
                 
                 // 3.销毁ge
                 ecb.DestroyEntity(ge);

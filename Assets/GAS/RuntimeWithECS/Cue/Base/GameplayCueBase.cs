@@ -66,11 +66,11 @@ namespace GAS.RuntimeWithECS.Cue
         {
             if (CanPlay())
             {
-                EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
+                EntityHelper.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
                 if (replay)
                 {
                     Reset();
-                    EntityManager.SetComponentEnabled<ECCuePlaying>(_cueEntity,false);
+                    EntityHelper.SetComponentEnabled<ECCuePlaying>(_cueEntity,false);
                 }
             }
         }

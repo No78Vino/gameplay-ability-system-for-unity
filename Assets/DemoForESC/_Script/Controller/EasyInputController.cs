@@ -51,7 +51,9 @@ namespace DemoForESC._Script.Controller
             if (Input.GetKeyDown(KeyCode.LeftShift))
                 demoPlayer.StartRun();
             else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
                 demoPlayer.StopRun();
+            }
         }
 
         private void UpdateMovement()

@@ -32,6 +32,7 @@ namespace GAS.Runtime
             {
                 var target = inUsage.ValueRO.Target;
                 var source = inUsage.ValueRO.Source;
+                
                 // 1.校验 ApplicationRequiredTags
                 if(!CheckCanApply(state.EntityManager,ge,target,ecb))
                     continue;
@@ -218,9 +219,8 @@ namespace GAS.Runtime
             // 优化：快照将在属性类mmc的modifier生效时才捕捉
             // CaptureAttributesSnapshot();
             
-            targetAsc.TryAddGameplayEffect(gameplayEffect);
-
-            TriggerCueOnAdd(gameplayEffect,targetAsc,entityManager);
+            if(targetAsc.TryAddGameplayEffect(gameplayEffect))
+                TriggerCueOnAdd(gameplayEffect,targetAsc,entityManager);
             
             if (entityManager.HasComponent<CEffectApplied>(gameplayEffect)) return;
             ecb.AddComponent<CEffectApplied>(gameplayEffect);
@@ -334,26 +334,55 @@ namespace GAS.Runtime
             {
                 var prefabEntity = prefabCue[i];
                 // 1.先判断tag是否可以播放cue
-                if (entityManager.HasComponent<CPlayRequiredTags>(prefabEntity))
+                bool hasRequiredTags = entityManager.HasComponent<CPlayRequiredTags>(prefabEntity);
+                if (hasRequiredTags)
                 {
                     var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
                     if(!ASCUtil.HasAllTags(targetAsc,requiredTags.tags)) continue;
                 }
-                if (entityManager.HasComponent<CPlayImmunitedTags>(prefabEntity))
+                bool hasImmunitedTags = entityManager.HasComponent<CPlayImmunitedTags>(prefabEntity);
+                if (hasImmunitedTags)
                 {
                     var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(prefabEntity);
                     if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
                 }
+
+                // 2.创建运行cue实例
+                cueEntities[i] = entityManager.CreateEntity(); // EntityHelper.Instantiate(prefabEntity);
+                entityManager.SetName(cueEntities[i], $"RuntimeCue_{cueEntities[i].Version}_{cueEntities[i].Index}");;
+                // 2.1 复制RequiredTags
+                if (hasRequiredTags)
+                {
+                    EntityHelper.AddComponent<CPlayRequiredTags>(cueEntities[i]);
+                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
+                    EntityHelper.SetComponent(cueEntities[i], new CPlayRequiredTags
+                    {
+                        tags = new NativeArray<int>(requiredTags.tags.ToArray(), Allocator.Persistent)
+                    });
+                }
+                // 2.2 复制ImmunitedTags
+                if (hasImmunitedTags)
+                {
+                    EntityHelper.AddComponent<CPlayImmunitedTags>(cueEntities[i]);
+                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(prefabEntity);
+                    EntityHelper.SetComponent(cueEntities[i], new CPlayImmunitedTags
+                    {
+                        tags = new NativeArray<int>(immunitedTags.tags.ToArray(), Allocator.Persistent)
+                    });
+                }
+                // 2.3 复制 ECCuePlayable,ECCuePlaying,ECKillCue
+                EntityHelper.AddComponent<ECCuePlaying>(cueEntities[i]);
+                EntityHelper.AddComponent<ECCuePlayable>(cueEntities[i]);
+                EntityHelper.AddComponent<ECKillCue>(cueEntities[i]);
                 
-                cueEntities[i] = EntityHelper.Instantiate(prefabEntity);
-                
-                // 2.重置Cue逻辑单元
-                // TODO 分系统实现，ecb逻辑分离
-                var cueLogic = entityManager.GetComponentData<MCCue>(cueEntities[i]);
-                cueLogic.cue.Reset();
-                cueLogic.cue.AddToTargetAsc(targetAsc);
-                // 3.激活CuePlaying
-                cueLogic.cue.Play(true);
+                // 2.4 复制Cue逻辑
+                var cueLogic = entityManager.GetComponentData<MCCue>(prefabEntity);
+                EntityHelper.AddManagedComponent<MCCue>(cueEntities[i]);
+                var cloneCue = CueHelper.CopyCueComponent(cueLogic);
+                cloneCue = CueHelper.InitInstantCueFromGameplayEffect(cloneCue, cueEntities[i], gameplayEffect);
+                cloneCue.cue.AddToTargetAsc(targetAsc);
+                cloneCue.cue.Play(true);
+                EntityHelper.SetManagedComponent(cueEntities[i],cloneCue);
             }
             cueOnAdd.runtimeCues = cueEntities;
             entityManager.SetComponentData(gameplayEffect,cueOnAdd);
