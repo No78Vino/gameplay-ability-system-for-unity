@@ -247,7 +247,7 @@ namespace GAS.Runtime
 
             var speed = _abilitySpec.GetPlaySpeed();
             speed = Math.Max(0, speed);
-            _playTotalTime += Time.deltaTime * speed;
+            _playTotalTime += GASTimer.TimeDelta * speed;
             var targetFrame = (int)(_playTotalTime * FrameRate);
 
             // 追帧

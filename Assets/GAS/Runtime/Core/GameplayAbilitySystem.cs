@@ -62,12 +62,20 @@ namespace GAS
 
         public void Pause()
         {
-            GasHost.enabled = false;
+            if (GasHost != null)
+            {
+                GasHost.enabled = false;
+                GASTimer.Pause();
+            }
         }
 
         public void Unpause()
         {
-            GasHost.enabled = true;
+            if (GasHost != null)
+            {
+                GasHost.enabled = true;
+                GASTimer.Unpause();
+            }
         }
 
         public void ClearComponents()

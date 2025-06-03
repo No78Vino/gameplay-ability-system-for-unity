@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GAS.General;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -82,14 +83,14 @@ namespace GAS.Runtime
             // 前提: Period不会动态修改
             if (Period <= 0) return;
 
-            var actualDuration = Time.time - _spec.ActivationTime;
+            var actualDuration = GASTimer.CurrentTimeSeconds - _spec.ActivationTime;
             if (actualDuration < Mathf.Epsilon)
             {
                 // 第一次执行
                 return;
             }
 
-            var dt = Time.deltaTime;
+            var dt = GASTimer.TimeDelta;
 
             if (_spec.DurationPolicy == EffectsDurationPolicy.Duration)
             {

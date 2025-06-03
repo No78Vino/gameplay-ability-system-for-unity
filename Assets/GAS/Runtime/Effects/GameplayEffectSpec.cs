@@ -36,6 +36,8 @@ namespace GAS.Runtime
             DurationPolicy = GameplayEffect.DurationPolicy;
             Stacking = GameplayEffect.Stacking;
             Modifiers = GameplayEffect.Modifiers;
+            ElapsedTime = 0;
+            
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
                 var periodTicker = ObjectPool.Instance.Fetch<GameplayEffectPeriodTicker>();
@@ -129,6 +131,7 @@ namespace GAS.Runtime
                 OnImmunityBlock = default;
                 OnStackChanged = default;
 
+                ElapsedTime = 0;
                 // InstanceId为0的不做回收处理, 避免重复回收
                 ObjectPool.Instance.Recycle(this);
             }
@@ -175,14 +178,24 @@ namespace GAS.Runtime
         /// 堆叠数
         /// </summary>
         public int StackCount { get; private set; } = 1;
+        
+        /// <summary>
+        /// 流逝时间
+        /// </summary>
+        public float ElapsedTime { get; private set; } = 0;
 
-
+        private void UpdateElapsedTime()
+        {
+            ElapsedTime += GASTimer.TimeDelta;
+        }
+        
         public float DurationRemaining()
         {
             if (DurationPolicy == EffectsDurationPolicy.Infinite)
                 return -1;
 
-            return Mathf.Max(0, Duration - (Time.time - ActivationTime));
+            return Mathf.Max(0, Duration - ElapsedTime);
+            //return Mathf.Max(0, Duration - (GASTimer.CurrentTimeSeconds - ActivationTime));
         }
 
         public void SetLevel(float level)
@@ -274,7 +287,7 @@ namespace GAS.Runtime
         {
             if (IsActive) return;
             IsActive = true;
-            ActivationTime = Time.time;
+            ActivationTime = GASTimer.CurrentTimeSeconds;
             TriggerOnActivation();
         }
 
@@ -288,6 +301,7 @@ namespace GAS.Runtime
         public void Tick()
         {
             PeriodTicker.Value?.Tick();
+            UpdateElapsedTime();
         }
 
         void TriggerInstantCues(GameplayCueInstant[] cues)
@@ -703,7 +717,8 @@ namespace GAS.Runtime
 
         public void RefreshDuration()
         {
-            ActivationTime = Time.time;
+            ActivationTime = GASTimer.CurrentTimeSeconds;
+            ElapsedTime = 0.0f;
         }
 
         private void OnStackCountChange(int oldStackCount, int newStackCount)
