@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Entities;
 
@@ -32,6 +33,12 @@ namespace GAS.Runtime
             _onBaseValueChangeBefore[entity][Tuple.Create(attrSetCode, attrCode)] = action;
         }
 
+        public static void SetOnBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            Func<float, float> action)
+        {
+            SetOnBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode, action);
+        }
+        
         public static void ClearOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode)
         {
             if (!_onBaseValueChangeBefore.TryGetValue(entity, out var value)) return;
@@ -39,6 +46,11 @@ namespace GAS.Runtime
             _onBaseValueChangeBefore[entity].Remove(Tuple.Create(attrSetCode, attrCode));
 
             if (_onBaseValueChangeBefore[entity].Count == 0) _onBaseValueChangeBefore.Remove(entity);
+        }
+
+        public static void ClearOnBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode)
+        {
+            ClearOnBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode);
         }
 
         public static float InvokeOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode, float value)
@@ -49,6 +61,12 @@ namespace GAS.Runtime
                 return action?.Invoke(value) ?? value;
 
             return value;
+        }
+        
+        public static float InvokeOnBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            float value)
+        {
+            return InvokeOnBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode, value);
         }
 
 
@@ -66,6 +84,12 @@ namespace GAS.Runtime
 
             _onBaseValueChangeAfter[entity][Tuple.Create(attrSetCode, attrCode)] += action;
         }
+        
+        public static void RegisterOnBaseValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            Action<float, float> action)
+        {
+            RegisterOnBaseValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
+        }
 
         public static void UnRegisterOnBaseValueChangeAfter(Entity entity, int attrSetCode, int attrCode,
             Action<float, float> action)
@@ -81,6 +105,12 @@ namespace GAS.Runtime
                 _onBaseValueChangeAfter[entity].Remove(Tuple.Create(attrSetCode, attrCode));
             if (_onBaseValueChangeAfter[entity].Count == 0) _onBaseValueChangeAfter.Remove(entity);
         }
+        
+        public static void UnRegisterOnBaseValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            Action<float, float> action)
+        {
+            UnRegisterOnBaseValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
+        }
 
         public static void InvokeOnBaseValueChangeAfter(Entity entity, int attrSetCode, int attrCode, float oldValue,
             float newValue)
@@ -89,6 +119,12 @@ namespace GAS.Runtime
 
             if (dictionary.TryGetValue(Tuple.Create(attrSetCode, attrCode), out var action))
                 action?.Invoke(oldValue, newValue);
+        }
+        
+        public static void InvokeOnBaseValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            float oldValue, float newValue)
+        {
+            InvokeOnBaseValueChangeAfter(asc.Entity, attrSetCode, attrCode, oldValue, newValue);
         }
 
 
@@ -106,6 +142,12 @@ namespace GAS.Runtime
 
             _onCurrentValueChangeAfter[entity][Tuple.Create(attrSetCode, attrCode)] += action;
         }
+        
+        public static void RegisterOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            Action<float, float> action)
+        {
+            RegisterOnCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
+        }
 
         public static void UnRegisterOnCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode,
             Action<float, float> action)
@@ -122,6 +164,12 @@ namespace GAS.Runtime
 
             if (_onCurrentValueChangeAfter[entity].Count == 0) _onCurrentValueChangeAfter.Remove(entity);
         }
+        
+        public static void UnRegisterOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            Action<float, float> action)
+        {
+            UnRegisterOnCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
+        }
 
         public static void InvokeOnCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode, float oldValue,
             float newValue)
@@ -130,6 +178,12 @@ namespace GAS.Runtime
 
             if (dictionary.TryGetValue(Tuple.Create(attrSetCode, attrCode), out var action))
                 action?.Invoke(oldValue, newValue);
+        }
+        
+        public static void InvokeOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+            float oldValue, float newValue)
+        {
+            InvokeOnCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, oldValue, newValue);
         }
 
         #endregion
@@ -144,6 +198,11 @@ namespace GAS.Runtime
                 _onGameplayEffectContainerIsDirty[entity] =
                     (Action)Delegate.Combine(_onGameplayEffectContainerIsDirty[entity], action);
         }
+        
+        public static void RegisterOnGameplayEffectContainerIsDirty(AbilitySystemCell asc, Action action)
+        {
+            RegisterOnGameplayEffectContainerIsDirty(asc.Entity, action);
+        }
 
         public static void UnRegisterOnGameplayEffectContainerIsDirty(Entity entity, Action action)
         {
@@ -154,11 +213,21 @@ namespace GAS.Runtime
             else
                 _onGameplayEffectContainerIsDirty[entity] = newAction;
         }
+        
+        public static void UnRegisterOnGameplayEffectContainerIsDirty(AbilitySystemCell asc, Action action)
+        {
+            UnRegisterOnGameplayEffectContainerIsDirty(asc.Entity, action);
+        }
 
         public static void InvokeOnGameplayEffectContainerIsDirty(Entity dirtyAsc)
         {
             if (_onGameplayEffectContainerIsDirty.TryGetValue(dirtyAsc, out var action))
                 action?.Invoke();
+        }
+        
+        public static void InvokeOnGameplayEffectContainerIsDirty(AbilitySystemCell asc)
+        {
+            InvokeOnGameplayEffectContainerIsDirty(asc.Entity);
         }
 
         #endregion

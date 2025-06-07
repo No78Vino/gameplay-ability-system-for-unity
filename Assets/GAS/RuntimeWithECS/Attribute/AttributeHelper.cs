@@ -22,7 +22,7 @@ namespace GAS.RuntimeWithECS.Attribute
             if (attrIndex == -1) return 0;
             var attr = attributes[attrIndex];
             
-
+            var oldValue = attr.CurrentValue;
             attr.CurrentValue = attr.BaseValue;
             // 获取GE
             var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
@@ -50,6 +50,9 @@ namespace GAS.RuntimeWithECS.Attribute
             var newCurrentValue = attr.CurrentValue;
             attrSet.Attributes[attrIndex] = attr;
             attrSets[attrSetIndex] = attrSet;
+            
+            GASEventCenter.InvokeOnCurrentValueChangeAfter(
+                asc, attrSet.Code, attr.Code, oldValue, newCurrentValue);
             return newCurrentValue;
         }
         
