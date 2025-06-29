@@ -40,9 +40,7 @@ namespace GAS.Runtime
         }
 
         public bool IsPlaying { get; private set; }
-
-        //public TimelineAbilityAssetBase AbilityAsset => _abilitySpec.Ability.DataReference as TimelineAbilityAssetBase;
-
+        
         public AbilityParamTimeline Param => _alTimeline.GetParam();
             
         private int FrameCount => Param.FrameCount;
