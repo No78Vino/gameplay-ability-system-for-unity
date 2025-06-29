@@ -10,13 +10,5 @@ namespace GAS.Runtime
         {
             GAUtil.DoCost(_logic.GetAbilityEntity());
         }
-
-        public override void OnEnd(int endFrame)
-        {
-        }
-
-        public override void OnTick(int frameIndex, int startFrame, int endFrame)
-        {
-        }
     }
 }
