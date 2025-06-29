@@ -1,5 +1,7 @@
+using DemoForESC._Script.Controller;
 using DemoForESC._Script.Gas.Ability;
 using DemoForESC._Script.Gen;
+using EXToyLib;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.ASCPreset;
@@ -28,6 +30,16 @@ namespace DemoForESC._Script
             AbilitySystemCellMono.Init(_configAsset.GetConfig());
             var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(GEN_AbilityCode.ABILITY_move);
             ((ALMove)abilityLogic.Logic).SetUnit(this);
+        }
+        
+        private void OnEnable()
+        {
+            GravityForCharacterController.Instance.Register(GetComponent<CharacterController>());
+        }
+        
+        private void OnDisable()
+        {
+            GravityForCharacterController.Instance.Unregister(GetComponent<CharacterController>());
         }
         
         public virtual void Move(Vector3 direction)

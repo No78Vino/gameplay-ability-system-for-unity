@@ -1,5 +1,6 @@
 using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Ability.Component.Dynamic;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
@@ -27,6 +28,27 @@ namespace GAS.RuntimeWithECS.Ability.Component
         public void SetAbilityEntity(Entity abilityEntity)
         {
             _abilityEntity = abilityEntity;
+        }
+        
+        public Entity GetAbilityEntity()
+        {
+            return _abilityEntity;
+        }
+        
+        public Entity GetAscEntity()
+        {
+            if (!_entityManager.Exists(_abilityEntity)) return Entity.Null;
+            
+            var basicInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
+            return basicInfo.Owner;
+        }
+        
+        public virtual void TryEndSelf()
+        {
+            if (GASManager.EntityManager.Exists(_abilityEntity))
+            {
+                GASManager.EntityManager.AddComponent<CAbilityInTryEnd>(_abilityEntity);
+            }
         }
 
         public Entity GetOwnerAsc()
@@ -82,6 +104,11 @@ namespace GAS.RuntimeWithECS.Ability.Component
         public void SetParam(T abilityParam)
         {
             _param = abilityParam;
+        }
+        
+        public T GetParam()
+        {
+            return _param;
         }
     }
 }

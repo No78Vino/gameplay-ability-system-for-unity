@@ -55,7 +55,7 @@ MonoBehaviour:
       ValueMax: 0
     - AttrCode: 2025855271
       attrName: SPEED
-      ValueDefaultInit: 100
+      ValueDefaultInit: 200
       ClampMin: 1
       ValueMin: 1
       ClampMax: 1
