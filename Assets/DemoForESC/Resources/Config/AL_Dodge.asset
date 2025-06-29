@@ -37,7 +37,7 @@ MonoBehaviour:
   ConfAssetCancelAbilityTags:
     tags: 
   MCConfAssetAbilityLogic:
-    AbilityLogicType: GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog
+    AbilityLogicType: GAS.Runtime.ALTimeline
     _jsonAbilityParamConfig:
-      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigNone
-      Data: '{}'
+      TypeFullName: GAS.RuntimeDataHelper.Ability.AbilityParam.AbilityParamConfigString
+      Data: '{"value":""}'
