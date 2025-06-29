@@ -14,6 +14,16 @@
       "dependencies": {},
       "hash": "b469ae66a33df51d1f5a9aa01f2213ea5826400f"
     },
+    "com.exhard.exopensourcepluginmanager": {
+      "version": "https://gitee.com/exhard/EX_Toy_Lib.git?path=Assets/ExOpenSourcePluginManager",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "com.unity.editorcoroutines": "1.0.0"
+      },
+      "hash": "02d412bea3a139324492c6e70db56105b1c28b84"
+    },
     "com.unity.2d.animation": {
       "version": "9.0.4",
       "depth": 1,
@@ -252,6 +262,13 @@
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.4",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

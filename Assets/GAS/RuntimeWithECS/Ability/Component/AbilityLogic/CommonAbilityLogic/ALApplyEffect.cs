@@ -1,22 +1,21 @@
-using System.Collections.Generic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.Runtime;
+using GAS.RuntimeDataHelper.GameplayEffect;
+using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 using UnityEngine;
 
 namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
 {
-    public class ALApplyEffect: AbilityLogicBase<AbilityParamArrayGameplayEffect>
+    public class ALApplyEffect : AbilityLogicBase<AbilityParamArrayGameplayEffect>
     {
-        public void InitGameplayEffects(GameplayEffectConfig[] effects)
-        {
-            _param.SetValue(effects);
-        }
-        
         public ALApplyEffect(Entity ability) : base(ability)
         {
+        }
+
+        public void InitGameplayEffects(string[] effects)
+        {
+            _param.SetValue(effects);
         }
 
         public override void AbilityTick(GlobalTimer timer)
@@ -27,9 +26,12 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
         {
             var baseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
             var owner = baseInfo.Owner;
-            foreach (var effect in _param.Value)
+            foreach (var effectPath in _param.Value)
             {
-                var geEntity = CreateGameplayEffectEntity(effect);
+                string resourcePath = GetResourcePath(effectPath);
+                var effect = Resources.Load<GameplayEffectConfigAsset>(resourcePath);
+                if (effect == null) continue;
+                var geEntity = CreateGameplayEffectEntity(effect.GetConfig());
                 ApplyGameplayEffectTo(geEntity, owner, owner);
             }
         }
@@ -49,10 +51,30 @@ namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
                 if (_entityManager.HasComponent<CCreatedByAbility>(effect))
                 {
                     var createdByAbility = _entityManager.GetComponentData<CCreatedByAbility>(effect);
-                    if(createdByAbility.sourceAbility==_abilityEntity)
+                    if (createdByAbility.sourceAbility == _abilityEntity)
                         RemoveGameplayEffect(effect);
                 }
             }
+        }
+
+        private string GetResourcePath(string effectPath)
+        {
+            // 只截取Resources的子路径：找到路径里匹配"Resources/"的位置，然后只保留后面的路径。
+            var index = effectPath.IndexOf("Resources/");
+            if (index >= 0)
+            {
+                var p = effectPath.Substring(index + "Resources/".Length);
+                // 再删掉“.asset”后缀
+                if (p.EndsWith(".asset"))
+                {
+                    p = p.Substring(0, p.Length - ".asset".Length);
+                }
+
+                return p;
+            }
+
+            Debug.LogWarning($"Effect path '{effectPath}' does not contain 'Resources/'. Returning the original path.");
+            return effectPath; // 如果没有找到，返回原始路径
         }
     }
 }

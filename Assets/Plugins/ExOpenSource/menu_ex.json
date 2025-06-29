@@ -1,0 +1,75 @@
+{
+  "Version": "1.0",
+  "Name": "EXHard开源插件收藏",
+  "Owner": "Ex-Hard",
+  "Intro": "我平日积累的插件，包括自己开发的插件和往上搜罗到的一些有意思的插件。",
+  "DefaultGit_UserName": "No78Vino",
+  "DefaultGit_RepoName": "EX_Toy_Lib",
+  "DefaultGit_Branch": "main",
+  "Plugins": [
+    {
+      "Name": "贝塞尔子弹轨迹控制器",
+      "Version": "1.0",
+      "Intro": "贝塞尔子弹轨迹控制器是一个用于控制物体运动轨迹的小插件，支持贝塞尔曲线的绘制和编辑。",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "Toy",
+        "物体运动",
+        "Bezier"
+      ],
+      "MenuPath": "EXHard开源插件收藏/运动/贝塞尔子弹轨迹控制器",
+      "LocalPath": "Assets/Plugins/ExOpenSource/BezierTrajectory",
+      "GitURL_Path": "Assets/_EXToyLib/BezierTrajectory",
+      "Dependencies": []
+    },
+    {
+      "Name": "CharacterController重力实现",
+      "Version": "1.0",
+      "Intro": "Unity的Character Controller组件和rigidbody的重力位移是冲突的。所以Character Controller组件的重力需要额外实现。\n这个插件实现了一个简易的重力控制。",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "MenuPath": "EXHard开源插件收藏/运动/CharacterController重力实现",
+      "LocalPath": "Assets/Plugins/ExOpenSource/GravityForCharacterController",
+      "GitURL_Path": "Assets/_EXToyLib/GravityForCharacterController",
+      "IntroductionURL": "https://github.com/No78Vino/EX_Toy_Lib/blob/main/Assets/_EXToyLib/GravityForCharacterController/GUIDE.md"
+    },
+    {
+      "Name": "EX-GAS",
+      "Version": "1.1",
+      "Intro": "该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。\n\n该项目完全开源，欢迎大家一起参与开发，提出建议，共同完善。可以基于该项目进行二次开发。",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "GAS",
+        "Gameplay技能系统"
+      ],
+      "MenuPath": "EXHard开源插件收藏/EX-GAS/1.0(Mono版本)",
+      "LocalPath": "Assets/Plugins/ExOpenSource/GAS",
+      "GitURL_Username": "No78Vino",
+      "GitURL_RepoName": "gameplay-ability-system-for-unity",
+      "GitURL_Branch": "EX-GAS-1.0",
+      "GitURL_Path": "Assets/GAS",
+      "IntroductionURL": "https://github.com/No78Vino/gameplay-ability-system-for-unity",
+      "Dependencies": []
+    },
+    {
+      "Name": "EX-Maid For UI (XUI)",
+      "Version": "1.0",
+      "Intro": "本插件集成了LoxodonFramework(MVVM)和FairyGUI，用于快速开发UI界面。适用于单人/小团队/小规模游戏开发。",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "UI",
+        "Framework"
+      ],
+      "MenuPath": "EXHard开源插件收藏/UI/EX-Maid For UI",
+      "LocalPath": "Assets/Plugins/ExOpenSource/EXMaidForUI",
+      "GitURL_RepoName": "EXMaidForFGUIandLoxondon",
+      "GitURL_Path": "",
+      "IntroductionURL": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon",
+      "Dependencies": [
+        {
+          "name":"com.vovgou.loxodon-framework",
+          "version": "https://github.com/vovgou/loxodon-framework.git?path=Loxodon.Framework/Assets/LoxodonFramework"
+        }
+      ]
+    }
+  ]
+}

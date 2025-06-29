@@ -48,7 +48,7 @@ MonoBehaviour:
       - AttrSetCode: 109648900
         AttrCode: 2025855271
         Operation: 1
-        Magnitude: 2
+        Magnitude: 3
         MMC:
           MmcType: GAS.RuntimeWithECS.Modifier.CommonUsage.MMCScalableFloat
           _jsonMmcParamConfig:

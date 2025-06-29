@@ -26,7 +26,7 @@ namespace GAS.Runtime
             new(GEN_AttributeCode.STAMINA,0,false,false,0f,0f),
             new(GEN_AttributeCode.POSTURE,0,true,false,1.39f,0f),
             new(GEN_AttributeCode.ATK,0,true,false,0f,0f),
-            new(GEN_AttributeCode.SPEED,100,true,true,1f,150f),
+            new(GEN_AttributeCode.SPEED,200,true,true,1f,500f),
             new(GEN_AttributeCode.HP,0,false,false,0f,0f),
         });
         public static Dictionary<int,NewAttributeSetConfig> AttributeSetMap = new()
