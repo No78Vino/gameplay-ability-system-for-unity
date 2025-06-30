@@ -12,15 +12,16 @@ namespace GAS.Editor
     [Serializable]
     public class AbilityParamConfigTimeline: AbilityParamConfigBase<AbilityParamTimeline>
     {
+        [LabelText("手动结束能力")]
         public bool manualEndAbility;
         
-        //[HideInInspector]
+        [HideInInspector]
         public int frameCount; // 能力结束时间
         
-        //[HideInInspector]
+        [HideInInspector]
         public List<CueTrackData> cues = new List<CueTrackData>();
         
-        //[HideInInspector]
+        [HideInInspector]
         public List<TaskClipEventTrackData> tasks = new List<TaskClipEventTrackData>();
         
         [Button("查看/编辑能力时间轴", ButtonSizes.Large, Icon = SdfIconType.Hammer)]
