@@ -8,7 +8,7 @@ namespace GAS.Editor
 {
     public static class GeneratorCueType
     {
-        [MenuItem("EX-GAS/CodeGenerate/CueType")]
+        [MenuItem("EXTool/EX-GAS/CodeGenerate/CueType")]
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);

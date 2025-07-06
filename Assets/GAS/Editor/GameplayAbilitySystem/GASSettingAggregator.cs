@@ -51,7 +51,7 @@ namespace GAS.Editor
             }
         }
 
-        private const string OpenWindow_MenuItemName = "EX-GAS/Settings";
+        private const string OpenWindow_MenuItemName = "EXTool/EX-GAS/Settings";
 #if EX_GAS_ENABLE_HOT_KEYS
         private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F12";
 #else

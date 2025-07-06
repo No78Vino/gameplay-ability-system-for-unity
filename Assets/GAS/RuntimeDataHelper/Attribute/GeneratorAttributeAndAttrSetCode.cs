@@ -10,7 +10,7 @@ namespace GAS.RuntimeDataHelper.Attribute
 {
     public static class GeneratorAttributeAndAttrSetCode
     {
-        [MenuItem("EX-GAS/CodeGenerate/AttributeSetCode")]
+        [MenuItem("EXTool/EX-GAS/CodeGenerate/AttributeSetCode")]
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);

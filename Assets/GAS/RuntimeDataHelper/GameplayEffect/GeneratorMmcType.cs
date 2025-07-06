@@ -9,7 +9,7 @@ namespace GAS.Editor
 {
     public static class GeneratorMmcType
     {
-        [MenuItem("EX-GAS/CodeGenerate/MmcType")]
+        [MenuItem("EXTool/EX-GAS/CodeGenerate/MmcType")]
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);

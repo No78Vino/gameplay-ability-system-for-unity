@@ -15,7 +15,7 @@ namespace GAS.RuntimeDataHelper.Tag
     /// </summary>
     public static class GeneratorGameplayTagCode
     {
-        [MenuItem("EX-GAS/CodeGenerate/GameplayTagCode")]
+        [MenuItem("EXTool/EX-GAS/CodeGenerate/GameplayTagCode")]
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);

@@ -10,7 +10,7 @@ namespace _ProjectCodeGenerate
 {
     public static class _Generator_AbilityConfigSO
     {
-        [MenuItem("EX-GAS/_ProjectGenerator/_AbilityConfigSO", priority = 0)]
+        [MenuItem("EXTool/EX-GAS/_ProjectGenerator/_AbilityConfigSO", priority = 0)]
         public static void Gen()
         {
             // var asset = GameplayTagsAsset.LoadOrCreate();

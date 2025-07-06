@@ -10,7 +10,7 @@ namespace _ProjectCodeGenerate
 {
     public static class _Generator_EffectConfigBase
     {
-        [MenuItem("EX-GAS/_ProjectGenerator/_EffectConfig")]
+        [MenuItem("EXTool/EX-GAS/_ProjectGenerator/_EffectConfig")]
         public static void Gen()
         {
             // var asset = GameplayTagsAsset.LoadOrCreate();

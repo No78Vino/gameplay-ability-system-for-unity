@@ -20,7 +20,7 @@ namespace GAS.Editor
 {
     public class EX_GAS_Watcher : OdinEditorWindow
     {
-        private const string OpenWindow_MenuItemName = "EX-GAS/Watcher";
+        private const string OpenWindow_MenuItemName = "EXTool/EX-GAS/Watcher";
 #if EX_GAS_ENABLE_HOT_KEYS
         private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F11";
 #else

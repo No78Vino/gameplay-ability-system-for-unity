@@ -10,7 +10,7 @@ namespace GAS.Editor
     /// </summary>
     public static class GeneratorAbilityCodeLib
     {
-        [MenuItem("EX-GAS/CodeGenerate/AbilityCode")]
+        [MenuItem("EXTool/EX-GAS/CodeGenerate/AbilityCode")]
         public static void Gen()
         {
             string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
