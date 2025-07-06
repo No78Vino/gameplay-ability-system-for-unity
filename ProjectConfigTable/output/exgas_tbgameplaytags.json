@@ -1,0 +1,62 @@
+[
+  {
+    "id": 100,
+    "name": "Faction",
+    "desc": "阵营描述标签"
+  },
+  {
+    "id": 1001,
+    "name": "Faction.Player",
+    "desc": "玩家阵营"
+  },
+  {
+    "id": 1002,
+    "name": "Faction.Enemy",
+    "desc": "敌人阵营"
+  },
+  {
+    "id": 200,
+    "name": "Ability",
+    "desc": "技能"
+  },
+  {
+    "id": 2001,
+    "name": "Ability.Die",
+    "desc": "技能：死亡"
+  },
+  {
+    "id": 2002,
+    "name": "Ability.Move",
+    "desc": "技能：移动"
+  },
+  {
+    "id": 2003,
+    "name": "Ability.Attack",
+    "desc": "技能：攻击"
+  },
+  {
+    "id": 2004,
+    "name": "Ability.Dodge",
+    "desc": "技能：闪避"
+  },
+  {
+    "id": 300,
+    "name": "Event",
+    "desc": "事件"
+  },
+  {
+    "id": 3001,
+    "name": "Event.Moving",
+    "desc": "事件：正在移动"
+  },
+  {
+    "id": 3002,
+    "name": "Event.Dodging",
+    "desc": "事件：正在闪避"
+  },
+  {
+    "id": 3003,
+    "name": "Event.Attacking",
+    "desc": "事件：正在攻击"
+  }
+]
