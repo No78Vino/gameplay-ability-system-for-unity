@@ -6,7 +6,7 @@ namespace GAS.Editor
 	using UnityEditor.TreeDataModel;
 	using UnityEngine;
 	
-	[FilePath(GasDefine.GAS_TAGS_MANAGER_ASSET_PATH)]
+	[SingletonFilePath(GasDefine.GAS_TAGS_MANAGER_ASSET_PATH)]
 	public class GameplayTagsAsset : ScriptableSingleton<GameplayTagsAsset>
 	{
 		[SerializeField] List<GameplayTagTreeElement> gameplayTagTreeElements = new List<GameplayTagTreeElement>();

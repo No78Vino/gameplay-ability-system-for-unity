@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace GAS.Editor
 {
-    [FilePath(GasDefine.GAS_ATTRIBUTE_ASSET_PATH)]
+    [SingletonFilePath(GasDefine.GAS_ATTRIBUTE_ASSET_PATH)]
     public class AttributeAsset : ScriptableSingleton<AttributeAsset>
     {
         [BoxGroup("Warning", order: -1)]

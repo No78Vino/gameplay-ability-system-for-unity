@@ -141,7 +141,7 @@ namespace GAS.Editor
         }
     }
 
-    [FilePath(GasDefine.GAS_ATTRIBUTE_SET_ASSET_PATH)]
+    [SingletonFilePath(GasDefine.GAS_ATTRIBUTE_SET_ASSET_PATH)]
     public class AttributeSetAsset : ScriptableSingleton<AttributeSetAsset>
     {
         [BoxGroup("Warning", order: -1)]

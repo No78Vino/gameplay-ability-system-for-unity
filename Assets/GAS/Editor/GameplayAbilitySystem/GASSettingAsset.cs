@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using GAS.General;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace GAS.Editor
 {
-    [FilePath(GasDefine.GAS_BASE_SETTING_PATH)]
+    [SingletonFilePath(GasDefine.GAS_BASE_SETTING_PATH)]
     public class GASSettingAsset : ScriptableSingleton<GASSettingAsset>
     {
         private const int LABEL_WIDTH = 200;
@@ -30,6 +33,23 @@ namespace GAS.Editor
         [OnValueChanged("SaveAsset")]
         public string GASConfigAssetPath = "Assets/GAS/Config";
 
+        [BoxGroup("A")]
+        [LabelText("表导出路径")]
+        [LabelWidth(LABEL_WIDTH)]
+        [FolderPath(RequireExistingPath = true)]
+        [OnValueChanged("SaveAsset")]
+        public string TableOutpuPath = "";
+                
+        [BoxGroup("A")]
+        [LabelText("导表工具路径")]
+        [LabelWidth(LABEL_WIDTH)]
+        [Sirenix.OdinInspector.FilePath(Extensions = "bat",RequireExistingPath = true)]
+        [OnValueChanged("SaveAsset")]
+        [InlineButton(nameof(OutputJsonTables),"导出Json表", ShowIf = nameof(IsShowOutputButton))]
+        public string TableExportToolPath = "";
+        
+
+        
         public static GASSettingAsset Setting
         {
             get
@@ -177,6 +197,79 @@ namespace GAS.Editor
 
             AbilitySystemComponentUtilGenerator.Gen();
             AssetDatabase.Refresh();
+        }
+
+        [MenuItem("EXTool/EX-GAS/导出GAS的Json配置表")]
+        public static void OutputJsonTables()
+        {
+            string fullBatPath = Path.GetFullPath(Instance.TableExportToolPath);
+            string fullOutputPath = Path.GetFullPath(Instance.TableOutpuPath);
+            // 验证文件和输出路径是否存在
+            if (!File.Exists(fullBatPath))
+            {
+                Debug.LogError($"BAT文件不存在: {fullBatPath}");
+                return;
+            }
+            if (!Directory.Exists(fullOutputPath))
+            {
+                Debug.LogError($"输出路径不存在: {fullOutputPath}");
+                return;
+            }
+
+            // 获取bat文件的文件夹路径
+            string fullBuildPath = Path.GetDirectoryName(fullBatPath);
+            // 创建进程配置
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo()
+            {
+                FileName = fullBatPath,
+                WorkingDirectory = fullBuildPath,
+                Arguments = $"\"{fullOutputPath}\"", // 用引号包裹路径防空格问题
+                UseShellExecute = false,              // 不使用系统shell
+                RedirectStandardOutput = true,         // 重定向输出
+                RedirectStandardError = true,          // 重定向错误
+                CreateNoWindow = false                  // 不创建窗口
+            };
+
+            // 注册输出事件
+            process.OutputDataReceived += (sender, e) => {
+                if (!string.IsNullOrEmpty(e.Data)) 
+                    Debug.Log(e.Data);
+            };
+        
+            process.ErrorDataReceived += (sender, e) => {
+                if (!string.IsNullOrEmpty(e.Data)) 
+                    Debug.LogError(e.Data);
+            };
+
+            try
+            {
+                // 启动进程
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit(); // 等待执行完成
+            
+                Debug.Log($"BAT执行完成，退出代码: {process.ExitCode}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"执行错误: {ex.Message}");
+            }
+            finally
+            {
+                process.Close();
+            }
+        }
+
+        bool IsShowOutputButton()
+        {
+            // 检查导出工具路径和输出路径是否存在
+            // 获取项目根目录
+            var projectRootPath = Application.dataPath.Substring(0, Application.dataPath.Length - 6); 
+            var fullBatPath = Path.Combine(projectRootPath,Instance.TableExportToolPath);
+            var fullOutputPath = Path.Combine(projectRootPath,Instance.TableOutpuPath);
+            return File.Exists(fullBatPath) && Directory.Exists(fullOutputPath);
         }
 
         private void SaveAsset()

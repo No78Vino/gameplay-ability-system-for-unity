@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CodeGeneratePath: Assets/DemoForESC/_Script/Gen
   GASConfigAssetPath: Assets/Demo/Resources/GAS_Setting/Config
+  TableOutpuPath: Assets/DemoForESC/Resources/Tables
+  LubanBuildPath: ProjectConfigTable/exgas_config
+  TableExportToolPath: ProjectConfigTable/exgas_config/gen.bat
