@@ -25,13 +25,7 @@ namespace GAS.Editor
         [FolderPath]
         [OnValueChanged("SaveAsset")]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
-
-        [BoxGroup("A")]
-        [LabelText(GASTextDefine.LABEL_OF_GASConfigAssetPath)]
-        [LabelWidth(LABEL_WIDTH)]
-        [FolderPath]
-        [OnValueChanged("SaveAsset")]
-        public string GASConfigAssetPath = "Assets/GAS/Config";
+        
 
         [BoxGroup("A")]
         [LabelText("表导出路径")]
@@ -40,6 +34,16 @@ namespace GAS.Editor
         [OnValueChanged("SaveAsset")]
         public string TableOutpuPath = "";
                 
+        [BoxGroup("A")]
+        [LabelText("表class生成路径")]
+        [InfoBox("注意【表class生成路径】和【自动化生成脚本路径】不要设置成同一个，" +
+                 "因为luban的类生成工具会把输出的目录文件夹整个清空后再生成。所以请保证【表class生成路径】内没有其它文件。",
+            InfoMessageType.Warning)]
+        [LabelWidth(LABEL_WIDTH)]
+        [FolderPath(RequireExistingPath = true)]
+        [OnValueChanged("SaveAsset")]
+        public string TableClassCodeOutpuPath = "";
+        
         [BoxGroup("A")]
         [LabelText("导表工具路径")]
         [LabelWidth(LABEL_WIDTH)]
@@ -67,116 +71,7 @@ namespace GAS.Editor
             $"<size=15><b><color=white>EX-GAS Version: {GasDefine.GAS_VERSION}</color></b></size>";
 
         public static string CodeGenPath => Setting.CodeGeneratePath;
-
-
-        [Title(GASTextDefine.TITLE_PATHS, Bold = true)]
-        [PropertySpace(10)]
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        public static string ASCLibPath => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ASC_LIBRARY_FOLDER}";
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        public static string GameplayEffectLibPath =>
-            $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_EFFECT_LIBRARY_FOLDER}";
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        public static string GameplayAbilityLibPath =>
-            $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_LIBRARY_FOLDER}";
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        public static string GameplayCueLibPath => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_CUE_LIBRARY_FOLDER}";
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        public static string MMCLibPath => $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_MMC_LIBRARY_FOLDER}";
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        public static string AbilityTaskLib =>
-            $"{Setting.GASConfigAssetPath}/{GasDefine.GAS_ABILITY_TASK_LIBRARY_FOLDER}";
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        [LabelText("Tag Asset Path")]
-        public static string GAS_TAG_ASSET_PATH => GasDefine.GAS_TAGS_MANAGER_ASSET_PATH;
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        [LabelText("Attribute Asset Path")]
-        public static string GAS_ATTRIBUTE_ASSET_PATH => GasDefine.GAS_ATTRIBUTE_ASSET_PATH;
-
-        [ShowInInspector]
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [LabelWidth(SHORT_LABEL_WIDTH)]
-        [LabelText("AttributeSet Asset Path")]
-        public static string GAS_ATTRIBUTESET_ASSET_PATH => GasDefine.GAS_ATTRIBUTE_SET_ASSET_PATH;
-
-        void CheckPathFolderExist(string folderPath)
-        {
-            var folders = folderPath.Split('/');
-            if (folders[0] != "Assets")
-            {
-                EditorUtility.DisplayDialog("Error!", "'Config Asset Path/Code Gen Path' must start with Assets!",
-                    "OK");
-                return;
-            }
-
-            string parentFolderPath = folders[0];
-            for (var i = 1; i < folders.Length; i++)
-            {
-                string newFolderName = folders[i];
-                if (newFolderName == "") continue;
-
-                string newFolderPath = parentFolderPath + "/" + newFolderName;
-                if (!AssetDatabase.IsValidFolder(newFolderPath))
-                {
-                    AssetDatabase.CreateFolder(parentFolderPath, newFolderName);
-                    Debug.Log("[EX] Folder created at path: " + newFolderPath);
-                }
-
-                parentFolderPath += "/" + newFolderName;
-            }
-        }
-
-        [BoxGroup("A")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [GUIColor(0, 0.8f, 0)]
-        [PropertySpace(10)]
-        [InfoBox(GASTextDefine.TIP_CREATE_FOLDERS)]
-        [Button(SdfIconType.FolderCheck, GASTextDefine.BUTTON_CheckAllPathFolderExist, ButtonHeight = 38)]
-        void CheckAllPathFolderExist()
-        {
-            CheckPathFolderExist(GASConfigAssetPath);
-            CheckPathFolderExist(CodeGeneratePath);
-            CheckPathFolderExist(ASCLibPath);
-            CheckPathFolderExist(GameplayAbilityLibPath);
-            CheckPathFolderExist(GameplayEffectLibPath);
-            CheckPathFolderExist(GameplayCueLibPath);
-            CheckPathFolderExist(MMCLibPath);
-            CheckPathFolderExist(AbilityTaskLib);
-            AssetDatabase.Refresh();
-        }
-
+        
         [BoxGroup("A")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
@@ -199,11 +94,12 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("EXTool/EX-GAS/导出GAS的Json配置表")]
+        [MenuItem("EXTool/EX-GAS/生成GAS配置")]
         public static void OutputJsonTables()
         {
             string fullBatPath = Path.GetFullPath(Instance.TableExportToolPath);
             string fullOutputPath = Path.GetFullPath(Instance.TableOutpuPath);
+            string fullCodeOutputPath = Path.GetFullPath(Instance.TableClassCodeOutpuPath);
             // 验证文件和输出路径是否存在
             if (!File.Exists(fullBatPath))
             {
@@ -215,6 +111,11 @@ namespace GAS.Editor
                 Debug.LogError($"输出路径不存在: {fullOutputPath}");
                 return;
             }
+            if (!Directory.Exists(fullCodeOutputPath))
+            {
+                Debug.LogError($"表类Class输出路径不存在: {fullCodeOutputPath}");
+                return;
+            }
 
             // 获取bat文件的文件夹路径
             string fullBuildPath = Path.GetDirectoryName(fullBatPath);
@@ -224,11 +125,11 @@ namespace GAS.Editor
             {
                 FileName = fullBatPath,
                 WorkingDirectory = fullBuildPath,
-                Arguments = $"\"{fullOutputPath}\"", // 用引号包裹路径防空格问题
+                Arguments = $"\"{fullOutputPath}\" \"{fullCodeOutputPath}\"",  // 用引号包裹路径防空格问题
                 UseShellExecute = false,              // 不使用系统shell
-                RedirectStandardOutput = true,         // 重定向输出
-                RedirectStandardError = true,          // 重定向错误
-                CreateNoWindow = false                  // 不创建窗口
+                RedirectStandardOutput = true,        // 重定向输出
+                RedirectStandardError = true,         // 重定向错误
+                CreateNoWindow = false                // 不创建窗口
             };
 
             // 注册输出事件

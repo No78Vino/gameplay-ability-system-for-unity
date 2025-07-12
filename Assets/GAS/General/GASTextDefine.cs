@@ -16,9 +16,8 @@
         public const string TIP_CREATE_FOLDERS =
             "<color=white><size=15>如果你修改了EX-GAS的配置Asset路径,请点击这个按钮来确保所有子文件夹和基础配置文件正确生成。</size></color>";
 
-        public const string LABEL_OF_CodeGeneratePath = "脚本生成路径";
+        public const string LABEL_OF_CodeGeneratePath = "自动化生成脚本路径";
         public const string LABEL_OF_GASConfigAssetPath = "配置文件Asset路径";
-        public const string BUTTON_CheckAllPathFolderExist = " 检查子目录和基础配置";
         public const string BUTTON_GenerateAscExtensionCode = " 生成AbilitySystemComponentExtension类脚本";
 
         #endregion

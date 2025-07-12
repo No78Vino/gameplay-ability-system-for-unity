@@ -33,7 +33,6 @@ namespace GAS.Editor
         {
             get
             {
-                if (_libPaths == null) CheckLibPaths();
                 return _libPaths;
             }
         }
@@ -59,7 +58,6 @@ namespace GAS.Editor
         [MenuItem(OpenWindow_MenuItemNameEnh, priority = 1)]
         private static void OpenWindow()
         {
-            CheckLibPaths();
             var window = GetWindow<GASAssetAggregator>();
             window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1600, 900);
             window.MenuWidth = 240;
@@ -72,28 +70,7 @@ namespace GAS.Editor
                 Application.OpenURL("https://github.com/No78Vino/gameplay-ability-system-for-unity");
             }
         }
-
-        private static void CheckLibPaths()
-        {
-            _libPaths = new[]
-            {
-                GASSettingAsset.MMCLibPath,
-                GASSettingAsset.GameplayCueLibPath,
-                GASSettingAsset.GameplayEffectLibPath,
-                GASSettingAsset.GameplayAbilityLibPath,
-                GASSettingAsset.ASCLibPath,
-            };
-
-            _subDirectoryInfos.Clear();
-            for (var i = 0; i < _directoryInfos.Length; i++)
-            {
-                var rootMenuName = MenuNames[i];
-                _directoryInfos[i] = new DirectoryInfo(rootMenuName, _libPaths[i], _libPaths[i], _types[i], true);
-
-                foreach (var subDir in _directoryInfos[i].SubDirectory)
-                    _subDirectoryInfos.Add(new DirectoryInfo(rootMenuName, _libPaths[i], subDir, _types[i], false));
-            }
-        }
+        
 
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -107,7 +84,6 @@ namespace GAS.Editor
                 tree.Add(menuName, _directoryInfos[i]);
                 if (menuName == MenuNames[3])
                 {
-                    tree.Add(menuName, new AbilityOverview());
                 }
 
                 tree.AddAllAssetsAtPath(menuName, libPath, type, true)
@@ -135,42 +111,7 @@ namespace GAS.Editor
             SirenixEditorGUI.BeginHorizontalToolbar(toolbarHeight);
             {
                 if (selected != null) GUILayout.Label(selected.Name + " (" + selected.Value.GetType().FullName + ")");
-
-                if (selected != null && (selected.Value is DirectoryInfo || selected.Value is AbilityOverview))
-                {
-                    var directoryInfo = selected.Value is AbilityOverview
-                        ? _directoryInfos[3]
-                        : selected.Value as DirectoryInfo;
-
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("浏览")))
-                    {
-                        OpenDirectoryInExplorer(directoryInfo);
-                    }
-
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建子文件夹")))
-                    {
-                        CreateNewSubDirectory(directoryInfo);
-                        GUIUtility
-                            .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
-                    }
-
-                    if (SirenixEditorGUI.ToolbarButton(new GUIContent("新建")))
-                    {
-                        CreateNewAsset(directoryInfo);
-                        GUIUtility
-                            .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
-                    }
-
-                    if (!directoryInfo.Root)
-                    {
-                        if (SirenixEditorGUI.ToolbarButton(new GUIContent("删除")))
-                        {
-                            RemoveSubDirectory(directoryInfo);
-                            GUIUtility
-                                .ExitGUI(); // In order to solve: "EndLayoutGroup: BeginLayoutGroup must be called first."
-                        }
-                    }
-                }
+                
 
                 if (selected is { Value: ScriptableObject asset })
                 {
@@ -215,7 +156,6 @@ namespace GAS.Editor
         private void Refresh()
         {
             AssetDatabase.Refresh();
-            CheckLibPaths();
             ForceMenuTreeRebuild();
         }
 
@@ -314,10 +254,7 @@ namespace GAS.Editor
         void OnMenuSelectionChange(SelectionChangedType selectionChangedType)
         {
             var selected = MenuTree.Selection.FirstOrDefault();
-            if (selected is { Value: AbilityOverview abilityOverview })
-            {
-                abilityOverview.Refresh();
-            }
+           
         }
     }
 }
