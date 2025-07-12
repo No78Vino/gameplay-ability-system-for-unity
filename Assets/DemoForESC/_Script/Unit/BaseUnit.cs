@@ -70,7 +70,8 @@ namespace DemoForESC._Script
 
         public bool IsMoving()
         {
-            return AbilitySystemCellMono.Cell.HasTag(GTagLib.Event_Moving.HashCode);
+            var tagMoving = 1; //GTagLib.Event_Moving.HashCode
+            return AbilitySystemCellMono.Cell.HasTag(tagMoving);
         }
 
         #region Attributes

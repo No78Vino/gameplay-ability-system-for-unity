@@ -200,7 +200,6 @@ namespace GAS.Editor
 
         void GenCode()
         {
-            GTagLibGenerator.Gen();
             AssetDatabase.Refresh();
         }
 

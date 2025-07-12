@@ -19,7 +19,14 @@
         public const string LABEL_OF_CodeGeneratePath = "自动化生成脚本路径";
         public const string LABEL_OF_GASConfigAssetPath = "配置文件Asset路径";
         public const string BUTTON_GenerateAscExtensionCode = " 生成AbilitySystemComponentExtension类脚本";
-
+        
+        public const string JSON_FILE_NAME_OF_TAG = "exgas_tbgameplaytags";
+        public const string CODE_FILE_NAME_OF_TAG = "ExGasTagLib.gen";
+        
+        public const string JSON_FILE_NAME_OF_ATTR = "exgas_tbgameplaytags";
+        public const string JSON_FILE_NAME_OF_ATTR_SET = "exgas_tbgameplaytags";
+        public const string JSON_FILE_NAME_OF_EFFECT = "exgas_tbgameplaytags";
+        public const string JSON_FILE_NAME_OF_ABILITY = "exgas_tbgameplaytags";
         #endregion
 
         
