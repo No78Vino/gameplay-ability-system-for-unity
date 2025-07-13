@@ -3,12 +3,14 @@ using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
+using UnityEngine;
 
 namespace GAS.Editor
 {
     public class GASCenterWindow:OdinMenuEditorWindow
     {
         private static GASSettingAsset _settingAsset;
+        private static GASCenterViewTag _viewTag;
         
         [MenuItem("EXTool/EX-GAS/GAS中心管理器")]
         public static void OpenWindow()
@@ -31,13 +33,6 @@ namespace GAS.Editor
             tree.Config.AutoScrollOnSelectionChanged = true;
             tree.Config.DrawScrollView = true;
             tree.Config.AutoHandleKeyboardNavigation = true;
-            tree.Selection.SelectionChanged += type =>
-            {
-                // GASSettingAsset.Save();
-                // GameplayTagsAsset.Save();
-                // AttributeAsset.Save();
-                // AttributeSetAsset.Save();
-            };
             return tree;
         }
         
@@ -47,10 +42,9 @@ namespace GAS.Editor
             return _settingAsset;
         }
         
-        private static GASSettingAsset GameplayTagEditor()
+        private static GASCenterViewTag GameplayTagEditor()
         {
-            if (_settingAsset == null) _settingAsset = GASSettingAsset.LoadOrCreate();
-            return _settingAsset;
+            return _viewTag ??= CreateInstance<GASCenterViewTag>();
         }
         
         private static GASSettingAsset AttributeEditor()

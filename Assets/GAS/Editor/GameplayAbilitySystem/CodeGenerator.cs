@@ -34,6 +34,13 @@ namespace GAS.Editor
         {
             var setting = GASSettingAsset.LoadOrCreate();
             var tagJsonFilePath = setting.PathOfJsonTag;
+            // 检查文件是否存在
+            if (!File.Exists(tagJsonFilePath))
+            {
+                EditorUtility.DisplayDialog("错误", $"Tag JSON文件未找到: {tagJsonFilePath}", "确定");
+                UnityEngine.Debug.LogError($"Tag JSON file not found at {tagJsonFilePath}");
+                return;
+            }
             var tagJsonText = File.ReadAllText(tagJsonFilePath);
             var tags = GasJsonReader.ReadTags(tagJsonText);
 
