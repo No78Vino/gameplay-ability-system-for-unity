@@ -9,7 +9,7 @@ namespace GAS.RuntimeWithECS.Tag
 {
     public static class GTagUtil
     {
-        private static Dictionary<int, GASTag> _tagMap;
+        private static Dictionary<int, GameplayTag> _tagMap;
         private static Dictionary<int, string> _tagCode2TagName;
         
         /// <summary>
@@ -17,7 +17,7 @@ namespace GAS.RuntimeWithECS.Tag
         /// </summary>
         /// <param name="tagMap"></param>
         /// <param name="tagCode2TagName"></param>
-        public static void InitTagMap(Dictionary<int, GASTag> tagMap,Dictionary<int, string> tagCode2TagName)
+        public static void InitTagMap(Dictionary<int, GameplayTag> tagMap,Dictionary<int, string> tagCode2TagName)
         {
             _tagMap = tagMap;
             _tagCode2TagName = tagCode2TagName;

@@ -36,6 +36,16 @@
   },
   {
     "id": 2004,
+    "name": "Ability.Defend",
+    "desc": "技能：防御"
+  },
+  {
+    "id": 2005,
+    "name": "Ability.Jump",
+    "desc": "技能：跳跃"
+  },
+  {
+    "id": 2006,
     "name": "Ability.Dodge",
     "desc": "技能：闪避"
   },
@@ -58,5 +68,25 @@
     "id": 3003,
     "name": "Event.Attacking",
     "desc": "事件：正在攻击"
+  },
+  {
+    "id": 400,
+    "name": "State",
+    "desc": "状态"
+  },
+  {
+    "id": 4001,
+    "name": "State.Buff",
+    "desc": "状态：正向增益"
+  },
+  {
+    "id": 4002,
+    "name": "State.Debuff",
+    "desc": "状态：负面增益"
+  },
+  {
+    "id": 4001001,
+    "name": "State.Buff.BulkUp",
+    "desc": "霸体"
   }
 ]

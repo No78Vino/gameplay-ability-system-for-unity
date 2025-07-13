@@ -1,97 +1,101 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GAS.Runtime
 {
     [Serializable]
     public struct GameplayTag
     {
-        [SerializeField] private string _name;
-        [SerializeField] private int _hashCode;
-        [SerializeField] private string _shortName;
-        [SerializeField] private int[] _ancestorHashCodes;
-        [SerializeField] private string[] _ancestorNames;
+        public readonly int Code;
+        public readonly int[] Parents;
+        public readonly int[] Children;
 
-        public GameplayTag(string name)
+        public GameplayTag(int tagCode, int[] parents, int[] children)
         {
-            _name = name;
-            _hashCode = name.GetHashCode();
+            Code = tagCode;
+            Parents = parents ?? Array.Empty<int>();
+            Children = children ?? Array.Empty<int>();
+        }
+        
+        public bool HasTag(int tag)
+        {
+            if (Code == tag) return true;
+            foreach (var pTag in Parents)
+                if (pTag == tag)
+                    return true;
 
-            var tags = name.Split('.');
-            // if (tags.Length > GasDefine.GAS_TAG_MAX_GENERATIONS)
-            //     throw new Exception(
-            //         $"GameplayTag {name} has more than {GasDefine.GAS_TAG_MAX_GENERATIONS} generations");
-
-            _ancestorNames = new string[tags.Length - 1];
-            _ancestorHashCodes = new int[tags.Length - 1];
-            var i = 0;
-            var ancestorTag = "";
-            while (i < tags.Length - 1)
-            {
-                ancestorTag += tags[i];
-                _ancestorHashCodes[i] = ancestorTag.GetHashCode();
-                _ancestorNames[i] = ancestorTag;
-                ancestorTag += ".";
-                i++;
-            }
-
-            _shortName = tags.Last();
+            return false;
         }
 
-        /// <summary>
-        ///     Only For Show.
-        /// </summary>
-        public string Name => _name;
-
-        /// <summary>
-        ///     Only For Show.
-        /// </summary>
-        public string ShortName => _shortName;
-
-        /// <summary>
-        ///     Actually ,Use the hash code for compare.
-        /// </summary>
-        public int HashCode => _hashCode;
-
-        public string[] AncestorNames => _ancestorNames;
-
-        public bool Root => _ancestorHashCodes.Length == 0;
-
-        public int[] AncestorHashCodes => _ancestorHashCodes;
-
-        public bool IsDescendantOf(GameplayTag other)
+        public bool HasChildTag(int child)
         {
-            return other._ancestorHashCodes.Contains(HashCode);
+            foreach (var cTag in Children)
+                if (cTag == child)
+                    return true;
+
+            return false;
+        }
+        
+        public bool HasParentTag(int tag)
+        {
+            foreach (var pTag in Parents)
+                if (pTag == tag)
+                    return true;
+
+            return false;
+        }
+        
+        public bool HasTag(GameplayTag tag)
+        {
+            if (this == tag) return true;
+            foreach (var pTag in Parents)
+                if (pTag == tag.Code)
+                    return true;
+
+            return false;
         }
 
-        public override bool Equals(object obj)
+        public bool HasChildTag(GameplayTag child)
         {
-            return obj is GameplayTag tag && this == tag;
-        }
+            foreach (var cTag in Children)
+                if (cTag == child.Code)
+                    return true;
 
-        public override int GetHashCode()
+            return false;
+        }
+        
+        public bool HasParentTag(GameplayTag tag)
         {
-            return HashCode;
-        }
+            foreach (var pTag in Parents)
+                if (pTag == tag.Code)
+                    return true;
 
+            return false;
+        }
+        
         public static bool operator ==(GameplayTag x, GameplayTag y)
         {
-            return x.HashCode == y.HashCode;
+            return x.Code == y.Code;
         }
 
         public static bool operator !=(GameplayTag x, GameplayTag y)
         {
-            return x.HashCode != y.HashCode;
+            return x.Code != y.Code;
         }
+        
+        public bool IsRoot => Parents.Length == 0;
+        public bool HasChild => Children.Length > 0;
 
-        public bool HasTag(GameplayTag tag)
+#if UNITY_EDITOR
+        public string Name
         {
-            foreach (var ancestorHashCode in _ancestorHashCodes)
-                if (ancestorHashCode == tag.HashCode)
-                    return true;
-
-            return this == tag;
+            get
+            {
+                return "tag_todo";
+            }
         }
+#endif
     }
 }

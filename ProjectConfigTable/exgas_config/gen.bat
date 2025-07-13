@@ -9,5 +9,5 @@ dotnet %LUBAN_DLL% ^
     -c cs-simple-json ^
     -d json ^
     --conf %CONF_ROOT%\luban.conf ^
-    -x outputCodeDir=%OUTPUT_CODE_DIR%
+    -x outputCodeDir=%OUTPUT_CODE_DIR% ^
     -x outputDataDir=%OUTPUT_JSON_DIR%

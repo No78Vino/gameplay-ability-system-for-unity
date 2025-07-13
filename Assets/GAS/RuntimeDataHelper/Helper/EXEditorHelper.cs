@@ -119,7 +119,7 @@ namespace GAS.RuntimeDataHelper.Helper
             get
             {
                 _gameplayTagChoices ??= ReflectionHelper.GameplayTags
-                    .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag.HashCode))
+                    .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag.Code))
                     .ToArray();
                 return _gameplayTagChoices;
             }

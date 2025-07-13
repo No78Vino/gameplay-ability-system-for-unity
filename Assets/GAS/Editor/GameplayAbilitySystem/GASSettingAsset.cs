@@ -23,7 +23,7 @@ namespace GAS.Editor
         [LabelText(GASTextDefine.LABEL_OF_CodeGeneratePath)]
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
-        [OnValueChanged("SaveAsset")]
+        [OnValueChanged(nameof(SaveAsset))]
         public string CodeGeneratePath = "Assets/Scripts/Gen";
         
 
@@ -31,7 +31,7 @@ namespace GAS.Editor
         [LabelText("表导出路径")]
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath(RequireExistingPath = true)]
-        [OnValueChanged("SaveAsset")]
+        [OnValueChanged(nameof(SaveAsset))]
         public string TableOutpuPath = "";
                 
         [BoxGroup("A")]
@@ -41,17 +41,28 @@ namespace GAS.Editor
             InfoMessageType.Warning)]
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath(RequireExistingPath = true)]
-        [OnValueChanged("SaveAsset")]
+        [OnValueChanged(nameof(SaveAsset))]
         public string TableClassCodeOutpuPath = "";
         
         [BoxGroup("A")]
         [LabelText("导表工具路径")]
         [LabelWidth(LABEL_WIDTH)]
         [Sirenix.OdinInspector.FilePath(Extensions = "bat",RequireExistingPath = true)]
-        [OnValueChanged("SaveAsset")]
+        [OnValueChanged(nameof(SaveAsset))]
         [InlineButton(nameof(OutputJsonTables),"导出Json表", ShowIf = nameof(IsShowOutputButton))]
         public string TableExportToolPath = "";
+
+        [TitleGroup("A/生成文件路径一览")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [ShowInInspector]
+        [LabelText("Tag配置Json路径")]
+        public string PathOfJsonTag => $"{TableOutpuPath}/{GASTextDefine.JSON_FILE_NAME_OF_TAG}.json";
         
+        [TitleGroup("A/生成文件路径一览")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [ShowInInspector]
+        [LabelText("Tag脚本路径")]
+        public string PathOfCodeTag => $"{CodeGeneratePath}/{GASTextDefine.CODE_FILE_NAME_OF_TAG}.cs";
 
         
         public static GASSettingAsset Setting
@@ -72,29 +83,91 @@ namespace GAS.Editor
 
         public static string CodeGenPath => Setting.CodeGeneratePath;
         
-        [BoxGroup("A")]
+        [TitleGroup("A/生成脚本")]
+        [HorizontalGroup("A/生成脚本/B")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(1,1,1)]
+        [Button(SdfIconType.Activity, "一键生成所有", ButtonHeight = 30)]
+        void GenerateAll()
+        {
+            GenerateTagCode();
+            GenerateAttrCode();
+            GenerateAttrSetCode();
+            GenerateEffectCode();
+            GenerateAbilityCode();
+        }
+        
+        [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
-        [PropertySpace(10)]
-        [InfoBox(GASTextDefine.TIP_CREATE_GEN_AscUtilCode)]
-        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAscExtensionCode, ButtonHeight = 38)]
-        void GenerateAscExtensionCode()
+        [Button("Tag脚本", ButtonHeight = 30)]
+        void GenerateTagCode()
         {
-            string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-            var filePath =
-                $"{pathWithoutAssets}/{CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
-
-            if (!File.Exists(filePath))
-            {
-                EditorUtility.DisplayDialog("Error!", "Please generate AttributeSetAsset first!", "OK");
-                return;
-            }
-
-            AbilitySystemComponentUtilGenerator.Gen();
-            AssetDatabase.Refresh();
+            CodeGenerator.GenerateTagCode();
         }
+        
+        [HorizontalGroup("A/生成脚本/B")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(0.8f, 0.8f, 0)]
+        [Button("属性脚本", ButtonHeight = 30)]
+        void GenerateAttrCode()
+        {
+            // TODO
+        }
+        
+        [HorizontalGroup("A/生成脚本/B")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(0.8f, 0.8f, 0)]
+        [Button("属性集脚本", ButtonHeight = 30)]
+        void GenerateAttrSetCode()
+        {
+            // TODO
+        }
+        
+        [HorizontalGroup("A/生成脚本/B")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(0.8f, 0.8f, 0)]
+        [Button("GameplayEffect脚本", ButtonHeight = 30)]
+        void GenerateEffectCode()
+        {
+            // TODO
+        }
+        
+        [HorizontalGroup("A/生成脚本/B")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(0.8f, 0.8f, 0)]
+        [Button("Ability脚本", ButtonHeight = 30)]
+        void GenerateAbilityCode()
+        {
+            // TODO
+        }
+        
 
-        [MenuItem("EXTool/EX-GAS/生成GAS配置")]
+        
+        //
+        // [HorizontalGroup("A/B")]
+        // [DisplayAsString(TextAlignment.Left, true)]
+        // [GUIColor(0.8f, 0.8f, 0)]
+        // [PropertySpace(10)]
+        // [InfoBox(GASTextDefine.TIP_CREATE_GEN_AscUtilCode)]
+        // [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAscExtensionCode, ButtonHeight = 38)]
+        // void GenerateAscExtensionCode()
+        // {
+        //     string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
+        //     var filePath =
+        //         $"{pathWithoutAssets}/{CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
+        //
+        //     if (!File.Exists(filePath))
+        //     {
+        //         EditorUtility.DisplayDialog("Error!", "Please generate AttributeSetAsset first!", "OK");
+        //         return;
+        //     }
+        //
+        //     AbilitySystemComponentUtilGenerator.Gen();
+        //     AssetDatabase.Refresh();
+        // }
+
+        [MenuItem("EXTool/EX-GAS/生成GAS表配置")]
         public static void OutputJsonTables()
         {
             string fullBatPath = Path.GetFullPath(Instance.TableExportToolPath);

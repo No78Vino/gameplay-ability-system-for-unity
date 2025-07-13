@@ -44,105 +44,105 @@ namespace GAS.RuntimeDataHelper.Tag
         
         private static void GenerateGameplayTagCodeLib(string filePath)
         {
-            var asset = GameplayTagsAsset.LoadOrCreate();
-            var gameplayTagNamesWithIdentifier = asset.Tags
-                .OrderBy(x => x.Name)
-                .Select(x => new Tuple<GameplayTag, string>(x, MakeValidIdentifier(x.Name)))
-                .ToArray();
-            
-            using var writer = new IndentedWriter(new StreamWriter(filePath));
-            writer.WriteLine("///////////////////////////////////");
-            writer.WriteLine("//// This is a generated file. ////");
-            writer.WriteLine("////     Do not modify it.     ////");
-            writer.WriteLine("///////////////////////////////////");
-
-            writer.WriteLine("");
-            writer.WriteLine("using System.Collections.Generic;");
-            writer.WriteLine("using GAS.RuntimeWithECS.Tag;");
-            writer.WriteLine("");
-            writer.WriteLine("namespace GAS.Runtime");
-            writer.WriteLine("{");
-            writer.Indent++;
-            {
-                writer.WriteLine("public static class GEN_GameplayTagCode");
-                writer.WriteLine("{");
-                writer.Indent++;
-                {
-                    var allTagAsset = gameplayTagNamesWithIdentifier;
-                    foreach (var tuple in gameplayTagNamesWithIdentifier)
-                    {
-                        writer.WriteLine(
-                            $"public const int {tuple.Item2} = {tuple.Item1.HashCode};");
-                    }
-
-                    writer.WriteLine("");
-                    writer.WriteLine("public static void InitTagList()");
-                    writer.WriteLine("{");
-                    writer.Indent++;
-                    {
-                        writer.WriteLine("GTagUtil.InitTagMap(new Dictionary<int, GASTag>()");
-                        writer.WriteLine("{");
-                        writer.Indent++;
-                        {
-                            foreach (var tagAsset in allTagAsset)
-                            {
-                                var tag = tagAsset.Item1;
-                                var tagName = tagAsset.Item2;
-                                var parentTagNames = new List<string>();
-                                string[] parentTagNamesArray = tagName.Split('_');
-                                string tempParentName = "";
-                                for (var i = 0; i < parentTagNamesArray.Length - 1; i++)
-                                {
-                                    var parentName = parentTagNamesArray[i];
-                                    tempParentName += parentName;
-                                    parentTagNames.Add(tempParentName);
-                                    tempParentName += "_";
-                                }
-                                var childTagNames = new string[tag.AncestorNames.Length];
-                                for (var i = 0; i < tag.AncestorNames.Length; i++)
-                                {
-                                    var childName = tag.AncestorNames[i];
-                                    childTagNames[i] = MakeValidIdentifier(childName);
-                                }
-
-
-                                writer.WriteLine(
-                                    $"{{ {tagName}, " +
-                                    $"new GASTag({tagName}, " +
-                                    $"new int[] {{ {string.Join(", ", parentTagNames)} }}, " +
-                                    $"new int[] {{ {string.Join(", ", childTagNames)} }}) }},");
-                            }
-                        }
-
-                        writer.Indent--;
-                        writer.WriteLine("},");
-
-                        writer.WriteLine("new Dictionary<int, string>()");
-                        writer.WriteLine("{");
-                        writer.Indent++;
-                        {
-                            foreach (var tagAsset in allTagAsset)
-                            {
-                                var tag = tagAsset.Item1;
-                                var tagName = tagAsset.Item2;
-                                writer.WriteLine(
-                                    $"{{ {tagName}, \"{tag.Name}\" }},");
-                            }
-                        }
-                        writer.Indent--;
-                        writer.WriteLine("}");
-                        writer.WriteLine(");");
-                    }
-
-                    writer.Indent--;
-                    writer.WriteLine("}");
-                }
-
-                writer.Indent--;
-                writer.WriteLine("}");
-            }
-            writer.Indent--;
-            writer.WriteLine("}");
+            // var asset = GameplayTagsAsset.LoadOrCreate();
+            // var gameplayTagNamesWithIdentifier = asset.Tags
+            //     .OrderBy(x => x.Name)
+            //     .Select(x => new Tuple<GameplayTag, string>(x, MakeValidIdentifier(x.Name)))
+            //     .ToArray();
+            //
+            // using var writer = new IndentedWriter(new StreamWriter(filePath));
+            // writer.WriteLine("///////////////////////////////////");
+            // writer.WriteLine("//// This is a generated file. ////");
+            // writer.WriteLine("////     Do not modify it.     ////");
+            // writer.WriteLine("///////////////////////////////////");
+            //
+            // writer.WriteLine("");
+            // writer.WriteLine("using System.Collections.Generic;");
+            // writer.WriteLine("using GAS.RuntimeWithECS.Tag;");
+            // writer.WriteLine("");
+            // writer.WriteLine("namespace GAS.Runtime");
+            // writer.WriteLine("{");
+            // writer.Indent++;
+            // {
+            //     writer.WriteLine("public static class GEN_GameplayTagCode");
+            //     writer.WriteLine("{");
+            //     writer.Indent++;
+            //     {
+            //         var allTagAsset = gameplayTagNamesWithIdentifier;
+            //         foreach (var tuple in gameplayTagNamesWithIdentifier)
+            //         {
+            //             writer.WriteLine(
+            //                 $"public const int {tuple.Item2} = {tuple.Item1.HashCode};");
+            //         }
+            //
+            //         writer.WriteLine("");
+            //         writer.WriteLine("public static void InitTagList()");
+            //         writer.WriteLine("{");
+            //         writer.Indent++;
+            //         {
+            //             writer.WriteLine("GTagUtil.InitTagMap(new Dictionary<int, GASTag>()");
+            //             writer.WriteLine("{");
+            //             writer.Indent++;
+            //             {
+            //                 foreach (var tagAsset in allTagAsset)
+            //                 {
+            //                     var tag = tagAsset.Item1;
+            //                     var tagName = tagAsset.Item2;
+            //                     var parentTagNames = new List<string>();
+            //                     string[] parentTagNamesArray = tagName.Split('_');
+            //                     string tempParentName = "";
+            //                     for (var i = 0; i < parentTagNamesArray.Length - 1; i++)
+            //                     {
+            //                         var parentName = parentTagNamesArray[i];
+            //                         tempParentName += parentName;
+            //                         parentTagNames.Add(tempParentName);
+            //                         tempParentName += "_";
+            //                     }
+            //                     var childTagNames = new string[tag.AncestorNames.Length];
+            //                     for (var i = 0; i < tag.AncestorNames.Length; i++)
+            //                     {
+            //                         var childName = tag.AncestorNames[i];
+            //                         childTagNames[i] = MakeValidIdentifier(childName);
+            //                     }
+            //
+            //
+            //                     writer.WriteLine(
+            //                         $"{{ {tagName}, " +
+            //                         $"new GASTag({tagName}, " +
+            //                         $"new int[] {{ {string.Join(", ", parentTagNames)} }}, " +
+            //                         $"new int[] {{ {string.Join(", ", childTagNames)} }}) }},");
+            //                 }
+            //             }
+            //
+            //             writer.Indent--;
+            //             writer.WriteLine("},");
+            //
+            //             writer.WriteLine("new Dictionary<int, string>()");
+            //             writer.WriteLine("{");
+            //             writer.Indent++;
+            //             {
+            //                 foreach (var tagAsset in allTagAsset)
+            //                 {
+            //                     var tag = tagAsset.Item1;
+            //                     var tagName = tagAsset.Item2;
+            //                     writer.WriteLine(
+            //                         $"{{ {tagName}, \"{tag.Name}\" }},");
+            //                 }
+            //             }
+            //             writer.Indent--;
+            //             writer.WriteLine("}");
+            //             writer.WriteLine(");");
+            //         }
+            //
+            //         writer.Indent--;
+            //         writer.WriteLine("}");
+            //     }
+            //
+            //     writer.Indent--;
+            //     writer.WriteLine("}");
+            // }
+            // writer.Indent--;
+            // writer.WriteLine("}");
         }
     }
 }

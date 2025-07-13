@@ -30,7 +30,7 @@ namespace GAS.Editor
 					tag = tag.Parent;
 				}
 
-				Tags.Add(new GameplayTag(tagName));
+				//Tags.Add(new GameplayTag(tagName));
 			}
 		}
 	}
