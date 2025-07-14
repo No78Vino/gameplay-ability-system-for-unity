@@ -3,16 +3,18 @@ using System.IO;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
+using UnityEngine;
 
 namespace GAS.Editor
 {
     /// <summary>
     /// GAS中心 当前Tag总览
     /// </summary>
-    public class GASCenterViewTag:OdinMenuEditorWindow
+    public class GASCenterViewTag
     {
         private GASSettingAsset _settingAsset;
         private TagInEditor[] _tags;
+        private OdinMenuTree tree;
         
         /// <summary>
         ///  加载Tag的Json数据
@@ -33,15 +35,31 @@ namespace GAS.Editor
         
         public GASCenterViewTag()
         {
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
             _settingAsset = GASSettingAsset.LoadOrCreate();
             LoadTagJsonData();
-            Show();
+            //Show();
+            tree = BuildMenuTree();
             Init();
+        }
+
+        [OnInspectorGUI]
+        protected void Draw()
+        {
+            // 只绘制树形菜单，不绘制其他任何内容
+            if (tree != null)
+            {
+                // 更新配置
+                // tree.Config = treeConfig;
+                // tree.DefaultMenuStyle = treeConfig.DefaultMenuStyle;
+                //
+                // 绘制树形菜单
+                tree.DrawMenuTree();
+            }
+        }
+        
+        protected void OnEnable()
+        {
+            
         }
 
         void Init()
@@ -50,7 +68,7 @@ namespace GAS.Editor
         }
         
 
-        protected override OdinMenuTree BuildMenuTree()
+        protected OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
             foreach (var tag in _tags)

@@ -44,7 +44,7 @@ namespace GAS.Editor
         
         private static GASCenterViewTag GameplayTagEditor()
         {
-            return _viewTag ??= CreateInstance<GASCenterViewTag>();
+            return _viewTag ??= new GASCenterViewTag();
         }
         
         private static GASSettingAsset AttributeEditor()
