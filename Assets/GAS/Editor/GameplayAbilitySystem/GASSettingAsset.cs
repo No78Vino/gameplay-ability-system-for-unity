@@ -57,6 +57,24 @@ namespace GAS.Editor
         [ShowInInspector]
         [LabelText("Tag配置Json路径")]
         public string PathOfJsonTag => $"{TableOutpuPath}/{GASTextDefine.JSON_FILE_NAME_OF_TAG}.json";
+
+        [TitleGroup("A/生成文件路径一览")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [ShowInInspector]
+        [LabelText("Tag配置Excel路径")]
+        public string PathOfExcelTag
+        {
+            get
+            {
+                // 移除TableExportToolPath末尾的"gen.bat"
+                string rootPath =  
+                    TableExportToolPath.EndsWith("gen.bat") ? 
+                    TableExportToolPath.Substring(0, TableExportToolPath.Length - 7) : 
+                    TableExportToolPath;
+                string path = $"{rootPath}/Datas/{GASTextDefine.EXCEL_FILE_NAME_OF_TAG}.xlsx";;
+                return path;
+            }
+        } 
         
         [TitleGroup("A/生成文件路径一览")]
         [DisplayAsString(TextAlignment.Left, true)]

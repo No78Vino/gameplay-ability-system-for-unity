@@ -21,6 +21,7 @@
         public const string BUTTON_GenerateAscExtensionCode = " 生成AbilitySystemComponentExtension类脚本";
         
         public const string JSON_FILE_NAME_OF_TAG = "exgas_tbgameplaytags";
+        public const string EXCEL_FILE_NAME_OF_TAG = "#exgas.gameplayTags";
         public const string CODE_FILE_NAME_OF_TAG = "ExGasTagLib.gen";
         
         public const string JSON_FILE_NAME_OF_ATTR = "exgas_tbgameplaytags";
