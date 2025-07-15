@@ -11,3 +11,5 @@ dotnet %LUBAN_DLL% ^
     --conf %CONF_ROOT%\luban.conf ^
     -x outputCodeDir=%OUTPUT_CODE_DIR% ^
     -x outputDataDir=%OUTPUT_JSON_DIR%
+    
+pause

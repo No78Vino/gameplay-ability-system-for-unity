@@ -14,4 +14,12 @@
         <var name="z" type="float"/>
         <var name="w" type="float"/>
     </bean>
+    <bean name="attributeInSet" valueType="1" sep=",">
+        <var name="id" type="int"/>
+        <var name="initValue" type="float"/>
+        <var name="minValue" type="float"/>
+        <var name="maxValue" type="float"/>
+        <var name="useMinValue" type="bool"/>
+        <var name="useMaxValue" type="bool"/>
+    </bean>
 </module>

@@ -6,30 +6,30 @@ using UnityEngine;
 
 namespace GAS.Editor
 {
-    public class GASCenterViewAttr
+    public class GASCenterViewAttrSet
     {
         private readonly GASSettingAsset _settingAsset;
-        private AttrInEditor[] _attrs;
+        private AttrSetInEditor[] _attrSets;
 
-        [TitleGroup("当前配置表内属性", order: 2)] 
+        [TitleGroup("当前配置表内属性集", order: 2)] 
         [HideLabel]
         [ShowInInspector]
         [ReadOnly]
         [TableList(AlwaysExpanded = true)]
-        public List<AttrInEditor> Attrs;
+        public List<AttrSetInEditor> AttrSets;
         
-        public GASCenterViewAttr()
+        public GASCenterViewAttrSet()
         {
             _settingAsset = GASSettingAsset.Instance;
-            RefreshAttrInfo();
+            RefreshAttrSetInfo();
         }
         
-        [TitleGroup("属性总览",order:1)]
-        [HorizontalGroup("属性总览/A")]
-        [Button("打开属性Excel文件所在文件夹")]
+        [TitleGroup("属性集总览",order:1)]
+        [HorizontalGroup("属性集总览/A")]
+        [Button("打开属性集Excel文件所在文件夹")]
         void OpenExcelFileExplore()
         {
-            var excelFilePath = _settingAsset.PathOfExcelAttr;
+            var excelFilePath = _settingAsset.PathOfExcelAttrSet;
             if (File.Exists(excelFilePath))
             {
                 if (excelFilePath != null)
@@ -39,11 +39,11 @@ namespace GAS.Editor
                 EditorUtility.DisplayDialog("错误", "Tag JSON文件未找到，请检查设置。", "确定");
         }
         
-        [HorizontalGroup("属性总览/A")]
-        [Button("打开属性Json文件所在文件夹")]
+        [HorizontalGroup("属性集总览/A")]
+        [Button("打开属性集Json文件所在文件夹")]
         void OpenJsonFileExplore()
         {
-            var jsonFilePath = _settingAsset.PathOfJsonAttr;
+            var jsonFilePath = _settingAsset.PathOfJsonAttrSet;
             if (File.Exists(jsonFilePath))
             {
                 if (jsonFilePath != null)
@@ -53,29 +53,29 @@ namespace GAS.Editor
                 EditorUtility.DisplayDialog("错误", "Tag JSON文件未找到，请检查设置。", "确定");
         }
         
-        [HorizontalGroup("属性总览/A")]
+        [HorizontalGroup("属性集总览/A")]
         [Button("导出更新Json表")]
         void ExportJson()
         {
             CodeGenerator.GenerateGasConfigTables();
         }
         
-        [HorizontalGroup("属性总览/A")]
+        [HorizontalGroup("属性集总览/A")]
         [Button("刷新",Icon = SdfIconType.Recycle)]
-        void RefreshAttrInfo()
+        void RefreshAttrSetInfo()
         {
-            var jsonFilePath = _settingAsset.PathOfJsonAttr;
+            var jsonFilePath = _settingAsset.PathOfJsonAttrSet;
             // 检查文件是否存在
             if (!File.Exists(jsonFilePath))
             {
-                EditorUtility.DisplayDialog("错误", $"属性 JSON文件未找到: {jsonFilePath}", "确定");
-                Debug.LogError($"属性 JSON file not found at {jsonFilePath}");
+                EditorUtility.DisplayDialog("错误", $"JSON文件未找到: {jsonFilePath}", "确定");
+                Debug.LogError($"JSON file not found at {jsonFilePath}");
                 return;
             }
 
             var jsonText = File.ReadAllText(jsonFilePath);
-            _attrs = GasJsonReader.ReadAttributes(jsonText);
-            Attrs = new List<AttrInEditor>(_attrs);
+            _attrSets = GasJsonReader.ReadAttributeSets(jsonText);
+            AttrSets = new List<AttrSetInEditor>(_attrSets);
         }
     }
 }

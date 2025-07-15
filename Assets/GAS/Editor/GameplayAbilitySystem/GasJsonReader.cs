@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Sirenix.OdinInspector;
 
 namespace GAS.Editor
 {
@@ -56,6 +57,18 @@ namespace GAS.Editor
         public int id;
         public string name;
         public string desc;
-        public int[] attrs;
+        
+        [TableList(AlwaysExpanded = true,IsReadOnly = true)]
+        public AttrInSetInEditor[] attribute;
+    }
+
+    public class AttrInSetInEditor
+    {
+        public int id;
+        public float initValue;
+        public float minValue;
+        public float maxValue;
+        public bool useMinValue;
+        public bool useMaxValue;
     }
 }
