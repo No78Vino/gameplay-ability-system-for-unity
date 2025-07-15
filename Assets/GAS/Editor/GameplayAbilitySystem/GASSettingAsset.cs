@@ -56,31 +56,34 @@ namespace GAS.Editor
         public string ConfigProjectPath = "";
         
         #region 生成文件路径一览
+
+        public string PathOfJsonTag => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_TAG}.json";
+        public string PathOfExcelTag => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_TAG}.xlsx";
+        public string PathOfCodeTag => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_TAG}.cs";
+        
+        public string PathOfJsonAttr => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_ATTR}.json";
+        public string PathOfExcelAttr => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ATTR}.xlsx";
+        public string PathOfCodeAttr => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ATTR}.cs";
+        
         
         [TitleGroup("A/生成文件路径一览")]
         [DisplayAsString(TextAlignment.Left, true)]
+        [HideLabel]
         [ShowInInspector]
-        [LabelText("Tag配置Json路径")]
-        public string PathOfJsonTag => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_TAG}.json";
-
-        [TitleGroup("A/生成文件路径一览")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [ShowInInspector]
-        [LabelText("Tag配置Excel路径")]
-        public string PathOfExcelTag
+        public string ShowGenPaths
         {
             get
             {
-                string path = $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_TAG}.xlsx";;
-                return path;
+                var content =
+                    $"Tag配置Json路径: {PathOfJsonTag}\n" +
+                    $"Tag配置Excel路径: {PathOfExcelTag}\n" +
+                    $"Tag脚本路径: {PathOfCodeTag}\n" +
+                    $"属性配置Json路径: {PathOfJsonAttr}\n" +
+                    $"属性配置Excel路径: {PathOfExcelAttr}\n" +
+                    $"属性脚本路径: {PathOfCodeAttr}\n";
+                return $"<color=white>{content}</color>";
             }
-        } 
-        
-        [TitleGroup("A/生成文件路径一览")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [ShowInInspector]
-        [LabelText("Tag脚本路径")]
-        public string PathOfCodeTag => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_TAG}.cs";
+        }
 
         #endregion
 
