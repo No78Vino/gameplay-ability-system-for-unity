@@ -25,6 +25,16 @@ namespace GAS.Editor
             // },.....]
             return JsonConvert.DeserializeObject<TagInEditor[]>(jsonContent);
         }
+        
+        public static AttrInEditor[] ReadAttributes(string jsonContent)
+        {
+            return JsonConvert.DeserializeObject<AttrInEditor[]>(jsonContent);
+        }
+        
+        public static AttrSetInEditor[] ReadAttributeSets(string jsonContent)
+        {
+            return JsonConvert.DeserializeObject<AttrSetInEditor[]>(jsonContent);
+        }
     }
 
     public class TagInEditor
@@ -32,5 +42,20 @@ namespace GAS.Editor
         public int id;
         public string name;
         public string desc;
+    }
+    
+    public class AttrInEditor
+    {
+        public int id;
+        public string name;
+        public string desc;
+    }
+    
+    public class AttrSetInEditor
+    {
+        public int id;
+        public string name;
+        public string desc;
+        public int[] attrs;
     }
 }
