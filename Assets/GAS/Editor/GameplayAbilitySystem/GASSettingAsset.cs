@@ -65,8 +65,19 @@ namespace GAS.Editor
         public string PathOfExcelAttr => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ATTR}.xlsx";
         public string PathOfCodeAttr => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ATTR}.cs";
         
+        public string PathOfJsonAttrSet => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_ATTR_SET}.json";
+        public string PathOfExcelAttrSet => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ATTR_SET}.xlsx";
+        public string PathOfCodeAttrSet => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ATTR_SET}.cs";
         
-        [TitleGroup("A/生成文件路径一览")]
+        public string PathOfJsonEffect => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_EFFECT}.json";
+        public string PathOfExcelEffect => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_EFFECT}.xlsx";
+        public string PathOfCodeEffect => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_EFFECT}.cs";
+        
+        public string PathOfJsonAbility => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_ABILITY}.json";
+        public string PathOfExcelAbility => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ABILITY}.xlsx";
+        public string PathOfCodeAbility => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ABILITY}.cs";
+        
+        [TitleGroup("A/生成文件路径一览",Order = 99)]
         [DisplayAsString(TextAlignment.Left, true)]
         [HideLabel]
         [ShowInInspector]
@@ -77,10 +88,19 @@ namespace GAS.Editor
                 var content =
                     $"Tag配置Json路径: {PathOfJsonTag}\n" +
                     $"Tag配置Excel路径: {PathOfExcelTag}\n" +
-                    $"Tag脚本路径: {PathOfCodeTag}\n" +
+                    $"Tag脚本路径: {PathOfCodeTag}\n\n" +
                     $"属性配置Json路径: {PathOfJsonAttr}\n" +
                     $"属性配置Excel路径: {PathOfExcelAttr}\n" +
-                    $"属性脚本路径: {PathOfCodeAttr}\n";
+                    $"属性脚本路径: {PathOfCodeAttr}\n\n" +
+                    $"属性集配置Json路径: {PathOfJsonAttrSet}\n" +
+                    $"属性集配置Excel路径: {PathOfExcelAttrSet}\n" +
+                    $"属性集脚本路径: {PathOfCodeAttrSet}\n\n" +
+                    $"Effect配置Json路径: {PathOfJsonEffect}\n" +
+                    $"Effect配置Excel路径: {PathOfExcelEffect}\n" +
+                    $"Effect脚本路径: {PathOfCodeEffect}\n\n" +
+                    $"Ability配置Json路径: {PathOfJsonAbility}\n" +
+                    $"Ability配置Excel路径: {PathOfExcelAbility}\n" +
+                    $"Ability脚本路径: {PathOfCodeAbility}\n";
                 return $"<color=white>{content}</color>";
             }
         }
@@ -105,7 +125,7 @@ namespace GAS.Editor
 
         public static string CodeGenPath => Setting.CodeGeneratePath;
 
-        [TitleGroup("A/生成脚本")]
+        [TitleGroup("A/生成脚本",Order = 98)]
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(1, 1, 1)]
