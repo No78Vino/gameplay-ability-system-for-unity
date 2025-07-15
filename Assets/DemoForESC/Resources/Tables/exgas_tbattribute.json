@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Hp",
+    "desc": "血量"
+  },
+  {
+    "id": 2,
+    "name": "Mp",
+    "desc": "蓝量"
+  },
+  {
+    "id": 3,
+    "name": "Spd",
+    "desc": "速度"
+  },
+  {
+    "id": 4,
+    "name": "Atk",
+    "desc": "攻击力"
+  },
+  {
+    "id": 5,
+    "name": "Def",
+    "desc": "防御力"
+  },
+  {
+    "id": 6,
+    "name": "Posture",
+    "desc": "架势，平衡值"
+  }
+]

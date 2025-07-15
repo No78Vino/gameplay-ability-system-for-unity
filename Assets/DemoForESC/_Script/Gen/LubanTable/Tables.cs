@@ -15,11 +15,13 @@ namespace cfg
 public partial class Tables
 {
     public exgas.Tbability Tbability {get; }
+    public exgas.Tbattribute Tbattribute {get; }
     public exgas.TbgameplayTags TbgameplayTags {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         Tbability = new exgas.Tbability(loader("exgas_tbability"));
+        Tbattribute = new exgas.Tbattribute(loader("exgas_tbattribute"));
         TbgameplayTags = new exgas.TbgameplayTags(loader("exgas_tbgameplaytags"));
         ResolveRef();
     }
@@ -27,6 +29,7 @@ public partial class Tables
     private void ResolveRef()
     {
         Tbability.ResolveRef(this);
+        Tbattribute.ResolveRef(this);
         TbgameplayTags.ResolveRef(this);
     }
 }

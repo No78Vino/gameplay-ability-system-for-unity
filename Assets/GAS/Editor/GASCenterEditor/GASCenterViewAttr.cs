@@ -11,6 +11,13 @@ namespace GAS.Editor
         private readonly GASSettingAsset _settingAsset;
         private AttrInEditor[] _attrs;
 
+        [TitleGroup("当前配置表内属性", order: 2)] 
+        [HideLabel]
+        [ShowInInspector]
+        [ReadOnly]
+        [TableList(AlwaysExpanded = true, HideToolbar = true,IsReadOnly = true)]
+        public List<AttrInEditor> Attrs;
+        
         public GASCenterViewAttr()
         {
             _settingAsset = GASSettingAsset.Instance;
@@ -53,7 +60,7 @@ namespace GAS.Editor
             CodeGenerator.GenerateGasConfigTables();
         }
         
-        [HorizontalGroup("Tag总览/A")]
+        [HorizontalGroup("属性总览/A")]
         [Button("刷新",Icon = SdfIconType.Recycle)]
         void RefreshAttrInfo()
         {
@@ -70,10 +77,5 @@ namespace GAS.Editor
             _attrs = GasJsonReader.ReadAttributes(jsonText);
             Attrs = new List<AttrInEditor>(_attrs);
         }
-
-        [TitleGroup("当前配置表内属性", order: 2)] 
-        [HideLabel]
-        [TableMatrix]
-        public List<AttrInEditor> Attrs;
     }
 }
