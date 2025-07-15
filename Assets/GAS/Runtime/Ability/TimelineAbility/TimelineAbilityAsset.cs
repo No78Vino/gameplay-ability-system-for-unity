@@ -32,7 +32,7 @@ namespace GAS.Runtime
         }
 
         [TabGroup("Data/H1/V1", "Timeline")]
-        [LabelText(GASTextDefine.ABILITY_MANUAL_ENDABILITY)]
+        [LabelText(GASConstDefine.ABILITY_MANUAL_ENDABILITY)]
         [LabelWidth(100)]
         public bool manualEndAbility;
 

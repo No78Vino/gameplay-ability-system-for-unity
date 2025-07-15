@@ -65,9 +65,9 @@ namespace GAS.Editor
 
         [VerticalGroup("Gen Code", order: 0)]
         [GUIColor(0, 0.9f, 0)]
-        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30,
+        [Button(SdfIconType.Upload, GASConstDefine.BUTTON_GenerateAttributeCollection, ButtonHeight = 30,
             Expanded = true)]
-        [InfoBox(GASTextDefine.TIP_Warning_EmptyAttribute, InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
+        [InfoBox(GASConstDefine.TIP_Warning_EmptyAttribute, InfoMessageType.Error, VisibleIf = "ExistEmptyAttribute")]
         void GenCode()
         {
             if (ExistEmptyAttribute() || ExistDuplicatedAttribute())
@@ -163,7 +163,7 @@ namespace GAS.Editor
                 var duplicatedAttributes = duplicates.Aggregate("", (current, d) => current + d + ",");
                 duplicatedAttributes = duplicatedAttributes.Remove(duplicatedAttributes.Length - 1, 1);
                 Warning_DuplicatedAttribute =
-                    string.Format(GASTextDefine.TIP_Warning_DuplicatedAttribute, duplicatedAttributes);
+                    string.Format(GASConstDefine.TIP_Warning_DuplicatedAttribute, duplicatedAttributes);
             }
 
             return duplicates.Count > 0;

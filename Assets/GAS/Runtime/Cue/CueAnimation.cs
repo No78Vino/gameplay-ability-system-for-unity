@@ -7,19 +7,19 @@ namespace GAS.Runtime
     public class CueAnimation : GameplayCueDurational
     {
         [BoxGroup]
-        [InfoBox(GASTextDefine.CUE_ANIMATION_PATH_TIP)]
-        [LabelText(GASTextDefine.CUE_ANIMATION_PATH)]
+        [InfoBox(GASConstDefine.CUE_ANIMATION_PATH_TIP)]
+        [LabelText(GASConstDefine.CUE_ANIMATION_PATH)]
         [SerializeField]
         private string _animatorRelativePath;
 
         [BoxGroup]
-        [InfoBox(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP)]
-        [LabelText(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN)]
+        [InfoBox(GASConstDefine.CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP)]
+        [LabelText(GASConstDefine.CUE_ANIMATION_INCLUDE_CHILDREN)]
         [SerializeField]
         private bool _includeChildrenAnimator;
 
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_ANIMATION_STATE)]
+        [LabelText(GASConstDefine.CUE_ANIMATION_STATE)]
         [SerializeField]
         private string _stateName;
 

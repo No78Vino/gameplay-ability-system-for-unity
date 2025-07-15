@@ -57,7 +57,7 @@ namespace GAS.Runtime
 #endif
 
         [TabGroup("Base/H1/V2", "General", SdfIconType.AwardFill)]
-        [InfoBox(GASTextDefine.TIP_UNAME, InfoMessageType.None)]
+        [InfoBox(GASConstDefine.TIP_UNAME, InfoMessageType.None)]
         [LabelText("U-Name", SdfIconType.Fingerprint)]
         [LabelWidth(WIDTH_LABEL)]
         [InfoBox("无效的名字 - 不符合C#标识符命名规则", InfoMessageType.Error,
@@ -69,18 +69,18 @@ namespace GAS.Runtime
         [Title("消耗&冷却", bold: true)]
         [LabelWidth(WIDTH_LABEL)]
         [AssetSelector]
-        [LabelText(SdfIconType.HeartHalf, Text = GASTextDefine.ABILITY_EFFECT_COST)]
+        [LabelText(SdfIconType.HeartHalf, Text = GASConstDefine.ABILITY_EFFECT_COST)]
         public GameplayEffectAsset Cost;
 
         [TabGroup("Base/H1/V2", "General")]
         [LabelWidth(WIDTH_LABEL)]
         [AssetSelector]
-        [LabelText(SdfIconType.StopwatchFill, Text = GASTextDefine.ABILITY_EFFECT_CD)]
+        [LabelText(SdfIconType.StopwatchFill, Text = GASConstDefine.ABILITY_EFFECT_CD)]
         public GameplayEffectAsset Cooldown;
 
         [TabGroup("Base/H1/V2", "General")]
         [LabelWidth(WIDTH_LABEL)]
-        [LabelText(SdfIconType.ClockFill, Text = GASTextDefine.ABILITY_CD_TIME)]
+        [LabelText(SdfIconType.ClockFill, Text = GASConstDefine.ABILITY_CD_TIME)]
         [Unit(Units.Second)]
         public float CooldownTime;
 

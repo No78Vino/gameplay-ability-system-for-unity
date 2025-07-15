@@ -9,13 +9,13 @@ namespace GAS.Runtime
         const int LabelWidth = 120;
 
         [TabGroup("Data", "Data", SdfIconType.Gear, TextColor = "#FF7F00")]
-        [InfoBox(GASTextDefine.CUE_ANIMATION_PATH_TIP, InfoMessageType.None)]
-        [LabelText(GASTextDefine.CUE_ANIMATION_PATH), LabelWidth(LabelWidth)]
+        [InfoBox(GASConstDefine.CUE_ANIMATION_PATH_TIP, InfoMessageType.None)]
+        [LabelText(GASConstDefine.CUE_ANIMATION_PATH), LabelWidth(LabelWidth)]
         public string animatorRelativePath;
 
         [TabGroup("Data", "Data")]
-        [InfoBox(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP, InfoMessageType.None)]
-        [LabelText(GASTextDefine.CUE_ANIMATION_INCLUDE_CHILDREN), LabelWidth(LabelWidth)]
+        [InfoBox(GASConstDefine.CUE_ANIMATION_INCLUDE_CHILDREN_ANIMATOR_TIP, InfoMessageType.None)]
+        [LabelText(GASConstDefine.CUE_ANIMATION_INCLUDE_CHILDREN), LabelWidth(LabelWidth)]
         public bool includeChildrenAnimator;
 
         [TabGroup("Data", "Data")]

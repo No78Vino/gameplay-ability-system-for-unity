@@ -145,20 +145,20 @@ namespace GAS.Runtime
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_TYPE)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_TYPE)]
         [EnumToggleButtons]
         public StackingType stackingType;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
         [HideIf("IsNoStacking")]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_CODENAME)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_CODENAME)]
         [InlineButton(@"@stackingCodeName = """"", SdfIconType.EraserFill, "")]
         public string stackingCodeName;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_COUNT)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_COUNT)]
         [HideIf("IsNoStacking")]
         [InlineButton(@"@limitCount = int.MaxValue", SdfIconType.Hammer, "max")]
         [InlineButton(@"@limitCount = 0", SdfIconType.Hammer, "min")]
@@ -167,41 +167,41 @@ namespace GAS.Runtime
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_DURATION_REFRESH_POLICY)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_DURATION_REFRESH_POLICY)]
         [HideIf("IsNoStacking")]
-        [InfoBox(GASTextDefine.LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION+"为True时多余的Apply不会刷新Duration", InfoMessageType.None,
+        [InfoBox(GASConstDefine.LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION+"为True时多余的Apply不会刷新Duration", InfoMessageType.None,
             VisibleIf =
                 "@durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication && denyOverflowApplication")]
         public DurationRefreshPolicy durationRefreshPolicy;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_PERIOD_RESET_POLICY)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_PERIOD_RESET_POLICY)]
         [HideIf("IsNoStacking")]
         public PeriodResetPolicy periodResetPolicy;
 
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_EXPIRATION_POLICY)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_EXPIRATION_POLICY)]
         [HideIf("IsNoStacking")]
         public ExpirationPolicy expirationPolicy;
 
         // Overflow 溢出逻辑处理
         [LabelWidth(LABEL_WIDTH)]
         [VerticalGroup]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_DENY_OVERFLOW_APPLICATION)]
         [HideIf("@IsNoStacking() || IsNeverRefreshDuration()")]
         public bool denyOverflowApplication;
 
         [VerticalGroup]
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_CLEAR_STACK_ON_OVERFLOW)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_CLEAR_STACK_ON_OVERFLOW)]
         [ShowIf("IsDenyOverflowApplication")]
         public bool clearStackOnOverflow;
 
         [VerticalGroup]
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GE_STACKING_CLEAR_OVERFLOW_EFFECTS)]
+        [LabelText(GASConstDefine.LABEL_GE_STACKING_CLEAR_OVERFLOW_EFFECTS)]
         [HideIf("IsNoStacking")]
         public GameplayEffectAsset[] overflowEffects;
 

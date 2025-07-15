@@ -7,27 +7,27 @@ namespace GAS.Runtime
     public class CueVFX : GameplayCueDurational
     {
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_VFX_PREFAB)]
+        [LabelText(GASConstDefine.CUE_VFX_PREFAB)]
         public GameObject VfxPrefab;
 
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_ATTACH_TO_OWNER)]
+        [LabelText(GASConstDefine.CUE_ATTACH_TO_OWNER)]
         public bool IsAttachToTarget = true;
 
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_VFX_OFFSET)]
+        [LabelText(GASConstDefine.CUE_VFX_OFFSET)]
         public Vector3 Offset;
 
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_VFX_ROTATION)]
+        [LabelText(GASConstDefine.CUE_VFX_ROTATION)]
         public Vector3 Rotation;
 
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_VFX_SCALE)]
+        [LabelText(GASConstDefine.CUE_VFX_SCALE)]
         public Vector3 Scale = Vector3.one;
         
         [BoxGroup]
-        [LabelText(GASTextDefine.CUE_VFX_ACTIVE_WHEN_ADDED)]
+        [LabelText(GASConstDefine.CUE_VFX_ACTIVE_WHEN_ADDED)]
         public bool ActiveWhenAdded = false;
 
         public override GameplayCueDurationalSpec CreateSpec(GameplayCueParameters parameters)

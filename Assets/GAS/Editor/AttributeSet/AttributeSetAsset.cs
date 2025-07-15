@@ -24,10 +24,10 @@ namespace GAS.Editor
         [HorizontalGroup("A/R", order: 1)]
         [DisplayAsString(TextAlignment.Left, FontSize = 18)]
         [HideLabel]
-        [InfoBox(GASTextDefine.ERROR_DuplicatedAttribute, InfoMessageType.Error,
+        [InfoBox(GASConstDefine.ERROR_DuplicatedAttribute, InfoMessageType.Error,
             VisibleIf = "ExistDuplicatedAttribute")]
-        [InfoBox(GASTextDefine.ERROR_Empty, InfoMessageType.Error, VisibleIf = "EmptyAttribute")]
-        [InfoBox(GASTextDefine.ERROR_EmptyName, InfoMessageType.Error, VisibleIf = "EmptyAttributeSetName")]
+        [InfoBox(GASConstDefine.ERROR_Empty, InfoMessageType.Error, VisibleIf = "EmptyAttribute")]
+        [InfoBox(GASConstDefine.ERROR_EmptyName, InfoMessageType.Error, VisibleIf = "EmptyAttributeSetName")]
         [OnValueChanged(nameof(OnNameChanged))]
         public string Name = "Unnamed";
 
@@ -188,8 +188,8 @@ namespace GAS.Editor
 
         [HorizontalGroup("GEN")]
         [GUIColor(0, 0.9f, 0)]
-        [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAttributeSetCode, ButtonHeight = 30, Expanded = true)]
-        [InfoBox(GASTextDefine.ERROR_InElements, InfoMessageType.Error, VisibleIf = "ErrorInElements")]
+        [Button(SdfIconType.Upload, GASConstDefine.BUTTON_GenerateAttributeSetCode, ButtonHeight = 30, Expanded = true)]
+        [InfoBox(GASConstDefine.ERROR_InElements, InfoMessageType.Error, VisibleIf = "ErrorInElements")]
         private void GenCode()
         {
             if (ExistDuplicatedAttributeSetName() || ErrorInElements())
@@ -225,7 +225,7 @@ namespace GAS.Editor
                 var duplicatedAttributeSets = duplicates.Aggregate("", (current, d) => current + d + ",");
                 duplicatedAttributeSets = duplicatedAttributeSets.Remove(duplicatedAttributeSets.Length - 1, 1);
                 ERROR_DuplicatedAttributeSet =
-                    string.Format(GASTextDefine.ERROR_DuplicatedAttributeSet, duplicatedAttributeSets);
+                    string.Format(GASConstDefine.ERROR_DuplicatedAttributeSet, duplicatedAttributeSets);
             }
 
             return duplicates.Count > 0;

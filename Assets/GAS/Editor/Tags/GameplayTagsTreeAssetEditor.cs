@@ -93,17 +93,17 @@ namespace GAS.Editor
             using (new EditorGUILayout.HorizontalScope())
             {
                 var style = "miniButton";
-                if (GUILayout.Button(GASTextDefine.BUTTON_ExpandAllTag, style)) _treeView.ExpandAll();
+                if (GUILayout.Button(GASConstDefine.BUTTON_ExpandAllTag, style)) _treeView.ExpandAll();
 
-                if (GUILayout.Button(GASTextDefine.BUTTON_CollapseAllTag, style)) _treeView.CollapseAll();
+                if (GUILayout.Button(GASConstDefine.BUTTON_CollapseAllTag, style)) _treeView.CollapseAll();
 
                 GUILayout.FlexibleSpace();
 
-                if (GUILayout.Button(GASTextDefine.BUTTON_AddTag, style)) CreateTag();
+                if (GUILayout.Button(GASConstDefine.BUTTON_AddTag, style)) CreateTag();
 
-                if (GUILayout.Button(GASTextDefine.BUTTON_RemoveTag, style)) RemoveTags();
+                if (GUILayout.Button(GASConstDefine.BUTTON_RemoveTag, style)) RemoveTags();
 
-                if (GUILayout.Button(GASTextDefine.BUTTON_GenTagCode, style)) GenCode();
+                if (GUILayout.Button(GASConstDefine.BUTTON_GenTagCode, style)) GenCode();
             }
         }
 

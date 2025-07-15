@@ -45,7 +45,7 @@ namespace GAS.Editor
         [Button("导出更新Json表")]
         void ExportJson()
         {
-            GASSettingAsset.OutputJsonTables();
+            CodeGenerator.GenerateGasConfigTables();
         }
         [HorizontalGroup("Tag总览/A")]
         [Button("刷新",Icon = SdfIconType.Recycle)]

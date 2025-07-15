@@ -1,13 +1,85 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using Debug = UnityEngine.Debug;
 
 namespace GAS.Editor
 {
     public static class CodeGenerator
     {
+        [MenuItem("EXTool/EX-GAS/生成脚本/GAS表配置",priority = 0)]
+        public static void GenerateGasConfigTables()
+        {
+            var instance = GASSettingAsset.Instance;
+            string fullBatPath = Path.GetFullPath(instance.FullGenBatPath());
+            string fullOutputPath = Path.GetFullPath(instance.TableOutpuPath);
+            string fullCodeOutputPath = Path.GetFullPath(instance.TableClassCodeOutpuPath);
+            // 验证文件和输出路径是否存在
+            if (!File.Exists(fullBatPath))
+            {
+                Debug.LogError($"BAT文件不存在: {fullBatPath}");
+                return;
+            }
+            if (!Directory.Exists(fullOutputPath))
+            {
+                Debug.LogError($"输出路径不存在: {fullOutputPath}");
+                return;
+            }
+            if (!Directory.Exists(fullCodeOutputPath))
+            {
+                Debug.LogError($"表类Class输出路径不存在: {fullCodeOutputPath}");
+                return;
+            }
+
+            // 获取bat文件的文件夹路径
+            string fullBuildPath = Path.GetDirectoryName(fullBatPath);
+            // 创建进程配置
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo()
+            {
+                FileName = fullBatPath,
+                WorkingDirectory = fullBuildPath,
+                Arguments = $"\"{fullOutputPath}\" \"{fullCodeOutputPath}\"",  // 用引号包裹路径防空格问题
+                UseShellExecute = false,              // 不使用系统shell
+                RedirectStandardOutput = true,        // 重定向输出
+                RedirectStandardError = true,         // 重定向错误
+                CreateNoWindow = false                // 不创建窗口
+            };
+
+            // 注册输出事件
+            process.OutputDataReceived += (sender, e) => {
+                if (!string.IsNullOrEmpty(e.Data)) 
+                    Debug.Log(e.Data);
+            };
+        
+            process.ErrorDataReceived += (sender, e) => {
+                if (!string.IsNullOrEmpty(e.Data)) 
+                    Debug.LogError(e.Data);
+            };
+
+            try
+            {
+                // 启动进程
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit(); // 等待执行完成
+                Debug.Log($"BAT执行完成，退出代码: {process.ExitCode}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"执行错误: {ex.Message}");
+            }
+            finally
+            {
+                process.Close();
+            }
+        }
+
+                
         private static string MakeTagValidIdentifier(string name)
         {
             // Replace '.' with '_'
@@ -162,6 +234,55 @@ namespace GAS.Editor
             }
             writer.Indent--;
             writer.WriteLine("}");
+        }
+
+        /// <summary>
+        ///  生成属性代码
+        /// </summary>
+        [MenuItem("EXTool/EX-GAS/生成脚本/Attribute")]
+        public static void GenerateAttrCode()
+        {
+            // TODO
+        }
+        
+        /// <summary>
+        ///  生成属性集代码
+        /// </summary>
+        [MenuItem("EXTool/EX-GAS/生成脚本/AttributeSet")]
+        public static void GenerateAttrSetCode()
+        {
+            // TODO
+        }
+        
+        /// <summary>
+        ///  生成GameplayEffect代码
+        /// </summary>
+        [MenuItem("EXTool/EX-GAS/生成脚本/GameplayEffect")]
+        public static void GenerateEffectCode()
+        {
+            // TODO
+        }
+        
+        /// <summary>
+        ///  生成Ability代码
+        /// </summary>
+        [MenuItem("EXTool/EX-GAS/生成脚本/Ability")]
+        public static void GenerateAbilityCode()
+        {
+            // TODO
+        }
+        
+        /// <summary>
+        ///  生成所有GAS相关代码
+        /// </summary>
+        [MenuItem("EXTool/EX-GAS/生成脚本/生成所有")]
+        public static void GenerateAllCode()
+        {
+            GenerateTagCode();
+            GenerateAttrCode();
+            GenerateAttrSetCode();
+            GenerateEffectCode();
+            GenerateAbilityCode();
         }
     }
 }

@@ -44,7 +44,7 @@ namespace GAS.Runtime
 
         [HorizontalGroup(GRP_BASE_H)]
         [TabGroup(GRP_BASE_H_RIGHT, "Policy", SdfIconType.AwardFill, TextColor = "#FF7F00")]
-        [LabelText(GASTextDefine.LABLE_GE_POLICY, SdfIconType.Diagram3Fill)]
+        [LabelText(GASConstDefine.LABLE_GE_POLICY, SdfIconType.Diagram3Fill)]
         [LabelWidth(WIDTH_LABEL)]
         [EnumToggleButtons]
         [PropertyOrder(1)]
@@ -55,12 +55,12 @@ namespace GAS.Runtime
         [EnableIf("@DurationPolicy == EffectsDurationPolicy.Duration")]
         [Unit(Units.Second)]
         [ValidateInput("@DurationPolicy != EffectsDurationPolicy.Duration || Duration > 0", ERROR_DURATION)]
-        [LabelText(GASTextDefine.LABLE_GE_DURATION, SdfIconType.HourglassSplit)]
+        [LabelText(GASConstDefine.LABLE_GE_DURATION, SdfIconType.HourglassSplit)]
         [PropertyOrder(2)]
         public float Duration;
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
-        [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
+        [LabelText(GASConstDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
         [LabelWidth(WIDTH_LABEL)]
         [ShowIf("@DurationPolicy != EffectsDurationPolicy.Duration")]
         [EnableIf("IsDurationalPolicy")]
@@ -69,7 +69,7 @@ namespace GAS.Runtime
         public float Period;
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
-        [LabelText(GASTextDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
+        [LabelText(GASConstDefine.LABLE_GE_INTERVAL, SdfIconType.AlarmFill)]
         [LabelWidth(WIDTH_LABEL)]
         [ShowIf("@DurationPolicy == EffectsDurationPolicy.Duration")]
         [InfoBox("Period < 0.01会出现误差", InfoMessageType.Warning,
@@ -88,7 +88,7 @@ namespace GAS.Runtime
         }
 
         [TabGroup(GRP_BASE_H_RIGHT, "Policy")]
-        [LabelText(GASTextDefine.LABLE_GE_EXEC, SdfIconType.Magic)]
+        [LabelText(GASConstDefine.LABLE_GE_EXEC, SdfIconType.Magic)]
         [LabelWidth(WIDTH_LABEL)]
         [EnableIf("IsPeriodic")]
         [AssetSelector]
@@ -174,8 +174,8 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_TAG, "Tags", SdfIconType.TagsFill, TextColor = "#45B1FF", Order = 1)]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_AssetTags)]
-        [Tooltip(GASTextDefine.TIP_GE_TAG_AssetTags)]
+        [LabelText(GASConstDefine.TITLE_GE_TAG_AssetTags)]
+        [Tooltip(GASConstDefine.TIP_GE_TAG_AssetTags)]
         [ShowIf("IsDurationalPolicy")]
         public GameplayTag[] AssetTags;
 
@@ -183,8 +183,8 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_TAG, "Tags")]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_GrantedTags)]
-        [Tooltip(GASTextDefine.TIP_GE_TAG_GrantedTags)]
+        [LabelText(GASConstDefine.TITLE_GE_TAG_GrantedTags)]
+        [Tooltip(GASConstDefine.TIP_GE_TAG_GrantedTags)]
         [ShowIf("IsDurationalPolicy")]
         public GameplayTag[] GrantedTags;
 
@@ -192,16 +192,16 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_TAG, "Tags")]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_ApplicationRequiredTags)]
-        [Tooltip(GASTextDefine.TIP_GE_TAG_ApplicationRequiredTags)]
+        [LabelText(GASConstDefine.TITLE_GE_TAG_ApplicationRequiredTags)]
+        [Tooltip(GASConstDefine.TIP_GE_TAG_ApplicationRequiredTags)]
         public GameplayTag[] ApplicationRequiredTags;
 
         [Space()]
         [TabGroup(GRP_DATA_TAG, "Tags")]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_OngoingRequiredTags)]
-        [Tooltip(GASTextDefine.TIP_GE_TAG_OngoingRequiredTags)]
+        [LabelText(GASConstDefine.TITLE_GE_TAG_OngoingRequiredTags)]
+        [Tooltip(GASConstDefine.TIP_GE_TAG_OngoingRequiredTags)]
         [ShowIf("IsDurationalPolicy")]
         public GameplayTag[] OngoingRequiredTags;
 
@@ -209,16 +209,16 @@ namespace GAS.Runtime
         [TabGroup(GRP_DATA_TAG, "Tags")]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_RemoveGameplayEffectsWithTags)]
-        [Tooltip(GASTextDefine.TIP_GE_TAG_RemoveGameplayEffectsWithTags)]
+        [LabelText(GASConstDefine.TITLE_GE_TAG_RemoveGameplayEffectsWithTags)]
+        [Tooltip(GASConstDefine.TIP_GE_TAG_RemoveGameplayEffectsWithTags)]
         public GameplayTag[] RemoveGameplayEffectsWithTags;
 
         [Space()]
         [TabGroup(GRP_DATA_TAG, "Tags")]
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ValueDropdown("@ValueDropdownHelper.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        [LabelText(GASTextDefine.TITLE_GE_TAG_ApplicationImmunityTags)]
-        [Tooltip(GASTextDefine.TIP_GE_TAG_ApplicationImmunityTags)]
+        [LabelText(GASConstDefine.TITLE_GE_TAG_ApplicationImmunityTags)]
+        [Tooltip(GASConstDefine.TIP_GE_TAG_ApplicationImmunityTags)]
         public GameplayTag[] ApplicationImmunityTags;
 
         #endregion Tags
@@ -230,7 +230,7 @@ namespace GAS.Runtime
         [ShowIf("IsInstantPolicy")]
         [InfoBox(ERROR_NONE_CUE, InfoMessageType.Error, VisibleIf = "IsCueExecuteNone")]
         [AssetSelector]
-        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnExecute)]
+        [LabelText(GASConstDefine.TITLE_GE_CUE_CueOnExecute)]
         public GameplayCueInstant[] CueOnExecute;
 
         [Space()]
@@ -239,7 +239,7 @@ namespace GAS.Runtime
         [ShowIf("IsDurationalPolicy")]
         [InfoBox(ERROR_NONE_CUE, InfoMessageType.Error, VisibleIf = "IsCueDurationalNone")]
         [AssetSelector]
-        [LabelText(GASTextDefine.TITLE_GE_CUE_CueDurational)]
+        [LabelText(GASConstDefine.TITLE_GE_CUE_CueDurational)]
         [Tooltip("生命周期完全和GameplayEffect同步")]
         public GameplayCueDurational[] CueDurational;
 
@@ -248,7 +248,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnAdd)]
+        [LabelText(GASConstDefine.TITLE_GE_CUE_CueOnAdd)]
         public GameplayCueInstant[] CueOnAdd;
 
         [Space()]
@@ -256,7 +256,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnRemove)]
+        [LabelText(GASConstDefine.TITLE_GE_CUE_CueOnRemove)]
         public GameplayCueInstant[] CueOnRemove;
 
         [Space()]
@@ -264,7 +264,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnActivate)]
+        [LabelText(GASConstDefine.TITLE_GE_CUE_CueOnActivate)]
         public GameplayCueInstant[] CueOnActivate;
 
         [Space()]
@@ -272,7 +272,7 @@ namespace GAS.Runtime
         [ListDrawerSettings(ShowFoldout = true, ShowItemCount = false)]
         [ShowIf("IsDurationalPolicy")]
         [AssetSelector]
-        [LabelText(GASTextDefine.TITLE_GE_CUE_CueOnDeactivate)]
+        [LabelText(GASConstDefine.TITLE_GE_CUE_CueOnDeactivate)]
         public GameplayCueInstant[] CueOnDeactivate;
 
         #endregion Cues

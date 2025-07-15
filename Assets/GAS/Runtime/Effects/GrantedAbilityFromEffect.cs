@@ -89,27 +89,27 @@ namespace GAS.Runtime
         private const int LABEL_WIDTH = 50;
 
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY)]
+        [LabelText(GASConstDefine.LABEL_GRANT_ABILITY)]
         [AssetSelector]
         public AbilityAsset AbilityAsset;
 
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY_LEVEL)]
+        [LabelText(GASConstDefine.LABEL_GRANT_ABILITY_LEVEL)]
         public int AbilityLevel;
 
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY_ACTIVATION_POLICY)]
-        [Tooltip(GASTextDefine.TIP_GRANT_ABILITY_ACTIVATION_POLICY)]
+        [LabelText(GASConstDefine.LABEL_GRANT_ABILITY_ACTIVATION_POLICY)]
+        [Tooltip(GASConstDefine.TIP_GRANT_ABILITY_ACTIVATION_POLICY)]
         public GrantedAbilityActivationPolicy ActivationPolicy;
 
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY_DEACTIVATION_POLICY)]
-        [Tooltip(GASTextDefine.TIP_GRANT_ABILITY_DEACTIVATION_POLICY)]
+        [LabelText(GASConstDefine.LABEL_GRANT_ABILITY_DEACTIVATION_POLICY)]
+        [Tooltip(GASConstDefine.TIP_GRANT_ABILITY_DEACTIVATION_POLICY)]
         public GrantedAbilityDeactivationPolicy DeactivationPolicy;
 
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASTextDefine.LABEL_GRANT_ABILITY_REMOVE_POLICY)]
-        [Tooltip(GASTextDefine.TIP_GRANT_ABILITY_REMOVE_POLICY)]
+        [LabelText(GASConstDefine.LABEL_GRANT_ABILITY_REMOVE_POLICY)]
+        [Tooltip(GASConstDefine.TIP_GRANT_ABILITY_REMOVE_POLICY)]
         public GrantedAbilityRemovePolicy RemovePolicy;
     }
 

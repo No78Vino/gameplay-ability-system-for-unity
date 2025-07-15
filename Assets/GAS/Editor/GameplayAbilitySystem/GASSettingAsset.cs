@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace GAS.Editor
@@ -18,9 +19,9 @@ namespace GAS.Editor
         private static GASSettingAsset _setting;
 
 
-        [Title(GASTextDefine.TITLE_SETTING, Bold = true)]
+        [Title(GASConstDefine.TITLE_SETTING, Bold = true)]
         [BoxGroup("A", false, order: 1)]
-        [LabelText(GASTextDefine.LABEL_OF_CodeGeneratePath)]
+        [LabelText(GASConstDefine.LABEL_OF_CodeGeneratePath)]
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath]
         [OnValueChanged(nameof(SaveAsset))]
@@ -44,19 +45,23 @@ namespace GAS.Editor
         [OnValueChanged(nameof(SaveAsset))]
         public string TableClassCodeOutpuPath = "";
         
+        [FormerlySerializedAs("TableExportToolPath")]
         [BoxGroup("A")]
-        [LabelText("导表工具路径")]
+        [LabelText("配置表工程路径")]
         [LabelWidth(LABEL_WIDTH)]
-        [Sirenix.OdinInspector.FilePath(Extensions = "bat",RequireExistingPath = true)]
+        [FolderPath(RequireExistingPath = true)]
         [OnValueChanged(nameof(SaveAsset))]
         [InlineButton(nameof(OutputJsonTables),"导出Json表", ShowIf = nameof(IsShowOutputButton))]
-        public string TableExportToolPath = "";
-
+        [InfoBox("配置表工程内没有luban导表工具gen.bat!", InfoMessageType.Error,VisibleIf = nameof(IsGenBatNotExist))]
+        public string ConfigProjectPath = "";
+        
+        #region 生成文件路径一览
+        
         [TitleGroup("A/生成文件路径一览")]
         [DisplayAsString(TextAlignment.Left, true)]
         [ShowInInspector]
         [LabelText("Tag配置Json路径")]
-        public string PathOfJsonTag => $"{TableOutpuPath}/{GASTextDefine.JSON_FILE_NAME_OF_TAG}.json";
+        public string PathOfJsonTag => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_TAG}.json";
 
         [TitleGroup("A/生成文件路径一览")]
         [DisplayAsString(TextAlignment.Left, true)]
@@ -66,12 +71,7 @@ namespace GAS.Editor
         {
             get
             {
-                // 移除TableExportToolPath末尾的"gen.bat"
-                string rootPath =  
-                    TableExportToolPath.EndsWith("gen.bat") ? 
-                    TableExportToolPath.Substring(0, TableExportToolPath.Length - 7) : 
-                    TableExportToolPath;
-                string path = $"{rootPath}/Datas/{GASTextDefine.EXCEL_FILE_NAME_OF_TAG}.xlsx";;
+                string path = $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_TAG}.xlsx";;
                 return path;
             }
         } 
@@ -80,10 +80,11 @@ namespace GAS.Editor
         [DisplayAsString(TextAlignment.Left, true)]
         [ShowInInspector]
         [LabelText("Tag脚本路径")]
-        public string PathOfCodeTag => $"{CodeGeneratePath}/{GASTextDefine.CODE_FILE_NAME_OF_TAG}.cs";
+        public string PathOfCodeTag => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_TAG}.cs";
 
-        
-        public static GASSettingAsset Setting
+        #endregion
+
+        private static GASSettingAsset Setting
         {
             get
             {
@@ -100,170 +101,69 @@ namespace GAS.Editor
             $"<size=15><b><color=white>EX-GAS Version: {GasDefine.GAS_VERSION}</color></b></size>";
 
         public static string CodeGenPath => Setting.CodeGeneratePath;
-        
+
         [TitleGroup("A/生成脚本")]
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
-        [GUIColor(1,1,1)]
+        [GUIColor(1, 1, 1)]
         [Button(SdfIconType.Activity, "一键生成所有", ButtonHeight = 30)]
-        void GenerateAll()
-        {
-            GenerateTagCode();
-            GenerateAttrCode();
-            GenerateAttrSetCode();
-            GenerateEffectCode();
-            GenerateAbilityCode();
-        }
+        void GenerateAll() => CodeGenerator.GenerateAllCode();
         
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
         [Button("Tag脚本", ButtonHeight = 30)]
-        void GenerateTagCode()
-        {
-            CodeGenerator.GenerateTagCode();
-        }
+        void GenerateTagCode() => CodeGenerator.GenerateTagCode();
+        
         
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
         [Button("属性脚本", ButtonHeight = 30)]
-        void GenerateAttrCode()
-        {
-            // TODO
-        }
-        
+        void GenerateAttrCode() => CodeGenerator.GenerateAttrCode();
+
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
         [Button("属性集脚本", ButtonHeight = 30)]
-        void GenerateAttrSetCode()
-        {
-            // TODO
-        }
+        void GenerateAttrSetCode() => CodeGenerator.GenerateAttrSetCode();
         
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
         [Button("GameplayEffect脚本", ButtonHeight = 30)]
-        void GenerateEffectCode()
-        {
-            // TODO
-        }
-        
+        void GenerateEffectCode() => CodeGenerator.GenerateEffectCode();
+
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
         [Button("Ability脚本", ButtonHeight = 30)]
-        void GenerateAbilityCode()
+        void GenerateAbilityCode() => CodeGenerator.GenerateAbilityCode();
+
+        public string FullGenBatPath()
         {
-            // TODO
+            var projectRootPath = Application.dataPath.Substring(0, Application.dataPath.Length - 6); 
+            var fullBatPath = Path.Combine(projectRootPath,$"{Instance.ConfigProjectPath}/{GASConstDefine.LUBAN_GEN_BAT_TILE_NAME}");
+            return fullBatPath;
         }
         
-
-        
-        //
-        // [HorizontalGroup("A/B")]
-        // [DisplayAsString(TextAlignment.Left, true)]
-        // [GUIColor(0.8f, 0.8f, 0)]
-        // [PropertySpace(10)]
-        // [InfoBox(GASTextDefine.TIP_CREATE_GEN_AscUtilCode)]
-        // [Button(SdfIconType.Upload, GASTextDefine.BUTTON_GenerateAscExtensionCode, ButtonHeight = 38)]
-        // void GenerateAscExtensionCode()
-        // {
-        //     string pathWithoutAssets = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
-        //     var filePath =
-        //         $"{pathWithoutAssets}/{CodeGenPath}/{GasDefine.GAS_ATTRIBUTESET_LIB_CSHARP_SCRIPT_NAME}";
-        //
-        //     if (!File.Exists(filePath))
-        //     {
-        //         EditorUtility.DisplayDialog("Error!", "Please generate AttributeSetAsset first!", "OK");
-        //         return;
-        //     }
-        //
-        //     AbilitySystemComponentUtilGenerator.Gen();
-        //     AssetDatabase.Refresh();
-        // }
-
-        [MenuItem("EXTool/EX-GAS/生成GAS表配置")]
-        public static void OutputJsonTables()
-        {
-            string fullBatPath = Path.GetFullPath(Instance.TableExportToolPath);
-            string fullOutputPath = Path.GetFullPath(Instance.TableOutpuPath);
-            string fullCodeOutputPath = Path.GetFullPath(Instance.TableClassCodeOutpuPath);
-            // 验证文件和输出路径是否存在
-            if (!File.Exists(fullBatPath))
-            {
-                Debug.LogError($"BAT文件不存在: {fullBatPath}");
-                return;
-            }
-            if (!Directory.Exists(fullOutputPath))
-            {
-                Debug.LogError($"输出路径不存在: {fullOutputPath}");
-                return;
-            }
-            if (!Directory.Exists(fullCodeOutputPath))
-            {
-                Debug.LogError($"表类Class输出路径不存在: {fullCodeOutputPath}");
-                return;
-            }
-
-            // 获取bat文件的文件夹路径
-            string fullBuildPath = Path.GetDirectoryName(fullBatPath);
-            // 创建进程配置
-            Process process = new Process();
-            process.StartInfo = new ProcessStartInfo()
-            {
-                FileName = fullBatPath,
-                WorkingDirectory = fullBuildPath,
-                Arguments = $"\"{fullOutputPath}\" \"{fullCodeOutputPath}\"",  // 用引号包裹路径防空格问题
-                UseShellExecute = false,              // 不使用系统shell
-                RedirectStandardOutput = true,        // 重定向输出
-                RedirectStandardError = true,         // 重定向错误
-                CreateNoWindow = false                // 不创建窗口
-            };
-
-            // 注册输出事件
-            process.OutputDataReceived += (sender, e) => {
-                if (!string.IsNullOrEmpty(e.Data)) 
-                    Debug.Log(e.Data);
-            };
-        
-            process.ErrorDataReceived += (sender, e) => {
-                if (!string.IsNullOrEmpty(e.Data)) 
-                    Debug.LogError(e.Data);
-            };
-
-            try
-            {
-                // 启动进程
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                process.WaitForExit(); // 等待执行完成
-            
-                Debug.Log($"BAT执行完成，退出代码: {process.ExitCode}");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"执行错误: {ex.Message}");
-            }
-            finally
-            {
-                process.Close();
-            }
-        }
+        public void OutputJsonTables() => CodeGenerator.GenerateGasConfigTables();
 
         bool IsShowOutputButton()
         {
             // 检查导出工具路径和输出路径是否存在
             // 获取项目根目录
             var projectRootPath = Application.dataPath.Substring(0, Application.dataPath.Length - 6); 
-            var fullBatPath = Path.Combine(projectRootPath,Instance.TableExportToolPath);
             var fullOutputPath = Path.Combine(projectRootPath,Instance.TableOutpuPath);
-            return File.Exists(fullBatPath) && Directory.Exists(fullOutputPath);
+            return !IsGenBatNotExist() && Directory.Exists(fullOutputPath);
         }
 
+        bool IsGenBatNotExist()
+        {
+            var fullBatPath = FullGenBatPath();
+            return !File.Exists(fullBatPath);
+        }
+        
         private void SaveAsset()
         {
             if (Instance == this) return;
