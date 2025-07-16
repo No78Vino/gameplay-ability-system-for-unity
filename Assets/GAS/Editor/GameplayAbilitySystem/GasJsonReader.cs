@@ -54,7 +54,7 @@ namespace GAS.Editor
     
     public class AttrSetInEditor
     {
-        [HorizontalGroup("A")]
+        [HorizontalGroup("A",Width = 200)]
         [TitleGroup("A/基本信息",order:1)]
         [LabelText("属性集ID")]
         [DisplayAsString]

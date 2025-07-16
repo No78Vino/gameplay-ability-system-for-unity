@@ -12,7 +12,7 @@ namespace GAS.Editor
         private AttrSetInEditor[] _attrSets;
 
         [TitleGroup("当前配置表内属性集", order: 2)] 
-        [HideLabel]
+        [LabelText(" ")]
         [ShowInInspector]
         [ReadOnly]
         [ListDrawerSettings(IsReadOnly = true,ShowFoldout = false)]
