@@ -15,7 +15,7 @@ namespace GAS.Editor
         [HideLabel]
         [ShowInInspector]
         [ReadOnly]
-        [TableList(AlwaysExpanded = true)]
+        [ListDrawerSettings(IsReadOnly = true,ShowFoldout = false)]
         public List<AttrSetInEditor> AttrSets;
         
         public GASCenterViewAttrSet()
