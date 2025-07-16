@@ -19,6 +19,7 @@ namespace GAS.Editor
         {
             var window = GetWindow<GASCenterWindow>();
             window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1200, 600);
+            GasJsonReader.ReadAllAndCache();
         }
         
         protected override OdinMenuTree BuildMenuTree()

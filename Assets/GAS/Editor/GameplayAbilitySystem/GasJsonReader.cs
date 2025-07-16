@@ -1,40 +1,65 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace GAS.Editor
 {
     public static class GasJsonReader
     {
-        /// <summary>
-        /// 读取标签数据
-        /// </summary>
-        /// <param name="jsonContent"></param>
-        /// <returns></returns>
+        private static TagInEditor[] _tags;
+        private static AttrInEditor[] _attrs;
+        private static AttrSetInEditor[] _attrSets;
+
+        public static Dictionary<int, TagInEditor> TagMap() => _tags.ToDictionary(t => t.id, t => t);
+        public static Dictionary<int, AttrInEditor> AttrMap() => _attrs.ToDictionary(t => t.id, t => t);
+        public static Dictionary<int, AttrSetInEditor> AttrSetMap() => _attrSets.ToDictionary(t => t.id, t => t);
+        
+        static GasJsonReader()
+        {
+            ReadAllAndCache();
+        }
+        
+        public static void ReadAllAndCache()
+        {
+            var settingAsset = GASSettingAsset.Instance;
+            var tagFilePath = settingAsset.PathOfJsonTag;
+            if (File.Exists(tagFilePath))
+                ReadTags(File.ReadAllText(tagFilePath));
+            else
+                Debug.LogError($"JSON file not found at {tagFilePath}");
+
+            var attrFilePath = settingAsset.PathOfJsonAttr;
+            if (File.Exists(attrFilePath))
+                ReadAttributes(File.ReadAllText(attrFilePath));
+            else
+                Debug.LogError($"JSON file not found at {attrFilePath}");
+            
+            var attrSetFilePath = settingAsset.PathOfJsonAttrSet;
+            if (File.Exists(attrSetFilePath))
+                ReadAttributeSets(File.ReadAllText(attrSetFilePath));
+            else
+                Debug.LogError($"JSON file not found at {attrSetFilePath}");
+        }
+
         public static TagInEditor[] ReadTags(string jsonContent)
         {
-            // 使用newtonsoft.json解析JSON内容
-            // tag的json内容格式：[
-            // {
-            //     "id": 100,
-            //     "name": "Faction",
-            //     "desc": "阵营描述标签"
-            // },
-            // {
-            //     "id": 1001,
-            //     "name": "Faction.Player",
-            //     "desc": "玩家阵营"
-            // },.....]
-            return JsonConvert.DeserializeObject<TagInEditor[]>(jsonContent);
+            _tags = JsonConvert.DeserializeObject<TagInEditor[]>(jsonContent);
+            return _tags;
         }
         
         public static AttrInEditor[] ReadAttributes(string jsonContent)
         {
-            return JsonConvert.DeserializeObject<AttrInEditor[]>(jsonContent);
+            _attrs = JsonConvert.DeserializeObject<AttrInEditor[]>(jsonContent);
+            return _attrs;
         }
         
         public static AttrSetInEditor[] ReadAttributeSets(string jsonContent)
         {
-            return JsonConvert.DeserializeObject<AttrSetInEditor[]>(jsonContent);
+            _attrSets = JsonConvert.DeserializeObject<AttrSetInEditor[]>(jsonContent);
+            return _attrSets;
         }
     }
 
@@ -79,6 +104,7 @@ namespace GAS.Editor
     public class AttrInSetInEditor
     {
         [VerticalGroup("属性ID")]
+        [HorizontalGroup("属性ID/A")]
         [HideLabel][DisplayAsString]
         public int id;
         
@@ -107,5 +133,18 @@ namespace GAS.Editor
         [HideLabel]
         [ShowIf(nameof(useMaxValue))]
         public float maxValue;
+
+        [HorizontalGroup("属性ID/A")]
+        [ShowInInspector]
+        [HideLabel]
+        [DisplayAsString(EnableRichText = true)]
+        public string AttrName
+        {
+            get
+            {
+                var map = GasJsonReader.AttrMap();
+                return map.TryGetValue(id,out var attr) ? $"<color=white>{attr.name}</color>" : $"<color=red>ERROR</color>";
+            }
+        } 
     }
 }
