@@ -109,8 +109,7 @@ namespace GAS.Editor
             // 检查文件是否存在
             if (!File.Exists(tagJsonFilePath))
             {
-                EditorUtility.DisplayDialog("错误", $"Tag JSON文件未找到: {tagJsonFilePath}", "确定");
-                UnityEngine.Debug.LogError($"Tag JSON file not found at {tagJsonFilePath}");
+                Debug.LogError($"JSON file not found at {tagJsonFilePath}");
                 return;
             }
             var tagJsonText = File.ReadAllText(tagJsonFilePath);
@@ -242,7 +241,43 @@ namespace GAS.Editor
         [MenuItem("EXTool/EX-GAS/生成脚本/Attribute")]
         public static void GenerateAttrCode()
         {
-            // TODO
+            var setting = GASSettingAsset.LoadOrCreate();
+            var attrJsonFilePath = setting.PathOfJsonAttr;
+            // 检查文件是否存在
+            if (!File.Exists(attrJsonFilePath))
+            {
+                Debug.LogError($"JSON file not found at {attrJsonFilePath}");
+                return;
+            }
+            var tagJsonText = File.ReadAllText(attrJsonFilePath);
+            var attrs = GasJsonReader.ReadAttributes(tagJsonText);
+            var filePath = setting.PathOfCodeAttr;
+            using var writer = new IndentedWriter(new StreamWriter(filePath));
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("//// This is a generated file. ////");
+            writer.WriteLine("////     Do not modify it.     ////");
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("");
+            writer.WriteLine("namespace GAS.Runtime");
+            writer.WriteLine("{");
+            writer.Indent++;
+            {
+                writer.WriteLine("public static class XAttribute");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    foreach (var attr in attrs)
+                    {
+                        writer.WriteLine(
+                            $"public const int {MakeTagValidIdentifier(attr.name)} = {attr.id};");
+                    }
+                }
+
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.WriteLine("}");
         }
         
         /// <summary>
