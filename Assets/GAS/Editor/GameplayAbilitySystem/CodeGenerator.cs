@@ -286,7 +286,65 @@ namespace GAS.Editor
         [MenuItem("EXTool/EX-GAS/生成脚本/AttributeSet")]
         public static void GenerateAttrSetCode()
         {
-            // TODO
+            var setting = GASSettingAsset.LoadOrCreate();
+            var attrSetJsonFilePath = setting.PathOfJsonAttrSet;
+            // 检查文件是否存在
+            if (!File.Exists(attrSetJsonFilePath))
+            {
+                Debug.LogError($"JSON file not found at {attrSetJsonFilePath}");
+                return;
+            }
+            var attrSetJsonText = File.ReadAllText(attrSetJsonFilePath);
+            var attrSets = GasJsonReader.ReadAttributeSets(attrSetJsonText);
+            var filePath = setting.PathOfCodeAttrSet;
+            using var writer = new IndentedWriter(new StreamWriter(filePath));
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("//// This is a generated file. ////");
+            writer.WriteLine("////     Do not modify it.     ////");
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("");
+            writer.WriteLine("namespace GAS.Runtime");
+            writer.WriteLine("{");
+            writer.Indent++;
+            {
+                writer.WriteLine("public static class XAttrSet");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    foreach (var attrSet in attrSets)
+                    {
+                        writer.WriteLine(
+                            $"public const int {MakeTagValidIdentifier(attrSet.name)} = {attrSet.id};");
+                    }
+                }
+                
+                writer.Indent--;
+                writer.WriteLine("");
+                
+                writer.Indent++;
+                {
+                    foreach (var attrSet in attrSets)
+                    {
+                        writer.WriteLine("");
+                        writer.WriteLine(
+                            $"public class AS_{MakeTagValidIdentifier(attrSet.name)}");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            foreach (var attr in attrSet.attribute)
+                                writer.WriteLine(
+                                    $"public const int {MakeTagValidIdentifier(attr.GetAttrName())} = {attr.id};");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                    }
+                }
+                
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.WriteLine("}");
         }
         
         /// <summary>

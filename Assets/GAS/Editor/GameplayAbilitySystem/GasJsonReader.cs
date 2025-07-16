@@ -145,6 +145,12 @@ namespace GAS.Editor
                 var map = GasJsonReader.AttrMap();
                 return map.TryGetValue(id,out var attr) ? $"<color=white>{attr.name}</color>" : $"<color=red>ERROR</color>";
             }
-        } 
+        }
+
+        public string GetAttrName()
+        {
+            var map = GasJsonReader.AttrMap();
+            return map.TryGetValue(id,out var attr) ? attr.name : "ERROR_ATTR";
+        }
     }
 }
