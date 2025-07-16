@@ -17,6 +17,7 @@ public partial class Tables
     public exgas.Tbability Tbability {get; }
     public exgas.Tbattribute Tbattribute {get; }
     public exgas.TbattributeSet TbattributeSet {get; }
+    public exgas.TbgameplayEffect TbgameplayEffect {get; }
     public exgas.TbgameplayTags TbgameplayTags {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
@@ -24,6 +25,7 @@ public partial class Tables
         Tbability = new exgas.Tbability(loader("exgas_tbability"));
         Tbattribute = new exgas.Tbattribute(loader("exgas_tbattribute"));
         TbattributeSet = new exgas.TbattributeSet(loader("exgas_tbattributeset"));
+        TbgameplayEffect = new exgas.TbgameplayEffect(loader("exgas_tbgameplayeffect"));
         TbgameplayTags = new exgas.TbgameplayTags(loader("exgas_tbgameplaytags"));
         ResolveRef();
     }
@@ -33,6 +35,7 @@ public partial class Tables
         Tbability.ResolveRef(this);
         Tbattribute.ResolveRef(this);
         TbattributeSet.ResolveRef(this);
+        TbgameplayEffect.ResolveRef(this);
         TbgameplayTags.ResolveRef(this);
     }
 }

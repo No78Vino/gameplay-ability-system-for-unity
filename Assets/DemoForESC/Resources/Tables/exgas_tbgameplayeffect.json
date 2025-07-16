@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1001,
+    "name": "SpeedUp",
+    "desc": "加速",
+    "assetTags": [
+      1001
+    ],
+    "grantedTags": [
+      1001,
+      1002
+    ],
+    "applicationRequiredTags": [
+      500
+    ],
+    "ongoingRequiredTags": [],
+    "removeGameplayEffectsWithTags": [],
+    "immunityTags": [],
+    "timeUnit": 0,
+    "duration": 0,
+    "period": 0,
+    "periodEffect": [],
+    "modifiers": [],
+    "cueOnApply": [],
+    "cueOnTick": [],
+    "cueOnAdd": [],
+    "cueOnRemove": [],
+    "cueOnActivate": [],
+    "cueOnDeactivate": [],
+    "grantedAbility": []
+  }
+]

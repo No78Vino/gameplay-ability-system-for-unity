@@ -22,4 +22,24 @@
         <var name="useMinValue" type="bool"/>
         <var name="useMaxValue" type="bool"/>
     </bean>
+    <bean name="grantedAbility" valueType="1" sep=",">
+        <var name="id" type="int"/>
+        <var name="level" type="int"/>
+        <var name="activationPolicy" type="int"/>
+        <var name="deactivationPolicy" type="int"/>
+        <var name="removePolicy" type="int"/>
+    </bean>
+    
+    <bean name="stacking" valueType="1" sep=",">
+        <var name="stackingType" type="int"/>
+        <var name="stackCode" type="int"/>
+        <var name="limitCount" type="int"/>
+        <var name="durationRefreshPolicy" type="int"/>
+        <var name="periodResetPolicy" type="int"/>
+        <var name="expirationPolicy" type="int"/>
+        <var name="denyOverflowApplication" type="bool"/>
+        <var name="clearStackOnOverflow" type="bool"/>
+        <var name="overflowEffects" type="list,int"/>
+    </bean>
+    
 </module>
