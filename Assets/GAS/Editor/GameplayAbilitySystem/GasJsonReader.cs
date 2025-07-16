@@ -55,7 +55,7 @@ namespace GAS.Editor
     public class AttrSetInEditor
     {
         [HorizontalGroup("A",Width = 200)]
-        [TitleGroup("A/基本信息",order:1)]
+        [TitleGroup("A/基本信息",BoldTitle = false,Order = 1)]
         [LabelText("属性集ID")]
         [DisplayAsString]
         public int id;
@@ -70,7 +70,7 @@ namespace GAS.Editor
         [DisplayAsString]
         public string desc;
         
-        [TitleGroup("A/包含属性",order:2)]
+        [TitleGroup("A/包含属性",BoldTitle = false,Order = 2)]
         [LabelText(" ")]
         [TableList(AlwaysExpanded = true,IsReadOnly = true)]
         public AttrInSetInEditor[] attribute;
