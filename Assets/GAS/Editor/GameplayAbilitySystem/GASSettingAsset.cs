@@ -150,12 +150,6 @@ namespace GAS.Editor
         [GUIColor(0.8f, 0.8f, 0)]
         [Button("属性集脚本", ButtonHeight = 30)]
         void GenerateAttrSetCode() => CodeGenerator.GenerateAttrSetCode();
-        
-        [HorizontalGroup("A/生成脚本/B")]
-        [DisplayAsString(TextAlignment.Left, true)]
-        [GUIColor(0.8f, 0.8f, 0)]
-        [Button("GameplayEffect脚本", ButtonHeight = 30)]
-        void GenerateEffectCode() => CodeGenerator.GenerateEffectCode();
 
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]

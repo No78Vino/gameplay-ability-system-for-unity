@@ -348,15 +348,6 @@ namespace GAS.Editor
         }
         
         /// <summary>
-        ///  生成GameplayEffect代码
-        /// </summary>
-        [MenuItem("EXTool/EX-GAS/生成脚本/GameplayEffect")]
-        public static void GenerateEffectCode()
-        {
-            // TODO
-        }
-        
-        /// <summary>
         ///  生成Ability代码
         /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/Ability")]
@@ -374,7 +365,6 @@ namespace GAS.Editor
             GenerateTagCode();
             GenerateAttrCode();
             GenerateAttrSetCode();
-            GenerateEffectCode();
             GenerateAbilityCode();
         }
     }
