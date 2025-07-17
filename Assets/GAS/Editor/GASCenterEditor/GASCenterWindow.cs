@@ -13,6 +13,7 @@ namespace GAS.Editor
         private static GASCenterViewTag _viewTag;
         private static GASCenterViewAttr _viewAttr;
         private static GASCenterViewAttrSet _viewAttrSet;
+        private static GASCenterViewEffect _viewEffect;
         
         [MenuItem("EXTool/EX-GAS/GAS中心管理器")]
         public static void OpenWindow()
@@ -60,10 +61,9 @@ namespace GAS.Editor
             return _viewAttrSet ??= new GASCenterViewAttrSet();
         }
         
-        private static GASSettingAsset GameplayEffectEditor()
+        private static GASCenterViewEffect GameplayEffectEditor()
         {
-            if (_settingAsset == null) _settingAsset = GASSettingAsset.LoadOrCreate();
-            return _settingAsset;
+            return _viewEffect ??= new GASCenterViewEffect();
         }
         
         private static GASSettingAsset GameplayAbilitySystemEditor()

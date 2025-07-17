@@ -14,6 +14,7 @@
         <var name="z" type="float"/>
         <var name="w" type="float"/>
     </bean>
+    
     <bean name="attributeInSet" valueType="1" sep=",">
         <var name="id" type="int"/>
         <var name="initValue" type="float"/>
@@ -22,6 +23,13 @@
         <var name="useMinValue" type="bool"/>
         <var name="useMaxValue" type="bool"/>
     </bean>
+
+    <bean name="period" valueType="1" sep=",">
+        <var name="time" type="int"/>
+        <var name="effects" type="list,int"/>
+        <var name="firstTrigger" type="bool"/>
+    </bean>
+    
     <bean name="grantedAbility" valueType="1" sep=",">
         <var name="id" type="int"/>
         <var name="level" type="int"/>
