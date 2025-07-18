@@ -72,6 +72,7 @@ namespace GAS.Editor
 
         private FileInfo _xlsxFileInfo;
         private Dictionary<string,int> _headerMap;
+        private Dictionary<int, Dictionary<int, object>> _data;
         private void LoadFile()
         {
             var excelFilePath = _settingAsset.PathOfExcelEffect;
@@ -81,18 +82,33 @@ namespace GAS.Editor
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
                 // 注册表头
                 _headerMap = new Dictionary<string, int>();
-                for (var i = 0; i < 200; i++)
+                for (var i = 0; i < 500; i++)
                 {
-                    if( worksheet.Cells[1, i + 1].Value == null) break;
+                    if( worksheet.Cells[1, i + 1].Value == null) continue;
                     var header = worksheet.Cells[1, i + 1].Value.ToString();
                     // 去除格式后缀（即#之后的内容）
                     header = header.Split('#')[0];
+                    if(string.IsNullOrEmpty(header)) continue;
                     _headerMap[header] = i + 1; // Excel列从1开始
                 }
                 
                 // 读取数据行,从第4行开始，第二列为key，即id。
                 // 以第2列是否有值为结束标志
-                
+                _data = new Dictionary<int, Dictionary<int, object>>();
+                int safeCnt = 99999;
+                int row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var rowData = new Dictionary<int, object>();
+                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    
+                    foreach (var colIndex in _headerMap.Values)
+                        rowData.Add(colIndex,worksheet.Cells[row, colIndex].Value);
+                    
+                    _data.Add(id,rowData);
+                    row++;
+                }
             }
 
             string a = "LLL";
