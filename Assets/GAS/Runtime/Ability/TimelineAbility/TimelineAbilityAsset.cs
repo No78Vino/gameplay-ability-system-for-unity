@@ -54,8 +54,8 @@ namespace GAS.Runtime
         [HideInInspector]
         public List<TaskMarkEventTrackData> InstantTasks = new List<TaskMarkEventTrackData>();
 
-        [HideInInspector]
-        public List<TaskClipEventTrackData> OngoingTasks = new List<TaskClipEventTrackData>();
+        // [HideInInspector]
+        // public List<TaskClipEventTrackData> OngoingTasks = new List<TaskClipEventTrackData>();
 
 #if UNITY_EDITOR
         public void Save()

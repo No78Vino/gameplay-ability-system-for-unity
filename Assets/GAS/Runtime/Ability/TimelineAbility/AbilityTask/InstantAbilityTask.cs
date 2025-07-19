@@ -16,6 +16,6 @@
 
     public abstract class InstantAbilityTaskT<T> : InstantAbilityTask where T : AbilitySpec
     {
-        public new T Spec => (T)_spec;
+        //public new T Spec => (T)_spec;
     }
 }

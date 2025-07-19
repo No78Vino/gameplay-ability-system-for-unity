@@ -14,6 +14,7 @@ namespace GAS.Editor
         private static GASCenterViewAttr _viewAttr;
         private static GASCenterViewAttrSet _viewAttrSet;
         private static GASCenterViewEffect _viewEffect;
+        private static GASCenterViewCue _viewCue;
         
         [MenuItem("EXTool/EX-GAS/GAS中心管理器")]
         public static void OpenWindow()
@@ -33,6 +34,7 @@ namespace GAS.Editor
             tree.Add("Attribute Set属性集", AttributeSetEditor());
             tree.Add("GameplayEffect效果buff", GameplayEffectEditor());
             tree.Add("GameplayAbility技能", GameplayAbilitySystemEditor());
+            tree.Add("GameplayAbility技能", GameplayCueEditor());
 
             tree.Config.AutoScrollOnSelectionChanged = true;
             tree.Config.DrawScrollView = true;
@@ -64,6 +66,11 @@ namespace GAS.Editor
         private static GASCenterViewEffect GameplayEffectEditor()
         {
             return _viewEffect ??= new GASCenterViewEffect();
+        }
+        
+        private static GASCenterViewCue GameplayCueEditor()
+        {
+            return _viewCue ??= new GASCenterViewCue();
         }
         
         private static GASSettingAsset GameplayAbilitySystemEditor()

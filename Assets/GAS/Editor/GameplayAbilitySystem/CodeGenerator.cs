@@ -357,6 +357,65 @@ namespace GAS.Editor
         }
         
         /// <summary>
+        ///  生成Ability代码
+        /// </summary>
+        [MenuItem("EXTool/EX-GAS/生成脚本/GameplayCue")]
+        public static void GenerateCueCode()
+        {
+            var setting = GASSettingAsset.LoadOrCreate();
+            var filePath = setting.PathOfCodeCue;
+            using var writer = new IndentedWriter(new StreamWriter(filePath));
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("//// This is a generated file. ////");
+            writer.WriteLine("////     Do not modify it.     ////");
+            writer.WriteLine("///////////////////////////////////");
+
+            writer.WriteLine("");
+            
+            writer.WriteLine("namespace GAS.Runtime");
+            writer.WriteLine("{");
+            writer.Indent++;
+            {
+                writer.WriteLine("public static class XCue");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    var allCue = EditCueHelper.GetCachedCueTypes();
+                    var cueTypes = allCue as Type[] ?? allCue.ToArray();
+                    foreach (var cueType in cueTypes)
+                    {
+                        var cueName = cueType.Name;
+                        var fullName = cueType.FullName;
+                        writer.WriteLine($"public const string CUE_{cueName} = \"{fullName}\";");
+                    }
+
+                    writer.WriteLine("");
+                    writer.WriteLine("public static void LoadCueType()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        foreach (var cueType in cueTypes)
+                        {
+                            var cueName = cueType.Name;
+                            var typeFullName = cueType.FullName;
+                            writer.WriteLine($"var {cueName} = typeof({typeFullName});");
+                            writer.WriteLine($"CueHelper.RegisterCue(CUE_{cueName}, {cueName});");
+                        }
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                }
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.WriteLine("}");
+            
+            Console.WriteLine($"Generated CueCode at path: {filePath}");
+            AssetDatabase.Refresh();
+        }
+        
+        /// <summary>
         ///  生成所有GAS相关代码
         /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/生成所有")]
@@ -366,6 +425,7 @@ namespace GAS.Editor
             GenerateAttrCode();
             GenerateAttrSetCode();
             GenerateAbilityCode();
+            GenerateCueCode();
         }
     }
 }

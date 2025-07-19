@@ -105,8 +105,8 @@ namespace GAS.Editor
             if (_trackType == typeof(BuffGameplayEffectTrack))
                 return baseIndex + (AbilityAsset.BuffGameplayEffects?.Count ?? 0);
 
-            if (_trackType == typeof(TaskClipEventTrack))
-                return baseIndex + (AbilityAsset.OngoingTasks?.Count ?? 0);
+            // if (_trackType == typeof(TaskClipEventTrack))
+            //     return baseIndex + (AbilityAsset.OngoingTasks?.Count ?? 0);
 
             if (_trackType == typeof(DurationalCueTrack))
                 return baseIndex + (AbilityAsset.DurationalCues?.Count ?? 0);

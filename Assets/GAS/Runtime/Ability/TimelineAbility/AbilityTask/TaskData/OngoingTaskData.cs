@@ -19,9 +19,10 @@ namespace GAS.Runtime
         
         public OngoingAbilityTask CreateTask(AbilitySpec abilitySpec)
         {
-            var task = base.Create(abilitySpec);
-            var ongoingAbilityTask = task as OngoingAbilityTask;
-            return ongoingAbilityTask;
+            return null;
+            // var task = base.Create(abilitySpec);
+            // var ongoingAbilityTask = task as OngoingAbilityTask;
+            // return ongoingAbilityTask;
         }
 
         public override AbilityTaskBase Load()

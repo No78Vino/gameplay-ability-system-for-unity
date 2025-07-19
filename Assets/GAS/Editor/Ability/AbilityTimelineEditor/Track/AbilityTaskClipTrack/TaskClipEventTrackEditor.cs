@@ -36,9 +36,9 @@ namespace GAS.Editor
             string info = "";
             foreach (var clip in _track.TaskClipTrackDataForSave.clipEvents)
             {
-                var taskName = clip.ongoingTask.TaskData.Type;
-                var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
-                info += $"[{shortName}]  Run(f):{clip.startFrame} -> {clip.EndFrame} \n";
+                // var taskName = clip.ongoingTask.TaskData.Type;
+                // var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
+                // info += $"[{shortName}]  Run(f):{clip.startFrame} -> {clip.EndFrame} \n";
             }
             TrackInfo = $"<b>{info}</b>";
         }

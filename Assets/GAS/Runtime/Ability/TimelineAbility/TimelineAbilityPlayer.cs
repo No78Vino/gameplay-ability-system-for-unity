@@ -5,12 +5,6 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    internal abstract class RuntimeClipInfo
-    {
-        public int endFrame;
-        public int startFrame;
-    }
-
     internal class RuntimeDurationCueClip : RuntimeClipInfo
     {
         public GameplayCueDurationalSpec cueSpec;
@@ -20,11 +14,6 @@ namespace GAS.Runtime
     {
         public GameplayEffect buff;
         public GameplayEffectSpec buffSpec;
-    }
-
-    internal class RuntimeTaskClip : RuntimeClipInfo
-    {
-        public OngoingAbilityTask task;
     }
 
     internal class RuntimeTaskMark
@@ -84,7 +73,7 @@ namespace GAS.Runtime
                 _cacheInstantCues.AddRange(trackData.markEvents);
             }
 
-            _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+            //_cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
         }
 
         private void Cache_ReleaseGameplayEffects()
@@ -95,7 +84,7 @@ namespace GAS.Runtime
                 _cacheReleaseGameplayEffect.AddRange(trackData.markEvents);
             }
 
-            _cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
+            //_cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
             foreach (var releaseGameplayEffectMarkEvent in _cacheReleaseGameplayEffect)
             {
                 releaseGameplayEffectMarkEvent.CacheTargetCatcher();
@@ -113,7 +102,7 @@ namespace GAS.Runtime
                     {
                         var runtimeTaskMark = new RuntimeTaskMark
                         {
-                            startFrame = markEvent.startFrame,
+                            //startFrame = markEvent.startFrame,
                             task = taskData.CreateTask(_abilitySpec)
                         };
                         _cacheInstantTasks.Add(runtimeTaskMark);
@@ -135,7 +124,7 @@ namespace GAS.Runtime
                     if (cueSpec == null) continue;
                     var runtimeDurationCueClip = new RuntimeDurationCueClip
                     {
-                        startFrame = clipEvent.startFrame,
+                        //startFrame = clipEvent.startFrame,
                         endFrame = clipEvent.EndFrame,
                         cueSpec = cueSpec
                     };
@@ -157,7 +146,7 @@ namespace GAS.Runtime
                     {
                         var runtimeBuffClip = new RuntimeBuffClip
                         {
-                            startFrame = clipEvent.startFrame,
+                            //startFrame = clipEvent.startFrame,
                             endFrame = clipEvent.EndFrame,
                             buff = new GameplayEffect(clipEvent.gameplayEffect),
                             buffSpec = null
@@ -171,19 +160,19 @@ namespace GAS.Runtime
         private void Cache_OngoingTasks()
         {
             _cacheOngoingTaskTrack.Clear();
-            foreach (var track in AbilityAsset.OngoingTasks)
-            {
-                foreach (var clip in track.clipEvents)
-                {
-                    var runtimeTaskClip = new RuntimeTaskClip
-                    {
-                        startFrame = clip.startFrame,
-                        endFrame = clip.EndFrame,
-                        task = clip.ongoingTask.CreateTask(_abilitySpec)
-                    };
-                    _cacheOngoingTaskTrack.Add(runtimeTaskClip);
-                }
-            }
+            // foreach (var track in AbilityAsset.OngoingTasks)
+            // {
+            //     foreach (var clip in track.clipEvents)
+            //     {
+            //         var runtimeTaskClip = new RuntimeTaskClip
+            //         {
+            //             startFrame = clip.startFrame,
+            //             endFrame = clip.EndFrame,
+            //             task = clip.ongoingTask.CreateTask(_abilitySpec)
+            //         };
+            //         _cacheOngoingTaskTrack.Add(runtimeTaskClip);
+            //     }
+            // }
         }
 
 
@@ -278,13 +267,13 @@ namespace GAS.Runtime
         {
             foreach (var cueMark in _cacheInstantCues)
             {
-                if (frame == cueMark.startFrame)
-                {
-                    foreach (var cue in cueMark.cues)
-                    {
-                        cue.ApplyFrom(_abilitySpec);
-                    }
-                }
+                // if (frame == cueMark.startFrame)
+                // {
+                //     foreach (var cue in cueMark.cues)
+                //     {
+                //         cue.ApplyFrom(_abilitySpec);
+                //     }
+                // }
             }
         }
 
@@ -292,24 +281,24 @@ namespace GAS.Runtime
         {
             foreach (var mark in _cacheReleaseGameplayEffect)
             {
-                if (frame == mark.startFrame)
-                {
-                    var catcher = mark.TargetCatcher;
-                    catcher.Init(_abilitySpec.Owner);
-
-                    catcher.CatchTargetsNonAllocSafe(_abilitySpec.Target, _targets);
-
-                    foreach (var asc in _targets)
-                    {
-                        foreach (var gea in mark.gameplayEffectAssets)
-                        {
-                            var ge = new GameplayEffect(gea);
-                            _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
-                        }
-                    }
-
-                    _targets.Clear();
-                }
+                // if (frame == mark.startFrame)
+                // {
+                //     var catcher = mark.TargetCatcher;
+                //     catcher.Init(_abilitySpec.Owner);
+                //
+                //     catcher.CatchTargetsNonAllocSafe(_abilitySpec.Target, _targets);
+                //
+                //     foreach (var asc in _targets)
+                //     {
+                //         foreach (var gea in mark.gameplayEffectAssets)
+                //         {
+                //             var ge = new GameplayEffect(gea);
+                //             _abilitySpec.Owner.ApplyGameplayEffectTo(ge, asc);
+                //         }
+                //     }
+                //
+                //     _targets.Clear();
+                // }
             }
         }
 

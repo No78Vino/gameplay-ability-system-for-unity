@@ -4,12 +4,6 @@ using UnityEngine.Serialization;
 namespace GAS.Runtime
 {
     [Serializable]
-    public abstract class TrackEventBase
-    {        
-        public int startFrame;
-    }
-    
-    [Serializable]
     public abstract class MarkEventBase:TrackEventBase
     {
     }

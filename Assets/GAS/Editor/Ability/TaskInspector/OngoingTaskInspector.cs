@@ -26,7 +26,7 @@ namespace GAS.Editor
         protected void Save()
         {
             var currentInspectorObject = AbilityTimelineEditorWindow.Instance.CurrentInspectorObject;
-            (currentInspectorObject as TaskClip)?.ClipDataForSave.ongoingTask.Save(_task);
+            //(currentInspectorObject as TaskClip)?.ClipDataForSave.ongoingTask.Save(_task);
             AbilityTimelineEditorWindow.Instance.Save();
         }
     }

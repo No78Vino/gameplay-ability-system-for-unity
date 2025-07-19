@@ -23,6 +23,6 @@
 
     public abstract class OngoingAbilityTaskT<T> : OngoingAbilityTask where T : AbilitySpec
     {
-        public new T Spec => (T)_spec;
+        //public new T Spec => (T)_spec;
     }
 }

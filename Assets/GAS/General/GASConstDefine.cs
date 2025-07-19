@@ -42,6 +42,10 @@
         public const string JSON_FILE_NAME_OF_ABILITY = "exgas_tbability";
         public const string EXCEL_FILE_NAME_OF_ABILITY = "#exgas.ability";
         public const string CODE_FILE_NAME_OF_ABILITY = "ExGasAbilityLib.gen";
+        
+        public const string JSON_FILE_NAME_OF_CUE = "exgas_tbgameplaycue";
+        public const string EXCEL_FILE_NAME_OF_CUE = "#exgas.gameplayCue";
+        public const string CODE_FILE_NAME_OF_CUE = "ExGasCueLib.gen";
 
         #endregion
 

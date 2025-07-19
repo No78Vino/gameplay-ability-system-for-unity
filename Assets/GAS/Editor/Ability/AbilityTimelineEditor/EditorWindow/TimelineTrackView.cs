@@ -119,16 +119,16 @@ namespace GAS.Editor
 
             // Ongoing Task
             _menuOngoingTask = new MenuTrack();
-            _menuOngoingTask.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                typeof(TaskClipEventTrack), typeof(TaskClipEventTrackData), "Ongoing Task",
-                new Color(0.7f, 0.3f, 0.7f, 0.2f), new Color(0.5f, 0.3f, 0.5f, 1));
-            foreach (var customClipEventTrackData in AbilityAsset.OngoingTasks)
-            {
-                var customClipTrack = new TaskClipEventTrack();
-                customClipTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                    customClipEventTrackData);
-                TrackList.Add(customClipTrack);
-            }
+            // _menuOngoingTask.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
+            //     typeof(TaskClipEventTrack), typeof(TaskClipEventTrackData), "Ongoing Task",
+            //     new Color(0.7f, 0.3f, 0.7f, 0.2f), new Color(0.5f, 0.3f, 0.5f, 1));
+            // foreach (var customClipEventTrackData in AbilityAsset.OngoingTasks)
+            // {
+            //     var customClipTrack = new TaskClipEventTrack();
+            //     customClipTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
+            //         customClipEventTrackData);
+            //     TrackList.Add(customClipTrack);
+            // }
 
             UpdateContentSize();
         }

@@ -18,11 +18,11 @@ namespace GAS.Editor
         {
             get
             {
-                for (int i = 0; i < AbilityAsset.OngoingTasks.Count; i++)
-                {
-                    if(AbilityAsset.OngoingTasks[i] == _taskClipEventTrackData)
-                        return AbilityAsset.OngoingTasks[i];
-                }
+                // for (int i = 0; i < AbilityAsset.OngoingTasks.Count; i++)
+                // {
+                //     if(AbilityAsset.OngoingTasks[i] == _taskClipEventTrackData)
+                //         return AbilityAsset.OngoingTasks[i];
+                // }
                 return null;
             }
         }
@@ -53,7 +53,7 @@ namespace GAS.Editor
                 foreach (var clipEvent in _taskClipEventTrackData.clipEvents)
                 {
                     var item = new TaskClip();
-                    item.InitTrackClip(this, Track, _frameWidth, clipEvent);
+                    //item.InitTrackClip(this, Track, _frameWidth, clipEvent);
                     _trackItems.Add(item);
                 }
         }
@@ -65,13 +65,13 @@ namespace GAS.Editor
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
                 durationFrame = 5,
-                ongoingTask = new OngoingTaskData()
+                //ongoingTask = new OngoingTaskData()
             };
             TaskClipTrackDataForSave.clipEvents.Add(clipEvent);
             
             // 刷新显示
             var item = new TaskClip();
-            item.InitTrackClip(this, Track, _frameWidth, clipEvent);
+            //item.InitTrackClip(this, Track, _frameWidth, clipEvent);
             _trackItems.Add(item);
             
             // 选中新Clip
@@ -83,7 +83,7 @@ namespace GAS.Editor
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
             // 删除数据
-            AbilityAsset.OngoingTasks.Remove(_taskClipEventTrackData);
+            //AbilityAsset.OngoingTasks.Remove(_taskClipEventTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
             TrackParent.Remove(TrackRoot);

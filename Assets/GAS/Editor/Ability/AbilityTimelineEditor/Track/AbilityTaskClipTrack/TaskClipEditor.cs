@@ -90,7 +90,7 @@ namespace GAS.Editor
         {
             RunInfo = $"<b>Run(f):{_clip.TaskClipData.startFrame} -> {_clip.TaskClipData.EndFrame}</b>";
             Duration = _clip.TaskClipData.durationFrame;
-            OngoingTaskType = _clip.TaskClipData.ongoingTask.TaskData.Type;
+            //OngoingTaskType = _clip.TaskClipData.ongoingTask.TaskData.Type;
 
             RefreshTaskInspector();
         }
@@ -102,7 +102,7 @@ namespace GAS.Editor
             if (OngoingTaskInspectorMap.TryGetValue(ongoingAbilityTask.GetType(), out var inspectorType))
             {
                 var taskInspector = (OngoingTaskInspector)Activator.CreateInstance(inspectorType);
-                taskInspector.Init(ongoingAbilityTask);
+                //taskInspector.Init(ongoingAbilityTask);
                 OngoingTask = taskInspector;
             }
             else
@@ -123,8 +123,8 @@ namespace GAS.Editor
         
         private void OnTaskTypeChanged()
         {
-            _clip.ClipDataForSave.ongoingTask.TaskData.Type = OngoingTaskType;
-            _clip.ClipDataForSave.ongoingTask.TaskData.Data = null;
+            // _clip.ClipDataForSave.ongoingTask.TaskData.Type = OngoingTaskType;
+            // _clip.ClipDataForSave.ongoingTask.TaskData.Data = null;
             AbilityTimelineEditorWindow.Instance.Save();
             AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
             

@@ -88,7 +88,8 @@ namespace GAS.Runtime
         
         private IEnumerable<ValueDropdownItem> AttributeChoice()
         {
-            return EditAttributeHelper.GetAttributeChoiceByAttrSet(AttrSetCode);
+            return null;
+            //return EditAttributeHelper.GetAttributeChoiceByAttrSet(AttrSetCode);
         }
 #endif
     }

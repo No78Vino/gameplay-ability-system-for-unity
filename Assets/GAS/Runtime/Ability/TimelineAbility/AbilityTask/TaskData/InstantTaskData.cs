@@ -19,9 +19,9 @@ namespace GAS.Runtime
         
         public InstantAbilityTask CreateTask(AbilitySpec abilitySpec)
         {
-            var task = base.Create(abilitySpec);
-            var instantAbilityTask = task as InstantAbilityTask;
-            return instantAbilityTask;
+            // var task = base.Create(abilitySpec);
+            // var instantAbilityTask = task as InstantAbilityTask;
+            return null;
         }
 
         public override AbilityTaskBase Load()

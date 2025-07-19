@@ -9,7 +9,7 @@ namespace GAS.Editor
     public class TaskClip : TrackClip<TaskClipEventTrack>
     {
         private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
-        public TaskClipEvent TaskClipData => clipData as TaskClipEvent;
+        public TaskClipEvent TaskClipData => null;//clipData as TaskClipEvent;
 
         public TaskClipEvent ClipDataForSave
         {
@@ -36,9 +36,9 @@ namespace GAS.Editor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            var taskType = TaskClipData.ongoingTask.TaskData.Type;
-            var shortName = taskType.Split('.').Last();
-            ItemLabel.text = !string.IsNullOrEmpty(shortName) ? shortName : "Null!";
+            // var taskType = TaskClipData.ongoingTask.TaskData.Type;
+            // var shortName = taskType.Split('.').Last();
+            // ItemLabel.text = !string.IsNullOrEmpty(shortName) ? shortName : "Null!";
         }
 
         public override void UpdateClipDataStartFrame(int newStartFrame)
@@ -46,7 +46,7 @@ namespace GAS.Editor
             var updatedClip = ClipDataForSave;
             ClipDataForSave.startFrame = newStartFrame;
             AbilityTimelineEditorWindow.Instance.Save();
-            clipData = updatedClip;
+            //clipData = updatedClip;
         }
 
         public override void UpdateClipDataDurationFrame(int newDurationFrame)
@@ -54,7 +54,7 @@ namespace GAS.Editor
             var updatedClip = ClipDataForSave;
             ClipDataForSave.durationFrame = newDurationFrame;
             AbilityTimelineEditorWindow.Instance.Save();
-            clipData = updatedClip;
+            //clipData = updatedClip;
         }
 
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
