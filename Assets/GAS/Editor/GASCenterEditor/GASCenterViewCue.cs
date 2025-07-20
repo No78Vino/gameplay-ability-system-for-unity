@@ -18,6 +18,13 @@ namespace GAS.Editor
 
         private readonly GASSettingAsset _settingAsset = GASSettingAsset.Instance;
 
+        public GASCenterViewCue()
+        {
+            LoadFile();
+            SelectedId = _data.Keys.FirstOrDefault();
+            OnSelectedIdChanged();
+        }
+        
         [TitleGroup(TITLE_GRP, order: 1)]
         [HorizontalGroup(TITLE_GRP_H_A)]
         [Button("打开Excel文件所在文件夹")]
@@ -221,7 +228,7 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["cue_logic"]]?.ToString()
                 : string.Empty;
 
-            cueParam = EditorCueHelper.CreateCueParamEditor(type, _cueLogicParameter[SelectedId]);
+            cueParam = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParamEditor(type, cueParams) : null;
         }
 
         #endregion
