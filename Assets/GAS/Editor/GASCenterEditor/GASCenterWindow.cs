@@ -34,11 +34,11 @@ namespace GAS.Editor
             tree.Add("Attribute Set属性集", AttributeSetEditor());
             tree.Add("GameplayEffect效果buff", GameplayEffectEditor());
             tree.Add("GameplayAbility技能", GameplayAbilitySystemEditor());
-            tree.Add("GameplayAbility技能", GameplayCueEditor());
+            tree.Add("GameplayCue演出提示", GameplayCueEditor());
 
             tree.Config.AutoScrollOnSelectionChanged = true;
             tree.Config.DrawScrollView = true;
-            tree.Config.AutoHandleKeyboardNavigation = true;
+            tree.Config.AutoHandleKeyboardNavigation = false;
             return tree;
         }
         

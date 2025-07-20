@@ -112,6 +112,14 @@ namespace GAS.Editor
             return _cachedCueTypes;
         }
         
+        public static IEnumerable<string> GetCachedCueTypeNames()
+        {
+            var types = GetCachedCueTypes();
+            return types
+                .Select(type => type.Name)
+                .Where(name => !string.IsNullOrEmpty(name))
+                .ToList();
+        }
         #region Instant Cue
         
         private static ValueDropdownItem[] _instantCueChoices;

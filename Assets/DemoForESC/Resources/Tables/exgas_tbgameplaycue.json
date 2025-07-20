@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1001,
+    "name": "打印日志",
+    "desc": "用于打印日志",
+    "required_tag": [
+      100,
+      1001
+    ],
+    "immunity_tag": [
+      200,
+      2001
+    ],
+    "cue_logic": {
+      "$type": "GameplayCueLog",
+      "value": "testMessageA"
+    }
+  },
+  {
+    "id": 1002,
+    "name": "打印日志2",
+    "desc": "用于打印日志2",
+    "required_tag": [],
+    "immunity_tag": [],
+    "cue_logic": {
+      "$type": "GameplayCueLog",
+      "value": "测试数据"
+    }
+  }
+]

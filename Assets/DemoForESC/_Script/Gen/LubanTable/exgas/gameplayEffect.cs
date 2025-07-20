@@ -28,8 +28,7 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         { var __json0 = _buf["immunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags.Add(__v0); }   }
         { if(!_buf["timeUnit"].IsNumber) { throw new SerializationException(); }  TimeUnit = _buf["timeUnit"]; }
         { if(!_buf["duration"].IsNumber) { throw new SerializationException(); }  Duration = _buf["duration"]; }
-        { if(!_buf["period"].IsNumber) { throw new SerializationException(); }  Period = _buf["period"]; }
-        { var __json0 = _buf["periodEffect"]; if(!__json0.IsArray) { throw new SerializationException(); } PeriodEffect = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  PeriodEffect.Add(__v0); }   }
+        { var _j = _buf["period"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Period = global::cfg.period.Deserializeperiod(_j);  } } else { Period = null; } }
         { var __json0 = _buf["modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Modifiers.Add(__v0); }   }
         { var __json0 = _buf["cueOnApply"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnApply = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnApply.Add(__v0); }   }
         { var __json0 = _buf["cueOnTick"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnTick = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnTick.Add(__v0); }   }
@@ -91,13 +90,9 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// </summary>
     public readonly int Duration;
     /// <summary>
-    /// 间隔
+    /// 间隔执行逻辑
     /// </summary>
-    public readonly int Period;
-    /// <summary>
-    /// 间隔执行的Buff
-    /// </summary>
-    public readonly System.Collections.Generic.List<int> PeriodEffect;
+    public readonly period? Period;
     /// <summary>
     /// 属性数值修改器
     /// </summary>
@@ -157,7 +152,6 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         + "timeUnit:" + TimeUnit + ","
         + "duration:" + Duration + ","
         + "period:" + Period + ","
-        + "periodEffect:" + Luban.StringUtil.CollectionToString(PeriodEffect) + ","
         + "modifiers:" + Luban.StringUtil.CollectionToString(Modifiers) + ","
         + "cueOnApply:" + Luban.StringUtil.CollectionToString(CueOnApply) + ","
         + "cueOnTick:" + Luban.StringUtil.CollectionToString(CueOnTick) + ","

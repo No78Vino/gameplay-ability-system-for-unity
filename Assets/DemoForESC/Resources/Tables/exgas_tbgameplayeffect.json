@@ -18,8 +18,6 @@
     "immunityTags": [],
     "timeUnit": 0,
     "duration": 0,
-    "period": 0,
-    "periodEffect": [],
     "modifiers": [],
     "cueOnApply": [],
     "cueOnTick": [],

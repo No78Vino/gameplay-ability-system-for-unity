@@ -22,6 +22,12 @@ namespace GAS.Editor
             ReadAllAndCache();
         }
         
+        private static ValueDropdownItem[] _tagChoices;
+        public static ValueDropdownItem[] TagChoices()
+        {
+            return _tagChoices ??= _tags.Select(t => new ValueDropdownItem(t.name, t.id)).ToArray();
+        }
+        
         public static void ReadAllAndCache()
         {
             var settingAsset = GASSettingAsset.Instance;
@@ -47,6 +53,7 @@ namespace GAS.Editor
         public static TagInEditor[] ReadTags(string jsonContent)
         {
             _tags = JsonConvert.DeserializeObject<TagInEditor[]>(jsonContent);
+            _tagChoices = _tags.Select(t => new ValueDropdownItem(t.name, t.id)).ToArray();
             return _tags;
         }
         
