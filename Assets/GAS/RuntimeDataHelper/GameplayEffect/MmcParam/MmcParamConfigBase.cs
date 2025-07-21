@@ -1,5 +1,5 @@
 using System;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
+using GAS.RuntimeWithECS;
 
 namespace GAS.RuntimeDataHelper.GameplayEffect.MmcParam
 {

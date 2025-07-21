@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using GAS.RuntimeDataHelper.Helper;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
 
@@ -357,7 +358,7 @@ namespace GAS.Editor
         }
         
         /// <summary>
-        ///  生成Ability代码
+        ///  生成Cue代码
         /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/GameplayCue")]
         public static void GenerateCueCode()
@@ -415,6 +416,61 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
         
+        [MenuItem("EXTool/EX-GAS/生成脚本/ModMagnitudeCalculation")]
+        public static void GenerateMmcCode()
+        {
+            var setting = GASSettingAsset.LoadOrCreate();
+            var filePath = setting.PathOfCodeMmc;
+           using var writer = new IndentedWriter(new StreamWriter(filePath));
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("//// This is a generated file. ////");
+            writer.WriteLine("////     Do not modify it.     ////");
+            writer.WriteLine("///////////////////////////////////");
+
+            writer.WriteLine("");
+            
+            writer.WriteLine("namespace GAS.Runtime");
+            writer.WriteLine("{");
+            writer.Indent++;
+            {
+                writer.WriteLine("public static class XMmc");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    var allMmc = EditGameplayEffectHelper.GetCachedMmcTypes();
+                    var mmcTypes = allMmc as Type[] ?? allMmc.ToArray();
+                    foreach (var mmcType in mmcTypes)
+                    {
+                        var mmcName = mmcType.Name;
+                        writer.WriteLine($"public const string MMC_{mmcName} = \"{mmcName}\";");
+                    }
+
+                    writer.WriteLine("");
+                    writer.WriteLine("public static void LoadMmcType()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        foreach (var mmcType in mmcTypes)
+                        {
+                            var mmcName = mmcType.Name;
+                            var typeFullName = mmcType.FullName;
+                            writer.WriteLine($"var {mmcName} = typeof({typeFullName});");
+                            writer.WriteLine($"MmcHelper.RegisterMmc(MMC_{mmcName}, {mmcName});");
+                        }
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                }
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.WriteLine("}");
+            
+            Console.WriteLine($"Generated MmcCode at path: {filePath}");
+            AssetDatabase.Refresh();
+        }
+        
         /// <summary>
         ///  生成所有GAS相关代码
         /// </summary>
@@ -426,6 +482,7 @@ namespace GAS.Editor
             GenerateAttrSetCode();
             GenerateAbilityCode();
             GenerateCueCode();
+            GenerateMmcCode();
         }
     }
 }

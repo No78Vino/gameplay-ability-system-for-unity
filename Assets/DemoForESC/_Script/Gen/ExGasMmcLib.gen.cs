@@ -5,16 +5,16 @@
 
 namespace GAS.Runtime
 {
-    public static class GEN_MmcCode
+    public static class XMmc
     {
-        public const string MMC_MMCNone = "GAS.RuntimeWithECS.Modifier.CommonUsage.MMCNone";
-        public const string MMC_MMCScalableFloat = "GAS.RuntimeWithECS.Modifier.CommonUsage.MMCScalableFloat";
+        public const string MMC_MMCNone = "MMCNone";
+        public const string MMC_MMCScalableFloat = "MMCScalableFloat";
 
         public static void LoadMmcType()
         {
-            var MMCNone = typeof(RuntimeWithECS.MMCNone);
+            var MMCNone = typeof(GAS.RuntimeWithECS.MMCNone);
             MmcHelper.RegisterMmc(MMC_MMCNone, MMCNone);
-            var MMCScalableFloat = typeof(RuntimeWithECS.MMCScalableFloat);
+            var MMCScalableFloat = typeof(GAS.RuntimeWithECS.MMCScalableFloat);
             MmcHelper.RegisterMmc(MMC_MMCScalableFloat, MMCScalableFloat);
         }
     }

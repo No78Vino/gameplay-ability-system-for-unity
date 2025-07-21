@@ -1,10 +1,11 @@
 ﻿using System;
+using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS.Modifier.MmcParameter;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Modifier.CommonUsage
+namespace GAS.RuntimeWithECS
 {
     [Serializable]
     public class MMCScalableFloat : ModMagnitudeCalculationBase<MmcParaFloatScale>

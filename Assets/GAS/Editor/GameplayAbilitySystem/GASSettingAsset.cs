@@ -81,6 +81,10 @@ namespace GAS.Editor
         public string PathOfExcelCue => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_CUE}.xlsx";
         public string PathOfCodeCue => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_CUE}.cs";
         
+        public string PathOfJsonMmc => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_MMC}.json";
+        public string PathOfExcelMmc => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_MMC}.xlsx";
+        public string PathOfCodeMmc => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_MMC}.cs";
+        
         [TitleGroup("A/生成文件路径一览",Order = 99)]
         [DisplayAsString(TextAlignment.Left, true)]
         [HideLabel]

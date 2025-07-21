@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
+using GAS.RuntimeWithECS;
 using Unity.Entities;
 using UnityEngine;
 
@@ -11,11 +11,6 @@ namespace GAS.Runtime
 {
     public static class MmcHelper
     {
-        public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, MmcParamConfigBase param)
-        {
-            return TryCreateMmc(mmcType, param.GetConfig());
-        }
-
         public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, IMmcParameter param)
         {
             if (MmcTypeMap.TryGetValue(mmcType, out var type))

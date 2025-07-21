@@ -4,7 +4,7 @@ using GAS.Runtime;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -36,8 +36,8 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
             MmcParamConfigBase config = null;
             if (typeMap.TryGetValue(MmcType, out var value))
                 config = Activator.CreateInstance(value) as MmcParamConfigBase;
-            
-            return MmcHelper.TryCreateMmc(MmcType,config);
+
+            return null;
         }
         
         protected void OnValueChanged()

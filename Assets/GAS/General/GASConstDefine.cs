@@ -46,6 +46,10 @@
         public const string JSON_FILE_NAME_OF_CUE = "exgas_tbgameplaycue";
         public const string EXCEL_FILE_NAME_OF_CUE = "#exgas.gameplayCue";
         public const string CODE_FILE_NAME_OF_CUE = "ExGasCueLib.gen";
+        
+        public const string JSON_FILE_NAME_OF_MMC = "exgas_tbmmc";
+        public const string EXCEL_FILE_NAME_OF_MMC = "#exgas.mmc";
+        public const string CODE_FILE_NAME_OF_MMC = "ExGasMmcLib.gen";
 
         #endregion
 

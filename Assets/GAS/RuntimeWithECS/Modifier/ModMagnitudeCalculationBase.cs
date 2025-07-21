@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using GAS.General;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;

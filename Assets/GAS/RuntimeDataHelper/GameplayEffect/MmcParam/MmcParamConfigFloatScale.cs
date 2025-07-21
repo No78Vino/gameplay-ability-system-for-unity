@@ -1,5 +1,5 @@
 using System;
-using GAS.RuntimeWithECS.Modifier.CommonUsage;
+using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.Modifier.MmcParameter;
 using Sirenix.OdinInspector;
 
