@@ -14,7 +14,7 @@ namespace GAS.Runtime
         {
             var MMCNone = typeof(GAS.RuntimeWithECS.MMCNone);
             MmcHelper.RegisterMmc(MMC_MMCNone, MMCNone);
-            var MMCScalableFloat = typeof(GAS.RuntimeWithECS.MMCScalableFloat);
+            var MMCScalableFloat = typeof(GAS.Runtime.MMCScalableFloat);
             MmcHelper.RegisterMmc(MMC_MMCScalableFloat, MMCScalableFloat);
         }
     }

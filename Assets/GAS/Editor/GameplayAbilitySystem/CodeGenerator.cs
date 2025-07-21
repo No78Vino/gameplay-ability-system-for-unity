@@ -79,8 +79,7 @@ namespace GAS.Editor
                 process.Close();
             }
         }
-
-                
+        
         private static string MakeTagValidIdentifier(string name)
         {
             // Replace '.' with '_'
@@ -99,9 +98,6 @@ namespace GAS.Editor
                     }, StringSplitOptions.RemoveEmptyEntries));
         }
         
-        /// <summary>
-        ///  生成Tag代码
-        /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/GameplayTag")]
         public static void GenerateTagCode()
         {
@@ -235,10 +231,7 @@ namespace GAS.Editor
             writer.Indent--;
             writer.WriteLine("}");
         }
-
-        /// <summary>
-        ///  生成属性代码
-        /// </summary>
+        
         [MenuItem("EXTool/EX-GAS/生成脚本/Attribute")]
         public static void GenerateAttrCode()
         {
@@ -281,9 +274,6 @@ namespace GAS.Editor
             writer.WriteLine("}");
         }
         
-        /// <summary>
-        ///  生成属性集代码
-        /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/AttributeSet")]
         public static void GenerateAttrSetCode()
         {
@@ -348,18 +338,12 @@ namespace GAS.Editor
             writer.WriteLine("}");
         }
         
-        /// <summary>
-        ///  生成Ability代码
-        /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/Ability")]
         public static void GenerateAbilityCode()
         {
             // TODO
         }
         
-        /// <summary>
-        ///  生成Cue代码
-        /// </summary>
         [MenuItem("EXTool/EX-GAS/生成脚本/GameplayCue")]
         public static void GenerateCueCode()
         {

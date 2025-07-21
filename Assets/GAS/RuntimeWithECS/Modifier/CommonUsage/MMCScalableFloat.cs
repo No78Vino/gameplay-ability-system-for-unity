@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     [Serializable]
     public class MMCScalableFloat : ModMagnitudeCalculationBase<MmcParaFloatScale>
