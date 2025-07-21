@@ -13,21 +13,23 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class GameplayCueLogInt : CueLogic
+public sealed partial class CueLoging : CueLogic
 {
-    public GameplayCueLogInt(JSONNode _buf)  : base(_buf) 
+    public CueLoging(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["value"].IsNumber) { throw new SerializationException(); }  Value = _buf["value"]; }
+        { if(!_buf["value"].IsString) { throw new SerializationException(); }  Value = _buf["value"]; }
+        { if(!_buf["duration"].IsNumber) { throw new SerializationException(); }  Duration = _buf["duration"]; }
     }
 
-    public static GameplayCueLogInt DeserializeGameplayCueLogInt(JSONNode _buf)
+    public static CueLoging DeserializeCueLoging(JSONNode _buf)
     {
-        return new GameplayCueLogInt(_buf);
+        return new CueLoging(_buf);
     }
 
-    public readonly int Value;
+    public readonly string Value;
+    public readonly float Duration;
    
-    public const int __ID__ = 1586863736;
+    public const int __ID__ = -1364927983;
     public override int GetTypeId() => __ID__;
 
     public override void ResolveRef(Tables tables)
@@ -39,6 +41,7 @@ public sealed partial class GameplayCueLogInt : CueLogic
     {
         return "{ "
         + "value:" + Value + ","
+        + "duration:" + Duration + ","
         + "}";
     }
 }

@@ -20,6 +20,7 @@ public partial class Tables
     public exgas.TbgameplayCue TbgameplayCue {get; }
     public exgas.TbgameplayEffect TbgameplayEffect {get; }
     public exgas.TbgameplayTags TbgameplayTags {get; }
+    public exgas.Tbmmc Tbmmc {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -29,6 +30,7 @@ public partial class Tables
         TbgameplayCue = new exgas.TbgameplayCue(loader("exgas_tbgameplaycue"));
         TbgameplayEffect = new exgas.TbgameplayEffect(loader("exgas_tbgameplayeffect"));
         TbgameplayTags = new exgas.TbgameplayTags(loader("exgas_tbgameplaytags"));
+        Tbmmc = new exgas.Tbmmc(loader("exgas_tbmmc"));
         ResolveRef();
     }
     
@@ -40,6 +42,7 @@ public partial class Tables
         TbgameplayCue.ResolveRef(this);
         TbgameplayEffect.ResolveRef(this);
         TbgameplayTags.ResolveRef(this);
+        Tbmmc.ResolveRef(this);
     }
 }
 

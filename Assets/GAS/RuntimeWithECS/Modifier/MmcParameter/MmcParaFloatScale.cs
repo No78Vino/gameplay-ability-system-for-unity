@@ -23,13 +23,13 @@ namespace GAS.RuntimeWithECS.Modifier.MmcParameter
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
-            if (paramData.Count > 1 && paramData[0] is float kValue)
-                k = kValue;
+            if (paramData.Count > 1)
+                k = Convert.ToSingle(paramData[0]);
             else
                 k = 1;
 
-            if (paramData.Count > 2 && paramData[1] is float bValue)
-                b = bValue;
+            if (paramData.Count > 2)
+                b = Convert.ToSingle(paramData[1]);
             else
                 b = 0;
         }

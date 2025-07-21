@@ -198,7 +198,7 @@ namespace GAS.Editor
 
         private void OnTypeChange()
         {
-            cueParam = EditorCueHelper.CreateCueParamEditor(type);
+            cueParam = EditorCueHelper.CreateCueParameter(type);
         }
 
         public ValueDropdownItem[] TagChoices => GasJsonReader.TagChoices();
@@ -228,7 +228,7 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["cue_logic"]]?.ToString()
                 : string.Empty;
 
-            cueParam = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParamEditor(type, cueParams) : null;
+            cueParam = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;
         }
 
         #endregion

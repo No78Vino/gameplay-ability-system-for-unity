@@ -18,13 +18,42 @@
   },
   {
     "id": 1002,
-    "name": "打印日志2",
-    "desc": "用于打印日志2",
-    "required_tag": [],
+    "name": "打印持续日志",
+    "desc": "用于打印持续日志",
+    "required_tag": [
+      100,
+      1002,
+      2002,
+      2005
+    ],
     "immunity_tag": [],
     "cue_logic": {
-      "$type": "GameplayCueLog",
-      "value": "测试数据"
+      "$type": "CueLoging",
+      "value": "testValue2",
+      "duration": 1.55
+    }
+  },
+  {
+    "id": 1003,
+    "name": "测试3",
+    "desc": "看看拉屎都",
+    "required_tag": [
+      200,
+      2005
+    ],
+    "immunity_tag": [
+      3002,
+      2006,
+      2003,
+      2001,
+      1002,
+      100,
+      1001
+    ],
+    "cue_logic": {
+      "$type": "CueLoging",
+      "value": "卧槽",
+      "duration": 30
     }
   }
 ]

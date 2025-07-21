@@ -13,22 +13,17 @@ using SimpleJSON;
 
 namespace cfg
 {
-public abstract partial class CueLogic : Luban.BeanBase
+public abstract partial class MmcLogic : Luban.BeanBase
 {
-    public CueLogic(JSONNode _buf) 
+    public MmcLogic(JSONNode _buf) 
     {
     }
 
-    public static CueLogic DeserializeCueLogic(JSONNode _buf)
+    public static MmcLogic DeserializeMmcLogic(JSONNode _buf)
     {
         switch ((string)_buf["$type"])
         {
-            case "GameplayCueLog": return new GameplayCueLog(_buf);
-            case "CueLoging": return new CueLoging(_buf);
-            case "GameplayCueLogFloat": return new GameplayCueLogFloat(_buf);
-            case "GameplayCueLogBool": return new GameplayCueLogBool(_buf);
-            case "GameplayCueLogVector2": return new GameplayCueLogVector2(_buf);
-            case "GameplayCueVector3": return new GameplayCueVector3(_buf);
+            case "MMCScalableFloat": return new MMCScalableFloat(_buf);
             default: throw new SerializationException();
         }
     }
