@@ -7,7 +7,7 @@ namespace DemoForESC._Script.Gen
         public static void LoadGenCache()
         {
             GEN_AbilityCode.LoadAbilityCode();
-            GEN_MmcCode.LoadMmcType();
+            XMmc.LoadMmcType();
             GEN_CueCode.LoadCueType();
         }
         
