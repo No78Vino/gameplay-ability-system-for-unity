@@ -110,8 +110,6 @@ namespace GAS.Editor
                     row++;
                 }
             }
-
-            string a = "LLL";
         }
 
         #endregion
