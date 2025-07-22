@@ -112,6 +112,7 @@ namespace GAS.Editor
 
         public IEnumerable<int> GetAllEffectIds() => _data == null ? new List<int>() : _data.Keys;
         public ValueDropdownItem[] TagChoices => GasJsonReader.TagChoices();
+        public IEnumerable<EffectEditComponent> ComponentChoice => EditorEffectHelper.ComponentTypes();
         
         private void OnSelectedIdChanged()
         {
@@ -145,11 +146,14 @@ namespace GAS.Editor
         
         #region 可视化读写编辑 UI
 
-        [TitleGroup("编辑配置", order: 2)]
-        [HorizontalGroup("编辑配置/A")]
+        private const string T_G = "编辑配置";
+        private const string T_G_A = "编辑配置/A";
+        private const string T_G_A_B = "编辑配置/A/组件详情";
+        
+        [TitleGroup(T_G, order: 2)]
         [ValueDropdown(nameof(GetAllEffectIds))]
         [OnValueChanged(nameof(OnSelectedIdChanged))]
-        [LabelText("当前编辑Effect")]
+        [LabelText("当前Effect"),LabelWidth(100)]
         [InlineButton(nameof(AddNewEffect), Label = "添加", Icon = SdfIconType.Plus)]
         [InlineButton(nameof(DeleteEffect), Label = "删除", Icon = SdfIconType.Trash)]
         public int SelectedId;
@@ -197,16 +201,35 @@ namespace GAS.Editor
             }
         }
 
-        [TitleGroup("编辑配置")] [LabelText("名字")] [Tooltip("部分GA编辑页的GE选项会用到这个参数")]
+        private bool HasComponent(EffectEditComponent component) =>
+            ComponentTypes != null && ComponentTypes.Contains(component);
+        
+        [TitleGroup(T_G)] [LabelText("名字"),LabelWidth(50)] [Tooltip("部分GA编辑页的GE选项会用到这个参数")]
         public string name;
 
-        [TitleGroup("编辑配置")] [LabelText("描述")] public string description;
+        [TitleGroup(T_G)] [LabelText("描述"),LabelWidth(50)] public string description;
 
-        [HorizontalGroup("编辑配置/tag")] [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText("播放时需求的tag")]
-        public List<int> requiredTags;
+        [HorizontalGroup(T_G_A,200)] 
+        [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] [LabelText("GE组件")]
+        public List<EffectEditComponent> ComponentTypes;
 
-        [HorizontalGroup("编辑配置/tag")] [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText("播放时免疫的tag")]
-        public List<int> immunityTags;
+        [BoxGroup(T_G_A_B)]
+        [Title("AssetTag 描述tag",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.AssetTags)")] 
+        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
+        public List<int> assetTags;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("GrantedTag 获得的tag",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.GrantedTags)")] 
+        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
+        public List<int> grantedTags;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("ApplicationRequiredTags 应用需求tag",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.ApplicationRequiredTags)")] 
+        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
+        public List<int> applicationRequiredTags;
 
         #endregion
     }
