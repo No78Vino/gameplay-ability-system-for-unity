@@ -251,9 +251,67 @@ namespace GAS.Editor
         
         [BoxGroup(T_G_A_B)]
         [Title("持续时间",Bold = false)]
+        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Duration)")] 
         public GEEditDurarion Duration;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("间隔效果GE",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.Period)")]
+        [InfoBox("必须有Duration组件，Period组件才会生效！",
+            InfoMessageType = InfoMessageType.Error,
+            VisibleIf = "@!HasComponent(EffectEditComponent.Duration)")]
+        public GEEditPeriod Period;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("间隔效果GE",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.Modifiers)")]
+        public List<GEEditPeriodModifier> Modifiers;
 
+        [BoxGroup(T_G_A_B)]
+        [Title("应用时触发的Cue",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.CueOnApply)")]
+        [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
+        public List<int> CueOnApply;
+            
+        [BoxGroup(T_G_A_B)]
+        [Title("帧更新的Cue",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.CueOnTick)")]
+        [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
+        public List<int> CueOnTick;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("添加时触发的Cue",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.CueOnAdd)")]
+        [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
+        public List<int> CueOnAdd;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("移除时触发的Cue",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.CueOnRemove)")]
+        [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
+        public List<int> CueOnRemove;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("激活时触发的Cue",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.CueOnActivate)")]
+        [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
+        public List<int> CueOnActivate;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("失活时触发的Cue",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.CueOnDeactivate)")]
+        [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
+        public List<int> CueOnDeactivate;
+        
         #endregion
     }
 }
