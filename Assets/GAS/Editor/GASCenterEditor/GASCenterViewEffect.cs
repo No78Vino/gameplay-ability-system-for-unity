@@ -217,19 +217,42 @@ namespace GAS.Editor
         [Title("AssetTag 描述tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.AssetTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
-        public List<int> assetTags;
+        public List<int> AssetTags;
         
         [BoxGroup(T_G_A_B)]
         [Title("GrantedTag 获得的tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.GrantedTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
-        public List<int> grantedTags;
+        public List<int> GrantedTags;
         
         [BoxGroup(T_G_A_B)]
         [Title("ApplicationRequiredTags 应用需求tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ApplicationRequiredTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
-        public List<int> applicationRequiredTags;
+        public List<int> ApplicationRequiredTags;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("OngoingRequiredTags 持续需求tag",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.OngoingRequiredTags)")] 
+        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
+        public List<int> OngoingRequiredTags;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("RemoveGameplayEffectsWithTags 移除持有tag的GE",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.RemoveGameplayEffectsWithTags)")] 
+        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
+        public List<int> RemoveGameplayEffectsWithTags;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("ImmunityTags 免疫的tag",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.ImmunityTags)")] 
+        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
+        public List<int> ImmunityTags;
+        
+        [BoxGroup(T_G_A_B)]
+        [Title("持续时间",Bold = false)]
+        [ShowIf("@HasComponent(EffectEditComponent.Duration)")] 
+        public GEEditDurarion Duration;
 
         #endregion
     }
