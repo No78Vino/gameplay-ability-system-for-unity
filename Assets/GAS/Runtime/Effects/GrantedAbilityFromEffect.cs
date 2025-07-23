@@ -13,19 +13,19 @@ namespace GAS.Runtime
         /// <summary>
         /// 不激活, 等待用户调用ASC激活
         /// </summary>
-        [LabelText("None - 不激活, 等待用户调用ASC激活", SdfIconType.Joystick)]
+        [LabelText("不激活", SdfIconType.Joystick)]
         None,
 
         /// <summary>
         /// 能力添加时激活（GE添加时激活）
         /// </summary>
-        [LabelText("WhenAdded - 能力添加时激活（GE添加时激活）", SdfIconType.LightningChargeFill)]
+        [LabelText("添加时激活", SdfIconType.LightningChargeFill)]
         WhenAdded,
 
         /// <summary>
         /// 同步GE激活时激活
         /// </summary>
-        [LabelText("SyncWithEffect - 同步GE激活时激活", SdfIconType.Robot)]
+        [LabelText("同步GE", SdfIconType.Robot)]
         SyncWithEffect,
     }
 
@@ -37,13 +37,13 @@ namespace GAS.Runtime
         /// <summary>
         /// 无相关取消激活逻辑, 需要用户调用ASC取消激活
         /// </summary>
-        [LabelText("None - 无相关取消激活逻辑, 需要用户调用ASC取消激活", SdfIconType.Joystick)]
+        [LabelText("无取消激活", SdfIconType.Joystick)]
         None,
 
         /// <summary>
         /// 同步GE，GE失活时取消激活
         /// </summary>
-        [LabelText("SyncWithEffect - 同步GE，GE失活时取消激活", SdfIconType.Robot)]
+        [LabelText("同步GE", SdfIconType.Robot)]
         SyncWithEffect,
     }
 
@@ -55,31 +55,31 @@ namespace GAS.Runtime
         /// <summary>
         /// 不移除
         /// </summary>
-        [LabelText("None - 不移除", SdfIconType.Joystick)]
+        [LabelText("不移除", SdfIconType.Joystick)]
         None,
 
         /// <summary>
         /// 同步GE，GE移除时移除
         /// </summary>
-        [LabelText("SyncWithEffect - 同步GE，GE移除时移除", SdfIconType.Robot)]
+        [LabelText("同步GE", SdfIconType.Robot)]
         SyncWithEffect,
 
         /// <summary>
         /// 能力结束时自己移除
         /// </summary>
-        [LabelText("WhenEnd - 能力结束时自己移除", SdfIconType.LightningChargeFill)]
+        [LabelText("能力结束时移除", SdfIconType.LightningChargeFill)]
         WhenEnd,
 
         /// <summary>
         /// 能力取消时自己移除
         /// </summary>
-        [LabelText("WhenCancel - 能力取消时自己移除", SdfIconType.LightningChargeFill)]
+        [LabelText("能力取消时移除", SdfIconType.LightningChargeFill)]
         WhenCancel,
 
         /// <summary>
         /// 能力结束或取消时自己移除
         /// </summary>
-        [LabelText("WhenCancelOrEnd - 能力结束或取消时自己移除", SdfIconType.LightningChargeFill)]
+        [LabelText("能力结束或取消时移除", SdfIconType.LightningChargeFill)]
         WhenCancelOrEnd,
     }
 

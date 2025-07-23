@@ -318,6 +318,13 @@ namespace GAS.Editor
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnDeactivate;
         
+        [VerticalGroup(T_G_A_B)]
+        [Title("获得技能",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.GrantedAbility)")]
+        [LabelText(" ")]
+        public List<GEEditGrantedAbility> GrantedAbility;
+        
         #endregion
     }
 }
