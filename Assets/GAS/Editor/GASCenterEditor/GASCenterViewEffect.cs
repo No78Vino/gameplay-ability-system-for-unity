@@ -111,7 +111,7 @@ namespace GAS.Editor
         }
 
         public IEnumerable<int> GetAllEffectIds() => _data == null ? new List<int>() : _data.Keys;
-        public ValueDropdownItem[] TagChoices => GasJsonReader.TagChoices();
+        public List<ValueDropdownItem> TagChoices => GasXlsxChoice.Tags();
         public IEnumerable<EffectEditComponent> ComponentChoice => EditorEffectHelper.ComponentTypes();
         
         private void OnSelectedIdChanged()

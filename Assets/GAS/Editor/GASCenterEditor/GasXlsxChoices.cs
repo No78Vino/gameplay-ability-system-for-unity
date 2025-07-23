@@ -36,12 +36,63 @@ namespace GAS.Editor
                     row++;
                 }
             }
-
+            
+            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelMmc)))
+            {
+                var worksheet = package.Workbook.Worksheets[1];
+                // 读取数据行,从第4行开始，第二列为key，即id。
+                // 以第2列是否有值为结束标志
+                _mmcs = new List<ValueDropdownItem>();
+                var safeCnt = 99999;
+                var row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    var name = worksheet.Cells[row, 3].Value.ToString();
+                    _mmcs.Add(new ValueDropdownItem($"[{id}]{name}", id));
+                    row++;
+                }
+            }
+            
+            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAttrSet)))
+            {
+                var worksheet = package.Workbook.Worksheets[1];
+                // 读取数据行,从第4行开始，第二列为key，即id。
+                // 以第2列是否有值为结束标志
+                _attrSets = new List<ValueDropdownItem>();
+                var safeCnt = 99999;
+                var row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    var name = worksheet.Cells[row, 3].Value.ToString();
+                    _attrSets.Add(new ValueDropdownItem($"[{id}]{name}", id));
+                    row++;
+                }
+            }
+            
+            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelTag)))
+            {
+                var worksheet = package.Workbook.Worksheets[1];
+                // 读取数据行,从第4行开始，第二列为key，即id。
+                // 以第2列是否有值为结束标志
+                _tags = new List<ValueDropdownItem>();
+                var safeCnt = 99999;
+                var row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    var name = worksheet.Cells[row, 3].Value.ToString();
+                    _tags.Add(new ValueDropdownItem($"{name}", id));
+                    row++;
+                }
+            }
+            
             // _effects = GASXlsxReader.EffectChoices();
-            // _mmcs = GASXlsxReader.MMChoices();
             // _abilities = GASXlsxReader.AbilityChoices();
-            // _tags = GASXlsxReader.TagChoices();
-            // _attrSets = GASXlsxReader.AttrSetChoices();
             // _attrs = GASXlsxReader.AttrChoices();
         }
 
