@@ -55,23 +55,23 @@ namespace GAS.Editor
                 }
             }
             
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAttrSet)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _attrSets = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _attrSets.Add(new ValueDropdownItem($"[{id}]{name}", id));
-                    row++;
-                }
-            }
+            // using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAttrSet)))
+            // {
+            //     var worksheet = package.Workbook.Worksheets[1];
+            //     // 读取数据行,从第4行开始，第二列为key，即id。
+            //     // 以第2列是否有值为结束标志
+            //     _attrSets = new List<ValueDropdownItem>();
+            //     var safeCnt = 99999;
+            //     var row = 4;
+            //     while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+            //     {
+            //         safeCnt--;
+            //         var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+            //         var name = worksheet.Cells[row, 3].Value.ToString();
+            //         _attrSets.Add(new ValueDropdownItem($"[{id}]{name}", id));
+            //         row++;
+            //     }
+            // }
             
             using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelTag)))
             {
@@ -91,7 +91,25 @@ namespace GAS.Editor
                 }
             }
             
-            // _effects = GASXlsxReader.EffectChoices();
+            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelEffect)))
+            {
+                var worksheet = package.Workbook.Worksheets[1];
+                // 读取数据行,从第4行开始，第二列为key，即id。
+                // 以第2列是否有值为结束标志
+                _effects = new List<ValueDropdownItem>();
+                var safeCnt = 99999;
+                var row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    var name = worksheet.Cells[row, 3].Value.ToString();
+                    _effects.Add(new ValueDropdownItem($"[{id}]{name}", id));
+                    row++;
+                }
+            }
+            
+            
             // _abilities = GASXlsxReader.AbilityChoices();
             // _attrs = GASXlsxReader.AttrChoices();
         }
