@@ -304,7 +304,7 @@ namespace GAS.Editor
         [OnValueChanged(nameof(OnTypeChange))]
         public string type;
 
-        [BoxGroup("编辑配置/Cue逻辑")] [LabelText("Cue逻辑参数")] [ShowInInspector] [HideReferenceObjectPicker]
+        [BoxGroup("编辑配置/Cue逻辑")] [HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
         public ICueParameter cueParam;
 
         #endregion

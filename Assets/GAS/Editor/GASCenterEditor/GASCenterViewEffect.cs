@@ -274,6 +274,7 @@ namespace GAS.Editor
         [Title("应用时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnApply)")]
+        [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnApply;
             
@@ -281,6 +282,7 @@ namespace GAS.Editor
         [Title("帧更新的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnTick)")]
+        [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnTick;
         
@@ -288,6 +290,7 @@ namespace GAS.Editor
         [Title("添加时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnAdd)")]
+        [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnAdd;
         
@@ -295,6 +298,7 @@ namespace GAS.Editor
         [Title("移除时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnRemove)")]
+        [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnRemove;
         
@@ -302,6 +306,7 @@ namespace GAS.Editor
         [Title("激活时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnActivate)")]
+        [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnActivate;
         
@@ -309,6 +314,7 @@ namespace GAS.Editor
         [Title("失活时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnDeactivate)")]
+        [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnDeactivate;
         
