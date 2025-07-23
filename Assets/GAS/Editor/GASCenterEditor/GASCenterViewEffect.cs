@@ -213,49 +213,49 @@ namespace GAS.Editor
         [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] [LabelText("GE组件")]
         public List<EffectEditComponent> ComponentTypes;
 
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("AssetTag 描述tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.AssetTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
         public List<int> AssetTags;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("GrantedTag 获得的tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.GrantedTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
         public List<int> GrantedTags;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("ApplicationRequiredTags 应用需求tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ApplicationRequiredTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
         public List<int> ApplicationRequiredTags;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("OngoingRequiredTags 持续需求tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.OngoingRequiredTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
         public List<int> OngoingRequiredTags;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("RemoveGameplayEffectsWithTags 移除持有tag的GE",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.RemoveGameplayEffectsWithTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
         public List<int> RemoveGameplayEffectsWithTags;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("ImmunityTags 免疫的tag",Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ImmunityTags)")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)] [LabelText(" ")]
         public List<int> ImmunityTags;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("持续时间",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Duration)")] 
         public GEEditDurarion Duration;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("间隔效果GE",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Period)")]
@@ -264,48 +264,48 @@ namespace GAS.Editor
             VisibleIf = "@!HasComponent(EffectEditComponent.Duration)")]
         public GEEditPeriod Period;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("间隔效果GE",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Modifiers)")]
         public List<GEEditPeriodModifier> Modifiers;
 
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("应用时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnApply)")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnApply;
             
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("帧更新的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnTick)")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnTick;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("添加时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnAdd)")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnAdd;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("移除时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnRemove)")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnRemove;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("激活时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnActivate)")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnActivate;
         
-        [BoxGroup(T_G_A_B)]
+        [VerticalGroup(T_G_A_B)]
         [Title("失活时触发的Cue",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnDeactivate)")]
