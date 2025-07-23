@@ -55,24 +55,6 @@ namespace GAS.Editor
                 }
             }
             
-            // using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAttrSet)))
-            // {
-            //     var worksheet = package.Workbook.Worksheets[1];
-            //     // 读取数据行,从第4行开始，第二列为key，即id。
-            //     // 以第2列是否有值为结束标志
-            //     _attrSets = new List<ValueDropdownItem>();
-            //     var safeCnt = 99999;
-            //     var row = 4;
-            //     while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-            //     {
-            //         safeCnt--;
-            //         var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-            //         var name = worksheet.Cells[row, 3].Value.ToString();
-            //         _attrSets.Add(new ValueDropdownItem($"[{id}]{name}", id));
-            //         row++;
-            //     }
-            // }
-            
             using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelTag)))
             {
                 var worksheet = package.Workbook.Worksheets[1];
@@ -109,9 +91,40 @@ namespace GAS.Editor
                 }
             }
             
+            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAbility)))
+            {
+                var worksheet = package.Workbook.Worksheets[1];
+                // 读取数据行,从第4行开始，第二列为key，即id。
+                // 以第2列是否有值为结束标志
+                _abilities = new List<ValueDropdownItem>();
+                var safeCnt = 99999;
+                var row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    var name = worksheet.Cells[row, 3].Value.ToString();
+                    _abilities.Add(new ValueDropdownItem($"[{id}]{name}", id));
+                    row++;
+                }
+            }
             
-            // _abilities = GASXlsxReader.AbilityChoices();
             // _attrs = GASXlsxReader.AttrChoices();
+            
+            // 属性集，属性需要特殊处理，读Json
+            GasJsonReader.ReadAllAndCache();
+            _attrSets = new List<ValueDropdownItem>();
+            _attrs = new Dictionary<int, List<ValueDropdownItem>>();
+            var attrSetMap = GasJsonReader.AttrSetMap();
+            foreach (var kv in attrSetMap)
+            {
+                _attrSets.Add(new ValueDropdownItem(kv.Value.name,kv.Key));
+                _attrs.Add(kv.Key,new List<ValueDropdownItem>());
+                foreach (var attr in kv.Value.attribute)
+                {
+                    _attrs[kv.Key].Add(new ValueDropdownItem(attr.GetAttrName(),attr.id));
+                }
+            }
         }
 
         public static List<ValueDropdownItem> Cues()

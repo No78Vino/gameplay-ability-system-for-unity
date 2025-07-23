@@ -11,26 +11,31 @@ namespace GAS.Editor
     {
         [VerticalGroup("A")]
         [LabelText("技能")]
+        [LabelWidth(70)]
         public int abilityID;
         
         [VerticalGroup("A")]
         [HorizontalGroup("A/B")]
         [LabelText("技能等级")]
-        [Range(0,99999)]
+        [LabelWidth(70)]
+        [Min(0)]
         public int level;
         
         [VerticalGroup("A")]
         [LabelText("激活策略")]
+        [LabelWidth(70)]
         [EnumToggleButtons]
         public GrantedAbilityActivationPolicy ActivationPolicy;
         
         [VerticalGroup("A")]
         [LabelText("失活策略")]
+        [LabelWidth(70)]
         [EnumToggleButtons]
         public GrantedAbilityDeactivationPolicy DeactivationPolicy;
         
         [VerticalGroup("A")]
         [LabelText("移除策略")]
+        [LabelWidth(70)]
         [EnumToggleButtons]
         public GrantedAbilityRemovePolicy RemovePolicy;
     }

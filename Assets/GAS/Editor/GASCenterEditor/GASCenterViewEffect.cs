@@ -266,13 +266,12 @@ namespace GAS.Editor
         
         [VerticalGroup(T_G_A_B)]
         [Title("间隔效果GE",Bold = false)]
-        [HideLabel]
+        [LabelText(" ")]
         [ShowIf("@HasComponent(EffectEditComponent.Modifiers)")]
         public List<GEEditPeriodModifier> Modifiers;
 
         [VerticalGroup(T_G_A_B)]
         [Title("应用时触发的Cue",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnApply)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
@@ -280,7 +279,6 @@ namespace GAS.Editor
             
         [VerticalGroup(T_G_A_B)]
         [Title("帧更新的Cue",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnTick)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
@@ -288,7 +286,6 @@ namespace GAS.Editor
         
         [VerticalGroup(T_G_A_B)]
         [Title("添加时触发的Cue",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnAdd)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
@@ -296,7 +293,6 @@ namespace GAS.Editor
         
         [VerticalGroup(T_G_A_B)]
         [Title("移除时触发的Cue",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnRemove)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
@@ -304,7 +300,6 @@ namespace GAS.Editor
         
         [VerticalGroup(T_G_A_B)]
         [Title("激活时触发的Cue",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnActivate)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
@@ -312,7 +307,6 @@ namespace GAS.Editor
         
         [VerticalGroup(T_G_A_B)]
         [Title("失活时触发的Cue",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnDeactivate)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
@@ -320,10 +314,15 @@ namespace GAS.Editor
         
         [VerticalGroup(T_G_A_B)]
         [Title("获得技能",Bold = false)]
-        [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.GrantedAbility)")]
         [LabelText(" ")]
         public List<GEEditGrantedAbility> GrantedAbility;
+        
+        [VerticalGroup(T_G_A_B)]
+        [Title("获得技能",Bold = false)]
+        [HideLabel]
+        [ShowIf("@HasComponent(EffectEditComponent.Stacking)")]
+        public GEEditStacking Stacking;
         
         #endregion
     }
