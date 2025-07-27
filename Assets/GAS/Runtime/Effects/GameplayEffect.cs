@@ -127,8 +127,6 @@ namespace GAS.Runtime
 
         public bool StackEqual(GameplayEffect effect)
         {
-            if (Stacking.stackingType == StackingType.None) return false;
-            if (effect.Stacking.stackingType == StackingType.None) return false;
             if (string.IsNullOrEmpty(Stacking.stackingCodeName)) return false;
             if (string.IsNullOrEmpty(effect.Stacking.stackingCodeName)) return false;
 

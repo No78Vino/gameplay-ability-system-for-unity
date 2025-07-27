@@ -7,9 +7,6 @@ namespace GAS.Runtime
 {
     public enum StackingType
     {
-        [LabelText("独立", SdfIconType.XCircleFill)]
-        None, //不会叠加，如果多次释放则每个Effect相当于单个Effect
-
         [LabelText("来源", SdfIconType.Magic)]
         AggregateBySource, //目标(Target)上的每个源(Source)ASC都有一个单独的堆栈实例, 每个源(Source)可以应用堆栈中的X个GameplayEffect.
 
@@ -19,33 +16,33 @@ namespace GAS.Runtime
 
     public enum DurationRefreshPolicy
     {
-        [LabelText("NeverRefresh - 不刷新Effect的持续时间", SdfIconType.XCircleFill)]
+        [LabelText("不刷新持续时间", SdfIconType.XCircleFill)]
         NeverRefresh, //不刷新Effect的持续时间
 
         [LabelText(
-            "RefreshOnSuccessfulApplication - 每次apply成功后刷新持续时间",
+            "应用成功后刷新持续时间",
             SdfIconType.HourglassTop)]
         RefreshOnSuccessfulApplication //每次apply成功后刷新Effect的持续时间, denyOverflowApplication如果为True则多余的Apply不会刷新Duration
     }
 
     public enum PeriodResetPolicy
     {
-        [LabelText("NeverReset - 不重置Effect的周期计时", SdfIconType.XCircleFill)]
+        [LabelText("不重置Period计时", SdfIconType.XCircleFill)]
         NeverRefresh, //不重置Effect的周期计时
 
-        [LabelText("ResetOnSuccessfulApplication - 每次apply成功后重置Effect的周期计时", SdfIconType.HourglassTop)]
+        [LabelText("应用成功后重置Period计时", SdfIconType.HourglassTop)]
         ResetOnSuccessfulApplication //每次apply成功后重置Effect的周期计时
     }
 
     public enum ExpirationPolicy
     {
-        [LabelText("ClearEntireStack - 持续时间结束时, 清除所有层数", SdfIconType.TrashFill)]
+        [LabelText("清除所有层数", SdfIconType.TrashFill)]
         ClearEntireStack, //持续时间结束时,清除所有层数
 
-        [LabelText("RemoveSingleStackAndRefreshDuration - 持续时间结束时减少一层，然后重新经历一个Duration", SdfIconType.EraserFill)]
+        [LabelText("减少一层，然后重新经历一个Duration", SdfIconType.EraserFill)]
         RemoveSingleStackAndRefreshDuration, //持续时间结束时减少一层，然后重新经历一个Duration，一直持续到层数减为0
 
-        [LabelText("RefreshDuration - 持续时间结束时,再次刷新Duration", SdfIconType.HourglassTop)]
+        [LabelText("再次刷新Duration[无限Duration]", SdfIconType.HourglassTop)]
         RefreshDuration //持续时间结束时,再次刷新Duration，这相当于无限Duration，
         //TODO :可以通过调用GameplayEffectsContainer的OnStackCountChange(GameplayEffect ActiveEffect, int OldStackCount, int NewStackCount)来处理层数，
         //TODO :可以达到Duration结束时减少两层并刷新Duration这样复杂的效果。
@@ -132,7 +129,6 @@ namespace GAS.Runtime
             get
             {
                 var stack = new GameplayEffectStacking();
-                stack.SetStackingType(StackingType.None);
                 return stack;
             }
         }
@@ -226,7 +222,7 @@ namespace GAS.Runtime
 
         #region UTIL FUNCTION FOR ODIN INSPECTOR
 
-        public bool IsNoStacking() => stackingType == StackingType.None;
+        public bool IsNoStacking() => false;
 
         public bool IsNeverRefreshDuration() =>
             IsNoStacking() || durationRefreshPolicy == DurationRefreshPolicy.NeverRefresh;

@@ -56,8 +56,6 @@ namespace GAS.Runtime
         {
             var attrMagnitude = base.CalculateMagnitude(spec, modifierMagnitude);
             
-            if (spec.Stacking.stackingType == StackingType.None) return attrMagnitude;
-            
             var stackMagnitude = spec.StackCount * sK + sB;
 
             return stackMagnitudeOperation switch

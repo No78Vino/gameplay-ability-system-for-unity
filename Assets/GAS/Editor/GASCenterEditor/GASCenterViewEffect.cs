@@ -54,7 +54,8 @@ namespace GAS.Editor
             LoadFile();
         }
 
-        [BoxGroup("GameplayEffect")]
+        [HorizontalGroup(TITLE_GRP_H_A)]
+        [GUIColor("green")]
         [Button("保存", Icon = SdfIconType.Save)]
         private void SaveConfig()
         {
@@ -319,9 +320,12 @@ namespace GAS.Editor
         public List<GEEditGrantedAbility> GrantedAbility;
         
         [VerticalGroup(T_G_A_B)]
-        [Title("获得技能",Bold = false)]
+        [Title("堆叠",Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Stacking)")]
+        [InfoBox("必须有Duration组件，Stacking组件才会生效！",
+            InfoMessageType = InfoMessageType.Error,
+            VisibleIf = "@!HasComponent(EffectEditComponent.Duration)")]
         public GEEditStacking Stacking;
         
         #endregion

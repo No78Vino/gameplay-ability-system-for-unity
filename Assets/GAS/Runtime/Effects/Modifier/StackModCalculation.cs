@@ -17,8 +17,6 @@ namespace GAS.Runtime
         
         public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
         {
-            if (spec.Stacking.stackingType == StackingType.None) return 0;
-            
             var stackCount = spec.StackCount;
             return stackCount * k + b;
         }

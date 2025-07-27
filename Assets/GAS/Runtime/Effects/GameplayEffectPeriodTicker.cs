@@ -23,13 +23,13 @@ namespace GAS.Runtime
 
             if (_spec.DurationPolicy == EffectsDurationPolicy.Duration && _spec.DurationRemaining() <= 0)
             {
-                // 处理STACKING
-                if (_spec.GameplayEffect.Stacking.stackingType == StackingType.None)
-                {
-                    _spec.RemoveSelf();
-                }
-                else
-                {
+                // // 处理STACKING
+                // if (_spec.GameplayEffect.Stacking.stackingType == StackingType.None)
+                // {
+                //     _spec.RemoveSelf();
+                // }
+                // else
+                // {
                     if (_spec.GameplayEffect.Stacking.expirationPolicy == ExpirationPolicy.ClearEntireStack)
                     {
                         _spec.RemoveSelf();
@@ -52,7 +52,7 @@ namespace GAS.Runtime
                         //持续时间结束时,再次刷新Duration，这相当于无限Duration，
                         _spec.RefreshDuration();
                     }
-                }
+                // }
             }
         }
 

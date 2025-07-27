@@ -30,7 +30,7 @@
         <var name="firstTrigger" type="bool"/>
     </bean>
     
-    <bean name="grantedAbility" valueType="1" sep=",">
+    <bean name="grantedAbility" valueType="1" sep=";">
         <var name="id" type="int"/>
         <var name="level" type="int"/>
         <var name="activationPolicy" type="int"/>

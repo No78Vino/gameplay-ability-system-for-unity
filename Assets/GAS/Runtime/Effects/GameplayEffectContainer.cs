@@ -95,12 +95,6 @@ namespace GAS.Runtime
                 effectSpec.TriggerOnExecute();
                 return null;
             }
-
-            // Check GE Stacking
-            if (effectSpec.Stacking.stackingType == StackingType.None)
-            {
-                return Operation_AddNewGameplayEffectSpec(source, effectSpec,overwriteEffectLevel,effectLevel);
-            }
             
             // 处理GE堆叠
             // 基于Target类型GE堆叠
