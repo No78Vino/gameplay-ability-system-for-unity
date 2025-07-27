@@ -126,21 +126,60 @@ namespace GAS.Editor
             description = selectInfo.ContainsKey(_headerMap["desc"])
                 ? selectInfo[_headerMap["desc"]]?.ToString()
                 : string.Empty;
-
-            // requiredTags = selectInfo.TryGetValue(_headerMap["required_tag"], out var requiredTagValue)
-            //     ? ListIntFromString(requiredTagValue.ToString())
-            //     : new List<int>();
-            //
-            // immunityTags = selectInfo.TryGetValue(_headerMap["immunity_tag"], out var immunityTagValue)
-            //     ? ListIntFromString(immunityTagValue.ToString())
-            //     : new List<int>();
-            //
-            // // 加载Cue逻辑
-            // type = selectInfo.ContainsKey(_headerMap["cue_logic"])
-            //     ? selectInfo[_headerMap["cue_logic"]]?.ToString()
-            //     : string.Empty;
-            //
-            // cueParam = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;
+            
+            AssetTags = selectInfo.ContainsKey(_headerMap["assetTags"])
+                ? ((string)selectInfo[_headerMap["assetTags"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            GrantedTags = selectInfo.ContainsKey(_headerMap["grantedTags"])
+                ? ((string)selectInfo[_headerMap["grantedTags"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            ApplicationRequiredTags = selectInfo.ContainsKey(_headerMap["applicationRequiredTags"])
+                ? ((string)selectInfo[_headerMap["applicationRequiredTags"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            OngoingRequiredTags = selectInfo.ContainsKey(_headerMap["ongoingRequiredTags"])
+                ? ((string)selectInfo[_headerMap["ongoingRequiredTags"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            RemoveGameplayEffectsWithTags = selectInfo.ContainsKey(_headerMap["removeGameplayEffectsWithTags"])
+                ? ((string)selectInfo[_headerMap["removeGameplayEffectsWithTags"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            ImmunityTags = selectInfo.ContainsKey(_headerMap["immunityTags"])
+                ? ((string)selectInfo[_headerMap["immunityTags"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            CueOnApply = selectInfo.ContainsKey(_headerMap["cueOnApply"])
+                ? ((string)selectInfo[_headerMap["cueOnApply"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            CueOnTick = selectInfo.ContainsKey(_headerMap["cueOnTick"])
+                ? ((string)selectInfo[_headerMap["cueOnTick"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            CueOnAdd = selectInfo.ContainsKey(_headerMap["cueOnAdd"])
+                ? ((string)selectInfo[_headerMap["cueOnAdd"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            CueOnRemove = selectInfo.ContainsKey(_headerMap["cueOnRemove"])
+                ? ((string)selectInfo[_headerMap["cueOnRemove"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            CueOnActivate = selectInfo.ContainsKey(_headerMap["cueOnActivate"])
+                ? ((string)selectInfo[_headerMap["cueOnActivate"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            CueOnDeactivate = selectInfo.ContainsKey(_headerMap["cueOnDeactivate"])
+                ? ((string)selectInfo[_headerMap["cueOnDeactivate"]]).Split(';').Select(int.Parse).ToList()
+                : new List<int>();
+            
+            //duration	period	modifiers	grantedAbility	stacking	
+            //Duration = new GEEditDurarion();
+            // selectInfo.ContainsKey(_headerMap["duration"])
+            //     ? new GEEditDurarion((string)selectInfo[_headerMap["duration"]])
+            //     : new GEEditDurarion();
         }
         #endregion
         
