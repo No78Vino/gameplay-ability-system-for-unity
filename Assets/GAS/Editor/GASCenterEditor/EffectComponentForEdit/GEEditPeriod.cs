@@ -14,7 +14,7 @@ namespace GAS.Editor
         [VerticalGroup("A")]
         [HorizontalGroup("A/B")]
         [LabelText("间隔时间"),LabelWidth(50)]
-        public float time;
+        public int time;
         
         [VerticalGroup("A")]
         [LabelText("执行效果GE"),LabelWidth(50)]

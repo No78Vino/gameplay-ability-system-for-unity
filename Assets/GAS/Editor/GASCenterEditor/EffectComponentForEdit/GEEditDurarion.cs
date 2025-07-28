@@ -9,7 +9,7 @@ namespace GAS.Editor
     {
         [HorizontalGroup("A")]
         [LabelText("时间"),LabelWidth(50)]
-        public float time;
+        public int time;
         
         [HorizontalGroup("A")]
         [LabelText("(单位)"),LabelWidth(50)]
