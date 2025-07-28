@@ -15,7 +15,17 @@
     "desc": "描述:模值x3",
     "mmc_logic": {
       "$type": "MMCScalableFloat",
-      "k": 11.5,
+      "k": 3,
+      "b": 0.5
+    }
+  },
+  {
+    "id": 1003,
+    "name": "测试3",
+    "desc": "test message3",
+    "mmc_logic": {
+      "$type": "MMCScalableFloat",
+      "k": 1.5,
       "b": 0
     }
   }

@@ -26,8 +26,7 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         { var __json0 = _buf["ongoingRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } OngoingRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OngoingRequiredTags.Add(__v0); }   }
         { var __json0 = _buf["removeGameplayEffectsWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } RemoveGameplayEffectsWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RemoveGameplayEffectsWithTags.Add(__v0); }   }
         { var __json0 = _buf["immunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags.Add(__v0); }   }
-        { if(!_buf["timeUnit"].IsNumber) { throw new SerializationException(); }  TimeUnit = _buf["timeUnit"]; }
-        { if(!_buf["duration"].IsNumber) { throw new SerializationException(); }  Duration = _buf["duration"]; }
+        { var _j = _buf["duration"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Duration = global::cfg.duration.Deserializeduration(_j);  } } else { Duration = null; } }
         { var _j = _buf["period"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Period = global::cfg.period.Deserializeperiod(_j);  } } else { Period = null; } }
         { var __json0 = _buf["modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Modifiers.Add(__v0); }   }
         { var __json0 = _buf["cueOnApply"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnApply = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnApply.Add(__v0); }   }
@@ -61,9 +60,6 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// 描述用tag
     /// </summary>
     public readonly System.Collections.Generic.List<int> AssetTags;
-    /// <summary>
-    /// buff生效时，获得的tag
-    /// </summary>
     public readonly System.Collections.Generic.List<int> GrantedTags;
     /// <summary>
     /// 应用需求tag
@@ -82,17 +78,13 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// </summary>
     public readonly System.Collections.Generic.List<int> ImmunityTags;
     /// <summary>
-    /// 时间单位：0=帧，1=回合
+    /// 时间单位
     /// </summary>
-    public readonly int TimeUnit;
+    public readonly duration Duration;
     /// <summary>
-    /// 持续时间
+    /// 间隔时间
     /// </summary>
-    public readonly int Duration;
-    /// <summary>
-    /// 间隔执行逻辑
-    /// </summary>
-    public readonly period? Period;
+    public readonly period Period;
     /// <summary>
     /// 属性数值修改器
     /// </summary>
@@ -126,15 +118,18 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// </summary>
     public readonly System.Collections.Generic.List<grantedAbility> GrantedAbility;
     /// <summary>
-    /// buff堆叠
+    /// 堆叠代码
     /// </summary>
-    public readonly stacking? Stacking;
+    public readonly stacking Stacking;
    
     public const int __ID__ = 1982447871;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
+        Duration?.ResolveRef(tables);
+        Period?.ResolveRef(tables);
+        Stacking?.ResolveRef(tables);
     }
 
     public override string ToString()
@@ -149,7 +144,6 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         + "ongoingRequiredTags:" + Luban.StringUtil.CollectionToString(OngoingRequiredTags) + ","
         + "removeGameplayEffectsWithTags:" + Luban.StringUtil.CollectionToString(RemoveGameplayEffectsWithTags) + ","
         + "immunityTags:" + Luban.StringUtil.CollectionToString(ImmunityTags) + ","
-        + "timeUnit:" + TimeUnit + ","
         + "duration:" + Duration + ","
         + "period:" + Period + ","
         + "modifiers:" + Luban.StringUtil.CollectionToString(Modifiers) + ","

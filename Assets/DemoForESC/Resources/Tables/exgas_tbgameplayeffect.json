@@ -16,8 +16,14 @@
     "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],
     "immunityTags": [],
-    "timeUnit": 0,
-    "duration": 0,
+    "period": {
+      "time": 1,
+      "effects": [
+        1001,
+        1002
+      ],
+      "firstTrigger": true
+    },
     "modifiers": [],
     "cueOnApply": [],
     "cueOnTick": [],
@@ -25,6 +31,36 @@
     "cueOnRemove": [],
     "cueOnActivate": [],
     "cueOnDeactivate": [],
-    "grantedAbility": []
+    "grantedAbility": [
+      {
+        "id": 1,
+        "level": 1,
+        "activationPolicy": 1,
+        "deactivationPolicy": 1,
+        "removePolicy": 1
+      },
+      {
+        "id": 1,
+        "level": 2,
+        "activationPolicy": 1,
+        "deactivationPolicy": 1,
+        "removePolicy": 1
+      }
+    ],
+    "stacking": {
+      "stackingType": 1,
+      "stackCode": 1,
+      "limitCount": 1,
+      "durationRefreshPolicy": 1,
+      "periodResetPolicy": 1,
+      "expirationPolicy": 1,
+      "denyOverflowApplication": true,
+      "clearStackOnOverflow": true,
+      "overflowEffects": [
+        1001,
+        1002,
+        1003
+      ]
+    }
   }
 ]

@@ -13,7 +13,7 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct period
+public sealed partial class period : Luban.BeanBase
 {
     public period(JSONNode _buf) 
     {
@@ -31,6 +31,8 @@ public partial struct period
     public readonly System.Collections.Generic.List<int> Effects;
     public readonly bool FirstTrigger;
    
+    public const int __ID__ = -991726143;
+    public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
