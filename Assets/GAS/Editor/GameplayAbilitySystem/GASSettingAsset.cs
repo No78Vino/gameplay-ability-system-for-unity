@@ -1,13 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using GAS.General;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Debug = UnityEngine.Debug;
 
 namespace GAS.Editor
 {
@@ -85,7 +81,7 @@ namespace GAS.Editor
         public string PathOfExcelMmc => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_MMC}.xlsx";
         public string PathOfCodeMmc => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_MMC}.cs";
         
-        [TitleGroup("A/生成文件路径一览",Order = 99)]
+        [TitleGroup("A/文件路径一览",Order = 99)]
         [DisplayAsString(TextAlignment.Left, true)]
         [HideLabel]
         [ShowInInspector]
@@ -108,7 +104,13 @@ namespace GAS.Editor
                     $"Effect脚本路径: {PathOfCodeEffect}\n\n" +
                     $"Ability配置Json路径: {PathOfJsonAbility}\n" +
                     $"Ability配置Excel路径: {PathOfExcelAbility}\n" +
-                    $"Ability脚本路径: {PathOfCodeAbility}\n";
+                    $"Ability脚本路径: {PathOfCodeAbility}\n\n" +
+                    $"Cue配置Json路径: {PathOfJsonCue}\n" +
+                    $"Cue配置Excel路径: {PathOfExcelCue}\n" +
+                    $"Cue脚本路径: {PathOfCodeCue}\n\n" +
+                    $"Mmc配置Json路径: {PathOfJsonMmc}\n" +
+                    $"Mmc配置Excel路径: {PathOfExcelMmc}\n" +
+                    $"Mmc脚本路径: {PathOfCodeMmc}\n\n";
                 return $"<color=white>{content}</color>";
             }
         }
