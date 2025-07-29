@@ -31,5 +31,13 @@
         <var name="deactivationPolicy" type="int"/>
         <var name="removePolicy" type="int"/>
     </bean>
+
+    <bean name="modifier" valueType="1" sep=";">
+        <var name="attrSet" type="int"/>
+        <var name="attribute" type="int"/>
+        <var name="magnitude" type="float"/>
+        <var name="operation" type="int"/>
+        <var name="mmc" type="int"/>
+    </bean>
     
 </module>

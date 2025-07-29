@@ -18,6 +18,7 @@ namespace GAS.Editor
         
         [VerticalGroup("A")]
         [LabelText("执行效果GE"),LabelWidth(50)]
+        [ValueDropdown("@GasXlsxChoice.Effects()",IsUniqueList = true)]
         public List<int> effects;
     }
 }

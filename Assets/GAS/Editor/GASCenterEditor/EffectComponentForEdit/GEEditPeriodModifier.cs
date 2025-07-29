@@ -15,8 +15,12 @@ namespace GAS.Editor
         
         [LabelText("目标属性")]
         [LabelWidth(70)]
-        [ValueDropdown(nameof(AttrChoices),IsUniqueList = true)]
+        [ValueDropdown("@GasXlsxChoice.Attributes(AttrSet)",IsUniqueList = true)]
         public int Attribute;
+        
+        [LabelText("基础模值")]
+        [LabelWidth(70)]
+        public float Magnitude;
         
         [LabelText("操作类型")]
         [LabelWidth(70)]
