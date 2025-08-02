@@ -17,6 +17,11 @@ namespace GAS.RuntimeWithECS
             _value = value;
         }
         
+        public AbilityParamInt()
+        {
+            _value = 0;
+        }
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

@@ -140,26 +140,36 @@ namespace GAS.Editor
                 worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
                 worksheet.Cells[row, _headerMap["name"]].Value = name;
                 worksheet.Cells[row, _headerMap["desc"]].Value = description;
-                worksheet.Cells[row, _headerMap["cost"]].Value = Cost;
-                worksheet.Cells[row, _headerMap["cdEffect"]].Value = CDEffect;
-                worksheet.Cells[row, _headerMap["cd"]].Value = CD;
+                worksheet.Cells[row, _headerMap["cost"]].Value =
+                    ComponentTypes.Contains(AbilityEditComponent.Cost) ? Cost : string.Empty;
+                
+                worksheet.Cells[row, _headerMap["cdEffect"]].Value =
+                    ComponentTypes.Contains(AbilityEditComponent.Cooldown) ? CDEffect : string.Empty;
+                worksheet.Cells[row, _headerMap["cd"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.Cooldown) ? CD : string.Empty;
 			
-                worksheet.Cells[row, _headerMap["assetTags"]].Value = assetTags.Count > 0
+                worksheet.Cells[row, _headerMap["assetTags"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.AssetTags) && assetTags.Count > 0
                     ? string.Join(";", assetTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["cancelAbilityWithTags"]].Value = cancelAbilityWithTags.Count > 0
+                worksheet.Cells[row, _headerMap["cancelAbilityWithTags"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.CancelAbilityWithTags) && cancelAbilityWithTags.Count > 0
                     ? string.Join(";", cancelAbilityWithTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["blockAbilityWithTags"]].Value = blockAbilityWithTags.Count > 0
+                worksheet.Cells[row, _headerMap["blockAbilityWithTags"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.BlockAbilityWithTags) && blockAbilityWithTags.Count > 0
                     ? string.Join(";", blockAbilityWithTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["activationOwnedTags"]].Value = activationOwnedTags.Count > 0
+                worksheet.Cells[row, _headerMap["activationOwnedTags"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.ActivationOwnedTags) && activationOwnedTags.Count > 0
                     ? string.Join(";", activationOwnedTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["activationRequiredTags"]].Value = activationRequiredTags.Count > 0
+                worksheet.Cells[row, _headerMap["activationRequiredTags"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.ActivationRequiredTags) && activationRequiredTags.Count > 0
                     ? string.Join(";", activationRequiredTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["activationBlockedTags"]].Value = activationBlockedTags.Count > 0
+                worksheet.Cells[row, _headerMap["activationBlockedTags"]].Value = 
+                    ComponentTypes.Contains(AbilityEditComponent.ActivationBlockedTags) && activationBlockedTags.Count > 0
                     ? string.Join(";", activationBlockedTags)
                     : string.Empty;
                 
@@ -184,6 +194,7 @@ namespace GAS.Editor
 
         public List<ValueDropdownItem> TagChoices => GasXlsxChoice.Tags();
         public IEnumerable<AbilityEditComponent> ComponentChoice => EditorAbilityHelper.ComponentTypes();
+        public IEnumerable<string> AbilityLogicClassChoice => EditorAbilityHelper.GetCachedAbilityLogicTypesName();
 
         private int MaxRowForNewID()
         {
@@ -194,6 +205,11 @@ namespace GAS.Editor
             return maxRowForNewID;
         }
 
+        private void OnTypeChange()
+        {
+            abilityParam = EditorAbilityHelper.CreateAbilityParameter(type);
+        }
+        
         private void OnSelectedIdChanged()
         {
             if (!_data.ContainsKey(SelectedId)) return;
@@ -208,14 +224,23 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["desc"]]?.ToString()
                 : string.Empty;
 
-            //cdEffect	cd 												
+											
             Cost = selectInfo.ContainsKey(_headerMap["cost"]) 
                 && selectInfo[_headerMap["cost"]] != null 
                 && int.TryParse(selectInfo[_headerMap["cost"]].ToString(), out var cost) 
                 ? cost 
                 : 0;
-            
-            
+         
+            CDEffect = selectInfo.ContainsKey(_headerMap["cdEffect"]) 
+                && selectInfo[_headerMap["cdEffect"]] != null 
+                && int.TryParse(selectInfo[_headerMap["cdEffect"]].ToString(), out var cdEffect) 
+                ? cdEffect 
+                : 0;
+            CD = selectInfo.ContainsKey(_headerMap["cd"]) 
+                && selectInfo[_headerMap["cd"]] != null 
+                && int.TryParse(selectInfo[_headerMap["cd"]].ToString(), out var cd) 
+                ? cd 
+                : 0;
             
             assetTags = 
                 selectInfo.ContainsKey(_headerMap["assetTags"]) 
@@ -260,7 +285,10 @@ namespace GAS.Editor
                 : new List<int>();
             
             // abilityLogic	
-            // TODO
+            type = selectInfo.ContainsKey(_headerMap["abilityLogic"])
+                ? selectInfo[_headerMap["abilityLogic"]]?.ToString()
+                : string.Empty;
+            abilityParam = _abilityLogicParameter.TryGetValue(SelectedId, out var abilityParams) ? EditorAbilityHelper.CreateAbilityParameter(type, abilityParams) : null;
             
             // Components加载
             ComponentTypes = new List<AbilityEditComponent>();
@@ -272,7 +300,6 @@ namespace GAS.Editor
             if (activationBlockedTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ActivationBlockedTags);
             if (Cost > 0) ComponentTypes.Add(AbilityEditComponent.Cost);
             if (CD > 0) ComponentTypes.Add(AbilityEditComponent.Cooldown);
-            if (!string.IsNullOrEmpty(type)) ComponentTypes.Add(AbilityEditComponent.AbilityLogic);
         }
 
         #endregion
@@ -353,6 +380,17 @@ namespace GAS.Editor
         [LabelText("Ability组件")]
         public List<AbilityEditComponent> ComponentTypes;
 
+        // TODO
+        // AbilityLogic
+        [TitleGroup(T_G_A_B_AL, BoldTitle = false)]
+        [LabelText("技能逻辑类型")]
+        [ValueDropdown(nameof(AbilityLogicClassChoice))]
+        [OnValueChanged(nameof(OnTypeChange))]
+        public string type;
+
+        [TitleGroup(T_G_A_B_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
+        public IAbilityParam abilityParam;
+        
         [VerticalGroup(T_G_A_B)]
         [Title("消耗", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cost)")]
@@ -414,16 +452,6 @@ namespace GAS.Editor
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> activationBlockedTags;
-        
-        // TODO
-        // AbilityLogic
-        [TitleGroup(T_G_A_B_AL, BoldTitle = false)]
-        // [ValueDropdown(nameof(AbilityLogicClassChoice))]
-        // [OnValueChanged(nameof(OnTypeChange))]
-        public string type;
-
-        [TitleGroup(T_G_A_B_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
-        public IAbilityParam abilityParam;
         
         #endregion
     }

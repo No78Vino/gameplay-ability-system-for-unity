@@ -7,9 +7,6 @@ namespace DemoForESC._Script
     public class DemoPlayer : BaseUnit
     {
         UnityEngine.Camera _mainCamera;
-
-        private AbilityParamArrayGameplayEffect _cacheParamRun = new();
-
         
         protected override void Awake()
         {
@@ -30,7 +27,7 @@ namespace DemoForESC._Script
         public void StartRun()
         {
             if(!AbilitySystemCellMono.Cell.IsAbilityActive(GEN_AbilityCode.ABILITY_RunSpeedUp))
-                AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_RunSpeedUp,_cacheParamRun);
+                AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_RunSpeedUp);
         }
 
         public void StopRun()

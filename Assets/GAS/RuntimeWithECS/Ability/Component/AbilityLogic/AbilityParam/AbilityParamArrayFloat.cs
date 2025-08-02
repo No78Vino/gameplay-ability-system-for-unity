@@ -5,6 +5,11 @@ namespace GAS.RuntimeWithECS
 {
     public class AbilityParamArrayFloat : IAbilityParam
     {
+        public AbilityParamArrayFloat()
+        {
+            Value = Array.Empty<float>();
+        }
+        
         public AbilityParamArrayFloat(float[] value)
         {
             Value = value;

@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace GAS.RuntimeWithECS.CommonAbilityLogic
 {
-    public class ALApplyEffect : AbilityLogicBase<AbilityParamArrayGameplayEffect>
+    public class ALApplyEffect : AbilityLogicBase<AbilityParamArrayInt>
     {
         public ALApplyEffect(Entity ability) : base(ability)
         {
         }
 
-        public void InitGameplayEffects(string[] effects)
+        public void InitGameplayEffects(int[] effects)
         {
             _param.SetValue(effects);
         }
@@ -28,11 +28,12 @@ namespace GAS.RuntimeWithECS.CommonAbilityLogic
             var owner = baseInfo.Owner;
             foreach (var effectPath in _param.Value)
             {
-                string resourcePath = GetResourcePath(effectPath);
-                var effect = Resources.Load<GameplayEffectConfigAsset>(resourcePath);
-                if (effect == null) continue;
-                var geEntity = CreateGameplayEffectEntity(effect.GetConfig());
-                ApplyGameplayEffectTo(geEntity, owner, owner);
+                // TODO
+                // string resourcePath = GetResourcePath(effectPath);
+                // var effect = Resources.Load<GameplayEffectConfigAsset>(resourcePath);
+                // if (effect == null) continue;
+                // var geEntity = CreateGameplayEffectEntity(effect.GetConfig());
+                // ApplyGameplayEffectTo(geEntity, owner, owner);
             }
         }
 

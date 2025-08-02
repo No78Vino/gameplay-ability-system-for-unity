@@ -13,6 +13,11 @@ namespace GAS.RuntimeWithECS
             _value = value;
         }
         
+        public AbilityParamArrayInt()
+        {
+            _value = Array.Empty<int>();
+        }
+        
         public AbilityParamArrayInt(int[] value)
         {
             _value = value;

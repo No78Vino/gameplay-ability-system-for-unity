@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 
 namespace GAS.Editor
@@ -28,9 +31,6 @@ namespace GAS.Editor
         
         [LabelText("阻止激活的Tag")]
         ActivationBlockedTags,
-        
-        [LabelText("技能逻辑")]
-        AbilityLogic
     }
     
     public static class EditorAbilityHelper
@@ -47,8 +47,73 @@ namespace GAS.Editor
                 AbilityEditComponent.ActivationOwnedTags,
                 AbilityEditComponent.ActivationRequiredTags,
                 AbilityEditComponent.ActivationBlockedTags,
-                AbilityEditComponent.AbilityLogic
             };
+        }
+
+
+        private static IEnumerable<Type> _cachedAbilityLogicTypes;
+        public static IEnumerable<Type> GetCachedAbilityLogicTypes()
+        {
+            if (_cachedAbilityLogicTypes != null) return _cachedAbilityLogicTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedAbilityLogicTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(AbilityLogicBase)) &&
+                    !type.IsAbstract
+                )
+                .ToList();
+
+            return _cachedAbilityLogicTypes;
+        }
+        
+        private static Dictionary<string, Type> _cachedAbilityToParamTypeMap;
+        public static Dictionary<string, Type> AbilityToAbilityParamTypeMap()
+        {
+            if (_cachedAbilityToParamTypeMap != null)
+                return _cachedAbilityToParamTypeMap;
+            var abilityLogicTypes = GetCachedAbilityLogicTypes() ;
+            _cachedAbilityToParamTypeMap = new Dictionary<string, Type>();
+            foreach (var derivedType in abilityLogicTypes)
+            {
+                var baseType = derivedType.BaseType; // 获取基类类型
+
+                if (baseType != null && baseType.IsGenericType)
+                {
+                    var genericBaseDef = baseType.GetGenericTypeDefinition();
+
+                    // 确认是否是所需的基类泛型定义
+                    if (genericBaseDef == typeof(AbilityLogicBase<>))
+                    {
+                        // 获取实际使用的泛型参数
+                        var genericArgs = baseType.GetGenericArguments();
+                        var paramType = genericArgs[0];
+
+                        if (derivedType.FullName != null) _cachedAbilityToParamTypeMap[derivedType.Name] = paramType;
+                    }
+                }
+            }
+
+            return _cachedAbilityToParamTypeMap;
+        }
+        
+        public static IAbilityParam CreateAbilityParameter(string type, List<object> paramData = null)
+        {
+            var map = AbilityToAbilityParamTypeMap();
+            if (!map.TryGetValue(type, out var abilityParamConfigType))
+                throw new KeyNotFoundException($"未找到类型为 {type} 的 IAbilityParam 类型。");
+            var abilityParamEditor = (IAbilityParam)Activator.CreateInstance(abilityParamConfigType);
+            if (paramData != null) abilityParamEditor.DecodeExcelData(paramData);
+            return abilityParamEditor;
+        }
+        
+        public static IEnumerable<string> GetCachedAbilityLogicTypesName()
+        {
+            var types = GetCachedAbilityLogicTypes();
+            return types
+                .Select(type => type.Name)
+                .Where(name => !string.IsNullOrEmpty(name))
+                .ToList();
         }
     }
 }

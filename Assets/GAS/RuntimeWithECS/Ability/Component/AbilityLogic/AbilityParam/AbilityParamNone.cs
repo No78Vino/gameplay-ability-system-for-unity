@@ -8,6 +8,10 @@ namespace GAS.RuntimeWithECS
         
         public static AbilityParamNone None => _instance ??= new AbilityParamNone();
         
+        private AbilityParamNone()
+        {
+        }
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

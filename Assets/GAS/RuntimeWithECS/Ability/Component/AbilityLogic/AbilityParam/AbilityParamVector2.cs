@@ -17,6 +17,11 @@ namespace GAS.RuntimeWithECS
             _value = value;
         }
         
+        public AbilityParamVector2()
+        {
+            _value = UnityEngine.Vector2.zero;
+        }
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

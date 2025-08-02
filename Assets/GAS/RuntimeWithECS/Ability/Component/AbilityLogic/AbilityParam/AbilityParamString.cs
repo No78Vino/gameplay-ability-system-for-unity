@@ -4,6 +4,11 @@ namespace GAS.RuntimeWithECS
 {
     public class AbilityParamString : IAbilityParam
     {
+        public AbilityParamString()
+        {
+            Value = string.Empty;
+        }
+        
         public AbilityParamString(string value)
         {
             SetValue(value);

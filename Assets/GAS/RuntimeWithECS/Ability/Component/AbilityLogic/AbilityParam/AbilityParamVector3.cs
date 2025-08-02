@@ -7,6 +7,11 @@ namespace GAS.RuntimeWithECS
         private UnityEngine.Vector3 _value;
         public UnityEngine.Vector3 Value => _value;
         
+        public AbilityParamVector3()
+        {
+            _value = UnityEngine.Vector3.zero;
+        }
+        
         public AbilityParamVector3(UnityEngine.Vector3 value)
         {
             _value = value;
