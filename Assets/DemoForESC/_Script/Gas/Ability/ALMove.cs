@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GAS.RuntimeWithECS;
 using GAS.Runtime;
 using Unity.Entities;
@@ -28,6 +29,17 @@ namespace DemoForESC._Script.Gas.Ability
             _viewPointForward = viewPointForward;
             _rotationOffset = rotationOffset;
         }
+        
+#if UNITY_EDITOR
+        public void DecodeExcelData(List<object> paramData)
+        {
+        }
+
+        public List<object> EncodeExcelData()
+        {
+            return new List<object>();
+        }
+#endif
     }
     
     public class ALMove : AbilityLogicBase<AbilityParamMove>
@@ -77,5 +89,7 @@ namespace DemoForESC._Script.Gas.Ability
             var motion = _param.MoveDirection * speed * Time.fixedDeltaTime;
             _controller.Move(motion);
         }
+        
+        
     }
 }
