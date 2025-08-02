@@ -4,7 +4,7 @@ using System.Linq;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
 

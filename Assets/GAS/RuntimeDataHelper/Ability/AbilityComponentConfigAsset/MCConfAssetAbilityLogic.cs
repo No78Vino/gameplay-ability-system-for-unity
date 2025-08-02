@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeDataHelper.Helper;
-using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.CommonAbilityLogic;
+using GAS.RuntimeWithECS.Static;
+using GAS.RuntimeWithECS.ComponentConfig;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

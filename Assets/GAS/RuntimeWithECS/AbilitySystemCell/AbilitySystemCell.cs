@@ -1,7 +1,6 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Ability;
-using GAS.RuntimeWithECS.Ability.Component;
-using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS;
+using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
@@ -204,7 +203,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
 
         #region Ability
 
-        public void TryActivateAbility(int abilityCode, AbilityParamBase param = null)
+        public void TryActivateAbility(int abilityCode, IAbilityParam param = null)
         {
             _abilityController.TryActivateAbility(abilityCode, param);
         }
@@ -224,7 +223,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             return _abilityController.IsAbilityActive(abilityCode);
         }
 
-        public void SetAbilityParam(int abilityCode, AbilityParamBase param)
+        public void SetAbilityParam(int abilityCode, IAbilityParam param)
         {
             _abilityController.SetAbilityParam(abilityCode, param);
         }

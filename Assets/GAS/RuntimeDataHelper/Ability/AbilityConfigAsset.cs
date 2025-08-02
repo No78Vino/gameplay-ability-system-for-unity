@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Ability;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS;
+using GAS.RuntimeWithECS.ComponentConfig;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

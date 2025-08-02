@@ -1,6 +1,9 @@
-namespace GAS.RuntimeWithECS.Ability.Component
+using System;
+using System.Collections.Generic;
+
+namespace GAS.RuntimeWithECS
 {
-    public class AbilityParamFloat: AbilityParamBase
+    public class AbilityParamFloat: IAbilityParam
     {
         private float _value;
         public float Value => _value;
@@ -14,5 +17,34 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
             _value = value;
         }
+        
+#if UNITY_EDITOR
+        public void DecodeExcelData(List<object> paramData)
+        {
+            if (paramData == null || paramData.Count == 0)
+            {
+                _value = 0f;
+                return;
+            }
+
+            var strData = paramData[0] as string;
+            if (string.IsNullOrEmpty(strData))
+            {
+                _value = 0f;
+                return;
+            }
+
+            if (!float.TryParse(strData, out _value))
+            {
+                _value = 0f;
+            }
+        }
+
+        public List<object> EncodeExcelData()
+        {
+            var result = new List<object> { _value.ToString() };
+            return result;
+        }
+#endif
     }
 }

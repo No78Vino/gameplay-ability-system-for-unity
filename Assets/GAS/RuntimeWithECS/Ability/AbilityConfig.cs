@@ -1,6 +1,6 @@
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.ComponentConfig;
 
-namespace GAS.RuntimeWithECS.Ability
+namespace GAS.RuntimeWithECS
 {
     public class AbilityConfig
     {

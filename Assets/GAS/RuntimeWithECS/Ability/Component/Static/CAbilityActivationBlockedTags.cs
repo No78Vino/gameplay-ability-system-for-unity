@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using GAS.RuntimeDataHelper.Ability;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.ComponentConfig;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Ability.Component.Static
+namespace GAS.RuntimeWithECS.Static
 {
     public struct CAbilityActivationBlockedTags : IComponentData
     {

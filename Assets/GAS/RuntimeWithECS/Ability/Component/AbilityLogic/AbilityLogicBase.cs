@@ -1,15 +1,15 @@
-using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Ability.Component.Dynamic;
+using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Ability.Component
+namespace GAS.RuntimeWithECS
 {
     public abstract class AbilityLogicBase
     {
         protected static EntityManager _entityManager => GASManager.EntityManager;
-        protected AbilityParamBase _paramRaw;
+        protected IAbilityParam _paramRaw;
         protected Entity _abilityEntity;
         
         protected AbilityLogicBase(Entity ability)
@@ -61,7 +61,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
             return Entity.Null;
         }
         
-        public virtual void SetParam(AbilityParamBase abilityParam)
+        public virtual void SetParam(IAbilityParam abilityParam)
         {
             _paramRaw = abilityParam;
         }
@@ -87,7 +87,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
         }
     }
 
-    public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:AbilityParamBase
+    public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:IAbilityParam
     {
         protected T _param;
         
@@ -95,7 +95,7 @@ namespace GAS.RuntimeWithECS.Ability.Component
         {
         }
 
-        public override void SetParam(AbilityParamBase abilityParam)
+        public override void SetParam(IAbilityParam abilityParam)
         {
             base.SetParam(abilityParam);
             SetParam((T)abilityParam);

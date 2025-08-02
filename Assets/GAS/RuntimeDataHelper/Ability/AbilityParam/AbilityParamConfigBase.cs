@@ -1,6 +1,6 @@
 using System;
 using GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityParam
 {
@@ -19,11 +19,11 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
             ConfAsset?.TriggerOnValueChanged();
         }
 
-        public abstract AbilityParamBase GetConfig();
+        public abstract IAbilityParam GetConfig();
     }
 
     [Serializable]
-    public abstract class AbilityParamConfigBase<T> : AbilityParamConfigBase where T : AbilityParamBase
+    public abstract class AbilityParamConfigBase<T> : AbilityParamConfigBase where T : IAbilityParam
     {
     }
 }

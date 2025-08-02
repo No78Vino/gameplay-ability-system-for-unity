@@ -1,6 +1,6 @@
 using System;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -15,7 +15,7 @@ namespace DemoForESC._Script.Gas.Ability.AbilityParam
         [OnValueChanged(nameof(OnAbilityParamValueChange))]
         public float rotationOffset = 0.1f;
         
-        public override AbilityParamBase GetConfig()
+        public override IAbilityParam GetConfig()
         {
             var paramMove = new AbilityParamMove();
             paramMove.SetValue(Vector3.zero,Vector3.zero, rotationOffset);

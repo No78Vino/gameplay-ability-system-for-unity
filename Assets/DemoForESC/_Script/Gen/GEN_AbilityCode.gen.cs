@@ -15,11 +15,11 @@ namespace GAS.Runtime
         public static void LoadAbilityCode()
         {
             var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
-            GAS.RuntimeWithECS.Ability.AbilityHelper.RegisterAbilityLogic(ALMove.FullName, ALMove);
-            var ALApplyEffect = typeof(GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALApplyEffect);
-            GAS.RuntimeWithECS.Ability.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.FullName, ALApplyEffect);
-            var ALDebugLog = typeof(GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic.ALDebugLog);
-            GAS.RuntimeWithECS.Ability.AbilityHelper.RegisterAbilityLogic(ALDebugLog.FullName, ALDebugLog);
+            RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALMove.FullName, ALMove);
+            var ALApplyEffect = typeof(RuntimeWithECS.CommonAbilityLogic.ALApplyEffect);
+            RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.FullName, ALApplyEffect);
+            var ALDebugLog = typeof(RuntimeWithECS.CommonAbilityLogic.ALDebugLog);
+            RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALDebugLog.FullName, ALDebugLog);
         }
     }
     }

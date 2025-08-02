@@ -1,11 +1,11 @@
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using GAS.Runtime;
 using Unity.Entities;
 using UnityEngine;
 
 namespace DemoForESC._Script.Gas.Ability
 {
-    public class AbilityParamMove : AbilityParamBase
+    public class AbilityParamMove : IAbilityParam
     {
         private Vector3 _moveDirection;
         private Vector3 _viewPointForward;

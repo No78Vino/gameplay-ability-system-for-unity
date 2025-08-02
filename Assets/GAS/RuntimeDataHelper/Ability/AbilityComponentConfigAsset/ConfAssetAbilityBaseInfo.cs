@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GAS.RuntimeDataHelper.Helper;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.Static;
+using GAS.RuntimeWithECS.ComponentConfig;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

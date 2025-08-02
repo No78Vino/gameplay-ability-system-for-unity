@@ -1,6 +1,6 @@
 using System;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.Static;
+using GAS.RuntimeWithECS.ComponentConfig;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityComponentConfigAsset
 {

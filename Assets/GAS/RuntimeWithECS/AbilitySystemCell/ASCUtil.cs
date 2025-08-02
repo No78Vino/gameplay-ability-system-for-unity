@@ -1,6 +1,6 @@
 ﻿using System;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Modifier;

@@ -1,8 +1,8 @@
 using System;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.ComponentConfig;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Ability.Component.Static
+namespace GAS.RuntimeWithECS.Static
 {
     public struct CAbilityBaseInfo : IComponentData
     {

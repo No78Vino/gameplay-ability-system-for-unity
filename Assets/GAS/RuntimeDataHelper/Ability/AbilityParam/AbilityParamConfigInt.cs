@@ -1,5 +1,5 @@
 using System;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityParam
@@ -7,7 +7,7 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
     [Serializable]
     public class AbilityParamConfigInt: AbilityParamConfigBase<AbilityParamInt>
     {
-        public override AbilityParamBase GetConfig()
+        public override IAbilityParam GetConfig()
         {
             return new AbilityParamInt(value);
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -41,7 +41,7 @@ namespace GAS.Editor
             }
         }
         
-        public override AbilityParamBase GetConfig()
+        public override IAbilityParam GetConfig()
         {
             return new AbilityParamTimeline
             {

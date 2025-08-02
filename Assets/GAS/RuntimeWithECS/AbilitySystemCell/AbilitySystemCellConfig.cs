@@ -1,4 +1,4 @@
-using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS;
 
 namespace GAS.RuntimeWithECS.AbilitySystemCell
 {

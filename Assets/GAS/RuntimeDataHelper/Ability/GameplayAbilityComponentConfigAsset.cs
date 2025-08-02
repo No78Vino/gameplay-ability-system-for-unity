@@ -1,5 +1,5 @@
 using System;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.ComponentConfig;
 using UnityEditor;
 
 namespace GAS.RuntimeDataHelper.Ability

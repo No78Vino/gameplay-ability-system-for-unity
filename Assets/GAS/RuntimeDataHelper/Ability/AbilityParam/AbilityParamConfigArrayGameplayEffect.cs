@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 using UnityEngine.Serialization;
 
@@ -15,7 +15,7 @@ namespace GAS.RuntimeDataHelper.Ability.AbilityParam
         [FilePath(IncludeFileExtension = false, Extensions = "asset")]
         public List<string> gameplayEffectConfigPaths = new();
 
-        public override AbilityParamBase GetConfig()
+        public override IAbilityParam GetConfig()
         {
             return new AbilityParamArrayGameplayEffect(gameplayEffectConfigPaths.ToArray());
         }

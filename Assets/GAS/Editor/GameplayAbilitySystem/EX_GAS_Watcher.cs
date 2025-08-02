@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Helper;
-using GAS.RuntimeWithECS.Ability.Component.Dynamic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS.Dynamic;
+using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.Runtime;

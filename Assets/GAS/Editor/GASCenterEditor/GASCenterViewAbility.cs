@@ -4,6 +4,7 @@ using System.Linq;
 using GAS.Editor.General;
 using GAS.General.Validation;
 using GAS.Runtime;
+using GAS.RuntimeWithECS;
 using OfficeOpenXml;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -109,17 +110,17 @@ namespace GAS.Editor
                     foreach (var colIndex in _headerMap.Values)
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
-                    var parameterCol = _headerMap["cue_logic"];
-                    var cueParams = new List<object>();
+                    var parameterCol = _headerMap["abilityLogic"];
+                    var abilityParams = new List<object>();
                     for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
                     {
                         var v = worksheet.Cells[row, i].Value;
                         rowData.Add(i, v);
-                        cueParams.Add(v);
+                        abilityParams.Add(v);
                     }
 
                     _data.Add(id, rowData);
-                    _abilityLogicParameter.Add(id, cueParams);
+                    _abilityLogicParameter.Add(id, abilityParams);
                     _idToRowMap.Add(id, row);
                     row++;
                 }
@@ -139,9 +140,9 @@ namespace GAS.Editor
                 worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
                 worksheet.Cells[row, _headerMap["name"]].Value = name;
                 worksheet.Cells[row, _headerMap["desc"]].Value = description;
-                worksheet.Cells[row, _headerMap["cost"]].Value = cost;
-                worksheet.Cells[row, _headerMap["cdEffect"]].Value = cdEffect;
-                worksheet.Cells[row, _headerMap["cd"]].Value = cd;
+                worksheet.Cells[row, _headerMap["cost"]].Value = Cost;
+                worksheet.Cells[row, _headerMap["cdEffect"]].Value = CDEffect;
+                worksheet.Cells[row, _headerMap["cd"]].Value = CD;
 			
                 worksheet.Cells[row, _headerMap["assetTags"]].Value = assetTags.Count > 0
                     ? string.Join(";", assetTags)
@@ -207,216 +208,71 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["desc"]]?.ToString()
                 : string.Empty;
 
-            AssetTags = 
+            //cdEffect	cd 												
+            Cost = selectInfo.ContainsKey(_headerMap["cost"]) 
+                && selectInfo[_headerMap["cost"]] != null 
+                && int.TryParse(selectInfo[_headerMap["cost"]].ToString(), out var cost) 
+                ? cost 
+                : 0;
+            
+            
+            
+            assetTags = 
                 selectInfo.ContainsKey(_headerMap["assetTags"]) 
                 && selectInfo[_headerMap["assetTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["assetTags"]].ToString())
                 ? selectInfo[_headerMap["assetTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
-
-            GrantedTags = 
-                selectInfo.ContainsKey(_headerMap["grantedTags"]) 
-                && selectInfo[_headerMap["grantedTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["grantedTags"]].ToString())
-                ? selectInfo[_headerMap["grantedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+            
+            cancelAbilityWithTags = 
+                selectInfo.ContainsKey(_headerMap["cancelAbilityWithTags"]) 
+                && selectInfo[_headerMap["cancelAbilityWithTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["cancelAbilityWithTags"]].ToString())
+                ? selectInfo[_headerMap["cancelAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
-
-            ApplicationRequiredTags = 
-                selectInfo.ContainsKey(_headerMap["applicationRequiredTags"]) 
-                && selectInfo[_headerMap["applicationRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["applicationRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["applicationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
+            
+            blockAbilityWithTags = 
+                selectInfo.ContainsKey(_headerMap["blockAbilityWithTags"]) 
+                && selectInfo[_headerMap["blockAbilityWithTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["blockAbilityWithTags"]].ToString())
+                ? selectInfo[_headerMap["blockAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
-
-            OngoingRequiredTags = 
-                selectInfo.ContainsKey(_headerMap["ongoingRequiredTags"]) 
-                && selectInfo[_headerMap["ongoingRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["ongoingRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["ongoingRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
+            
+            activationOwnedTags =
+                selectInfo.ContainsKey(_headerMap["activationOwnedTags"]) 
+                && selectInfo[_headerMap["activationOwnedTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["activationOwnedTags"]].ToString())
+                ? selectInfo[_headerMap["activationOwnedTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
-
-            RemoveGameplayEffectsWithTags =
-                selectInfo.ContainsKey(_headerMap["removeGameplayEffectsWithTags"]) 
-                && selectInfo[_headerMap["removeGameplayEffectsWithTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["removeGameplayEffectsWithTags"]].ToString())
-                    ? selectInfo[_headerMap["removeGameplayEffectsWithTags"]].ToString().Split(';').Select(int.Parse)
-                        .ToList()
-                    : new List<int>();
-
-            ImmunityTags = 
-                selectInfo.ContainsKey(_headerMap["immunityTags"]) 
-                && selectInfo[_headerMap["immunityTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["immunityTags"]].ToString())
-                ? selectInfo[_headerMap["immunityTags"]].ToString().Split(';').Select(int.Parse).ToList()
+            
+            activationRequiredTags =
+                selectInfo.ContainsKey(_headerMap["activationRequiredTags"]) 
+                && selectInfo[_headerMap["activationRequiredTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["activationRequiredTags"]].ToString())
+                ? selectInfo[_headerMap["activationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
-
-            CueOnApply = 
-                selectInfo.ContainsKey(_headerMap["cueOnApply"]) 
-                && selectInfo[_headerMap["cueOnApply"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnApply"]].ToString())
-                ? selectInfo[_headerMap["cueOnApply"]].ToString().Split(';').Select(int.Parse).ToList()
+            
+            activationBlockedTags =
+                selectInfo.ContainsKey(_headerMap["activationBlockedTags"]) 
+                && selectInfo[_headerMap["activationBlockedTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["activationBlockedTags"]].ToString())
+                ? selectInfo[_headerMap["activationBlockedTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
-
-            CueOnTick = 
-                selectInfo.ContainsKey(_headerMap["cueOnTick"]) 
-                && selectInfo[_headerMap["cueOnTick"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnTick"]].ToString())
-                ? selectInfo[_headerMap["cueOnTick"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-
-            CueOnAdd = 
-                selectInfo.ContainsKey(_headerMap["cueOnAdd"]) 
-                && selectInfo[_headerMap["cueOnAdd"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnAdd"]].ToString())
-                ? ((string)selectInfo[_headerMap["cueOnAdd"]]).Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-
-            CueOnRemove = 
-                selectInfo.ContainsKey(_headerMap["cueOnRemove"]) 
-                && selectInfo[_headerMap["cueOnRemove"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnRemove"]].ToString())
-                ? selectInfo[_headerMap["cueOnRemove"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-
-            CueOnActivate = 
-                selectInfo.ContainsKey(_headerMap["cueOnActivate"]) 
-                && selectInfo[_headerMap["cueOnActivate"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnActivate"]].ToString())
-                ? selectInfo[_headerMap["cueOnActivate"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-
-            CueOnDeactivate = 
-                selectInfo.ContainsKey(_headerMap["cueOnDeactivate"]) 
-                && selectInfo[_headerMap["cueOnDeactivate"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnDeactivate"]].ToString())
-                ? selectInfo[_headerMap["cueOnDeactivate"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-
-
-            if (selectInfo[_headerMap["duration"]] != null 
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnDeactivate"]].ToString()))
-                Duration = new GEEditDurarion
-                {
-                    Unit = (TimeUnit)selectInfo[_headerMap["duration"]],
-                    time = selectInfo[_headerMap["duration"] + 1] != null
-                        ? int.Parse(selectInfo[_headerMap["duration"] + 1].ToString())
-                        : 0
-                };
-            else
-                Duration = new GEEditDurarion();
-
-            if (selectInfo[_headerMap["period"]] != null 
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["period"]].ToString()))
-                Period = new GEEditPeriod
-                {
-                    time = selectInfo[_headerMap["period"]] != null
-                        ? int.Parse(selectInfo[_headerMap["period"]].ToString())
-                        : 0,
-                    effects = selectInfo[_headerMap["period"] + 1] != null
-                        ? ((string)selectInfo[_headerMap["period"] + 1]).Split(';').Select(int.Parse).ToList()
-                        : new List<int>(),
-                    firstTrigger = selectInfo[_headerMap["period"] + 2] != null &&
-                                   bool.Parse(selectInfo[_headerMap["period"] + 2].ToString())
-                };
-            else
-                Period = new GEEditPeriod();
-
-            if (selectInfo.ContainsKey(_headerMap["stacking"]) 
-                && selectInfo[_headerMap["stacking"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["stacking"]].ToString()))
-                Stacking = new GEEditStacking
-                {
-                    code = selectInfo[_headerMap["stacking"]] != null
-                        ? int.Parse(selectInfo[_headerMap["stacking"]].ToString())
-                        : 0,
-                    stackingType = selectInfo[_headerMap["stacking"] + 1] != null
-                        ? (StackingType)int.Parse(selectInfo[_headerMap["stacking"] + 1].ToString())
-                        : 0,
-                    limitCount = selectInfo[_headerMap["stacking"] + 2] != null
-                        ? int.Parse(selectInfo[_headerMap["stacking"] + 2].ToString())
-                        : 0,
-                    durationRefreshPolicy = selectInfo[_headerMap["stacking"] + 3] != null
-                        ? (DurationRefreshPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 3].ToString())
-                        : DurationRefreshPolicy.NeverRefresh,
-                    periodResetPolicy = selectInfo[_headerMap["stacking"] + 4] != null
-                        ? (PeriodResetPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 4].ToString())
-                        : PeriodResetPolicy.NeverRefresh,
-                    expirationPolicy = selectInfo[_headerMap["stacking"] + 5] != null
-                        ? (ExpirationPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 5].ToString())
-                        : ExpirationPolicy.ClearEntireStack,
-                    DenyOverflowApplication = selectInfo[_headerMap["stacking"] + 6] != null &&
-                                              bool.Parse(selectInfo[_headerMap["stacking"] + 6].ToString()),
-                    clearStackOnOverflow = selectInfo[_headerMap["stacking"] + 7] != null &&
-                                           bool.Parse(selectInfo[_headerMap["stacking"] + 7].ToString()),
-                    overflowEffects = selectInfo[_headerMap["stacking"] + 8] != null
-                        ? selectInfo[_headerMap["stacking"] + 8].ToString().Split(';').Select(int.Parse).ToList()
-                        : new List<int>()
-                };
-            else
-                Stacking = new GEEditStacking();
-
-            //	modifiers
-            Modifiers = new List<GEEditPeriodModifier>();
-            if (selectInfo.ContainsKey(_headerMap["modifiers"]) 
-                && selectInfo[_headerMap["modifiers"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["modifiers"]].ToString()))
-            {
-                var mods = selectInfo[_headerMap["modifiers"]].ToString().Split('|').ToList();
-                foreach (var v in mods)
-                {
-                    var cfg = v.Split(';').ToList();
-                    var mod = new GEEditPeriodModifier();
-                    mod.AttrSet = int.Parse(cfg[0]);
-                    mod.Attribute = int.Parse(cfg[1]);
-                    mod.Magnitude = float.Parse(cfg[2]);
-                    mod.Operation = (GEOperation)int.Parse(cfg[3]);
-                    mod.MMC = int.Parse(cfg[4]);
-                    Modifiers.Add(mod);
-                }
-            }
-
-            // grantedAbility	
-            GrantedAbility = new List<GEEditGrantedAbility>();
-            if (selectInfo.ContainsKey(_headerMap["grantedAbility"]) 
-                && selectInfo[_headerMap["grantedAbility"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["grantedAbility"]].ToString()))
-            {
-                var abilities = selectInfo[_headerMap["grantedAbility"]].ToString().Split('|').ToList();
-                foreach (var v in abilities)
-                {
-                    var cfg = v.Split(';').Select(int.Parse).ToList();
-                    var a = new GEEditGrantedAbility
-                    {
-                        abilityID = cfg[0],
-                        level = cfg[1],
-                        ActivationPolicy = (GrantedAbilityActivationPolicy)cfg[2],
-                        DeactivationPolicy = (GrantedAbilityDeactivationPolicy)cfg[3],
-                        RemovePolicy = (GrantedAbilityRemovePolicy)cfg[4]
-                    };
-                    GrantedAbility.Add(a);
-                }
-            }
-
+            
+            // abilityLogic	
+            // TODO
+            
             // Components加载
             ComponentTypes = new List<AbilityEditComponent>();
-            if (AssetTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.AssetTags);
-            if (GrantedTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.GrantedTags);
-            if (ApplicationRequiredTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ApplicationRequiredTags);
-            if (OngoingRequiredTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.OngoingRequiredTags);
-            if (RemoveGameplayEffectsWithTags.Count > 0)
-                ComponentTypes.Add(AbilityEditComponent.RemoveGameplayEffectsWithTags);
-            if (ImmunityTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ImmunityTags);
-            if (Duration.time != 0) ComponentTypes.Add(AbilityEditComponent.Duration);
-            if (Period.time != 0) ComponentTypes.Add(AbilityEditComponent.Period);
-            if (CueOnApply.Count > 0) ComponentTypes.Add(AbilityEditComponent.CueOnApply);
-            if (CueOnTick.Count > 0) ComponentTypes.Add(AbilityEditComponent.CueOnTick);
-            if (CueOnAdd.Count > 0) ComponentTypes.Add(AbilityEditComponent.CueOnAdd);
-            if (CueOnRemove.Count > 0) ComponentTypes.Add(AbilityEditComponent.CueOnRemove);
-            if (CueOnActivate.Count > 0) ComponentTypes.Add(AbilityEditComponent.CueOnActivate);
-            if (CueOnDeactivate.Count > 0) ComponentTypes.Add(AbilityEditComponent.CueOnDeactivate);
-            if (GrantedAbility.Count > 0) ComponentTypes.Add(AbilityEditComponent.GrantedAbility);
-            if (Stacking.code != 0) ComponentTypes.Add(AbilityEditComponent.Stacking);
-            if (Modifiers.Count > 0) ComponentTypes.Add(AbilityEditComponent.Modifiers);
+            if (assetTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.AssetTags);
+            if (cancelAbilityWithTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.CancelAbilityWithTags);
+            if (blockAbilityWithTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.BlockAbilityWithTags);
+            if (activationOwnedTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ActivationOwnedTags);
+            if (activationRequiredTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ActivationRequiredTags);
+            if (activationBlockedTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ActivationBlockedTags);
+            if (Cost > 0) ComponentTypes.Add(AbilityEditComponent.Cost);
+            if (CD > 0) ComponentTypes.Add(AbilityEditComponent.Cooldown);
+            if (!string.IsNullOrEmpty(type)) ComponentTypes.Add(AbilityEditComponent.AbilityLogic);
         }
 
         #endregion
@@ -427,6 +283,7 @@ namespace GAS.Editor
         private const string T_G = "编辑配置";
         private const string T_G_A = "编辑配置/A";
         private const string T_G_A_B = "编辑配置/A/组件详情";
+        private const string T_G_A_B_AL = "编辑配置/A/组件详情/技能逻辑";
 
         [TitleGroup(T_G, order: 2)]
         [ValueDropdown(nameof(GetAllAbilityIds))]
@@ -499,15 +356,21 @@ namespace GAS.Editor
         [VerticalGroup(T_G_A_B)]
         [Title("消耗", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cost)")]
-        //[ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
-        [LabelText(" ")]
+        [ValueDropdown("@GasXlsxChoice.Effects()", IsUniqueList = true)]
+        [LabelText("消耗效果")]
         public int Cost;
         
         [VerticalGroup(T_G_A_B)]
         [Title("冷却CD", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cooldown)")]
-        //[ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
-        [LabelText(" ")]
+        [ValueDropdown("@GasXlsxChoice.Effects()", IsUniqueList = true)]
+        [LabelText("CD效果")]
+        public int CDEffect;
+        
+        [VerticalGroup(T_G_A_B)]
+        [Title("冷却CD", Bold = false)]
+        [ShowIf("@HasComponent(AbilityEditComponent.Cooldown)")]
+        [LabelText("CD时长")]
         public int CD;
         
         [VerticalGroup(T_G_A_B)]
@@ -554,6 +417,14 @@ namespace GAS.Editor
         
         // TODO
         // AbilityLogic
+        [TitleGroup(T_G_A_B_AL, BoldTitle = false)]
+        // [ValueDropdown(nameof(AbilityLogicClassChoice))]
+        // [OnValueChanged(nameof(OnTypeChange))]
+        public string type;
+
+        [TitleGroup(T_G_A_B_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
+        public IAbilityParam abilityParam;
+        
         #endregion
     }
 }

@@ -1,23 +1,57 @@
-namespace GAS.RuntimeWithECS.Ability.Component
+using System.Collections.Generic;
+
+namespace GAS.RuntimeWithECS
 {
-    public class AbilityParamString: AbilityParamBase
+    public class AbilityParamString : IAbilityParam
     {
-        private string _value;
-        public string Value => _value;
-        
         public AbilityParamString(string value)
         {
             SetValue(value);
         }
-        
+
+        public string Value { get; private set; }
+
         public void SetValue(string value)
         {
-            _value = value;
+            Value = value;
         }
-        
+
         public override string ToString()
         {
-            return _value;
+            return Value;
         }
+
+#if UNITY_EDITOR
+        public void DecodeExcelData(List<object> paramData)
+        {
+            if (paramData == null || paramData.Count == 0)
+            {
+                Value = string.Empty;
+                return;
+            }
+
+            var strData = paramData[0] as string;
+            if (string.IsNullOrEmpty(strData))
+            {
+                Value = string.Empty;
+                return;
+            }
+
+            Value = strData;
+        }
+
+        public List<object> EncodeExcelData()
+        {
+            var result = new List<object>();
+            if (string.IsNullOrEmpty(Value))
+            {
+                result.Add(string.Empty);
+                return result;
+            }
+
+            result.Add(Value);
+            return result;
+        }
+#endif
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using GAS.RuntimeWithECS.Ability.Component;
-using GAS.RuntimeWithECS.Ability.Component.Dynamic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS;
 using GAS.Runtime;
+using GAS.RuntimeWithECS.Dynamic;
+using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Ability
+namespace GAS.RuntimeWithECS
 {
     /// <summary>
     ///     Ability controller
@@ -109,7 +109,7 @@ namespace GAS.RuntimeWithECS.Ability
             return false;
         }
 
-        public void TryActivateAbility(int abilityCode, AbilityParamBase param = null)
+        public void TryActivateAbility(int abilityCode, IAbilityParam param = null)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)
@@ -122,7 +122,7 @@ namespace GAS.RuntimeWithECS.Ability
             }
         }
 
-        public void SetAbilityParam(int abilityCode, AbilityParamBase param)
+        public void SetAbilityParam(int abilityCode, IAbilityParam param)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)

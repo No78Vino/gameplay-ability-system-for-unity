@@ -1,5 +1,5 @@
-using GAS.RuntimeWithECS.Ability.Component.Dynamic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
+using GAS.RuntimeWithECS.Dynamic;
+using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.Runtime;
 using Unity.Burst;

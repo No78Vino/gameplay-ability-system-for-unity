@@ -5,7 +5,7 @@ using EXToyLib;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.ASCPreset;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using Unity.VisualScripting;
 using UnityEngine;

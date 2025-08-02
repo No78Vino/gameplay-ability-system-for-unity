@@ -7,7 +7,7 @@ using GAS.Runtime;
 using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeDataHelper.GameplayEffect;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
 using UnityEditor;

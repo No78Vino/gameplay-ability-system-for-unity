@@ -1,7 +1,7 @@
 using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Ability.ComponentConfig
+namespace GAS.RuntimeWithECS.ComponentConfig
 {
     public abstract class GameplayAbilityComponentConfig
     {

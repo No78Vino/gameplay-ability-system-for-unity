@@ -1,8 +1,8 @@
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Ability.Component.Static
+namespace GAS.RuntimeWithECS.Static
 {
     public struct CAbilityCooldown : IComponentData
     {

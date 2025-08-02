@@ -1,8 +1,8 @@
 using System;
-using GAS.RuntimeWithECS.Ability;
-using GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS;
+using GAS.RuntimeWithECS.CommonAbilityLogic;
+using GAS.RuntimeWithECS.Static;
+using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
 using GAS.RuntimeWithECS.GameplayEffect;

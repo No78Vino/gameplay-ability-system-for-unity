@@ -1,5 +1,5 @@
 ﻿using System;
-using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS;
 
 namespace GAS.Runtime
 {

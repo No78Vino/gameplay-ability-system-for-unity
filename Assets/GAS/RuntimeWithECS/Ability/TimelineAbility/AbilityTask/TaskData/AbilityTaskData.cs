@@ -1,6 +1,6 @@
 using System;
 using GAS.General;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using UnityEngine;
 
 namespace GAS.Runtime

@@ -2,7 +2,7 @@ using GAS.Runtime;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
+namespace GAS.RuntimeWithECS.CommonAbilityLogic
 {
     public class ALDebugLog : AbilityLogicBase<AbilityParamString>
     {

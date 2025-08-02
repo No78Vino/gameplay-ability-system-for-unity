@@ -1,8 +1,8 @@
 using System;
 using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.Helper;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.Static;
+using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;

@@ -1,15 +1,15 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Ability.Component.Dynamic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.AttributeSet.Component;
+using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Modifier;
+using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.Tag;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Ability
+namespace GAS.RuntimeWithECS
 {
     public enum AbilityActivationResult
     {

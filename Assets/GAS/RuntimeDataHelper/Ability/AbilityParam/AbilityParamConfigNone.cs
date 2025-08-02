@@ -1,12 +1,12 @@
 using System;
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 
 namespace GAS.RuntimeDataHelper.Ability.AbilityParam
 {
     [Serializable]
     public class AbilityParamConfigNone: AbilityParamConfigBase<AbilityParamNone>
     {
-        public override AbilityParamBase GetConfig()
+        public override IAbilityParam GetConfig()
         {
             return AbilityParamNone.None;
         }

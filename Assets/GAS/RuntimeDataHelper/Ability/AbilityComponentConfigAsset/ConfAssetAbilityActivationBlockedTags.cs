@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Ability.Component.Static;
-using GAS.RuntimeWithECS.Ability.ComponentConfig;
+using GAS.RuntimeWithECS.Static;
+using GAS.RuntimeWithECS.ComponentConfig;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

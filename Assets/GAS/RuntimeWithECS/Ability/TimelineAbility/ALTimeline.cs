@@ -1,4 +1,4 @@
-using GAS.RuntimeWithECS.Ability.Component;
+using GAS.RuntimeWithECS;
 using Unity.Entities;
 
 namespace GAS.Runtime

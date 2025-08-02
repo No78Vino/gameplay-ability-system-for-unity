@@ -1,11 +1,11 @@
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.GameplayEffect;
-using GAS.RuntimeWithECS.Ability.Component.Static;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Ability.Component.CommonAbilityLogic
+namespace GAS.RuntimeWithECS.CommonAbilityLogic
 {
     public class ALApplyEffect : AbilityLogicBase<AbilityParamArrayGameplayEffect>
     {

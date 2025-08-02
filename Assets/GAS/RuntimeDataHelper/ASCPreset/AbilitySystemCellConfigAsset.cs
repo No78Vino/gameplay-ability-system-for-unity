@@ -1,7 +1,7 @@
 using System;
 using GAS.General;
 using GAS.RuntimeDataHelper.Ability;
-using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using Sirenix.OdinInspector;
 using UnityEngine;

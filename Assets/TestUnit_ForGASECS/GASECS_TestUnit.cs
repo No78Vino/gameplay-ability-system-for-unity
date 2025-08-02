@@ -1,5 +1,5 @@
 ﻿using DemoForESC._Script.Gen;
-using GAS.RuntimeWithECS.Ability;
+using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
