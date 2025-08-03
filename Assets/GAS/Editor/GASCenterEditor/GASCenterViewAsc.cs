@@ -142,6 +142,7 @@ namespace GAS.Editor
                 worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
                 worksheet.Cells[row, _headerMap["name"]].Value = name;
                 worksheet.Cells[row, _headerMap["desc"]].Value = description;
+                worksheet.Cells[row, _headerMap["level"]].Value = level;
                 
                 worksheet.Cells[row, _headerMap["tag"]].Value = tags.Count > 0
                     ? string.Join(";", tags)
@@ -192,6 +193,9 @@ namespace GAS.Editor
             description = selectInfo.ContainsKey(_headerMap["desc"])
                 ? selectInfo[_headerMap["desc"]]?.ToString()
                 : string.Empty;
+            level = selectInfo.ContainsKey(_headerMap["level"])
+                ? int.Parse(selectInfo[_headerMap["level"]]?.ToString() ?? "0")
+                : 0;
             
             tags = selectInfo.ContainsKey(_headerMap["tag"])
                 ? ListIntFromString(selectInfo[_headerMap["tag"]]?.ToString())
@@ -267,6 +271,10 @@ namespace GAS.Editor
         [LabelText("描述")] 
         [Multiline]
         public string description;
+        
+        [TitleGroup("编辑配置")] 
+        [LabelText("等级")] 
+        public int level;
         
         [HorizontalGroup("编辑配置/B")]
         [Space]

@@ -14,6 +14,7 @@ namespace DemoForESC._Script.Gen
         public static void Launch()
         {
             LoadGenCache();
+            XLubanExtension.LoadTables();
             GASManager.Initialize();
             GEN_GameplayTagCode.InitTagList();
         }

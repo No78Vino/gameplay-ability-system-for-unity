@@ -20,9 +20,10 @@ public sealed partial class asc : Luban.BeanBase
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { var __json0 = _buf["tag"]; if(!__json0.IsArray) { throw new SerializationException(); } Tag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Tag.Add(__v0); }   }
-        { var __json0 = _buf["attrSet"]; if(!__json0.IsArray) { throw new SerializationException(); } AttrSet = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AttrSet.Add(__v0); }   }
-        { var __json0 = _buf["ability"]; if(!__json0.IsArray) { throw new SerializationException(); } Ability = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Ability.Add(__v0); }   }
+        { if(!_buf["level"].IsNumber) { throw new SerializationException(); }  Level = _buf["level"]; }
+        { var __json0 = _buf["tag"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Tag = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Tag[__index0++] = __v0; }   }
+        { var __json0 = _buf["attrSet"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; AttrSet = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AttrSet[__index0++] = __v0; }   }
+        { var __json0 = _buf["ability"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Ability = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Ability[__index0++] = __v0; }   }
     }
 
     public static asc Deserializeasc(JSONNode _buf)
@@ -43,17 +44,21 @@ public sealed partial class asc : Luban.BeanBase
     /// </summary>
     public readonly string Desc;
     /// <summary>
+    /// 等级
+    /// </summary>
+    public readonly int Level;
+    /// <summary>
     /// 初始标签
     /// </summary>
-    public readonly System.Collections.Generic.List<int> Tag;
+    public readonly int[] Tag;
     /// <summary>
     /// 初始属性集
     /// </summary>
-    public readonly System.Collections.Generic.List<int> AttrSet;
+    public readonly int[] AttrSet;
     /// <summary>
     /// 初始技能
     /// </summary>
-    public readonly System.Collections.Generic.List<int> Ability;
+    public readonly int[] Ability;
    
     public const int __ID__ = 622834121;
     public override int GetTypeId() => __ID__;
@@ -68,6 +73,7 @@ public sealed partial class asc : Luban.BeanBase
         + "id:" + Id + ","
         + "name:" + Name + ","
         + "desc:" + Desc + ","
+        + "level:" + Level + ","
         + "tag:" + Luban.StringUtil.CollectionToString(Tag) + ","
         + "attrSet:" + Luban.StringUtil.CollectionToString(AttrSet) + ","
         + "ability:" + Luban.StringUtil.CollectionToString(Ability) + ","

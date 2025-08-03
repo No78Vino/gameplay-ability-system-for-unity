@@ -7,6 +7,7 @@ using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.ASCPreset;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -21,13 +22,15 @@ namespace DemoForESC._Script
 
         public AbilitySystemCellMono AbilitySystemCellMono { get; private set; }
 
-        [SerializeField]
-        private AbilitySystemCellConfigAsset _configAsset;
+        [ShowInInspector]
+        [LabelText("ASC预设")]
+        [ValueDropdown("@GasXlsxChoice.Ascs()")]
+        private int _ascPresetId = 0;
         
         protected virtual void Awake()
         {
             AbilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
-            AbilitySystemCellMono.Init(_configAsset.GetConfig());
+            AbilitySystemCellMono.Init(XLubanExtension.GetAscConfig(_ascPresetId));
             var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(GEN_AbilityCode.ABILITY_move);
             ((ALMove)abilityLogic.Logic).SetUnit(this);
         }
