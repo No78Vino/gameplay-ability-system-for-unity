@@ -1,29 +1,16 @@
 [
   {
     "id": 1001,
-    "name": "SpeedUp",
-    "desc": "加速",
+    "name": "加速测试a",
+    "desc": "加速加速！！",
     "assetTags": [
       1001
     ],
-    "grantedTags": [
-      1001,
-      1002
-    ],
-    "applicationRequiredTags": [
-      500
-    ],
+    "grantedTags": [],
+    "applicationRequiredTags": [],
     "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],
     "immunityTags": [],
-    "period": {
-      "time": 1,
-      "effects": [
-        1001,
-        1002
-      ],
-      "firstTrigger": true
-    },
     "modifiers": [],
     "cueOnApply": [],
     "cueOnTick": [],
@@ -31,36 +18,6 @@
     "cueOnRemove": [],
     "cueOnActivate": [],
     "cueOnDeactivate": [],
-    "grantedAbility": [
-      {
-        "id": 1,
-        "level": 1,
-        "activationPolicy": 1,
-        "deactivationPolicy": 1,
-        "removePolicy": 1
-      },
-      {
-        "id": 1,
-        "level": 2,
-        "activationPolicy": 1,
-        "deactivationPolicy": 1,
-        "removePolicy": 1
-      }
-    ],
-    "stacking": {
-      "stackingType": 1,
-      "stackCode": 1,
-      "limitCount": 1,
-      "durationRefreshPolicy": 1,
-      "periodResetPolicy": 1,
-      "expirationPolicy": 1,
-      "denyOverflowApplication": true,
-      "clearStackOnOverflow": true,
-      "overflowEffects": [
-        1001,
-        1002,
-        1003
-      ]
-    }
+    "grantedAbility": []
   }
 ]

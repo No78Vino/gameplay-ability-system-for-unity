@@ -20,8 +20,16 @@ public sealed partial class ability : Luban.BeanBase
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { if(!_buf["count"].IsNumber) { throw new SerializationException(); }  Count = _buf["count"]; }
-        { var __json0 = _buf["asset_tags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
+        { if(!_buf["cost"].IsNumber) { throw new SerializationException(); }  Cost = _buf["cost"]; }
+        { if(!_buf["cdEffect"].IsNumber) { throw new SerializationException(); }  CdEffect = _buf["cdEffect"]; }
+        { if(!_buf["cd"].IsNumber) { throw new SerializationException(); }  Cd = _buf["cd"]; }
+        { var __json0 = _buf["assetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
+        { var __json0 = _buf["cancelAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } CancelAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CancelAbilityWithTags.Add(__v0); }   }
+        { var __json0 = _buf["blockAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } BlockAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  BlockAbilityWithTags.Add(__v0); }   }
+        { var __json0 = _buf["activationOwnedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationOwnedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationOwnedTags.Add(__v0); }   }
+        { var __json0 = _buf["activationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationRequiredTags.Add(__v0); }   }
+        { var __json0 = _buf["activationBlockedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationBlockedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationBlockedTags.Add(__v0); }   }
+        { var _j = _buf["abilityLogic"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogic.DeserializeAbilityLogic(_j);  } } else { AbilityLogic = null; } }
     }
 
     public static ability Deserializeability(JSONNode _buf)
@@ -42,19 +50,37 @@ public sealed partial class ability : Luban.BeanBase
     /// </summary>
     public readonly string Desc;
     /// <summary>
-    /// 个数
+    /// 消耗GE
     /// </summary>
-    public readonly int Count;
+    public readonly int Cost;
+    /// <summary>
+    /// 冷却CD执行的GE
+    /// </summary>
+    public readonly int CdEffect;
+    /// <summary>
+    /// 冷却CD时长
+    /// </summary>
+    public readonly int Cd;
     /// <summary>
     /// 描述标签
     /// </summary>
     public readonly System.Collections.Generic.List<int> AssetTags;
+    public readonly System.Collections.Generic.List<int> CancelAbilityWithTags;
+    public readonly System.Collections.Generic.List<int> BlockAbilityWithTags;
+    public readonly System.Collections.Generic.List<int> ActivationOwnedTags;
+    public readonly System.Collections.Generic.List<int> ActivationRequiredTags;
+    public readonly System.Collections.Generic.List<int> ActivationBlockedTags;
+    /// <summary>
+    /// 技能逻辑：支持多态，添加新AbilityLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
+    /// </summary>
+    public readonly AbilityLogic AbilityLogic;
    
     public const int __ID__ = 712278146;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
+        AbilityLogic?.ResolveRef(tables);
     }
 
     public override string ToString()
@@ -63,8 +89,16 @@ public sealed partial class ability : Luban.BeanBase
         + "id:" + Id + ","
         + "name:" + Name + ","
         + "desc:" + Desc + ","
-        + "count:" + Count + ","
+        + "cost:" + Cost + ","
+        + "cdEffect:" + CdEffect + ","
+        + "cd:" + Cd + ","
         + "assetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
+        + "cancelAbilityWithTags:" + Luban.StringUtil.CollectionToString(CancelAbilityWithTags) + ","
+        + "blockAbilityWithTags:" + Luban.StringUtil.CollectionToString(BlockAbilityWithTags) + ","
+        + "activationOwnedTags:" + Luban.StringUtil.CollectionToString(ActivationOwnedTags) + ","
+        + "activationRequiredTags:" + Luban.StringUtil.CollectionToString(ActivationRequiredTags) + ","
+        + "activationBlockedTags:" + Luban.StringUtil.CollectionToString(ActivationBlockedTags) + ","
+        + "abilityLogic:" + AbilityLogic + ","
         + "}";
     }
 }

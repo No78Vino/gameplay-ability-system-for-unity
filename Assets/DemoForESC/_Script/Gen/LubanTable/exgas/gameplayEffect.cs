@@ -28,7 +28,7 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         { var __json0 = _buf["immunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags.Add(__v0); }   }
         { var _j = _buf["duration"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Duration = global::cfg.duration.Deserializeduration(_j);  } } else { Duration = null; } }
         { var _j = _buf["period"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Period = global::cfg.period.Deserializeperiod(_j);  } } else { Period = null; } }
-        { var __json0 = _buf["modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Modifiers.Add(__v0); }   }
+        { var __json0 = _buf["modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<modifier>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { modifier __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.modifier.Deserializemodifier(__e0);  }  Modifiers.Add(__v0); }   }
         { var __json0 = _buf["cueOnApply"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnApply = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnApply.Add(__v0); }   }
         { var __json0 = _buf["cueOnTick"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnTick = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnTick.Add(__v0); }   }
         { var __json0 = _buf["cueOnAdd"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnAdd = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnAdd.Add(__v0); }   }
@@ -88,7 +88,7 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// 属性数值修改器
     /// </summary>
-    public readonly System.Collections.Generic.List<int> Modifiers;
+    public readonly System.Collections.Generic.List<modifier> Modifiers;
     /// <summary>
     /// 应用时触发的cue
     /// </summary>
