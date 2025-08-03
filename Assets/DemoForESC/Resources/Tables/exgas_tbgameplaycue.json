@@ -11,7 +11,7 @@
       200,
       2001
     ],
-    "cue_logic": {
+    "cueLogic": {
       "$type": "GameplayCueLog",
       "value": "testMessageA"
     }
@@ -27,7 +27,7 @@
       2005
     ],
     "immunity_tag": [],
-    "cue_logic": {
+    "cueLogic": {
       "$type": "CueLoging",
       "value": "testValue2",
       "duration": 1.55
@@ -50,7 +50,7 @@
       100,
       1001
     ],
-    "cue_logic": {
+    "cueLogic": {
       "$type": "CueLoging",
       "value": "卧槽",
       "duration": 30

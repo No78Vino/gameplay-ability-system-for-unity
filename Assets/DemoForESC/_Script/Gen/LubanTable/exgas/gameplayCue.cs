@@ -22,7 +22,7 @@ public sealed partial class gameplayCue : Luban.BeanBase
         { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
         { var __json0 = _buf["required_tag"]; if(!__json0.IsArray) { throw new SerializationException(); } RequiredTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RequiredTag.Add(__v0); }   }
         { var __json0 = _buf["immunity_tag"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTag.Add(__v0); }   }
-        { if(!_buf["cue_logic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.CueLogic.DeserializeCueLogic(_buf["cue_logic"]);  }
+        { if(!_buf["cueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.CueLogic.DeserializeCueLogic(_buf["cueLogic"]);  }
     }
 
     public static gameplayCue DeserializegameplayCue(JSONNode _buf)

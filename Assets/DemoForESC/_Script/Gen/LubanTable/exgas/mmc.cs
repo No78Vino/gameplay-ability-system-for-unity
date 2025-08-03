@@ -20,7 +20,7 @@ public sealed partial class mmc : Luban.BeanBase
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { var _j = _buf["mmc_logic"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  MmcLogic = global::cfg.MmcLogic.DeserializeMmcLogic(_j);  } } else { MmcLogic = null; } }
+        { var _j = _buf["mmcLogic"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  MmcLogic = global::cfg.MmcLogic.DeserializeMmcLogic(_j);  } } else { MmcLogic = null; } }
     }
 
     public static mmc Deserializemmc(JSONNode _buf)

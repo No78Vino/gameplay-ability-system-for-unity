@@ -1,5 +1,4 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS;
 using UnityEngine;
 
 namespace DemoForESC._Script

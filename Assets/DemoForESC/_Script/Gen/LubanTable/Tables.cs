@@ -15,6 +15,7 @@ namespace cfg
 public partial class Tables
 {
     public exgas.Tbability Tbability {get; }
+    public exgas.Tbasc Tbasc {get; }
     public exgas.Tbattribute Tbattribute {get; }
     public exgas.TbattributeSet TbattributeSet {get; }
     public exgas.TbgameplayCue TbgameplayCue {get; }
@@ -25,6 +26,7 @@ public partial class Tables
     public Tables(System.Func<string, JSONNode> loader)
     {
         Tbability = new exgas.Tbability(loader("exgas_tbability"));
+        Tbasc = new exgas.Tbasc(loader("exgas_tbasc"));
         Tbattribute = new exgas.Tbattribute(loader("exgas_tbattribute"));
         TbattributeSet = new exgas.TbattributeSet(loader("exgas_tbattributeset"));
         TbgameplayCue = new exgas.TbgameplayCue(loader("exgas_tbgameplaycue"));
@@ -37,6 +39,7 @@ public partial class Tables
     private void ResolveRef()
     {
         Tbability.ResolveRef(this);
+        Tbasc.ResolveRef(this);
         Tbattribute.ResolveRef(this);
         TbattributeSet.ResolveRef(this);
         TbgameplayCue.ResolveRef(this);

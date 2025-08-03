@@ -4,14 +4,40 @@
     "name": "加速测试a",
     "desc": "加速加速！！",
     "assetTags": [
-      1001
+      1001,
+      1002,
+      2001
     ],
     "grantedTags": [],
     "applicationRequiredTags": [],
-    "ongoingRequiredTags": [],
+    "ongoingRequiredTags": [
+      1002,
+      200,
+      2002,
+      2003
+    ],
     "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "modifiers": [],
+    "immunityTags": [
+      2001,
+      2002,
+      2003
+    ],
+    "modifiers": [
+      {
+        "attrSet": 1,
+        "attribute": 2,
+        "magnitude": 60,
+        "operation": 0,
+        "mmc": 1001
+      },
+      {
+        "attrSet": 1,
+        "attribute": 3,
+        "magnitude": 50,
+        "operation": 3,
+        "mmc": 1002
+      }
+    ],
     "cueOnApply": [],
     "cueOnTick": [],
     "cueOnAdd": [],
