@@ -523,8 +523,7 @@ namespace GAS.Editor
         #region 可视化读写编辑 UI
 
         private const string T_G = "编辑配置";
-        private const string T_G_A = "编辑配置/A";
-        private const string T_G_A_B = "编辑配置/A/组件详情";
+        private const string T_G_TAB = "编辑配置/TAB";
 
         [TitleGroup(T_G, order: 2)]
         [ValueDropdown(nameof(GetAllEffectIds))]
@@ -589,58 +588,59 @@ namespace GAS.Editor
         [TitleGroup(T_G)] [LabelText("描述")] [LabelWidth(50)]
         public string description;
 
-        [HorizontalGroup(T_G_A, 200)] [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] [LabelText("GE组件")]
+        [TabGroup(T_G_TAB,"组件列表")]
+        [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] [LabelText("GE组件")]
         public List<EffectEditComponent> ComponentTypes;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("AssetTag 描述tag", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.AssetTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> AssetTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("GrantedTag 获得的tag", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.GrantedTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> GrantedTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("ApplicationRequiredTags 应用需求tag", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ApplicationRequiredTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> ApplicationRequiredTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("OngoingRequiredTags 持续需求tag", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.OngoingRequiredTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> OngoingRequiredTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("RemoveGameplayEffectsWithTags 移除持有tag的GE", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.RemoveGameplayEffectsWithTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> RemoveGameplayEffectsWithTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("ImmunityTags 免疫的tag", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ImmunityTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> ImmunityTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("持续时间", Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Duration)")]
         public GEEditDurarion Duration;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("间隔效果GE", Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Period)")]
@@ -649,61 +649,61 @@ namespace GAS.Editor
             VisibleIf = "@!HasComponent(EffectEditComponent.Duration)")]
         public GEEditPeriod Period;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("修改器", Bold = false)]
         [LabelText(" ")]
         [ShowIf("@HasComponent(EffectEditComponent.Modifiers)")]
         public List<GEEditPeriodModifier> Modifiers;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("应用时触发的Cue", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnApply)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnApply;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("帧更新的Cue", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnTick)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnTick;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("添加时触发的Cue", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnAdd)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnAdd;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("移除时触发的Cue", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnRemove)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnRemove;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("激活时触发的Cue", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnActivate)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnActivate;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("失活时触发的Cue", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.CueOnDeactivate)")]
         [LabelText(" ")]
         [ValueDropdown("@GasXlsxChoice.Cues()", IsUniqueList = true)]
         public List<int> CueOnDeactivate;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("获得技能", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.GrantedAbility)")]
         [LabelText(" ")]
         public List<GEEditGrantedAbility> GrantedAbility;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("堆叠", Bold = false)]
         [HideLabel]
         [ShowIf("@HasComponent(EffectEditComponent.Stacking)")]

@@ -311,7 +311,8 @@ namespace GAS.Editor
         private const string T_G_A = "编辑配置/A";
         private const string T_G_A_B = "编辑配置/A/组件详情";
         private const string T_G_AL = "编辑配置/技能逻辑";
-        private const string T_G_A_B_CD = "编辑配置/A/组件详情/冷却CD";
+        private const string T_G_A_B_CD = "编辑配置/TAB/详情/冷却CD";
+        private const string T_G_TAB = "编辑配置/TAB";
 
         [TitleGroup(T_G, order: 2)]
         [ValueDropdown(nameof(GetAllAbilityIds))]
@@ -385,12 +386,12 @@ namespace GAS.Editor
         [BoxGroup(T_G_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
         public IAbilityParam abilityParam;
         
-        [HorizontalGroup(T_G_A, 200)] 
+        [TabGroup(T_G_TAB, "组件列表")] 
         [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] 
         [LabelText("Ability组件")]
         public List<AbilityEditComponent> ComponentTypes;
         
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("消耗", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cost)")]
         [ValueDropdown("@GasXlsxChoice.Effects()", IsUniqueList = true)]
@@ -403,47 +404,47 @@ namespace GAS.Editor
         [LabelText("CD效果")]
         public int CDEffect;
         
-        [VerticalGroup(T_G_A_B_CD)]
+        [TitleGroup(T_G_A_B_CD)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cooldown)")]
         [LabelText("CD时长")]
         public int CD;
         
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("描述tag", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.AssetTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> assetTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("拥有【任意】Tag的Ability会被取消", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.CancelAbilityWithTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> cancelAbilityWithTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("拥有【任意】Tag的Ability会被阻止", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.BlockAbilityWithTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> blockAbilityWithTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("激活后获得的Tag", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.ActivationOwnedTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> activationOwnedTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("激活需要的Tag", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.ActivationRequiredTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
         public List<int> activationRequiredTags;
 
-        [VerticalGroup(T_G_A_B)]
+        [TabGroup(T_G_TAB,"详情")]
         [Title("阻止激活的Tag", Bold = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.ActivationBlockedTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]

@@ -50,6 +50,10 @@
         public const string JSON_FILE_NAME_OF_MMC = "exgas_tbmmc";
         public const string EXCEL_FILE_NAME_OF_MMC = "#exgas.mmc";
         public const string CODE_FILE_NAME_OF_MMC = "ExGasMmcLib.gen";
+        
+        public const string JSON_FILE_NAME_OF_ASC = "exgas_tbasc";
+        public const string EXCEL_FILE_NAME_OF_ASC = "#exgas.asc";
+        public const string CODE_FILE_NAME_OF_ASC = "ExGasAscLib.gen";
 
         #endregion
 
