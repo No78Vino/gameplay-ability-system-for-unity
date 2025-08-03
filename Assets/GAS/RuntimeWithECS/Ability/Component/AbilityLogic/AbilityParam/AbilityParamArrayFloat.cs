@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.RuntimeWithECS
 {
@@ -15,6 +16,7 @@ namespace GAS.RuntimeWithECS
             Value = value;
         }
 
+        [ShowInInspector]
         public float[] Value { get; private set; }
 
         public void SetValue(float[] value)

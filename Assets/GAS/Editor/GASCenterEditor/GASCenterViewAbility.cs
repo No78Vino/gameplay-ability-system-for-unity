@@ -299,7 +299,7 @@ namespace GAS.Editor
             if (activationRequiredTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ActivationRequiredTags);
             if (activationBlockedTags.Count > 0) ComponentTypes.Add(AbilityEditComponent.ActivationBlockedTags);
             if (Cost > 0) ComponentTypes.Add(AbilityEditComponent.Cost);
-            if (CD > 0) ComponentTypes.Add(AbilityEditComponent.Cooldown);
+            if (CDEffect > 0) ComponentTypes.Add(AbilityEditComponent.Cooldown);
         }
 
         #endregion
@@ -310,7 +310,8 @@ namespace GAS.Editor
         private const string T_G = "编辑配置";
         private const string T_G_A = "编辑配置/A";
         private const string T_G_A_B = "编辑配置/A/组件详情";
-        private const string T_G_A_B_AL = "编辑配置/A/组件详情/技能逻辑";
+        private const string T_G_AL = "编辑配置/技能逻辑";
+        private const string T_G_A_B_CD = "编辑配置/A/组件详情/冷却CD";
 
         [TitleGroup(T_G, order: 2)]
         [ValueDropdown(nameof(GetAllAbilityIds))]
@@ -372,24 +373,22 @@ namespace GAS.Editor
         [TitleGroup(T_G)] [LabelText("名字")] [LabelWidth(50)] [Tooltip("部分GA/GE编辑页的GA选项会用到这个参数")]
         public string name;
 
-        [TitleGroup(T_G)] [LabelText("描述")] [LabelWidth(50)]
+        [TitleGroup(T_G)] [LabelText("描述")] [LabelWidth(50)][Multiline]
         public string description;
 
-        [HorizontalGroup(T_G_A, 200)] 
-        [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] 
-        [LabelText("Ability组件")]
-        public List<AbilityEditComponent> ComponentTypes;
-
-        // TODO
-        // AbilityLogic
-        [TitleGroup(T_G_A_B_AL, BoldTitle = false)]
+        [BoxGroup(T_G_AL)]
         [LabelText("技能逻辑类型")]
         [ValueDropdown(nameof(AbilityLogicClassChoice))]
         [OnValueChanged(nameof(OnTypeChange))]
         public string type;
 
-        [TitleGroup(T_G_A_B_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
+        [BoxGroup(T_G_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
         public IAbilityParam abilityParam;
+        
+        [HorizontalGroup(T_G_A, 200)] 
+        [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] 
+        [LabelText("Ability组件")]
+        public List<AbilityEditComponent> ComponentTypes;
         
         [VerticalGroup(T_G_A_B)]
         [Title("消耗", Bold = false)]
@@ -398,15 +397,13 @@ namespace GAS.Editor
         [LabelText("消耗效果")]
         public int Cost;
         
-        [VerticalGroup(T_G_A_B)]
-        [Title("冷却CD", Bold = false)]
+        [TitleGroup(T_G_A_B_CD, BoldTitle = false)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cooldown)")]
         [ValueDropdown("@GasXlsxChoice.Effects()", IsUniqueList = true)]
         [LabelText("CD效果")]
         public int CDEffect;
         
-        [VerticalGroup(T_G_A_B)]
-        [Title("冷却CD", Bold = false)]
+        [VerticalGroup(T_G_A_B_CD)]
         [ShowIf("@HasComponent(AbilityEditComponent.Cooldown)")]
         [LabelText("CD时长")]
         public int CD;

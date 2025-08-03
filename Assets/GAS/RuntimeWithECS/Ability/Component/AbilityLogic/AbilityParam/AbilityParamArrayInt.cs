@@ -1,26 +1,27 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.RuntimeWithECS
 {
     public class AbilityParamArrayInt: IAbilityParam
     {
-        private int[] _value;
-        public int[] Value => _value;
-        
+        [ShowInInspector]
+        public int[] Value { get; private set; }
+
         public void SetValue(int[] value)
         {
-            _value = value;
+            Value = value;
         }
         
         public AbilityParamArrayInt()
         {
-            _value = Array.Empty<int>();
+            Value = Array.Empty<int>();
         }
         
         public AbilityParamArrayInt(int[] value)
         {
-            _value = value;
+            Value = value;
         }
         
 #if UNITY_EDITOR
@@ -28,24 +29,24 @@ namespace GAS.RuntimeWithECS
         {
             if (paramData == null || paramData.Count == 0)
             {
-                _value = Array.Empty<int>();
+                Value = Array.Empty<int>();
                 return;
             }
 
             var strData = paramData[0] as string;
             if (string.IsNullOrEmpty(strData))
             {
-                _value = Array.Empty<int>();
+                Value = Array.Empty<int>();
                 return;
             }
 
             var strArray = strData.Split(';');
-            _value = new int[strArray.Length];
+            Value = new int[strArray.Length];
             for (var i = 0; i < strArray.Length; i++)
                 if (int.TryParse(strArray[i], out var val))
-                    _value[i] = val;
+                    Value[i] = val;
                 else
-                    _value[i] = 0;
+                    Value[i] = 0;
         }
 
         public List<object> EncodeExcelData()

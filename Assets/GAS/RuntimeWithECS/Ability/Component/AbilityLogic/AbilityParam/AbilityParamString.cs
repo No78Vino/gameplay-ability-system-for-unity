@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.RuntimeWithECS
 {
     public class AbilityParamString : IAbilityParam
     {
+        [ShowInInspector]
+        public string Value { get; private set; }
+        
         public AbilityParamString()
         {
             Value = string.Empty;
@@ -13,8 +17,6 @@ namespace GAS.RuntimeWithECS
         {
             SetValue(value);
         }
-
-        public string Value { get; private set; }
 
         public void SetValue(string value)
         {
