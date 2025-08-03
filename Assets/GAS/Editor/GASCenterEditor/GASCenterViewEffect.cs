@@ -593,6 +593,7 @@ namespace GAS.Editor
         public List<EffectEditComponent> ComponentTypes;
 
         [TabGroup(T_G_TAB,"详情")]
+        //[GUIColor("cyan")]
         [Title("AssetTag 描述tag", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.AssetTags)")]
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]

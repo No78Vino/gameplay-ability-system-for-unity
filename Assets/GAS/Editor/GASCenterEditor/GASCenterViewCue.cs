@@ -124,7 +124,7 @@ namespace GAS.Editor
                     foreach (var colIndex in _headerMap.Values)
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
-                    var parameterCol = _headerMap["cue_logic"];
+                    var parameterCol = _headerMap["cueLogic"];
                     var cueParams = new List<object>();
                     for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
                     {
@@ -161,11 +161,11 @@ namespace GAS.Editor
                     ? string.Join(";", immunityTags)
                     : string.Empty;
                 // cue_logic需要特殊处理
-                worksheet.Cells[row, _headerMap["cue_logic"]].Value = type;
+                worksheet.Cells[row, _headerMap["cueLogic"]].Value = type;
                 var cueParams = cueParam.EncodeExcelData();
                 for (var i = 0; i < cueParams.Count; i++)
                 {
-                    var colIndex = _headerMap["cue_logic"] + 1 + i;
+                    var colIndex = _headerMap["cueLogic"] + 1 + i;
                     if (colIndex > worksheet.Dimension.End.Column) break; // 防止超出列数
                     worksheet.Cells[row, colIndex].Value = cueParams[i];
                 }
@@ -224,8 +224,8 @@ namespace GAS.Editor
                 : new List<int>();
 
             // 加载Cue逻辑
-            type = selectInfo.ContainsKey(_headerMap["cue_logic"])
-                ? selectInfo[_headerMap["cue_logic"]]?.ToString()
+            type = selectInfo.ContainsKey(_headerMap["cueLogic"])
+                ? selectInfo[_headerMap["cueLogic"]]?.ToString()
                 : string.Empty;
 
             cueParam = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;

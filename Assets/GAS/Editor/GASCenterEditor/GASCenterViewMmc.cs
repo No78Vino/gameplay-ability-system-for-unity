@@ -123,7 +123,7 @@ namespace GAS.Editor
                     foreach (var colIndex in _headerMap.Values)
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
-                    var parameterCol = _headerMap["mmc_logic"];
+                    var parameterCol = _headerMap["mmcLogic"];
                     var mmcParams = new List<object>();
                     for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
                     {
@@ -155,11 +155,11 @@ namespace GAS.Editor
                 worksheet.Cells[row, _headerMap["desc"]].Value = description;
                 
                 // mmc_logic需要特殊处理
-                worksheet.Cells[row, _headerMap["mmc_logic"]].Value = type;
+                worksheet.Cells[row, _headerMap["mmcLogic"]].Value = type;
                 var mmcParams = mmcParam.EncodeExcelData();
                 for (var i = 0; i < mmcParams.Count; i++)
                 {
-                    var colIndex = _headerMap["mmc_logic"] + 1 + i;
+                    var colIndex = _headerMap["mmcLogic"] + 1 + i;
                     if (colIndex > worksheet.Dimension.End.Column) break; // 防止超出列数
                     worksheet.Cells[row, colIndex].Value = mmcParams[i];
                 }
@@ -210,8 +210,8 @@ namespace GAS.Editor
                 : string.Empty;
 
             // 加载Mmc逻辑
-            type = selectInfo.ContainsKey(_headerMap["mmc_logic"])
-                ? selectInfo[_headerMap["mmc_logic"]]?.ToString()
+            type = selectInfo.ContainsKey(_headerMap["mmcLogic"])
+                ? selectInfo[_headerMap["mmcLogic"]]?.ToString()
                 : string.Empty;
 
             mmcParam = _mmcParameter.TryGetValue(SelectedId, out var mmcParams) ? EditorMmcHelper.CreateMmcParameter(type, mmcParams) : null;
