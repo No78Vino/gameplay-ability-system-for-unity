@@ -41,7 +41,5 @@ namespace GAS.Runtime
             HideChildProperties = true)]
         public List<int> immunityTags;
 
-        [HideLabel]
-        public CueSettingConfig cue;
     }
 }

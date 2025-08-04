@@ -11,14 +11,9 @@ namespace GAS.Runtime
 {
     public static class CueHelper
     {
-        public static GameplayCueBase TryCreateInstantCue(string cueType, CueParamConfigBase param)
+        public static GameplayCueBase TryCreateCue(GameplayCueConfig param)
         {
-            return TryCreateCue( cueType,  param);
-        }
-
-        public static GameplayCueBase TryCreateCue(string cueType, CueParamConfigBase param)
-        {
-            return TryCreateCue(cueType, param.GetConfig());
+            return TryCreateCue(param.CueType, param.CueParameter);
         }
         
         public static GameplayCueBase TryCreateCue(string cueType, ICueParameter param)
@@ -46,7 +41,7 @@ namespace GAS.Runtime
             {
                 Debug.LogError("[EX] 创建Cue失败: " +
                                $"请检查这个类【'{type.FullName}'】是否继承自NewGameplayCueBase;" +
-                               "或者，ModMagnitudeCalculation的Type映射脚本是否更新，重新生成。" +
+                               "或者，GameplayCueBase的Type映射脚本是否更新，重新生成。" +
                                $"Error Exception:{e.Message}");
                 throw;
             }
@@ -64,7 +59,11 @@ namespace GAS.Runtime
 
         public static Type GetCueType(string sType)
         {
-            return CueTypeMap[sType];
+            if (CueTypeMap.TryGetValue(sType, out var type)) return type;
+#if UNITY_EDITOR
+            Debug.LogError($"[EX] CueTypeMap中没有找到类型: {sType}，请检查是否注册了该Cue类型。");
+#endif
+            return null;
         }
 
         public static void RegisterCue<T>(string sType) where T : GameplayCueBase

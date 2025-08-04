@@ -7,7 +7,7 @@ namespace GAS.RuntimeWithECS.Cue
 {
     public abstract class ConfCueBase: GameplayEffectComponentConfig
     {
-        public CueSetting[] cues;
+        public GameplayCueConfig[] cues;
 
         public NativeArray<Entity> CreateCueEntityArray(Entity ge)
         {
@@ -26,26 +26,26 @@ namespace GAS.RuntimeWithECS.Cue
                 
                 // Cue逻辑
                 EntityHelper.AddManagedComponent<MCCue>(entities[i]);
-                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.cue.CreateCue()),entities[i],ge);
+                var instantCue = CueHelper.InitInstantCueFromGameplayEffect(new MCCue(c.CreateCue()),entities[i],ge);
                 EntityHelper.SetManagedComponent(entities[i], instantCue);
                 
                 // cue播放免疫tag
-                if (c.immunityTags.Count > 0)
+                if (c.ImmunityTags.Length > 0)
                 {
                     EntityHelper.AddComponent<CPlayImmunitedTags>(entities[i]);
                     EntityHelper.SetComponent(entities[i], new CPlayImmunitedTags
                     {
-                        tags = new NativeArray<int>(c.immunityTags.ToArray(), Allocator.Persistent)
+                        tags = new NativeArray<int>(c.ImmunityTags, Allocator.Persistent)
                     });
                 }
 
                 // cue播放需求tag
-                if (c.requiredTags.Count > 0)
+                if (c.RequiredTags.Length > 0)
                 {
                     EntityHelper.AddComponent<CPlayRequiredTags>(entities[i]);
                     EntityHelper.SetComponent(entities[i], new CPlayRequiredTags
                     {
-                        tags = new NativeArray<int>(c.requiredTags.ToArray(), Allocator.Persistent)
+                        tags = new NativeArray<int>(c.RequiredTags, Allocator.Persistent)
                     });
                 }
             }

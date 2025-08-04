@@ -20,7 +20,6 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         {
             return new ConfCueOnAdd()
             {
-                cues = cues.ToArray()
             };
         }
     }

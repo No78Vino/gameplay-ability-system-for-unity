@@ -34,6 +34,14 @@ namespace GAS.Runtime
             _requiredTags = requiredTags;
             _immunityTags = immunityTags;
         }
+        
+        public GameplayCueUnit(GameplayCueConfig config)
+        {
+            _cueType = config.CueType;
+            _cueParameter = config.CueParameter;
+            _requiredTags = config.RequiredTags;
+            _immunityTags = config.ImmunityTags;
+        }
 
         private bool CheckCueEntity()
         {

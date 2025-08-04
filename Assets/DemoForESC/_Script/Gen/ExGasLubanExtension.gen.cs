@@ -62,6 +62,34 @@ namespace GAS.Runtime
         //     return new AbilityConfig(configs);
         // }
         
+        public static GameplayCueConfig GetGameplayCueConfig(int id)
+        {
+            var data = _tables.TbgameplayCue.Get(id);
+            if (data == null)
+            {
+                Debug.LogError($"Cue_ID:{id}  不存在.");
+                return null;
+            }
+
+            var cueType = CueHelper.GetCueType(data.CueLogic.GetType().Name);
+            if (cueType == null)
+            {
+                Debug.LogError($"Cue_ID:{id}  CueType:{data.CueLogic.GetType().Name} 不存在.");
+                return null;
+            }
+            // TODO
+            //var cueLogic = data.CueLogic as cfg.GameplayCueLog;
+            // cueLogic.Value;
+            // var cueParameter = Activator.CreateInstance(cueParamType) as ICueParameter;
+            // if (cueParameter == null)
+            // {
+            //     Debug.LogError($"Cue_ID:{id}  CueParameter:{data.CueLogic} 创建失败.");
+            //     return new GameplayCueConfig(null, null, Array.Empty<int>(), Array.Empty<int>());
+            // }
+            return new GameplayCueConfig(cueType, null, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
+        }
+        
+        
         public static GameplayEffectConfig GetGameplayEffectConfig(int id)
         {
             var configs = new GameplayEffectComponentConfig[0];
