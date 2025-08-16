@@ -370,8 +370,7 @@ namespace GAS.Editor
                     foreach (var cueType in cueTypes)
                     {
                         var cueName = cueType.Name;
-                        var fullName = cueType.FullName;
-                        writer.WriteLine($"public const string CUE_{cueName} = \"{fullName}\";");
+                        writer.WriteLine($"public const string CUE_{cueName} = \"{cueName}\";");
                     }
 
                     writer.WriteLine("");

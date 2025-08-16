@@ -8,15 +8,21 @@ namespace DemoForESC._Script.Gen
         {
             GEN_AbilityCode.LoadAbilityCode();
             XMmc.LoadMmcType();
-            GEN_CueCode.LoadCueType();
+            XCue.LoadCueType();
         }
-        
+          
         public static void Launch()
         {
             LoadGenCache();
             XLubanExtension.LoadTables();
             GASManager.Initialize();
             GEN_GameplayTagCode.InitTagList();
+            
+            // 测试代码
+            var testCue = XLubanExtension.GetGameplayCueConfig(1001);
+            var cueUnit = new GameplayCueUnit(testCue);
+            cueUnit.Create();
+            cueUnit.Play();
         }
     }
 }

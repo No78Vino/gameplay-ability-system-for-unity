@@ -5,14 +5,14 @@
 
 namespace GAS.Runtime
 {
-    public static class GEN_CueCode
+    public static class XCue
     {
-        public const string CUE_CueLog = "GAS.Runtime.CueLog";
+        public const string CUE_GameplayCueLog = "GameplayCueLog";
 
         public static void LoadCueType()
         {
-            var CueLog = typeof(GAS.Runtime.GameplayCueLog);
-            CueHelper.RegisterCue(CUE_CueLog, CueLog);
+            var GameplayCueLog = typeof(GAS.Runtime.GameplayCueLog);
+            CueHelper.RegisterCue(CUE_GameplayCueLog, GameplayCueLog);
         }
     }
 }

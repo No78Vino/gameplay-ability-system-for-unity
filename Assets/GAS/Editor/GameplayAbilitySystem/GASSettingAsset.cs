@@ -168,6 +168,12 @@ namespace GAS.Editor
         [HorizontalGroup("A/生成脚本/B")]
         [DisplayAsString(TextAlignment.Left, true)]
         [GUIColor(0.8f, 0.8f, 0)]
+        [Button("Cue脚本", ButtonHeight = 30)]
+        void GenerateCueCode() => CodeGenerator.GenerateCueCode();
+        
+        [HorizontalGroup("A/生成脚本/B")]
+        [DisplayAsString(TextAlignment.Left, true)]
+        [GUIColor(0.8f, 0.8f, 0)]
         [Button("Ability脚本", ButtonHeight = 30)]
         void GenerateAbilityCode() => CodeGenerator.GenerateAbilityCode();
 
