@@ -69,6 +69,8 @@ namespace GAS.Editor
         {
             obj.menu.AppendAction("Delete Mark", _ => Delete());
             obj.menu.AppendAction("Duplicate", _ => Duplicate());
+            obj.menu.AppendAction("Disable", action => SetEnable(false));
+            obj.menu.AppendAction("Enable", action => SetEnable(true));
         }
         
         public abstract void UpdateMarkDataFrame(int newStartFrame);
@@ -129,6 +131,7 @@ namespace GAS.Editor
         public bool Selected { get; private set; }
         private static Color SelectedColor = new Color(0.8f, 0.6f, 0.3f, 1f);
         private static Color UnSelectedColor = new Color(1f, 1f, 1f, 0.9f);
+        protected static readonly Color DisabledColor = new Color(0.5f, 0.5f, 0.5f, 0.9f);
         public void OnSelect()
         {
             Selected = true;
@@ -139,9 +142,22 @@ namespace GAS.Editor
         public void OnUnSelect()
         {
             Selected = false;
-            ve.style.unityBackgroundImageTintColor = UnSelectedColor;
+            ve.style.unityBackgroundImageTintColor = markData.isEnabled? UnSelectedColor : DisabledColor;
         }
 
+        public void SetEnable(bool enable)
+        {
+            if (enable)
+            {
+                ItemLabel.style.backgroundColor = UnSelectedColor;
+            }
+            else
+            {
+                ItemLabel.style.backgroundColor = DisabledColor;
+            }
+            markData.isEnabled = enable;
+            AbilityTimelineEditorWindow.Instance.Save();
+        }
         #endregion
     }
     

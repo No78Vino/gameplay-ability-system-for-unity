@@ -70,6 +70,8 @@ namespace GAS.Editor
         private void OnContextMenu(ContextualMenuPopulateEvent obj)
         {
             obj.menu.AppendAction("Delete Clip", action => _clip.Delete());
+            obj.menu.AppendAction("Disable", action => SetEnable(false));
+            obj.menu.AppendAction("Enable", action => SetEnable(true));
         }
 
         public void InitClipInfo(TrackClipBase trackClipBase)
@@ -161,6 +163,7 @@ namespace GAS.Editor
         protected static readonly Color SelectColor = new(0.6f, 0.1f, 0.1f, 0.75f);
         protected static readonly Color OutsideBoxSelectColor = new(0.8f, 0.5f, 0.1f, 1f);
         protected static readonly Color OutsideBoxHoverColor = new(0.8f, 0.8f, 0.7f, 0.9f);
+        protected static readonly Color DisabledColor = new Color(0.5f, 0.5f, 0.5f, 0.9f);
 
         private const int TipBoundingSize = 4;
 
@@ -211,10 +214,24 @@ namespace GAS.Editor
         public virtual void OnUnSelect()
         {
             Selected = false;
-            ItemLabel.style.backgroundColor = NormalColor;
+            ItemLabel.style.backgroundColor = _clip.ClipData.isEnabled ? NormalColor : DisabledColor;
             SwitchBounding();
         }
 
+        public void SetEnable(bool enable)
+        {
+            if (enable)
+            {
+                ItemLabel.style.backgroundColor = NormalColor;
+            }
+            else
+            {
+                ItemLabel.style.backgroundColor = DisabledColor;
+            }
+            
+            _clip.ClipData.isEnabled = enable;
+            AbilityTimelineEditorWindow.Instance.Save();
+        }
         #endregion
 
         #region Clip Resize Area

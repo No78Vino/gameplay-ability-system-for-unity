@@ -88,7 +88,12 @@ namespace GAS.Runtime
             _cacheInstantCues.Clear();
             foreach (var trackData in AbilityAsset.InstantCues)
             {
-                _cacheInstantCues.AddRange(trackData.markEvents);
+                // 只添加启用的markEvents
+                foreach (var markEvent in trackData.markEvents)
+                {
+                    if (!markEvent.isEnabled) continue;
+                    _cacheInstantCues.Add(markEvent);
+                }
             }
 
             _cacheInstantCues.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
@@ -99,7 +104,11 @@ namespace GAS.Runtime
             _cacheReleaseGameplayEffect.Clear();
             foreach (var trackData in AbilityAsset.ReleaseGameplayEffect)
             {
-                _cacheReleaseGameplayEffect.AddRange(trackData.markEvents);
+                foreach (var markEvent in trackData.markEvents)
+                {
+                    if (!markEvent.isEnabled) continue;
+                    _cacheReleaseGameplayEffect.Add(markEvent);
+                }
             }
 
             _cacheReleaseGameplayEffect.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
@@ -116,6 +125,8 @@ namespace GAS.Runtime
             {
                 foreach (var markEvent in trackData.markEvents)
                 {
+                    if (!markEvent.isEnabled) continue;
+
                     foreach (var taskData in markEvent.InstantTasks)
                     {
                         var runtimeTaskMark = new RuntimeTaskMark
@@ -138,7 +149,9 @@ namespace GAS.Runtime
             {
                 foreach (var clipEvent in track.clipEvents)
                 {
-                    var cueSpec = clipEvent.cue.ApplyFrom(_abilitySpec);
+                    if (!clipEvent.isEnabled) continue;
+                    
+                    var cueSpec = clipEvent.cue?.ApplyFrom(_abilitySpec);
                     if (cueSpec == null) continue;
                     var runtimeDurationCueClip = new RuntimeDurationCueClip
                     {
@@ -158,6 +171,8 @@ namespace GAS.Runtime
             {
                 foreach (var clipEvent in track.clipEvents)
                 {
+                    if (!clipEvent.isEnabled) continue;
+
                     // 只有持续型的GameplayEffect可视作buff
                     if (clipEvent.gameplayEffect.DurationPolicy is EffectsDurationPolicy.Duration
                         or EffectsDurationPolicy.Infinite)
@@ -182,6 +197,7 @@ namespace GAS.Runtime
             {
                 foreach (var clip in track.clipEvents)
                 {
+                    if (!clip.isEnabled) continue;
                     var runtimeTaskClip = new RuntimeTaskClip
                     {
                         startFrame = clip.startFrame,

@@ -5,7 +5,8 @@ namespace GAS.Runtime
 {
     [Serializable]
     public abstract class TrackEventBase
-    {        
+    {
+        public bool isEnabled = true;
         public int startFrame;
     }
     
