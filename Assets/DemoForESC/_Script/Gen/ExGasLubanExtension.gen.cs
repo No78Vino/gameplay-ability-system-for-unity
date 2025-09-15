@@ -79,11 +79,15 @@ namespace GAS.Runtime
             }
             // TODO
             var cueLogic = data.CueLogic;
-            ICueParameter cueParam = null;
-            if (cueLogic is cfg.GameplayCueLog gameplayCueLog)
-            {
-                cueParam = new CueParamString(gameplayCueLog.Value);
-            }
+            string cueLogicName = cueLogic.GetType().Name;
+            Type cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
+            ICueParameter cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
+            cueParam?.LoadConfigParameterData(cueLogic);
+            // if (cueLogic is cfg.GameplayCueLog)
+            // {
+            //     cueParam = new CueParamString();
+            //     cueParam.LoadConfigParameterData(cueLogic);
+            // }
             return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
         }
         

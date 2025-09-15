@@ -382,8 +382,10 @@ namespace GAS.Editor
                         {
                             var cueName = cueType.Name;
                             var typeFullName = cueType.FullName;
+                            var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];
+                            var cueParamTypeFullName = cueParamType.FullName;
                             writer.WriteLine($"var {cueName} = typeof({typeFullName});");
-                            writer.WriteLine($"CueHelper.RegisterCue(CUE_{cueName}, {cueName});");
+                            writer.WriteLine($"CueHelper.RegisterCue(CUE_{cueName}, {cueName}, typeof({cueParamTypeFullName}));");
                         }
                     }
                     writer.Indent--;

@@ -48,15 +48,31 @@ namespace GAS.Runtime
             return null;
         }
 
+        public static Type GetCueLogicParamType(string cueType)
+        {
+            var cueParam = CueType2CueParamTypeMap[cueType];
+            return CueParamTypeMap[cueParam];
+        }
+        
+        public static Type GetCueLogicParamType(Type cueType)
+        {
+            var cueParam = CueType2CueParamTypeMap[cueType.Name];
+            return CueParamTypeMap[cueParam];
+        }
+        
         #region Cue
 
         private static readonly Dictionary<string, Type> CueTypeMap = new();
+        private static readonly Dictionary<string, Type> CueParamTypeMap = new();
+        private static readonly Dictionary<string, string> CueType2CueParamTypeMap = new();
 
-        public static void RegisterCue(string sType, Type logicType)
+        public static void RegisterCue(string sType, Type logicType,Type cueParamType)
         {
             CueTypeMap[sType] = logicType;
+            CueParamTypeMap[cueParamType.Name] = cueParamType;
+            CueType2CueParamTypeMap[sType] = cueParamType.Name;
         }
-
+        
         public static Type GetCueType(string sType)
         {
             if (CueTypeMap.TryGetValue(sType, out var type)) return type;
@@ -66,9 +82,9 @@ namespace GAS.Runtime
             return null;
         }
 
-        public static void RegisterCue<T>(string sType) where T : GameplayCueBase
+        public static void RegisterCue<T>(string sType,Type cueParam) where T : GameplayCueBase
         {
-            RegisterCue(sType, typeof(T));
+            RegisterCue(sType, typeof(T),cueParam);
         }
 
         #endregion

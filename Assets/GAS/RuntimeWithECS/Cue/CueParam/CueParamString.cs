@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using cfg;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
@@ -22,6 +23,14 @@ namespace GAS.Runtime
         public void SetValue(string v)
         {
             Value = v;
+        }
+        
+        public void LoadConfigParameterData(CueLogic cfgCueLogic)
+        {
+            if (cfgCueLogic is cfg.GameplayCueLog cueLog)
+            {
+                SetValue(cueLog.Value);
+            }
         }
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)

@@ -12,7 +12,7 @@ namespace GAS.Runtime
         public static void LoadCueType()
         {
             var GameplayCueLog = typeof(GAS.Runtime.GameplayCueLog);
-            CueHelper.RegisterCue(CUE_GameplayCueLog, GameplayCueLog);
+            CueHelper.RegisterCue(CUE_GameplayCueLog, GameplayCueLog, typeof(GAS.Runtime.CueParamString));
         }
     }
 }

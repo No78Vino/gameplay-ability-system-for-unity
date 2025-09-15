@@ -25,7 +25,7 @@ namespace DemoForESC._Script
         [ShowInInspector]
         [LabelText("ASC预设")]
         [ValueDropdown("@GasXlsxChoice.Ascs()")]
-        private int _ascPresetId = 0;
+        public int _ascPresetId = 0;
         
         protected virtual void Awake()
         {
