@@ -14,12 +14,12 @@ namespace DemoForESC._Script.Gen
         public static void Launch()
         {
             LoadGenCache();
-            XLubanExtension.LoadTables();
+            XLuban.LoadTables();
             GASManager.Initialize();
             GEN_GameplayTagCode.InitTagList();
             
             // 测试代码
-            var testCue = XLubanExtension.GetGameplayCueConfig(1001);
+            var testCue = XLuban.GetGameplayCueConfig(1001);
             var cueUnit = new GameplayCueUnit(testCue);
             cueUnit.Create();
             cueUnit.Play();

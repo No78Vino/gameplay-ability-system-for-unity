@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.ComponentConfig;
@@ -15,7 +16,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public static class XLubanExtension
+    public static class XLuban
     {
         public const string GAME_CONF_DIR = "Assets/DemoForESC/Resources/Tables";
         
@@ -56,11 +57,6 @@ namespace GAS.Runtime
             }
             return new AbilitySystemCellConfig(data.Tag, data.AttrSet, abilities, data.Level);
         }
-        // public static CueConfig GetGameplayCueConfig(int id)
-        // {
-        //     var configs = new GameplayAbilityComponentConfig[0];
-        //     return new AbilityConfig(configs);
-        // }
         
         public static GameplayCueConfig GetGameplayCueConfig(int id)
         {
@@ -77,25 +73,62 @@ namespace GAS.Runtime
                 Debug.LogError($"Cue_ID:{id}  CueType:{data.CueLogic.GetType().Name} 不存在.");
                 return null;
             }
-            // TODO
             var cueLogic = data.CueLogic;
             string cueLogicName = cueLogic.GetType().Name;
             Type cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
             ICueParameter cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
             cueParam?.LoadConfigParameterData(cueLogic);
-            // if (cueLogic is cfg.GameplayCueLog)
-            // {
-            //     cueParam = new CueParamString();
-            //     cueParam.LoadConfigParameterData(cueLogic);
-            // }
             return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
         }
         
         
         public static GameplayEffectConfig GetGameplayEffectConfig(int id)
         {
-            var configs = new GameplayEffectComponentConfig[0];
-            return new GameplayEffectConfig(configs);
+            var data = _tables.TbgameplayEffect.Get(id);
+            if (data == null)
+            {
+                Debug.LogError($"GameplayEffect_ID:{id}  不存在.");
+                return null;
+            }
+            var configs = new List<GameplayEffectComponentConfig>();
+            // TODO
+            // assetTags
+            if (data.AssetTags is { Count: > 0 })
+                configs.Add(new ConfAssetTags() { tags = data.AssetTags.ToArray() });
+            
+            // grantedTags
+            if (data.GrantedTags is { Count: > 0 })
+                configs.Add(new ConfEffectGrantedTags() { tags = data.GrantedTags.ToArray() });
+            
+            // applicationRequiredTags
+            if (data.ApplicationRequiredTags is { Count: > 0 })
+                configs.Add(new ConfApplicationRequiredTags() { tags = data.ApplicationRequiredTags.ToArray() });
+            
+            // ongoingRequiredTags
+            if (data.OngoingRequiredTags is { Count: > 0 })
+                configs.Add(new ConfOngoingRequiredTags() { tags = data.OngoingRequiredTags.ToArray() });
+            
+            // removeGameplayEffectsWithTags
+            if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })
+                configs.Add(new ConfRemoveEffectWithTags() { tags = data.RemoveGameplayEffectsWithTags.ToArray() });
+            
+            // immunityTags
+            if (data.ImmunityTags is { Count: > 0 })
+                configs.Add(new ConfEffectImmunityTags() { tags = data.ImmunityTags.ToArray() });
+            
+            // duration
+            // period
+            // modifiers
+            // cueOnApply
+            // cueOnTick
+            // cueOnAdd
+            // cueOnRemove
+            // cueOnActivate
+            // cueOnDeactivate
+            // grantedAbility
+            // stacking								
+
+            return new GameplayEffectConfig(configs.ToArray());
         }
         
         public static AbilityConfig GetAbilityConfig(int id)

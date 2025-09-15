@@ -30,7 +30,7 @@ namespace DemoForESC._Script
         protected virtual void Awake()
         {
             AbilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
-            AbilitySystemCellMono.Init(XLubanExtension.GetAscConfig(_ascPresetId));
+            AbilitySystemCellMono.Init(XLuban.GetAscConfig(_ascPresetId));
             var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(GEN_AbilityCode.ABILITY_move);
             ((ALMove)abilityLogic.Logic).SetUnit(this);
         }
