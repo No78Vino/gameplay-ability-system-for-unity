@@ -11,6 +11,7 @@ using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.RuntimeWithECS.GameplayEffect;
+using GAS.RuntimeWithECS.Static;
 using SimpleJSON;
 using UnityEngine;
 
@@ -203,15 +204,52 @@ namespace GAS.Runtime
                 return new AbilityConfig(Array.Empty<GameplayAbilityComponentConfig>());
             }
             var configs = new List<GameplayAbilityComponentConfig>();
-            // cost	cdEffect cd	assetTags	cancelAbilityWithTags	blockAbilityWithTags	activationOwnedTags	activationRequiredTags	activationBlockedTags	abilityLogic													
+            // cost								
             if (data.Cost != 0)
             {
-                var costConfig = _tables.TbgameplayEffect.Get(data.Cost);
-                // if (costConfig != null)
-                // {
-                //     configs.Add(costConfig.GetConfig());
-                // }
+                configs.Add(new ConfAbilityCost()
+                {
+                    CostComponentConfigs = GetGameplayEffectConfig(data.Cost).ComponentConfigs
+                });
             }
+            
+            // assetTags
+            if (data.AssetTags is { Count: > 0 })
+                configs.Add(new ConfAbilityAssetTags() { tags = data.AssetTags.ToArray() });
+
+            // cancelAbilityWithTags
+            if (data.CancelAbilityWithTags is { Count: > 0 })
+                configs.Add(new ConfCancelAbilityTags() { tags = data.CancelAbilityWithTags.ToArray() });
+            
+            // blockAbilityWithTags
+            if (data.BlockAbilityWithTags is { Count: > 0 })
+                configs.Add(new ConfBlockAbilityTags() { tags = data.BlockAbilityWithTags.ToArray() });
+            
+            // activationOwnedTags
+            if (data.ActivationOwnedTags is { Count: > 0 })
+                configs.Add(new ConfAbilityActivationOwnedTags() { tags = data.ActivationOwnedTags.ToArray() });
+            
+            // activationRequiredTags
+            if (data.ActivationRequiredTags is { Count: > 0 })
+                configs.Add(new ConfAbilityActivationRequiredTags() { tags = data.ActivationRequiredTags.ToArray() });
+            
+            // activationBlockedTags
+            if (data.ActivationBlockedTags is { Count: > 0 })
+                configs.Add(new ConfAbilityActivationBlockedTags() { tags = data.ActivationBlockedTags.ToArray() });
+            
+            // cdEffect cd
+            if (data.Cd != 0)
+            {
+                configs.Add(new ConfAbilityCooldown()
+                {
+                    Cooldown = data.Cd,
+                    CooldownComponentConfigs = GetGameplayEffectConfig(data.CdEffect).ComponentConfigs
+                });
+            }
+            
+            // TODO
+            // abilityLogic						
+            
             return new AbilityConfig(configs.ToArray());
         }
     }
