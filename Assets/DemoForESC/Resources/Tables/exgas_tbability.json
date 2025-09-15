@@ -30,11 +30,11 @@
     "id": 10002,
     "name": "技能2",
     "desc": "描述2",
-    "cost": -3,
-    "cdEffect": -14,
-    "cd": -14,
+    "cost": 1001,
+    "cdEffect": 1001,
+    "cd": 5,
     "assetTags": [
-      100
+      1001
     ],
     "cancelAbilityWithTags": [],
     "blockAbilityWithTags": [],
