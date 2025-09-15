@@ -10,7 +10,7 @@ namespace GAS.RuntimeDataHelper.GameplayEffect.EffectComponentConfigAsset
         // TODO
         public override GameplayEffectComponentConfig GetConfig()
         {
-            return new ConfCueOnExecution();
+            return new ConfCueOnApply();
         }
     }
 }

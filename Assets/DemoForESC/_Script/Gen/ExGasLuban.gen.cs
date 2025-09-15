@@ -116,16 +116,79 @@ namespace GAS.Runtime
             if (data.ImmunityTags is { Count: > 0 })
                 configs.Add(new ConfEffectImmunityTags() { tags = data.ImmunityTags.ToArray() });
             
+            // TODO
             // duration
+            if (data.Duration != null && data.Duration.Time != 0)
+            {
+                configs.Add(new ConfDuration()
+                {
+                    duration = data.Duration.Time,
+                    timeUnit = (TimeUnit)data.Duration.TimeUnit,
+                    //ResetStartTimeWhenActivated = data.Duration.
+                });
+                
+            }
+            
             // period
+            if (data.Period is { Time: > 0 })
+            {
+                var gameplayEffectSettings = new List<GameplayEffectComponentConfig[]>();
+                foreach (var effectID in data.Period.Effects)
+                {
+                    var effect = GetGameplayEffectConfig(effectID);
+                    gameplayEffectSettings.Add(effect.ComponentConfigs);
+                }
+                configs.Add(new ConfPeriod()
+                {
+                    Period = data.Period.Time,
+                    ResetTimeCountWhenDeactivated = data.Period.FirstTrigger,
+                    GameplayEffectSettings = gameplayEffectSettings.ToArray(),
+                });
+                
+            }
+            // TODO
             // modifiers
+            
             // cueOnApply
+            if (data.CueOnApply is { Count: > 0 })
+            {
+                var cues = new GameplayCueConfig[data.CueOnApply.Count];
+                for (var i = 0; i < data.CueOnApply.Count; i++)
+                    cues[i] = GetGameplayCueConfig(data.CueOnApply[i]);
+                configs.Add(new ConfCueOnApply() { cues = cues });
+            }
+            // TODO
             // cueOnTick
+            // if (data.CueOnTick is { Count: > 0 })
+            // {
+            //     var cues = new GameplayCueConfig[data.CueOnTick.Count];
+            //     for (var i = 0; i < data.CueOnTick.Count; i++)
+            //         cues[i] = GetGameplayCueConfig(data.CueOnTick[i]);
+            //     configs.Add(new confcueti() { cues = cues });
+            // }
+            
             // cueOnAdd
+            if (data.CueOnAdd is { Count: > 0 })
+            {
+                var cues = new GameplayCueConfig[data.CueOnAdd.Count];
+                for (var i = 0; i < data.CueOnAdd.Count; i++)
+                    cues[i] = GetGameplayCueConfig(data.CueOnAdd[i]);
+                configs.Add(new ConfCueOnAdd() { cues = cues });
+            }
+            
+            // TODO
             // cueOnRemove
+            
+            // TODO
             // cueOnActivate
+            
+            // TODO
             // cueOnDeactivate
+            
+            // TODO
             // grantedAbility
+            
+            // TODO
             // stacking								
 
             return new GameplayEffectConfig(configs.ToArray());

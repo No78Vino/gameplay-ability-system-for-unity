@@ -4,18 +4,18 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public struct CCueOnExecution : IComponentData
+    public struct CCueOnApply : IComponentData
     {
         public NativeArray<Entity> cues;
     }
 
-    public sealed class ConfCueOnExecution : ConfCueBase
+    public sealed class ConfCueOnApply : ConfCueBase
     {
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
             var entities = CreateCueEntityArray(ge);
-            EntityHelper.AddComponent<CCueOnExecution>(ge);
-            EntityHelper.SetComponent(ge, new CCueOnExecution
+            EntityHelper.AddComponent<CCueOnApply>(ge);
+            EntityHelper.SetComponent(ge, new CCueOnApply
             {
                 cues = entities
             });

@@ -19,6 +19,7 @@ namespace GAS.Runtime
     public sealed class ConfPeriod:GameplayEffectComponentConfig
     {
         public int Period;
+        public bool ResetTimeCountWhenDeactivated;
         public GameplayEffectComponentConfig[][] GameplayEffectSettings;
 
         public override void LoadToGameplayEffectEntity(Entity ge)
@@ -34,7 +35,7 @@ namespace GAS.Runtime
             EntityHelper.SetComponent(ge, new CPeriod
             {
                 Period = Period,
-                ResetTimeCountWhenDeactivated = true,
+                ResetTimeCountWhenDeactivated = ResetTimeCountWhenDeactivated,
                 GameplayEffects = geEntities,
             });
         }

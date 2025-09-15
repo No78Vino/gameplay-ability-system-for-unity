@@ -287,9 +287,9 @@ namespace GAS.Runtime
         
         private void TriggerCueOnExecute(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager)
         {
-            if (!entityManager.HasComponent<CCueOnExecution>(gameplayEffect)) return;
+            if (!entityManager.HasComponent<CCueOnApply>(gameplayEffect)) return;
 
-            var cues = entityManager.GetComponentData<CCueOnExecution>(gameplayEffect).cues;
+            var cues = entityManager.GetComponentData<CCueOnApply>(gameplayEffect).cues;
             foreach (var cueEntity in cues)
             {
                 // 1.先判断tag是否可以播放cue
