@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using cfg;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.ComponentConfig;
@@ -20,10 +20,10 @@ namespace GAS.Runtime
     public static class XLuban
     {
         public const string GAME_CONF_DIR = "Assets/DemoForESC/Resources/Tables";
-        
-        private static cfg.Tables _tables;
 
-        public static cfg.Tables Tables
+        private static Tables _tables;
+
+        public static Tables Tables
         {
             get
             {
@@ -35,20 +35,20 @@ namespace GAS.Runtime
         public static void LoadTables()
         {
             if (_tables != null) return; // Already loaded
-            _tables = new cfg.Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
+            _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
         }
 
         public static AbilitySystemCellConfig GetAscConfig(int id)
         {
-            var data = _tables.Tbasc.Get(id);
+            var data = Tables.Tbasc.Get(id);
             if (data == null)
             {
                 Debug.LogError($"ASC_ID:{id}  不存在.");
                 return new AbilitySystemCellConfig(
-                    Array.Empty<int>(), Array.Empty<int>(), 
+                    Array.Empty<int>(), Array.Empty<int>(),
                     Array.Empty<AbilityConfig>(), 0);
             }
-            
+
             var abilityIds = data.Ability;
             var abilities = new AbilityConfig[abilityIds.Length];
             for (var i = 0; i < abilityIds.Length; i++)
@@ -56,12 +56,13 @@ namespace GAS.Runtime
                 var abilityId = abilityIds[i];
                 abilities[i] = GetAbilityConfig(abilityId);
             }
+
             return new AbilitySystemCellConfig(data.Tag, data.AttrSet, abilities, data.Level);
         }
-        
+
         public static GameplayCueConfig GetGameplayCueConfig(int id)
         {
-            var data = _tables.TbgameplayCue.Get(id);
+            var data = Tables.TbgameplayCue.Get(id);
             if (data == null)
             {
                 Debug.LogError($"Cue_ID:{id}  不存在.");
@@ -74,62 +75,61 @@ namespace GAS.Runtime
                 Debug.LogError($"Cue_ID:{id}  CueType:{data.CueLogic.GetType().Name} 不存在.");
                 return null;
             }
+
             var cueLogic = data.CueLogic;
-            string cueLogicName = cueLogic.GetType().Name;
-            Type cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
-            ICueParameter cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
+            var cueLogicName = cueLogic.GetType().Name;
+            var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
+            var cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
             cueParam?.LoadConfigParameterData(cueLogic);
             return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
         }
-        
-        
+
+
         public static GameplayEffectConfig GetGameplayEffectConfig(int id)
         {
-            var data = _tables.TbgameplayEffect.Get(id);
+            var data = Tables.TbgameplayEffect.Get(id);
             if (data == null)
             {
                 Debug.LogError($"GameplayEffect_ID:{id}  不存在.");
                 return null;
             }
+
             var configs = new List<GameplayEffectComponentConfig>();
-            // TODO
+
             // assetTags
             if (data.AssetTags is { Count: > 0 })
-                configs.Add(new ConfAssetTags() { tags = data.AssetTags.ToArray() });
-            
+                configs.Add(new ConfAssetTags { tags = data.AssetTags.ToArray() });
+
             // grantedTags
             if (data.GrantedTags is { Count: > 0 })
-                configs.Add(new ConfEffectGrantedTags() { tags = data.GrantedTags.ToArray() });
-            
+                configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });
+
             // applicationRequiredTags
             if (data.ApplicationRequiredTags is { Count: > 0 })
-                configs.Add(new ConfApplicationRequiredTags() { tags = data.ApplicationRequiredTags.ToArray() });
-            
+                configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });
+
             // ongoingRequiredTags
             if (data.OngoingRequiredTags is { Count: > 0 })
-                configs.Add(new ConfOngoingRequiredTags() { tags = data.OngoingRequiredTags.ToArray() });
-            
+                configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });
+
             // removeGameplayEffectsWithTags
             if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })
-                configs.Add(new ConfRemoveEffectWithTags() { tags = data.RemoveGameplayEffectsWithTags.ToArray() });
-            
+                configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });
+
             // immunityTags
             if (data.ImmunityTags is { Count: > 0 })
-                configs.Add(new ConfEffectImmunityTags() { tags = data.ImmunityTags.ToArray() });
-            
+                configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });
+
             // TODO
             // duration
             if (data.Duration != null && data.Duration.Time != 0)
-            {
-                configs.Add(new ConfDuration()
+                configs.Add(new ConfDuration
                 {
                     duration = data.Duration.Time,
-                    timeUnit = (TimeUnit)data.Duration.TimeUnit,
+                    timeUnit = (TimeUnit)data.Duration.TimeUnit
                     //ResetStartTimeWhenActivated = data.Duration.
                 });
-                
-            }
-            
+
             // period
             if (data.Period is { Time: > 0 })
             {
@@ -139,24 +139,24 @@ namespace GAS.Runtime
                     var effect = GetGameplayEffectConfig(effectID);
                     gameplayEffectSettings.Add(effect.ComponentConfigs);
                 }
-                configs.Add(new ConfPeriod()
+
+                configs.Add(new ConfPeriod
                 {
                     Period = data.Period.Time,
                     ResetTimeCountWhenDeactivated = data.Period.FirstTrigger,
-                    GameplayEffectSettings = gameplayEffectSettings.ToArray(),
+                    GameplayEffectSettings = gameplayEffectSettings.ToArray()
                 });
-                
             }
             // TODO
             // modifiers
-            
+
             // cueOnApply
             if (data.CueOnApply is { Count: > 0 })
             {
                 var cues = new GameplayCueConfig[data.CueOnApply.Count];
                 for (var i = 0; i < data.CueOnApply.Count; i++)
                     cues[i] = GetGameplayCueConfig(data.CueOnApply[i]);
-                configs.Add(new ConfCueOnApply() { cues = cues });
+                configs.Add(new ConfCueOnApply { cues = cues });
             }
             // TODO
             // cueOnTick
@@ -167,89 +167,86 @@ namespace GAS.Runtime
             //         cues[i] = GetGameplayCueConfig(data.CueOnTick[i]);
             //     configs.Add(new confcueti() { cues = cues });
             // }
-            
+
             // cueOnAdd
             if (data.CueOnAdd is { Count: > 0 })
             {
                 var cues = new GameplayCueConfig[data.CueOnAdd.Count];
                 for (var i = 0; i < data.CueOnAdd.Count; i++)
                     cues[i] = GetGameplayCueConfig(data.CueOnAdd[i]);
-                configs.Add(new ConfCueOnAdd() { cues = cues });
+                configs.Add(new ConfCueOnAdd { cues = cues });
             }
-            
+
             // TODO
             // cueOnRemove
-            
+
             // TODO
             // cueOnActivate
-            
+
             // TODO
             // cueOnDeactivate
-            
+
             // TODO
             // grantedAbility
-            
+
             // TODO
             // stacking								
 
             return new GameplayEffectConfig(configs.ToArray());
         }
-        
+
         public static AbilityConfig GetAbilityConfig(int id)
         {
-            var data = _tables.Tbability.Get(id);
+            var data = Tables.Tbability.Get(id);
             if (data == null)
             {
                 Debug.LogError($"Ability_ID:{id}  不存在.");
                 return new AbilityConfig(Array.Empty<GameplayAbilityComponentConfig>());
             }
+
             var configs = new List<GameplayAbilityComponentConfig>();
             // cost								
             if (data.Cost != 0)
-            {
-                configs.Add(new ConfAbilityCost()
+                configs.Add(new ConfAbilityCost
                 {
                     CostComponentConfigs = GetGameplayEffectConfig(data.Cost).ComponentConfigs
                 });
-            }
-            
+
             // assetTags
             if (data.AssetTags is { Count: > 0 })
-                configs.Add(new ConfAbilityAssetTags() { tags = data.AssetTags.ToArray() });
+                configs.Add(new ConfAbilityAssetTags { tags = data.AssetTags.ToArray() });
 
             // cancelAbilityWithTags
             if (data.CancelAbilityWithTags is { Count: > 0 })
-                configs.Add(new ConfCancelAbilityTags() { tags = data.CancelAbilityWithTags.ToArray() });
-            
+                configs.Add(new ConfCancelAbilityTags { tags = data.CancelAbilityWithTags.ToArray() });
+
             // blockAbilityWithTags
             if (data.BlockAbilityWithTags is { Count: > 0 })
-                configs.Add(new ConfBlockAbilityTags() { tags = data.BlockAbilityWithTags.ToArray() });
-            
+                configs.Add(new ConfBlockAbilityTags { tags = data.BlockAbilityWithTags.ToArray() });
+
             // activationOwnedTags
             if (data.ActivationOwnedTags is { Count: > 0 })
-                configs.Add(new ConfAbilityActivationOwnedTags() { tags = data.ActivationOwnedTags.ToArray() });
-            
+                configs.Add(new ConfAbilityActivationOwnedTags { tags = data.ActivationOwnedTags.ToArray() });
+
             // activationRequiredTags
             if (data.ActivationRequiredTags is { Count: > 0 })
-                configs.Add(new ConfAbilityActivationRequiredTags() { tags = data.ActivationRequiredTags.ToArray() });
-            
+                configs.Add(new ConfAbilityActivationRequiredTags { tags = data.ActivationRequiredTags.ToArray() });
+
             // activationBlockedTags
             if (data.ActivationBlockedTags is { Count: > 0 })
-                configs.Add(new ConfAbilityActivationBlockedTags() { tags = data.ActivationBlockedTags.ToArray() });
-            
+                configs.Add(new ConfAbilityActivationBlockedTags { tags = data.ActivationBlockedTags.ToArray() });
+
             // cdEffect cd
             if (data.Cd != 0)
-            {
-                configs.Add(new ConfAbilityCooldown()
+                configs.Add(new ConfAbilityCooldown
                 {
                     Cooldown = data.Cd,
                     CooldownComponentConfigs = GetGameplayEffectConfig(data.CdEffect).ComponentConfigs
                 });
-            }
-            
+
             // TODO
             // abilityLogic						
-            
+
             return new AbilityConfig(configs.ToArray());
         }
     }
