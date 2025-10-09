@@ -457,6 +457,12 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
         
+        [MenuItem("EXTool/EX-GAS/生成脚本/配置表拓展类")]
+        public static void GenerateLubanExtension()
+        {
+            CodeGeneratorLubanPart.GenerateLubanExtension();
+        }
+        
         /// <summary>
         ///  生成所有GAS相关代码
         /// </summary>
@@ -469,6 +475,7 @@ namespace GAS.Editor
             GenerateAbilityCode();
             GenerateCueCode();
             GenerateMmcCode();
+            GenerateLubanExtension();
         }
     }
 }
