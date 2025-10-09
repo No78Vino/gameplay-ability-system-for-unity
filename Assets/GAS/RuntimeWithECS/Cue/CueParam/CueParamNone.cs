@@ -9,7 +9,7 @@ namespace GAS.Runtime
         {
         }
         
-        public void LoadConfigParameterData(CueLogic cfgCueLogic)
+        public void LoadConfigParameterData(object cfgCueLogic)
         {
         }
         

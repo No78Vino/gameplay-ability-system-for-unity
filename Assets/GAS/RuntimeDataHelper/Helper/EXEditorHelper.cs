@@ -288,6 +288,40 @@ namespace GAS.RuntimeDataHelper.Helper
             return _cachedAbilityLogicToAbilityParamConfigTypeMap;
         }
 
+        private static Dictionary<string, Type> _cachedAbilityLogicToAbilityParamTypeMap;
+
+        public static Dictionary<string, Type> GetCachedAbilityLogicToAbilityParamTypeMap()
+        {
+            if (_cachedAbilityLogicToAbilityParamTypeMap != null)
+                return _cachedAbilityLogicToAbilityParamTypeMap;
+            var types = GetCachedAbilityLogicTypes();
+            _cachedAbilityLogicToAbilityParamTypeMap = new Dictionary<string, Type>();
+            foreach (var derivedType in types)
+            {
+                var baseType = derivedType.BaseType; // 获取基类类型
+
+                if (baseType != null && baseType.IsGenericType)
+                {
+                    // 获取泛型类型定义（如 AbilityLogicBase<>）
+                    var genericBaseDef = baseType.GetGenericTypeDefinition();
+
+                    // 确认是否是所需的基类泛型定义
+                    if (genericBaseDef == typeof(AbilityLogicBase<>))
+                    {
+                        // 获取实际使用的泛型参数（如 AbilityParamString）
+                        var genericArgs = baseType.GetGenericArguments();
+                        var paramType = genericArgs[0];
+
+                        if (derivedType.FullName != null)
+                        {
+                            _cachedAbilityLogicToAbilityParamTypeMap[derivedType.FullName] = paramType;
+                        }
+                    }
+                }
+            }
+
+            return _cachedAbilityLogicToAbilityParamTypeMap;
+        }
         
         public static List<AbilityConfigAsset> GetAllAbilityConfigAssets()
         {

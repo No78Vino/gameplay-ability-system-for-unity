@@ -25,7 +25,7 @@ namespace GAS.Runtime
             Value = v;
         }
         
-        public void LoadConfigParameterData(CueLogic cfgCueLogic)
+        public void LoadConfigParameterData(object cfgCueLogic)
         {
             if (cfgCueLogic is cfg.GameplayCueLog cueLog)
             {

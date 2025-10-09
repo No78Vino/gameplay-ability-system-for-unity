@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GAS.RuntimeDataHelper.Helper;
+using SimpleJSON;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
 
@@ -341,7 +342,7 @@ namespace GAS.Editor
         [MenuItem("EXTool/EX-GAS/生成脚本/Ability")]
         public static void GenerateAbilityCode()
         {
-            // TODO
+            CodeGeneratorAbilityPart.GenerateAbilityCode();
         }
         
         [MenuItem("EXTool/EX-GAS/生成脚本/GameplayCue")]

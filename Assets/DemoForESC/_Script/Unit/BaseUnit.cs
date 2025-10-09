@@ -31,7 +31,7 @@ namespace DemoForESC._Script
         {
             AbilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
             AbilitySystemCellMono.Init(XLuban.GetAscConfig(_ascPresetId));
-            var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(GEN_AbilityCode.ABILITY_move);
+            var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(XAbility.ABILITY_move);
             ((ALMove)abilityLogic.Logic).SetUnit(this);
         }
         
@@ -47,18 +47,18 @@ namespace DemoForESC._Script
         
         public virtual void Move(Vector3 direction)
         {
-            if(!AbilitySystemCellMono.Cell.IsAbilityActive(GEN_AbilityCode.ABILITY_move))
-                AbilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
+            if(!AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_move))
+                AbilitySystemCellMono.TryActivateAbility(XAbility.ABILITY_move,_cacheParamMove);
             
             var viewPointForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
             _cacheParamMove.SetValue(direction,viewPointForward,0.1f);
-            AbilitySystemCellMono.Cell.SetAbilityParam(GEN_AbilityCode.ABILITY_move,_cacheParamMove);
+            AbilitySystemCellMono.Cell.SetAbilityParam(XAbility.ABILITY_move,_cacheParamMove);
         }
         
         public virtual void StopMove()
         {
-            if(AbilitySystemCellMono.Cell.IsAbilityActive(GEN_AbilityCode.ABILITY_move)) 
-                AbilitySystemCellMono.TryEndAbility(GEN_AbilityCode.ABILITY_move);
+            if(AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_move)) 
+                AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_move);
         }
         
         public virtual void Jump()

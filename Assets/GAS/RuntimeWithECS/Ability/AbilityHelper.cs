@@ -12,20 +12,19 @@ namespace GAS.RuntimeWithECS
     {
         #region AbilityLogic
         private static readonly Dictionary<string, Type> AbilityLogicMap = new();
-
-        public static void RegisterAbilityLogic(string sType, Type logicType)
+        private static readonly Dictionary<string, Type> AbilityLogicParamTypeMap = new();
+        private static readonly Dictionary<string, string> AbilityType2AbilityParamTypeMap = new();
+        
+        public static void RegisterAbilityLogic(string sType, Type logicType,Type abilityParamType)
         {
             AbilityLogicMap[sType] = logicType;
+            AbilityLogicParamTypeMap[logicType.Name] = abilityParamType;
+            AbilityType2AbilityParamTypeMap[sType] = abilityParamType.Name;
         }
 
         public static Type GetAbilityLogicType(string sType)
         {
             return AbilityLogicMap[sType];
-        }
-
-        public static void RegisterAbilityLogic<T>(string sType) where T : AbilityLogicBase
-        {
-            RegisterAbilityLogic(sType, typeof(T));
         }
 
         public static AbilityLogicBase TryCreateAbilityLogic(string logicType,Entity ability)
@@ -51,6 +50,13 @@ namespace GAS.RuntimeWithECS
 
             return null;
         }
+
+        public static Type GetAbilityLogicParamType(string abilityLogicName)
+        {
+            var abilityParam = AbilityType2AbilityParamTypeMap[abilityLogicName];
+            return AbilityLogicParamTypeMap[abilityParam];
+        }
+        
         #endregion
         
         public static Entity CreateAbilityEntity(GameplayAbilityComponentConfig[] configs)

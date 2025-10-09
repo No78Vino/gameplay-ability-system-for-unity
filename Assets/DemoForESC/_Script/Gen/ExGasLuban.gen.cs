@@ -13,6 +13,7 @@ using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Static;
 using SimpleJSON;
+using UnityEditor;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -80,7 +81,22 @@ namespace GAS.Runtime
             var cueLogicName = cueLogic.GetType().Name;
             var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
             var cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
-            cueParam?.LoadConfigParameterData(cueLogic);
+            if (cueParam != null)
+            {
+                if (cueLogic is cfg.GameplayCueLog gameplayCueLog)
+                {
+                    var gameplayCueLogParam = cueParam as CueParamString;
+                    gameplayCueLogParam?.SetValue(gameplayCueLog.Value);
+                    cueParam = gameplayCueLogParam;
+                }
+                if (cueLogic is cfg.CueLoging cueLoging)
+                {
+                    var cueLogingParam = cueParam as CueParamString;
+                    cueLogingParam?.SetValue(cueLoging.Value);
+                    //cueLogingParam?.SetD(cueLoging.Duration);
+                    cueParam = cueLogingParam;
+                }
+            }
             return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
         }
 
@@ -246,6 +262,37 @@ namespace GAS.Runtime
 
             // TODO
             // abilityLogic						
+            var abilityLogicType = AbilityHelper.GetAbilityLogicType(data.AbilityLogic.GetType().Name);
+            if (abilityLogicType == null)
+            {
+                Debug.LogError($"Ability_ID:{id}  AbilityLogicType:{data.AbilityLogic.GetType().Name} 不存在.");
+            }
+            else
+            {
+                var abilityLogic = data.AbilityLogic;
+                var abilityLogicName = abilityLogic.GetType().Name;
+                var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);
+                var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;
+                if (abilityParam != null)
+                {
+                    if (abilityLogic is cfg.ALApplyEffect alApplyEffect)
+                    {
+                        var alApplyEffectParam = abilityParam as AbilityParamArrayInt;
+                        alApplyEffectParam?.SetValue(alApplyEffect.Value.ToArray());
+                        abilityParam = alApplyEffectParam;
+                    }
+                    if (abilityLogic is cfg.ALDebugLog alDebugLog)
+                    {
+                        var alDebugLogParam = abilityParam as AbilityParamString;
+                        alDebugLogParam?.SetValue(alDebugLog.Value);
+                        abilityParam = alDebugLogParam;
+                    }
+                }
+                configs.Add(new MCConfAbilityLogic()
+                {
+                    abilityParam = abilityParam
+                });
+            }
 
             return new AbilityConfig(configs.ToArray());
         }
