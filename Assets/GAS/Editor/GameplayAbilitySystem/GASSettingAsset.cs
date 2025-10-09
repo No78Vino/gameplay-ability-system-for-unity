@@ -85,6 +85,8 @@ namespace GAS.Editor
         public string PathOfExcelAsc => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ASC}.xlsx";
         public string PathOfCodeAsc => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ASC}.cs";
         
+        public string PathOfCodeLubanExtesion => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LUBAN}.cs";
+        
         [TitleGroup("A/文件路径一览",Order = 99)]
         [DisplayAsString(TextAlignment.Left, true)]
         [HideLabel]
