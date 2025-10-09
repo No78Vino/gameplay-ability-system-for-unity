@@ -2,9 +2,6 @@
 using System.IO;
 using GAS.RuntimeDataHelper.Helper;
 using OfficeOpenXml;
-using SimpleJSON;
-using Sirenix.OdinInspector;
-using Unity.Entities;
 
 namespace GAS.Editor
 {
@@ -70,7 +67,6 @@ namespace GAS.Editor
             writer.WriteLine("}");
         }
         
-        #region 可视化读写编辑 Ability 配置xlsx文件
         
         private static Dictionary<int,string> GetAbilityNames()
         {
@@ -80,53 +76,21 @@ namespace GAS.Editor
             using (var package = new ExcelPackage(xlsxFileInfo))
             {
                 var worksheet = package.Workbook.Worksheets[1];
-                // 注册表头
-                //var headerMap = new Dictionary<string, int>();
-                // for (var i = 0; i < 500; i++)
-                // {
-                //     if (worksheet.Cells[1, i + 1].Value == null) continue;
-                //     //var header = worksheet.Cells[1, i + 1].Value.ToString();
-                //     // 去除格式后缀（即#之后的内容）
-                //     //header = header.Split('#')[0];
-                //     //if (string.IsNullOrEmpty(header)) continue;
-                //     //headerMap[header] = i + 1; // Excel列从1开始
-                // }
-
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                // _data = new Dictionary<int, Dictionary<int, object>>();
-                // _abilityLogicParameter = new Dictionary<int, List<object>>();
-                // _idToRowMap = new Dictionary<int, int>();
+               
                 var safeCnt = 99999;
                 var row = 4;
                 while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
                 {
                     safeCnt--;
-                    //var rowData = new Dictionary<int, object>();
+                   
                     var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
                     result.Add(id,worksheet.Cells[row, 3].Value.ToString());
-                    // foreach (var colIndex in _headerMap.Values)
-                    //     rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
-                    //
-                    // var parameterCol = _headerMap["abilityLogic"];
-                    // var abilityParams = new List<object>();
-                    // for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
-                    // {
-                    //     var v = worksheet.Cells[row, i].Value;
-                    //     rowData.Add(i, v);
-                    //     abilityParams.Add(v);
-                    // }
-                    //
-                    // _data.Add(id, rowData);
-                    // _abilityLogicParameter.Add(id, abilityParams);
-                    // _idToRowMap.Add(id, row);
+                   
                     row++;
                 }
             }
 
             return result;
         }
-
-        #endregion
     }
 }
