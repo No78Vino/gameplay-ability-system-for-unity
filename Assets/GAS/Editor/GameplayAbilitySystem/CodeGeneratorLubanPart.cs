@@ -36,11 +36,15 @@ namespace GAS.Editor
                     writer.Indent++;
                     {
                         writer.WriteLine("{");
+                        writer.Indent++;
                         writer.WriteLine("get");
                         writer.WriteLine("{");
+                        writer.Indent++;
                         writer.WriteLine("if (_tables == null) LoadTables();");
                         writer.WriteLine("return _tables;");
+                        writer.Indent--;
                         writer.WriteLine("}");
+                        writer.Indent--;
                         writer.WriteLine("}");
                     }
                     writer.Indent--;
