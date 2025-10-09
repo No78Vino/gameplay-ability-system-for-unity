@@ -19,6 +19,7 @@ namespace GAS.Editor
 
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Collections.Generic;");
+            writer.WriteLine("using cfg;");
 
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
@@ -35,15 +36,11 @@ namespace GAS.Editor
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
-                        writer.WriteLine("{");
-                        writer.Indent++;
                         writer.WriteLine("get");
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("if (_tables == null) LoadTables();");
                         writer.WriteLine("return _tables;");
-                        writer.Indent--;
-                        writer.WriteLine("}");
                         writer.Indent--;
                         writer.WriteLine("}");
                     }
