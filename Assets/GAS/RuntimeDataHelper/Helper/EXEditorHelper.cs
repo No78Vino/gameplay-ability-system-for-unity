@@ -27,7 +27,27 @@ namespace GAS.RuntimeDataHelper.Helper
             else
                 Debug.LogWarning(message);
         }
+        
+        public static List<string> GetAllReadOnlyFieldNames(Type targetType)
+        {
+            // 绑定标志：获取实例字段（包括public和非public），但不包括静态字段
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        
+            // 获取所有字段，并通过IsInitOnly识别readonly字段
+            FieldInfo[] allFields = targetType.GetFields(bindingFlags);
+            List<string> readonlyFieldNames = new List<string>();
 
+            foreach (FieldInfo field in allFields)
+            {
+                // 关键：IsInitOnly为true表示readonly字段
+                if (field.IsInitOnly)
+                {
+                    readonlyFieldNames.Add(field.Name);
+                }
+            }
+
+            return readonlyFieldNames;
+        }
 
         /// <summary>
         ///     获取工程中所有指定类型的 ScriptableObject 资源 (Odin优化版)

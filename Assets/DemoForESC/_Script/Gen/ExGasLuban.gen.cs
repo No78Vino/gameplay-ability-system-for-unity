@@ -259,8 +259,7 @@ namespace GAS.Runtime
                     Cooldown = data.Cd,
                     CooldownComponentConfigs = GetGameplayEffectConfig(data.CdEffect).ComponentConfigs
                 });
-
-            // TODO
+            
             // abilityLogic						
             var abilityLogicType = AbilityHelper.GetAbilityLogicType(data.AbilityLogic.GetType().Name);
             if (abilityLogicType == null)
