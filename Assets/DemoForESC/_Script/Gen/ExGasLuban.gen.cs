@@ -204,9 +204,35 @@ namespace GAS.Runtime
 
             // TODO
             // grantedAbility
+            if (data.GrantedAbility.Count > 0)
+            {
+                // configs.Add(new Confabili);
+            }
+            
 
-            // TODO
-            // stacking								
+            // stacking		
+            if (data.Stacking.StackCode != 0)
+            {
+                var effectConfigs = new List<GameplayEffectConfig>();
+                foreach (var effectID in data.Stacking.OverflowEffects)
+                {
+                    var effect = GetGameplayEffectConfig(effectID);
+                    effectConfigs.Add(effect);
+                }
+
+                configs.Add(new ConfStacking()
+                {
+                    StackingCode = data.Stacking.StackCode,
+                    StackType = (EffectStackType)data.Stacking.StackingType,
+                    LimitCount = data.Stacking.LimitCount,
+                    EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.DurationRefreshPolicy,
+                    EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.PeriodResetPolicy,
+                    EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.ExpirationPolicy,
+                    denyOverflowApplication = data.Stacking.DenyOverflowApplication,
+                    clearStackOnOverflow = data.Stacking.ClearStackOnOverflow,
+                    overflowEffects = effectConfigs.ToArray()
+                });
+            }
 
             return new GameplayEffectConfig(configs.ToArray());
         }
