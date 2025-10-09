@@ -18,7 +18,7 @@ public sealed partial class period : Luban.BeanBase
     public period(JSONNode _buf) 
     {
         { if(!_buf["time"].IsNumber) { throw new SerializationException(); }  Time = _buf["time"]; }
-        { var __json0 = _buf["effects"]; if(!__json0.IsArray) { throw new SerializationException(); } Effects = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Effects.Add(__v0); }   }
+        { var __json0 = _buf["effects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Effects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Effects[__index0++] = __v0; }   }
         { if(!_buf["firstTrigger"].IsBoolean) { throw new SerializationException(); }  FirstTrigger = _buf["firstTrigger"]; }
     }
 
@@ -28,7 +28,7 @@ public sealed partial class period : Luban.BeanBase
     }
 
     public readonly int Time;
-    public readonly System.Collections.Generic.List<int> Effects;
+    public readonly int[] Effects;
     public readonly bool FirstTrigger;
    
     public const int __ID__ = -991726143;

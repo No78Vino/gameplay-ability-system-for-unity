@@ -25,7 +25,7 @@ public sealed partial class stacking : Luban.BeanBase
         { if(!_buf["expirationPolicy"].IsNumber) { throw new SerializationException(); }  ExpirationPolicy = _buf["expirationPolicy"]; }
         { if(!_buf["denyOverflowApplication"].IsBoolean) { throw new SerializationException(); }  DenyOverflowApplication = _buf["denyOverflowApplication"]; }
         { if(!_buf["clearStackOnOverflow"].IsBoolean) { throw new SerializationException(); }  ClearStackOnOverflow = _buf["clearStackOnOverflow"]; }
-        { var __json0 = _buf["overflowEffects"]; if(!__json0.IsArray) { throw new SerializationException(); } OverflowEffects = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OverflowEffects.Add(__v0); }   }
+        { var __json0 = _buf["overflowEffects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; OverflowEffects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OverflowEffects[__index0++] = __v0; }   }
     }
 
     public static stacking Deserializestacking(JSONNode _buf)
@@ -41,7 +41,7 @@ public sealed partial class stacking : Luban.BeanBase
     public readonly int ExpirationPolicy;
     public readonly bool DenyOverflowApplication;
     public readonly bool ClearStackOnOverflow;
-    public readonly System.Collections.Generic.List<int> OverflowEffects;
+    public readonly int[] OverflowEffects;
    
     public const int __ID__ = 1302685786;
     public override int GetTypeId() => __ID__;

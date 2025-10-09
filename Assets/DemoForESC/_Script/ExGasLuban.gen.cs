@@ -302,7 +302,7 @@ namespace GAS.Runtime
                     if (abilityLogic is cfg.ALApplyEffect alApplyEffect)
                     {
                         var alApplyEffectParam = abilityParam as AbilityParamArrayInt;
-                        alApplyEffectParam?.SetValue(alApplyEffect.Value.ToArray());
+                        alApplyEffectParam?.SetValue(alApplyEffect.Value);
                         abilityParam = alApplyEffectParam;
                     }
                     if (abilityLogic is cfg.ALDebugLog alDebugLog)

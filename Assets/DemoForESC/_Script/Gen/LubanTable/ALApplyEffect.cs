@@ -17,7 +17,7 @@ public sealed partial class ALApplyEffect : AbilityLogic
 {
     public ALApplyEffect(JSONNode _buf)  : base(_buf) 
     {
-        { var __json0 = _buf["value"]; if(!__json0.IsArray) { throw new SerializationException(); } Value = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Value.Add(__v0); }   }
+        { var __json0 = _buf["value"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Value = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Value[__index0++] = __v0; }   }
     }
 
     public static ALApplyEffect DeserializeALApplyEffect(JSONNode _buf)
@@ -25,7 +25,7 @@ public sealed partial class ALApplyEffect : AbilityLogic
         return new ALApplyEffect(_buf);
     }
 
-    public readonly System.Collections.Generic.List<int> Value;
+    public readonly int[] Value;
    
     public const int __ID__ = -1283340940;
     public override int GetTypeId() => __ID__;
