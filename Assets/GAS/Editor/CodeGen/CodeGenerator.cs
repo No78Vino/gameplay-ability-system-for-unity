@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using GAS.Editor;
-using SimpleJSON;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
 
