@@ -10,7 +10,7 @@ using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace GAS.RuntimeDataHelper.Helper
+namespace GAS.Editor
 {
     public static class EXEditorHelper
     {
@@ -46,103 +46,10 @@ namespace GAS.RuntimeDataHelper.Helper
             return readonlyFieldNames;
         }
 
-        /// <summary>
-        ///     获取工程中所有指定类型的 ScriptableObject 资源 (Odin优化版)
-        /// </summary>
-        /// <typeparam name="T">继承自 ScriptableObject 的类型</typeparam>
-        /// <param name="includeSubAssets">是否包含子资源（如嵌套在 Prefab 中的资源）</param>
-        public static List<T> FindAll<T>(bool includeSubAssets = false) where T : ScriptableObject
-        {
-            // Odin 的缓存式查找（性能优化关键）
-            var assets = AssetUtilities.GetAllAssetsOfType<T>();
-
-            var results = new List<T>();
-
-            foreach (var asset in assets)
-                // // 直接通过 GUID 获取强类型对象
-                // var asset = AssetDatabase.LoadAssetAtPath<T>(
-                //     AssetDatabase.GUIDToAssetPath(guid));
-                results.Add(asset);
-
-            return results;
-        }
-
-        /// <summary>
-        ///     快速版本（不加载资源本体）
-        /// </summary>
-        public static List<string> FindAllPaths<T>() where T : ScriptableObject
-        {
-            var assets = AssetUtilities.GetAllAssetsOfType<T>().ToList();
-            List<string> paths = new();
-            foreach (var a in assets)
-            {
-                var p = AssetDatabase.GetAssetPath(a);
-                if (!string.IsNullOrEmpty(p))
-                    paths.Add(p);
-            }
-
-            return paths;
-        }
-
         public static int GetFrameRate()
         {
             return (int)Math.Round(1 / Time.fixedDeltaTime);
         }
-        
-        #region GameplayTag
-
-        private static GameplayTag[] _gameplayTags;
-
-        public static IEnumerable<GameplayTag> GameplayTags
-        {
-            get
-            {
-                _gameplayTags ??= LoadTags();
-                return _gameplayTags;
-            }
-        }
-
-        private static GameplayTag[] LoadTags()
-        {
-            var tagLibType = TypeUtil.FindTypeInAllAssemblies("GAS.Runtime.GTagLib");
-            if (tagLibType == null)
-            {
-                Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            const string fieldName = "TagMap";
-            var field = tagLibType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
-            if (field == null)
-            {
-                Debug.LogError($"[EX] Field {fieldName} not found in GTagLib!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            var value = field.GetValue(null);
-            if (value is not Dictionary<string, GameplayTag> tagMap)
-            {
-                Debug.LogError($"[EX] Field {fieldName} is not a Dictionary<string, GameplayTag> in GTagLib!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            return tagMap.Values.ToArray();
-        }
-        
-        private static ValueDropdownItem[] _gameplayTagChoices;
-        
-        public static IEnumerable<ValueDropdownItem> GameplayTagCodeChoices
-        {
-            get
-            {
-                _gameplayTagChoices ??= ReflectionHelper.GameplayTags
-                    .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag.Code))
-                    .ToArray();
-                return _gameplayTagChoices;
-            }
-        }
-
-        #endregion
         
         #region Ability
 

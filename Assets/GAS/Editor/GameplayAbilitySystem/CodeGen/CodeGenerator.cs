@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using GAS.RuntimeDataHelper.Helper;
+using GAS.Editor;
 using SimpleJSON;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
@@ -484,8 +484,9 @@ namespace GAS.Editor
                         {
                             var mmcName = mmcType.Name;
                             var typeFullName = mmcType.FullName;
+                            var mmcParaName = EditorMmcHelper.MmcToMmcParamTypeMap()[mmcName];
                             writer.WriteLine($"var {mmcName} = typeof({typeFullName});");
-                            writer.WriteLine($"MmcHelper.RegisterMmc(MMC_{mmcName}, {mmcName});");
+                            writer.WriteLine($"MmcHelper.RegisterMmc(MMC_{mmcName}, {mmcName},typeof({mmcParaName.FullName}));");
                         }
                     }
                     writer.Indent--;

@@ -5,7 +5,7 @@ using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
 
-namespace GAS.RuntimeDataHelper.Helper
+namespace GAS.Editor
 {
     public static class EditGameplayEffectHelper
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using GAS.Runtime;
 using GAS.RuntimeDataHelper.GameplayEffect;
-using GAS.RuntimeDataHelper.Helper;
+using GAS.Editor;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;

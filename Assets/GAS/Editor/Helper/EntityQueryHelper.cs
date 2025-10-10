@@ -3,7 +3,7 @@ using Unity.Collections;
 using System.Collections.Generic;
 using GAS.Runtime;
 
-namespace GAS.RuntimeDataHelper.Helper
+namespace GAS.Editor
 {
     public static class EntityQueryHelper
     {

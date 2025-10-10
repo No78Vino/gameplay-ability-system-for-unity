@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
-using GAS.RuntimeDataHelper.Helper;
+using GAS.Editor;
+using GAS.Runtime;
 using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
@@ -31,10 +32,11 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
         
         public ModMagnitudeCalculationBase CreateMmc()
         {
-            var typeMap = EditGameplayEffectHelper.GetCachedMmcToMmcParamConfigTypeMap();
-            MmcParamConfigBase config = null;
-            if (typeMap.TryGetValue(MmcType, out var value))
-                config = Activator.CreateInstance(value) as MmcParamConfigBase;
+            var mmcParaType = MmcHelper.GetMmcParamTypeByMmcType(MmcType);
+            if (mmcParaType != null)
+            {
+                MmcParamConfigBase config = Activator.CreateInstance(mmcParaType) as MmcParamConfigBase;
+            }
 
             return null;
         }
@@ -46,11 +48,11 @@ namespace GAS.RuntimeDataHelper.GameplayEffect
             _jsonMmcParamConfig.Data = JsonProxyHelper.Serialize(mmcParamConfig);
 
 
-            var typeMap = EditGameplayEffectHelper.GetCachedMmcToMmcParamConfigTypeMap();
-            if (typeMap.TryGetValue(MmcType, out var value))
+            var mmcParaType = MmcHelper.GetMmcParamTypeByMmcType(MmcType);
+            if (mmcParaType != null)
             {
-                if (mmcParamConfig.GetType() != value)
-                    mmcParamConfig = Activator.CreateInstance(value) as MmcParamConfigBase;
+                if (mmcParamConfig.GetType() != mmcParaType)
+                    mmcParamConfig = Activator.CreateInstance(mmcParaType) as MmcParamConfigBase;
             }
             else
             {

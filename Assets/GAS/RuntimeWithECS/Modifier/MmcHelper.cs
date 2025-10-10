@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
-using GAS.Runtime;
 using GAS.RuntimeWithECS.Modifier;
 using GAS.RuntimeWithECS;
 using Unity.Entities;
@@ -71,10 +69,14 @@ namespace GAS.Runtime
         #region MMC
 
         private static readonly Dictionary<string, Type> MmcTypeMap = new();
-
-        public static void RegisterMmc(string sType, Type logicType)
+        private static readonly Dictionary<string, Type> MmcParamTypeMap = new();
+        private static readonly Dictionary<string, string> MmcType2MmcParamTypeMap = new();
+        
+        public static void RegisterMmc(string sType, Type logicType,Type mmcParamType)
         {
             MmcTypeMap[sType] = logicType;
+            MmcParamTypeMap[mmcParamType.Name] = mmcParamType;
+            MmcType2MmcParamTypeMap[sType] = mmcParamType.Name;
         }
 
         public static Type GetMmcType(string sType)
@@ -82,11 +84,24 @@ namespace GAS.Runtime
             return MmcTypeMap[sType];
         }
 
-        public static void RegisterMmc<T>(string sType) where T : ModMagnitudeCalculationBase
+        public static Type GetMmcParamTypeByMmcType(Type mmcType)
         {
-            RegisterMmc(sType, typeof(T));
+            var cueParam = MmcType2MmcParamTypeMap[mmcType.Name];
+            return MmcParamTypeMap[cueParam];
+        }
+        
+        public static Type GetMmcParamTypeByMmcType(string mmcType)
+        {
+            var cueParam = MmcType2MmcParamTypeMap[mmcType];
+            return MmcParamTypeMap[cueParam];
+        }
+        
+        public static void RegisterMmc<T>(string sType,Type mmcParam) where T : ModMagnitudeCalculationBase
+        {
+            RegisterMmc(sType, typeof(T),mmcParam);
         }
 
+        
         #endregion
     }
 }

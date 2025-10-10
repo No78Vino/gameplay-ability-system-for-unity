@@ -13,9 +13,9 @@ namespace GAS.Runtime
         public static void LoadMmcType()
         {
             var MMCNone = typeof(GAS.RuntimeWithECS.MMCNone);
-            MmcHelper.RegisterMmc(MMC_MMCNone, MMCNone);
+            MmcHelper.RegisterMmc(MMC_MMCNone, MMCNone,MMCNone);
             var MMCScalableFloat = typeof(GAS.Runtime.MMCScalableFloat);
-            MmcHelper.RegisterMmc(MMC_MMCScalableFloat, MMCScalableFloat);
+            MmcHelper.RegisterMmc(MMC_MMCScalableFloat, MMCScalableFloat,MMCNone);
         }
     }
 }
