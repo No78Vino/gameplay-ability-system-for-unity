@@ -41,7 +41,7 @@ public sealed partial class mmc : Luban.BeanBase
     /// </summary>
     public readonly string Desc;
     /// <summary>
-    /// mmc修改器计算逻辑：支持多态，添加新CueLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
+    /// mmc修改器计算逻辑：支持多态，添加新MmcLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
     /// </summary>
     public readonly MmcLogic MmcLogic;
    

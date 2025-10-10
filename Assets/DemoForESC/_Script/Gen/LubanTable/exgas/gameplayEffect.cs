@@ -86,7 +86,7 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// </summary>
     public readonly period Period;
     /// <summary>
-    /// 属性数值修改器
+    /// 属性数值修改器（每组共5个参数：1.AttrSet属性集ID；2.Attribute属性ID；3.Magnitude基础模值；4.Operation操作类型；5.MMC计算逻辑【即exgas.mmc中的计算类型ID】）
     /// </summary>
     public readonly System.Collections.Generic.List<modifier> Modifiers;
     /// <summary>

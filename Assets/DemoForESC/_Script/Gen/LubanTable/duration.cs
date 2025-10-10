@@ -19,6 +19,7 @@ public sealed partial class duration : Luban.BeanBase
     {
         { if(!_buf["timeUnit"].IsNumber) { throw new SerializationException(); }  TimeUnit = _buf["timeUnit"]; }
         { if(!_buf["time"].IsNumber) { throw new SerializationException(); }  Time = _buf["time"]; }
+        { if(!_buf["ResetStartTimeWhenActivated"].IsBoolean) { throw new SerializationException(); }  ResetStartTimeWhenActivated = _buf["ResetStartTimeWhenActivated"]; }
     }
 
     public static duration Deserializeduration(JSONNode _buf)
@@ -28,7 +29,7 @@ public sealed partial class duration : Luban.BeanBase
 
     public readonly int TimeUnit;
     public readonly int Time;
-    public readonly bool ResetStartTimeWhenActivated = false;
+    public readonly bool ResetStartTimeWhenActivated;
    
     public const int __ID__ = -1992012396;
     public override int GetTypeId() => __ID__;
@@ -42,6 +43,7 @@ public sealed partial class duration : Luban.BeanBase
         return "{ "
         + "timeUnit:" + TimeUnit + ","
         + "time:" + Time + ","
+        + "ResetStartTimeWhenActivated:" + ResetStartTimeWhenActivated + ","
         + "}";
     }
 }
