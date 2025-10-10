@@ -47,14 +47,5 @@ namespace GAS.Editor
             if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
             return cueParamEditor;
         }
-
-        public static Type GetCueParamEditorType(string type)
-        {
-            var map = CueToCueParamTypeMap();
-            if (!map.TryGetValue(type, out var cueParamConfigType))
-                throw new KeyNotFoundException($"未找到类型为 {type} 的 CueParamEditor 类型。");
-
-            return cueParamConfigType;
-        }
     }
 }

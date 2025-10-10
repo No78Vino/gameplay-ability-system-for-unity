@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GAS.RuntimeDataHelper.Ability;
 using GAS.RuntimeDataHelper.Helper;
 using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.Static;
@@ -158,14 +157,14 @@ namespace GAS.Editor
                 if (_cacheAbilityCode2Name == null)
                 {
                     _cacheAbilityCode2Name = new Dictionary<int, string>();
-                    var allAbilityAssets = EXEditorHelper.FindAll<AbilityConfigAsset>();
-                    foreach (var abilityAsset in allAbilityAssets)
-                    {
-                        var abilityBasicInfo = abilityAsset.ConfAssetAbilityBaseInfo;
-                        var abilityCode = abilityBasicInfo.Code;
-                        var abilityName = abilityBasicInfo.name;
-                        _cacheAbilityCode2Name.TryAdd(abilityCode, abilityName);
-                    }
+                    // var allAbilityAssets = EXEditorHelper.FindAll<AbilityConfigAsset>();
+                    // foreach (var abilityAsset in allAbilityAssets)
+                    // {
+                    //     var abilityBasicInfo = abilityAsset.ConfAssetAbilityBaseInfo;
+                    //     var abilityCode = abilityBasicInfo.Code;
+                    //     var abilityName = abilityBasicInfo.name;
+                    //     _cacheAbilityCode2Name.TryAdd(abilityCode, abilityName);
+                    // }
                 }
 
                 return _cacheAbilityCode2Name;

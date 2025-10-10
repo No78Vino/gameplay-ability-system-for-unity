@@ -9,16 +9,8 @@
 
         
         #region GASSettingAsset
-
-        public const string TIP_CREATE_GEN_AscUtilCode =
-            "<color=white><size=15>生成ASC拓展类之前，一定要保证Ability，AttributeSet的集合工具类已经生成。因为ASC拓展类依赖于此</size></color>";
-
-        public const string TIP_CREATE_FOLDERS =
-            "<color=white><size=15>如果你修改了EX-GAS的配置Asset路径,请点击这个按钮来确保所有子文件夹和基础配置文件正确生成。</size></color>";
-
+        
         public const string LABEL_OF_CodeGeneratePath = "自动化生成脚本路径";
-        public const string LABEL_OF_GASConfigAssetPath = "配置文件Asset路径";
-        public const string BUTTON_GenerateAscExtensionCode = " 生成AbilitySystemComponentExtension类脚本";
 
         public const string LUBAN_GEN_BAT_TILE_NAME = "gen.bat";
         

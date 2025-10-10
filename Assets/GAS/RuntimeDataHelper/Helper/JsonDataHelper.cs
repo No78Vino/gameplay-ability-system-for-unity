@@ -3,9 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAS.Editor;
-using GAS.RuntimeDataHelper.Ability;
-using GAS.RuntimeDataHelper.Ability.AbilityParam;
 using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using UnityEngine;
@@ -30,17 +27,17 @@ public static class JsonProxyHelper
 
     static JsonProxyHelper()
     {
-        var abstractAbilityComponentType = typeof(BaseGameplayAbilityComponentConfigAsset);
+        //var abstractAbilityComponentType = typeof(BaseGameplayAbilityComponentConfigAsset);
         var abstractEffectComponentType = typeof(BaseGameplayEffectComponentConfigAsset);
-        var abstractAbilityParamConfigType = typeof(AbilityParamConfigBase);
+        //var abstractAbilityParamConfigType = typeof(AbilityParamConfigBase);
         var abstractMmcParamConfigType = typeof(MmcParamConfigBase);
    
         foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()))
         {
             if (type.IsAbstract) continue;
-            if (!abstractAbilityComponentType.IsAssignableFrom(type) 
-                && !abstractEffectComponentType.IsAssignableFrom(type)
-                && !abstractAbilityParamConfigType.IsAssignableFrom(type)
+            if (!abstractEffectComponentType.IsAssignableFrom(type)
+                //&& !abstractAbilityComponentType.IsAssignableFrom(type) 
+                //&& !abstractAbilityParamConfigType.IsAssignableFrom(type)
                 && !abstractMmcParamConfigType.IsAssignableFrom(type)) continue;
             if (type.FullName != null) _typeCache[type.FullName] = type;
         }
