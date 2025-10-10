@@ -52,7 +52,7 @@ namespace GAS.RuntimeWithECS.AbilitySystemCell
             // 2.创建属性集
             foreach (var attrSetCode in attrSets)
             {
-                var attrSetConfig = GEN_AttrSetCode.AttributeSetMap[attrSetCode];
+                var attrSetConfig = XAttrSet.AttributeSetMap[attrSetCode];
                 _attrSetController.AddAttrSet(attrSetConfig);
             }
 

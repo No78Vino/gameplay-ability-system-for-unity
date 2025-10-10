@@ -81,7 +81,7 @@ namespace DemoForESC._Script
 
         public float GetSpeed()
         {
-            return AbilitySystemCellMono.GetAttrCurrentValue(GEN_AttrSetCode.Fight ,GEN_AttributeCode.SPEED)/100;
+            return AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit ,XAttribute.Spd)/100;
         }
 
         #endregion

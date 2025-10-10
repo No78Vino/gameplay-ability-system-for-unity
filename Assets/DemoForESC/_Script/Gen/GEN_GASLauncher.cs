@@ -16,7 +16,7 @@ namespace DemoForESC._Script.Gen
             LoadGenCache();
             XLuban.LoadTables();
             GASManager.Initialize();
-            GEN_GameplayTagCode.InitTagList();
+            XTag.InitTagList();
             
             // 测试代码
             var testCue = XLuban.GetGameplayCueConfig(1001);

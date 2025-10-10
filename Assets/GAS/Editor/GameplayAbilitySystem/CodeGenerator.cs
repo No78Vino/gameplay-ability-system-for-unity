@@ -295,6 +295,9 @@ namespace GAS.Editor
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("");
+            writer.WriteLine("using System.Collections.Generic;");
+            writer.WriteLine("using GAS.RuntimeWithECS.Attribute;");
+            writer.WriteLine("");
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
             writer.Indent++;
@@ -331,6 +334,47 @@ namespace GAS.Editor
                         writer.WriteLine("}");
                     }
                 }
+                writer.WriteLine("");
+                
+                writer.WriteLine("private static Dictionary<int, NewAttributeSetConfig> _attributeSetMap = new Dictionary<int, NewAttributeSetConfig>();");
+                writer.WriteLine("");
+                writer.WriteLine("public static Dictionary<int, NewAttributeSetConfig> AttributeSetMap");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    writer.WriteLine("get");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("if (_attributeSetMap.Count == 0)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine("var datas = XLuban.Tables.TbattributeSet.DataList;");
+                            writer.WriteLine("foreach (var attrSet in datas)");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            writer.WriteLine("var settings = new AttributeBaseSetting[attrSet.Attribute.Length];");
+                            writer.WriteLine("for (var i = 0; i < attrSet.Attribute.Length; i++)");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            writer.WriteLine("var a = attrSet.Attribute[i];");
+                            writer.WriteLine("settings[i] = new AttributeBaseSetting(a.Id, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);");
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                            writer.WriteLine("_attributeSetMap.Add(attrSet.Id,new NewAttributeSetConfig(attrSet.Id,settings));");
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("return _attributeSetMap;");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                }
+                writer.Indent--;
+                writer.WriteLine("}");
                 
                 writer.Indent--;
                 writer.WriteLine("}");
