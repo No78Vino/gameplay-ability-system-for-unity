@@ -28,6 +28,7 @@ public sealed partial class duration : Luban.BeanBase
 
     public readonly int TimeUnit;
     public readonly int Time;
+    public readonly bool ResetStartTimeWhenActivated = false;
    
     public const int __ID__ = -1992012396;
     public override int GetTypeId() => __ID__;

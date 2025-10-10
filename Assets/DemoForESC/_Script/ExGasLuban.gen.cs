@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using cfg;
+using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.ComponentConfig;
@@ -134,15 +135,14 @@ namespace GAS.Runtime
             // immunityTags
             if (data.ImmunityTags is { Count: > 0 })
                 configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });
-
-            // TODO
+            
             // duration
             if (data.Duration != null && data.Duration.Time != 0)
                 configs.Add(new ConfDuration
                 {
                     duration = data.Duration.Time,
-                    timeUnit = (TimeUnit)data.Duration.TimeUnit
-                    //ResetStartTimeWhenActivated = data.Duration.
+                    timeUnit = (TimeUnit)data.Duration.TimeUnit,
+                    ResetStartTimeWhenActivated = data.Duration.ResetStartTimeWhenActivated
                 });
 
             // period
@@ -162,9 +162,31 @@ namespace GAS.Runtime
                     GameplayEffectSettings = gameplayEffectSettings.ToArray()
                 });
             }
-            // TODO
+            
             // modifiers
+            if (data.Modifiers != null && data.Modifiers.Count > 0)
+            {
+                ModifierSetting[] modifierSettings = new ModifierSetting[data.Modifiers.Count];
+                for (var i = 0; i < data.Modifiers.Count; i++)
+                {
+                    var info = data.Modifiers[i];
+                    modifierSettings[i] = new ModifierSetting()
+                    {
+                        AttrSetCode = info.AttrSet,
+                        AttrCode = info.Attribute,
+                        Magnitude = info.Magnitude,
+                        Operation = (GEOperation)info.Operation,
+                        MMC = GetMmcConfig(info.Mmc),
+                    };
+                }
 
+                configs.Add(new MCConfModifiers()
+                {
+                    modifierSettings = modifierSettings
+                });    
+            }
+            
+            
             // cueOnApply
             if (data.CueOnApply is { Count: > 0 })
             {
@@ -173,15 +195,15 @@ namespace GAS.Runtime
                     cues[i] = GetGameplayCueConfig(data.CueOnApply[i]);
                 configs.Add(new ConfCueOnApply { cues = cues });
             }
-            // TODO
+            
             // cueOnTick
-            // if (data.CueOnTick is { Count: > 0 })
-            // {
-            //     var cues = new GameplayCueConfig[data.CueOnTick.Count];
-            //     for (var i = 0; i < data.CueOnTick.Count; i++)
-            //         cues[i] = GetGameplayCueConfig(data.CueOnTick[i]);
-            //     configs.Add(new confcueti() { cues = cues });
-            // }
+            if (data.CueOnTick is { Count: > 0 })
+            {
+                var cues = new GameplayCueConfig[data.CueOnTick.Count];
+                for (var i = 0; i < data.CueOnTick.Count; i++)
+                    cues[i] = GetGameplayCueConfig(data.CueOnTick[i]);
+                configs.Add(new ConfCueOnTick() { cues = cues });
+            }
 
             // cueOnAdd
             if (data.CueOnAdd is { Count: > 0 })
@@ -191,16 +213,34 @@ namespace GAS.Runtime
                     cues[i] = GetGameplayCueConfig(data.CueOnAdd[i]);
                 configs.Add(new ConfCueOnAdd { cues = cues });
             }
-
-            // TODO
+            
             // cueOnRemove
-
-            // TODO
+            if (data.CueOnRemove is { Count: > 0 })
+            {
+                var cues = new GameplayCueConfig[data.CueOnRemove.Count];
+                for (var i = 0; i < data.CueOnRemove.Count; i++)
+                    cues[i] = GetGameplayCueConfig(data.CueOnRemove[i]);
+                configs.Add(new ConfCueOnRemove { cues = cues });
+            }
+            
             // cueOnActivate
-
-            // TODO
+            if (data.CueOnActivate is { Count: > 0 })
+            {
+                var cues = new GameplayCueConfig[data.CueOnActivate.Count];
+                for (var i = 0; i < data.CueOnActivate.Count; i++)
+                    cues[i] = GetGameplayCueConfig(data.CueOnActivate[i]);
+                configs.Add(new ConfCueOnAcivate() { cues = cues });
+            }
+       
             // cueOnDeactivate
-
+            if (data.CueOnDeactivate is { Count: > 0 })
+            {
+                var cues = new GameplayCueConfig[data.CueOnDeactivate.Count];
+                for (var i = 0; i < data.CueOnDeactivate.Count; i++)
+                    cues[i] = GetGameplayCueConfig(data.CueOnDeactivate[i]);
+                configs.Add(new ConfCueOnDeacivate() { cues = cues });
+            }
+            
             // TODO
             // grantedAbility
             if (data.GrantedAbility.Count > 0)
@@ -319,6 +359,16 @@ namespace GAS.Runtime
             }
 
             return new AbilityConfig(configs.ToArray());
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MMCSettingConfig GetMmcConfig(int id)
+        {
+            return new MMCSettingConfig() { };
         }
     }
 }

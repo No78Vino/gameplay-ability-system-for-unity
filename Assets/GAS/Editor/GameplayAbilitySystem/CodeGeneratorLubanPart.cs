@@ -173,6 +173,14 @@ namespace GAS.Editor
                     writer.Indent--;
                     writer.WriteLine("}");
                     #endregion
+                    
+                    writer.WriteLine("");
+
+                    #region GameplayEffect
+
+                    
+
+                    #endregion
                 }
                 writer.Indent--;
                 writer.WriteLine("}");
