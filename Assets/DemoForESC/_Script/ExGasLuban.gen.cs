@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using cfg;
-using GAS.RuntimeDataHelper.GameplayEffect;
+using GAS.Runtime;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.ComponentConfig;
@@ -365,16 +365,16 @@ namespace GAS.Runtime
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static MMCSettingConfig GetMmcConfig(int id)
+        public static MMCConfig GetMmcConfig(int id)
         {
             var data = Tables.Tbmmc.Get(id);
             if (data == null)
             {
                 Debug.LogError($"MMC_ID:{id}  不存在.");
-                return new MMCSettingConfig() { };
+                return new MMCConfig() { };
             }
             //data.MmcLogic
-            return new MMCSettingConfig() { };
+            return new MMCConfig() { };
         }
     }
 }

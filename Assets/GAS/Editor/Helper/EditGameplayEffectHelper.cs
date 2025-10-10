@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
 
@@ -89,15 +88,15 @@ namespace GAS.Editor
         public static IEnumerable<Type> GetCachedMmcParamConfigTypes()
         {
             if (_cachedMmcParamConfigTypes != null) return _cachedMmcParamConfigTypes;
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            _cachedMmcParamConfigTypes = assemblies
-                .SelectMany(asm => asm.GetTypes())
-                .Where(type =>
-                    type.IsSubclassOf(typeof(MmcParamConfigBase)) &&
-                    !type.IsAbstract &&
-                    type.IsDefined(typeof(SerializableAttribute), false)
-                )
-                .ToList();
+            // var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            // _cachedMmcParamConfigTypes = assemblies
+            //     .SelectMany(asm => asm.GetTypes())
+            //     .Where(type =>
+            //         type.IsSubclassOf(typeof(MmcParamConfigBase)) &&
+            //         !type.IsAbstract &&
+            //         type.IsDefined(typeof(SerializableAttribute), false)
+            //     )
+            //     .ToList();
             return _cachedMmcParamConfigTypes;
         }
 
@@ -117,14 +116,14 @@ namespace GAS.Editor
                     var genericBaseDef = baseType.GetGenericTypeDefinition();
 
                     // 确认是否是所需的基类泛型定义
-                    if (genericBaseDef == typeof(MmcParamConfigBase<>))
-                    {
-                        // 获取实际使用的泛型参数（如 MmcParamString）
-                        var genericArgs = baseType.GetGenericArguments();
-                        var paramType = genericArgs[0];
-
-                        _cachedMmcParamTypeToMmcParamConfigTypeMap[paramType] = derivedType;
-                    }
+                    // if (genericBaseDef == typeof(MmcParamConfigBase<>))
+                    // {
+                    //     // 获取实际使用的泛型参数（如 MmcParamString）
+                    //     var genericArgs = baseType.GetGenericArguments();
+                    //     var paramType = genericArgs[0];
+                    //
+                    //     _cachedMmcParamTypeToMmcParamConfigTypeMap[paramType] = derivedType;
+                    // }
                 }
             }
 

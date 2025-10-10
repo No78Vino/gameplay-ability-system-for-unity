@@ -1,5 +1,4 @@
 using GAS.Runtime;
-using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
