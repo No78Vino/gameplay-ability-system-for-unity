@@ -389,6 +389,7 @@ namespace GAS.Runtime
                 return new MMCConfig() { };
             }
             //data.MmcLogic
+            
             return new MMCConfig() { };
         }
     }
