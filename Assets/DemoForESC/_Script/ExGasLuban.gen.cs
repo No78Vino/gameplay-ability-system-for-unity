@@ -373,7 +373,7 @@ namespace GAS.Runtime
                 Debug.LogError($"MMC_ID:{id}  不存在.");
                 return new MMCSettingConfig() { };
             }
-            data.MmcLogic
+            //data.MmcLogic
             return new MMCSettingConfig() { };
         }
     }
