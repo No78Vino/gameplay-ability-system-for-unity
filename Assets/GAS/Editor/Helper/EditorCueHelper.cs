@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Cue;
 
@@ -13,7 +14,7 @@ namespace GAS.Editor
         {
             if (_cachedCueToParamTypeMap != null)
                 return _cachedCueToParamTypeMap;
-            var cueTypes = EditCueHelper.GetCachedInstantCueTypes() ;
+            var cueTypes = GetCachedInstantCueTypes() ;
             _cachedCueToParamTypeMap = new Dictionary<string, Type>();
             foreach (var derivedType in cueTypes)
             {
@@ -47,5 +48,57 @@ namespace GAS.Editor
             if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
             return cueParamEditor;
         }
+        
+        
+        
+        
+        private static Dictionary<Type, Type> _cachedCueParamTypeToCueParamConfigTypeMap;
+        private static Dictionary<string, Type> _cachedCueToCueParamConfigTypeMap;
+        private static IEnumerable<Type> _cachedCueParamConfigTypes;
+        private static IEnumerable<Type> _cachedCueTypes;
+        
+        public static IEnumerable<Type> GetCachedCueTypes()
+        {
+            if (_cachedCueTypes != null) return _cachedCueTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedCueTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(GameplayCueBase)) &&
+                    !type.IsAbstract
+                )
+                .ToList();
+
+            return _cachedCueTypes;
+        }
+        
+        public static IEnumerable<string> GetCachedCueTypeNames()
+        {
+            var types = GetCachedCueTypes();
+            return types
+                .Select(type => type.Name)
+                .Where(name => !string.IsNullOrEmpty(name))
+                .ToList();
+        }
+        #region Instant Cue
+        
+        private static IEnumerable<Type> _cachedInstantCueTypes;
+        
+        public static IEnumerable<Type> GetCachedInstantCueTypes()
+        {
+            if (_cachedInstantCueTypes != null) return _cachedInstantCueTypes;
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            _cachedInstantCueTypes = assemblies
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type =>
+                    type.IsSubclassOf(typeof(GameplayCueBase)) &&
+                    !type.IsAbstract
+                )
+                .ToList();
+
+            return _cachedInstantCueTypes;
+        }
+        
+        #endregion
     }
 }

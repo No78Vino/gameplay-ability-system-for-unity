@@ -410,7 +410,7 @@ namespace GAS.Editor
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
-                    var allCue = EditCueHelper.GetCachedCueTypes();
+                    var allCue = EditorCueHelper.GetCachedCueTypes();
                     var cueTypes = allCue as Type[] ?? allCue.ToArray();
                     foreach (var cueType in cueTypes)
                     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAS.RuntimeDataHelper.GameplayEffect;
 using GAS.RuntimeDataHelper.GameplayEffect.MmcParam;
 using GAS.RuntimeWithECS.Modifier;
 using Sirenix.OdinInspector;
@@ -59,15 +58,15 @@ namespace GAS.RuntimeDataHelper.Helper
         public static IEnumerable<Type> GetCachedEffectComponentSubTypes()
         {
             if (_cachedEffectComponentSubTypes != null) return _cachedEffectComponentSubTypes;
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            _cachedEffectComponentSubTypes = assemblies
-                .SelectMany(asm => asm.GetTypes())
-                .Where(type =>
-                    type.IsSubclassOf(typeof(BaseGameplayEffectComponentConfigAsset)) &&
-                    !type.IsAbstract &&
-                    type.IsDefined(typeof(SerializableAttribute), false)
-                )
-                .ToList();
+            // var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            // _cachedEffectComponentSubTypes = assemblies
+            //     .SelectMany(asm => asm.GetTypes())
+            //     .Where(type =>
+            //         type.IsSubclassOf(typeof(BaseGameplayEffectComponentConfigAsset)) &&
+            //         !type.IsAbstract &&
+            //         type.IsDefined(typeof(SerializableAttribute), false)
+            //     )
+            //     .ToList();
 
             return _cachedEffectComponentSubTypes;
         }

@@ -189,7 +189,7 @@ namespace GAS.Editor
             return maxRowForNewID;
         }
 
-        public IEnumerable<string> CueClassChoice => EditCueHelper.GetCachedCueTypeNames();
+        public IEnumerable<string> CueClassChoice => EditorCueHelper.GetCachedCueTypeNames();
 
         public List<int> ListIntFromString(string str)
         {

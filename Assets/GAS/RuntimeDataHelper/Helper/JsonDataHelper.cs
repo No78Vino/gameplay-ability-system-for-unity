@@ -28,17 +28,17 @@ public static class JsonProxyHelper
     static JsonProxyHelper()
     {
         //var abstractAbilityComponentType = typeof(BaseGameplayAbilityComponentConfigAsset);
-        var abstractEffectComponentType = typeof(BaseGameplayEffectComponentConfigAsset);
+        //var abstractEffectComponentType = typeof(BaseGameplayEffectComponentConfigAsset);
         //var abstractAbilityParamConfigType = typeof(AbilityParamConfigBase);
         var abstractMmcParamConfigType = typeof(MmcParamConfigBase);
    
         foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()))
         {
             if (type.IsAbstract) continue;
-            if (!abstractEffectComponentType.IsAssignableFrom(type)
+            if (//!abstractEffectComponentType.IsAssignableFrom(type)
                 //&& !abstractAbilityComponentType.IsAssignableFrom(type) 
                 //&& !abstractAbilityParamConfigType.IsAssignableFrom(type)
-                && !abstractMmcParamConfigType.IsAssignableFrom(type)) continue;
+                !abstractMmcParamConfigType.IsAssignableFrom(type)) continue;
             if (type.FullName != null) _typeCache[type.FullName] = type;
         }
 
