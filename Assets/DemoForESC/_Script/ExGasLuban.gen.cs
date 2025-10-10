@@ -186,7 +186,6 @@ namespace GAS.Runtime
                 });    
             }
             
-            
             // cueOnApply
             if (data.CueOnApply is { Count: > 0 })
             {
@@ -368,6 +367,13 @@ namespace GAS.Runtime
         /// <returns></returns>
         public static MMCSettingConfig GetMmcConfig(int id)
         {
+            var data = Tables.Tbmmc.Get(id);
+            if (data == null)
+            {
+                Debug.LogError($"MMC_ID:{id}  不存在.");
+                return new MMCSettingConfig() { };
+            }
+            data.MmcLogic
             return new MMCSettingConfig() { };
         }
     }
