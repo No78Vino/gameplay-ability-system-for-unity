@@ -240,11 +240,26 @@ namespace GAS.Runtime
                 configs.Add(new ConfCueOnDeacivate() { cues = cues });
             }
             
-            // TODO
             // grantedAbility
             if (data.GrantedAbility.Count > 0)
             {
-                // configs.Add(new Confabili);
+                var grantedAbilities = new GrantedAbility[data.GrantedAbility.Count];
+                for (var i = 0; i < data.GrantedAbility.Count; i++)
+                {
+                    var info = data.GrantedAbility[i];
+                    grantedAbilities[i] = new GrantedAbility()
+                    {
+                        AbilityConfig = GetAbilityConfig(info.Id),
+                        ActivationPolicy = (GrantedAbilityActivationPolicy)info.ActivationPolicy,
+                        DeactivationPolicy = (GrantedAbilityDeactivationPolicy)info.DeactivationPolicy,
+                        Level = info.Level,
+                        RemovePolicy = (GrantedAbilityRemovePolicy)info.RemovePolicy,
+                    };
+                }
+                configs.Add(new MCConfGrantedAbility()
+                {
+                    GrantedAbilities = grantedAbilities
+                });
             }
             
 
