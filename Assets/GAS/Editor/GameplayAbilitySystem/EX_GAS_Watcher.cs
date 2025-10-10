@@ -181,13 +181,13 @@ namespace GAS.Editor
                 if (_cacheAttributeCode2Name == null)
                 {
                     _cacheAttributeCode2Name = new Dictionary<int, string>();
-                    var attributeAsset = AttributeAsset.LoadOrCreate();
-                    foreach (var attribute in attributeAsset.attributes)
-                    {
-                        var attributeCode = attribute.GetCode();
-                        var attributeName = attribute.Name;
-                        _cacheAttributeCode2Name.TryAdd(attributeCode, attributeName);
-                    }
+                    // var attributeAsset = AttributeAsset.LoadOrCreate();
+                    // foreach (var attribute in attributeAsset.attributes)
+                    // {
+                    //     var attributeCode = attribute.GetCode();
+                    //     var attributeName = attribute.Name;
+                    //     _cacheAttributeCode2Name.TryAdd(attributeCode, attributeName);
+                    // }
                 }
 
                 return _cacheAttributeCode2Name;
@@ -203,13 +203,13 @@ namespace GAS.Editor
                 if (_cacheAttrSetCode2Name == null)
                 {
                     _cacheAttrSetCode2Name = new Dictionary<int, string>();
-                    var attributeSetAsset = AttributeSetAsset.LoadOrCreate();
-                    foreach (var attributeSet in attributeSetAsset.AttributeSetConfigs)
-                    {
-                        var attrSetCode = attributeSet.GetCode();
-                        var attrSetName = attributeSet.Name;
-                        _cacheAttrSetCode2Name.TryAdd(attrSetCode, attrSetName);
-                    }
+                    // var attributeSetAsset = AttributeSetAsset.LoadOrCreate();
+                    // foreach (var attributeSet in attributeSetAsset.AttributeSetConfigs)
+                    // {
+                    //     var attrSetCode = attributeSet.GetCode();
+                    //     var attrSetName = attributeSet.Name;
+                    //     _cacheAttrSetCode2Name.TryAdd(attrSetCode, attrSetName);
+                    // }
                 }
 
                 return _cacheAttrSetCode2Name;
