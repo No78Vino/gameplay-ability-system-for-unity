@@ -226,7 +226,7 @@ namespace GAS.Runtime
                 configs.Add(new MCConfGrantedAbility() { GrantedAbilities = grantedAbilities });
             }
             // stacking
-            if (data.Stacking.StackCode != 0)
+            if (data.Stacking!=null && data.Stacking.StackCode != 0)
             {
                 var effectConfigs = new List<GameplayEffectConfig>();
                 foreach (var effectID in data.Stacking.OverflowEffects)

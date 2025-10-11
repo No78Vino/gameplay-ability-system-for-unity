@@ -18,7 +18,7 @@ namespace GAS.RuntimeWithECS
         public static void RegisterAbilityLogic(string sType, Type logicType,Type abilityParamType)
         {
             AbilityLogicMap[sType] = logicType;
-            AbilityLogicParamTypeMap[logicType.Name] = abilityParamType;
+            AbilityLogicParamTypeMap[abilityParamType.Name] = abilityParamType;
             AbilityType2AbilityParamTypeMap[sType] = abilityParamType.Name;
         }
 

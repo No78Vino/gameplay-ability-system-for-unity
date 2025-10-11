@@ -1,7 +1,7 @@
 [
   {
     "id": 10001,
-    "name": "技能1",
+    "name": "move",
     "desc": "描述1",
     "cost": 1001,
     "cdEffect": 1001,
@@ -28,7 +28,7 @@
   },
   {
     "id": 10002,
-    "name": "技能2",
+    "name": "RunSpeedUp",
     "desc": "描述2",
     "cost": 1001,
     "cdEffect": 1001,

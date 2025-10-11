@@ -50,11 +50,11 @@ namespace GAS.Editor
                             var typeFullName = subType.FullName;
                             var shortTypeName = subType.Name;
                             var abilityParamType =
-                                EditorAbilityHelper.AbilityToAbilityParamTypeMap()[typeFullName];
+                                EditorAbilityHelper.AbilityToAbilityParamTypeMap()[shortTypeName];
                             var abilityParamTypeFullName = abilityParamType.FullName;
                             writer.WriteLine($"var {shortTypeName} = typeof({typeFullName});");
                             writer.WriteLine(
-                                $"GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic({shortTypeName}.FullName, {shortTypeName},typeof({abilityParamTypeFullName}));");
+                                $"GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic({shortTypeName}.Name, {shortTypeName},typeof({abilityParamTypeFullName}));");
                         }
                     }
                     writer.Indent--;

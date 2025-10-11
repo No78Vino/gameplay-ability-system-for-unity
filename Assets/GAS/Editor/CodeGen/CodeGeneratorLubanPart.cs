@@ -146,18 +146,18 @@ namespace GAS.Editor
                             {
                                 var cueName = cueType.Name;
                                 var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];
-                                var tType = EXEditorHelper.GetTypeByName($"cfg.{cueName}"); 
-                                if(tType==null) continue;
-                                
+                                var tType = EXEditorHelper.GetTypeByName($"cfg.{cueName}");
+                                if (tType == null) continue;
+
                                 writer.WriteLine($"case cfg.{cueName} cData:");
                                 writer.WriteLine("{");
                                 writer.Indent++;
                                 writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");
-           
+
                                 var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
                                 foreach (var fieldName in readOnlyFields)
                                     writer.WriteLine($"cp?.Set{fieldName}(cData.{fieldName});");
-                                
+
                                 writer.WriteLine("cueParam = cp;");
                                 writer.WriteLine("break;");
                                 writer.Indent--;
@@ -333,7 +333,7 @@ namespace GAS.Editor
                         writer.WriteLine("}");
 
                         writer.WriteLine("// stacking");
-                        writer.WriteLine("if (data.Stacking.StackCode != 0)");
+                        writer.WriteLine("if (data.Stacking!=null && data.Stacking.StackCode != 0)");
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("var effectConfigs = new List<GameplayEffectConfig>();");
@@ -454,8 +454,10 @@ namespace GAS.Editor
                         {
                             writer.WriteLine("var abilityLogic = data.AbilityLogic;");
                             writer.WriteLine("var abilityLogicName = abilityLogic.GetType().Name;");
-                            writer.WriteLine("var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);");
-                            writer.WriteLine("var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;");
+                            writer.WriteLine(
+                                "var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);");
+                            writer.WriteLine(
+                                "var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;");
                             writer.WriteLine("if (abilityParam != null)");
                             writer.WriteLine("{");
                             writer.Indent++;
@@ -463,17 +465,18 @@ namespace GAS.Editor
                                 writer.WriteLine("switch (abilityLogic)");
                                 writer.WriteLine("{");
                                 writer.Indent++;
-                                
-                                
+
+
                                 var allAbilities = EditorAbilityHelper.GetCachedAbilityLogicTypes();
                                 var abilityTypes = allAbilities as Type[] ?? allAbilities.ToArray();
                                 foreach (var abilityType in abilityTypes)
                                 {
                                     var abilityTypeName = abilityType.Name;
-                                    var abilityParamType = EditorAbilityHelper.AbilityToAbilityParamTypeMap()[abilityTypeName];
-                                    var tType = EXEditorHelper.GetTypeByName($"cfg.{abilityTypeName}"); 
-                                    if(tType==null) continue;
-                                    
+                                    var abilityParamType =
+                                        EditorAbilityHelper.AbilityToAbilityParamTypeMap()[abilityTypeName];
+                                    var tType = EXEditorHelper.GetTypeByName($"cfg.{abilityTypeName}");
+                                    if (tType == null) continue;
+
                                     writer.WriteLine($"case cfg.{abilityTypeName} aData:");
                                     writer.WriteLine("{");
                                     writer.Indent++;
@@ -483,11 +486,13 @@ namespace GAS.Editor
                                     {
                                         writer.WriteLine($"ap?.Set{fieldName}(aData.{fieldName});");
                                     }
+
                                     writer.WriteLine("abilityParam = ap;");
                                     writer.WriteLine("break;");
                                     writer.Indent--;
                                     writer.WriteLine("}");
                                 }
+
                                 writer.Indent--;
                                 writer.WriteLine("}");
                             }
@@ -510,10 +515,11 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     #endregion
-                    
+
                     writer.WriteLine("");
 
                     #region MMC
+
                     writer.WriteLine("public static MMCConfig GetMmcConfig(int id)");
                     writer.WriteLine("{");
                     writer.Indent++;
@@ -526,13 +532,14 @@ namespace GAS.Editor
                         writer.WriteLine("return new MMCConfig() { };");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        
+
                         writer.WriteLine("");
-                        
+
                         writer.WriteLine("var mmcLogic = data.MmcLogic;");
                         writer.WriteLine("var mmcLogicName = data.MmcLogic.GetType().Name;");
                         writer.WriteLine("var mmcLogicParamType = MmcHelper.GetMmcParamTypeByMmcType(mmcLogicName);");
-                        writer.WriteLine("IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;");
+                        writer.WriteLine(
+                            "IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;");
                         writer.WriteLine("if (mmcParam != null)");
                         writer.WriteLine("{");
                         writer.Indent++;
@@ -540,8 +547,8 @@ namespace GAS.Editor
                             writer.WriteLine("switch (mmcLogic)");
                             writer.WriteLine("{");
                             writer.Indent++;
-                            
-                            
+
+
                             var mmcs = EditorMmcHelper.GetCachedMmcTypes();
                             var mmcTypes = mmcs as Type[] ?? mmcs.ToArray();
                             foreach (var mmcType in mmcTypes)
@@ -549,8 +556,8 @@ namespace GAS.Editor
                                 var mmcTypeName = mmcType.Name;
                                 var mmcParamType = EditorMmcHelper.MmcToMmcParamTypeMap()[mmcTypeName];
                                 var tType = EXEditorHelper.GetTypeByName($"cfg.{mmcTypeName}");
-                                if(tType==null) continue;
-                                    
+                                if (tType == null) continue;
+
                                 writer.WriteLine($"case cfg.{mmcTypeName} mmcData:");
                                 writer.WriteLine("{");
                                 writer.Indent++;
@@ -560,12 +567,13 @@ namespace GAS.Editor
                                 {
                                     writer.WriteLine($"mp?.Set{fieldName}(mmcData.{fieldName});");
                                 }
+
                                 writer.WriteLine("mmcParam = mp;");
                                 writer.WriteLine("break;");
                                 writer.Indent--;
                                 writer.WriteLine("}");
                             }
-                            
+
                             writer.Indent--;
                             writer.WriteLine("}");
                         }
@@ -582,7 +590,7 @@ namespace GAS.Editor
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
-                    
+
                     #endregion
                 }
                 writer.Indent--;
