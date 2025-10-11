@@ -353,17 +353,22 @@ namespace GAS.Runtime
                 var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;
                 if (abilityParam != null)
                 {
-                    if (abilityLogic is cfg.ALApplyEffect alApplyEffect)
+                    switch (abilityLogic)
                     {
-                        var alApplyEffectParam = abilityParam as AbilityParamArrayInt;
-                        alApplyEffectParam?.SetValue(alApplyEffect.Value);
-                        abilityParam = alApplyEffectParam;
-                    }
-                    if (abilityLogic is cfg.ALDebugLog alDebugLog)
-                    {
-                        var alDebugLogParam = abilityParam as AbilityParamString;
-                        alDebugLogParam?.SetValue(alDebugLog.Value);
-                        abilityParam = alDebugLogParam;
+                        case cfg.ALApplyEffect aData:
+                        {
+                            var ap = abilityParam as AbilityParamArrayInt;
+                            ap?.SetValue(aData.Value);
+                            abilityParam = ap;
+                            break;
+                        }
+                        case cfg.ALDebugLog aData:
+                        {
+                            var ap = abilityParam as AbilityParamString;
+                            ap?.SetValue(aData.Value);
+                            abilityParam = ap;
+                            break;
+                        }
                     }
                 }
                 configs.Add(new MCConfAbilityLogic()
