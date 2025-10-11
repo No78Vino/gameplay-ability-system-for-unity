@@ -1,14 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using GAS.Runtime;
-using GAS.Editor;
-
 namespace GAS.Editor
 {
     public static class CodeGeneratorLubanPart
     {
-        // TODO
         public static void GenerateLubanExtension()
         {
             var setting = GASSettingAsset.LoadOrCreate();
@@ -140,34 +136,36 @@ namespace GAS.Editor
                         writer.WriteLine("{");
                         writer.Indent++;
 
-                        var allCue = EditorCueHelper.GetCachedCueTypes();
-                        var cueTypes = allCue as Type[] ?? allCue.ToArray();
-                        foreach (var cueType in cueTypes)
+                        writer.WriteLine("switch (cueLogic)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
                         {
-                            var cueName = cueType.Name;
-                            // 首字母小写，作为变量名
-                            var cueFieldName = char.ToLower(cueName[0]) + cueName.Substring(1);
-                            var cueParaName = char.ToLower(cueName[0]) + cueName.Substring(1) + "Param";
-                            var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];
-
-                            writer.WriteLine($"if (cueLogic is cfg.{cueName} {cueFieldName})");
-                            writer.WriteLine("{");
-                            writer.Indent++;
-                            writer.WriteLine($"var {cueParaName} = cueParam as {cueParamType.FullName};");
-                            // 通过类名的字符串，获取类的Type
-                            var typeFullName = $"cfg.{cueName}, {cueType.Assembly.GetName().Name}";
-                            var tType = Type.GetType(typeFullName);
-                            // 获取只读字段
-                            var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                            foreach (var fieldName in readOnlyFields)
+                            var allCue = EditorCueHelper.GetCachedCueTypes();
+                            var cueTypes = allCue as Type[] ?? allCue.ToArray();
+                            foreach (var cueType in cueTypes)
                             {
-                                writer.WriteLine($"{cueParaName}?.Set{fieldName}({cueFieldName}.{fieldName});");
+                                var cueName = cueType.Name;
+                                var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];
+                                var tType = EXEditorHelper.GetTypeByName($"cfg.{cueName}"); 
+                                if(tType==null) continue;
+                                
+                                writer.WriteLine($"case cfg.{cueName} cData:");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");
+           
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
+                                foreach (var fieldName in readOnlyFields)
+                                    writer.WriteLine($"cp?.Set{fieldName}(cData.{fieldName});");
+                                
+                                writer.WriteLine("cueParam = cp;");
+                                writer.WriteLine("break;");
+                                writer.Indent--;
+                                writer.WriteLine("}");
                             }
-
-                            writer.WriteLine($"cueParam = {cueParaName};");
-                            writer.Indent--;
-                            writer.WriteLine("}");
                         }
+                        writer.Indent--;
+                        writer.WriteLine("}");
 
                         writer.Indent--;
                         writer.WriteLine("}");
@@ -203,20 +201,25 @@ namespace GAS.Editor
                         writer.WriteLine("    configs.Add(new ConfAssetTags { tags = data.AssetTags.ToArray() });");
                         writer.WriteLine("// grantedTags");
                         writer.WriteLine("if (data.GrantedTags is { Count: > 0 })");
-                        writer.WriteLine("    configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });");
                         writer.WriteLine("// applicationRequiredTags");
                         writer.WriteLine("if (data.ApplicationRequiredTags is { Count: > 0 })");
-                        writer.WriteLine("    configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });");
                         writer.WriteLine("// ongoingRequiredTags");
                         writer.WriteLine("if (data.OngoingRequiredTags is { Count: > 0 })");
-                        writer.WriteLine("    configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });");
                         writer.WriteLine("// removeGameplayEffectsWithTags");
                         writer.WriteLine("if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })");
-                        writer.WriteLine("    configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });");
                         writer.WriteLine("// immunityTags");
                         writer.WriteLine("if (data.ImmunityTags is { Count: > 0 })");
-                        writer.WriteLine("    configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });");
-                        
+                        writer.WriteLine(
+                            "    configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });");
+
                         writer.WriteLine("// duration");
                         writer.WriteLine("if (data.Duration != null && data.Duration.Time != 0)");
                         writer.Indent++;
@@ -252,29 +255,30 @@ namespace GAS.Editor
                         writer.WriteLine("});");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        
-                        writer.WriteLine("// modifiers");    
-                        writer.WriteLine("if (data.Modifiers != null && data.Modifiers.Count > 0)");    
+
+                        writer.WriteLine("// modifiers");
+                        writer.WriteLine("if (data.Modifiers != null && data.Modifiers.Count > 0)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("ModifierSetting[] modifierSettings = new ModifierSetting[data.Modifiers.Count];"); 
-                        writer.WriteLine("for (var i = 0; i < data.Modifiers.Count; i++)"); 
+                        writer.WriteLine(
+                            "ModifierSetting[] modifierSettings = new ModifierSetting[data.Modifiers.Count];");
+                        writer.WriteLine("for (var i = 0; i < data.Modifiers.Count; i++)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("var info = data.Modifiers[i];"); 
-                        writer.WriteLine("modifierSettings[i] = new ModifierSetting()"); 
+                        writer.WriteLine("var info = data.Modifiers[i];");
+                        writer.WriteLine("modifierSettings[i] = new ModifierSetting()");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("AttrSetCode = info.AttrSet,"); 
-                        writer.WriteLine("AttrCode = info.Attribute,"); 
-                        writer.WriteLine("Magnitude = info.Magnitude,"); 
-                        writer.WriteLine("Operation = (GEOperation)info.Operation,"); 
-                        writer.WriteLine("MMC = GetMmcConfig(info.Mmc)"); 
+                        writer.WriteLine("AttrSetCode = info.AttrSet,");
+                        writer.WriteLine("AttrCode = info.Attribute,");
+                        writer.WriteLine("Magnitude = info.Magnitude,");
+                        writer.WriteLine("Operation = (GEOperation)info.Operation,");
+                        writer.WriteLine("MMC = GetMmcConfig(info.Mmc)");
                         writer.Indent--;
                         writer.WriteLine("};");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        writer.WriteLine("configs.Add(new MCConfModifiers(){ modifierSettings = modifierSettings });"); 
+                        writer.WriteLine("configs.Add(new MCConfModifiers(){ modifierSettings = modifierSettings });");
                         writer.Indent--;
                         writer.WriteLine("}");
 
@@ -300,42 +304,44 @@ namespace GAS.Editor
                             writer.Indent--;
                             writer.WriteLine("}");
                         }
-                         
-                        writer.WriteLine("// grantedAbility");    
-                        writer.WriteLine("if (data.GrantedAbility.Count > 0)");    
+
+                        writer.WriteLine("// grantedAbility");
+                        writer.WriteLine("if (data.GrantedAbility.Count > 0)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("var grantedAbilities = new GrantedAbility[data.GrantedAbility.Count];"); 
-                        writer.WriteLine("for (var i = 0; i < data.GrantedAbility.Count; i++)"); 
+                        writer.WriteLine("var grantedAbilities = new GrantedAbility[data.GrantedAbility.Count];");
+                        writer.WriteLine("for (var i = 0; i < data.GrantedAbility.Count; i++)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("var info = data.GrantedAbility[i];"); 
-                        writer.WriteLine("grantedAbilities[i] = new GrantedAbility()"); 
+                        writer.WriteLine("var info = data.GrantedAbility[i];");
+                        writer.WriteLine("grantedAbilities[i] = new GrantedAbility()");
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("AbilityConfig = GetAbilityConfig(info.Id),");
                         writer.WriteLine("ActivationPolicy = (GrantedAbilityActivationPolicy)info.ActivationPolicy,");
-                        writer.WriteLine("DeactivationPolicy = (GrantedAbilityDeactivationPolicy)info.DeactivationPolicy,");
+                        writer.WriteLine(
+                            "DeactivationPolicy = (GrantedAbilityDeactivationPolicy)info.DeactivationPolicy,");
                         writer.WriteLine("Level = info.Level,");
                         writer.WriteLine("RemovePolicy = (GrantedAbilityRemovePolicy)info.RemovePolicy,");
                         writer.Indent--;
                         writer.WriteLine("};");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        writer.WriteLine("configs.Add(new MCConfGrantedAbility() { GrantedAbilities = grantedAbilities });"); 
+                        writer.WriteLine(
+                            "configs.Add(new MCConfGrantedAbility() { GrantedAbilities = grantedAbilities });");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        
-                        writer.WriteLine("// stacking"); 
-                        writer.WriteLine("if (data.Stacking.StackCode != 0)"); 
+
+                        writer.WriteLine("// stacking");
+                        writer.WriteLine("if (data.Stacking.StackCode != 0)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("var effectConfigs = new List<GameplayEffectConfig>();"); 
-                        writer.WriteLine("foreach (var effectID in data.Stacking.OverflowEffects)"); 
+                        writer.WriteLine("var effectConfigs = new List<GameplayEffectConfig>();");
+                        writer.WriteLine("foreach (var effectID in data.Stacking.OverflowEffects)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("var effect = GetGameplayEffectConfig(effectID);"); 
-                        writer.WriteLine("effectConfigs.Add(effect);"); 
+                        writer.WriteLine("var effect = GetGameplayEffectConfig(effectID);");
+                        writer.WriteLine("effectConfigs.Add(effect);");
                         writer.Indent--;
                         writer.WriteLine("}");
                         writer.WriteLine("configs.Add(new ConfStacking()");
@@ -344,9 +350,12 @@ namespace GAS.Editor
                         writer.WriteLine("StackingCode = data.Stacking.StackCode,");
                         writer.WriteLine("StackType = (EffectStackType)data.Stacking.StackingType,");
                         writer.WriteLine("LimitCount = data.Stacking.LimitCount,");
-                        writer.WriteLine("EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.DurationRefreshPolicy,");
-                        writer.WriteLine("EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.PeriodResetPolicy,");
-                        writer.WriteLine("EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.ExpirationPolicy,");
+                        writer.WriteLine(
+                            "EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.DurationRefreshPolicy,");
+                        writer.WriteLine(
+                            "EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.PeriodResetPolicy,");
+                        writer.WriteLine(
+                            "EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.ExpirationPolicy,");
                         writer.WriteLine("denyOverflowApplication = data.Stacking.DenyOverflowApplication,");
                         writer.WriteLine("clearStackOnOverflow = data.Stacking.ClearStackOnOverflow,");
                         writer.WriteLine("overflowEffects = effectConfigs.ToArray()");
@@ -354,7 +363,7 @@ namespace GAS.Editor
                         writer.WriteLine("});");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        
+
                         writer.WriteLine("");
                         writer.WriteLine("return new GameplayEffectConfig(configs.ToArray());");
                     }
@@ -363,17 +372,217 @@ namespace GAS.Editor
 
                     #endregion
 
+                    writer.WriteLine("");
 
                     #region Ability
 
-                    
+                    writer.WriteLine("public static AbilityConfig GetAbilityConfig(int id)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("var data = Tables.Tbability.Get(id);");
+                        writer.WriteLine("if (data == null)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("Debug.LogError($\"Ability_ID:{id}  不存在.\");");
+                        writer.WriteLine("return new AbilityConfig(Array.Empty<GameplayAbilityComponentConfig>());");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
+
+                        writer.WriteLine("var configs = new List<GameplayAbilityComponentConfig>();");
+                        writer.WriteLine("");
+                        writer.WriteLine("// cost");
+                        writer.WriteLine("if (data.Cost != 0)");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfAbilityCost{ CostComponentConfigs = GetGameplayEffectConfig(data.Cost).ComponentConfigs });");
+
+                        writer.WriteLine("// assetTags");
+                        writer.WriteLine("if (data.AssetTags is { Count: > 0 })");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfAbilityAssetTags { tags = data.AssetTags.ToArray() });");
+
+                        writer.WriteLine("// cancelAbilityWithTags");
+                        writer.WriteLine("if (data.CancelAbilityWithTags is { Count: > 0 })");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfCancelAbilityTags { tags = data.CancelAbilityWithTags.ToArray() });");
+
+                        writer.WriteLine("// blockAbilityWithTags");
+                        writer.WriteLine("if (data.BlockAbilityWithTags is { Count: > 0 })");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfBlockAbilityTags { tags = data.BlockAbilityWithTags.ToArray() });");
+
+                        writer.WriteLine("// activationOwnedTags");
+                        writer.WriteLine("if (data.ActivationOwnedTags is { Count: > 0 })");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfAbilityActivationOwnedTags { tags = data.ActivationOwnedTags.ToArray() });");
+
+                        writer.WriteLine("// activationRequiredTags");
+                        writer.WriteLine("if (data.ActivationRequiredTags is { Count: > 0 })");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfAbilityActivationRequiredTags { tags = data.ActivationRequiredTags.ToArray() });");
+
+                        writer.WriteLine("// activationBlockedTags");
+                        writer.WriteLine("if (data.ActivationBlockedTags is { Count: > 0 })");
+                        writer.WriteLine(
+                            "    configs.Add(new ConfAbilityActivationBlockedTags { tags = data.ActivationBlockedTags.ToArray() });");
+
+                        writer.WriteLine("// cdEffect cd");
+                        writer.WriteLine("if (data.Cd != 0)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("configs.Add(new ConfAbilityCooldown");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("Cooldown = data.Cd,");
+                        writer.WriteLine(
+                            "CooldownComponentConfigs = GetGameplayEffectConfig(data.CdEffect).ComponentConfigs");
+                        writer.Indent--;
+                        writer.WriteLine("});");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+
+                        writer.WriteLine("// abilityLogic");
+                        writer.WriteLine(
+                            "var abilityLogicType = AbilityHelper.GetAbilityLogicType(data.AbilityLogic.GetType().Name);");
+                        writer.WriteLine("if (abilityLogicType == null)");
+                        writer.WriteLine(
+                            "    Debug.LogError($\"Ability_ID:{id}  AbilityLogicType:{data.AbilityLogic.GetType().Name} 不存在.\");");
+                        writer.WriteLine("else");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine("var abilityLogic = data.AbilityLogic;");
+                            writer.WriteLine("var abilityLogicName = abilityLogic.GetType().Name;");
+                            writer.WriteLine("var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);");
+                            writer.WriteLine("var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;");
+                            writer.WriteLine("if (abilityParam != null)");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            {
+                                writer.WriteLine("switch (abilityLogic)");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                
+                                
+                                var allAbilities = EditorAbilityHelper.GetCachedAbilityLogicTypes();
+                                var abilityTypes = allAbilities as Type[] ?? allAbilities.ToArray();
+                                foreach (var abilityType in abilityTypes)
+                                {
+                                    var abilityTypeName = abilityType.Name;
+                                    var abilityParamType = EditorAbilityHelper.AbilityToAbilityParamTypeMap()[abilityTypeName];
+                                    var tType = EXEditorHelper.GetTypeByName($"cfg.{abilityTypeName}"); 
+                                    if(tType==null) continue;
+                                    
+                                    writer.WriteLine($"case cfg.{abilityTypeName} aData:");
+                                    writer.WriteLine("{");
+                                    writer.Indent++;
+                                    writer.WriteLine($"var ap = abilityParam as {abilityParamType.FullName};");
+                                    var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
+                                    foreach (var fieldName in readOnlyFields)
+                                    {
+                                        writer.WriteLine($"ap?.Set{fieldName}(aData.{fieldName});");
+                                    }
+                                    writer.WriteLine("abilityParam = ap;");
+                                    writer.WriteLine("break;");
+                                    writer.Indent--;
+                                    writer.WriteLine("}");
+                                }
+                                writer.Indent--;
+                                writer.WriteLine("}");
+                            }
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                            writer.WriteLine("configs.Add(new MCConfAbilityLogic()");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            writer.WriteLine("AbilityLogicType = abilityLogicName,");
+                            writer.WriteLine("abilityParam = abilityParam");
+                            writer.Indent--;
+                            writer.WriteLine("});");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
+                        writer.WriteLine("return new AbilityConfig(configs.ToArray());");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
 
                     #endregion
                     
+                    writer.WriteLine("");
+
                     #region MMC
-
+                    writer.WriteLine("public static MMCConfig GetMmcConfig(int id)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("var data = Tables.Tbmmc.Get(id);");
+                        writer.WriteLine("if (data == null)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("Debug.LogError($\"MMC_ID:{id}  不存在.\");");
+                        writer.WriteLine("return new MMCConfig() { };");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        
+                        writer.WriteLine("");
+                        
+                        writer.WriteLine("var mmcLogic = data.MmcLogic;");
+                        writer.WriteLine("var mmcLogicName = data.MmcLogic.GetType().Name;");
+                        writer.WriteLine("var mmcLogicParamType = AbilityHelper.GetAbilityLogicParamType(mmcLogicName);");
+                        writer.WriteLine("IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;");
+                        writer.WriteLine("if (mmcParam != null)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine("switch (mmcLogic)");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            
+                            
+                            var mmcs = EditorMmcHelper.GetCachedMmcTypes();
+                            var mmcTypes = mmcs as Type[] ?? mmcs.ToArray();
+                            foreach (var mmcType in mmcTypes)
+                            {
+                                var mmcTypeName = mmcType.Name;
+                                var mmcParamType = EditorMmcHelper.MmcToMmcParamTypeMap()[mmcTypeName];
+                                var tType = EXEditorHelper.GetTypeByName($"cfg.{mmcTypeName}");
+                                if(tType==null) continue;
+                                    
+                                writer.WriteLine($"case cfg.{mmcTypeName} mmcData:");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                writer.WriteLine($"var mp = mmcParam as {mmcParamType.FullName};");
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
+                                foreach (var fieldName in readOnlyFields)
+                                {
+                                    writer.WriteLine($"mp?.Set{fieldName}(mmcData.{fieldName});");
+                                }
+                                writer.WriteLine("mmcParam = mp;");
+                                writer.WriteLine("break;");
+                                writer.Indent--;
+                                writer.WriteLine("}");
+                            }
+                            
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
+                        writer.WriteLine("return new MMCConfig()");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("MmcType = MmcHelper.GetMmcType(mmcLogicName),");
+                        writer.WriteLine("MmcParameter = mmcParam");
+                        writer.Indent--;
+                        writer.WriteLine("};");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
                     
-
                     #endregion
                 }
                 writer.Indent--;

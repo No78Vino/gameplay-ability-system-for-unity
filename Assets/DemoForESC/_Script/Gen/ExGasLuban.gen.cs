@@ -49,7 +49,7 @@ namespace GAS.Runtime
             for (var i = 0; i < abilityIds.Length; i++)
             {
                 var abilityId = abilityIds[i];
-                //abilities[i] = GetAbilityConfig(abilityId);
+                abilities[i] = GetAbilityConfig(abilityId);
             }
             return new AbilitySystemCellConfig(data.Tag, data.AttrSet, abilities, data.Level);
         }
@@ -74,11 +74,15 @@ namespace GAS.Runtime
             var cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
             if (cueParam != null)
             {
-                if (cueLogic is cfg.GameplayCueLog gameplayCueLog)
+                switch (cueLogic)
                 {
-                    var gameplayCueLogParam = cueParam as GAS.Runtime.CueParamString;
-                    gameplayCueLogParam?.SetValue(gameplayCueLog.Value);
-                    cueParam = gameplayCueLogParam;
+                    case cfg.GameplayCueLog cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.CueParamString;
+                        cp?.SetValue(cData.Value);
+                        cueParam = cp;
+                        break;
+                    }
                 }
             }
             return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
@@ -150,7 +154,7 @@ namespace GAS.Runtime
                         AttrCode = info.Attribute,
                         Magnitude = info.Magnitude,
                         Operation = (GEOperation)info.Operation,
-                        //MMC = GetMmcConfig(info.Mmc)
+                        MMC = GetMmcConfig(info.Mmc)
                     };
                 }
                 configs.Add(new MCConfModifiers(){ modifierSettings = modifierSettings });
@@ -212,7 +216,7 @@ namespace GAS.Runtime
                     var info = data.GrantedAbility[i];
                     grantedAbilities[i] = new GrantedAbility()
                     {
-                        //AbilityConfig = GetAbilityConfig(info.Id),
+                        AbilityConfig = GetAbilityConfig(info.Id),
                         ActivationPolicy = (GrantedAbilityActivationPolicy)info.ActivationPolicy,
                         DeactivationPolicy = (GrantedAbilityDeactivationPolicy)info.DeactivationPolicy,
                         Level = info.Level,
@@ -245,6 +249,120 @@ namespace GAS.Runtime
             }
 
             return new GameplayEffectConfig(configs.ToArray());
+        }
+        public static AbilityConfig GetAbilityConfig(int id)
+        {
+            var data = Tables.Tbability.Get(id);
+            if (data == null)
+            {
+                Debug.LogError($"Ability_ID:{id}  不存在.");
+                return new AbilityConfig(Array.Empty<GameplayAbilityComponentConfig>());
+            }
+
+            var configs = new List<GameplayAbilityComponentConfig>();
+
+            // cost
+            if (data.Cost != 0)
+                configs.Add(new ConfAbilityCost{ CostComponentConfigs = GetGameplayEffectConfig(data.Cost).ComponentConfigs });
+            // assetTags
+            if (data.AssetTags is { Count: > 0 })
+                configs.Add(new ConfAbilityAssetTags { tags = data.AssetTags.ToArray() });
+            // cancelAbilityWithTags
+            if (data.CancelAbilityWithTags is { Count: > 0 })
+                configs.Add(new ConfCancelAbilityTags { tags = data.CancelAbilityWithTags.ToArray() });
+            // blockAbilityWithTags
+            if (data.BlockAbilityWithTags is { Count: > 0 })
+                configs.Add(new ConfBlockAbilityTags { tags = data.BlockAbilityWithTags.ToArray() });
+            // activationOwnedTags
+            if (data.ActivationOwnedTags is { Count: > 0 })
+                configs.Add(new ConfAbilityActivationOwnedTags { tags = data.ActivationOwnedTags.ToArray() });
+            // activationRequiredTags
+            if (data.ActivationRequiredTags is { Count: > 0 })
+                configs.Add(new ConfAbilityActivationRequiredTags { tags = data.ActivationRequiredTags.ToArray() });
+            // activationBlockedTags
+            if (data.ActivationBlockedTags is { Count: > 0 })
+                configs.Add(new ConfAbilityActivationBlockedTags { tags = data.ActivationBlockedTags.ToArray() });
+            // cdEffect cd
+            if (data.Cd != 0)
+            {
+                configs.Add(new ConfAbilityCooldown
+                {
+                    Cooldown = data.Cd,
+                    CooldownComponentConfigs = GetGameplayEffectConfig(data.CdEffect).ComponentConfigs
+                });
+            }
+            // abilityLogic
+            var abilityLogicType = AbilityHelper.GetAbilityLogicType(data.AbilityLogic.GetType().Name);
+            if (abilityLogicType == null)
+                Debug.LogError($"Ability_ID:{id}  AbilityLogicType:{data.AbilityLogic.GetType().Name} 不存在.");
+            else
+            {
+                var abilityLogic = data.AbilityLogic;
+                var abilityLogicName = abilityLogic.GetType().Name;
+                var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);
+                var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;
+                if (abilityParam != null)
+                {
+                    switch (abilityLogic)
+                    {
+                        case cfg.ALApplyEffect aData:
+                        {
+                            var ap = abilityParam as GAS.RuntimeWithECS.AbilityParamArrayInt;
+                            ap?.SetValue(aData.Value);
+                            abilityParam = ap;
+                            break;
+                        }
+                        case cfg.ALDebugLog aData:
+                        {
+                            var ap = abilityParam as GAS.RuntimeWithECS.AbilityParamString;
+                            ap?.SetValue(aData.Value);
+                            abilityParam = ap;
+                            break;
+                        }
+                    }
+                }
+                configs.Add(new MCConfAbilityLogic()
+                {
+                    AbilityLogicType = abilityLogicName,
+                    abilityParam = abilityParam
+                });
+            }
+
+            return new AbilityConfig(configs.ToArray());
+        }
+        public static MMCConfig GetMmcConfig(int id)
+        {
+            var data = Tables.Tbmmc.Get(id);
+            if (data == null)
+            {
+                Debug.LogError($"MMC_ID:{id}  不存在.");
+                return new MMCConfig() { };
+            }
+
+            var mmcLogic = data.MmcLogic;
+            var mmcLogicName = data.MmcLogic.GetType().Name;
+            var mmcLogicParamType = AbilityHelper.GetAbilityLogicParamType(mmcLogicName);
+            IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;
+            if (mmcParam != null)
+            {
+                switch (mmcLogic)
+                {
+                    case cfg.MMCScalableFloat mmcData:
+                    {
+                        var mp = mmcParam as GAS.Runtime.MmcParaFloatScale;
+                        mp?.SetK(mmcData.K);
+                        mp?.SetB(mmcData.B);
+                        mmcParam = mp;
+                        break;
+                    }
+                }
+            }
+
+            return new MMCConfig()
+            {
+                MmcType = MmcHelper.GetMmcType(mmcLogicName),
+                MmcParameter = mmcParam
+            };
         }
     }
 }

@@ -396,12 +396,16 @@ namespace GAS.Runtime
             IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;
             if (mmcParam != null)
             {
-                if (mmcLogic is cfg.MMCScalableFloat mmcScalableFloat)
+                switch (mmcLogic)
                 {
-                    var mMcScalableFloatParam = mmcParam as MmcParaFloatScale;
-                    mMcScalableFloatParam?.SetK(mmcScalableFloat.K);
-                    mMcScalableFloatParam?.SetB(mmcScalableFloat.B);
-                    mmcParam = mMcScalableFloatParam;
+                    case cfg.MMCScalableFloat mmcData:
+                    {
+                        var mp = mmcParam as MmcParaFloatScale;
+                        mp?.SetK(mmcData.K);
+                        mp?.SetB(mmcData.B);
+                        mmcParam = mp;
+                        break;
+                    }
                 }
             }
             
