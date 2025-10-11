@@ -531,7 +531,7 @@ namespace GAS.Editor
                         
                         writer.WriteLine("var mmcLogic = data.MmcLogic;");
                         writer.WriteLine("var mmcLogicName = data.MmcLogic.GetType().Name;");
-                        writer.WriteLine("var mmcLogicParamType = AbilityHelper.GetAbilityLogicParamType(mmcLogicName);");
+                        writer.WriteLine("var mmcLogicParamType = MmcHelper.GetMmcParamTypeByMmcType(mmcLogicName);");
                         writer.WriteLine("IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;");
                         writer.WriteLine("if (mmcParam != null)");
                         writer.WriteLine("{");
