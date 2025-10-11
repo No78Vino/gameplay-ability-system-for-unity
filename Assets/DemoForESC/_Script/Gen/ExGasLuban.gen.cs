@@ -17,7 +17,7 @@ using GAS.RuntimeWithECS.Static;
 
 namespace GAS.Runtime
 {
-    public static class EXLuban
+    public static class XLuban
     {
         public const string GAME_CONF_DIR = "Assets/DemoForESC/Resources/Tables";
         private static Tables _tables;
@@ -250,6 +250,7 @@ namespace GAS.Runtime
 
             return new GameplayEffectConfig(configs.ToArray());
         }
+
         public static AbilityConfig GetAbilityConfig(int id)
         {
             var data = Tables.Tbability.Get(id);
@@ -330,6 +331,7 @@ namespace GAS.Runtime
 
             return new AbilityConfig(configs.ToArray());
         }
+
         public static MMCConfig GetMmcConfig(int id)
         {
             var data = Tables.Tbmmc.Get(id);

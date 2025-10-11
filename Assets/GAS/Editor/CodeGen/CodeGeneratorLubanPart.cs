@@ -35,7 +35,7 @@ namespace GAS.Editor
             writer.WriteLine("{");
             writer.Indent++;
             {
-                writer.WriteLine("public static class EXLuban");
+                writer.WriteLine("public static class XLuban");
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
