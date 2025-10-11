@@ -17,9 +17,9 @@ using UnityEngine;
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    public class EX_GAS_Watcher : OdinEditorWindow
+    public class GASWatcher : OdinEditorWindow
     {
-        private const string OpenWindow_MenuItemName = "EXTool/EX-GAS/Watcher";
+        private const string OpenWindow_MenuItemName = "EXTool/EX-GAS/监测台";
 #if EX_GAS_ENABLE_HOT_KEYS
         private const string OpenWindow_MenuItemNameEnh = OpenWindow_MenuItemName + " %F11";
 #else
@@ -28,7 +28,7 @@ namespace GAS.Editor
         [MenuItem(OpenWindow_MenuItemNameEnh, priority = 3)]
         private static void OpenWindow()
         {
-            var window = GetWindow<EX_GAS_Watcher>();
+            var window = GetWindow<GASWatcher>();
             window.titleContent = new GUIContent("EX-GAS监测台");
             window.Show();
         }

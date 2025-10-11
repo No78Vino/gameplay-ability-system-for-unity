@@ -371,7 +371,7 @@ namespace GAS.Editor
             AssetDatabase.Refresh();
         }
         
-        [MenuItem("EXTool/EX-GAS/生成脚本/配置表拓展类")]
+        [MenuItem("EXTool/EX-GAS/生成脚本/LubanExtension")]
         public static void GenerateLubanExtension()
         {
             CodeGeneratorLubanPart.GenerateLubanExtension();
