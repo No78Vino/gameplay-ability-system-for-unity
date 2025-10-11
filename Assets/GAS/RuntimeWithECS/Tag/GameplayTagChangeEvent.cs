@@ -1,4 +1,4 @@
-namespace GAS.RuntimeWithECS.Tag
+namespace GAS.Runtime
 {
     public enum GameplayTagChangeEvent
     {

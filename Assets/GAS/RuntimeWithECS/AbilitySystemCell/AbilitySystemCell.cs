@@ -1,10 +1,8 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AttributeSet;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.Tag;
 using Unity.Entities;
 using UnityEngine;
 

@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using GAS.Editor;
 using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Helper;
-using GAS.RuntimeWithECS.Tag;
-using GAS.RuntimeWithECS.Tag.Component;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Unity.Entities;

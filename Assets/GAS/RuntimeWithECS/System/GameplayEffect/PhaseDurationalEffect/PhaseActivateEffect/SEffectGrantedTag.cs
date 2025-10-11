@@ -1,5 +1,4 @@
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Burst;
 using Unity.Entities;
 

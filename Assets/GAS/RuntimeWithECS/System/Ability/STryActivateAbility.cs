@@ -1,8 +1,6 @@
-using GAS.Runtime;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.Static;
-using GAS.RuntimeWithECS.Tag;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

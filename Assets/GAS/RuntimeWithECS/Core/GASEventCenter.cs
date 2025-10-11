@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using GAS.RuntimeWithECS;
 using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.Tag;
 using Unity.Entities;
 
 namespace GAS.Runtime

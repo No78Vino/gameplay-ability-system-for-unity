@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Tag.Component
+namespace GAS.Runtime
 {
     public struct BTemporaryTag: IBufferElementData
     {

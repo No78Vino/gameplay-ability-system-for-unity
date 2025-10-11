@@ -1,6 +1,6 @@
 using System;
 
-namespace GAS.RuntimeWithECS.Tag
+namespace GAS.Runtime
 {
     public struct GASTag
     {

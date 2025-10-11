@@ -75,7 +75,6 @@ namespace GAS.Editor
 
             writer.WriteLine("");
             writer.WriteLine("using System.Collections.Generic;");
-            writer.WriteLine("using GAS.RuntimeWithECS.Tag;");
             writer.WriteLine("");
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");

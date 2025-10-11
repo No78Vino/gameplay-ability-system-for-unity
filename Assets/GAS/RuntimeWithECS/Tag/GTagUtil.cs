@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using GAS.Runtime;
-using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Tag
+namespace GAS.Runtime
 {
     public static class GTagUtil
     {

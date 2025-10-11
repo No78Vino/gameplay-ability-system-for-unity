@@ -1,8 +1,6 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.RuntimeWithECS.Common.Component;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Tag;
-using GAS.RuntimeWithECS.Tag.Component;
 using Unity.Collections;
 using Unity.Entities;
 

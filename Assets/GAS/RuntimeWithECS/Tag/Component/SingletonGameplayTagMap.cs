@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Tag.Component
+namespace GAS.Runtime
 {
     public struct SingletonGameplayTagMap : IComponentData
     {
