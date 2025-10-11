@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using GAS.RuntimeWithECS;
 
-namespace GAS.RuntimeWithECS.Modifier.MmcParameter
+namespace GAS.Runtime
 {
     [Serializable]
     public class MmcParaFloatScale : IMmcParameter
@@ -20,6 +21,10 @@ namespace GAS.RuntimeWithECS.Modifier.MmcParameter
             this.k = k;
             this.b = b;
         }
+        
+        public void SetK(float k) =>this.k = k;
+        public void SetB(float b) =>this.b = b;
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

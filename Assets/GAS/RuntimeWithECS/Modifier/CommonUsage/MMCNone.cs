@@ -1,5 +1,5 @@
 using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.MmcParameter;
+using GAS.Runtime;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS

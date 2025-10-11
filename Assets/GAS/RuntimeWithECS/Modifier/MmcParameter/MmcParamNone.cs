@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using GAS.RuntimeWithECS;
 
-namespace GAS.RuntimeWithECS.Modifier.MmcParameter
+namespace GAS.Runtime
 {
     public class MmcParamNone : IMmcParameter
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS.Modifier.MmcParameter;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;

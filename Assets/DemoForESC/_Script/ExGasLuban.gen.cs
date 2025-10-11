@@ -368,18 +368,14 @@ namespace GAS.Runtime
                 }
                 configs.Add(new MCConfAbilityLogic()
                 {
+                    AbilityLogicType = abilityLogicName,
                     abilityParam = abilityParam
                 });
             }
 
             return new AbilityConfig(configs.ToArray());
         }
-
-        /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        
         public static MMCConfig GetMmcConfig(int id)
         {
             var data = Tables.Tbmmc.Get(id);
@@ -388,9 +384,27 @@ namespace GAS.Runtime
                 Debug.LogError($"MMC_ID:{id}  不存在.");
                 return new MMCConfig() { };
             }
-            //data.MmcLogic
             
-            return new MMCConfig() { };
+            var mmcLogic = data.MmcLogic;
+            var mmcLogicName = data.MmcLogic.GetType().Name;
+            var mmcLogicParamType = AbilityHelper.GetAbilityLogicParamType(mmcLogicName);
+            IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;
+            if (mmcParam != null)
+            {
+                if (mmcLogic is cfg.MMCScalableFloat mmcScalableFloat)
+                {
+                    var mMcScalableFloatParam = mmcParam as MmcParaFloatScale;
+                    mMcScalableFloatParam?.SetK(mmcScalableFloat.K);
+                    mMcScalableFloatParam?.SetB(mmcScalableFloat.B);
+                    mmcParam = mMcScalableFloatParam;
+                }
+            }
+            
+            return new MMCConfig()
+            {
+                MmcType = MmcHelper.GetMmcType(mmcLogicName),
+                MmcParameter = mmcParam
+            };
         }
     }
 }
