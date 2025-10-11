@@ -228,7 +228,7 @@ namespace GAS.Runtime
                 var cues = new GameplayCueConfig[data.CueOnActivate.Count];
                 for (var i = 0; i < data.CueOnActivate.Count; i++)
                     cues[i] = GetGameplayCueConfig(data.CueOnActivate[i]);
-                configs.Add(new ConfCueOnAcivate() { cues = cues });
+                configs.Add(new ConfCueOnActivate() { cues = cues });
             }
        
             // cueOnDeactivate
@@ -237,7 +237,7 @@ namespace GAS.Runtime
                 var cues = new GameplayCueConfig[data.CueOnDeactivate.Count];
                 for (var i = 0; i < data.CueOnDeactivate.Count; i++)
                     cues[i] = GetGameplayCueConfig(data.CueOnDeactivate[i]);
-                configs.Add(new ConfCueOnDeacivate() { cues = cues });
+                configs.Add(new ConfCueOnDeactivate() { cues = cues });
             }
             
             // grantedAbility

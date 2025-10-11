@@ -9,7 +9,7 @@ namespace GAS.Runtime
         public NativeArray<Entity> cues;
     }
 
-    public sealed class ConfCueOnDeacivate : ConfCueBase
+    public sealed class ConfCueOnDeactivate : ConfCueBase
     {
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
