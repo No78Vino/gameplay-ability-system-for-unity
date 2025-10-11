@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GAS.RuntimeWithECS;
 using GAS.Runtime;
+using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
 
@@ -10,9 +11,10 @@ namespace DemoForESC._Script.Gas.Ability
     {
         private Vector3 _moveDirection;
         private Vector3 _viewPointForward;
-        private float _rotationOffset = 0.1f; // 转身缓冲
-        
-        public float RotationOffset => _rotationOffset;
+
+        [ShowInInspector]
+        public float RotationOffset { get; private set; } = 0.1f;
+
         public Vector3 ViewPointForward => _viewPointForward;
         public Vector3 MoveDirection => _moveDirection;
         
@@ -20,24 +22,39 @@ namespace DemoForESC._Script.Gas.Ability
         {
             _moveDirection = Vector3.zero;
             _viewPointForward = Vector3.forward;
-            _rotationOffset = 0.1f;
+            RotationOffset = 0.1f;
         }
         
-        public void SetValue(Vector3 moveDirection,Vector3 viewPointForward, float rotationOffset)
+        public void SetValue(Vector3 moveDirection,Vector3 viewPointForward)
         {
             _moveDirection = moveDirection;
             _viewPointForward = viewPointForward;
-            _rotationOffset = rotationOffset;
+        }
+        
+        public void SetRotationOffset(float offset)
+        {
+            RotationOffset = offset;
         }
         
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
+            if (paramData == null || paramData.Count == 0)
+            {
+                RotationOffset = 0.1f;
+                return;
+            }
+
+            if (float.TryParse(paramData[0].ToString(), out var val))
+                RotationOffset = val;
+            else
+                RotationOffset = 0.1f;
         }
 
         public List<object> EncodeExcelData()
         {
-            return new List<object>();
+            var result = new List<object> { RotationOffset };
+            return result;
         }
 #endif
     }

@@ -5,8 +5,8 @@
     "desc": "描述:模值x1.5",
     "mmcLogic": {
       "$type": "MMCScalableFloat",
-      "k": 2,
-      "b": 1
+      "K": 2,
+      "B": 1
     }
   },
   {
@@ -15,8 +15,8 @@
     "desc": "描述:模值x3",
     "mmcLogic": {
       "$type": "MMCScalableFloat",
-      "k": 3,
-      "b": 0.5
+      "K": 3,
+      "B": 0.5
     }
   },
   {
@@ -25,8 +25,8 @@
     "desc": "test message3",
     "mmcLogic": {
       "$type": "MMCScalableFloat",
-      "k": 1.5,
-      "b": 0
+      "K": 1.5,
+      "B": 0
     }
   }
 ]

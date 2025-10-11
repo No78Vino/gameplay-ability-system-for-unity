@@ -17,8 +17,8 @@ public sealed partial class MMCScalableFloat : MmcLogic
 {
     public MMCScalableFloat(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["k"].IsNumber) { throw new SerializationException(); }  K = _buf["k"]; }
-        { if(!_buf["b"].IsNumber) { throw new SerializationException(); }  B = _buf["b"]; }
+        { if(!_buf["K"].IsNumber) { throw new SerializationException(); }  K = _buf["K"]; }
+        { if(!_buf["B"].IsNumber) { throw new SerializationException(); }  B = _buf["B"]; }
     }
 
     public static MMCScalableFloat DeserializeMMCScalableFloat(JSONNode _buf)
@@ -40,8 +40,8 @@ public sealed partial class MMCScalableFloat : MmcLogic
     public override string ToString()
     {
         return "{ "
-        + "k:" + K + ","
-        + "b:" + B + ","
+        + "K:" + K + ","
+        + "B:" + B + ","
         + "}";
     }
 }

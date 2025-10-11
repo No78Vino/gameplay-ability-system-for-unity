@@ -17,15 +17,15 @@ public sealed partial class stacking : Luban.BeanBase
 {
     public stacking(JSONNode _buf) 
     {
-        { if(!_buf["stackingType"].IsNumber) { throw new SerializationException(); }  StackingType = _buf["stackingType"]; }
-        { if(!_buf["stackCode"].IsNumber) { throw new SerializationException(); }  StackCode = _buf["stackCode"]; }
-        { if(!_buf["limitCount"].IsNumber) { throw new SerializationException(); }  LimitCount = _buf["limitCount"]; }
-        { if(!_buf["durationRefreshPolicy"].IsNumber) { throw new SerializationException(); }  DurationRefreshPolicy = _buf["durationRefreshPolicy"]; }
-        { if(!_buf["periodResetPolicy"].IsNumber) { throw new SerializationException(); }  PeriodResetPolicy = _buf["periodResetPolicy"]; }
-        { if(!_buf["expirationPolicy"].IsNumber) { throw new SerializationException(); }  ExpirationPolicy = _buf["expirationPolicy"]; }
-        { if(!_buf["denyOverflowApplication"].IsBoolean) { throw new SerializationException(); }  DenyOverflowApplication = _buf["denyOverflowApplication"]; }
-        { if(!_buf["clearStackOnOverflow"].IsBoolean) { throw new SerializationException(); }  ClearStackOnOverflow = _buf["clearStackOnOverflow"]; }
-        { var __json0 = _buf["overflowEffects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; OverflowEffects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OverflowEffects[__index0++] = __v0; }   }
+        { if(!_buf["StackingType"].IsNumber) { throw new SerializationException(); }  StackingType = _buf["StackingType"]; }
+        { if(!_buf["StackCode"].IsNumber) { throw new SerializationException(); }  StackCode = _buf["StackCode"]; }
+        { if(!_buf["LimitCount"].IsNumber) { throw new SerializationException(); }  LimitCount = _buf["LimitCount"]; }
+        { if(!_buf["DurationRefreshPolicy"].IsNumber) { throw new SerializationException(); }  DurationRefreshPolicy = _buf["DurationRefreshPolicy"]; }
+        { if(!_buf["PeriodResetPolicy"].IsNumber) { throw new SerializationException(); }  PeriodResetPolicy = _buf["PeriodResetPolicy"]; }
+        { if(!_buf["ExpirationPolicy"].IsNumber) { throw new SerializationException(); }  ExpirationPolicy = _buf["ExpirationPolicy"]; }
+        { if(!_buf["DenyOverflowApplication"].IsBoolean) { throw new SerializationException(); }  DenyOverflowApplication = _buf["DenyOverflowApplication"]; }
+        { if(!_buf["ClearStackOnOverflow"].IsBoolean) { throw new SerializationException(); }  ClearStackOnOverflow = _buf["ClearStackOnOverflow"]; }
+        { var __json0 = _buf["OverflowEffects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; OverflowEffects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OverflowEffects[__index0++] = __v0; }   }
     }
 
     public static stacking Deserializestacking(JSONNode _buf)
@@ -53,15 +53,15 @@ public sealed partial class stacking : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "stackingType:" + StackingType + ","
-        + "stackCode:" + StackCode + ","
-        + "limitCount:" + LimitCount + ","
-        + "durationRefreshPolicy:" + DurationRefreshPolicy + ","
-        + "periodResetPolicy:" + PeriodResetPolicy + ","
-        + "expirationPolicy:" + ExpirationPolicy + ","
-        + "denyOverflowApplication:" + DenyOverflowApplication + ","
-        + "clearStackOnOverflow:" + ClearStackOnOverflow + ","
-        + "overflowEffects:" + Luban.StringUtil.CollectionToString(OverflowEffects) + ","
+        + "StackingType:" + StackingType + ","
+        + "StackCode:" + StackCode + ","
+        + "LimitCount:" + LimitCount + ","
+        + "DurationRefreshPolicy:" + DurationRefreshPolicy + ","
+        + "PeriodResetPolicy:" + PeriodResetPolicy + ","
+        + "ExpirationPolicy:" + ExpirationPolicy + ","
+        + "DenyOverflowApplication:" + DenyOverflowApplication + ","
+        + "ClearStackOnOverflow:" + ClearStackOnOverflow + ","
+        + "OverflowEffects:" + Luban.StringUtil.CollectionToString(OverflowEffects) + ","
         + "}";
     }
 }

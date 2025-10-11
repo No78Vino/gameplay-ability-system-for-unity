@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GAS.RuntimeWithECS;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.ComponentConfig;
+using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 using UnityEngine;
 
@@ -65,6 +66,7 @@ namespace GAS.RuntimeWithECS
             GASManager.EntityManager.SetName(entity, $"Ability_{entity.ToString()}");
             foreach (var config in configs)
                 config.LoadToGameplayAbilityEntity(entity);
+            
             return entity;
         }
         

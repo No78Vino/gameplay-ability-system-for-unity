@@ -262,6 +262,8 @@ namespace GAS.Runtime
 
             var configs = new List<GameplayAbilityComponentConfig>();
 
+            // baseInfo
+            configs.Add(new ConfAbilityBaseInfo { Code = id, Level = 0 });
             // cost
             if (data.Cost != 0)
                 configs.Add(new ConfAbilityCost{ CostComponentConfigs = GetGameplayEffectConfig(data.Cost).ComponentConfigs });
@@ -317,6 +319,13 @@ namespace GAS.Runtime
                         {
                             var ap = abilityParam as GAS.RuntimeWithECS.AbilityParamString;
                             ap?.SetValue(aData.Value);
+                            abilityParam = ap;
+                            break;
+                        }
+                        case cfg.ALMove aData:
+                        {
+                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.AbilityParamMove;
+                            ap?.SetRotationOffset(aData.RotationOffset);
                             abilityParam = ap;
                             break;
                         }

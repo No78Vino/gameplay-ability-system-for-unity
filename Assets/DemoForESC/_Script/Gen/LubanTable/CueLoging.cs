@@ -17,8 +17,8 @@ public sealed partial class CueLoging : CueLogic
 {
     public CueLoging(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["value"].IsString) { throw new SerializationException(); }  Value = _buf["value"]; }
-        { if(!_buf["duration"].IsNumber) { throw new SerializationException(); }  Duration = _buf["duration"]; }
+        { if(!_buf["Value"].IsString) { throw new SerializationException(); }  Value = _buf["Value"]; }
+        { if(!_buf["Duration"].IsNumber) { throw new SerializationException(); }  Duration = _buf["Duration"]; }
     }
 
     public static CueLoging DeserializeCueLoging(JSONNode _buf)
@@ -40,8 +40,8 @@ public sealed partial class CueLoging : CueLogic
     public override string ToString()
     {
         return "{ "
-        + "value:" + Value + ","
-        + "duration:" + Duration + ","
+        + "Value:" + Value + ","
+        + "Duration:" + Duration + ","
         + "}";
     }
 }

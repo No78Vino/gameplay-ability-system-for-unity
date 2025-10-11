@@ -17,7 +17,7 @@ public sealed partial class ALDebugLog : AbilityLogic
 {
     public ALDebugLog(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["value"].IsString) { throw new SerializationException(); }  Value = _buf["value"]; }
+        { if(!_buf["Value"].IsString) { throw new SerializationException(); }  Value = _buf["Value"]; }
     }
 
     public static ALDebugLog DeserializeALDebugLog(JSONNode _buf)
@@ -38,7 +38,7 @@ public sealed partial class ALDebugLog : AbilityLogic
     public override string ToString()
     {
         return "{ "
-        + "value:" + Value + ","
+        + "Value:" + Value + ","
         + "}";
     }
 }

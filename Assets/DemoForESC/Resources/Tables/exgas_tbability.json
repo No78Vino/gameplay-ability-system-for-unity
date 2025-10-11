@@ -2,28 +2,21 @@
   {
     "id": 10001,
     "name": "move",
-    "desc": "描述1",
-    "cost": 1001,
-    "cdEffect": 1001,
-    "cd": 96,
+    "desc": "移动",
+    "cost": 0,
+    "cdEffect": 0,
+    "cd": 0,
     "assetTags": [
-      1001,
-      2001,
-      2003,
       2002
     ],
-    "cancelAbilityWithTags": [
-      2002,
-      2005,
-      2004
-    ],
+    "cancelAbilityWithTags": [],
     "blockAbilityWithTags": [],
     "activationOwnedTags": [],
     "activationRequiredTags": [],
     "activationBlockedTags": [],
     "abilityLogic": {
-      "$type": "ALDebugLog",
-      "value": "测试代码9"
+      "$type": "ALMove",
+      "RotationOffset": 0.5
     }
   },
   {
@@ -43,7 +36,7 @@
     "activationBlockedTags": [],
     "abilityLogic": {
       "$type": "ALDebugLog",
-      "value": "测试代码2"
+      "Value": "测试代码2"
     }
   }
 ]

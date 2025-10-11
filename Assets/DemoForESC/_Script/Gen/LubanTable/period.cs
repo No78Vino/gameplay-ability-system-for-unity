@@ -17,9 +17,9 @@ public sealed partial class period : Luban.BeanBase
 {
     public period(JSONNode _buf) 
     {
-        { if(!_buf["time"].IsNumber) { throw new SerializationException(); }  Time = _buf["time"]; }
-        { var __json0 = _buf["effects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Effects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Effects[__index0++] = __v0; }   }
-        { if(!_buf["firstTrigger"].IsBoolean) { throw new SerializationException(); }  FirstTrigger = _buf["firstTrigger"]; }
+        { if(!_buf["Time"].IsNumber) { throw new SerializationException(); }  Time = _buf["Time"]; }
+        { var __json0 = _buf["Effects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Effects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Effects[__index0++] = __v0; }   }
+        { if(!_buf["FirstTrigger"].IsBoolean) { throw new SerializationException(); }  FirstTrigger = _buf["FirstTrigger"]; }
     }
 
     public static period Deserializeperiod(JSONNode _buf)
@@ -41,9 +41,9 @@ public sealed partial class period : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "time:" + Time + ","
-        + "effects:" + Luban.StringUtil.CollectionToString(Effects) + ","
-        + "firstTrigger:" + FirstTrigger + ","
+        + "Time:" + Time + ","
+        + "Effects:" + Luban.StringUtil.CollectionToString(Effects) + ","
+        + "FirstTrigger:" + FirstTrigger + ","
         + "}";
     }
 }

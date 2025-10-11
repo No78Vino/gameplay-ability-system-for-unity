@@ -17,7 +17,7 @@ public sealed partial class GameplayCueLog : CueLogic
 {
     public GameplayCueLog(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["value"].IsString) { throw new SerializationException(); }  Value = _buf["value"]; }
+        { if(!_buf["Value"].IsString) { throw new SerializationException(); }  Value = _buf["Value"]; }
     }
 
     public static GameplayCueLog DeserializeGameplayCueLog(JSONNode _buf)
@@ -38,7 +38,7 @@ public sealed partial class GameplayCueLog : CueLogic
     public override string ToString()
     {
         return "{ "
-        + "value:" + Value + ","
+        + "Value:" + Value + ","
         + "}";
     }
 }

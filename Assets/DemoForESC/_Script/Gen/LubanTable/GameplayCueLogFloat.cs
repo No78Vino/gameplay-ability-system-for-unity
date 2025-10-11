@@ -17,7 +17,7 @@ public sealed partial class GameplayCueLogFloat : CueLogic
 {
     public GameplayCueLogFloat(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["value"].IsNumber) { throw new SerializationException(); }  Value = _buf["value"]; }
+        { if(!_buf["Value"].IsNumber) { throw new SerializationException(); }  Value = _buf["Value"]; }
     }
 
     public static GameplayCueLogFloat DeserializeGameplayCueLogFloat(JSONNode _buf)
@@ -38,7 +38,7 @@ public sealed partial class GameplayCueLogFloat : CueLogic
     public override string ToString()
     {
         return "{ "
-        + "value:" + Value + ","
+        + "Value:" + Value + ","
         + "}";
     }
 }

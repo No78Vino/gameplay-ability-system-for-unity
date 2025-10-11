@@ -13,7 +13,7 @@
     ],
     "cueLogic": {
       "$type": "GameplayCueLog",
-      "value": "testMessageA"
+      "Value": "testMessageA"
     }
   },
   {
@@ -29,8 +29,8 @@
     "immunity_tag": [],
     "cueLogic": {
       "$type": "CueLoging",
-      "value": "testValue2",
-      "duration": 1.55
+      "Value": "testValue2",
+      "Duration": 1.55
     }
   },
   {
@@ -52,8 +52,8 @@
     ],
     "cueLogic": {
       "$type": "CueLoging",
-      "value": "卧槽",
-      "duration": 30
+      "Value": "卧槽",
+      "Duration": 30
     }
   }
 ]

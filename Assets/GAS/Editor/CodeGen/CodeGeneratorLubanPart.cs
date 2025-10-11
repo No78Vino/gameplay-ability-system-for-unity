@@ -392,6 +392,10 @@ namespace GAS.Editor
 
                         writer.WriteLine("var configs = new List<GameplayAbilityComponentConfig>();");
                         writer.WriteLine("");
+                        
+                        writer.WriteLine("// baseInfo");
+                        writer.WriteLine("configs.Add(new ConfAbilityBaseInfo { Code = id, Level = 0 });");
+                        
                         writer.WriteLine("// cost");
                         writer.WriteLine("if (data.Cost != 0)");
                         writer.WriteLine(

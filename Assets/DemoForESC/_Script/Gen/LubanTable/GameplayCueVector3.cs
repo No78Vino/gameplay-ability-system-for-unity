@@ -17,9 +17,9 @@ public sealed partial class GameplayCueVector3 : CueLogic
 {
     public GameplayCueVector3(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["x"].IsNumber) { throw new SerializationException(); }  X = _buf["x"]; }
-        { if(!_buf["y"].IsNumber) { throw new SerializationException(); }  Y = _buf["y"]; }
-        { if(!_buf["z"].IsNumber) { throw new SerializationException(); }  Z = _buf["z"]; }
+        { if(!_buf["X"].IsNumber) { throw new SerializationException(); }  X = _buf["X"]; }
+        { if(!_buf["Y"].IsNumber) { throw new SerializationException(); }  Y = _buf["Y"]; }
+        { if(!_buf["Z"].IsNumber) { throw new SerializationException(); }  Z = _buf["Z"]; }
     }
 
     public static GameplayCueVector3 DeserializeGameplayCueVector3(JSONNode _buf)
@@ -42,9 +42,9 @@ public sealed partial class GameplayCueVector3 : CueLogic
     public override string ToString()
     {
         return "{ "
-        + "x:" + X + ","
-        + "y:" + Y + ","
-        + "z:" + Z + ","
+        + "X:" + X + ","
+        + "Y:" + Y + ","
+        + "Z:" + Z + ","
         + "}";
     }
 }

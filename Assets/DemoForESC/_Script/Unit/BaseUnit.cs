@@ -46,7 +46,7 @@ namespace DemoForESC._Script
                 AbilitySystemCellMono.TryActivateAbility(XAbility.ABILITY_move,_cacheParamMove);
             
             var viewPointForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            _cacheParamMove.SetValue(direction,viewPointForward,0.1f);
+            _cacheParamMove.SetValue(direction,viewPointForward);
             AbilitySystemCellMono.Cell.SetAbilityParam(XAbility.ABILITY_move,_cacheParamMove);
         }
         

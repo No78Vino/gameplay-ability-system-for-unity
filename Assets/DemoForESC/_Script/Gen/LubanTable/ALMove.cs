@@ -13,21 +13,21 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class GameplayCueLogBool : CueLogic
+public sealed partial class ALMove : AbilityLogic
 {
-    public GameplayCueLogBool(JSONNode _buf)  : base(_buf) 
+    public ALMove(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["Value"].IsBoolean) { throw new SerializationException(); }  Value = _buf["Value"]; }
+        { if(!_buf["RotationOffset"].IsNumber) { throw new SerializationException(); }  RotationOffset = _buf["RotationOffset"]; }
     }
 
-    public static GameplayCueLogBool DeserializeGameplayCueLogBool(JSONNode _buf)
+    public static ALMove DeserializeALMove(JSONNode _buf)
     {
-        return new GameplayCueLogBool(_buf);
+        return new ALMove(_buf);
     }
 
-    public readonly bool Value;
+    public readonly float RotationOffset;
    
-    public const int __ID__ = 1947927937;
+    public const int __ID__ = 1933486748;
     public override int GetTypeId() => __ID__;
 
     public override void ResolveRef(Tables tables)
@@ -38,7 +38,7 @@ public sealed partial class GameplayCueLogBool : CueLogic
     public override string ToString()
     {
         return "{ "
-        + "Value:" + Value + ","
+        + "RotationOffset:" + RotationOffset + ","
         + "}";
     }
 }
