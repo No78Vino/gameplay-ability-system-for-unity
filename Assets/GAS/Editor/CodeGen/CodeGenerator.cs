@@ -336,7 +336,7 @@ namespace GAS.Editor
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
-                    var allMmc = EditGameplayEffectHelper.GetCachedMmcTypes();
+                    var allMmc = EditorMmcHelper.GetCachedMmcTypes();
                     var mmcTypes = allMmc as Type[] ?? allMmc.ToArray();
                     foreach (var mmcType in mmcTypes)
                     {
