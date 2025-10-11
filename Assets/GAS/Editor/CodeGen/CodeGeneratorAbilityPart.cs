@@ -44,13 +44,13 @@ namespace GAS.Editor
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
-                        var subTypes = EXEditorHelper.GetCachedAbilityLogicTypes();
+                        var subTypes = EditorAbilityHelper.GetCachedAbilityLogicTypes();
                         foreach (var subType in subTypes)
                         {
                             var typeFullName = subType.FullName;
                             var shortTypeName = subType.Name;
                             var abilityParamType =
-                                EXEditorHelper.GetCachedAbilityLogicToAbilityParamTypeMap()[typeFullName];
+                                EditorAbilityHelper.AbilityToAbilityParamTypeMap()[typeFullName];
                             var abilityParamTypeFullName = abilityParamType.FullName;
                             writer.WriteLine($"var {shortTypeName} = typeof({typeFullName});");
                             writer.WriteLine(
