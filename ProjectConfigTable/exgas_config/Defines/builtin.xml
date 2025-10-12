@@ -39,5 +39,28 @@
         <var name="operation" type="int"/>
         <var name="mmc" type="int"/>
     </bean>
-    
+
+    <bean name="duration" valueType="1" sep=";">
+        <var name="TimeUnit" type="int"/>
+        <var name="Time" type="int"/>
+        <var name="ResetStartTimeWhenActivated" type="bool"/>
+    </bean>
+
+    <bean name="period" valueType="1" sep=";">
+        <var name="Time" type="int"/>
+        <var name="Effects" type="(array#sep=;),int"/>
+        <var name="FirstTrigger" type="bool"/>
+    </bean>
+
+    <bean name="stacking" valueType="1" sep=";">
+        <var name="StackingType" type="int"/>
+        <var name="StackCode" type="int"/>
+        <var name="LimitCount" type="int"/>
+        <var name="DurationRefreshPolicy" type="int"/>
+        <var name="PeriodResetPolicy" type="int"/>
+        <var name="ExpirationPolicy" type="int"/>
+        <var name="DenyOverflowApplication" type="bool"/>
+        <var name="ClearStackOnOverflow" type="bool"/>
+        <var name="OverflowEffects" type="(array#sep=;),int"/>
+    </bean>
 </module>

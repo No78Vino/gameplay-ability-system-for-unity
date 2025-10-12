@@ -13,7 +13,7 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class stacking : Luban.BeanBase
+public partial struct stacking
 {
     public stacking(JSONNode _buf) 
     {
@@ -43,8 +43,6 @@ public sealed partial class stacking : Luban.BeanBase
     public readonly bool ClearStackOnOverflow;
     public readonly int[] OverflowEffects;
    
-    public const int __ID__ = 1302685786;
-    public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {

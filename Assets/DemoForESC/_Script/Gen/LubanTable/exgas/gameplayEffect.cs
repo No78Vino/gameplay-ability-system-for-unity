@@ -80,11 +80,11 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// 时间单位
     /// </summary>
-    public readonly duration Duration;
+    public readonly duration? Duration;
     /// <summary>
     /// 间隔时间
     /// </summary>
-    public readonly period Period;
+    public readonly period? Period;
     /// <summary>
     /// 属性数值修改器（每组共5个参数：1.AttrSet属性集ID；2.Attribute属性ID；3.Magnitude基础模值；4.Operation操作类型；5.MMC计算逻辑【即exgas.mmc中的计算类型ID】）
     /// </summary>
@@ -120,16 +120,13 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// 堆叠代码
     /// </summary>
-    public readonly stacking Stacking;
+    public readonly stacking? Stacking;
    
     public const int __ID__ = 1982447871;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
-        Duration?.ResolveRef(tables);
-        Period?.ResolveRef(tables);
-        Stacking?.ResolveRef(tables);
     }
 
     public override string ToString()

@@ -13,7 +13,7 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class duration : Luban.BeanBase
+public partial struct duration
 {
     public duration(JSONNode _buf) 
     {
@@ -31,8 +31,6 @@ public sealed partial class duration : Luban.BeanBase
     public readonly int Time;
     public readonly bool ResetStartTimeWhenActivated;
    
-    public const int __ID__ = -1992012396;
-    public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {

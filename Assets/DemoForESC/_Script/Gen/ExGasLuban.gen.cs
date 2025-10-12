@@ -118,26 +118,26 @@ namespace GAS.Runtime
             if (data.ImmunityTags is { Count: > 0 })
                 configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });
             // duration
-            if (data.Duration != null && data.Duration.Time != 0)
+            if (data.Duration != null && data.Duration.Value.Time != 0)
                 configs.Add(new ConfDuration
                 {
-                    duration = data.Duration.Time,
-                    timeUnit = (TimeUnit)data.Duration.TimeUnit,
-                    ResetStartTimeWhenActivated = data.Duration.ResetStartTimeWhenActivated
+                    duration = data.Duration.Value.Time,
+                    timeUnit = (TimeUnit)data.Duration.Value.TimeUnit,
+                    ResetStartTimeWhenActivated = data.Duration.Value.ResetStartTimeWhenActivated
                 });
             // period
             if (data.Period is { Time: > 0 })
             {
                 var gameplayEffectSettings = new List<GameplayEffectComponentConfig[]>();
-                foreach (var effectID in data.Period.Effects)
+                foreach (var effectID in data.Period.Value.Effects)
                 {
                     var effect = GetGameplayEffectConfig(effectID);
                     gameplayEffectSettings.Add(effect.ComponentConfigs);
                 }
                 configs.Add(new ConfPeriod
                 {
-                    Period = data.Period.Time,
-                    ResetTimeCountWhenDeactivated = data.Period.FirstTrigger,
+                    Period = data.Period.Value.Time,
+                    ResetTimeCountWhenDeactivated = data.Period.Value.FirstTrigger,
                     GameplayEffectSettings = gameplayEffectSettings.ToArray()
                 });
             }
@@ -226,24 +226,24 @@ namespace GAS.Runtime
                 configs.Add(new MCConfGrantedAbility() { GrantedAbilities = grantedAbilities });
             }
             // stacking
-            if (data.Stacking!=null && data.Stacking.StackCode != 0)
+            if (data.Stacking!=null && data.Stacking.Value.StackCode != 0)
             {
                 var effectConfigs = new List<GameplayEffectConfig>();
-                foreach (var effectID in data.Stacking.OverflowEffects)
+                foreach (var effectID in data.Stacking.Value.OverflowEffects)
                 {
                     var effect = GetGameplayEffectConfig(effectID);
                     effectConfigs.Add(effect);
                 }
                 configs.Add(new ConfStacking()
                 {
-                    StackingCode = data.Stacking.StackCode,
-                    StackType = (EffectStackType)data.Stacking.StackingType,
-                    LimitCount = data.Stacking.LimitCount,
-                    EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.DurationRefreshPolicy,
-                    EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.PeriodResetPolicy,
-                    EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.ExpirationPolicy,
-                    denyOverflowApplication = data.Stacking.DenyOverflowApplication,
-                    clearStackOnOverflow = data.Stacking.ClearStackOnOverflow,
+                    StackingCode = data.Stacking.Value.StackCode,
+                    StackType = (EffectStackType)data.Stacking.Value.StackingType,
+                    LimitCount = data.Stacking.Value.LimitCount,
+                    EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.Value.DurationRefreshPolicy,
+                    EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.Value.PeriodResetPolicy,
+                    EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.Value.ExpirationPolicy,
+                    denyOverflowApplication = data.Stacking.Value.DenyOverflowApplication,
+                    clearStackOnOverflow = data.Stacking.Value.ClearStackOnOverflow,
                     overflowEffects = effectConfigs.ToArray()
                 });
             }

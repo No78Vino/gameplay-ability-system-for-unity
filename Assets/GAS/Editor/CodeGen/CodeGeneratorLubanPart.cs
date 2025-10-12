@@ -221,14 +221,14 @@ namespace GAS.Editor
                             "    configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });");
 
                         writer.WriteLine("// duration");
-                        writer.WriteLine("if (data.Duration != null && data.Duration.Time != 0)");
+                        writer.WriteLine("if (data.Duration != null && data.Duration.Value.Time != 0)");
                         writer.Indent++;
                         writer.WriteLine("configs.Add(new ConfDuration");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("duration = data.Duration.Time,");
-                        writer.WriteLine("timeUnit = (TimeUnit)data.Duration.TimeUnit,");
-                        writer.WriteLine("ResetStartTimeWhenActivated = data.Duration.ResetStartTimeWhenActivated");
+                        writer.WriteLine("duration = data.Duration.Value.Time,");
+                        writer.WriteLine("timeUnit = (TimeUnit)data.Duration.Value.TimeUnit,");
+                        writer.WriteLine("ResetStartTimeWhenActivated = data.Duration.Value.ResetStartTimeWhenActivated");
                         writer.Indent--;
                         writer.WriteLine("});");
                         writer.Indent--;
@@ -238,7 +238,7 @@ namespace GAS.Editor
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("var gameplayEffectSettings = new List<GameplayEffectComponentConfig[]>();");
-                        writer.WriteLine("foreach (var effectID in data.Period.Effects)");
+                        writer.WriteLine("foreach (var effectID in data.Period.Value.Effects)");
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("var effect = GetGameplayEffectConfig(effectID);");
@@ -248,8 +248,8 @@ namespace GAS.Editor
                         writer.WriteLine("configs.Add(new ConfPeriod");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("Period = data.Period.Time,");
-                        writer.WriteLine("ResetTimeCountWhenDeactivated = data.Period.FirstTrigger,");
+                        writer.WriteLine("Period = data.Period.Value.Time,");
+                        writer.WriteLine("ResetTimeCountWhenDeactivated = data.Period.Value.FirstTrigger,");
                         writer.WriteLine("GameplayEffectSettings = gameplayEffectSettings.ToArray()");
                         writer.Indent--;
                         writer.WriteLine("});");
@@ -333,11 +333,11 @@ namespace GAS.Editor
                         writer.WriteLine("}");
 
                         writer.WriteLine("// stacking");
-                        writer.WriteLine("if (data.Stacking!=null && data.Stacking.StackCode != 0)");
+                        writer.WriteLine("if (data.Stacking!=null && data.Stacking.Value.StackCode != 0)");
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("var effectConfigs = new List<GameplayEffectConfig>();");
-                        writer.WriteLine("foreach (var effectID in data.Stacking.OverflowEffects)");
+                        writer.WriteLine("foreach (var effectID in data.Stacking.Value.OverflowEffects)");
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("var effect = GetGameplayEffectConfig(effectID);");
@@ -347,17 +347,17 @@ namespace GAS.Editor
                         writer.WriteLine("configs.Add(new ConfStacking()");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("StackingCode = data.Stacking.StackCode,");
-                        writer.WriteLine("StackType = (EffectStackType)data.Stacking.StackingType,");
-                        writer.WriteLine("LimitCount = data.Stacking.LimitCount,");
+                        writer.WriteLine("StackingCode = data.Stacking.Value.StackCode,");
+                        writer.WriteLine("StackType = (EffectStackType)data.Stacking.Value.StackingType,");
+                        writer.WriteLine("LimitCount = data.Stacking.Value.LimitCount,");
                         writer.WriteLine(
-                            "EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.DurationRefreshPolicy,");
+                            "EffectDurationRefreshPolicy = (EffectDurationRefreshPolicy)data.Stacking.Value.DurationRefreshPolicy,");
                         writer.WriteLine(
-                            "EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.PeriodResetPolicy,");
+                            "EffectPeriodResetPolicy = (EffectPeriodResetPolicy)data.Stacking.Value.PeriodResetPolicy,");
                         writer.WriteLine(
-                            "EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.ExpirationPolicy,");
-                        writer.WriteLine("denyOverflowApplication = data.Stacking.DenyOverflowApplication,");
-                        writer.WriteLine("clearStackOnOverflow = data.Stacking.ClearStackOnOverflow,");
+                            "EffectExpirationPolicy = (EffectExpirationPolicy)data.Stacking.Value.ExpirationPolicy,");
+                        writer.WriteLine("denyOverflowApplication = data.Stacking.Value.DenyOverflowApplication,");
+                        writer.WriteLine("clearStackOnOverflow = data.Stacking.Value.ClearStackOnOverflow,");
                         writer.WriteLine("overflowEffects = effectConfigs.ToArray()");
                         writer.Indent--;
                         writer.WriteLine("});");
