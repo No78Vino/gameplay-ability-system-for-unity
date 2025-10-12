@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell.Component
+namespace GAS.Runtime
 {
     public struct EffectContainerDirty : IComponentData
     {

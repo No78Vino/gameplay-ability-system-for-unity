@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.Static;
-using GAS.RuntimeWithECS.AbilitySystemCell.Component;
-using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.Helper;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Unity.Entities;
@@ -144,73 +141,25 @@ namespace GAS.Editor
         {
             get { return _ascEntityChoices ?? new ValueDropdownItem[] { }; }
         }
-
-        private static Dictionary<int, string> _cacheAbilityCode2Name;
         
-        private static Dictionary<int, string> CacheAbilityCode2Name
+        private static string GetAbilityNameByCode(int code)
         {
-            get
-            {
-                if (_cacheAbilityCode2Name == null)
-                {
-                    _cacheAbilityCode2Name = new Dictionary<int, string>();
-                    // var allAbilityAssets = EXEditorHelper.FindAll<AbilityConfigAsset>();
-                    // foreach (var abilityAsset in allAbilityAssets)
-                    // {
-                    //     var abilityBasicInfo = abilityAsset.ConfAssetAbilityBaseInfo;
-                    //     var abilityCode = abilityBasicInfo.Code;
-                    //     var abilityName = abilityBasicInfo.name;
-                    //     _cacheAbilityCode2Name.TryAdd(abilityCode, abilityName);
-                    // }
-                }
-
-                return _cacheAbilityCode2Name;
-            }
+            var name = EXEditorHelper.InvokeStaticXLubanMethod("GetAbilityNameByCode", code);
+            return name!=null ? name as string : "未知技能(配置表内不存在)";
         }
         
-        private static Dictionary<int, string> _cacheAttributeCode2Name;
-        
-        private static Dictionary<int, string> CacheAttributeCode2Name
+        private static string GetAttributeNameByCode(int code)
         {
-            get
-            {
-                if (_cacheAttributeCode2Name == null)
-                {
-                    _cacheAttributeCode2Name = new Dictionary<int, string>();
-                    // var attributeAsset = AttributeAsset.LoadOrCreate();
-                    // foreach (var attribute in attributeAsset.attributes)
-                    // {
-                    //     var attributeCode = attribute.GetCode();
-                    //     var attributeName = attribute.Name;
-                    //     _cacheAttributeCode2Name.TryAdd(attributeCode, attributeName);
-                    // }
-                }
-
-                return _cacheAttributeCode2Name;
-            }
+            var name = EXEditorHelper.InvokeStaticXLubanMethod("GetAttributeNameByCode", code);
+            return name!=null ? name as string : "未知属性(配置表内不存在)";
         }
         
-        private static Dictionary<int, string> _cacheAttrSetCode2Name;
-        
-        private static Dictionary<int, string> CacheAttrSetCode2Name
+        private static string GetAttrSetNameByCode(int code)
         {
-            get
-            {
-                if (_cacheAttrSetCode2Name == null)
-                {
-                    _cacheAttrSetCode2Name = new Dictionary<int, string>();
-                    // var attributeSetAsset = AttributeSetAsset.LoadOrCreate();
-                    // foreach (var attributeSet in attributeSetAsset.AttributeSetConfigs)
-                    // {
-                    //     var attrSetCode = attributeSet.GetCode();
-                    //     var attrSetName = attributeSet.Name;
-                    //     _cacheAttrSetCode2Name.TryAdd(attrSetCode, attrSetName);
-                    // }
-                }
-
-                return _cacheAttrSetCode2Name;
-            }
+            var name = EXEditorHelper.InvokeStaticXLubanMethod("GetAttrSetNameByCode", code);
+            return name!=null ? name as string : "未知属性集(配置表内不存在)";
         }
+        
         #endregion
 
         #region content update
@@ -233,11 +182,11 @@ namespace GAS.Editor
             foreach (var attrSet in attrSetBuffer)
             {
                 var attrSetCode = attrSet.Code;
-                _ascAttributes.Add($"属性集:{CacheAttrSetCode2Name[attrSetCode]} - [{attrSetCode}]");
+                _ascAttributes.Add($"属性集:{GetAttrSetNameByCode(attrSetCode)} - [{attrSetCode}]");
                 var attributes = attrSet.Attributes;
                 foreach (var attribute in attributes)
                     _ascAttributes.Add(
-                        $"--- {CacheAttributeCode2Name[attribute.Code]} : {attribute.CurrentValue} (BaseValue:{attribute.BaseValue})"
+                        $"--- {GetAttributeNameByCode(attribute.Code)} : {attribute.CurrentValue} (BaseValue:{attribute.BaseValue})"
                     );
             }
         }
@@ -298,7 +247,7 @@ namespace GAS.Editor
                 var abilityBasicInfo = GASManager.EntityManager.GetComponentData<CAbilityBaseInfo>(ability.Ability);
                 var abilityEntityName = ExGasHelper.GetEntityName(ability.Ability);
                 var text = $"Lv.{abilityBasicInfo.Level} " +
-                           $"- {CacheAbilityCode2Name[abilityBasicInfo.Code]} " +
+                           $"- {GetAbilityNameByCode(abilityBasicInfo.Code)} " +
                            $"[{abilityEntityName}]";
                 if(GASManager.EntityManager.HasComponent<CAbilityActive>(ability.Ability))
                     text += " - 激活中";

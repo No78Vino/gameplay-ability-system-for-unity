@@ -1,5 +1,4 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.AbilitySystemCell.Component;
 using GAS.Runtime;
 using Unity.Entities;
 

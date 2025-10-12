@@ -1,5 +1,4 @@
-﻿using GAS.RuntimeWithECS.AbilitySystemCell.Component;
-using GAS.Runtime;
+﻿using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

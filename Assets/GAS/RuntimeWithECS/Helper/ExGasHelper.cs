@@ -1,7 +1,6 @@
-using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Helper
+namespace GAS.Runtime
 {
     public static class ExGasHelper
     {

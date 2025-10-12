@@ -596,6 +596,49 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     #endregion
+
+                    writer.WriteLine("");
+                    
+                    #region Utils
+
+                    writer.WriteLine("public static string GetAbilityNameByCode(int id)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("var data = Tables.Tbability.Get(id);");
+                        writer.WriteLine("if (data != null) return data.Name;");
+                        writer.WriteLine("Debug.LogError($\"Ability_ID:{id}  不存在.\");");
+                        writer.WriteLine("return string.Empty;");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("");
+                    
+                    writer.WriteLine("public static string GetAttrSetNameByCode(int code)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("var data = Tables.TbattributeSet.Get(code);");
+                        writer.WriteLine("if (data != null) return data.Name;");
+                        writer.WriteLine("Debug.LogError($\"AttrSet_Code:{code}  不存在.\");");
+                        writer.WriteLine("return string.Empty;");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("");
+                    
+                    writer.WriteLine("public static string GetAttributeNameByCode(int code)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("var data = Tables.Tbattribute.Get(code);");
+                        writer.WriteLine("if (data != null) return data.Name;");
+                        writer.WriteLine("Debug.LogError($\"Attribute_Code:{code}  不存在.\");");
+                        writer.WriteLine("return string.Empty;");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    #endregion
                 }
                 writer.Indent--;
                 writer.WriteLine("}");

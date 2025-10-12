@@ -375,5 +375,29 @@ namespace GAS.Runtime
                 MmcParameter = mmcParam
             };
         }
+
+        public static string GetAbilityNameByCode(int id)
+        {
+            var data = Tables.Tbability.Get(id);
+            if (data != null) return data.Name;
+            Debug.LogError($"Ability_ID:{id}  不存在.");
+            return string.Empty;
+        }
+
+        public static string GetAttrSetNameByCode(int code)
+        {
+            var data = Tables.TbattributeSet.Get(code);
+            if (data != null) return data.Name;
+            Debug.LogError($"AttrSet_Code:{code}  不存在.");
+            return string.Empty;
+        }
+
+        public static string GetAttributeNameByCode(int code)
+        {
+            var data = Tables.Tbattribute.Get(code);
+            if (data != null) return data.Name;
+            Debug.LogError($"Attribute_Code:{code}  不存在.");
+            return string.Empty;
+        }
     }
 }

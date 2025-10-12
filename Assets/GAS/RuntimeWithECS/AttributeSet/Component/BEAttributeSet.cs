@@ -1,8 +1,7 @@
-using GAS.Runtime;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AttributeSet.Component
+namespace GAS.Runtime
 {
     [InternalBufferCapacity(50)]
     public struct BEAttributeSet : IBufferElementData

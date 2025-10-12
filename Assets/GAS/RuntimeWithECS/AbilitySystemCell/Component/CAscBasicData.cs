@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell.Component
+namespace GAS.Runtime
 {
     /// <summary>
     /// ASC的基础数据Component，包含了所有ASC通用数值字段

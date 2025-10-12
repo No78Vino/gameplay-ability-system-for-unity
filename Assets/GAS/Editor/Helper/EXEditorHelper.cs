@@ -168,5 +168,59 @@ namespace GAS.Editor
         }
 
         #endregion
+
+        #region ReflectionHelper
+
+        public static object InvokeStaticMethod(string classTypeFullName,string functionName, params object[] param)
+        {
+            try
+            {
+                // 1. 反射获取静态类A的类型（替换为实际的命名空间+类名）
+                // 格式："命名空间.类名, 程序集名"（同程序集可省略程序集名）
+                Type staticType = GetTypeByName(classTypeFullName);
+
+                if (staticType == null)
+                {
+                    // 类A未生成，执行备选逻辑
+                    Debug.LogWarning($"静态类{classTypeFullName}不存在，执行默认处理");
+                    return $"无静态类{classTypeFullName}";
+                }
+
+                // 2. 获取目标静态方法（根据实际方法名和参数类型调整）
+                var fieldTypes = new Type[param.Length];
+                for (var i = 0; i < param.Length; i++) fieldTypes[i] = param[i].GetType();
+                
+                MethodInfo method = staticType.GetMethod(
+                    functionName, // 方法名
+                    BindingFlags.Static | BindingFlags.Public, // 静态+公有
+                    null,
+                    fieldTypes, // 方法参数类型（无参数则传空数组）
+                    null
+                );
+
+                if (method == null)
+                {
+                    // 方法不存在，执行备选逻辑
+                    Debug.LogWarning($"静态方法{functionName}不存在，执行默认处理");
+                    return $"静态方法{functionName}不存在";
+                }
+
+                // 3. 调用静态方法（参数为null表示静态方法，第二个参数是实际参数数组）
+                return method.Invoke(null, param);
+            }
+            catch (Exception ex)
+            {
+                // 捕获可能的异常（如参数不匹配等）
+                Console.WriteLine($"调用静态方法出错：{ex.Message}");
+                return "错误返回值";
+            }
+        }
+
+        public static object InvokeStaticXLubanMethod(string functionName,params object[] param)
+        {
+            return InvokeStaticMethod("GAS.Runtime.XLuban", functionName, param);
+        }
+
+        #endregion
     }
 }

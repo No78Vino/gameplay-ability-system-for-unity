@@ -1,6 +1,4 @@
-using GAS.RuntimeWithECS.AttributeSet.Component;
-
-namespace GAS.RuntimeWithECS.AttributeSet
+namespace GAS.Runtime
 {
     public static class AttributeSetExtension
     {
