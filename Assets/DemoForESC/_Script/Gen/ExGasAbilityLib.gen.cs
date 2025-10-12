@@ -14,7 +14,7 @@ namespace GAS.Runtime
 
         public static void LoadAbilityCode()
         {
-            var ALApplyEffect = typeof(GAS.RuntimeWithECS.CommonAbilityLogic.ALApplyEffect);
+            var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);
             GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.Name, ALApplyEffect,typeof(GAS.RuntimeWithECS.AbilityParamArrayInt));
             var ALDebugLog = typeof(GAS.RuntimeWithECS.CommonAbilityLogic.ALDebugLog);
             GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.RuntimeWithECS.AbilityParamString));

@@ -14,5 +14,8 @@ namespace GAS.Editor
         [HorizontalGroup("A")]
         [LabelText("(单位)"),LabelWidth(50)]
         public TimeUnit Unit;
+        
+        [LabelText("是否激活时重置计时")]
+        public bool ResetStartTimeWhenActivated;
     }
 }

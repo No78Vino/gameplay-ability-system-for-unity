@@ -45,5 +45,41 @@
     "cueOnActivate": [],
     "cueOnDeactivate": [],
     "grantedAbility": []
+  },
+  {
+    "id": 1002,
+    "name": "speed_up",
+    "desc": "加速buff",
+    "assetTags": [
+      4001001
+    ],
+    "grantedTags": [
+      4001001
+    ],
+    "applicationRequiredTags": [],
+    "ongoingRequiredTags": [],
+    "removeGameplayEffectsWithTags": [],
+    "immunityTags": [],
+    "duration": {
+      "TimeUnit": 1,
+      "Time": 1215752191,
+      "ResetStartTimeWhenActivated": false
+    },
+    "modifiers": [
+      {
+        "attrSet": 1,
+        "attribute": 3,
+        "magnitude": 3,
+        "operation": 1,
+        "mmc": 1001
+      }
+    ],
+    "cueOnApply": [],
+    "cueOnTick": [],
+    "cueOnAdd": [],
+    "cueOnRemove": [],
+    "cueOnActivate": [],
+    "cueOnDeactivate": [],
+    "grantedAbility": []
   }
 ]

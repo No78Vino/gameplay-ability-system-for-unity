@@ -109,6 +109,7 @@ namespace GAS.Editor
 
                     // duration特殊处理
                     rowData.Add(_headerMap["duration"] + 1, worksheet.Cells[row, _headerMap["duration"] + 1].Value);
+                    rowData.Add(_headerMap["duration"] + 2, worksheet.Cells[row, _headerMap["duration"] + 2].Value);
                     // period特殊处理
                     rowData.Add(_headerMap["period"] + 1, worksheet.Cells[row, _headerMap["period"] + 1].Value);
                     rowData.Add(_headerMap["period"] + 2, worksheet.Cells[row, _headerMap["period"] + 2].Value);
@@ -198,11 +199,13 @@ namespace GAS.Editor
                 {
                     worksheet.Cells[row, _headerMap["duration"]].Value = (int)Duration.Unit;
                     worksheet.Cells[row, _headerMap["duration"] + 1].Value = Duration.time;
+                    worksheet.Cells[row, _headerMap["duration"] + 2].Value = Duration.ResetStartTimeWhenActivated;
                 }
                 else
                 {
                     worksheet.Cells[row, _headerMap["duration"]].Value = null;
                     worksheet.Cells[row, _headerMap["duration"] + 1].Value = null;
+                    worksheet.Cells[row, _headerMap["duration"] + 2].Value = null;
                 }
 
                 if (ComponentTypes.Contains(EffectEditComponent.Period))
@@ -392,13 +395,14 @@ namespace GAS.Editor
 
 
             if (selectInfo[_headerMap["duration"]] != null 
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnDeactivate"]].ToString()))
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["duration"]].ToString()))
                 Duration = new GEEditDurarion
                 {
-                    Unit = (TimeUnit)selectInfo[_headerMap["duration"]],
+                    Unit = (TimeUnit)int.Parse(selectInfo[_headerMap["duration"]].ToString()),
                     time = selectInfo[_headerMap["duration"] + 1] != null
                         ? int.Parse(selectInfo[_headerMap["duration"] + 1].ToString())
-                        : 0
+                        : 0,
+                    ResetStartTimeWhenActivated = selectInfo[_headerMap["duration"] + 2] != null && bool.Parse(selectInfo[_headerMap["duration"] + 2].ToString()),
                 };
             else
                 Duration = new GEEditDurarion();

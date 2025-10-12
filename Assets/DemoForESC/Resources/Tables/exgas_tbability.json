@@ -22,21 +22,21 @@
   {
     "id": 10002,
     "name": "RunSpeedUp",
-    "desc": "描述2",
-    "cost": 1001,
-    "cdEffect": 1001,
-    "cd": 5,
-    "assetTags": [
-      1001
-    ],
+    "desc": "加速",
+    "cost": 0,
+    "cdEffect": 0,
+    "cd": 0,
+    "assetTags": [],
     "cancelAbilityWithTags": [],
     "blockAbilityWithTags": [],
     "activationOwnedTags": [],
     "activationRequiredTags": [],
     "activationBlockedTags": [],
     "abilityLogic": {
-      "$type": "ALDebugLog",
-      "Value": "测试代码2"
+      "$type": "ALApplyEffect",
+      "Value": [
+        1001
+      ]
     }
   }
 ]

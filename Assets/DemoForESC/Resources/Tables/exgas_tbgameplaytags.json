@@ -88,5 +88,10 @@
     "id": 4001001,
     "name": "State.Buff.BulkUp",
     "desc": "霸体"
+  },
+  {
+    "id": 4001002,
+    "name": "State.Buff.SpeedUp",
+    "desc": "状态：移速增加"
   }
 ]

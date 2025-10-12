@@ -40,19 +40,19 @@
         <var name="mmc" type="int"/>
     </bean>
 
-    <bean name="duration" valueType="1" sep=";">
+    <bean name="duration" valueType="1">
         <var name="TimeUnit" type="int"/>
         <var name="Time" type="int"/>
         <var name="ResetStartTimeWhenActivated" type="bool"/>
     </bean>
 
-    <bean name="period" valueType="1" sep=";">
+    <bean name="period" valueType="1">
         <var name="Time" type="int"/>
         <var name="Effects" type="(array#sep=;),int"/>
         <var name="FirstTrigger" type="bool"/>
     </bean>
 
-    <bean name="stacking" valueType="1" sep=";">
+    <bean name="stacking" valueType="1">
         <var name="StackingType" type="int"/>
         <var name="StackCode" type="int"/>
         <var name="LimitCount" type="int"/>
