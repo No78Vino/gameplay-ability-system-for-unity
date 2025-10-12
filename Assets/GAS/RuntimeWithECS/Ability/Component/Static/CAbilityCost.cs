@@ -2,7 +2,7 @@ using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Static
+namespace GAS.Runtime
 {
     public struct CAbilityCost : IComponentData
     {

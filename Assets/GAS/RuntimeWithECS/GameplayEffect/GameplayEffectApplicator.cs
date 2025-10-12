@@ -1,8 +1,8 @@
-using GAS.Runtime;
 using GAS.RuntimeWithECS.AbilitySystemCell;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect
+namespace GAS.Runtime
 {
     public static class GameplayEffectApplicator
     {

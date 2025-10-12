@@ -1,8 +1,8 @@
 ﻿using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.Runtime;
+using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect
+namespace GAS.Runtime
 {
     /// <summary>
     /// GE 控制器
@@ -28,7 +28,7 @@ namespace GAS.RuntimeWithECS.GameplayEffect
             GEUtil.ApplyGameplayEffectTo(gameplayEffect,target,_asc);
         }
         
-        public NewGameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCell.AbilitySystemCell target)
+        public NewGameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCell target)
         {
             AddGameplayEffectEntityTo(gameplayEffect.Entity, target.Entity);
             return gameplayEffect;
