@@ -1,6 +1,4 @@
 ﻿using System;
-using GAS.RuntimeWithECS;
-using GAS.RuntimeWithECS.Modifier;
 
 namespace GAS.Runtime
 {

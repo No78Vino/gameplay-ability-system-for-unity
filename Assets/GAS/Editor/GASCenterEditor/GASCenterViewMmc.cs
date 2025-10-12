@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using GAS.Editor.General;
 using GAS.General.Validation;
-using GAS.RuntimeWithECS;
+using GAS.Runtime;
 using OfficeOpenXml;
 using UnityEngine;
 

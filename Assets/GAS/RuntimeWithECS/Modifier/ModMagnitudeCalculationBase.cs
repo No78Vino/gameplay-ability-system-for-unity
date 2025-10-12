@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using GAS.General;
-using GAS.RuntimeWithECS;
 using Sirenix.OdinInspector;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Modifier
+namespace GAS.Runtime
 {
     public abstract class ModMagnitudeCalculationBase
     {

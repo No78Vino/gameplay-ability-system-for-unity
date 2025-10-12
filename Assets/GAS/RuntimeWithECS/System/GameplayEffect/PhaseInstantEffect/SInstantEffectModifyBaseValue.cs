@@ -1,10 +1,5 @@
-﻿using System;
-using GAS.Runtime;
-using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.RuntimeWithECS.GameplayEffect.Aspect;
-using GAS.RuntimeWithECS.Modifier;
+﻿using GAS.Runtime;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.RuntimeWithECS.System.GameplayEffect

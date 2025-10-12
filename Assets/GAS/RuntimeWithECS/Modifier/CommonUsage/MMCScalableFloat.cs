@@ -1,6 +1,4 @@
 ﻿using System;
-using GAS.RuntimeWithECS.Modifier;
-using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using GAS.RuntimeWithECS;
-using GAS.RuntimeWithECS.Modifier;
+using GAS.Runtime;
 
 namespace GAS.Editor
 {

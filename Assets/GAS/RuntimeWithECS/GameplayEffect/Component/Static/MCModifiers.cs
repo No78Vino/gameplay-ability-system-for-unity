@@ -1,6 +1,4 @@
 using System;
-using GAS.RuntimeWithECS.GameplayEffect;
-using GAS.RuntimeWithECS.Modifier;
 using Unity.Entities;
 
 namespace GAS.Runtime

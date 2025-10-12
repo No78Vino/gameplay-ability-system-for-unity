@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Modifier;
-using GAS.RuntimeWithECS;
 using Unity.Entities;
 using UnityEngine;
 
