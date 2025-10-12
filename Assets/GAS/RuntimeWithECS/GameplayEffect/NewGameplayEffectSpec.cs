@@ -1,7 +1,7 @@
-﻿using GAS.Runtime;
+﻿using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect
+namespace GAS.Runtime
 {
     /// <summary>
     /// 新版GE Spec其实是对GE Entity的管理单位

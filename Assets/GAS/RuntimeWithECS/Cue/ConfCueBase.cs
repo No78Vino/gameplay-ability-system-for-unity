@@ -1,9 +1,7 @@
-using GAS.Runtime;
-using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Cue
+namespace GAS.Runtime
 {
     public abstract class ConfCueBase: GameplayEffectComponentConfig
     {

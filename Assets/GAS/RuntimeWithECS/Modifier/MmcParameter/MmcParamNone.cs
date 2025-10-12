@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GAS.RuntimeWithECS;
 
 namespace GAS.Runtime
 {

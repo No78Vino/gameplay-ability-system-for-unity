@@ -1,7 +1,6 @@
-using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect.Aspect
+namespace GAS.Runtime
 {
     public readonly partial struct AspModifyBaseValue : IAspect
     {

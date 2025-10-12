@@ -1,4 +1,4 @@
-namespace GAS.RuntimeWithECS.GameplayEffect.Enum
+namespace GAS.Runtime
 {
     public enum GameplayEffectListDirtyReason
     {

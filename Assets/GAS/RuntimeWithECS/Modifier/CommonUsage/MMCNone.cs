@@ -1,7 +1,6 @@
-using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     public class MMCNone : ModMagnitudeCalculationBase<MmcParamNone>
     {

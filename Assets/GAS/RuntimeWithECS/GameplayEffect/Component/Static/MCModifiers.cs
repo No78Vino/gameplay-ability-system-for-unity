@@ -3,7 +3,6 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-
     public class MCModifiers:IComponentData
     {
         public EffectModifier[] Modifiers;
