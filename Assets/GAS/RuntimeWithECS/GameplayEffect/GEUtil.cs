@@ -88,19 +88,6 @@ namespace GAS.RuntimeWithECS.GameplayEffect
                 config.LoadToGameplayEffectEntity(entity);
             return entity;
         }
-
-        // /// <summary>
-        // /// 特别注意
-        // /// </summary>
-        // /// <param name="componentAssets"></param>
-        // /// <param name="ecb"></param>
-        // public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
-        // {
-        //     var entity = ecb.CreateEntity();
-        //     foreach (var config in componentAssets)
-        //         config.LoadToGameplayEffectEntity(entity,ecb);
-        //     return entity;
-        // }
         
         public static NewGameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
         {
