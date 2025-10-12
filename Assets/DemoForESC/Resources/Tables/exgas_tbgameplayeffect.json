@@ -61,8 +61,8 @@
     "removeGameplayEffectsWithTags": [],
     "immunityTags": [],
     "duration": {
-      "TimeUnit": 1,
-      "Time": 1215752191,
+      "TimeUnit": 0,
+      "Time": -1,
       "ResetStartTimeWhenActivated": false
     },
     "modifiers": [

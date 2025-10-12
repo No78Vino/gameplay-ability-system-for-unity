@@ -11,7 +11,7 @@ namespace GAS.Runtime
         
         public ModMagnitudeCalculationBase CreateMmc()
         {
-            return null;
+            return MmcHelper.TryCreateMmc(MmcType, MmcParameter);
         }
     }
 }

@@ -11,32 +11,35 @@ namespace GAS.Runtime
     {
         public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, IMmcParameter param)
         {
-            if (MmcTypeMap.TryGetValue(mmcType, out var type))
-                try
-                {
-                    var mmc = Activator.CreateInstance(type) as ModMagnitudeCalculationBase;
-                    if (mmc != null)
-                    {
-                        mmc.InitParameters(param);
-                        return mmc;
-                    }
-                }
-                catch (MissingMethodException e)
-                {
-                    Debug.LogError("[EX] 创建MMC失败: " +
-                                   $"请检查这个类【'{type.FullName}'】是否继承自ModMagnitudeCalculationBase;" +
-                                   "或者，ModMagnitudeCalculation的Type映射脚本是否更新，重新生成。" +
-                                   $"Error Exception:{e.Message}");
-                    throw;
-                }
-#if UNITY_EDITOR
-            Debug.LogError($"[EX] 创建MMC失败:Can't find ModMagnitudeCalculation for mmcType [{mmcType}]. " +
-                           "ModMagnitudeCalculation的Type映射脚本错误，请重新生成。");
-#endif
-
-            return null;
+            var type = GetMmcType(mmcType);
+            return type != null ? TryCreateMmc(type, param) : null;
         }
 
+        public static ModMagnitudeCalculationBase TryCreateMmc(Type type, IMmcParameter param)
+        {
+            try
+            {
+                var mmc = Activator.CreateInstance(type) as ModMagnitudeCalculationBase;
+                if (mmc != null)
+                {
+                    mmc.InitParameters(param);
+                    return mmc;
+                }
+            }
+            catch (MissingMethodException e)
+            {
+                Debug.LogError("[EX] 创建MMC失败: " +
+                               $"请检查这个类【'{type.FullName}'】是否继承自ModMagnitudeCalculationBase;" +
+                               "或者，ModMagnitudeCalculation的Type映射脚本是否更新，重新生成。" +
+                               $"Error Exception:{e.Message}");
+                throw;
+            }
+#if UNITY_EDITOR
+            Debug.LogError($"[EX] 创建MMC失败:Can't find ModMagnitudeCalculation for mmcType [{type.Name}]. " +
+                           "ModMagnitudeCalculation的Type映射脚本错误，请重新生成。");
+#endif
+            return null;
+        }
 
         public static float Calculate(Entity ge, EffectModifier modifier, float sourceValue)
         {
@@ -81,7 +84,7 @@ namespace GAS.Runtime
 
         public static Type GetMmcType(string sType)
         {
-            return MmcTypeMap[sType];
+            return MmcTypeMap.GetValueOrDefault(sType);
         }
 
         public static Type GetMmcParamTypeByMmcType(Type mmcType)
