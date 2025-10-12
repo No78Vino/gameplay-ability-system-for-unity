@@ -1,41 +1,23 @@
 [
   {
     "id": 1001,
-    "name": "加速测试a",
-    "desc": "加速加速！！",
+    "name": "测试受伤",
+    "desc": "受到2点伤害",
     "assetTags": [
-      1001,
-      1002,
-      2001
+      3003
     ],
     "grantedTags": [],
     "applicationRequiredTags": [],
-    "ongoingRequiredTags": [
-      1002,
-      200,
-      2002,
-      2003
-    ],
+    "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],
-    "immunityTags": [
-      2001,
-      2002,
-      2003
-    ],
+    "immunityTags": [],
     "modifiers": [
       {
         "attrSet": 1,
-        "attribute": 2,
-        "magnitude": 60,
-        "operation": 0,
-        "mmc": 1001
-      },
-      {
-        "attrSet": 1,
-        "attribute": 3,
-        "magnitude": 50,
+        "attribute": 1,
+        "magnitude": 2,
         "operation": 3,
-        "mmc": 1002
+        "mmc": 1001
       }
     ],
     "cueOnApply": [],
