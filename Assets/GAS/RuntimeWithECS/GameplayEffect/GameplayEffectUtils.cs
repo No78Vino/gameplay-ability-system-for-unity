@@ -1,7 +1,6 @@
-﻿using GAS.Runtime;
-using Unity.Entities;
+﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect
+namespace GAS.Runtime
 {
     public static class GameplayEffectUtils
     {
