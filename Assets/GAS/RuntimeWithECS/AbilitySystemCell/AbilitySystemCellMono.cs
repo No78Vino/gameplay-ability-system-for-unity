@@ -1,8 +1,6 @@
-﻿using GAS.Runtime;
-using GAS.RuntimeWithECS;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell
+namespace GAS.Runtime
 {
     public class AbilitySystemCellMono : MonoBehaviour
     {

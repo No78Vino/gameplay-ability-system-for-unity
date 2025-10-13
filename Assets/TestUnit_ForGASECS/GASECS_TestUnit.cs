@@ -1,6 +1,4 @@
 ﻿using DemoForESC._Script.Gen;
-using GAS.RuntimeWithECS;
-using GAS.RuntimeWithECS.AbilitySystemCell;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;

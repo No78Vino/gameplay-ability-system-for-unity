@@ -1,5 +1,4 @@
-﻿using GAS.RuntimeWithECS.AbilitySystemCell;
-using GAS.RuntimeWithECS.Common.Component;
+﻿using GAS.RuntimeWithECS.Common.Component;
 using GAS.Runtime;
 using Unity.Collections;
 using Unity.Entities;

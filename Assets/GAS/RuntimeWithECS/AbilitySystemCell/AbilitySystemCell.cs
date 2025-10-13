@@ -1,12 +1,9 @@
-using GAS.Runtime;
 using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AttributeSet;
-using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell
+namespace GAS.Runtime
 {
     public class AbilitySystemCell
     {

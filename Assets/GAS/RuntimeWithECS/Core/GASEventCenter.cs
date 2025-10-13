@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GAS.RuntimeWithECS;
-using GAS.RuntimeWithECS.AbilitySystemCell;
 using Unity.Entities;
 
 namespace GAS.Runtime

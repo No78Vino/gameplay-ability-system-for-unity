@@ -1,7 +1,6 @@
-﻿using GAS.Runtime;
-using Unity.Entities;
+﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell
+namespace GAS.Runtime
 {
     public class BasicDataController
     {

@@ -1,11 +1,10 @@
-﻿using GAS.Runtime;
-using GAS.RuntimeWithECS.Static;
+﻿using GAS.RuntimeWithECS.Static;
 using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AbilitySystemCell
+namespace GAS.Runtime
 {
     public static class ASCUtil
     {
