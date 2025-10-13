@@ -141,11 +141,9 @@ namespace GAS.RuntimeWithECS
             {
                 var a = buffer[i].Ability;
                 var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
-                if (abi.Code == abilityCode)
-                {
-                    GasEntityManager.AddComponent<CAbilityInTryEnd>(a);
-                    break;
-                }
+                if (abi.Code != abilityCode) continue;
+                GasEntityManager.AddComponent<CAbilityInTryEnd>(a);
+                break;
             }
         }
 
