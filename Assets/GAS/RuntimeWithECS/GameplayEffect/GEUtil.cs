@@ -1,8 +1,7 @@
-﻿using GAS.Runtime;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.GameplayEffect
+namespace GAS.Runtime
 {
     public static class GEUtil
     {

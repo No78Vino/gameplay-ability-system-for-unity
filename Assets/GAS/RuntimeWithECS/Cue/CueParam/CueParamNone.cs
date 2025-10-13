@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using cfg;
 
 namespace GAS.Runtime
 {

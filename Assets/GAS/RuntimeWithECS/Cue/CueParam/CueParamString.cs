@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using cfg;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime

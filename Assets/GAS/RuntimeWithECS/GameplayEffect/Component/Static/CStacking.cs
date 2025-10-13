@@ -1,4 +1,3 @@
-using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;

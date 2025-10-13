@@ -1,6 +1,5 @@
 ﻿using DemoForESC._Script.Gen;
 using GAS.Runtime;
-using GAS.RuntimeWithECS.GameplayEffect;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;
