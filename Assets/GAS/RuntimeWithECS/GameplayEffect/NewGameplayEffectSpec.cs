@@ -1,5 +1,4 @@
-﻿
-using Unity.Entities;
+﻿using Unity.Entities;
 
 namespace GAS.Runtime
 {
