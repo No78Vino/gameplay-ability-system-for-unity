@@ -1,6 +1,4 @@
-﻿using GAS.RuntimeWithECS.Attribute;
-using GAS.RuntimeWithECS.AttributeSet.Component;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 

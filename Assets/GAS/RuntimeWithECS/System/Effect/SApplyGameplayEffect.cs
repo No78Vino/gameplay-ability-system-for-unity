@@ -1,5 +1,4 @@
 using System;
-using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.Common.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Burst;

@@ -4,7 +4,6 @@
 ///////////////////////////////////
 
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Attribute;
 
 namespace GAS.Runtime
 {

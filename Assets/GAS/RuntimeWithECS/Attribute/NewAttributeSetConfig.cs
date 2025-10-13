@@ -1,4 +1,4 @@
-namespace GAS.RuntimeWithECS.Attribute
+namespace GAS.Runtime
 {
     public struct NewAttributeSetConfig
     {

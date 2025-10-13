@@ -1,9 +1,7 @@
-using GAS.Runtime;
-using GAS.RuntimeWithECS.AttributeSet.Component;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace GAS.RuntimeWithECS.Attribute
+namespace GAS.Runtime
 {
     public static class AttributeHelper
     {

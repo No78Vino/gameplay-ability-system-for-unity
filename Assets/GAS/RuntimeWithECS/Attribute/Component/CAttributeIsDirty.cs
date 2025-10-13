@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AttributeSet.Component
+namespace GAS.Runtime
 {
     public struct CAttributeIsDirty : IComponentData
     {

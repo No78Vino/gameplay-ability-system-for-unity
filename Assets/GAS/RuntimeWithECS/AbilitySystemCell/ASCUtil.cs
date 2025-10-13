@@ -1,5 +1,4 @@
 ﻿using GAS.RuntimeWithECS.Static;
-using GAS.RuntimeWithECS.AttributeSet.Component;
 using GAS.RuntimeWithECS.GameplayEffect;
 using Unity.Collections;
 using Unity.Entities;

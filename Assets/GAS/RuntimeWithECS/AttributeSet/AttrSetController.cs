@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.Attribute;
-using GAS.RuntimeWithECS.AttributeSet.Component;
-using GAS.Runtime;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.AttributeSet
+namespace GAS.Runtime
 {
     public class AttrSetController
     {
