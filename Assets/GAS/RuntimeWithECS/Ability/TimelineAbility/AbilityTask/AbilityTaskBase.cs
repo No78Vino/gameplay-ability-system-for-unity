@@ -1,6 +1,4 @@
-﻿using GAS.RuntimeWithECS;
-
-namespace GAS.Runtime
+﻿namespace GAS.Runtime
 {
     public abstract class AbilityTaskBase
     {

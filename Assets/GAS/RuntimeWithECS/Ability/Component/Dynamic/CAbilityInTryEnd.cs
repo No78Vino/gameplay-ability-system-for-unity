@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Dynamic
+namespace GAS.Runtime
 {
     /// <summary>
     ///  能力尝试结束标记【Tag Component】

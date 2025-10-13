@@ -1,5 +1,3 @@
-using GAS.RuntimeWithECS.Dynamic;
-using GAS.RuntimeWithECS.Static;
 using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;

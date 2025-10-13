@@ -2,7 +2,7 @@
 using Unity.Burst;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect
+namespace GAS.Runtime.System.GameplayEffect
 {
     [UpdateInGroup(typeof(SysGroupTryApplyEffect))]
     [UpdateAfter(typeof(SCheckApplicationCondition))]

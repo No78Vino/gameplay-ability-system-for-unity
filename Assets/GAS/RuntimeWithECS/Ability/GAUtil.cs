@@ -1,10 +1,7 @@
-using GAS.Runtime;
-using GAS.RuntimeWithECS.Dynamic;
-using GAS.RuntimeWithECS.Static;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     public enum AbilityActivationResult
     {

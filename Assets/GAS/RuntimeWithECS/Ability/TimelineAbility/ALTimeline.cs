@@ -1,4 +1,3 @@
-using GAS.RuntimeWithECS;
 using Unity.Entities;
 
 namespace GAS.Runtime

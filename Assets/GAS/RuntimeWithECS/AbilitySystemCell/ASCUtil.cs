@@ -1,5 +1,4 @@
-﻿using GAS.RuntimeWithECS.Static;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
@@ -70,7 +71,7 @@ namespace GAS.Runtime
         {
             if (data is null)
             {
-                throw new System.Exception($"GE data can't be null!");
+                throw new ArgumentNullException(nameof(data), "GameplayEffectData is null");
             }
 
             GameplayEffectName = data.GetDisplayName();

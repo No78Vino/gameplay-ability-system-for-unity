@@ -1,7 +1,6 @@
-using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Static
+namespace GAS.Runtime
 {
     [InternalBufferCapacity(GASParameterSetting.ASC_MAX_ABILITY_COUNT)]
     public struct BEAbility : IBufferElementData

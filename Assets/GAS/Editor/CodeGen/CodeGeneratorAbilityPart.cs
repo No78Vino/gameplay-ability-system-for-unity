@@ -54,7 +54,7 @@ namespace GAS.Editor
                             var abilityParamTypeFullName = abilityParamType.FullName;
                             writer.WriteLine($"var {shortTypeName} = typeof({typeFullName});");
                             writer.WriteLine(
-                                $"GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic({shortTypeName}.Name, {shortTypeName},typeof({abilityParamTypeFullName}));");
+                                $"GAS.Runtime.AbilityHelper.RegisterAbilityLogic({shortTypeName}.Name, {shortTypeName},typeof({abilityParamTypeFullName}));");
                         }
                     }
                     writer.Indent--;

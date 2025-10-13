@@ -16,7 +16,7 @@ namespace GAS.Runtime
         {
             var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.Name, ALApplyEffect,typeof(GAS.Runtime.AbilityParamArrayInt));
-            var ALDebugLog = typeof(GAS.RuntimeWithECS.CommonAbilityLogic.ALDebugLog);
+            var ALDebugLog = typeof(Runtime.ALDebugLog);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.Runtime.AbilityParamString));
             var ALTimeline = typeof(GAS.Runtime.ALTimeline);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.AbilityParamTimeline));

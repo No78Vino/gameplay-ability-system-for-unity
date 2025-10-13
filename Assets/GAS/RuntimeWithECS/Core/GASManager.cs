@@ -1,4 +1,4 @@
-using GAS.RuntimeWithECS.System.Attribute;
+using GAS.Runtime.System.Attribute;
 using Unity.Entities;
 using UnityEngine;
 

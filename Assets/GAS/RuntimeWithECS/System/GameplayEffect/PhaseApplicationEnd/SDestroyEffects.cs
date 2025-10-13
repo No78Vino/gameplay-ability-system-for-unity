@@ -2,7 +2,7 @@
 using Unity.Burst;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseApplicationEnd
+namespace GAS.Runtime.System.GameplayEffect.PhaseApplicationEnd
 {
     [UpdateInGroup(typeof(SysGroupApplicationEnd))]
     [UpdateAfter(typeof(SRemoveApplicationProgressTag))]

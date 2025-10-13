@@ -1,8 +1,7 @@
-using GAS.RuntimeWithECS.ComponentConfig;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Static
+namespace GAS.Runtime
 {
     public struct CAbilityActivationOwnedTags : IComponentData
     {

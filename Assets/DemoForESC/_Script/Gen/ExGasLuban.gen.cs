@@ -9,8 +9,7 @@ using cfg;
 using SimpleJSON;
 using System.IO;
 using UnityEngine;
-using GAS.RuntimeWithECS.ComponentConfig;
-using GAS.RuntimeWithECS.Static;
+using GAS.Runtime;
 
 namespace GAS.Runtime
 {

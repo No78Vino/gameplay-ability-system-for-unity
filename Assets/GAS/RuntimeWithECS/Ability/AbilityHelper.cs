@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS.ComponentConfig;
 using Unity.Entities;
 using UnityEngine;
 

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using GAS.RuntimeWithECS.Dynamic;
-using GAS.RuntimeWithECS.Static;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;

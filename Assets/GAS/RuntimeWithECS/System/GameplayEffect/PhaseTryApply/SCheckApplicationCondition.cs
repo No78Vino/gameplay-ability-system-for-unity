@@ -3,7 +3,7 @@ using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect
+namespace GAS.Runtime.System.GameplayEffect
 {
     [UpdateInGroup(typeof(SysGroupTryApplyEffect))]
     public partial struct SCheckApplicationCondition : ISystem

@@ -2,7 +2,7 @@ using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
+namespace GAS.Runtime.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupDurationalEffect))]
     [UpdateAfter(typeof(SInitDuartionalEffect))]

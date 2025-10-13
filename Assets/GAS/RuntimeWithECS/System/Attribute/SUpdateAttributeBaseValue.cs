@@ -1,9 +1,9 @@
-﻿using GAS.RuntimeWithECS.System.GameplayEffect;
+﻿using GAS.Runtime.System.GameplayEffect;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.System.Attribute
+namespace GAS.Runtime.System.Attribute
 {
     [UpdateAfter(typeof(SInstantEffectModifyBaseValue))]
     public partial struct SUpdateAttributeBaseValue : ISystem

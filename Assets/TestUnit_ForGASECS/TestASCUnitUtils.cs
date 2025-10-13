@@ -1,7 +1,4 @@
 using System;
-using GAS.RuntimeWithECS.CommonAbilityLogic;
-using GAS.RuntimeWithECS.Static;
-using GAS.RuntimeWithECS.ComponentConfig;
 using GAS.Runtime;
 using Unity.Collections;
 using Unity.Entities;

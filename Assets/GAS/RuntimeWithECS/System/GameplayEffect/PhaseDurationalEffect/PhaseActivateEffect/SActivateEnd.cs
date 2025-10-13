@@ -3,7 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect
+namespace GAS.Runtime.System.GameplayEffect.PhaseDurationalEffect
 {
     [UpdateInGroup(typeof(SysGroupActivateEffect))]
     public partial struct SActivateEnd : ISystem

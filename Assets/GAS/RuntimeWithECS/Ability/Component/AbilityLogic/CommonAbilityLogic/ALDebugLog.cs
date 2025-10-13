@@ -1,8 +1,7 @@
-using GAS.Runtime;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.CommonAbilityLogic
+namespace GAS.Runtime
 {
     public class ALDebugLog : AbilityLogicBase<AbilityParamString>
     {

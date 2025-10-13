@@ -3,7 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.System.GameplayEffect
+namespace GAS.Runtime.System.GameplayEffect
 {
     /// <summary>
     /// 所有GE需要初始化的Runtime数据，组件等，都在这个系统内完成

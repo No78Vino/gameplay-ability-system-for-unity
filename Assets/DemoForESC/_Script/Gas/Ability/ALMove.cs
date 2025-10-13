@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GAS.RuntimeWithECS;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Unity.Entities;

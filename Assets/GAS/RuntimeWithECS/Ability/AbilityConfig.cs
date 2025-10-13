@@ -1,5 +1,3 @@
-using GAS.RuntimeWithECS.ComponentConfig;
-
 namespace GAS.Runtime
 {
     public class AbilityConfig

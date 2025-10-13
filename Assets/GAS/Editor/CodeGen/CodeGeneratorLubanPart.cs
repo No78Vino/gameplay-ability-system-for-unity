@@ -23,11 +23,6 @@ namespace GAS.Editor
             writer.WriteLine("using SimpleJSON;");
             writer.WriteLine("using System.IO;");
             writer.WriteLine("using UnityEngine;");
-            writer.WriteLine("using GAS.RuntimeWithECS;");
-            writer.WriteLine("using GAS.RuntimeWithECS.AbilitySystemCell;");
-            writer.WriteLine("using GAS.RuntimeWithECS.ComponentConfig;");
-            writer.WriteLine("using GAS.RuntimeWithECS.GameplayEffect;");
-            writer.WriteLine("using GAS.RuntimeWithECS.Static;");
 
             writer.WriteLine("");
 

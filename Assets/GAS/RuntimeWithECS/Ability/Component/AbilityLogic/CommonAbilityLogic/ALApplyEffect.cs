@@ -1,5 +1,3 @@
-using GAS.RuntimeWithECS;
-using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 
 namespace GAS.Runtime

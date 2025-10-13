@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Dynamic
+namespace GAS.Runtime
 {
     /// <summary>
     ///  能力激活标记【Tag Component】

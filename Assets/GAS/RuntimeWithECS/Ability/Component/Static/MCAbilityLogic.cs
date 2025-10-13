@@ -1,8 +1,6 @@
-using GAS.RuntimeWithECS.ComponentConfig;
-using GAS.Runtime;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Static
+namespace GAS.Runtime
 {
     public class MCAbilityLogic : IComponentData
     {
