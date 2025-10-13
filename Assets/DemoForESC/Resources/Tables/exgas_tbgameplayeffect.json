@@ -63,5 +63,108 @@
     "cueOnActivate": [],
     "cueOnDeactivate": [],
     "grantedAbility": []
+  },
+  {
+    "id": 1003,
+    "name": "debug_effect1",
+    "desc": "调试用的测试ge",
+    "assetTags": [
+      3001
+    ],
+    "grantedTags": [],
+    "applicationRequiredTags": [
+      400
+    ],
+    "ongoingRequiredTags": [],
+    "removeGameplayEffectsWithTags": [
+      3001
+    ],
+    "immunityTags": [
+      2004
+    ],
+    "modifiers": [
+      {
+        "attrSet": 1,
+        "attribute": 2,
+        "magnitude": 10,
+        "operation": 3,
+        "mmc": 1002
+      }
+    ],
+    "cueOnApply": [
+      1001
+    ],
+    "cueOnTick": [],
+    "cueOnAdd": [],
+    "cueOnRemove": [],
+    "cueOnActivate": [],
+    "cueOnDeactivate": [],
+    "grantedAbility": []
+  },
+  {
+    "id": 1005,
+    "name": "debug_effect2",
+    "desc": "调试用测试GE",
+    "assetTags": [],
+    "grantedTags": [
+      200
+    ],
+    "applicationRequiredTags": [],
+    "ongoingRequiredTags": [
+      100
+    ],
+    "removeGameplayEffectsWithTags": [],
+    "immunityTags": [],
+    "duration": {
+      "TimeUnit": 0,
+      "Time": 600,
+      "ResetStartTimeWhenActivated": false
+    },
+    "period": {
+      "Time": 60,
+      "Effects": [
+        1001
+      ],
+      "FirstTrigger": true
+    },
+    "modifiers": [
+      {
+        "attrSet": 1,
+        "attribute": 1,
+        "magnitude": 1,
+        "operation": 3,
+        "mmc": 1001
+      }
+    ],
+    "cueOnApply": [],
+    "cueOnTick": [
+      1001
+    ],
+    "cueOnAdd": [
+      1001
+    ],
+    "cueOnRemove": [
+      1001
+    ],
+    "cueOnActivate": [
+      1001
+    ],
+    "cueOnDeactivate": [
+      1002
+    ],
+    "grantedAbility": [],
+    "stacking": {
+      "StackingType": 1,
+      "StackCode": 0,
+      "LimitCount": 10,
+      "DurationRefreshPolicy": 1,
+      "PeriodResetPolicy": 1,
+      "ExpirationPolicy": 0,
+      "DenyOverflowApplication": false,
+      "ClearStackOnOverflow": false,
+      "OverflowEffects": [
+        1001
+      ]
+    }
   }
 ]
