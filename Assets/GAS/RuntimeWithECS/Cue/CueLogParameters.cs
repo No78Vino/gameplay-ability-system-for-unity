@@ -1,4 +1,4 @@
-namespace GAS.RuntimeWithECS.Cue
+namespace GAS.Runtime
 {
     public class CueLogParameters:GameplayCueParametersBase
     {

@@ -1,5 +1,3 @@
-using GAS.RuntimeWithECS.Common.Component;
-using GAS.Runtime;
 using GAS.RuntimeWithECS.System.GameplayEffect.PhaseDurationalEffect;
 using Unity.Burst;
 using Unity.Collections;

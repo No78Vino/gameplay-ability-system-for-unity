@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Common.Component
+namespace GAS.Runtime
 {
     public struct CEffectDestroy : IComponentData
     {

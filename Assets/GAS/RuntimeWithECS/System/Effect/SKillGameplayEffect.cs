@@ -1,5 +1,3 @@
-using GAS.RuntimeWithECS.Common.Component;
-using GAS.Runtime;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

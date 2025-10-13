@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GAS.RuntimeWithECS.Cue
+namespace GAS.Runtime
 {
     public enum CueSourceType
     {

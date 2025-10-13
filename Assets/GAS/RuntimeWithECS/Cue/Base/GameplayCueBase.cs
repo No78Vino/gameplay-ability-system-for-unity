@@ -1,8 +1,7 @@
-﻿using GAS.Runtime;
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS.Cue
+namespace GAS.Runtime
 {
     public abstract class GameplayCueBase
     {
