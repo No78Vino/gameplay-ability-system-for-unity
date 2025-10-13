@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     public class AbilityParamArrayInt: IAbilityParam
     {

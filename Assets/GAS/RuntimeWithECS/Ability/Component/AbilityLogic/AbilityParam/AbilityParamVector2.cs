@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     public class AbilityParamVector2: IAbilityParam
     {

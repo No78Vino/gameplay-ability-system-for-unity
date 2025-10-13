@@ -15,13 +15,13 @@ namespace GAS.Runtime
         public static void LoadAbilityCode()
         {
             var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);
-            GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.Name, ALApplyEffect,typeof(GAS.RuntimeWithECS.AbilityParamArrayInt));
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.Name, ALApplyEffect,typeof(GAS.Runtime.AbilityParamArrayInt));
             var ALDebugLog = typeof(GAS.RuntimeWithECS.CommonAbilityLogic.ALDebugLog);
-            GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.RuntimeWithECS.AbilityParamString));
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.Runtime.AbilityParamString));
             var ALTimeline = typeof(GAS.Runtime.ALTimeline);
-            GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.AbilityParamTimeline));
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.AbilityParamTimeline));
             var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
-            GAS.RuntimeWithECS.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.AbilityParamMove));
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.AbilityParamMove));
         }
     }
 }

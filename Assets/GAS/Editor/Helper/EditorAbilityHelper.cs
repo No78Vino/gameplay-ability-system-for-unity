@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GAS.RuntimeWithECS;
+using GAS.Runtime;
 using Sirenix.OdinInspector;
 
 namespace GAS.Editor

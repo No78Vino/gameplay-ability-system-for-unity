@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using GAS.Runtime;
 using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     /// <summary>
     ///     Ability controller

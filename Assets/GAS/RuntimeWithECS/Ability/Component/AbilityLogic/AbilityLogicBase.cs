@@ -4,7 +4,7 @@ using GAS.RuntimeWithECS.GameplayEffect;
 using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     public abstract class AbilityLogicBase
     {

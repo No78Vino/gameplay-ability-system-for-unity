@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using GAS.Runtime;
 using GAS.RuntimeWithECS.ComponentConfig;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GAS.RuntimeWithECS
+namespace GAS.Runtime
 {
     public static class AbilityHelper
     {

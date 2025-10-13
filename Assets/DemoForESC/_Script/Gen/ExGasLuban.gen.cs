@@ -310,14 +310,14 @@ namespace GAS.Runtime
                     {
                         case cfg.ALApplyEffect aData:
                         {
-                            var ap = abilityParam as GAS.RuntimeWithECS.AbilityParamArrayInt;
+                            var ap = abilityParam as GAS.Runtime.AbilityParamArrayInt;
                             ap?.SetValue(aData.Value);
                             abilityParam = ap;
                             break;
                         }
                         case cfg.ALDebugLog aData:
                         {
-                            var ap = abilityParam as GAS.RuntimeWithECS.AbilityParamString;
+                            var ap = abilityParam as GAS.Runtime.AbilityParamString;
                             ap?.SetValue(aData.Value);
                             abilityParam = ap;
                             break;
