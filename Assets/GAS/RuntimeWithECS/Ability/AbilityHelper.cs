@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GAS.RuntimeWithECS;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.ComponentConfig;
-using GAS.RuntimeWithECS.Static;
 using Unity.Entities;
 using UnityEngine;
 

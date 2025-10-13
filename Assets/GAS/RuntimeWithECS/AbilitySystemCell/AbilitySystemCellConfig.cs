@@ -1,6 +1,4 @@
-using GAS.RuntimeWithECS;
-
-namespace GAS.RuntimeWithECS.AbilitySystemCell
+namespace GAS.Runtime
 {
     public struct AbilitySystemCellConfig
     {

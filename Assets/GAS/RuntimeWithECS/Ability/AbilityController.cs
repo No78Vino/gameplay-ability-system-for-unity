@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GAS.RuntimeWithECS;
 using GAS.Runtime;
 using GAS.RuntimeWithECS.Dynamic;
 using GAS.RuntimeWithECS.Static;
@@ -69,7 +68,7 @@ namespace GAS.RuntimeWithECS
             buffer.Clear();
         }
 
-        public bool HasAbility(int abilityCode)
+        public bool HaveAbility(int abilityCode)
         {
             var buffer = GasEntityManager.GetBuffer<BEAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
