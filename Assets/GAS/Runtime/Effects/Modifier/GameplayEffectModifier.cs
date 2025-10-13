@@ -125,11 +125,11 @@ namespace GAS.Runtime
             AttributeSetName = split[0];
             AttributeShortName = split[1];
 
-            if (ReflectionHelper.GetAttribute(AttributeName)?.CalculateMode !=
-                CalculateMode.Stacking)
-            {
-                Operation = GEOperation.Override;
-            }
+            // if (ReflectionHelper.GetAttribute(AttributeName)?.CalculateMode !=
+            //     CalculateMode.Stacking)
+            // {
+            //     Operation = GEOperation.Override;
+            // }
         }
     }
 }

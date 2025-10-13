@@ -147,25 +147,6 @@ namespace GAS.Runtime
         [LabelText(@"@IsInstantPolicy() ? ""仅在成功应用时执行"":""每次激活时都会执行""")]
         public GameplayEffectModifier[] Modifiers;
 
-        bool IsModifiersHasInvalid()
-        {
-            if (IsInstantPolicy())
-            {
-                return Modifiers != null && Modifiers.Any(modifier =>
-                {
-                    var attributeBase = ReflectionHelper.GetAttribute(modifier.AttributeName);
-                    if (attributeBase != null)
-                    {
-                        return attributeBase.CalculateMode != CalculateMode.Stacking;
-                    }
-
-                    return false;
-                });
-            }
-
-            return false;
-        }
-
         #endregion Modifiers
 
         #region Tags
