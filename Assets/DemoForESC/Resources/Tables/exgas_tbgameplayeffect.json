@@ -33,7 +33,8 @@
     "name": "speed_up",
     "desc": "加速buff",
     "assetTags": [
-      4001001
+      4001001,
+      3001
     ],
     "grantedTags": [
       4001001
@@ -111,7 +112,7 @@
     ],
     "applicationRequiredTags": [],
     "ongoingRequiredTags": [
-      100
+      200
     ],
     "removeGameplayEffectsWithTags": [],
     "immunityTags": [],

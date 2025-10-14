@@ -48,7 +48,10 @@ namespace DemoForESC._Script.Controller
             if (Input.GetKeyDown(KeyCode.LeftShift))
                 demoPlayer.StartRun();
             else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
                 demoPlayer.StopRun();
+                Debug.Log("StopRun");
+            }
             
             // 调试GE1
             if (Input.GetKeyDown(KeyCode.E)) 
