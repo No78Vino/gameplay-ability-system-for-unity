@@ -108,7 +108,7 @@ namespace GAS.Runtime
                     for (var i = 0; i < geContainer.Length; i++)
                     {
                         var effect = geContainer[i].GameplayEffect;
-                        bool geHasAnyTag = GEUtil.HasAnyTags(effect, removeEffectWithTags.tags);
+                        bool geHasAnyTag = EffectUtil.HasAnyTags(effect, removeEffectWithTags.tags);
                         if (!geHasAnyTag) continue;
                         // 2.添加到销毁ge集合中
                         ecb.AddComponent<CEffectDestroy>(effect);
@@ -483,7 +483,7 @@ namespace GAS.Runtime
                     var target = inUsage.Target;
                     var source = inUsage.Source;
                     foreach (var overflowEffect in stacking.overflowEffects)
-                        GEUtil.ApplyGameplayEffectImmediate(overflowEffect, target, source);
+                        EffectUtil.ApplyGameplayEffectImmediate(overflowEffect, target, source);
                 }
 
                 if (stacking.EffectDurationRefreshPolicy == EffectDurationRefreshPolicy.RefreshOnSuccessfulApplication)

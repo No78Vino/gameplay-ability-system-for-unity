@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public static class GEUtil
+    public static class EffectUtil
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
 

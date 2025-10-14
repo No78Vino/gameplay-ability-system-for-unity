@@ -22,7 +22,13 @@ namespace GAS.Runtime
         public DynamicBuffer<BEAbility> CurrentAbilities =>
             GasEntityManager.GetBuffer<BEAbility>(_asc);
 
-        public void GrantAbility(Entity ability)
+        public void GrantAbility(AbilityConfig abilityConfig)
+        {
+            var abilityEntity = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
+            AttachAbility(abilityEntity);
+        }
+
+        private void AttachAbility(Entity ability)
         {
             // 设置ability的owner
             var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(ability);

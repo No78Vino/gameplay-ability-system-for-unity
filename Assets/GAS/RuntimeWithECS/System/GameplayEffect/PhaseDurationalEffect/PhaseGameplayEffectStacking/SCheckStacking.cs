@@ -128,7 +128,7 @@ namespace GAS.Runtime.System.GameplayEffect.PhaseDurationalEffect
                     var target = inUsage.Target;
                     var source = inUsage.Source;
                     foreach (var overflowEffect in stacking.overflowEffects)
-                        GEUtil.ApplyGameplayEffectImmediate(overflowEffect, target, source);
+                        EffectUtil.ApplyGameplayEffectImmediate(overflowEffect, target, source);
                 }
 
                 if (stacking.EffectDurationRefreshPolicy == EffectDurationRefreshPolicy.RefreshOnSuccessfulApplication)

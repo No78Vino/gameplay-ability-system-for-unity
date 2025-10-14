@@ -30,7 +30,7 @@ namespace GAS.Runtime
             _entityManager.AddComponentData(ability, new CAbilityCooldown
             {
                 Cooldown = Cooldown,
-                ProtoGameplayEffectCooldown = GEUtil.CreateGameplayEffectEntity(CooldownComponentConfigs),
+                ProtoGameplayEffectCooldown = EffectUtil.CreateGameplayEffectEntity(CooldownComponentConfigs),
             });
         }
     }

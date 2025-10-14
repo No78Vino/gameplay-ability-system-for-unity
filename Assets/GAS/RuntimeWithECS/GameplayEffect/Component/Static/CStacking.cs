@@ -87,7 +87,7 @@ namespace GAS.Runtime
             for (var i = 0; i < overflowEffects.Length; i++)
             {
                 var comConfig = overflowEffects[i];
-                overflowEntities[i] = GEUtil.CreateGameplayEffectEntity(comConfig.ComponentConfigs);
+                overflowEntities[i] = EffectUtil.CreateGameplayEffectEntity(comConfig.ComponentConfigs);
             }
             
             EntityHelper.AddComponent<CStacking>(ge);

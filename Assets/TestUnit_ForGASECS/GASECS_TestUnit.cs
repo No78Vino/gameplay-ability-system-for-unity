@@ -114,7 +114,7 @@ namespace TestUnit_ForGASECS
             // var geSpec =
             //     GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT);
             // _asc.ApplyGameplayEffectTo(geSpec, _asc);
-            var gameplayEffect = GEUtil.CreateGameplayEffectEntity(TestASCUnitUtils.GEConfig_ONEHIT);
+            var gameplayEffect = EffectUtil.CreateGameplayEffectEntity(TestASCUnitUtils.GEConfig_ONEHIT);
             //GEUtil.ApplyGameplayEffectTo(gameplayEffect, _asc.Entity, _asc.Entity);
         }
 
@@ -122,7 +122,7 @@ namespace TestUnit_ForGASECS
         private void ApplyEarthHitToASC()
         {
             var geSpec =
-                GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
+                EffectUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_ONEHIT_REQUIRED_EARTH_TAG);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
         }
 
@@ -130,7 +130,7 @@ namespace TestUnit_ForGASECS
         private void ApplyBurningToASC()
         {
             var geSpec =
-                GEUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
+                EffectUtil.CreateGameplayEffectSpec(TestASCUnitUtils.GEConfig_BURNING);
             _asc.ApplyGameplayEffectTo(geSpec, _asc);
         }
 

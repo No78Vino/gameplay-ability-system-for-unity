@@ -15,7 +15,7 @@ namespace GAS.Runtime
 
         public Entity CreateGameplayEffectEntity()
         {
-            return GEUtil.CreateGameplayEffectEntity(_componentConfigs);
+            return EffectUtil.CreateGameplayEffectEntity(_componentConfigs);
         }
     }
 }

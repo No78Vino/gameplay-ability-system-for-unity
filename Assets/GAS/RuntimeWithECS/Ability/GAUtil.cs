@@ -140,7 +140,7 @@ namespace GAS.Runtime
             
             var costComponent = _entityManager.GetComponentData<CAbilityCost>(ability);
             var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-            GEUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
+            EffectUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
         // public static AbilityActivationResult TryActivateAbility(Entity ability)

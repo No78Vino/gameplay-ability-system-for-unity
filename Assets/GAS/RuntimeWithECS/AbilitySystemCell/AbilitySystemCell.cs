@@ -52,10 +52,7 @@ namespace GAS.Runtime
 
             // 3.初始化基础技能
             foreach (var abilityConfig in baseAbilities)
-            {
-                var ability = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
-                _abilityController.GrantAbility(ability);
-            }
+                GrantAbility(abilityConfig);
 
             // 4.初始化等级
             SetLevel(level);
@@ -79,6 +76,8 @@ namespace GAS.Runtime
         {
             _gameplayEffectController.RemoveGameplayEffect(gameplayEffectSpec.Entity);
         }
+
+        public void ClearGameplayEffects() => _gameplayEffectController.ClearGameplayEffects();
 
         #endregion
 
@@ -165,6 +164,16 @@ namespace GAS.Runtime
             return _abilityController.GetAbilityLogic(abilityCode);
         }
 
+        public void GrantAbility(AbilityConfig abilityCfg)
+        {
+            _abilityController.GrantAbility(abilityCfg);
+        }
+
+        public void RemoveAbility(int abilityCode)
+        {
+            _abilityController.RemoveAbility(abilityCode);
+        }
+        
         #endregion
 
 

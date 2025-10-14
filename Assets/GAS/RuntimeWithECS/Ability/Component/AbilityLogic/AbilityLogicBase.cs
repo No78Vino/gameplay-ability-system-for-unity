@@ -64,12 +64,12 @@ namespace GAS.Runtime
         
         protected Entity CreateGameplayEffectEntity(GameplayEffectConfig config)
         {
-            return GEUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
+            return EffectUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
         } 
         
         protected void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
-            GEUtil.ApplyGameplayEffectTo(gameplayEffect, target,source);
+            EffectUtil.ApplyGameplayEffectTo(gameplayEffect, target,source);
             EntityHelper.AddComponent<CCreatedByAbility>(gameplayEffect);
             EntityHelper.SetComponent(gameplayEffect,new CCreatedByAbility()
             {
@@ -79,7 +79,7 @@ namespace GAS.Runtime
 
         protected void RemoveGameplayEffect(Entity geEntity)
         {
-            GEUtil.RemoveGameplayEffect(geEntity);
+            EffectUtil.RemoveGameplayEffect(geEntity);
         }
     }
 
