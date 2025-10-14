@@ -57,7 +57,7 @@ namespace DemoForESC._Script.Controller
                 demoPlayer.StopDebugGE1();
             
             // 调试GE2
-            if (Input.GetKeyUp(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F))
                 demoPlayer.StartDebugGE2();
             else if (Input.GetKeyUp(KeyCode.F))
                 demoPlayer.StopDebugGE2();
