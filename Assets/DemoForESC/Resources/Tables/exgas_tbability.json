@@ -39,5 +39,45 @@
         1001
       ]
     }
+  },
+  {
+    "id": 1003,
+    "name": "debug_ge_ability",
+    "desc": "调试GE",
+    "cost": 0,
+    "cdEffect": 0,
+    "cd": 0,
+    "assetTags": [],
+    "cancelAbilityWithTags": [],
+    "blockAbilityWithTags": [],
+    "activationOwnedTags": [],
+    "activationRequiredTags": [],
+    "activationBlockedTags": [],
+    "abilityLogic": {
+      "$type": "ALApplyEffect",
+      "Value": [
+        1003
+      ]
+    }
+  },
+  {
+    "id": 1005,
+    "name": "debug_ge_2",
+    "desc": "调试ge2",
+    "cost": 0,
+    "cdEffect": 0,
+    "cd": 0,
+    "assetTags": [],
+    "cancelAbilityWithTags": [],
+    "blockAbilityWithTags": [],
+    "activationOwnedTags": [],
+    "activationRequiredTags": [],
+    "activationBlockedTags": [],
+    "abilityLogic": {
+      "$type": "ALApplyEffect",
+      "Value": [
+        1005
+      ]
+    }
   }
 ]

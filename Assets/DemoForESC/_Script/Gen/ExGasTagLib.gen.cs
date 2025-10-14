@@ -27,6 +27,7 @@ namespace GAS.Runtime
         public const int State_Buff = 4001;
         public const int State_Debuff = 4002;
         public const int State_Buff_BulkUp = 4001001;
+        public const int State_Buff_SpeedUp = 4001002;
 
         public static void InitTagList()
         {
@@ -46,10 +47,11 @@ namespace GAS.Runtime
                 { Event_Moving, new GameplayTag(Event_Moving, new int[] { Event }, new int[] {  }) },
                 { Event_Dodging, new GameplayTag(Event_Dodging, new int[] { Event }, new int[] {  }) },
                 { Event_Attacking, new GameplayTag(Event_Attacking, new int[] { Event }, new int[] {  }) },
-                { State, new GameplayTag(State, new int[] {  }, new int[] { State_Buff, State_Debuff, State_Buff_BulkUp }) },
-                { State_Buff, new GameplayTag(State_Buff, new int[] { State }, new int[] { State_Buff_BulkUp }) },
+                { State, new GameplayTag(State, new int[] {  }, new int[] { State_Buff, State_Debuff, State_Buff_BulkUp, State_Buff_SpeedUp }) },
+                { State_Buff, new GameplayTag(State_Buff, new int[] { State }, new int[] { State_Buff_BulkUp, State_Buff_SpeedUp }) },
                 { State_Debuff, new GameplayTag(State_Debuff, new int[] { State }, new int[] {  }) },
                 { State_Buff_BulkUp, new GameplayTag(State_Buff_BulkUp, new int[] { State, State_Buff }, new int[] {  }) },
+                { State_Buff_SpeedUp, new GameplayTag(State_Buff_SpeedUp, new int[] { State, State_Buff }, new int[] {  }) },
             },
             new Dictionary<int, string>()
             {
@@ -71,6 +73,7 @@ namespace GAS.Runtime
                 { State_Buff, "State.Buff" },
                 { State_Debuff, "State.Debuff" },
                 { State_Buff_BulkUp, "State.Buff.BulkUp" },
+                { State_Buff_SpeedUp, "State.Buff.SpeedUp" },
             }
             );
         }

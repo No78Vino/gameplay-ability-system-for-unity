@@ -9,7 +9,6 @@ using cfg;
 using SimpleJSON;
 using System.IO;
 using UnityEngine;
-using GAS.Runtime;
 
 namespace GAS.Runtime
 {

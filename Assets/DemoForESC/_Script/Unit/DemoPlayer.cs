@@ -34,5 +34,29 @@ namespace DemoForESC._Script
             if(AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_RunSpeedUp)) 
                 AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_RunSpeedUp);
         }
+        
+        public void StartDebugGE1()
+        {
+            if(!AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_debug_ge_ability)) 
+                AbilitySystemCellMono.TryActivateAbility(XAbility.ABILITY_debug_ge_ability);
+        }
+        
+        public void StartDebugGE2()
+        {
+            if(!AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_debug_ge_2)) 
+                AbilitySystemCellMono.TryActivateAbility(XAbility.ABILITY_debug_ge_2);
+        }
+        
+        public void StopDebugGE1()
+        {
+            if(AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_debug_ge_ability)) 
+                AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_debug_ge_ability);
+        }
+        
+        public void StopDebugGE2()
+        {
+            if(AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_debug_ge_2)) 
+                AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_debug_ge_2);
+        }
     }
 }
