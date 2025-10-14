@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
@@ -68,82 +69,16 @@ namespace GAS.Runtime
         {
             _gameplayEffectController.ApplyGameplayEffectTo(gameplayEffectSpec, target);
         }
-        // private NewGameplayEffectSpec AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
-        // {
-        // var attrBuffer = EntityManager.GetBuffer<AttributeSetBufferElement>(Entity);
-        // var newAttrs = new AttributeData[config.Settings.Length];
-        // for (var i = 0; i < config.Settings.Length; i++)
-        // {
-        //     var setting = config.Settings[i];
-        //     newAttrs[i] = new AttributeData
-        //     {
-        //         Code = setting.Code,
-        //         BaseValue = setting.InitValue,
-        //         CurrentValue = setting.InitValue,
-        //         MinValue = setting.Min,
-        //         MaxValue = setting.Max
-        //     };
-        // }
-        //
-        // attrBuffer.Add(new AttributeSetBufferElement
-        // {
-        //     Code = attrSetCode,
-        //     Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
-        // });
-        // return true;
+        
+        public void ApplyGameplayEffectToSelf(NewGameplayEffectSpec gameplayEffectSpec)
+        {
+            _gameplayEffectController.ApplyGameplayEffectTo(gameplayEffectSpec, this);
+        }
 
-        //return target.AddGameplayEffect(this, gameplayEffectSpec);
-        // }
-
-        // public GameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCellBase target)
-        // {
-        //     return target.AddGameplayEffect(this, gameplayEffectSpec);
-        // }
-
-//         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target)
-//         {
-//             if (gameplayEffect == null)
-//             {
-// #if UNITY_EDITOR
-//                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
-// #endif
-//                 return null;
-//             }
-//
-//             var spec = gameplayEffect.CreateSpec();
-//             return ApplyGameplayEffectTo(spec, target);
-//         }
-//
-//         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffect gameplayEffect, AbilitySystemComponent target,
-//             int effectLevel)
-//         {
-//             if (gameplayEffect == null)
-//             {
-// #if UNITY_EDITOR
-//                 Debug.LogError($"[EX] Try To Apply a NULL GameplayEffect From {name} To {target.name}!");
-// #endif
-//                 return null;
-//             }
-//
-//             var spec = gameplayEffect.CreateSpec();
-//             spec.SetLevel(effectLevel);
-//             return ApplyGameplayEffectTo(spec, target);
-//         }
-//
-//         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
-//         {
-//             return ApplyGameplayEffectTo(gameplayEffectSpec, this);
-//         }
-//
-//         public GameplayEffectSpec ApplyGameplayEffectToSelf(GameplayEffect gameplayEffect)
-//         {
-//             return ApplyGameplayEffectTo(gameplayEffect, this);
-//         }
-//
-//         public void RemoveGameplayEffectSpec(GameplayEffectSpec gameplayEffectSpec)
-//         {
-//             GameplayEffectContainer.RemoveGameplayEffectSpec(gameplayEffectSpec);
-//         }
+        public void RemoveGameplayEffect(NewGameplayEffectSpec gameplayEffectSpec)
+        {
+            _gameplayEffectController.RemoveGameplayEffect(gameplayEffectSpec.Entity);
+        }
 
         #endregion
 
@@ -163,15 +98,19 @@ namespace GAS.Runtime
 
         #region GameplayTag
 
-        public bool HasTag(int tag)
-        {
-            return _gameplayTagController.HasTag(tag);
-        }
+        public bool HasTag(int tag) => _gameplayTagController.HasTag(tag);
 
-        public void KillFixedTag(int tag)
-        {
-            _gameplayTagController.KillFixedTag(tag);
-        }
+        public bool HasAllTags(IEnumerable<int> tags) => _gameplayTagController.HasAllTags(tags);
+        
+        public bool HasAnyTags(IEnumerable<int> tags) => _gameplayTagController.HasAnyTags(tags);
+        
+        public void AddFixedTags(IEnumerable<int> tags) => _gameplayTagController.AddFixedTags(tags);
+        
+        public bool AddFixedTag(int tag) => _gameplayTagController.AddFixedTag(tag);
+        
+        public void KillFixedTag(int tag) => _gameplayTagController.KillFixedTag(tag);
+        
+        public void KillFixedTags(IEnumerable<int> tags) => _gameplayTagController.KillFixedTags(tags);
 
         #endregion
 

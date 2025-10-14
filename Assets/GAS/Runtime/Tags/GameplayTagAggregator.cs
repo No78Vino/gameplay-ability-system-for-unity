@@ -28,9 +28,7 @@ namespace GAS.Runtime
 
         private void TagIsDirty(GameplayTagSet tags)
         {
-            Profiler.BeginSample($"{nameof(GameplayTagAggregator)}::TagIsDirty(GameplayTagSet)");
             if (!tags.Empty) OnTagIsDirty?.Invoke();
-            Profiler.EndSample();
         }
 
         private void TagIsDirty(GameplayTag tag)

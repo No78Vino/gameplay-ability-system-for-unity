@@ -59,6 +59,11 @@ namespace GAS.Runtime
             if(index>=0) fixedTags.RemoveAt(index);
         }
 
+        public void KillFixedTags(IEnumerable<int> tags)
+        {
+            foreach (var tag in tags) KillFixedTag(tag);
+        }
+
         private void KillTemporaryTag(int tag)
         {
             var tempTags = DynamicBufferTemporaryTags;
@@ -87,14 +92,29 @@ namespace GAS.Runtime
             bool hasTemporary = HasAnyTemporaryTag(tag);
             return hasTemporary;
         }
-
+        
+        public bool HasAllTags(IEnumerable<int> tags)
+        {
+            foreach (var tag in tags)
+                if (!HasTag(tag)) return false;
+            
+            return true;
+        }
+        
+        public bool HasAnyTags(IEnumerable<int> tags)
+        {
+            foreach (var tag in tags)
+                if (HasTag(tag)) return true;
+            
+            return false;
+        }
 
         /// <summary>
         /// 固有Tag添加逻辑：固有tag已经存在则不添加；若临时tag中存在，则在固有tag中添加完后，还要移除临时tag中的这个tag
         /// </summary>
         /// <param name="tag"></param>
         /// <returns>dirty：tag合集是否产生变化</returns>
-        private bool AddFixedTag(int tag)
+        public bool AddFixedTag(int tag)
         {
             if (HasFixedTag(tag)) return false;
             
@@ -105,7 +125,7 @@ namespace GAS.Runtime
             return !containTemporary;
         }
 
-        public bool AddFixedTags(int[] tags)
+        public bool AddFixedTags(IEnumerable<int> tags)
         {
             bool dirty = false;
             foreach (var tag in tags)
