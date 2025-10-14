@@ -242,6 +242,12 @@ namespace GAS.Runtime
             GTagUtil.AddTemporaryTagTo(asc, source, tag);
         }
         
+        public static void TryAddDynamicAddedTags(Entity asc, Entity source, int[] tags)
+        {
+            foreach (var tag in tags)
+                GTagUtil.AddTemporaryTagTo(asc, source, tag);
+        }
+        
         private static bool TryRemoveDynamicAddedTag(Entity asc,Entity source,int tag)
         {
             var dirty = false;

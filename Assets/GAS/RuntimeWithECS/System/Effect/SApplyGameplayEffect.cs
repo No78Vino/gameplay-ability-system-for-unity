@@ -230,6 +230,12 @@ namespace GAS.Runtime
                         ? _globalTimer.Frame
                         : _globalTimer.Turn;
                     entityManager.SetComponentData(gameplayEffect,duration);
+
+                    if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
+                    {
+                        var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
+                        ASCUtil.TryAddDynamicAddedTags(targetAsc,gameplayEffect, grantedTags.tags.ToArray());
+                    }
                     TriggerOnActivation(gameplayEffect, targetAsc);
                 }
             }
