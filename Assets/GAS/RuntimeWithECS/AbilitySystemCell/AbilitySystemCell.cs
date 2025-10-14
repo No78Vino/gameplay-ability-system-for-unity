@@ -31,7 +31,7 @@ namespace GAS.Runtime
         }
 
         public Entity Entity { get; private set; }
-        private EntityManager EntityManager => GASManager.EntityManager;
+        private static EntityManager EntityManager => GASManager.EntityManager;
 
         public void Dispose()
         {
@@ -39,7 +39,7 @@ namespace GAS.Runtime
             Entity = Entity.Null;
         }
 
-        public void Init(int[] baseTags, int[] attrSets, AbilityConfig[] baseAbilities, int level = 1)
+        public void Init(IEnumerable<int> baseTags, IEnumerable<int> attrSets, IEnumerable<AbilityConfig> baseAbilities, int level = 1)
         {
             // 1.初始化基础标签
             _gameplayTagController.AddFixedTags(baseTags);
