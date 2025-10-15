@@ -88,10 +88,10 @@ namespace GAS.Runtime
 
         public virtual AbilityActivateResult CanActivate()
         {
-            if (IsActive) return AbilityActivateResult.FailHasActivated;
-            if (!CheckGameplayTagsValidTpActivate()) return AbilityActivateResult.FailTagRequirement;
-            if (!CheckCost()) return AbilityActivateResult.FailCost;
-            if (CheckCooldown().TimeRemaining > 0) return AbilityActivateResult.FailCooldown;
+            // if (IsActive) return AbilityActivateResult.FailHasActivated;
+            // if (!CheckGameplayTagsValidTpActivate()) return AbilityActivateResult.FailTagRequirement;
+            // if (!CheckCost()) return AbilityActivateResult.FailCost;
+            // if (CheckCooldown().TimeRemaining > 0) return AbilityActivateResult.FailCooldown;
 
             return AbilityActivateResult.Success;
         }

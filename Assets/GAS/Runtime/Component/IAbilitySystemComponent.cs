@@ -5,8 +5,6 @@ namespace GAS.Runtime
 {
     public interface IAbilitySystemComponent
     {
-        void SetPreset(AbilitySystemComponentPreset ascPreset);
-        
         void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities,int level);
         
         void SetLevel(int level);

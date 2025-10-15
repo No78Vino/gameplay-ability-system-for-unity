@@ -17,14 +17,15 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInUsage>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
             var currentFrame = globalFrameTimer.ValueRO.Frame;
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            foreach (var (duration, _, _, geEntity) in SystemAPI
+            EntityHelper.RegisterEntityCommandBuffer(ecb);
+            foreach (var (duration, _, inUsage, geEntity) in SystemAPI
                          .Query<RefRW<CDuration>, RefRO<CEffectApplied>, RefRO<CEffectInUsage>>()
                          .WithNone<CStacking>()
                          .WithEntityAccess())
@@ -44,6 +45,8 @@ namespace GAS.Runtime
                 // 过期的GE无效化，并销毁
                 if (expired)
                 {
+                    var targetAsc = inUsage.ValueRO.Target;
+                    GameplayEffectUtils.DeactivateEffect(geEntity, targetAsc, state.EntityManager);
                     ecb.RemoveComponent<CEffectApplied>(geEntity);
                     ecb.AddComponent<CEffectDestroy>(geEntity);
                 }
@@ -51,6 +54,7 @@ namespace GAS.Runtime
 
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
+            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

@@ -46,39 +46,7 @@ namespace GAS.Runtime
             return ASCUtil.HasAllTags(targetAsc,ongoingRequiredTags.tags);
         }
         
-        public static bool ActivateGameplayEffect(Entity gameplayEffect, Entity targetAsc, EntityManager entityManager,
-            GlobalTimer globalTimer)
-        {
-            if (!CheckOngoingRequiredTags(gameplayEffect, targetAsc, entityManager)) return false;
-
-            var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
-            if (!duration.active)
-            {
-                duration.active = true;
-                duration.activeTime = duration.timeUnit == TimeUnit.Frame
-                    ? globalTimer.Frame
-                    : globalTimer.Turn;
-                entityManager.SetComponentData(gameplayEffect, duration);
-
-                if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
-                {
-                    var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
-                    ASCUtil.TryAddDynamicAddedTags(targetAsc, gameplayEffect, grantedTags.tags.ToArray());
-                }
-
-                if (entityManager.HasComponent<CCueOnActivate>(gameplayEffect))
-                {
-                    var cCue = entityManager.GetComponentData<CCueOnActivate>(gameplayEffect);
-                    cCue.runtimeCues = GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
-                        cCue.cues);
-                    entityManager.SetComponentData(gameplayEffect, cCue);
-                }
-            }
-
-            return true;
-        }
-        
-        public static NativeArray<Entity> GetTriggerCues(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager,
+                public static NativeArray<Entity> GetTriggerCues(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager,
             NativeArray<Entity> lastCueInstances,NativeArray<Entity> prefabCues)
         {
             // 0.先清楚已实例化的cue
@@ -105,7 +73,7 @@ namespace GAS.Runtime
                 if (hasImmunitedTags)
                 {
                     var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(prefabEntity);
-                    if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
+                    //if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
                 }
 
                 // 2.创建运行cue实例
@@ -147,6 +115,61 @@ namespace GAS.Runtime
             }
 
             return cueEntities;
+        }
+                
+        public static bool ActivateEffect(Entity gameplayEffect, Entity targetAsc, EntityManager entityManager,
+            GlobalTimer globalTimer)
+        {
+            if (!CheckOngoingRequiredTags(gameplayEffect, targetAsc, entityManager)) return false;
+
+            var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
+            if (duration.active) return false;
+            
+            duration.active = true;
+            duration.activeTime = duration.timeUnit == TimeUnit.Frame
+                ? globalTimer.Frame
+                : globalTimer.Turn;
+            entityManager.SetComponentData(gameplayEffect, duration);
+
+            if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
+            {
+                var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
+                ASCUtil.TryAddDynamicAddedTags(targetAsc, gameplayEffect, grantedTags.tags.ToArray());
+            }
+
+            if (entityManager.HasComponent<CCueOnActivate>(gameplayEffect))
+            {
+                var cCue = entityManager.GetComponentData<CCueOnActivate>(gameplayEffect);
+                cCue.runtimeCues = GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
+                    cCue.cues);
+                entityManager.SetComponentData(gameplayEffect, cCue);
+            }
+            return true;
+
+        }
+
+        public static bool DeactivateEffect(Entity gameplayEffect, Entity targetAsc, EntityManager entityManager)
+        {
+            var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
+            if (!duration.active) return false;
+
+            duration.active = false;
+            entityManager.SetComponentData(gameplayEffect, duration);
+            if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
+            {
+                var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
+                ASCUtil.RestoreDynamicTags(targetAsc, gameplayEffect, grantedTags.tags);
+            }
+
+            if (entityManager.HasComponent<CCueOnDeacivate>(gameplayEffect))
+            {
+                var cCue = entityManager.GetComponentData<CCueOnDeacivate>(gameplayEffect);
+                cCue.runtimeCues = GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
+                    cCue.cues);
+                entityManager.SetComponentData(gameplayEffect, cCue);
+            }
+
+            return true;
         }
     }
 }

@@ -6,11 +6,6 @@ namespace GAS.Runtime
 {
     public class AbilitySystemComponent : MonoBehaviour, IAbilitySystemComponent
     {
-        [SerializeField]
-        private AbilitySystemComponentPreset preset;
-
-        public AbilitySystemComponentPreset Preset => preset;
-
         public int Level { get; protected set; }
 
         public GameplayEffectContainer GameplayEffectContainer { get; private set; }
@@ -63,11 +58,6 @@ namespace GAS.Runtime
         {
             Disable();
             GameplayAbilitySystem.GAS.Unregister(this);
-        }
-
-        public void SetPreset(AbilitySystemComponentPreset ascPreset)
-        {
-            preset = ascPreset;
         }
 
         public void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities, int level)
@@ -228,18 +218,6 @@ namespace GAS.Runtime
             AbilityContainer.RemoveAbility(abilityName);
         }
 
-        public AttributeValue? GetAttributeAttributeValue(string attrSetName, string attrShortName)
-        {
-            var value = AttributeSetContainer.GetAttributeAttributeValue(attrSetName, attrShortName);
-            return value;
-        }
-
-        public CalculateMode? GetAttributeCalculateMode(string attrSetName, string attrShortName)
-        {
-            var value = AttributeSetContainer.GetAttributeCalculateMode(attrSetName, attrShortName);
-            return value;
-        }
-
         public float? GetAttributeCurrentValue(string setName, string attributeShortName)
         {
             var value = AttributeSetContainer.GetAttributeCurrentValue(setName, attributeShortName);
@@ -282,45 +260,45 @@ namespace GAS.Runtime
         {
             foreach (var modifier in spec.Modifiers)
             {
-                var attributeValue = GetAttributeAttributeValue(modifier.AttributeSetName, modifier.AttributeShortName);
-                if (attributeValue == null) continue;
-                if (attributeValue.Value.IsSupportOperation(modifier.Operation) == false)
-                {
-                    throw new InvalidOperationException("Unsupported operation.");
-                }
-
-                if (attributeValue.Value.CalculateMode != CalculateMode.Stacking)
-                {
-                    throw new InvalidOperationException(
-                        $"[EX] Instant GameplayEffect Can Only Modify Stacking Mode Attribute! " +
-                        $"But {modifier.AttributeSetName}.{modifier.AttributeShortName} is {attributeValue.Value.CalculateMode}");
-                }
-
-                var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
-                var baseValue = attributeValue.Value.BaseValue;
-                switch (modifier.Operation)
-                {
-                    case GEOperation.Add:
-                        baseValue += magnitude;
-                        break;
-                    case GEOperation.Minus:
-                        baseValue -= magnitude;
-                        break;
-                    case GEOperation.Multiply:
-                        baseValue *= magnitude;
-                        break;
-                    case GEOperation.Divide:
-                        baseValue /= magnitude;
-                        break;
-                    case GEOperation.Override:
-                        baseValue = magnitude;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                AttributeSetContainer.Sets[modifier.AttributeSetName]
-                    .ChangeAttributeBase(modifier.AttributeShortName, baseValue);
+                // var attributeValue = GetAttributeAttributeValue(modifier.AttributeSetName, modifier.AttributeShortName);
+                // if (attributeValue == null) continue;
+                // if (attributeValue.Value.IsSupportOperation(modifier.Operation) == false)
+                // {
+                //     throw new InvalidOperationException("Unsupported operation.");
+                // }
+                //
+                // if (attributeValue.Value.CalculateMode != CalculateMode.Stacking)
+                // {
+                //     throw new InvalidOperationException(
+                //         $"[EX] Instant GameplayEffect Can Only Modify Stacking Mode Attribute! " +
+                //         $"But {modifier.AttributeSetName}.{modifier.AttributeShortName} is {attributeValue.Value.CalculateMode}");
+                // }
+                //
+                // var magnitude = modifier.CalculateMagnitude(spec, modifier.ModiferMagnitude);
+                // var baseValue = attributeValue.Value.BaseValue;
+                // switch (modifier.Operation)
+                // {
+                //     case GEOperation.Add:
+                //         baseValue += magnitude;
+                //         break;
+                //     case GEOperation.Minus:
+                //         baseValue -= magnitude;
+                //         break;
+                //     case GEOperation.Multiply:
+                //         baseValue *= magnitude;
+                //         break;
+                //     case GEOperation.Divide:
+                //         baseValue /= magnitude;
+                //         break;
+                //     case GEOperation.Override:
+                //         baseValue = magnitude;
+                //         break;
+                //     default:
+                //         throw new ArgumentOutOfRangeException();
+                // }
+                //
+                // AttributeSetContainer.Sets[modifier.AttributeSetName]
+                //     .ChangeAttributeBase(modifier.AttributeShortName, baseValue);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
@@ -271,6 +272,13 @@ namespace GAS.Runtime
         }
         
         public static void RestoreDynamicTags(Entity asc,Entity source,NativeArray<int> tags)
+        {
+            foreach (var tag in tags)
+                if( TryRemoveDynamicAddedTag(asc,source, tag))
+                    GASEventCenter.InvokeOnTagIsDirty(asc,tag,GameplayTagChangeEvent.RemoveTag);
+        }
+        
+        public static void RestoreDynamicTags(Entity asc,Entity source,IEnumerable<int> tags)
         {
             foreach (var tag in tags)
                 if( TryRemoveDynamicAddedTag(asc,source, tag))

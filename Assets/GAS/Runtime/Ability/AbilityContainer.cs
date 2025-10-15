@@ -57,25 +57,21 @@ namespace GAS.Runtime
                 // 通常我们使用ASC::InitWithPreset()来间接调用ASC::Init()执行初始化
 #if UNITY_EDITOR
                 // 这个输出可以删掉, 某些情况下确实会尝试激活不存在的技能(失败了也无所谓), 但是对开发期间的调试有帮助
-                Debug.LogWarning(
-                    $"you are trying to activate an ability that does not exist: " +
-                    $"abilityName=\"{abilityName}\", GameObject=\"{_owner.name}\", " +
-                    $"Preset={(_owner.Preset != null ? _owner.Preset.name : "null")}");
 #endif
                 return false;
             }
 
             if (!_abilities[abilityName].TryActivateAbility(args)) return false;
 
-            var tags = _abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags;
-            foreach (var kv in _abilities)
-            {
-                var abilityTag = kv.Value.Ability.Tag;
-                if (abilityTag.AssetTag.HasAnyTags(tags))
-                {
-                    _abilities[kv.Key].TryCancelAbility();
-                }
-            }
+            // var tags = _abilities[abilityName].Ability.Tag.CancelAbilitiesWithTags;
+            // foreach (var kv in _abilities)
+            // {
+            //     var abilityTag = kv.Value.Ability.Tag;
+            //     if (abilityTag.AssetTag.HasAnyTags(tags))
+            //     {
+            //         _abilities[kv.Key].TryCancelAbility();
+            //     }
+            // }
 
             return true;
         }
@@ -90,18 +86,6 @@ namespace GAS.Runtime
         {
             if (!_abilities.ContainsKey(abilityName)) return;
             _abilities[abilityName].TryCancelAbility();
-        }
-
-        void CancelAbilitiesByTag(GameplayTagSet tags)
-        {
-            foreach (var kv in _abilities)
-            {
-                var abilityTag = kv.Value.Ability.Tag;
-                if (abilityTag.AssetTag.HasAnyTags(tags))
-                {
-                    _abilities[kv.Key].TryCancelAbility();
-                }
-            }
         }
 
         public Dictionary<string, AbilitySpec> AbilitySpecs() => _abilities;

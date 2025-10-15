@@ -220,26 +220,7 @@ namespace GAS.Runtime
             if (entityManager.HasComponent<CEffectApplied>(gameplayEffect)) return;
             ecb.AddComponent<CEffectApplied>(gameplayEffect);
 
-            GameplayEffectUtils.ActivateGameplayEffect(gameplayEffect,targetAsc,entityManager,_globalTimer);
-            // if (CheckOngoingRequiredTags(gameplayEffect,targetAsc,entityManager))
-            // {
-            //     var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
-            //     if (!duration.active)
-            //     {
-            //         duration.active = true;
-            //         duration.activeTime = duration.timeUnit == TimeUnit.Frame
-            //             ? _globalTimer.Frame
-            //             : _globalTimer.Turn;
-            //         entityManager.SetComponentData(gameplayEffect,duration);
-            //
-            //         if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
-            //         {
-            //             var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
-            //             ASCUtil.TryAddDynamicAddedTags(targetAsc,gameplayEffect, grantedTags.tags.ToArray());
-            //         }
-            //         TriggerOnActivation(gameplayEffect, targetAsc);
-            //     }
-            // }
+            GameplayEffectUtils.ActivateEffect(gameplayEffect,targetAsc,entityManager,_globalTimer);
             
 #if UNITY_EDITOR
             if (!targetAsc.HasGameplayEffect(gameplayEffect))
