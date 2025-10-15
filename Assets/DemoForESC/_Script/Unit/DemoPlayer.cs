@@ -11,6 +11,9 @@ namespace DemoForESC._Script
         {
             base.Awake();
             _mainCamera = UnityEngine.Camera.main;
+
+
+            AbilitySystemCellMono.Cell.AddFixedTag(XTag.Ability);
         }
 
         public override void Move(Vector3 direction)
