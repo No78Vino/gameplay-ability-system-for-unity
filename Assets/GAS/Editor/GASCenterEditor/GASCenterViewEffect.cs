@@ -253,7 +253,7 @@ namespace GAS.Editor
                     worksheet.Cells[row, _headerMap["stacking"] + 2].Value = Stacking.limitCount;
                     worksheet.Cells[row, _headerMap["stacking"] + 3].Value = (int)Stacking.durationRefreshPolicy;
                     worksheet.Cells[row, _headerMap["stacking"] + 4].Value = (int)Stacking.periodResetPolicy;
-                    worksheet.Cells[row, _headerMap["stacking"] + 5].Value = (int)Stacking.expirationPolicy;
+                    worksheet.Cells[row, _headerMap["stacking"] + 5].Value = (int)Stacking.stackingExpirationPolicy;
                     worksheet.Cells[row, _headerMap["stacking"] + 6].Value =
                         Stacking.DenyOverflowApplication.ToString();
                     worksheet.Cells[row, _headerMap["stacking"] + 7].Value = Stacking.clearStackOnOverflow.ToString();
@@ -443,9 +443,9 @@ namespace GAS.Editor
                     periodResetPolicy = selectInfo[_headerMap["stacking"] + 4] != null
                         ? (PeriodResetPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 4].ToString())
                         : PeriodResetPolicy.NeverRefresh,
-                    expirationPolicy = selectInfo[_headerMap["stacking"] + 5] != null
-                        ? (ExpirationPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 5].ToString())
-                        : ExpirationPolicy.ClearEntireStack,
+                    stackingExpirationPolicy = selectInfo[_headerMap["stacking"] + 5] != null
+                        ? (StackingExpirationPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 5].ToString())
+                        : StackingExpirationPolicy.ClearEntireStack,
                     DenyOverflowApplication = selectInfo[_headerMap["stacking"] + 6] != null &&
                                               bool.Parse(selectInfo[_headerMap["stacking"] + 6].ToString()),
                     clearStackOnOverflow = selectInfo[_headerMap["stacking"] + 7] != null &&

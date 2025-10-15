@@ -16,9 +16,9 @@ namespace GAS.Runtime
 
         [SerializeField] private float b = 0f;
 
-        public override float CalculateMagnitude(GameplayEffectSpec spec, float input)
-        {
-            return input * k + b;
-        }
+        // public override float CalculateMagnitude(GameplayEffectSpec spec, float input)
+        // {
+        //     return input * k + b;
+        // }
     }
 }

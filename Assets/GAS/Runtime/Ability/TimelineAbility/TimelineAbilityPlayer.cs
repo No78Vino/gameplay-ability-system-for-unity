@@ -11,8 +11,8 @@ namespace GAS.Runtime
 
     internal class RuntimeBuffClip : RuntimeClipInfo
     {
-        public GameplayEffect buff;
-        public GameplayEffectSpec buffSpec;
+        //public GameplayEffect buff;
+        //public GameplayEffectSpec buffSpec;
     }
 
     internal class RuntimeTaskMark
@@ -21,7 +21,7 @@ namespace GAS.Runtime
         public InstantAbilityTask task;
     }
 
-    public class TimelineAbilityPlayer<T> where T : AbstractAbility
+    public class TimelineAbilityPlayer<T> 
     {
         private readonly TimelineAbilitySpecT<T> _abilitySpec;
         private readonly List<RuntimeBuffClip> _cacheBuffGameplayEffectTrack = new();
@@ -102,7 +102,7 @@ namespace GAS.Runtime
                         var runtimeTaskMark = new RuntimeTaskMark
                         {
                             //startFrame = markEvent.startFrame,
-                            task = taskData.CreateTask(_abilitySpec)
+                            //task = taskData.CreateTask(_abilitySpec)
                         };
                         _cacheInstantTasks.Add(runtimeTaskMark);
                     }
@@ -178,7 +178,7 @@ namespace GAS.Runtime
         {
             foreach (var runtimeBuffClip in _cacheBuffGameplayEffectTrack)
             {
-                runtimeBuffClip.buffSpec = null;
+                //runtimeBuffClip.buffSpec = null;
             }
         }
 
@@ -240,8 +240,8 @@ namespace GAS.Runtime
         {
             IsPlaying = false;
 
-            if (!AbilityAsset.manualEndAbility)
-                _abilitySpec.TryEndAbility();
+            // if (!AbilityAsset.manualEndAbility)
+            //     _abilitySpec.TryEndAbility();
 
         }
 
@@ -348,14 +348,14 @@ namespace GAS.Runtime
 
                     if (frame == buffClip.endFrame)
                     {
-                        if (buffClip.buffSpec != null)
-                        {
-                            //Profiler.BeginSample("buffGameplayEffect.End");
-                            //_abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
-                            //Profiler.EndSample();
-                        }
-
-                        buffClip.buffSpec = null;
+                        // if (buffClip.buffSpec != null)
+                        // {
+                        //     //Profiler.BeginSample("buffGameplayEffect.End");
+                        //     //_abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
+                        //     //Profiler.EndSample();
+                        // }
+                        //
+                        // buffClip.buffSpec = null;
                     }
                 }
             // }

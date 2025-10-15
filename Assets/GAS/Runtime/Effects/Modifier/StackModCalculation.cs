@@ -15,10 +15,10 @@ namespace GAS.Runtime
         [LabelText("常量(b)")]
         public float b = 0;
         
-        public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
-        {
-            var stackCount = spec.StackCount;
-            return stackCount * k + b;
-        }
+        // public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
+        // {
+        //     var stackCount = spec.StackCount;
+        //     return stackCount * k + b;
+        // }
     }
 }

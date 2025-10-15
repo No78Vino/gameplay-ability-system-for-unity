@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace GAS.Editor
 {
@@ -36,11 +37,12 @@ namespace GAS.Editor
         [LabelWidth(100)]
         public PeriodResetPolicy periodResetPolicy;
         
+        [FormerlySerializedAs("expirationPolicy")]
         [VerticalGroup("A")]
         [LabelText("过期策略")]
         [EnumToggleButtons]
         [LabelWidth(100)]
-        public ExpirationPolicy expirationPolicy;
+        public StackingExpirationPolicy stackingExpirationPolicy;
 
         [VerticalGroup("A")] 
         [LabelText("拒绝溢出时间重置")]

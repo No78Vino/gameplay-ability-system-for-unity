@@ -17,7 +17,7 @@ namespace GAS.Runtime
             };
         }
         
-        public OngoingAbilityTask CreateTask(AbilitySpec abilitySpec)
+        public OngoingAbilityTask CreateTask()
         {
             return null;
             // var task = base.Create(abilitySpec);

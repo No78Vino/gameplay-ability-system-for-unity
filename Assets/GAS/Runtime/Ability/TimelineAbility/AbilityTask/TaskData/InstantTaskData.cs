@@ -17,7 +17,7 @@ namespace GAS.Runtime
             };    
         }
         
-        public InstantAbilityTask CreateTask(AbilitySpec abilitySpec)
+        public InstantAbilityTask CreateTask()
         {
             // var task = base.Create(abilitySpec);
             // var instantAbilityTask = task as InstantAbilityTask;

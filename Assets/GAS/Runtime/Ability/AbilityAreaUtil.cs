@@ -44,7 +44,7 @@ namespace GAS.Runtime
         {
             return centerType switch
             {
-                EffectCenterType.SelfOffset => spec.Owner.OverlapBox2DNonAlloc(offset, size, angle, results, layerMask, relativeTransform),
+                //EffectCenterType.SelfOffset => spec.Owner.OverlapBox2DNonAlloc(offset, size, angle, results, layerMask, relativeTransform),
                 EffectCenterType.WorldSpace => Physics2D.OverlapBoxNonAlloc(offset, size, angle, results, layerMask),
                 EffectCenterType.TargetOffset => spec.Target.OverlapBox2DNonAlloc(offset, size, angle, results, layerMask, relativeTransform),
                 _ => 0

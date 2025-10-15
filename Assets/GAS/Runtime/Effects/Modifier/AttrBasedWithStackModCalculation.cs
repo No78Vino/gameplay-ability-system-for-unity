@@ -52,19 +52,19 @@ namespace GAS.Runtime
             }
         }
         
-        public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
-        {
-            var attrMagnitude = base.CalculateMagnitude(spec, modifierMagnitude);
-            
-            var stackMagnitude = spec.StackCount * sK + sB;
-
-            return stackMagnitudeOperation switch
-            {
-                StackMagnitudeOperation.Add => attrMagnitude + stackMagnitude,
-                StackMagnitudeOperation.Multiply => attrMagnitude * stackMagnitude,
-                _ => attrMagnitude + stackMagnitude
-            };
-        }
+        // public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
+        // {
+        //     var attrMagnitude = base.CalculateMagnitude(spec, modifierMagnitude);
+        //     
+        //     var stackMagnitude = spec.StackCount * sK + sB;
+        //
+        //     return stackMagnitudeOperation switch
+        //     {
+        //         StackMagnitudeOperation.Add => attrMagnitude + stackMagnitude,
+        //         StackMagnitudeOperation.Multiply => attrMagnitude * stackMagnitude,
+        //         _ => attrMagnitude + stackMagnitude
+        //     };
+        // }
         
     }
 }

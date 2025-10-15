@@ -2,14 +2,14 @@
 
 namespace GAS.Runtime
 {
-    public abstract class TimelineAbilityT<T> : AbstractAbility<T> where T : TimelineAbilityAssetBase
+    public abstract class TimelineAbilityT<T> 
     {
         // protected TimelineAbilityT(T abilityAsset) : base(abilityAsset)
         // {
         // }
     }
 
-    public abstract class TimelineAbilitySpecT<T> : AbilitySpec<T> where T : AbstractAbility
+    public abstract class TimelineAbilitySpecT<T> 
     {
         protected TimelineAbilityPlayer<T> _player;
 
@@ -18,9 +18,9 @@ namespace GAS.Runtime
         /// </summary>
         public AbilitySystemCellMono Target { get; private set; }
 
-        protected TimelineAbilitySpecT(T ability, AbilitySystemCellMono owner) : base(ability, owner)
+        protected TimelineAbilitySpecT(T ability, AbilitySystemCellMono owner)
         {
-            _player = new TimelineAbilityPlayer<T>(this);
+            //_player = new TimelineAbilityPlayer<T>(this);
         }
 
         public void SetAbilityTarget(AbilitySystemCellMono mainTarget)
@@ -28,22 +28,22 @@ namespace GAS.Runtime
             Target = mainTarget;
         }
 
-        public override void ActivateAbility(params object[] args)
+        public  void ActivateAbility(params object[] args)
         {
             _player.Play();
         }
 
-        public override void CancelAbility()
+        public  void CancelAbility()
         {
             _player.Stop();
         }
 
-        public override void EndAbility()
+        public  void EndAbility()
         {
             _player.Stop();
         }
 
-        protected override void AbilityTick()
+        protected  void AbilityTick()
         {
             Profiler.BeginSample("TimelineAbilitySpecT<T>::AbilityTick()");
             _player.Tick();
@@ -58,11 +58,6 @@ namespace GAS.Runtime
     {
         public TimelineAbility(TimelineAbilityAssetBase abilityAsset) //: base(abilityAsset)
         {
-        }
-
-        public override AbilitySpec CreateSpec(AbilitySystemCellMono owner)
-        {
-            return new TimelineAbilitySpec(this, owner);
         }
     }
 

@@ -59,37 +59,37 @@ namespace GAS.Runtime
         [LabelText("常量(b)")]
         public float b = 0;
 
-        public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
-        {
-            if (attributeFromType == AttributeFrom.Source)
-            {
-                if (captureType == GEAttributeCaptureType.SnapShot)
-                {
-                    var snapShot = spec.SnapshotSourceAttributes;
-                    var attribute = snapShot[attributeName];
-                    return attribute * k + b;
-                }
-                else
-                {
-                    //var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                    //return (attribute ?? 1) * k + b;
-                    return ( 1) * k + b;
-                }
-            }
-
-            if (captureType == GEAttributeCaptureType.SnapShot)
-            {
-                var snapShot = spec.SnapshotTargetAttributes;
-                var attribute = snapShot[attributeName];
-                return attribute * k + b;
-            }
-            else
-            {
-                // var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                // return (attribute ?? 1) * k + b;
-                return ( 1) * k + b;
-            }
-        }
+        // public override float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
+        // {
+        //     if (attributeFromType == AttributeFrom.Source)
+        //     {
+        //         if (captureType == GEAttributeCaptureType.SnapShot)
+        //         {
+        //             var snapShot = spec.SnapshotSourceAttributes;
+        //             var attribute = snapShot[attributeName];
+        //             return attribute * k + b;
+        //         }
+        //         else
+        //         {
+        //             //var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+        //             //return (attribute ?? 1) * k + b;
+        //             return ( 1) * k + b;
+        //         }
+        //     }
+        //
+        //     if (captureType == GEAttributeCaptureType.SnapShot)
+        //     {
+        //         var snapShot = spec.SnapshotTargetAttributes;
+        //         var attribute = snapShot[attributeName];
+        //         return attribute * k + b;
+        //     }
+        //     else
+        //     {
+        //         // var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+        //         // return (attribute ?? 1) * k + b;
+        //         return ( 1) * k + b;
+        //     }
+        // }
 
         private void OnAttributeNameChanged()
         {

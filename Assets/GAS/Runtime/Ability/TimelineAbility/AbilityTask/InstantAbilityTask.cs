@@ -14,7 +14,7 @@
         public abstract void OnExecute();
     }
 
-    public abstract class InstantAbilityTaskT<T> : InstantAbilityTask where T : AbilitySpec
+    public abstract class InstantAbilityTaskT<T> : InstantAbilityTask
     {
         //public new T Spec => (T)_spec;
     }

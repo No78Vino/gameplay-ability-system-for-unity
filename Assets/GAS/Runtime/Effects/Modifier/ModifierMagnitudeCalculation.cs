@@ -41,7 +41,7 @@ namespace GAS.Runtime
         public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
 #endif
 
-        public abstract float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude);
+        //public abstract float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude);
 
 #if UNITY_EDITOR
         private void OnValidate()

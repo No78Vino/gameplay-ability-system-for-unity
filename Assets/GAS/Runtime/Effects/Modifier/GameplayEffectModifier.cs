@@ -109,10 +109,10 @@ namespace GAS.Runtime
             MMC = mmc;
         }
 
-        public float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
-        {
-            return MMC == null ? ModiferMagnitude : MMC.CalculateMagnitude(spec, modifierMagnitude);
-        }
+        // public float CalculateMagnitude(GameplayEffectSpec spec, float modifierMagnitude)
+        // {
+        //     return MMC == null ? ModiferMagnitude : MMC.CalculateMagnitude(spec, modifierMagnitude);
+        // }
 
         public void SetModiferMagnitude(float value)
         {

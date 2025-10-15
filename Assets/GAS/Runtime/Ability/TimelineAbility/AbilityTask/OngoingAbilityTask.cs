@@ -21,7 +21,7 @@
         public abstract void OnTick(int frameIndex, int startFrame, int endFrame);
     }
 
-    public abstract class OngoingAbilityTaskT<T> : OngoingAbilityTask where T : AbilitySpec
+    public abstract class OngoingAbilityTaskT<T> : OngoingAbilityTask
     {
         //public new T Spec => (T)_spec;
     }
