@@ -19,14 +19,6 @@
         GameplayTag[] GetApplicationImmunityTags();
         GameplayTag[] GetOngoingRequiredTags();
 
-        // Cues
-        GameplayCueInstant[] GetCueOnExecute();
-        GameplayCueInstant[] GetCueOnRemove();
-        GameplayCueInstant[] GetCueOnAdd();
-        GameplayCueInstant[] GetCueOnActivate();
-        GameplayCueInstant[] GetCueOnDeactivate();
-        GameplayCueDurational[] GetCueDurational();
-
         // Modifiers
         GameplayEffectModifier[] GetModifiers();
         ExecutionCalculation[] GetExecutions();

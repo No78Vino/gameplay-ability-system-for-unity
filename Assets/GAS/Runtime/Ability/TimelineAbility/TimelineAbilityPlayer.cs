@@ -7,7 +7,6 @@ namespace GAS.Runtime
 {
     internal class RuntimeDurationCueClip : RuntimeClipInfo
     {
-        public GameplayCueDurationalSpec cueSpec;
     }
 
     internal class RuntimeBuffClip : RuntimeClipInfo
@@ -120,15 +119,14 @@ namespace GAS.Runtime
             {
                 foreach (var clipEvent in track.clipEvents)
                 {
-                    var cueSpec = clipEvent.cue.ApplyFrom(_abilitySpec);
-                    if (cueSpec == null) continue;
-                    var runtimeDurationCueClip = new RuntimeDurationCueClip
-                    {
-                        //startFrame = clipEvent.startFrame,
-                        endFrame = clipEvent.EndFrame,
-                        cueSpec = cueSpec
-                    };
-                    _cacheDurationalCueTrack.Add(runtimeDurationCueClip);
+                    // var cueSpec = clipEvent.cue.ApplyFrom(_abilitySpec);
+                    // if (cueSpec == null) continue;
+                    // var runtimeDurationCueClip = new RuntimeDurationCueClip
+                    // {
+                    //     //startFrame = clipEvent.startFrame,
+                    //     endFrame = clipEvent.EndFrame,
+                    // };
+                    // _cacheDurationalCueTrack.Add(runtimeDurationCueClip);
                 }
             }
         }
@@ -141,18 +139,18 @@ namespace GAS.Runtime
                 foreach (var clipEvent in track.clipEvents)
                 {
                     // 只有持续型的GameplayEffect可视作buff
-                    if (clipEvent.gameplayEffect.DurationPolicy is EffectsDurationPolicy.Duration
-                        or EffectsDurationPolicy.Infinite)
-                    {
-                        var runtimeBuffClip = new RuntimeBuffClip
-                        {
-                            //startFrame = clipEvent.startFrame,
-                            endFrame = clipEvent.EndFrame,
-                            buff = new GameplayEffect(clipEvent.gameplayEffect),
-                            buffSpec = null
-                        };
-                        _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
-                    }
+                    // if (clipEvent.gameplayEffect.DurationPolicy is EffectsDurationPolicy.Duration
+                    //     or EffectsDurationPolicy.Infinite)
+                    // {
+                    //     var runtimeBuffClip = new RuntimeBuffClip
+                    //     {
+                    //         //startFrame = clipEvent.startFrame,
+                    //         endFrame = clipEvent.EndFrame,
+                    //         buff = new GameplayEffect(clipEvent.gameplayEffect),
+                    //         buffSpec = null
+                    //     };
+                    //     _cacheBuffGameplayEffectTrack.Add(runtimeBuffClip);
+                    // }
                 }
             }
         }
@@ -198,8 +196,6 @@ namespace GAS.Runtime
 
             foreach (var clip in _cacheDurationalCueTrack)
             {
-                if(_currentFrame <= clip.endFrame)
-                    clip.cueSpec.OnRemove();
             }
 
             foreach (var clip in _cacheBuffGameplayEffectTrack)
@@ -317,20 +313,20 @@ namespace GAS.Runtime
         {
             foreach (var cueClip in _cacheDurationalCueTrack)
             {
-                if (frame == cueClip.startFrame)
-                {
-                    cueClip.cueSpec.OnAdd();
-                }
-
-                if (frame >= cueClip.startFrame && frame <= cueClip.endFrame)
-                {
-                    cueClip.cueSpec.OnTick();
-                }
-
-                if (frame == cueClip.endFrame)
-                {
-                    cueClip.cueSpec.OnRemove();
-                }
+                // if (frame == cueClip.startFrame)
+                // {
+                //     cueClip.cueSpec.OnAdd();
+                // }
+                //
+                // if (frame >= cueClip.startFrame && frame <= cueClip.endFrame)
+                // {
+                //     cueClip.cueSpec.OnTick();
+                // }
+                //
+                // if (frame == cueClip.endFrame)
+                // {
+                //     cueClip.cueSpec.OnRemove();
+                // }
             }
         }
 

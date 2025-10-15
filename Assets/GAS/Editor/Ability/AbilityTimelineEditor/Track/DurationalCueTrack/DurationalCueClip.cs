@@ -45,7 +45,7 @@ namespace GAS.Editor
         {
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
-            ItemLabel.text = DurationalCueClipData.cue ? DurationalCueClipData.cue.name : "NULL!";
+            //ItemLabel.text = DurationalCueClipData.cue ? DurationalCueClipData.cue.name : "NULL!";
 
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
@@ -68,10 +68,9 @@ namespace GAS.Editor
             clipData = updatedClip;
         }
         
-        public void UpdateClipDataCue(GameplayCueDurational newCue)
+        public void UpdateClipDataCue()
         {
             var updatedClip = ClipDataForSave;
-            ClipDataForSave.cue = newCue;
             AbilityTimelineEditorWindow.Instance.Save();
             clipData = updatedClip;
             RefreshShow(FrameUnitWidth);
@@ -79,8 +78,8 @@ namespace GAS.Editor
 
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
-            DurationalCueClipData.cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
-                startFrame, endFrame);
+            // DurationalCueClipData.cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
+            //     startFrame, endFrame);
         }
 
         #region Clip Visual Element Event

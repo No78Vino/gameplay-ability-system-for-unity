@@ -36,11 +36,11 @@ namespace GAS.Editor
             foreach (var mark in _track.InstantCueTrackData.markEvents)
             {
                 info += $"Trigger(f):{mark.startFrame} \n";
-                foreach (var c in mark.cues)
-                {
-                    var cueName = c != null ? c.name : "NULL";
-                    info += $"    |-> {cueName}\n";
-                }
+                // foreach (var c in mark.cues)
+                // {
+                //     var cueName = c != null ? c.name : "NULL";
+                //     info += $"    |-> {cueName}\n";
+                // }
                 info += "\n";
             }
 

@@ -35,9 +35,9 @@ namespace GAS.Editor
         {
             base.RefreshShow(newFrameUnitWidth);
             // clip 文本
-            ItemLabel.text = BuffGameplayEffectClipData.gameplayEffect
-                ? BuffGameplayEffectClipData.gameplayEffect.name
-                : "【NULL】";
+            // ItemLabel.text = BuffGameplayEffectClipData.gameplayEffect
+            //     ? BuffGameplayEffectClipData.gameplayEffect.name
+            //     : "【NULL】";
 
             // 刷新面板显示
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject == this)
@@ -60,10 +60,10 @@ namespace GAS.Editor
             clipData = updatedClip;
         }
 
-        public void UpdateClipDataBuff(GameplayEffectAsset newBuff)
+        public void UpdateClipDataBuff()
         {
             var updatedClip = ClipDataForSave;
-            ClipDataForSave.gameplayEffect = newBuff;
+            //ClipDataForSave.gameplayEffect = newBuff;
             AbilityTimelineEditorWindow.Instance.Save();
             clipData = updatedClip;
         }

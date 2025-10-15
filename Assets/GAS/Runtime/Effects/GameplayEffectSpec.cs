@@ -9,7 +9,7 @@ namespace GAS.Runtime
     {
         private Dictionary<GameplayTag, float> _valueMapWithTag = new Dictionary<GameplayTag, float>();
         private Dictionary<string, float> _valueMapWithName = new Dictionary<string, float>();
-        private List<GameplayCueDurationalSpec> _cueDurationalSpecs = new List<GameplayCueDurationalSpec>();
+        //private List<GameplayCueDurationalSpec> _cueDurationalSpecs = new List<GameplayCueDurationalSpec>();
 
         /// <summary>
         /// The execution type of onImmunity is one shot.
@@ -162,98 +162,26 @@ namespace GAS.Runtime
             PeriodTicker?.Tick();
         }
 
-        void TriggerInstantCues(GameplayCueInstant[] cues)
-        {
-            foreach (var cue in cues) cue.ApplyFrom(this);
-        }
-
-        private void TriggerCueOnExecute()
-        {
-            if (GameplayEffect.CueOnExecute == null || GameplayEffect.CueOnExecute.Length <= 0) return;
-            TriggerInstantCues(GameplayEffect.CueOnExecute);
-        }
-
-        private void TriggerCueOnAdd()
-        {
-            if (GameplayEffect.CueOnAdd != null && GameplayEffect.CueOnAdd.Length > 0)
-                TriggerInstantCues(GameplayEffect.CueOnAdd);
-
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
-            {
-                _cueDurationalSpecs.Clear();
-                foreach (var cueDurational in GameplayEffect.CueDurational)
-                {
-                    var cueSpec = cueDurational.ApplyFrom(this);
-                    if (cueSpec != null) _cueDurationalSpecs.Add(cueSpec);
-                }
-
-                foreach (var cue in _cueDurationalSpecs) cue.OnAdd();
-            }
-        }
-
-        private void TriggerCueOnRemove()
-        {
-            if (GameplayEffect.CueOnRemove != null && GameplayEffect.CueOnRemove.Length > 0)
-                TriggerInstantCues(GameplayEffect.CueOnRemove);
-
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
-            {
-                foreach (var cue in _cueDurationalSpecs) cue.OnRemove();
-
-                _cueDurationalSpecs = null;
-            }
-        }
-
-        private void TriggerCueOnActivation()
-        {
-            if (GameplayEffect.CueOnActivate != null && GameplayEffect.CueOnActivate.Length > 0)
-                TriggerInstantCues(GameplayEffect.CueOnActivate);
-
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
-                foreach (var cue in _cueDurationalSpecs)
-                    cue.OnGameplayEffectActivate();
-        }
-
-        private void TriggerCueOnDeactivation()
-        {
-            if (GameplayEffect.CueOnDeactivate != null && GameplayEffect.CueOnDeactivate.Length > 0)
-                TriggerInstantCues(GameplayEffect.CueOnDeactivate);
-
-            if (GameplayEffect.CueDurational != null && GameplayEffect.CueDurational.Length > 0)
-                foreach (var cue in _cueDurationalSpecs)
-                    cue.OnGameplayEffectDeactivate();
-        }
-
-        private void CueOnTick()
-        {
-            if (GameplayEffect.CueDurational == null || GameplayEffect.CueDurational.Length <= 0) return;
-            foreach (var cue in _cueDurationalSpecs) cue.OnTick();
-        }
-
         public void TriggerOnExecute()
         {
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
             Owner.ApplyModFromInstantGameplayEffect(this);
             
-            TriggerCueOnExecute();
         }
 
         public void TriggerOnAdd()
         {
-            TriggerCueOnAdd();
         }
 
         public void TriggerOnRemove()
         {
-            TriggerCueOnRemove();
             
             TryRemoveGrantedAbilities();
         }
 
         private void TriggerOnActivation()
         {
-            TriggerCueOnActivation();
             Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
@@ -263,7 +191,6 @@ namespace GAS.Runtime
 
         private void TriggerOnDeactivation()
         {
-            TriggerCueOnDeactivation();
             Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
             
             TryDeactivateGrantedAbilities();
@@ -271,9 +198,6 @@ namespace GAS.Runtime
 
         public void TriggerOnTick()
         {
-            if (DurationPolicy == EffectsDurationPolicy.Duration ||
-                DurationPolicy == EffectsDurationPolicy.Infinite)
-                CueOnTick();
         }
 
         public void TriggerOnImmunity()

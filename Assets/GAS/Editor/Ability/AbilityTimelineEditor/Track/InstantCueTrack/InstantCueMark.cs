@@ -32,7 +32,7 @@ namespace GAS.Editor
             var markEvent = new InstantCueMarkEvent
             {
                 startFrame = startFrame,
-                cues = (markData as InstantCueMarkEvent)?.cues
+                //cues = (markData as InstantCueMarkEvent)?.cues
             };
             track.InstantCueTrackData.markEvents.Add(markEvent);
             AbilityTimelineEditorWindow.Instance.Save();
@@ -46,7 +46,7 @@ namespace GAS.Editor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            ItemLabel.text = InstantCueMarkData.cues.Count.ToString();
+            //ItemLabel.text = InstantCueMarkData.cues.Count.ToString();
         }
 
         public override Object DataInspector => InstantCueMarkEditor.Create(this);
@@ -70,9 +70,9 @@ namespace GAS.Editor
 
         public override void OnTickView(int frameIndex)
         {
-            foreach (var cue in InstantCueMarkData.cues)
-                cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
-                    InstantCueMarkData.startFrame);
+            // foreach (var cue in InstantCueMarkData.cues)
+            //     cue.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject, frameIndex,
+            //         InstantCueMarkData.startFrame);
         }
     }
 }

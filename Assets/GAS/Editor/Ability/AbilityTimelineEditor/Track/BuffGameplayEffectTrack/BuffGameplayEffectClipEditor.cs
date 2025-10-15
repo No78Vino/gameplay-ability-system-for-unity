@@ -33,12 +33,6 @@ namespace GAS.Editor
         [OnValueChanged("OnDurationFrameChanged")]
         public int Duration;
 
-        [Delayed]
-        [BoxGroup]
-        [AssetSelector]
-        [OnValueChanged("OnBuffChanged")]
-        public GameplayEffectAsset Buff;
-
         [BoxGroup]
         [Button]
         [GUIColor(0.9f, 0.2f, 0.2f)]
@@ -49,7 +43,6 @@ namespace GAS.Editor
 
         void Refresh()
         {
-            Buff = _clip.BuffGameplayEffectClipData.gameplayEffect;
             RunInfo = $"<b>Run(f):{_clip.BuffGameplayEffectClipData.startFrame} -> {_clip.BuffGameplayEffectClipData.EndFrame}</b>";
             Duration = _clip.BuffGameplayEffectClipData.durationFrame;
         }
@@ -68,7 +61,6 @@ namespace GAS.Editor
 
         private void OnBuffChanged()
         {
-            _clip.UpdateClipDataBuff(Buff);
             _clip.RefreshShow(_clip.FrameUnitWidth);
             Refresh();
         }

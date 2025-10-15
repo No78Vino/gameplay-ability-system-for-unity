@@ -29,7 +29,7 @@ namespace GAS.Editor
             {
                 startFrame = startFrame,
                 jsonTargetCatcher = (markData as ReleaseGameplayEffectMarkEvent)?.jsonTargetCatcher,
-                gameplayEffectAssets = (markData as ReleaseGameplayEffectMarkEvent)?.gameplayEffectAssets
+                //gameplayEffectAssets = (markData as ReleaseGameplayEffectMarkEvent)?.gameplayEffectAssets
             };
             track.ReleaseGameplayEffectTrackData.markEvents.Add(markEvent);
             AbilityTimelineEditorWindow.Instance.Save();
@@ -43,7 +43,7 @@ namespace GAS.Editor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            ItemLabel.text = MarkData.gameplayEffectAssets.Count.ToString();
+            //ItemLabel.text = MarkData.gameplayEffectAssets.Count.ToString();
         }
 
         public override Object DataInspector => ReleaseGameplayEffectMarkEditor.Create(this);

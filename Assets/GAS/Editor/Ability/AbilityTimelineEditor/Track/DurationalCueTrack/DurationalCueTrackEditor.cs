@@ -36,8 +36,8 @@ namespace GAS.Editor
             string info = "";
             foreach (var clip in _track.CueTrackDataForSave.clipEvents)
             {
-                var clipName = clip.cue != null ? clip.cue.name : "NULL";
-                info += $"[{clipName}]  Run(f):{clip.startFrame} -> {clip.EndFrame} \n";
+                // var clipName = clip.cue != null ? clip.cue.name : "NULL";
+                // info += $"[{clipName}]  Run(f):{clip.startFrame} -> {clip.EndFrame} \n";
             }
             TrackInfo = $"<b>{info}</b>";
         }

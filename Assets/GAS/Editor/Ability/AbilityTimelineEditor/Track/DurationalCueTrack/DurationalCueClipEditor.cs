@@ -33,12 +33,6 @@ namespace GAS.Editor
         [OnValueChanged("OnDurationFrameChanged")]
         public int Duration;
 
-        [Delayed]
-        [BoxGroup]
-        [AssetSelector]
-        [OnValueChanged("OnCueChanged")]
-        public GameplayCueDurational Cue;
-
         [BoxGroup]
         [Button]
         [GUIColor(0.9f, 0.2f, 0.2f)]
@@ -51,7 +45,6 @@ namespace GAS.Editor
         {
             RunInfo = $"<b>Run(f):{_clip.DurationalCueClipData.startFrame} -> {_clip.DurationalCueClipData.EndFrame}</b>";
             Duration = _clip.DurationalCueClipData.durationFrame;
-            Cue = _clip.DurationalCueClipData.cue;
         }
 
         private void OnDurationFrameChanged()
@@ -62,11 +55,6 @@ namespace GAS.Editor
             _clip.UpdateClipDataDurationFrame(Duration);
             _clip.RefreshShow(_clip.FrameUnitWidth);
             Refresh();
-        }
-
-        private void OnCueChanged()
-        {
-            _clip.UpdateClipDataCue(Cue);
         }
     }
 

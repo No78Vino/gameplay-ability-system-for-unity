@@ -25,13 +25,6 @@ namespace GAS.Editor
         [DisplayAsString(TextAlignment.Left, true)]
         public string RunInfo;
 
-        [Delayed]
-        [BoxGroup]
-        [AssetSelector]
-        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
-        [OnValueChanged("OnCueListChanged")]
-        public List<GameplayCueInstant> Cues;
-
         [BoxGroup]
         [Button]
         [GUIColor(0.9f, 0.2f, 0.2f)]
@@ -43,13 +36,6 @@ namespace GAS.Editor
         void UpdateMarkInfo()
         {
             RunInfo = $"<b>Trigger(f):{_mark.InstantCueMarkData.startFrame}</b>";
-            Cues = _mark.InstantCueMarkData.cues;
-        }
-
-        void OnCueListChanged()
-        {
-            _mark.MarkDataForSave.cues = Cues;
-            AbilityTimelineEditorWindow.Instance.Save();
         }
     }
 

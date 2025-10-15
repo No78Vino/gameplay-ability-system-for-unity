@@ -66,19 +66,6 @@ namespace GAS.Runtime
         public string UniqueName;
 
         [TabGroup("Base/H1/V2", "General")]
-        [Title("消耗&冷却", bold: true)]
-        [LabelWidth(WIDTH_LABEL)]
-        [AssetSelector]
-        [LabelText(SdfIconType.HeartHalf, Text = GASConstDefine.ABILITY_EFFECT_COST)]
-        public GameplayEffectAsset Cost;
-
-        [TabGroup("Base/H1/V2", "General")]
-        [LabelWidth(WIDTH_LABEL)]
-        [AssetSelector]
-        [LabelText(SdfIconType.StopwatchFill, Text = GASConstDefine.ABILITY_EFFECT_CD)]
-        public GameplayEffectAsset Cooldown;
-
-        [TabGroup("Base/H1/V2", "General")]
         [LabelWidth(WIDTH_LABEL)]
         [LabelText(SdfIconType.ClockFill, Text = GASConstDefine.ABILITY_CD_TIME)]
         [Unit(Units.Second)]

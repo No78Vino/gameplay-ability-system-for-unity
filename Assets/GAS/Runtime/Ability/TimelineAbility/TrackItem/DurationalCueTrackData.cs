@@ -19,6 +19,6 @@ namespace GAS.Runtime
     [Serializable]
     public class DurationalCueClipEvent : ClipEventBase
     {
-        public GameplayCueDurational cue;
+        //public GameplayCueDurational cue;
     }
 }

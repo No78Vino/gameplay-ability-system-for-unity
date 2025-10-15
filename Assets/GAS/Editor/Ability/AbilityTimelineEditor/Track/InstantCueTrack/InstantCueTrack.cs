@@ -94,7 +94,6 @@ namespace GAS.Editor
             var markEvent = new InstantCueMarkEvent
             {
                 startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
-                cues = new List<GameplayCueInstant>()
             };
             InstantCueTrackData.markEvents.Add(markEvent);
 

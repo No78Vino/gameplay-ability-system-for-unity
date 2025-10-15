@@ -47,13 +47,6 @@ namespace GAS.Editor
         [OnValueChanged("OnCatcherChanged", true)]
         public TargetCatcherInspector Catcher;
 
-        [Delayed]
-        [BoxGroup(GRP_BOX)]
-        [AssetSelector]
-        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
-        [OnValueChanged("OnGameplayEffectListChanged")]
-        public List<GameplayEffectAsset> gameplayEffects;
-
         [BoxGroup(GRP_BOX)]
         [Button]
         [GUIColor(0.9f, 0.2f, 0.2f)]
@@ -65,7 +58,6 @@ namespace GAS.Editor
         void UpdateMarkInfo()
         {
             RunInfo = $"<b>Trigger(f):{_mark.MarkData.startFrame}</b>";
-            gameplayEffects = _mark.MarkDataForSave.gameplayEffectAssets;
 
             CatcherType = _mark.MarkDataForSave.jsonTargetCatcher.Type;
             RefreshCatcherInspector();
@@ -90,7 +82,6 @@ namespace GAS.Editor
 
         void OnGameplayEffectListChanged()
         {
-            _mark.MarkDataForSave.gameplayEffectAssets = gameplayEffects;
             AbilityTimelineEditorWindow.Instance.Save();
         }
 

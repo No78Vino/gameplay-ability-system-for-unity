@@ -26,12 +26,12 @@ namespace GAS.Runtime
         public readonly GameplayEffectTagContainer TagContainer;
 
         // Cues
-        public readonly GameplayCueInstant[] CueOnExecute;
-        public readonly GameplayCueInstant[] CueOnRemove;
-        public readonly GameplayCueInstant[] CueOnAdd;
-        public readonly GameplayCueInstant[] CueOnActivate;
-        public readonly GameplayCueInstant[] CueOnDeactivate;
-        public readonly GameplayCueDurational[] CueDurational;
+        // public readonly GameplayCueInstant[] CueOnExecute;
+        // public readonly GameplayCueInstant[] CueOnRemove;
+        // public readonly GameplayCueInstant[] CueOnAdd;
+        // public readonly GameplayCueInstant[] CueOnActivate;
+        // public readonly GameplayCueInstant[] CueOnDeactivate;
+        // public readonly GameplayCueDurational[] CueDurational;
 
         // Modifiers
         public readonly GameplayEffectModifier[] Modifiers;
@@ -87,12 +87,12 @@ namespace GAS.Runtime
             }
 #endif
             PeriodExecution = periodExecutionGe != null ? new GameplayEffect(periodExecutionGe) : null;
-            CueOnExecute = data.GetCueOnExecute();
-            CueOnRemove = data.GetCueOnRemove();
-            CueOnAdd = data.GetCueOnAdd();
-            CueOnActivate = data.GetCueOnActivate();
-            CueOnDeactivate = data.GetCueOnDeactivate();
-            CueDurational = data.GetCueDurational();
+            // CueOnExecute = data.GetCueOnExecute();
+            // CueOnRemove = data.GetCueOnRemove();
+            // CueOnAdd = data.GetCueOnAdd();
+            // CueOnActivate = data.GetCueOnActivate();
+            // CueOnDeactivate = data.GetCueOnDeactivate();
+            // CueDurational = data.GetCueDurational();
             Modifiers = data.GetModifiers();
             Executions = data.GetExecutions();
             GrantedAbilities = GetGrantedAbilities(data.GetGrantedAbilities());

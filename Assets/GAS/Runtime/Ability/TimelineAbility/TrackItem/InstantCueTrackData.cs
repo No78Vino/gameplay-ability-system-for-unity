@@ -19,6 +19,6 @@ namespace GAS.Runtime
     [Serializable]
     public class InstantCueMarkEvent:MarkEventBase
     {
-        public List<GameplayCueInstant> cues = new List<GameplayCueInstant>();
+        //public List<GameplayCueInstant> cues = new List<GameplayCueInstant>();
     }
 }

@@ -105,15 +105,6 @@ namespace GAS.Runtime
             this.overflowEffects = overflowEffects;
         }
 
-        public void SetOverflowEffects(GameplayEffectAsset[] overflowEffectAssets)
-        {
-            overflowEffects = new GameplayEffect[overflowEffectAssets.Length];
-            for (var i = 0; i < overflowEffectAssets.Length; ++i)
-            {
-                overflowEffects[i] = new GameplayEffect(overflowEffectAssets[i]);
-            }
-        }
-
         public void SetDenyOverflowApplication(bool denyOverflowApplication)
         {
             this.denyOverflowApplication = denyOverflowApplication;
@@ -195,12 +186,6 @@ namespace GAS.Runtime
         [ShowIf("IsDenyOverflowApplication")]
         public bool clearStackOnOverflow;
 
-        [VerticalGroup]
-        [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASConstDefine.LABEL_GE_STACKING_CLEAR_OVERFLOW_EFFECTS)]
-        [HideIf("IsNoStacking")]
-        public GameplayEffectAsset[] overflowEffects;
-
         /// <summary>
         /// 转换为运行时数据
         /// </summary>
@@ -214,7 +199,6 @@ namespace GAS.Runtime
             stack.SetDurationRefreshPolicy(durationRefreshPolicy);
             stack.SetPeriodResetPolicy(periodResetPolicy);
             stack.SetExpirationPolicy(expirationPolicy);
-            stack.SetOverflowEffects(overflowEffects);
             stack.SetDenyOverflowApplication(denyOverflowApplication);
             stack.SetClearStackOnOverflow(clearStackOnOverflow);
             return stack;

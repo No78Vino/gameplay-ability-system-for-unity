@@ -37,11 +37,11 @@ namespace GAS.Editor
             foreach (var mark in _track.ReleaseGameplayEffectTrackData.markEvents)
             {
                 info += $"Trigger(f):{mark.startFrame} \n";
-                foreach (var ge in mark.gameplayEffectAssets)
-                {
-                    var geName = ge != null ? ge.name : "NULL";
-                    info += $"    |-> {geName}\n";
-                }
+                // foreach (var ge in mark.gameplayEffectAssets)
+                // {
+                //     var geName = ge != null ? ge.name : "NULL";
+                //     info += $"    |-> {geName}\n";
+                // }
 
                 info += "\n";
             }

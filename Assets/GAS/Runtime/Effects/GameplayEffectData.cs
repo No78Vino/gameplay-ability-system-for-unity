@@ -9,7 +9,7 @@ namespace GAS.Runtime
         public GameplayTag[] ApplicationRequiredTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] ApplicationImmunityTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] RemoveGameplayEffectsWithTags { get; set; } = Array.Empty<GameplayTag>();
-        public GameplayCueInstant[] CueOnExecute { get; set; } = Array.Empty<GameplayCueInstant>();
+        //public GameplayCueInstant[] CueOnExecute { get; set; } = Array.Empty<GameplayCueInstant>();
         public GameplayEffectModifier[] Modifiers { get; set; } = Array.Empty<GameplayEffectModifier>();
 
         public InstantGameplayEffectData(string name)
@@ -72,36 +72,6 @@ namespace GAS.Runtime
             return Array.Empty<GameplayTag>();
         }
 
-        public GameplayCueInstant[] GetCueOnExecute()
-        {
-            return CueOnExecute;
-        }
-
-        public virtual GameplayCueInstant[] GetCueOnRemove()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
-
-        public virtual GameplayCueInstant[] GetCueOnAdd()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
-
-        public virtual GameplayCueInstant[] GetCueOnActivate()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
-
-        public virtual GameplayCueInstant[] GetCueOnDeactivate()
-        {
-            return Array.Empty<GameplayCueInstant>();
-        }
-
-        public virtual GameplayCueDurational[] GetCueDurational()
-        {
-            return Array.Empty<GameplayCueDurational>();
-        }
-
         public GameplayEffectModifier[] GetModifiers()
         {
             return Modifiers;
@@ -132,12 +102,7 @@ namespace GAS.Runtime
         public GameplayTag[] AssetTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] GrantedTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] OngoingRequiredTags { get; set; } = Array.Empty<GameplayTag>();
-
-        public GameplayCueInstant[] CueOnRemove { get; set; } = Array.Empty<GameplayCueInstant>();
-        public GameplayCueInstant[] CueOnAdd { get; set; } = Array.Empty<GameplayCueInstant>();
-        public GameplayCueInstant[] CueOnActivate { get; set; } = Array.Empty<GameplayCueInstant>();
-        public GameplayCueInstant[] CueOnDeactivate { get; set; } = Array.Empty<GameplayCueInstant>();
-        public GameplayCueDurational[] CueDurational { get; set; } = Array.Empty<GameplayCueDurational>();
+        
         public ExecutionCalculation[] Executions { get; set; } = Array.Empty<ExecutionCalculation>();
         public GrantedAbilityConfig[] GrantedAbilities { get; set; } = Array.Empty<GrantedAbilityConfig>();
         public GameplayEffectStacking Stacking { get; set; } = GameplayEffectStacking.None;
@@ -175,31 +140,6 @@ namespace GAS.Runtime
         public override GameplayTag[] GetOngoingRequiredTags()
         {
             return OngoingRequiredTags;
-        }
-
-        public override GameplayCueInstant[] GetCueOnRemove()
-        {
-            return CueOnRemove;
-        }
-
-        public override GameplayCueInstant[] GetCueOnAdd()
-        {
-            return CueOnAdd;
-        }
-
-        public override GameplayCueInstant[] GetCueOnActivate()
-        {
-            return CueOnActivate;
-        }
-
-        public override GameplayCueInstant[] GetCueOnDeactivate()
-        {
-            return CueOnDeactivate;
-        }
-
-        public override GameplayCueDurational[] GetCueDurational()
-        {
-            return CueDurational;
         }
 
         public override ExecutionCalculation[] GetExecutions()
