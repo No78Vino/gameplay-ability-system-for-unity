@@ -6,13 +6,10 @@ namespace GAS.Runtime
     public abstract class AbstractAbility
     {
         public readonly string Name;
-        public readonly AbilityAsset DataReference;
 
         // TODO : AbilityTask
         // public List<OngoingAbilityTask> OngoingAbilityTasks=new List<OngoingAbilityTask>();
         // public List<AsyncAbilityTask> AsyncAbilityTasks = new List<AsyncAbilityTask>();
-
-        public AbilityTagContainer Tag { get; protected set; }
 
         public GameplayEffect Cooldown { get; protected set; }
 
@@ -20,15 +17,15 @@ namespace GAS.Runtime
 
         public GameplayEffect Cost { get; protected set; }
 
-        public AbstractAbility(AbilityAsset abilityAsset)
-        {
-            DataReference = abilityAsset;
-
-            Name = DataReference.UniqueName;
-
-
-            CooldownTime = DataReference.CooldownTime;
-        }
+        // public AbstractAbility(AbilityAsset abilityAsset)
+        // {
+        //     DataReference = abilityAsset;
+        //
+        //     Name = DataReference.UniqueName;
+        //
+        //
+        //     CooldownTime = DataReference.CooldownTime;
+        // }
 
         public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
 
@@ -61,12 +58,12 @@ namespace GAS.Runtime
         }
     }
 
-    public abstract class AbstractAbility<T> : AbstractAbility where T : AbilityAsset
+    public abstract class AbstractAbility<T> : AbstractAbility// where T : AbilityAsset
     {
-        public T AbilityAsset => DataReference as T;
+        //public T AbilityAsset => DataReference as T;
 
-        protected AbstractAbility(T abilityAsset) : base(abilityAsset)
-        {
-        }
+        // protected AbstractAbility(T abilityAsset) : base(abilityAsset)
+        // {
+        // }
     }
 }

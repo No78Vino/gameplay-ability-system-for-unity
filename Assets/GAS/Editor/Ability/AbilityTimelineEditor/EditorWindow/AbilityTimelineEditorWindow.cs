@@ -65,7 +65,7 @@ namespace GAS.Editor
 
         private void InitAbility(TimelineAbilityAssetBase asset)
         {
-            _abilityAsset.value = asset;
+            //_abilityAsset.value = asset;
             MaxFrame.value = AbilityAsset.FrameCount;
             CurrentSelectFrameIndex = 0;
             TimerShaftView.RefreshTimerDraw();
@@ -74,8 +74,8 @@ namespace GAS.Editor
 
         private void SaveAsset()
         {
-            EditorUtility.SetDirty(AbilityAsset);
-            AssetDatabase.SaveAssetIfDirty(AbilityAsset);
+            // EditorUtility.SetDirty(AbilityAsset);
+            // AssetDatabase.SaveAssetIfDirty(AbilityAsset);
         }
 
         #region Config
@@ -84,7 +84,7 @@ namespace GAS.Editor
 
         private ObjectField _abilityAsset;
         private Button _btnShowAbilityAssetDetail;
-        public TimelineAbilityAssetBase AbilityAsset => _abilityAsset.value as TimelineAbilityAssetBase;
+        public TimelineAbilityAssetBase AbilityAsset => null;// _abilityAsset.value as TimelineAbilityAssetBase;
 
         // private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
         //     ? UnityEditor.Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
@@ -118,7 +118,7 @@ namespace GAS.Editor
         private void ShowAbilityAssetDetail()
         {
             if (AbilityAsset == null) return;
-            Selection.activeObject = AbilityAsset;
+            //Selection.activeObject = AbilityAsset;
         }
 
         #endregion

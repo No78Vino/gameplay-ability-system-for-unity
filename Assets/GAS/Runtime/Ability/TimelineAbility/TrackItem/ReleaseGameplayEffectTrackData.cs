@@ -24,80 +24,79 @@ namespace GAS.Runtime
     {
         public JsonData jsonTargetCatcher = new JsonData()
         {
-            Type = typeof(CatchSelf).FullName // 默认 CatchSelf
+            //Type = typeof(CatchSelf).FullName // 默认 CatchSelf
         };
 
         //public List<GameplayEffectAsset> gameplayEffectAssets = new List<GameplayEffectAsset>();
 
 
-        private TargetCatcherBase _targetCatcher;
-        public TargetCatcherBase TargetCatcher
-        {
-            get
-            {
-                // 如果是反序列化的数据，没有执行构造函数, 需要加载
-                _targetCatcher ??= LoadTargetCatcher();
-                return _targetCatcher;
-            }
-        }
+        //private TargetCatcherBase _targetCatcher;
+        // public TargetCatcherBase TargetCatcher
+        // {
+        //     get
+        //     {
+        //         // 如果是反序列化的数据，没有执行构造函数, 需要加载
+        //         _targetCatcher ??= LoadTargetCatcher();
+        //         return _targetCatcher;
+        //     }
+        // }
 
         public void CacheTargetCatcher()
         {
-            _targetCatcher = LoadTargetCatcher();
+            //_targetCatcher = LoadTargetCatcher();
         }
 
-        public void SaveTargetCatcher(TargetCatcherBase targetCatcher)
-        {
-            var jsonData = JsonUtility.ToJson(targetCatcher);
-            var dataType = targetCatcher.GetType().FullName;
-            jsonTargetCatcher = new JsonData
-            {
-                Type = dataType,
-                Data = jsonData
-            };
-        }
+        // public void SaveTargetCatcher(TargetCatcherBase targetCatcher)
+        // {
+        //     var jsonData = JsonUtility.ToJson(targetCatcher);
+        //     var dataType = targetCatcher.GetType().FullName;
+        //     jsonTargetCatcher = new JsonData
+        //     {
+        //         Type = dataType,
+        //         Data = jsonData
+        //     };
+        // }
 
-        public TargetCatcherBase LoadTargetCatcher()
-        {
-            TargetCatcherBase targetCatcher = null;
-            var jsonData = jsonTargetCatcher.Data;
-            var dataType = jsonTargetCatcher.Type;
-
-            Type type = null;
-            foreach (var t in TargetCatcherSonTypes)
-            {
-                if (t.FullName == dataType)
-                {
-                    type = t;
-                    break;
-                }
-            }
-
-            if (type == null)
-            {
-                Debug.LogError("[EX] TargetCatcherBase SonType not found: " + dataType);
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(jsonData))
-                {
-                    targetCatcher = Activator.CreateInstance(type) as TargetCatcherBase;
-                }
-                else
-                {
-                    targetCatcher = JsonUtility.FromJson(jsonData, type) as TargetCatcherBase;
-                }
-            }
-
-            return targetCatcher;
-        }
+        // public TargetCatcherBase LoadTargetCatcher()
+        // {
+        //     TargetCatcherBase targetCatcher = null;
+        //     var jsonData = jsonTargetCatcher.Data;
+        //     var dataType = jsonTargetCatcher.Type;
+        //
+        //     Type type = null;
+        //     foreach (var t in TargetCatcherSonTypes)
+        //     {
+        //         if (t.FullName == dataType)
+        //         {
+        //             type = t;
+        //             break;
+        //         }
+        //     }
+        //
+        //     if (type == null)
+        //     {
+        //         Debug.LogError("[EX] TargetCatcherBase SonType not found: " + dataType);
+        //     }
+        //     else
+        //     {
+        //         if (string.IsNullOrEmpty(jsonData))
+        //         {
+        //             targetCatcher = Activator.CreateInstance(type) as TargetCatcherBase;
+        //         }
+        //         else
+        //         {
+        //             targetCatcher = JsonUtility.FromJson(jsonData, type) as TargetCatcherBase;
+        //         }
+        //     }
+        //
+        //     return targetCatcher;
+        // }
 
         #region TargetCatcher SonTypes
 
         private static Type[] _targetCatcherSonTypes;
 
-        public static Type[] TargetCatcherSonTypes =>
-            _targetCatcherSonTypes ??= TypeUtil.GetAllSonTypesOf(typeof(TargetCatcherBase));
+        public static Type[] TargetCatcherSonTypes => null; // _targetCatcherSonTypes ??= TypeUtil.GetAllSonTypesOf(typeof(TargetCatcherBase));
 
         #endregion
     }

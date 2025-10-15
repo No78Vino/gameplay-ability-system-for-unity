@@ -30,7 +30,6 @@ namespace GAS.Runtime
             Modifiers = GameplayEffect.Modifiers;
             if (gameplayEffect.DurationPolicy != EffectsDurationPolicy.Instant)
             {
-                PeriodTicker = new GameplayEffectPeriodTicker(this);
             }
         }
 
@@ -53,7 +52,6 @@ namespace GAS.Runtime
         public AbilitySystemComponent Owner { get; private set; }
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
-        public GameplayEffectPeriodTicker PeriodTicker { get; }
         public float Duration { get; private set; }
         public EffectsDurationPolicy DurationPolicy { get; private set; }
         public GameplayEffectSpec PeriodExecution { get; private set; }
@@ -159,13 +157,12 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            PeriodTicker?.Tick();
         }
 
         public void TriggerOnExecute()
         {
-            Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
-                .RemoveGameplayEffectsWithTags);
+            // Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
+            //     .RemoveGameplayEffectsWithTags);
             Owner.ApplyModFromInstantGameplayEffect(this);
             
         }
@@ -183,8 +180,8 @@ namespace GAS.Runtime
         private void TriggerOnActivation()
         {
             //Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
-            Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
-                .RemoveGameplayEffectsWithTags);
+            // Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
+            //     .RemoveGameplayEffectsWithTags);
             
             TryActivateGrantedAbilities();
         }
@@ -309,7 +306,6 @@ namespace GAS.Runtime
                 // 是否重置Period
                 if (Stacking.periodResetPolicy == PeriodResetPolicy.ResetOnSuccessfulApplication)
                 {
-                    PeriodTicker.ResetPeriod();
                 }
             }
             else

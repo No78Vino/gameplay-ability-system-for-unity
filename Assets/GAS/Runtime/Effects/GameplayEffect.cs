@@ -23,7 +23,6 @@ namespace GAS.Runtime
         public readonly float Duration; // -1 represents infinite duration
         public readonly float Period;
         public readonly GameplayEffect PeriodExecution;
-        public readonly GameplayEffectTagContainer TagContainer;
 
         // Cues
         // public readonly GameplayCueInstant[] CueOnExecute;
@@ -77,7 +76,6 @@ namespace GAS.Runtime
             DurationPolicy = data.GetDurationPolicy();
             Duration = data.GetDuration();
             Period = data.GetPeriod();
-            TagContainer = new GameplayEffectTagContainer(data);
             var periodExecutionGe = data.GetPeriodExecution();
 #if UNITY_EDITOR
             if (periodExecutionGe != null && periodExecutionGe.GetDurationPolicy() != EffectsDurationPolicy.Instant)
@@ -102,7 +100,7 @@ namespace GAS.Runtime
             var grantedAbilityList = new List<GrantedAbilityFromEffect>();
             foreach (var grantedAbilityConfig in grantedAbilities)
             {
-                if (grantedAbilityConfig.AbilityAsset == null) continue;
+                //if (grantedAbilityConfig.AbilityAsset == null) continue;
                 grantedAbilityList.Add(new GrantedAbilityFromEffect(grantedAbilityConfig));
             }
 
@@ -111,17 +109,17 @@ namespace GAS.Runtime
 
         public bool CanApplyTo(AbilitySystemComponent target)
         {
-            return target.HasAllTags(TagContainer.ApplicationRequiredTags);
+            return true;
         }
 
         public bool CanRunning(AbilitySystemComponent target)
         {
-            return target.HasAllTags(TagContainer.OngoingRequiredTags);
+            return true;
         }
 
         public bool IsImmune(AbilitySystemComponent target)
         {
-            return target.HasAnyTags(TagContainer.ApplicationImmunityTags);
+            return true;
         }
 
         public bool StackEqual(GameplayEffect effect)

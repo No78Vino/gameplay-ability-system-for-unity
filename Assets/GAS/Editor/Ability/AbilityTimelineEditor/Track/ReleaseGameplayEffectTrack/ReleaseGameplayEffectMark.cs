@@ -122,8 +122,8 @@ namespace GAS.Editor
         {
             if (frameIndex == StartFrameIndex)
             {
-                var targetCatcher = MarkData.TargetCatcher;
-                targetCatcher.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject);
+                // var targetCatcher = MarkData.TargetCatcher;
+                // targetCatcher.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject);
             }
         }
     }

@@ -11,15 +11,11 @@ namespace GAS.Runtime
         public GameplayEffectContainer GameplayEffectContainer { get; private set; }
         
 
-        public AbilityContainer AbilityContainer { get; private set; }
-        
-
         private bool _ready;
 
         private void Prepare()
         {
             if (_ready) return;
-            AbilityContainer = new AbilityContainer(this);
             GameplayEffectContainer = new GameplayEffectContainer(this);
             _ready = true;
         }
@@ -52,7 +48,7 @@ namespace GAS.Runtime
             //GameplayAbilitySystem.GAS.Unregister(this);
         }
 
-        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes, AbilityAsset[] baseAbilities, int level)
+        public void Init(GameplayTag[] baseTags, Type[] attrSetTypes, int level)
         {
             Prepare();
             SetLevel(level);
@@ -62,85 +58,15 @@ namespace GAS.Runtime
                 // foreach (var attrSetType in attrSetTypes)
                 //     AttributeSetContainer.AddAttributeSet(attrSetType);
             }
-
-            if (baseAbilities != null)
-            {
-                foreach (var info in baseAbilities)
-                    GrantAbility(info);
-            }
-        }
-
-        private void GrantAbility(AbilityAsset info)
-        {
-            if (info == null)
-            {
-                Debug.LogWarning($"[EX] Try To Grant a NULL Ability!");
-                return;
-            }
-
-            try
-            {
-                var ability = Activator.CreateInstance(info.AbilityType(), args: info) as AbstractAbility;
-                AbilityContainer.GrantAbility(ability);
-            }
-#pragma warning disable CS0168 // 声明了变量，但从未使用过
-            catch (MissingMethodException e)
-#pragma warning restore CS0168 // 声明了变量，但从未使用过
-            {
-                // 踩坑日志:
-                //   复制了某个AbilityAsset实现类的代码，但忘记更新AbilityType()方法的返回值。
-                //   一般来说AbilityAsset和Ability应该是配套的, 比如在"GAA_xxx"中返回"GA_xxx"的类型.
-                Debug.LogError($"[EX] 创建能力失败: " +
-                               $"请检查AbilityAsset实现类'{info.GetType().FullName}'中的AbilityType()方法" +
-                               $"是否正确返回了能力类型(当前为'{info.AbilityType()?.FullName ?? "null"}')。");
-                throw;
-            }
         }
 
         public void SetLevel(int level)
         {
             Level = level;
         }
-
-        public bool HasTag(GameplayTag gameplayTag)
-        {
-            return true;
-        }
-
-        public bool HasAllTags(GameplayTagSet tags)
-        {
-            return true;
-        }
-
-        public bool HasAnyTags(GameplayTagSet tags)
-        {
-            return true;
-        }
-
-        public void AddFixedTags(GameplayTagSet tags)
-        {
-        }
-
-        public void RemoveFixedTags(GameplayTagSet tags)
-        {
-        }
-
-        public void AddFixedTag(GameplayTag gameplayTag)
-        {
-        }
-
-        public void RemoveFixedTag(GameplayTag gameplayTag)
-        {
-        }
-
         public void RemoveGameplayEffect(GameplayEffectSpec spec)
         {
             GameplayEffectContainer.RemoveGameplayEffectSpec(spec);
-        }
-
-        public void RemoveGameplayEffectWithAnyTags(GameplayTagSet tags)
-        {
-            GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(tags);
         }
 
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec,
@@ -196,13 +122,11 @@ namespace GAS.Runtime
 
         public AbilitySpec GrantAbility(AbstractAbility ability)
         {
-            AbilityContainer.GrantAbility(ability);
-            return AbilityContainer.AbilitySpecs()[ability.Name];
+            return null;
         }
 
         public void RemoveAbility(string abilityName)
         {
-            AbilityContainer.RemoveAbility(abilityName);
         }
 
         public float? GetAttributeCurrentValue(string setName, string attributeShortName)
@@ -217,7 +141,6 @@ namespace GAS.Runtime
 
         public void Tick()
         {
-            AbilityContainer.Tick();
             GameplayEffectContainer.Tick();
         }
 
@@ -228,17 +151,15 @@ namespace GAS.Runtime
 
         public bool TryActivateAbility(string abilityName, params object[] args)
         {
-            return AbilityContainer.TryActivateAbility(abilityName, args);
+            return false;
         }
 
         public void TryEndAbility(string abilityName)
         {
-            AbilityContainer.EndAbility(abilityName);
         }
 
         public void TryCancelAbility(string abilityName)
         {
-            AbilityContainer.CancelAbility(abilityName);
         }
 
         public void ApplyModFromInstantGameplayEffect(GameplayEffectSpec spec)
@@ -286,12 +207,7 @@ namespace GAS.Runtime
                 //     .ChangeAttributeBase(modifier.AttributeShortName, baseValue);
             }
         }
-
-        public CooldownTimer CheckCooldownFromTags(GameplayTagSet tags)
-        {
-            return GameplayEffectContainer.CheckCooldownFromTags(tags);
-        }
-
+        
         public void ClearGameplayEffect()
         {
             // _abilityContainer = new AbilityContainer(this);
@@ -314,7 +230,6 @@ namespace GAS.Runtime
 
         private void DisableAllAbilities()
         {
-            AbilityContainer.CancelAllAbilities();
         }
 
         private void ClearGameplayEffects()

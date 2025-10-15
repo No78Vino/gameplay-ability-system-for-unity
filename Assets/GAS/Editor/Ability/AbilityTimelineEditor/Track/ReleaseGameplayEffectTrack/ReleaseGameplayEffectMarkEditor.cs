@@ -39,13 +39,13 @@ namespace GAS.Editor
         [OnValueChanged("OnCatcherTypeChanged")]
         public string CatcherType;
 
-        [Delayed]
-        [BoxGroup(GRP_BOX_CATCHER)]
-        [HideReferenceObjectPicker]
-        [HideIf("CatcherIsNull")]
-        [LabelText("Detail")]
-        [OnValueChanged("OnCatcherChanged", true)]
-        public TargetCatcherInspector Catcher;
+        // [Delayed]
+        // [BoxGroup(GRP_BOX_CATCHER)]
+        // [HideReferenceObjectPicker]
+        // [HideIf("CatcherIsNull")]
+        // [LabelText("Detail")]
+        // [OnValueChanged("OnCatcherChanged", true)]
+        // public TargetCatcherInspector Catcher;
 
         [BoxGroup(GRP_BOX)]
         [Button]
@@ -66,18 +66,18 @@ namespace GAS.Editor
         void RefreshCatcherInspector()
         {
             // 根据选择的OngoingAbilityTask子类，显示对应的属性
-            var catcher = _mark.MarkDataForSave.LoadTargetCatcher();
-            if (TargetCatcherInspectorMap.TryGetValue(catcher.GetType(), out var inspectorType))
-            {
-                var targetCatcherInspector =
-                    (TargetCatcherInspector)Activator.CreateInstance(inspectorType, catcher);
-                Catcher = targetCatcherInspector;
-            }
-            else
-            {
-                Catcher = null;
-                Debug.LogWarning($"[EX] TargetCatcherInspector not found: {catcher.GetType()}");
-            }
+            // var catcher = _mark.MarkDataForSave.LoadTargetCatcher();
+            // if (TargetCatcherInspectorMap.TryGetValue(catcher.GetType(), out var inspectorType))
+            // {
+            //     // var targetCatcherInspector =
+            //     //     (TargetCatcherInspector)Activator.CreateInstance(inspectorType, catcher);
+            //     // Catcher = targetCatcherInspector;
+            // }
+            // else
+            // {
+            //     //Catcher = null;
+            //     Debug.LogWarning($"[EX] TargetCatcherInspector not found: {catcher.GetType()}");
+            // }
         }
 
         void OnGameplayEffectListChanged()
@@ -99,7 +99,7 @@ namespace GAS.Editor
             // AbilityTimelineEditorWindow.Instance.Save();
         }
 
-        private bool CatcherIsNull => Catcher == null;
+        //private bool CatcherIsNull => Catcher == null;
 
 
         private static Type[] _targetCatcherInspectorTypes;
@@ -111,7 +111,7 @@ namespace GAS.Editor
             get
             {
                 if (_targetCatcherInspectorTypes != null) return _targetCatcherInspectorTypes;
-                _targetCatcherInspectorTypes = TypeUtil.GetAllSonTypesOf(typeof(TargetCatcherInspector));
+                //_targetCatcherInspectorTypes = TypeUtil.GetAllSonTypesOf(typeof(TargetCatcherInspector));
                 TargetCatcherSonTypeChoices = ReleaseGameplayEffectMarkEvent.TargetCatcherSonTypes.Select(type => type.FullName).ToList();
                 return _targetCatcherInspectorTypes;
             }

@@ -96,26 +96,6 @@ namespace GAS.Runtime
             return AbilityActivateResult.Success;
         }
 
-        private bool CheckGameplayTagsValidTpActivate()
-        {
-            var hasAllTags = Owner.HasAllTags(Ability.Tag.ActivationRequiredTags);
-            var notHasAnyTags = !Owner.HasAnyTags(Ability.Tag.ActivationBlockedTags);
-            var notBlockedByOtherAbility = true;
-
-            foreach (var kv in Owner.AbilityContainer.AbilitySpecs())
-            {
-                var abilitySpec = kv.Value;
-                if (abilitySpec.IsActive)
-                    if (Ability.Tag.AssetTag.HasAnyTags(abilitySpec.Ability.Tag.BlockAbilitiesWithTags))
-                    {
-                        notBlockedByOtherAbility = false;
-                        break;
-                    }
-            }
-
-            return hasAllTags && notHasAnyTags && notBlockedByOtherAbility;
-        }
-
         protected virtual bool CheckCost()
         {
             if (Ability.Cost == null) return true;
@@ -145,9 +125,7 @@ namespace GAS.Runtime
 
         protected virtual CooldownTimer CheckCooldown()
         {
-            return Ability.Cooldown == null
-                ? new CooldownTimer { TimeRemaining = 0, Duration = Ability.CooldownTime }
-                : Owner.CheckCooldownFromTags(Ability.Cooldown.TagContainer.GrantedTags);
+            return new CooldownTimer { TimeRemaining = 0, Duration = Ability.CooldownTime };
         }
 
         /// <summary>

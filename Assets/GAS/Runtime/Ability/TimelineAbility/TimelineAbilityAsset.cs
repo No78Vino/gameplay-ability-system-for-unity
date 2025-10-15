@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public abstract class TimelineAbilityAssetBase : AbilityAsset
+    public abstract class TimelineAbilityAssetBase //: AbilityAsset
     {
         [TitleGroup("Data")]
         [HorizontalGroup("Data/H1", 1 / 3f)]
@@ -60,7 +60,7 @@ namespace GAS.Runtime
 #if UNITY_EDITOR
         public void Save()
         {
-            EditorUtility.SetDirty(this);
+            //EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
 #endif
@@ -68,7 +68,7 @@ namespace GAS.Runtime
 
     public abstract class TimelineAbilityAssetT<T> : TimelineAbilityAssetBase where T : class
     {
-        public sealed override Type AbilityType()
+        public Type AbilityType()
         {
             return typeof(T);
         }

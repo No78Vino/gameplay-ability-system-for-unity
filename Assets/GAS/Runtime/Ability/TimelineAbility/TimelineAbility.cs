@@ -4,9 +4,9 @@ namespace GAS.Runtime
 {
     public abstract class TimelineAbilityT<T> : AbstractAbility<T> where T : TimelineAbilityAssetBase
     {
-        protected TimelineAbilityT(T abilityAsset) : base(abilityAsset)
-        {
-        }
+        // protected TimelineAbilityT(T abilityAsset) : base(abilityAsset)
+        // {
+        // }
     }
 
     public abstract class TimelineAbilitySpecT<T> : AbilitySpec<T> where T : AbstractAbility
@@ -56,7 +56,7 @@ namespace GAS.Runtime
     /// </summary>
     public sealed class TimelineAbility : TimelineAbilityT<TimelineAbilityAssetBase>
     {
-        public TimelineAbility(TimelineAbilityAssetBase abilityAsset) : base(abilityAsset)
+        public TimelineAbility(TimelineAbilityAssetBase abilityAsset) //: base(abilityAsset)
         {
         }
 

@@ -89,11 +89,6 @@ namespace GAS.Runtime
         private const int LABEL_WIDTH = 50;
 
         [LabelWidth(LABEL_WIDTH)]
-        [LabelText(GASConstDefine.LABEL_GRANT_ABILITY)]
-        [AssetSelector]
-        public AbilityAsset AbilityAsset;
-
-        [LabelWidth(LABEL_WIDTH)]
         [LabelText(GASConstDefine.LABEL_GRANT_ABILITY_LEVEL)]
         public int AbilityLevel;
 
@@ -123,9 +118,9 @@ namespace GAS.Runtime
 
         public GrantedAbilityFromEffect(GrantedAbilityConfig config)
         {
-            Ability =
-                Activator.CreateInstance(config.AbilityAsset.AbilityType(), args: config.AbilityAsset) as
-                    AbstractAbility;
+            // Ability =
+            //     Activator.CreateInstance(config.AbilityAsset.AbilityType(), args: config.AbilityAsset) as
+            //         AbstractAbility;
             AbilityLevel = config.AbilityLevel;
             ActivationPolicy = config.ActivationPolicy;
             DeactivationPolicy = config.DeactivationPolicy;
@@ -164,7 +159,7 @@ namespace GAS.Runtime
         public GrantedAbilityActivationPolicy ActivationPolicy => GrantedAbility.ActivationPolicy;
         public GrantedAbilityDeactivationPolicy DeactivationPolicy => GrantedAbility.DeactivationPolicy;
         public GrantedAbilityRemovePolicy RemovePolicy => GrantedAbility.RemovePolicy;
-        public AbilitySpec AbilitySpec => Owner.AbilityContainer.AbilitySpecs()[AbilityName];
+        public AbilitySpec AbilitySpec => null; //Owner.AbilityContainer.AbilitySpecs()[AbilityName];
 
         public GrantedAbilitySpecFromEffect(GrantedAbilityFromEffect grantedAbility,
             GameplayEffectSpec sourceEffectSpec)
@@ -173,10 +168,10 @@ namespace GAS.Runtime
             SourceEffectSpec = sourceEffectSpec;
             AbilityName = GrantedAbility.Ability.Name;
             Owner = SourceEffectSpec.Owner;
-            if (Owner.AbilityContainer.HasAbility(AbilityName))
-            {
+            // if (Owner.AbilityContainer.HasAbility(AbilityName))
+            // {
                 Debug.LogError($"GrantedAbilitySpecFromEffect: {Owner.name} already has ability {AbilityName}");
-            }
+            //}
 
             Owner.GrantAbility(GrantedAbility.Ability);
             AbilitySpec.SetLevel(AbilityLevel);
