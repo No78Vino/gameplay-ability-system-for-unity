@@ -2,6 +2,8 @@
 {
     public static class GASConstDefine
     {
+        public const string GAS_VERSION = "2.0";
+        
         public const string TITLE_SETTING = "设置";
         public const string TITLE_PATHS = "路径";
         public const string TITLE_BASE_INFO = "基本信息";
@@ -9,6 +11,7 @@
 
         
         #region GASSettingAsset
+        public const string GAS_BASE_SETTING_PATH = "ProjectSettings/GASSettingAsset.asset";
         
         public const string LABEL_OF_CodeGeneratePath = "自动化生成脚本路径";
 

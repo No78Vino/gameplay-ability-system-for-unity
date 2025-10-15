@@ -196,15 +196,15 @@ namespace GAS.Runtime
             {
                 if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
                 {
-                    if (ge.Owner != null)
-                        ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
-                            .UnregisterPostCurrentValueChange(OnAttributeChanged);
+                    // if (ge.Owner != null)
+                    //     ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                    //         .UnregisterPostCurrentValueChange(OnAttributeChanged);
                 }
                 else
                 {
-                    if (ge.Source != null)
-                        ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
-                            .UnregisterPostCurrentValueChange(OnAttributeChanged);
+                    // if (ge.Source != null)
+                    //     ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                    //         .UnregisterPostCurrentValueChange(OnAttributeChanged);
                 }
             }
         }
@@ -216,15 +216,15 @@ namespace GAS.Runtime
             {
                 if (mmc.attributeFromType == AttributeBasedModCalculation.AttributeFrom.Target)
                 {
-                    if (ge.Owner != null)
-                        ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
-                            .RegisterPostCurrentValueChange(OnAttributeChanged);
+                    // if (ge.Owner != null)
+                    //     ge.Owner.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                    //         .RegisterPostCurrentValueChange(OnAttributeChanged);
                 }
                 else
                 {
-                    if (ge.Source != null)
-                        ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
-                            .RegisterPostCurrentValueChange(OnAttributeChanged);
+                    // if (ge.Source != null)
+                    //     ge.Source.AttributeSetContainer.Sets[mmc.attributeSetName][mmc.attributeShortName]
+                    //         .RegisterPostCurrentValueChange(OnAttributeChanged);
                 }
             }
         }

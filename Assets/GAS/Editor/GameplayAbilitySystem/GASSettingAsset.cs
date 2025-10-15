@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 namespace GAS.Editor
 {
-    [SingletonFilePath(GasDefine.GAS_BASE_SETTING_PATH)]
+    [SingletonFilePath(GASConstDefine.GAS_BASE_SETTING_PATH)]
     public class GASSettingAsset : ScriptableSingleton<GASSettingAsset>
     {
         private const int LABEL_WIDTH = 200;
@@ -137,7 +137,7 @@ namespace GAS.Editor
         [HideLabel]
         [DisplayAsString(TextAlignment.Left, true)]
         private static string Version =>
-            $"<size=15><b><color=white>EX-GAS Version: {GasDefine.GAS_VERSION}</color></b></size>";
+            $"<size=15><b><color=white>EX-GAS Version: {GASConstDefine.GAS_VERSION}</color></b></size>";
 
         public static string CodeGenPath => Setting.CodeGeneratePath;
 

@@ -177,7 +177,7 @@ namespace GAS.Runtime
             {
                 IsActive = true;
                 ActiveCount++;
-                Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
+                //Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
 
                 ActivateAbility(_abilityArguments);
             }
@@ -190,7 +190,7 @@ namespace GAS.Runtime
         {
             if (!IsActive) return;
             IsActive = false;
-            Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            // Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             EndAbility();
             _onEndAbility?.Invoke();
         }
@@ -200,7 +200,7 @@ namespace GAS.Runtime
             if (!IsActive) return;
             IsActive = false;
 
-            Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            //Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
         }

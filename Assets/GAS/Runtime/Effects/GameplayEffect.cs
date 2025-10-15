@@ -35,7 +35,6 @@ namespace GAS.Runtime
 
         // Modifiers
         public readonly GameplayEffectModifier[] Modifiers;
-        public readonly ExecutionCalculation[] Executions; // TODO: this should be a list of execution calculations
 
         // Granted Ability
         public readonly GrantedAbilityFromEffect[] GrantedAbilities;
@@ -94,7 +93,6 @@ namespace GAS.Runtime
             // CueOnDeactivate = data.GetCueOnDeactivate();
             // CueDurational = data.GetCueDurational();
             Modifiers = data.GetModifiers();
-            Executions = data.GetExecutions();
             GrantedAbilities = GetGrantedAbilities(data.GetGrantedAbilities());
             Stacking = data.GetStacking();
         }
@@ -111,17 +109,17 @@ namespace GAS.Runtime
             return grantedAbilityList.ToArray();
         }
 
-        public bool CanApplyTo(IAbilitySystemComponent target)
+        public bool CanApplyTo(AbilitySystemComponent target)
         {
             return target.HasAllTags(TagContainer.ApplicationRequiredTags);
         }
 
-        public bool CanRunning(IAbilitySystemComponent target)
+        public bool CanRunning(AbilitySystemComponent target)
         {
             return target.HasAllTags(TagContainer.OngoingRequiredTags);
         }
 
-        public bool IsImmune(IAbilitySystemComponent target)
+        public bool IsImmune(AbilitySystemComponent target)
         {
             return target.HasAnyTags(TagContainer.ApplicationImmunityTags);
         }

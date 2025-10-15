@@ -182,7 +182,7 @@ namespace GAS.Runtime
 
         private void TriggerOnActivation()
         {
-            Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
+            //Owner.GameplayTagAggregator.ApplyGameplayEffectDynamicTag(this);
             Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
                 .RemoveGameplayEffectsWithTags);
             
@@ -191,7 +191,7 @@ namespace GAS.Runtime
 
         private void TriggerOnDeactivation()
         {
-            Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
+            //Owner.GameplayTagAggregator.RestoreGameplayEffectDynamicTags(this);
             
             TryDeactivateGrantedAbilities();
         }

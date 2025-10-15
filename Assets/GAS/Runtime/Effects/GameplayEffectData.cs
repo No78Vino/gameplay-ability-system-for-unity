@@ -76,11 +76,7 @@ namespace GAS.Runtime
         {
             return Modifiers;
         }
-
-        public virtual ExecutionCalculation[] GetExecutions()
-        {
-            return Array.Empty<ExecutionCalculation>();
-        }
+        
 
         public virtual GrantedAbilityConfig[] GetGrantedAbilities()
         {
@@ -103,7 +99,6 @@ namespace GAS.Runtime
         public GameplayTag[] GrantedTags { get; set; } = Array.Empty<GameplayTag>();
         public GameplayTag[] OngoingRequiredTags { get; set; } = Array.Empty<GameplayTag>();
         
-        public ExecutionCalculation[] Executions { get; set; } = Array.Empty<ExecutionCalculation>();
         public GrantedAbilityConfig[] GrantedAbilities { get; set; } = Array.Empty<GrantedAbilityConfig>();
         public GameplayEffectStacking Stacking { get; set; } = GameplayEffectStacking.None;
 
@@ -140,11 +135,6 @@ namespace GAS.Runtime
         public override GameplayTag[] GetOngoingRequiredTags()
         {
             return OngoingRequiredTags;
-        }
-
-        public override ExecutionCalculation[] GetExecutions()
-        {
-            return Executions;
         }
 
         public override GrantedAbilityConfig[] GetGrantedAbilities()

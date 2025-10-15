@@ -21,7 +21,6 @@
 
         // Modifiers
         GameplayEffectModifier[] GetModifiers();
-        ExecutionCalculation[] GetExecutions();
 
         // Granted Ability
         GrantedAbilityConfig[] GetGrantedAbilities();
