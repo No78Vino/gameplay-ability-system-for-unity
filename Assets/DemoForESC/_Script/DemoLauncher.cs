@@ -9,7 +9,7 @@ namespace DemoForESC._Script
     {
         private void Awake()
         {
-            GEN_GASLauncher.Launch();
+            XLauncher.Launch();
             GASManager.Run();
 
             var testE = GASManager.EntityManager.CreateEntity();

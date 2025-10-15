@@ -11,16 +11,16 @@ namespace GAS.Runtime
     /// 随意的组件增删对于System的运作逻辑都是存在的隐患的。
     /// 数据修改都是没问题的。
     /// </summary>
-    public class NewGameplayEffectSpec
+    public class GameplayEffectSpec
     {
         public Entity Entity { get; set; }
 
-        public NewGameplayEffectSpec(GameplayEffectComponentConfig[] componentConfigs)
+        public GameplayEffectSpec(GameplayEffectComponentConfig[] componentConfigs)
         {
             Entity = EffectUtil.CreateGameplayEffectEntity(componentConfigs);
         }
         
-        public NewGameplayEffectSpec(Entity geEntity)
+        public GameplayEffectSpec(Entity geEntity)
         {
             Entity = geEntity;
         }

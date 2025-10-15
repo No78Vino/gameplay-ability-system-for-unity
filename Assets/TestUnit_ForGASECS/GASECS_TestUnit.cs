@@ -88,7 +88,7 @@ namespace TestUnit_ForGASECS
         [Button(ButtonSizes.Medium, Name = "初始化GAS")]
         private void InitGAS()
         {
-            GEN_GASLauncher.Launch();
+            XLauncher.Launch();
             GASManager.Run();
         }
 

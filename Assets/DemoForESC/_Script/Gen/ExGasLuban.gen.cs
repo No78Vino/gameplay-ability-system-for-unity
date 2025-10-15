@@ -31,13 +31,19 @@ namespace GAS.Runtime
             _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
         }
 
+        public static void Init()
+        {
+            LoadTables();
+            GameplayEffectHelper.RegisterGetConfigByIDFunc(GetGameplayEffectConfig);
+        }
+
         public static AbilitySystemCellConfig GetAscConfig(int id)
         {
             var data = Tables.Tbasc.Get(id);
             if (data == null)
             {
                 Debug.LogError($"ASC_ID:{id}  不存在.");
-                return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<int>(),Array.Empty<AbilityConfig>(), 0);
+                return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<AttributeSetConfig>(),Array.Empty<AbilityConfig>(), 0);
             }
             var abilityIds = data.Ability;
             var abilities = new AbilityConfig[abilityIds.Length];
@@ -46,7 +52,10 @@ namespace GAS.Runtime
                 var abilityId = abilityIds[i];
                 abilities[i] = GetAbilityConfig(abilityId);
             }
-            return new AbilitySystemCellConfig(data.Tag, data.AttrSet, abilities, data.Level);
+            var attrSets = new AttributeSetConfig[data.AttrSet.Length];
+            for (var i = 0; i < data.AttrSet.Length; i++)
+                attrSets[i] = XAttrSet.AttributeSetMap[data.AttrSet[i]];
+            return new AbilitySystemCellConfig(data.Tag, attrSets, abilities, data.Level);
         }
 
         public static GameplayCueConfig GetGameplayCueConfig(int id)
@@ -303,6 +312,13 @@ namespace GAS.Runtime
                 {
                     switch (abilityLogic)
                     {
+                        case cfg.ALMove aData:
+                        {
+                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.AbilityParamMove;
+                            ap?.SetRotationOffset(aData.RotationOffset);
+                            abilityParam = ap;
+                            break;
+                        }
                         case cfg.ALApplyEffect aData:
                         {
                             var ap = abilityParam as GAS.Runtime.AbilityParamArrayInt;
@@ -314,13 +330,6 @@ namespace GAS.Runtime
                         {
                             var ap = abilityParam as GAS.Runtime.AbilityParamString;
                             ap?.SetValue(aData.Value);
-                            abilityParam = ap;
-                            break;
-                        }
-                        case cfg.ALMove aData:
-                        {
-                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.AbilityParamMove;
-                            ap?.SetRotationOffset(aData.RotationOffset);
                             abilityParam = ap;
                             break;
                         }

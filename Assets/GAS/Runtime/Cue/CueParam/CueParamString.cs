@@ -23,14 +23,7 @@ namespace GAS.Runtime
         {
             Value = v;
         }
-        
-        public void LoadConfigParameterData(object cfgCueLogic)
-        {
-            if (cfgCueLogic is cfg.GameplayCueLog cueLog)
-            {
-                SetValue(cueLog.Value);
-            }
-        }
+
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

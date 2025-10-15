@@ -18,7 +18,7 @@ namespace GAS.Runtime
             var owner = baseInfo.Owner;
             foreach (var effectCode in _param.Value)
             {
-                var effectCfg = XLuban.GetGameplayEffectConfig(effectCode);
+                var effectCfg = GameplayEffectHelper.GetConfigByID(effectCode);
                 var geEntity = CreateGameplayEffectEntity(effectCfg);
                 ApplyGameplayEffectTo(geEntity, owner, owner);
             }

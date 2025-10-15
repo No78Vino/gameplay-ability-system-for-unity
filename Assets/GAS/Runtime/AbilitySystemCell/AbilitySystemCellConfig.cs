@@ -2,7 +2,7 @@ namespace GAS.Runtime
 {
     public struct AbilitySystemCellConfig
     {
-        public AbilitySystemCellConfig(int[] baseTags, int[] attrSets, AbilityConfig[] baseAbilities, int level = 1)
+        public AbilitySystemCellConfig(int[] baseTags, AttributeSetConfig[] attrSets, AbilityConfig[] baseAbilities, int level = 1)
         {
             BaseTags = baseTags;
             AttrSets = attrSets;
@@ -12,7 +12,7 @@ namespace GAS.Runtime
 
         public int[] BaseTags { get; private set; }
 
-        public int[] AttrSets { get; private set; }
+        public AttributeSetConfig[] AttrSets { get; private set; }
 
         public AbilityConfig[] BaseAbilities { get; private set; }
 
@@ -23,7 +23,7 @@ namespace GAS.Runtime
             BaseTags = baseTags;
         }
 
-        public void SetAttrSets(int[] attrSets)
+        public void SetAttrSets(AttributeSetConfig[] attrSets)
         {
             AttrSets = attrSets;
         }

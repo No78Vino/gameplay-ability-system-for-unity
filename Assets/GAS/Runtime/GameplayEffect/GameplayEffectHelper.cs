@@ -1,9 +1,10 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public static class GameplayEffectUtils
+    public static class GameplayEffectHelper
     {
         private static EntityManager GasEntityManager => GASManager.EntityManager;
 
@@ -171,5 +172,22 @@ namespace GAS.Runtime
 
             return true;
         }
+
+
+
+        #region GameplayEffectConfig
+
+        private static Func<int,GameplayEffectConfig> _getConfigByID;
+        public static void RegisterGetConfigByIDFunc(Func<int,GameplayEffectConfig> func)
+        {
+            _getConfigByID = func;
+        }
+        
+        public static GameplayEffectConfig GetConfigByID(int id)
+        {
+            return _getConfigByID?.Invoke(id);
+        }
+
+        #endregion
     }
 }

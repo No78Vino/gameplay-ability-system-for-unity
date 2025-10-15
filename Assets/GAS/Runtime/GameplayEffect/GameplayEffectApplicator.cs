@@ -104,7 +104,7 @@ namespace GAS.Runtime
             gameplayEffect.InitGameplayEffect(source, target, level);
             
             // 2.添加GE到target
-            var geBuffers = GameplayEffectUtils.GameplayEffectsOf(target);
+            var geBuffers = GameplayEffectHelper.GameplayEffectsOf(target);
             geBuffers.Add(new BEGameplayEffect { GameplayEffect = gameplayEffect });
             
             // 3.触发OnAdd的Cue

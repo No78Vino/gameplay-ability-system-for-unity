@@ -16,14 +16,14 @@ namespace GAS.Runtime
 
         public static void LoadAbilityCode()
         {
+            var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.AbilityParamMove));
             var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.Name, ALApplyEffect,typeof(GAS.Runtime.AbilityParamArrayInt));
             var ALDebugLog = typeof(GAS.Runtime.ALDebugLog);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.Runtime.AbilityParamString));
             var ALTimeline = typeof(GAS.Runtime.ALTimeline);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.AbilityParamTimeline));
-            var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
-            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.AbilityParamMove));
         }
     }
 }

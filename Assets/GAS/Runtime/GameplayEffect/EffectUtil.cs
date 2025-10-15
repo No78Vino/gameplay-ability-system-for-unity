@@ -86,9 +86,9 @@ namespace GAS.Runtime
             return entity;
         }
         
-        public static NewGameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
+        public static GameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)
         {
-            return new NewGameplayEffectSpec(componentAssets);
+            return new GameplayEffectSpec(componentAssets);
         }
 
         public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)

@@ -220,7 +220,7 @@ namespace GAS.Runtime
             if (entityManager.HasComponent<CEffectApplied>(gameplayEffect)) return;
             ecb.AddComponent<CEffectApplied>(gameplayEffect);
 
-            GameplayEffectUtils.ActivateEffect(gameplayEffect,targetAsc,entityManager,_globalTimer);
+            GameplayEffectHelper.ActivateEffect(gameplayEffect,targetAsc,entityManager,_globalTimer);
             
 #if UNITY_EDITOR
             if (!targetAsc.HasGameplayEffect(gameplayEffect))
@@ -294,7 +294,7 @@ namespace GAS.Runtime
             if (entityManager.HasComponent<CCueOnAdd>(gameplayEffect))
             {
                 var cCue = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect);
-                cCue.runtimeCues = GameplayEffectUtils.GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
+                cCue.runtimeCues = GameplayEffectHelper.GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
                     cCue.cues);
                 entityManager.SetComponentData(gameplayEffect, cCue);
             }

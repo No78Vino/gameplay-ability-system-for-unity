@@ -63,7 +63,17 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     writer.WriteLine("");
-
+                    
+                    writer.WriteLine("public static void Init()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine("LoadTables();");
+                    writer.WriteLine("GameplayEffectHelper.RegisterGetConfigByIDFunc(GetGameplayEffectConfig);");
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    
+                    writer.WriteLine("");
+                    
                     #region ASC
 
                     writer.WriteLine("public static AbilitySystemCellConfig GetAscConfig(int id)");
@@ -76,7 +86,7 @@ namespace GAS.Editor
                         writer.Indent++;
                         writer.WriteLine("Debug.LogError($\"ASC_ID:{id}  不存在.\");");
                         writer.WriteLine(
-                            "return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<int>(),Array.Empty<AbilityConfig>(), 0);");
+                            "return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<AttributeSetConfig>(),Array.Empty<AbilityConfig>(), 0);");
                         writer.Indent--;
                         writer.WriteLine("}");
                         writer.WriteLine("var abilityIds = data.Ability;");
@@ -88,8 +98,13 @@ namespace GAS.Editor
                         writer.WriteLine("abilities[i] = GetAbilityConfig(abilityId);");
                         writer.Indent--;
                         writer.WriteLine("}");
+                        
+                        writer.WriteLine("var attrSets = new AttributeSetConfig[data.AttrSet.Length];");
+                        writer.WriteLine("for (var i = 0; i < data.AttrSet.Length; i++)");
+                        writer.WriteLine("    attrSets[i] = XAttrSet.AttributeSetMap[data.AttrSet[i]];");
+                        
                         writer.WriteLine(
-                            "return new AbilitySystemCellConfig(data.Tag, data.AttrSet, abilities, data.Level);");
+                            "return new AbilitySystemCellConfig(data.Tag, attrSets, abilities, data.Level);");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");

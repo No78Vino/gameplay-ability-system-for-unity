@@ -46,7 +46,7 @@ namespace GAS.Runtime
                 if (expired)
                 {
                     var targetAsc = inUsage.ValueRO.Target;
-                    GameplayEffectUtils.DeactivateEffect(geEntity, targetAsc, state.EntityManager);
+                    GameplayEffectHelper.DeactivateEffect(geEntity, targetAsc, state.EntityManager);
                     ecb.RemoveComponent<CEffectApplied>(geEntity);
                     ecb.AddComponent<CEffectDestroy>(geEntity);
                 }

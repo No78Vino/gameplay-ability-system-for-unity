@@ -26,7 +26,7 @@ namespace GAS.Runtime
             EffectUtil.ApplyGameplayEffectTo(gameplayEffect,target,_asc);
         }
         
-        public NewGameplayEffectSpec ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffect, AbilitySystemCell target)
+        public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffect, AbilitySystemCell target)
         {
             AddGameplayEffectEntityTo(gameplayEffect.Entity, target.Entity);
             return gameplayEffect;

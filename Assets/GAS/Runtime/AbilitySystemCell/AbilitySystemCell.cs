@@ -39,15 +39,15 @@ namespace GAS.Runtime
             Entity = Entity.Null;
         }
 
-        public void Init(IEnumerable<int> baseTags, IEnumerable<int> attrSets, IEnumerable<AbilityConfig> baseAbilities, int level = 1)
+        public void Init(IEnumerable<int> baseTags, IEnumerable<AttributeSetConfig> attrSets, IEnumerable<AbilityConfig> baseAbilities, int level = 1)
         {
             // 1.初始化基础标签
             _gameplayTagController.AddFixedTags(baseTags);
             // 2.创建属性集
-            foreach (var attrSetCode in attrSets)
+            foreach (var attrSet in attrSets)
             {
-                var attrSetConfig = XAttrSet.AttributeSetMap[attrSetCode];
-                _attrSetController.AddAttrSet(attrSetConfig);
+                //var attrSetConfig = XAttrSet.AttributeSetMap[attrSetCode];
+                _attrSetController.AddAttrSet(attrSet);
             }
 
             // 3.初始化基础技能
@@ -62,17 +62,17 @@ namespace GAS.Runtime
         
         #region GameplayEffect
 
-        public void ApplyGameplayEffectTo(NewGameplayEffectSpec gameplayEffectSpec, AbilitySystemCell target)
+        public void ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemCell target)
         {
             _gameplayEffectController.ApplyGameplayEffectTo(gameplayEffectSpec, target);
         }
         
-        public void ApplyGameplayEffectToSelf(NewGameplayEffectSpec gameplayEffectSpec)
+        public void ApplyGameplayEffectToSelf(GameplayEffectSpec gameplayEffectSpec)
         {
             _gameplayEffectController.ApplyGameplayEffectTo(gameplayEffectSpec, this);
         }
 
-        public void RemoveGameplayEffect(NewGameplayEffectSpec gameplayEffectSpec)
+        public void RemoveGameplayEffect(GameplayEffectSpec gameplayEffectSpec)
         {
             _gameplayEffectController.RemoveGameplayEffect(gameplayEffectSpec.Entity);
         }

@@ -32,7 +32,7 @@ namespace GAS.Runtime
             return attrIndex >= 0 ? attrSetCom.Attributes[attrIndex] : AttributeData.NULL;
         }
 
-        public bool AddAttrSet(NewAttributeSetConfig config)
+        public bool AddAttrSet(AttributeSetConfig config)
         {
             var attrSetCode = config.Code;
             if (_attrSetCodeList.Contains(attrSetCode)) return false;
