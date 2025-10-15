@@ -376,6 +376,83 @@ namespace GAS.Editor
             CodeGeneratorLubanPart.GenerateLubanExtension();
         }
         
+        [MenuItem("EXTool/EX-GAS/生成脚本/Launcher")]
+        public static void GenerateLauncher()
+        {
+            // namespace GAS.Runtime
+            // {
+            //     public static class XLauncher
+            //     {
+            //         public static void InitCache()
+            //         {
+            //             XAbility.LoadAbilityCode();
+            //             XMmc.LoadMmcType();
+            //             XCue.LoadCueType();
+            //             XLuban.Init();
+            //         }
+            //       
+            //         public static void Launch()
+            //         {
+            //             InitCache();
+            //             GASManager.Initialize();
+            //         
+            //             // 初始化Tag系统
+            //             // 注意需要在GASManager.Initialize()之后调用
+            //             // 因为XTag创建全Tag的图鉴单例来作为运行时缓存，需要EntityManager。
+            //             XTag.InitTagList();
+            //         }
+            //     }
+            // }
+            var setting = GASSettingAsset.LoadOrCreate();
+            var filePath = setting.PathOfCodeLauncher;
+            using var writer = new IndentedWriter(new StreamWriter(filePath));
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("//// This is a generated file. ////");
+            writer.WriteLine("////     Do not modify it.     ////");
+            writer.WriteLine("///////////////////////////////////");
+            writer.WriteLine("");
+            writer.WriteLine("namespace GAS.Runtime");
+            writer.WriteLine("{");
+            writer.Indent++;
+            {
+                writer.WriteLine("public static class XLauncher");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    writer.WriteLine("public static void InitCache()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("XAbility.LoadAbilityCode();");
+                        writer.WriteLine("XMmc.LoadMmcType();");
+                        writer.WriteLine("XCue.LoadCueType();");
+                        writer.WriteLine("XLuban.Init();");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("");
+                    writer.WriteLine("public static void Launch()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("InitCache();");
+                        writer.WriteLine("GASManager.Initialize();");
+                        writer.WriteLine("");
+                        writer.WriteLine("// 初始化Tag系统");
+                        writer.WriteLine("// 注意需要在GASManager.Initialize()之后调用");
+                        writer.WriteLine("// 因为XTag创建全Tag的图鉴单例来作为运行时缓存，需要EntityManager。");
+                        writer.WriteLine("XTag.InitTagList();");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                }
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.WriteLine("}");
+        }
+        
         /// <summary>
         ///  生成所有GAS相关代码
         /// </summary>
@@ -389,6 +466,7 @@ namespace GAS.Editor
             GenerateCueCode();
             GenerateMmcCode();
             GenerateLubanExtension();
+            GenerateLauncher();
         }
     }
 }

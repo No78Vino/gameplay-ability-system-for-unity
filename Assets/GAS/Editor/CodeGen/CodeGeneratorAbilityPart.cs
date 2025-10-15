@@ -19,9 +19,6 @@ namespace GAS.Editor
 
             writer.WriteLine("");
 
-            writer.WriteLine("using System;");
-            writer.WriteLine("using System.Collections.Generic;");
-
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
 

@@ -1,5 +1,4 @@
-﻿using DemoForESC._Script.Gen;
-using GAS.Runtime;
+﻿using GAS.Runtime;
 using Sirenix.OdinInspector;
 using Unity.Entities;
 using UnityEngine;

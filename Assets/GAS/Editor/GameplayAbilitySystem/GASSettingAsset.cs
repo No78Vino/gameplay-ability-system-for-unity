@@ -86,6 +86,7 @@ namespace GAS.Editor
         public string PathOfCodeAsc => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ASC}.cs";
         
         public string PathOfCodeLubanExtesion => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LUBAN}.cs";
+        public string PathOfCodeLauncher => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LAUNCHER}.cs";
         
         [TitleGroup("A/文件路径一览",Order = 99)]
         [DisplayAsString(TextAlignment.Left, true)]
@@ -96,6 +97,7 @@ namespace GAS.Editor
             get
             {
                 var content =
+                    $"Launcher脚本路径: {PathOfCodeLauncher}\n\n" +
                     $"Tag配置Json路径: {PathOfJsonTag}\n" +
                     $"Tag配置Excel路径: {PathOfExcelTag}\n" +
                     $"Tag脚本路径: {PathOfCodeTag}\n\n" +

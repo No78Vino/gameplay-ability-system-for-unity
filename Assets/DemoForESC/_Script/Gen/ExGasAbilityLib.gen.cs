@@ -3,8 +3,6 @@
 ////     Do not modify it.     ////
 ///////////////////////////////////
 
-using System;
-using System.Collections.Generic;
 namespace GAS.Runtime
 {
     public static class XAbility

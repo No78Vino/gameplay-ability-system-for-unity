@@ -51,6 +51,7 @@
         public const string CODE_FILE_NAME_OF_ASC = "ExGasAscLib.gen";
         
         public const string CODE_FILE_NAME_OF_LUBAN = "ExGasLuban.gen";
+        public const string CODE_FILE_NAME_OF_LAUNCHER = "XLauncher.gen";
 
         #endregion
 

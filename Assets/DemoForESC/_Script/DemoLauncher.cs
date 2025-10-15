@@ -1,5 +1,3 @@
-using System;
-using DemoForESC._Script.Gen;
 using GAS.Runtime;
 using UnityEngine;
 
