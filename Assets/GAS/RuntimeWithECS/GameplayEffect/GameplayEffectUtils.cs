@@ -82,7 +82,6 @@ namespace GAS.Runtime
             NativeArray<Entity> lastCueInstances,NativeArray<Entity> prefabCues)
         {
             // 0.先清楚已实例化的cue
-            //var cueInstances = entityManager.GetComponentData<CCueOnAdd>(gameplayEffect).runtimeCues;
             foreach (var cueInstance in lastCueInstances)
             {
                 if (!entityManager.Exists(cueInstance)) continue;
@@ -148,8 +147,6 @@ namespace GAS.Runtime
             }
 
             return cueEntities;
-            // cueOnAdd.runtimeCues = cueEntities;
-            // entityManager.SetComponentData(gameplayEffect,cueOnAdd);
         }
     }
 }
