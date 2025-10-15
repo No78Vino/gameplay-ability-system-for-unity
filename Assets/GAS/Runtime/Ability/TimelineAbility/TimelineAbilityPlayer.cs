@@ -37,7 +37,7 @@ namespace GAS.Runtime
 
         // cache for target catcher, avoid new in TickFrame
         // 这个是一个泛型类, 这个变量就不作为static了
-        private readonly List<AbilitySystemComponent> _targets = new();
+        private readonly List<AbilitySystemCellMono> _targets = new();
 
         private int _currentFrame;
         private float _playTotalTime;
@@ -200,8 +200,8 @@ namespace GAS.Runtime
 
             foreach (var clip in _cacheBuffGameplayEffectTrack)
             {
-                if (clip.buffSpec != null)
-                    _abilitySpec.Owner.RemoveGameplayEffect(clip.buffSpec);
+                // if (clip.buffSpec != null)
+                //     _abilitySpec.Owner.Cell.RemoveGameplayEffect(clip.buffSpec);
             }
 
             foreach (var clip in _cacheOngoingTaskTrack)
@@ -340,9 +340,9 @@ namespace GAS.Runtime
                     if (frame == buffClip.startFrame)
                     {
                         //Profiler.BeginSample("buffGameplayEffect.Start");
-                        var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
-                        buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
-                        buffClip.buffSpec = buffSpec;
+                        // var buffSpec = _abilitySpec.Owner.ApplyGameplayEffectToSelf(buffClip.buff);
+                        // buffSpec.SetDurationPolicy(EffectsDurationPolicy.Infinite);
+                        // buffClip.buffSpec = buffSpec;
                         //Profiler.EndSample();
                     }
 
@@ -351,7 +351,7 @@ namespace GAS.Runtime
                         if (buffClip.buffSpec != null)
                         {
                             //Profiler.BeginSample("buffGameplayEffect.End");
-                            _abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
+                            //_abilitySpec.Owner.RemoveGameplayEffect(buffClip.buffSpec);
                             //Profiler.EndSample();
                         }
 

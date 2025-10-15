@@ -6,35 +6,35 @@ namespace GAS.Runtime
 {
     public abstract class NewTargetCatcherBase
     {
-        public AbilitySystemComponent Owner;
+        public AbilitySystemCellMono Owner;
 
         protected NewTargetCatcherBase()
         {
         }
 
-        public virtual void Init(AbilitySystemComponent owner)
+        public virtual void Init(AbilitySystemCellMono owner)
         {
             Owner = owner;
         }
 
         [Obsolete("请使用CatchTargetsNonAlloc方法来避免产生垃圾收集（GC）。")]
-        public List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget)
+        public List<AbilitySystemCellMono> CatchTargets(AbilitySystemCellMono mainTarget)
         {
-            var result = new List<AbilitySystemComponent>();
+            var result = new List<AbilitySystemCellMono>();
 
             CatchTargetsNonAlloc(mainTarget, result);
 
             return result;
         }
 
-        public void CatchTargetsNonAllocSafe(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
+        public void CatchTargetsNonAllocSafe(AbilitySystemCellMono mainTarget, List<AbilitySystemCellMono> results)
         {
             results.Clear();
 
             CatchTargetsNonAlloc(mainTarget, results);
         }
 
-        protected abstract void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results);
+        protected abstract void CatchTargetsNonAlloc(AbilitySystemCellMono mainTarget, List<AbilitySystemCellMono> results);
 
 #if UNITY_EDITOR
         public virtual void OnEditorPreview(GameObject obj)

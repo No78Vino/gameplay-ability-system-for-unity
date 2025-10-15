@@ -46,8 +46,8 @@ namespace GAS.Runtime
         public readonly GameplayEffect[] RoutineExpirationEffectClasses;
 
         public GameplayEffectSpec CreateSpec(
-            AbilitySystemComponent creator,
-            AbilitySystemComponent owner,
+            AbilitySystemCellMono creator,
+            AbilitySystemCellMono owner,
             float level = 1)
         {
             var spec = new GameplayEffectSpec(this);
@@ -107,17 +107,17 @@ namespace GAS.Runtime
             return grantedAbilityList.ToArray();
         }
 
-        public bool CanApplyTo(AbilitySystemComponent target)
+        public bool CanApplyTo(AbilitySystemCellMono target)
         {
             return true;
         }
 
-        public bool CanRunning(AbilitySystemComponent target)
+        public bool CanRunning(AbilitySystemCellMono target)
         {
             return true;
         }
 
-        public bool IsImmune(AbilitySystemComponent target)
+        public bool IsImmune(AbilitySystemCellMono target)
         {
             return true;
         }

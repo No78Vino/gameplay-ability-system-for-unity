@@ -152,7 +152,7 @@ namespace GAS.Runtime
     {
         public readonly GrantedAbilityFromEffect GrantedAbility;
         public readonly GameplayEffectSpec SourceEffectSpec;
-        public readonly AbilitySystemComponent Owner;
+        public readonly AbilitySystemCellMono Owner;
 
         public readonly string AbilityName;
         public int AbilityLevel => GrantedAbility.AbilityLevel;
@@ -173,13 +173,13 @@ namespace GAS.Runtime
                 Debug.LogError($"GrantedAbilitySpecFromEffect: {Owner.name} already has ability {AbilityName}");
             //}
 
-            Owner.GrantAbility(GrantedAbility.Ability);
+            //Owner.GrantAbility(GrantedAbility.Ability);
             AbilitySpec.SetLevel(AbilityLevel);
 
             // 是否添加时激活
             if (ActivationPolicy == GrantedAbilityActivationPolicy.WhenAdded)
             {
-                Owner.TryActivateAbility(AbilityName);
+                //Owner.TryActivateAbility(AbilityName);
             }
 
             switch (RemovePolicy)
@@ -199,7 +199,7 @@ namespace GAS.Runtime
 
         private void RemoveSelf()
         {
-            Owner.RemoveAbility(AbilityName);
+            //Owner.RemoveAbility(AbilityName);
         }
     }
 }

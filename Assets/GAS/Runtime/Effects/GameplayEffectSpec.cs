@@ -15,7 +15,7 @@ namespace GAS.Runtime
         /// The execution type of onImmunity is one shot.
         /// </summary>
 #pragma warning disable CS0067 // 事件从未使用过
-        public event Action<AbilitySystemComponent, GameplayEffectSpec> onImmunity;
+        public event Action<AbilitySystemCellMono, GameplayEffectSpec> onImmunity;
 #pragma warning restore CS0067 // 事件从未使用过
         
         public event Action<int,int> onStackCountChanged;
@@ -33,7 +33,7 @@ namespace GAS.Runtime
             }
         }
 
-        public void Init(AbilitySystemComponent source, AbilitySystemComponent owner, float level = 1)
+        public void Init(AbilitySystemCellMono source, AbilitySystemCellMono owner, float level = 1)
         {
             Source = source;
             Owner = owner;
@@ -48,8 +48,8 @@ namespace GAS.Runtime
         public GameplayEffect GameplayEffect { get; }
         public float ActivationTime { get; private set; }
         public float Level { get; private set; }
-        public AbilitySystemComponent Source { get; private set; }
-        public AbilitySystemComponent Owner { get; private set; }
+        public AbilitySystemCellMono Source { get; private set; }
+        public AbilitySystemCellMono Owner { get; private set; }
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public float Duration { get; private set; }
@@ -159,14 +159,6 @@ namespace GAS.Runtime
         {
         }
 
-        public void TriggerOnExecute()
-        {
-            // Owner.GameplayEffectContainer.RemoveGameplayEffectWithAnyTags(GameplayEffect.TagContainer
-            //     .RemoveGameplayEffectsWithTags);
-            Owner.ApplyModFromInstantGameplayEffect(this);
-            
-        }
-
         public void TriggerOnAdd()
         {
         }
@@ -206,13 +198,13 @@ namespace GAS.Runtime
 
         public void RemoveSelf()
         {
-            Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
+            //Owner.GameplayEffectContainer.RemoveGameplayEffectSpec(this);
         }
 
         private void CaptureAttributesSnapshot()
         {
-            SnapshotSourceAttributes = Source.DataSnapshot();
-            SnapshotTargetAttributes = Source == Owner ? SnapshotSourceAttributes : Owner.DataSnapshot();
+            //SnapshotSourceAttributes = Source.DataSnapshot();
+            //SnapshotTargetAttributes = Source == Owner ? SnapshotSourceAttributes : Owner.DataSnapshot();
         }
 
         public void RegisterValue(GameplayTag tag, float value)
@@ -251,7 +243,7 @@ namespace GAS.Runtime
             {
                 if (grantedAbilitySpec.ActivationPolicy == GrantedAbilityActivationPolicy.SyncWithEffect)
                 {
-                    Owner.TryActivateAbility(grantedAbilitySpec.AbilityName);
+                    //Owner.TryActivateAbility(grantedAbilitySpec.AbilityName);
                 }
             }
         }
@@ -262,7 +254,7 @@ namespace GAS.Runtime
             {
                 if (grantedAbilitySpec.DeactivationPolicy == GrantedAbilityDeactivationPolicy.SyncWithEffect)
                 {
-                    Owner.TryEndAbility(grantedAbilitySpec.AbilityName);
+                    //Owner.TryEndAbility(grantedAbilitySpec.AbilityName);
                 }
             }
         }
@@ -273,8 +265,8 @@ namespace GAS.Runtime
             {
                 if (grantedAbilitySpec.RemovePolicy == GrantedAbilityRemovePolicy.SyncWithEffect)
                 {
-                    Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
-                    Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
+                   // Owner.TryCancelAbility(grantedAbilitySpec.AbilityName);
+                    //Owner.RemoveAbility(grantedAbilitySpec.AbilityName);
                 }
             }
         }
@@ -311,8 +303,8 @@ namespace GAS.Runtime
             else
             {
                 // 溢出GE生效
-                foreach (var overflowEffect in Stacking.overflowEffects)
-                    Owner.ApplyGameplayEffectToSelf(overflowEffect);
+                // foreach (var overflowEffect in Stacking.overflowEffects)
+                //     //Owner.ApplyGameplayEffectToSelf(overflowEffect);
 
                 if (Stacking.durationRefreshPolicy == DurationRefreshPolicy.RefreshOnSuccessfulApplication)
                 {

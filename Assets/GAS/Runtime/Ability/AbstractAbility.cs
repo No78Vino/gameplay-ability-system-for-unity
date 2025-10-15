@@ -27,7 +27,7 @@ namespace GAS.Runtime
         //     CooldownTime = DataReference.CooldownTime;
         // }
 
-        public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
+        public abstract AbilitySpec CreateSpec(AbilitySystemCellMono owner);
 
         public void SetCooldown(GameplayEffect coolDown)
         {

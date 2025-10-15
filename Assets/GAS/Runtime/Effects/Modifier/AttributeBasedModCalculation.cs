@@ -71,8 +71,9 @@ namespace GAS.Runtime
                 }
                 else
                 {
-                    var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                    return (attribute ?? 1) * k + b;
+                    //var attribute = spec.Source.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                    //return (attribute ?? 1) * k + b;
+                    return ( 1) * k + b;
                 }
             }
 
@@ -84,8 +85,9 @@ namespace GAS.Runtime
             }
             else
             {
-                var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
-                return (attribute ?? 1) * k + b;
+                // var attribute = spec.Owner.GetAttributeCurrentValue(attributeSetName, attributeShortName);
+                // return (attribute ?? 1) * k + b;
+                return ( 1) * k + b;
             }
         }
 

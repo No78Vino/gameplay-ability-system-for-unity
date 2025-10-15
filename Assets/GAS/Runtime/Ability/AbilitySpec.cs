@@ -25,7 +25,7 @@ namespace GAS.Runtime
         public object UserData { get; set; }
 
 
-        public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
+        public AbilitySpec(AbstractAbility ability, AbilitySystemCellMono owner)
         {
             Ability = ability;
             Owner = owner;
@@ -40,7 +40,7 @@ namespace GAS.Runtime
 
         public AbstractAbility Ability { get; }
 
-        public AbilitySystemComponent Owner { get; protected set; }
+        public AbilitySystemCellMono Owner { get; protected set; }
 
         public int Level { get; protected set; }
 
@@ -96,54 +96,9 @@ namespace GAS.Runtime
             return AbilityActivateResult.Success;
         }
 
-        protected virtual bool CheckCost()
-        {
-            if (Ability.Cost == null) return true;
-            var costSpec = Ability.Cost.CreateSpec(Owner, Owner, Level);
-            if (costSpec == null) return false;
-
-            if (Ability.Cost.DurationPolicy != EffectsDurationPolicy.Instant) return true;
-
-            foreach (var modifier in Ability.Cost.Modifiers)
-            {
-                // 常规来说消耗是减法, 但是加一个负数也应该被视为减法
-                if (modifier.Operation != GEOperation.Add && modifier.Operation != GEOperation.Minus) continue;
-
-                var costValue = modifier.CalculateMagnitude(costSpec, modifier.ModiferMagnitude);
-                var attributeCurrentValue =
-                    Owner.GetAttributeCurrentValue(modifier.AttributeSetName, modifier.AttributeShortName);
-                
-                if(modifier.Operation == GEOperation.Add)
-                    if (attributeCurrentValue + costValue < 0) return false;
-                
-                if(modifier.Operation == GEOperation.Minus)
-                    if (attributeCurrentValue - costValue < 0) return false;
-            }
-
-            return true;
-        }
-
         protected virtual CooldownTimer CheckCooldown()
         {
             return new CooldownTimer { TimeRemaining = 0, Duration = Ability.CooldownTime };
-        }
-
-        /// <summary>
-        ///     Some skills include wind-up and follow-through, where the wind-up may be interrupted, causing the skill not to be
-        ///     successfully released.
-        ///     Therefore, the actual timing and logic of skill release (triggering costs and initiating cooldown) should be
-        ///     determined by developers within the AbilitySpec,
-        ///     rather than being systematically standardized.
-        /// </summary>
-        public void DoCost()
-        {
-            if (Ability.Cost != null) Owner.ApplyGameplayEffectToSelf(Ability.Cost);
-
-            if (Ability.Cooldown != null)
-            {
-                var cdSpec = Owner.ApplyGameplayEffectToSelf(Ability.Cooldown);
-                cdSpec.SetDuration(Ability.CooldownTime); // Actually, it should be set by the ability's cooldown time.
-            }
         }
 
         public virtual bool TryActivateAbility(params object[] args)
@@ -206,7 +161,7 @@ namespace GAS.Runtime
     {
         public T Data { get; private set; }
 
-        protected AbilitySpec(T ability, AbilitySystemComponent owner) : base(ability, owner)
+        protected AbilitySpec(T ability, AbilitySystemCellMono owner) : base(ability, owner)
         {
             Data = ability;
         }
