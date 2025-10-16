@@ -19,38 +19,35 @@
         
         public const string JSON_FILE_NAME_OF_TAG = "exgas_tbgameplaytags";
         public const string EXCEL_FILE_NAME_OF_TAG = "#exgas.gameplayTags";
-        public const string CODE_FILE_NAME_OF_TAG = "ExGasTagLib.gen";
+        public const string CODE_FILE_NAME_OF_TAG = "XTag.gen";
         
         public const string JSON_FILE_NAME_OF_ATTR = "exgas_tbattribute";
         public const string EXCEL_FILE_NAME_OF_ATTR = "#exgas.attribute";
-        public const string CODE_FILE_NAME_OF_ATTR = "ExGasAttrLib.gen";
+        public const string CODE_FILE_NAME_OF_ATTR = "XAttribute.gen";
         
         public const string JSON_FILE_NAME_OF_ATTR_SET = "exgas_tbattributeset";
         public const string EXCEL_FILE_NAME_OF_ATTR_SET = "#exgas.attributeSet";
-        public const string CODE_FILE_NAME_OF_ATTR_SET = "ExGasAttrSetLib.gen";
-        
+        public const string CODE_FILE_NAME_OF_ATTR_SET = "XAttrSet.gen";
         
         public const string JSON_FILE_NAME_OF_EFFECT = "exgas_tbgameplayeffect";
         public const string EXCEL_FILE_NAME_OF_EFFECT = "#exgas.gameplayEffect";
-        public const string CODE_FILE_NAME_OF_EFFECT = "ExGasEffectLib.gen";
         
         public const string JSON_FILE_NAME_OF_ABILITY = "exgas_tbability";
         public const string EXCEL_FILE_NAME_OF_ABILITY = "#exgas.ability";
-        public const string CODE_FILE_NAME_OF_ABILITY = "ExGasAbilityLib.gen";
+        public const string CODE_FILE_NAME_OF_ABILITY = "XAbility.gen";
         
         public const string JSON_FILE_NAME_OF_CUE = "exgas_tbgameplaycue";
         public const string EXCEL_FILE_NAME_OF_CUE = "#exgas.gameplayCue";
-        public const string CODE_FILE_NAME_OF_CUE = "ExGasCueLib.gen";
+        public const string CODE_FILE_NAME_OF_CUE = "XCue.gen";
         
         public const string JSON_FILE_NAME_OF_MMC = "exgas_tbmmc";
         public const string EXCEL_FILE_NAME_OF_MMC = "#exgas.mmc";
-        public const string CODE_FILE_NAME_OF_MMC = "ExGasMmcLib.gen";
+        public const string CODE_FILE_NAME_OF_MMC = "XMmc.gen";
         
         public const string JSON_FILE_NAME_OF_ASC = "exgas_tbasc";
         public const string EXCEL_FILE_NAME_OF_ASC = "#exgas.asc";
-        public const string CODE_FILE_NAME_OF_ASC = "ExGasAscLib.gen";
         
-        public const string CODE_FILE_NAME_OF_LUBAN = "ExGasLuban.gen";
+        public const string CODE_FILE_NAME_OF_LUBAN = "XLuban.gen";
         public const string CODE_FILE_NAME_OF_LAUNCHER = "XLauncher.gen";
 
         #endregion

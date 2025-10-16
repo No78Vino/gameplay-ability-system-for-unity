@@ -67,8 +67,7 @@ namespace GAS.Editor
         
         public string PathOfJsonEffect => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_EFFECT}.json";
         public string PathOfExcelEffect => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_EFFECT}.xlsx";
-        public string PathOfCodeEffect => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_EFFECT}.cs";
-        
+
         public string PathOfJsonAbility => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_ABILITY}.json";
         public string PathOfExcelAbility => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ABILITY}.xlsx";
         public string PathOfCodeAbility => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ABILITY}.cs";
@@ -83,8 +82,7 @@ namespace GAS.Editor
         
         public string PathOfJsonAsc => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_ASC}.json";
         public string PathOfExcelAsc => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_ASC}.xlsx";
-        public string PathOfCodeAsc => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_ASC}.cs";
-        
+
         public string PathOfCodeLubanExtesion => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LUBAN}.cs";
         public string PathOfCodeLauncher => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LAUNCHER}.cs";
         
@@ -108,8 +106,7 @@ namespace GAS.Editor
                     $"属性集配置Excel路径: {PathOfExcelAttrSet}\n" +
                     $"属性集脚本路径: {PathOfCodeAttrSet}\n\n" +
                     $"Effect配置Json路径: {PathOfJsonEffect}\n" +
-                    $"Effect配置Excel路径: {PathOfExcelEffect}\n" +
-                    $"Effect脚本路径: {PathOfCodeEffect}\n\n" +
+                    $"Effect配置Excel路径: {PathOfExcelEffect}\n\n" +
                     $"Ability配置Json路径: {PathOfJsonAbility}\n" +
                     $"Ability配置Excel路径: {PathOfExcelAbility}\n" +
                     $"Ability脚本路径: {PathOfCodeAbility}\n\n" +
