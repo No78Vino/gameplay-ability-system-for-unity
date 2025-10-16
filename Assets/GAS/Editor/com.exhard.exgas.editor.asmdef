@@ -1,0 +1,21 @@
+{
+    "name": "com.exhard.exgas.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6c99ff64c0c0f1e449657448dcdd2487",
+        "GUID:f94478891bcd7bd4fbfb70d37e38439b",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:e0cd26848372d4e5c891c569017e11f1"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
