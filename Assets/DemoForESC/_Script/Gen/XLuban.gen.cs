@@ -43,7 +43,7 @@ namespace GAS.Runtime
             if (data == null)
             {
                 Debug.LogError($"ASC_ID:{id}  不存在.");
-                return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<AttributeSetConfig>(),Array.Empty<AbilityConfig>(), 0);
+                return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<AttrSetConfig>(),Array.Empty<AbilityConfig>(), 0);
             }
             var abilityIds = data.Ability;
             var abilities = new AbilityConfig[abilityIds.Length];
@@ -52,7 +52,7 @@ namespace GAS.Runtime
                 var abilityId = abilityIds[i];
                 abilities[i] = GetAbilityConfig(abilityId);
             }
-            var attrSets = new AttributeSetConfig[data.AttrSet.Length];
+            var attrSets = new AttrSetConfig[data.AttrSet.Length];
             for (var i = 0; i < data.AttrSet.Length; i++)
                 attrSets[i] = XAttrSet.AttributeSetMap[data.AttrSet[i]];
             return new AbilitySystemCellConfig(data.Tag, attrSets, abilities, data.Level);

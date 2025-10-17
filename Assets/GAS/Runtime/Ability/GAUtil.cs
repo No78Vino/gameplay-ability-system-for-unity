@@ -101,7 +101,7 @@ namespace GAS.Runtime
             
             var mcModifiers = _entityManager.GetComponentData<MCModifiers>(costComponent.ProtoGameplayEffectCost);
             var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-            var attrSets = _entityManager.GetBuffer<BEAttributeSet>(owner);
+            var attrSets = _entityManager.GetBuffer<BEAttrSet>(owner);
             foreach (var modifier in mcModifiers.Modifiers)
             {
                 var opt = modifier.Operation;

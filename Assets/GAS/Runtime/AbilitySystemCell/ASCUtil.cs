@@ -37,7 +37,7 @@ namespace GAS.Runtime
 
         public static void ApplyModFromInstantGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
-            var attrSets = _entityManager.GetBuffer<BEAttributeSet>(asc);
+            var attrSets = _entityManager.GetBuffer<BEAttrSet>(asc);
             var modifiers = _entityManager.GetComponentData<MCModifiers>(gameplayEffect);
             foreach (var mod in modifiers.Modifiers)
             {
@@ -180,7 +180,7 @@ namespace GAS.Runtime
         public static bool TryRecalculateAttributeCurrentValue(this Entity asc)
         {
             bool isValueChanged = false;
-            var attrSets = _entityManager.GetBuffer<BEAttributeSet>(asc);
+            var attrSets = _entityManager.GetBuffer<BEAttrSet>(asc);
             var effects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
             for (var attrSetIndex = 0; attrSetIndex < attrSets.Length; attrSetIndex++)
             {

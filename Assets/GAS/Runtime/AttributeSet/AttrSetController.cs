@@ -13,7 +13,7 @@ namespace GAS.Runtime
         public AttrSetController(Entity entity)
         {
             Entity = entity;
-            EntityManager.AddBuffer<BEAttributeSet>(Entity);
+            EntityManager.AddBuffer<BEAttrSet>(Entity);
         }
 
         public Entity Entity { get; }
@@ -25,21 +25,21 @@ namespace GAS.Runtime
             // 若不存在，则直接返回NULL
             if (!_attrSetCodeList.Contains(attrSetCode)) return AttributeData.NULL;
             var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
-            var attrBuffer = EntityManager.GetBuffer<BEAttributeSet>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<BEAttrSet>(Entity);
             var attrSetCom = attrBuffer[attrSetIndex];
 
             var attrIndex = attrSetCom.GetAttrIndexByCode(attrCode);
             return attrIndex >= 0 ? attrSetCom.Attributes[attrIndex] : AttributeData.NULL;
         }
 
-        public bool AddAttrSet(AttributeSetConfig config)
+        public bool AddAttrSet(AttrSetConfig config)
         {
             var attrSetCode = config.Code;
             if (_attrSetCodeList.Contains(attrSetCode)) return false;
             _attrSetCodeList.Add(attrSetCode);
             _attrSetCodeIndexMap.Add(attrSetCode, _attrSetCodeList.Count - 1);
             // 添加属性集数据
-            var attrBuffer = EntityManager.GetBuffer<BEAttributeSet>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<BEAttrSet>(Entity);
             var newAttrs = new AttributeData[config.Settings.Length];
             for (var i = 0; i < config.Settings.Length; i++)
             {
@@ -61,7 +61,7 @@ namespace GAS.Runtime
                 };
             }
 
-            attrBuffer.Add(new BEAttributeSet
+            attrBuffer.Add(new BEAttrSet
             {
                 Code = attrSetCode,
                 Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
@@ -86,7 +86,7 @@ namespace GAS.Runtime
             if (!_attrSetCodeList.Contains(attrSetCode)) return;
             var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
             
-            var attrBuffer = EntityManager.GetBuffer<BEAttributeSet>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<BEAttrSet>(Entity);
             var attrSet = attrBuffer[attrSetIndex];
             var attrIndex = attrSet.GetAttrIndexByCode(attrCode);
             

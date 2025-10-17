@@ -39,7 +39,7 @@ namespace GAS.Runtime
             Entity = Entity.Null;
         }
 
-        public void Init(IEnumerable<int> baseTags, IEnumerable<AttributeSetConfig> attrSets, IEnumerable<AbilityConfig> baseAbilities, int level = 1)
+        public void Init(IEnumerable<int> baseTags, IEnumerable<AttrSetConfig> attrSets, IEnumerable<AbilityConfig> baseAbilities, int level = 1)
         {
             // 1.初始化基础标签
             _gameplayTagController.AddFixedTags(baseTags);
@@ -183,9 +183,9 @@ namespace GAS.Runtime
             return _gameplayTagController.FixedTags();
         }
 
-        public DynamicBuffer<BEAttributeSet> AttrSets()
+        public DynamicBuffer<BEAttrSet> AttrSets()
         {
-            var attrBuffer = EntityManager.GetBuffer<BEAttributeSet>(Entity);
+            var attrBuffer = EntityManager.GetBuffer<BEAttrSet>(Entity);
             return attrBuffer;
         }
 

@@ -176,7 +176,7 @@ namespace GAS.Editor
         {
             _ascAttributes.Clear();
             var ascEntity = entityWatching;
-            var attrSetBuffer = GASManager.EntityManager.GetBuffer<BEAttributeSet>(ascEntity);
+            var attrSetBuffer = GASManager.EntityManager.GetBuffer<BEAttrSet>(ascEntity);
             foreach (var attrSet in attrSetBuffer)
             {
                 var attrSetCode = attrSet.Code;

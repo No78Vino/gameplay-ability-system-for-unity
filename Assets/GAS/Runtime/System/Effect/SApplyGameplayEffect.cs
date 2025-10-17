@@ -120,7 +120,7 @@ namespace GAS.Runtime
                 {
                     bool change = false;
                     var modifiers = entityManager.GetComponentData<MCModifiers>(ge);
-                    var attrSets = entityManager.GetBuffer<BEAttributeSet>(asc);
+                    var attrSets = entityManager.GetBuffer<BEAttrSet>(asc);
                     foreach (var modifier in modifiers.Modifiers)
                     {
                         var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
@@ -234,7 +234,7 @@ namespace GAS.Runtime
             {
                 // 标记相关属性为Dirty
                 var modifiers = entityManager.GetComponentData<MCModifiers>(gameplayEffect);
-                var attrSets = entityManager.GetBuffer<BEAttributeSet>(targetAsc);
+                var attrSets = entityManager.GetBuffer<BEAttrSet>(targetAsc);
                 bool isAttrDirty = false;
                 foreach (var modifier in modifiers.Modifiers)
                 {

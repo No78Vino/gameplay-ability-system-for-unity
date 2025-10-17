@@ -9,7 +9,7 @@ namespace GAS.Runtime
         public static float RecalculateCurrentValue(Entity asc,int attrSetCode,int attrCode)
         {
             // 获取属性集
-            var attrSets = _entityManager.GetBuffer<BEAttributeSet>(asc);
+            var attrSets = _entityManager.GetBuffer<BEAttrSet>(asc);
             var attrSetIndex = attrSets.IndexOfAttrSetCode(attrSetCode);
             if (attrSetIndex == -1) return 0;
             var attrSet = attrSets[attrSetIndex];

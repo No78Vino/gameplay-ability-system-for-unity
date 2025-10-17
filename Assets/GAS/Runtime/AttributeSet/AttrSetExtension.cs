@@ -1,8 +1,8 @@
 namespace GAS.Runtime
 {
-    public static class AttributeSetExtension
+    public static class AttrSetExtension
     {
-        public static int GetAttrIndexByCode(this BEAttributeSet self, int attrCode)
+        public static int GetAttrIndexByCode(this BEAttrSet self, int attrCode)
         {
             for (var i = 0; i < self.Attributes.Length; i++)
                 if (self.Attributes[i].Code == attrCode)

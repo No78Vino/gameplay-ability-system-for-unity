@@ -10,7 +10,7 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BEAttributeSet>();
+            state.RequireForUpdate<BEAttrSet>();
             state.RequireForUpdate<CAttributeIsDirty>();
         }
 
@@ -19,7 +19,7 @@ namespace GAS.Runtime
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             
-            foreach (var (_,attrSets,asc) in SystemAPI.Query<RefRO<CAttributeIsDirty>,DynamicBuffer<BEAttributeSet>>().WithEntityAccess())
+            foreach (var (_,attrSets,asc) in SystemAPI.Query<RefRO<CAttributeIsDirty>,DynamicBuffer<BEAttrSet>>().WithEntityAccess())
             {
                 foreach (var attrSet in attrSets)
                 {

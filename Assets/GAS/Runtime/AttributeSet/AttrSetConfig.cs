@@ -1,11 +1,11 @@
 namespace GAS.Runtime
 {
-    public struct AttributeSetConfig
+    public struct AttrSetConfig
     {
         public readonly int Code;
         public readonly AttributeBaseSetting[] Settings;
 
-        public AttributeSetConfig(int code,AttributeBaseSetting[] settings)
+        public AttrSetConfig(int code,AttributeBaseSetting[] settings)
         {
             Code = code;
             Settings = settings;

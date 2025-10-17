@@ -204,9 +204,9 @@ namespace GAS.Editor
                 }
                 writer.WriteLine("");
                 
-                writer.WriteLine("private static Dictionary<int, AttributeSetConfig> _attributeSetMap = new Dictionary<int, AttributeSetConfig>();");
+                writer.WriteLine("private static Dictionary<int, AttrSetConfig> _attributeSetMap = new Dictionary<int, AttrSetConfig>();");
                 writer.WriteLine("");
-                writer.WriteLine("public static Dictionary<int, AttributeSetConfig> AttributeSetMap");
+                writer.WriteLine("public static Dictionary<int, AttrSetConfig> AttributeSetMap");
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
@@ -230,7 +230,7 @@ namespace GAS.Editor
                             writer.WriteLine("settings[i] = new AttributeBaseSetting(a.Id, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);");
                             writer.Indent--;
                             writer.WriteLine("}");
-                            writer.WriteLine("_attributeSetMap.Add(attrSet.Id,new AttributeSetConfig(attrSet.Id,settings));");
+                            writer.WriteLine("_attributeSetMap.Add(attrSet.Id,new AttrSetConfig(attrSet.Id,settings));");
                             writer.Indent--;
                             writer.WriteLine("}");
                         }

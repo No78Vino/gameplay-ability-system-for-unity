@@ -86,7 +86,7 @@ namespace GAS.Editor
                         writer.Indent++;
                         writer.WriteLine("Debug.LogError($\"ASC_ID:{id}  不存在.\");");
                         writer.WriteLine(
-                            "return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<AttributeSetConfig>(),Array.Empty<AbilityConfig>(), 0);");
+                            "return new AbilitySystemCellConfig(Array.Empty<int>(), Array.Empty<AttrSetConfig>(),Array.Empty<AbilityConfig>(), 0);");
                         writer.Indent--;
                         writer.WriteLine("}");
                         writer.WriteLine("var abilityIds = data.Ability;");
@@ -99,7 +99,7 @@ namespace GAS.Editor
                         writer.Indent--;
                         writer.WriteLine("}");
                         
-                        writer.WriteLine("var attrSets = new AttributeSetConfig[data.AttrSet.Length];");
+                        writer.WriteLine("var attrSets = new AttrSetConfig[data.AttrSet.Length];");
                         writer.WriteLine("for (var i = 0; i < data.AttrSet.Length; i++)");
                         writer.WriteLine("    attrSets[i] = XAttrSet.AttributeSetMap[data.AttrSet[i]];");
                         

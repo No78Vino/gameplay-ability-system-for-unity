@@ -29,9 +29,9 @@ namespace GAS.Runtime
             public const int Atk = 4;
         }
 
-        private static Dictionary<int, AttributeSetConfig> _attributeSetMap = new Dictionary<int, AttributeSetConfig>();
+        private static Dictionary<int, AttrSetConfig> _attributeSetMap = new Dictionary<int, AttrSetConfig>();
 
-        public static Dictionary<int, AttributeSetConfig> AttributeSetMap
+        public static Dictionary<int, AttrSetConfig> AttributeSetMap
         {
             get
             {
@@ -46,7 +46,7 @@ namespace GAS.Runtime
                             var a = attrSet.Attribute[i];
                             settings[i] = new AttributeBaseSetting(a.Id, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);
                         }
-                        _attributeSetMap.Add(attrSet.Id,new AttributeSetConfig(attrSet.Id,settings));
+                        _attributeSetMap.Add(attrSet.Id,new AttrSetConfig(attrSet.Id,settings));
                     }
                 }
                 return _attributeSetMap;
