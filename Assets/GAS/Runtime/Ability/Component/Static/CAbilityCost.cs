@@ -7,7 +7,7 @@ namespace GAS.Runtime
         public Entity ProtoGameplayEffectCost;
     }
     
-    public sealed class ConfAbilityCost:GameplayAbilityComponentConfig
+    public sealed class ConfAbilityCost:AbilityComponentConfig
     {
         public GameplayEffectComponentConfig[] CostComponentConfigs;
         

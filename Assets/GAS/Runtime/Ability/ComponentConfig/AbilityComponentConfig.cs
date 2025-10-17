@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public abstract class GameplayAbilityComponentConfig
+    public abstract class AbilityComponentConfig
     {
         protected static EntityManager _entityManager => GASManager.EntityManager;
 

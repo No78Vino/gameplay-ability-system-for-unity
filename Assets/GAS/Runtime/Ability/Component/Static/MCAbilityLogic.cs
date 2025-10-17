@@ -16,7 +16,7 @@ namespace GAS.Runtime
         }
     }
     
-    public sealed class MCConfAbilityLogic:GameplayAbilityComponentConfig
+    public sealed class MCConfAbilityLogic:AbilityComponentConfig
     {
         public string AbilityLogicType;
         public IAbilityParam abilityParam;

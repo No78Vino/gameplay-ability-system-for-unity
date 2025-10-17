@@ -85,7 +85,7 @@ namespace TestUnit_ForGASECS
             // }
         };
 
-        public static AbilityConfig AbilityConfig_Debug = new(new GameplayAbilityComponentConfig[]
+        public static AbilityConfig AbilityConfig_Debug = new(new AbilityComponentConfig[]
         {
             //new ConfAbilityBaseInfo { Code = GEN_AbilityCode.DebugLog },
             //new ConfAbilityAssetTags { tags = new[] { GEN_GameplayTagCode.Magic_Fire } },

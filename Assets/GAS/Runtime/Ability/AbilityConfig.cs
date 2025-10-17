@@ -2,9 +2,9 @@ namespace GAS.Runtime
 {
     public class AbilityConfig
     {
-        public GameplayAbilityComponentConfig[] ComponentConfigs { get; }
+        public AbilityComponentConfig[] ComponentConfigs { get; }
 
-        public AbilityConfig(GameplayAbilityComponentConfig[] configs)
+        public AbilityConfig(AbilityComponentConfig[] configs)
         {
             ComponentConfigs = configs;
         }

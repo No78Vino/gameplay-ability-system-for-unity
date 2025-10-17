@@ -19,7 +19,7 @@ namespace GAS.Runtime
         public Entity CooldownGameplayEffectInstance;
     }
     
-    public sealed class ConfAbilityCooldown:GameplayAbilityComponentConfig
+    public sealed class ConfAbilityCooldown:AbilityComponentConfig
     {
         public int Cooldown;
         public GameplayEffectComponentConfig[] CooldownComponentConfigs;

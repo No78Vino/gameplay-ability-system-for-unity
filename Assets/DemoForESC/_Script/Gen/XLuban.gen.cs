@@ -261,10 +261,10 @@ namespace GAS.Runtime
             if (data == null)
             {
                 Debug.LogError($"Ability_ID:{id}  不存在.");
-                return new AbilityConfig(Array.Empty<GameplayAbilityComponentConfig>());
+                return new AbilityConfig(Array.Empty<AbilityComponentConfig>());
             }
 
-            var configs = new List<GameplayAbilityComponentConfig>();
+            var configs = new List<AbilityComponentConfig>();
 
             // baseInfo
             configs.Add(new ConfAbilityBaseInfo { Code = id, Level = 0 });

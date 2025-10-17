@@ -8,7 +8,7 @@ namespace GAS.Runtime
         public NativeArray<int> tags;
     }
     
-    public sealed class ConfBlockAbilityTags:GameplayAbilityComponentConfig
+    public sealed class ConfBlockAbilityTags:AbilityComponentConfig
     {
         public int[] tags;
 

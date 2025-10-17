@@ -23,7 +23,7 @@ namespace GAS.Runtime
         public Entity Owner;
     }
     
-    public sealed class ConfAbilityBaseInfo:GameplayAbilityComponentConfig
+    public sealed class ConfAbilityBaseInfo:AbilityComponentConfig
     {
         public int Code;
         public int Level;

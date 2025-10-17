@@ -56,7 +56,7 @@ namespace GAS.Runtime
         
         #endregion
         
-        public static Entity CreateAbilityEntity(GameplayAbilityComponentConfig[] configs)
+        public static Entity CreateAbilityEntity(AbilityComponentConfig[] configs)
         {
             var entity = GASManager.EntityManager.CreateEntity();
             GASManager.EntityManager.SetName(entity, $"Ability_{entity.ToString()}");
