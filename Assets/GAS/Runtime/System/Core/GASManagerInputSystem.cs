@@ -17,13 +17,13 @@ namespace GAS.Runtime
         {
             if (GASManager.IsRunning)
             {
-                if (!EntityManager.HasComponent<GASRunningTag>(_managerEntity))
-                    EntityManager.AddComponent<GASRunningTag>(_managerEntity);
+                if (!EntityManager.HasComponent<CGASRunningTag>(_managerEntity))
+                    EntityManager.AddComponent<CGASRunningTag>(_managerEntity);
             }
             else
             {
-                if (EntityManager.HasComponent<GASRunningTag>(_managerEntity))
-                    EntityManager.RemoveComponent<GASRunningTag>(_managerEntity);
+                if (EntityManager.HasComponent<CGASRunningTag>(_managerEntity))
+                    EntityManager.RemoveComponent<CGASRunningTag>(_managerEntity);
             }
         }
     }

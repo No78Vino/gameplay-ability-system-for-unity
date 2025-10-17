@@ -11,7 +11,7 @@ namespace GAS.Runtime.System.GameplayEffect.PhaseDurationalEffect
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<EffectContainerDirty>();
+            state.RequireForUpdate<CEffectDirty>();
         }
 
         //[BurstCompile]

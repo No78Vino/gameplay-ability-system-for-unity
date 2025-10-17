@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public struct EffectContainerDirty : IComponentData
+    public struct CEffectDirty : IComponentData
     {
         
     }
