@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
@@ -6,6 +7,15 @@ namespace GAS.Runtime
     public static class AttributeHelper
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
+        
+        public static int IndexOfAttrCode(this NativeArray<CAttributeData> attrs, int attrCode)
+        {
+            for (var i = 0; i < attrs.Length; i++)
+                if (attrs[i].Code == attrCode)
+                    return i;
+            return -1;
+        }
+        
         public static float RecalculateCurrentValue(Entity asc,int attrSetCode,int attrCode)
         {
             // 获取属性集

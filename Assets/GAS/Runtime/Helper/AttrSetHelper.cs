@@ -1,6 +1,6 @@
 namespace GAS.Runtime
 {
-    public static class AttrSetExtension
+    public static class AttrSetHelper
     {
         public static int GetAttrIndexByCode(this BEAttrSet self, int attrCode)
         {

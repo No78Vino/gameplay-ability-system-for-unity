@@ -20,16 +20,16 @@ namespace GAS.Runtime
 
         public EntityManager EntityManager => GASManager.EntityManager;
 
-        private AttributeData GetAttributeData(int attrSetCode, int attrCode)
+        private CAttributeData GetAttributeData(int attrSetCode, int attrCode)
         {
             // 若不存在，则直接返回NULL
-            if (!_attrSetCodeList.Contains(attrSetCode)) return AttributeData.NULL;
+            if (!_attrSetCodeList.Contains(attrSetCode)) return CAttributeData.NULL;
             var attrSetIndex = _attrSetCodeIndexMap[attrSetCode];
             var attrBuffer = EntityManager.GetBuffer<BEAttrSet>(Entity);
             var attrSetCom = attrBuffer[attrSetIndex];
 
             var attrIndex = attrSetCom.GetAttrIndexByCode(attrCode);
-            return attrIndex >= 0 ? attrSetCom.Attributes[attrIndex] : AttributeData.NULL;
+            return attrIndex >= 0 ? attrSetCom.Attributes[attrIndex] : CAttributeData.NULL;
         }
 
         public bool AddAttrSet(AttrSetConfig config)
@@ -40,7 +40,7 @@ namespace GAS.Runtime
             _attrSetCodeIndexMap.Add(attrSetCode, _attrSetCodeList.Count - 1);
             // 添加属性集数据
             var attrBuffer = EntityManager.GetBuffer<BEAttrSet>(Entity);
-            var newAttrs = new AttributeData[config.Settings.Length];
+            var newAttrs = new CAttributeData[config.Settings.Length];
             for (var i = 0; i < config.Settings.Length; i++)
             {
                 var setting = config.Settings[i];
@@ -49,7 +49,7 @@ namespace GAS.Runtime
                 // EntityManager.AddBuffer<BuffEleDependentAttribute>(tracker);
                 // EntityManager.AddBuffer<BuffEleEffectedGameplayEffect>(tracker);
                 
-                newAttrs[i] = new AttributeData
+                newAttrs[i] = new CAttributeData
                 {
                     Code = setting.Code,
                     BaseValue = setting.InitValue,
@@ -64,7 +64,7 @@ namespace GAS.Runtime
             attrBuffer.Add(new BEAttrSet
             {
                 Code = attrSetCode,
-                Attributes = new NativeArray<AttributeData>(newAttrs, Allocator.Persistent)
+                Attributes = new NativeArray<CAttributeData>(newAttrs, Allocator.Persistent)
             });
             return true;
         }

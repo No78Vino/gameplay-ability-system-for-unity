@@ -7,7 +7,7 @@ namespace GAS.Runtime
     public struct BEAttrSet : IBufferElementData
     {
         public int Code;
-        public NativeArray<AttributeData> Attributes;
+        public NativeArray<CAttributeData> Attributes;
     }
 
     public static class AttributeSetBufferElementExtension
