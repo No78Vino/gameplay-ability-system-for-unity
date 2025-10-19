@@ -89,6 +89,12 @@ namespace GAS.Runtime
         {
             EntityManager.SetComponentEnabled<ECKillCue>(_cueEntity,true);
         }
+
+        public void RemoveSelf()
+        {
+            StopImmediate();
+            RemoveFromTargetAsc();
+        }
         
         #region system function
 
