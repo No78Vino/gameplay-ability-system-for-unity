@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GAS.Runtime
 {
     [DisableAutoCreation]
-    [UpdateInGroup(typeof(SysGroupDisplay))]
+    [UpdateInGroup(typeof(SysGrpDisplay))]
     [UpdateAfter(typeof(SCueStart))]
     public partial struct SCueTick : ISystem
     {

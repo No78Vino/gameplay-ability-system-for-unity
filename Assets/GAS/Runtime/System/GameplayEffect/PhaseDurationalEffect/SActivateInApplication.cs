@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGroupDurationalEffect))]
+    [UpdateInGroup(typeof(SysGrpDurationalEffect))]
     [ UpdateAfter(typeof(SysInvokeEffectContainerIsDirtyEvent))]
     public partial struct SActivateInApplication : ISystem
     {

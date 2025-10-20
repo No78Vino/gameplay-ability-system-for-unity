@@ -4,9 +4,9 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [DisableAutoCreation]
-    [UpdateInGroup(typeof(SysGroupDurationalEffect))]
+    [UpdateInGroup(typeof(SysGrpDurationalEffect))]
     [UpdateAfter(typeof(SysInvokeEffectContainerIsDirtyEvent))]
-    public partial class SysGroupActivateEffect : ComponentSystemGroup
+    public partial class SysGrpActivateEffect : ComponentSystemGroup
     {
     }
 }

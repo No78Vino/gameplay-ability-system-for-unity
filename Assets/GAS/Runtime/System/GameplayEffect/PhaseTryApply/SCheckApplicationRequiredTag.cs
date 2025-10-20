@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime.System.GameplayEffect
 {
-    [UpdateInGroup(typeof(SysGroupTryApplyEffect))]
+    [UpdateInGroup(typeof(SysGrpTryApplyEffect))]
     [UpdateAfter(typeof(SCheckApplicationCondition))]
     public partial struct SCheckApplicationRequiredTag : ISystem
     {

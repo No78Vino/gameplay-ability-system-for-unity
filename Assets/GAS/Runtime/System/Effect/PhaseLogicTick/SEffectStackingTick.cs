@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGroupTickGameplayEffect))]
+    [UpdateInGroup(typeof(SysGrpTickGameplayEffect))]
     [UpdateAfter(typeof(SEffectPeriodTick))]
     public partial struct SEffectStackingTick : ISystem
     {

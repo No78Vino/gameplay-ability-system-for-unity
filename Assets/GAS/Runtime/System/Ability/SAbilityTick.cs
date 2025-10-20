@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGroupTickAbility))]
+    [UpdateInGroup(typeof(SysGrpTickAbility))]
     public partial struct SAbilityTick : ISystem
     {
         [BurstCompile]

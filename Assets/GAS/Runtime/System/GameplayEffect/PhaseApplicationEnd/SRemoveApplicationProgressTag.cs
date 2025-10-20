@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime.System.GameplayEffect.PhaseApplicationEnd
 {
-    [UpdateInGroup(typeof(SysGroupApplicationEnd))]
+    [UpdateInGroup(typeof(SysGrpApplicationEnd))]
     public partial struct SRemoveApplicationProgressTag : ISystem
     {
         [BurstCompile]

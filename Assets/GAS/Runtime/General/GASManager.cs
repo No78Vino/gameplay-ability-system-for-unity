@@ -9,8 +9,6 @@ namespace GAS.Runtime
         public static World ExWorld { get; private set; }
         public static EntityManager EntityManager { get; private set; }
 
-        //public static World World { get; }
-
         public static TurnController TurnController { get; private set; }
 
         public static bool IsRunning { get; private set; }
@@ -24,7 +22,7 @@ namespace GAS.Runtime
             if (IsInitialized)
             {
 #if UNITY_EDITOR
-                Debug.Log("EX-GAS has been initialized.Don't reinitialize.");
+                Debug.LogWarning("EX-GAS has been initialized.Don't reinitialize.");
 #endif
                 return;
             }
@@ -33,7 +31,7 @@ namespace GAS.Runtime
             TurnController ??= new TurnController();
             ExWorld = new World("EX_GAS_World");
             EntityManager = ExWorld.EntityManager;
-            CreateGasSystems();
+            CreateSystems();
             // 系统逻辑帧计时器
             EntityGlobalTimer = ExWorld.EntityManager.CreateSingleton<GlobalTimer>();
             IsInitialized = true;
@@ -49,7 +47,7 @@ namespace GAS.Runtime
             IsRunning = false;
         }
 
-        private static void CreateGasSystems()
+        private static void CreateSystems()
         {
             // 创建基础系统组
             var sgInitialization = ExWorld.CreateSystemManaged<InitializationSystemGroup>();
@@ -61,26 +59,26 @@ namespace GAS.Runtime
 
             // 创建系统组
             // 逻辑帧 系统组
-            var sgLogic = ExWorld.CreateSystemManaged<SysGroupLogic>();
+            var sgLogic = ExWorld.CreateSystemManaged<SysGrpLogic>();
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogic);
 
-            var sgAbility = ExWorld.CreateSystemManaged<SysGroupAbility>();
-            var sgAttribute = ExWorld.CreateSystemManaged<SysGroupAttribute>();
-            var sgEffect = ExWorld.CreateSystemManaged<SysGroupEffect>();
+            var sgAbility = ExWorld.CreateSystemManaged<SysGrpAbility>();
+            var sgAttribute = ExWorld.CreateSystemManaged<SysGrpAttribute>();
+            var sgEffect = ExWorld.CreateSystemManaged<SysGrpEffect>();
             sgLogic.AddSystemToUpdateList(sgAbility);
             sgLogic.AddSystemToUpdateList(sgAttribute);
             sgLogic.AddSystemToUpdateList(sgEffect);
 
-            var sgLogicTick = ExWorld.CreateSystemManaged<SysGroupLogicTick>();
+            var sgLogicTick = ExWorld.CreateSystemManaged<SysGrpLogicTick>();
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogicTick);
 
-            var sgTickAbility = ExWorld.CreateSystemManaged<SysGroupTickAbility>();
-            var sgTickGameplayEffect = ExWorld.CreateSystemManaged<SysGroupTickGameplayEffect>();
+            var sgTickAbility = ExWorld.CreateSystemManaged<SysGrpTickAbility>();
+            var sgTickGameplayEffect = ExWorld.CreateSystemManaged<SysGrpTickGameplayEffect>();
             sgLogicTick.AddSystemToUpdateList(sgTickAbility);
             sgLogicTick.AddSystemToUpdateList(sgTickGameplayEffect);
             
             // 表现帧 系统组
-            var sgDisplay = ExWorld.CreateSystemManaged<SysGroupDisplay>();
+            var sgDisplay = ExWorld.CreateSystemManaged<SysGrpDisplay>();
             sgSimulation.AddSystemToUpdateList(sgDisplay);
             sgSimulation.SortSystems();
             

@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGroupAbility))]
+    [UpdateInGroup(typeof(SysGrpAbility))]
     public partial struct STryActivateAbility : ISystem
     {
         [BurstCompile]

@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGroupApplicationGameplayEffectStacking))]
+    [UpdateInGroup(typeof(SysGrpApplicationGameplayEffectStacking))]
     public partial struct SCheckStacking : ISystem
     {
         [BurstCompile]

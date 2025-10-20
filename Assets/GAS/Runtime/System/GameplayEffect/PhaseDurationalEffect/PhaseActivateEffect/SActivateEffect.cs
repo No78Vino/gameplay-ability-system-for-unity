@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGroupActivateEffect))]
+    [UpdateInGroup(typeof(SysGrpActivateEffect))]
     [UpdateBefore(typeof(SActivateEnd))]
     public partial struct SActivateEffect : ISystem
     {

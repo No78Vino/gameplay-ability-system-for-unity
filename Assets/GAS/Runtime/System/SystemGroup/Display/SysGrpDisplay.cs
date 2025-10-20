@@ -4,8 +4,8 @@ namespace GAS.Runtime
 {
     [DisableAutoCreation]
     [UpdateInGroup(typeof(SimulationSystemGroup))]
-    [UpdateAfter(typeof(SysGroupLogicTick))]
-    public partial class SysGroupDisplay : ComponentSystemGroup
+    [UpdateAfter(typeof(SysGrpLogicTick))]
+    public partial class SysGrpDisplay : ComponentSystemGroup
     {
     }
 }

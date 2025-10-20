@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime.System.GameplayEffect
 {
-    [UpdateInGroup(typeof(SysGroupInstantEffect))]
+    [UpdateInGroup(typeof(SysGrpInstantEffect))]
     [UpdateAfter(typeof(STriggerCueOnExecution))]
     public partial struct SInstantEffectOver : ISystem
     {

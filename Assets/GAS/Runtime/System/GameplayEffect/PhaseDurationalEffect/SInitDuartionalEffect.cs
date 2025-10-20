@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup( typeof(SysGroupDurationalEffect) )]
+    [UpdateInGroup( typeof(SysGrpDurationalEffect) )]
     public partial struct SInitDuartionalEffect : ISystem
     {
         [BurstCompile]

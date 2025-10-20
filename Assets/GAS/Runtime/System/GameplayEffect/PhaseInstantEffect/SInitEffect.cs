@@ -9,7 +9,7 @@ namespace GAS.Runtime.System.GameplayEffect
     /// 所有GE需要初始化的Runtime数据，组件等，都在这个系统内完成
     /// </summary>
     
-    [UpdateInGroup(typeof(SysGroupInstantEffect))]
+    [UpdateInGroup(typeof(SysGrpInstantEffect))]
     public partial struct SInitEffect : ISystem
     {
         [BurstCompile]
