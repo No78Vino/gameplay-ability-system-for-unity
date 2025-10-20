@@ -1,4 +1,4 @@
-using GAS.Runtime.System.GameplayEffect.PhaseDurationalEffect;
+using GAS.Runtime;
 using Unity.Entities;
 
 namespace GAS.Runtime

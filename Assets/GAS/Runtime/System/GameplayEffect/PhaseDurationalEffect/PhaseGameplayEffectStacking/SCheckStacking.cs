@@ -3,7 +3,7 @@ using GAS.Runtime;
 using Unity.Burst;
 using Unity.Entities;
 
-namespace GAS.Runtime.System.GameplayEffect.PhaseDurationalEffect
+namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SysGroupApplicationGameplayEffectStacking))]
     public partial struct SCheckStacking : ISystem
