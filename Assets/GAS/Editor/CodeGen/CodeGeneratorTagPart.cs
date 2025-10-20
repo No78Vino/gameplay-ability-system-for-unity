@@ -96,7 +96,7 @@ namespace GAS.Editor
                     writer.WriteLine("{");
                     writer.Indent++;
                     {
-                        writer.WriteLine("GTagUtil.InitTagMap(new Dictionary<int, GameplayTag>()");
+                        writer.WriteLine("TagHelper.InitTagMap(new Dictionary<int, GameplayTag>()");
                         writer.WriteLine("{");
                         writer.Indent++;
                         {
