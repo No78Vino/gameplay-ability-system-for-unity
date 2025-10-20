@@ -6,7 +6,7 @@ namespace GAS.Runtime.System.GameplayEffect
 {
     //[UpdateBefore(typeof(SysEffectDurationTicker))]
     //[UpdateAfter(typeof(SysCheckEffectOngoingActive))]
-    public partial struct SysEffectDeactivate : ISystem
+    public partial struct SEffectDeactivate : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
