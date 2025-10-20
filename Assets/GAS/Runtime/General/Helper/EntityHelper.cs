@@ -154,6 +154,15 @@ namespace GAS.Runtime
                 _entityManager.SetName(entity, name);
         }
 
+        public static string GetEntityName(Entity entity)
+        {
+            if (!GASManager.IsInitialized) return string.Empty;
+  
+            string name = GASManager.EntityManager.GetName(entity);
+            if (string.IsNullOrEmpty(name)) name =  entity.ToString();
+            return name;
+        }
+        
         #region GameObject绑定
 
         private static readonly Dictionary<Entity, GameObject> _bindingGameObjects = new();

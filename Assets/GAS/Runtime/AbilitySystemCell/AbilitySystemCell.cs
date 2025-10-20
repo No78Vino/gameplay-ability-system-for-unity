@@ -189,7 +189,7 @@ namespace GAS.Runtime
             return attrBuffer;
         }
 
-        public DynamicBuffer<BEGameplayEffect> GameplayEffects()
+        public DynamicBuffer<BGameplayEffect> GameplayEffects()
         {
             return _gameplayEffectController.CurrentGameplayEffects;
         }

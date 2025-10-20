@@ -47,7 +47,7 @@ namespace GAS.Editor
         [DisplayAsString(EnableRichText = true)]
         [ShowInInspector]
         [HideLabel]
-        public string ascName => $"<b><color=yellow>{(entityWatching==Entity.Null?"NULL":ExGasHelper.GetEntityName(entityWatching))}</color></b>";
+        public string ascName => $"<b><color=yellow>{(entityWatching==Entity.Null?"NULL":EntityHelper.GetEntityName(entityWatching))}</color></b>";
 
         [TabGroup("ASC/Content", "属性")]
         [ShowIf(nameof(IsEntityValid))]
@@ -197,7 +197,7 @@ namespace GAS.Editor
             var tagBuffer = GASManager.EntityManager.GetBuffer<BFixedTag>(ascEntity);
             foreach (var tag in tagBuffer)
             {
-                var tagName = GTagUtil.GetTagFullName(tag.tag);
+                var tagName = TagHelper.GetTagFullName(tag.tag);
                 if (tagName != null) _ascFixedTags.Add(tagName);
             }
 
@@ -206,8 +206,8 @@ namespace GAS.Editor
             var dynamicTagBuffer = GASManager.EntityManager.GetBuffer<BTemporaryTag>(ascEntity);
             foreach (var tag in dynamicTagBuffer)
             {
-                var tagName = GTagUtil.GetTagFullName(tag.tag);
-                var sourceName = ExGasHelper.GetEntityName(tag.source);
+                var tagName = TagHelper.GetTagFullName(tag.tag);
+                var sourceName = EntityHelper.GetEntityName(tag.source);
                 if (tagName != null) _ascTempTags.Add($"{tagName} ->来源: {sourceName}");
             }
         }
@@ -216,7 +216,7 @@ namespace GAS.Editor
         {
             _ascGameplayEffects.Clear();
             var ascEntity = entityWatching;
-            var gameplayEffectBuffer = GASManager.EntityManager.GetBuffer<BEGameplayEffect>(ascEntity);
+            var gameplayEffectBuffer = GASManager.EntityManager.GetBuffer<BGameplayEffect>(ascEntity);
             foreach (var gameplayEffect in gameplayEffectBuffer)
             {
                 var gameplayEffectName = GASManager.EntityManager.GetName(gameplayEffect.GameplayEffect);
@@ -224,7 +224,7 @@ namespace GAS.Editor
                     && gameplayEffectName!="ENTITY_NOT_FOUND")
                 {
                     var inUsage = GASManager.EntityManager.GetComponentData<CEffectInUsage>(gameplayEffect.GameplayEffect);
-                    var source = ExGasHelper.GetEntityName(inUsage.Source);
+                    var source = EntityHelper.GetEntityName(inUsage.Source);
                     var text = $"[来源:{source}] Lv.{inUsage.Level} - {gameplayEffectName}";
                     _ascGameplayEffects.Add(text);
                 }
@@ -239,11 +239,11 @@ namespace GAS.Editor
         {
             _ascAbilities.Clear();
             var ascEntity = entityWatching;
-            var abilityBuffer = GASManager.EntityManager.GetBuffer<BEAbility>(ascEntity);
+            var abilityBuffer = GASManager.EntityManager.GetBuffer<BAbility>(ascEntity);
             foreach (var ability in abilityBuffer)
             {
                 var abilityBasicInfo = GASManager.EntityManager.GetComponentData<CAbilityBaseInfo>(ability.Ability);
-                var abilityEntityName = ExGasHelper.GetEntityName(ability.Ability);
+                var abilityEntityName = EntityHelper.GetEntityName(ability.Ability);
                 var text = $"Lv.{abilityBasicInfo.Level} " +
                            $"- {GetAbilityNameByCode(abilityBasicInfo.Code)} " +
                            $"[{abilityEntityName}]";

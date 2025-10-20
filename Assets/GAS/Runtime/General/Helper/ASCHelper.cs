@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public static class ASCUtil
+    public static class ASCHelper
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
 
@@ -16,7 +16,7 @@ namespace GAS.Runtime
             var removeEffectWithTags = comRemoveEffectWithTags.tags;
             if (removeEffectWithTags.Length == 0) return;
 
-            var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
+            var geBuff = _entityManager.GetBuffer<BGameplayEffect>(asc);
             for (var i = geBuff.Length - 1; i >= 0; i--)
             {
                 var ge = geBuff[i].GameplayEffect;
@@ -84,7 +84,7 @@ namespace GAS.Runtime
                 var hasTag = false;
 
                 foreach (var fixedTag in fixedTags)
-                    if (GTagUtil.HasTag(fixedTag.tag, tag))
+                    if (TagHelper.HasTag(fixedTag.tag, tag))
                     {
                         hasTag = true;
                         break;
@@ -92,7 +92,7 @@ namespace GAS.Runtime
 
                 if (!hasTag)
                     foreach (var tempTag in tempTags)
-                        if (GTagUtil.HasTag(tempTag.tag, tag))
+                        if (TagHelper.HasTag(tempTag.tag, tag))
                         {
                             hasTag = true;
                             break;
@@ -120,11 +120,11 @@ namespace GAS.Runtime
             foreach (var tag in tags)
             {
                 foreach (var fixedTag in fixedTags)
-                    if (GTagUtil.HasTag(fixedTag.tag, tag))
+                    if (TagHelper.HasTag(fixedTag.tag, tag))
                         return true;
 
                 foreach (var tempTag in tempTags)
-                    if (GTagUtil.HasTag(tempTag.tag, tag))
+                    if (TagHelper.HasTag(tempTag.tag, tag))
                         return true;
             }
 
@@ -141,7 +141,7 @@ namespace GAS.Runtime
 
         public static bool HasGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
-            var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
+            var geBuff = _entityManager.GetBuffer<BGameplayEffect>(asc);
             foreach (var geElem in geBuff)
                 if (geElem.GameplayEffect == gameplayEffect)
                     return true;
@@ -150,11 +150,11 @@ namespace GAS.Runtime
         
         public static bool TryAddGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
-            var geBuff = _entityManager.GetBuffer<BEGameplayEffect>(asc);
+            var geBuff = _entityManager.GetBuffer<BGameplayEffect>(asc);
             foreach (var geElem in geBuff)
                 if (geElem.GameplayEffect == gameplayEffect)
                     return false;
-            geBuff.Add(new BEGameplayEffect { GameplayEffect = gameplayEffect });
+            geBuff.Add(new BGameplayEffect { GameplayEffect = gameplayEffect });
             return true;
         }
 
@@ -181,7 +181,7 @@ namespace GAS.Runtime
         {
             bool isValueChanged = false;
             var attrSets = _entityManager.GetBuffer<BEAttrSet>(asc);
-            var effects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
+            var effects = _entityManager.GetBuffer<BGameplayEffect>(asc);
             for (var attrSetIndex = 0; attrSetIndex < attrSets.Length; attrSetIndex++)
             {
                 var attrSet = attrSets[attrSetIndex];
@@ -240,13 +240,13 @@ namespace GAS.Runtime
         
         public static void TryAddDynamicAddedTag(Entity asc, Entity source, int tag)
         {
-            GTagUtil.AddTemporaryTagTo(asc, source, tag);
+            TagHelper.AddTemporaryTagTo(asc, source, tag);
         }
         
         public static void TryAddDynamicAddedTags(Entity asc, Entity source, int[] tags)
         {
             foreach (var tag in tags)
-                GTagUtil.AddTemporaryTagTo(asc, source, tag);
+                TagHelper.AddTemporaryTagTo(asc, source, tag);
         }
         
         private static bool TryRemoveDynamicAddedTag(Entity asc,Entity source,int tag)

@@ -64,7 +64,7 @@ namespace GAS.Runtime
         private Entity GetStackingGameplayEffect(EntityManager entityManager, Entity owner, Entity source,
             CStacking stacking)
         {
-            var effects = entityManager.GetBuffer<BEGameplayEffect>(owner);
+            var effects = entityManager.GetBuffer<BGameplayEffect>(owner);
             for (var i = 0; i < effects.Length; i++)
             {
                 var effect = effects[i].GameplayEffect;

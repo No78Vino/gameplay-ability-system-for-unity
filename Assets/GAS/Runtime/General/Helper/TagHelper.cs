@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public static class GTagUtil
+    public static class TagHelper
     {
         private static Dictionary<int, GameplayTag> _tagMap;
         private static Dictionary<int, string> _tagCode2TagName;

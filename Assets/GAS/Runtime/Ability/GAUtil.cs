@@ -55,7 +55,7 @@ namespace GAS.Runtime
             {
                 var abilityActivationRequiredTags =
                     _entityManager.GetComponentData<CAbilityActivationRequiredTags>(ability);
-                hasAllTags = ASCUtil.HasAllTags(owner, abilityActivationRequiredTags.tags);
+                hasAllTags = ASCHelper.HasAllTags(owner, abilityActivationRequiredTags.tags);
             }
 
             // 2. 检查激活被阻止的标签
@@ -65,12 +65,12 @@ namespace GAS.Runtime
             {
                 var abilityActivationBlockedTags =
                     _entityManager.GetComponentData<CAbilityActivationBlockedTags>(ability);
-                notHasAnyTags = !ASCUtil.HasAnyTags(owner, abilityActivationBlockedTags.tags);
+                notHasAnyTags = !ASCHelper.HasAnyTags(owner, abilityActivationBlockedTags.tags);
             }
 
             // 3. 检查是否被其他能力阻止,遍历宿主其它能力,检查是否有阻止激活的标签
             var notBlockedByOtherAbility = true;
-            var ownerAbilities = _entityManager.GetBuffer<BEAbility>(owner);
+            var ownerAbilities = _entityManager.GetBuffer<BAbility>(owner);
             foreach (var ownerAbility in ownerAbilities)
             {
                 var ownerAbilityEntity = ownerAbility.Ability;
@@ -209,7 +209,7 @@ namespace GAS.Runtime
             var assetTags = _entityManager.GetComponentData<CAbilityAssetTags>(ability);
             foreach (var tag in tags)
             foreach (var assetTag in assetTags.tags)
-                if (GTagUtil.HasTag(assetTag, tag))
+                if (TagHelper.HasTag(assetTag, tag))
                     return true;
             return false;
         }

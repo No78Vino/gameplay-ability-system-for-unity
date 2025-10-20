@@ -32,7 +32,7 @@ namespace GAS.Runtime
         public override void EndAbility(GlobalTimer timer)
         {
             var ownerAsc = GetOwnerAsc();
-            var geEntities = _entityManager.GetBuffer<BEGameplayEffect>(ownerAsc);
+            var geEntities = _entityManager.GetBuffer<BGameplayEffect>(ownerAsc);
             foreach (var beEffect in geEntities)
             {
                 var effect = beEffect.GameplayEffect;

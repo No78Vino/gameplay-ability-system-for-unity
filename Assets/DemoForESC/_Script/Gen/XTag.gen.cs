@@ -31,7 +31,7 @@ namespace GAS.Runtime
 
         public static void InitTagList()
         {
-            GTagUtil.InitTagMap(new Dictionary<int, GameplayTag>()
+            TagHelper.InitTagMap(new Dictionary<int, GameplayTag>()
             {
                 { Faction, new GameplayTag(Faction, new int[] {  }, new int[] { Faction_Player, Faction_Enemy }) },
                 { Faction_Player, new GameplayTag(Faction_Player, new int[] { Faction }, new int[] {  }) },

@@ -61,7 +61,7 @@ namespace GAS.Runtime
 
                 foreach (var assetTag in assetTags)
                 foreach (var tag in tags)
-                    if (GTagUtil.HasTag(assetTag, tag))
+                    if (TagHelper.HasTag(assetTag, tag))
                         return true;
             }
 
@@ -71,7 +71,7 @@ namespace GAS.Runtime
                 var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(ge).tags;
                 foreach (var grantedTag in grantedTags)
                 foreach (var tag in tags)
-                    if (GTagUtil.HasTag(grantedTag, tag))
+                    if (TagHelper.HasTag(grantedTag, tag))
                         return true;
             }
 
@@ -110,7 +110,7 @@ namespace GAS.Runtime
             var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             var target = inUsage.Target;
             
-            var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(target);;
+            var gameplayEffects = _entityManager.GetBuffer<BGameplayEffect>(target);;
             for (var i = 0; i < gameplayEffects.Length; i++)
             {
                 if (gameplayEffects[i].GameplayEffect != gameplayEffect) continue;
@@ -128,7 +128,7 @@ namespace GAS.Runtime
             // 从ASC容器中移除
             var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
             var target = inUsage.Target;
-            var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(target);
+            var gameplayEffects = _entityManager.GetBuffer<BGameplayEffect>(target);
             for (var i = 0; i < gameplayEffects.Length; i++)
             {
                 if (gameplayEffects[i].GameplayEffect != gameplayEffect) continue;
@@ -147,7 +147,7 @@ namespace GAS.Runtime
         {
             if (!_entityManager.HasComponent<CApplicationRequiredTags>(gameplayEffect)) return true;
             var requiredTags = _entityManager.GetComponentData<CApplicationRequiredTags>(gameplayEffect);
-            return ASCUtil.HasAllTags(asc, requiredTags.tags);
+            return ASCHelper.HasAllTags(asc, requiredTags.tags);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace GAS.Runtime
         {
             if (!_entityManager.HasComponent<COngoingRequiredTags>(gameplayEffect)) return true;
             var requiredTags = _entityManager.GetComponentData<COngoingRequiredTags>(gameplayEffect);
-            return ASCUtil.HasAllTags(asc, requiredTags.tags);
+            return ASCHelper.HasAllTags(asc, requiredTags.tags);
 
         }
 
@@ -174,7 +174,7 @@ namespace GAS.Runtime
         {
             if (!_entityManager.HasComponent<CEffectImmunityTags>(gameplayEffect)) return false;
             var immunityTags = _entityManager.GetComponentData<CEffectImmunityTags>(gameplayEffect);
-            return ASCUtil.HasAnyTags(asc, immunityTags.tags);
+            return ASCHelper.HasAnyTags(asc, immunityTags.tags);
         }
 
         public static void InitGameplayEffect(this Entity gameplayEffect, Entity source, Entity target, int level)
@@ -223,7 +223,7 @@ namespace GAS.Runtime
 
                 foreach (var assetTag in assetTags)
                 foreach (var tag in tags)
-                    if (GTagUtil.HasTag(assetTag, tag))
+                    if (TagHelper.HasTag(assetTag, tag))
                         return true;
             }
 
@@ -233,7 +233,7 @@ namespace GAS.Runtime
                 var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect).tags;
                 foreach (var grantedTag in grantedTags)
                 foreach (var tag in tags)
-                    if (GTagUtil.HasTag(grantedTag, tag))
+                    if (TagHelper.HasTag(grantedTag, tag))
                         return true;
             }
 

@@ -34,7 +34,7 @@ namespace GAS.Runtime
                         var abilityActivationOwnedTags =
                             state.EntityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
                         foreach (var tag in abilityActivationOwnedTags.tags)
-                            GTagUtil.AddTemporaryTagTo(owner, ability, tag);
+                            TagHelper.AddTemporaryTagTo(owner, ability, tag);
                     }
 
                     // 添加激活tag

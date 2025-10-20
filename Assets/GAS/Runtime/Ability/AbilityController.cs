@@ -14,13 +14,13 @@ namespace GAS.Runtime
         public AbilityController(Entity asc)
         {
             _asc = asc;
-            GasEntityManager.AddBuffer<BEAbility>(_asc);
+            GasEntityManager.AddBuffer<BAbility>(_asc);
         }
 
         private static EntityManager GasEntityManager => GASManager.EntityManager;
 
-        public DynamicBuffer<BEAbility> CurrentAbilities =>
-            GasEntityManager.GetBuffer<BEAbility>(_asc);
+        public DynamicBuffer<BAbility> CurrentAbilities =>
+            GasEntityManager.GetBuffer<BAbility>(_asc);
 
         public void GrantAbility(AbilityConfig abilityConfig)
         {
@@ -35,13 +35,13 @@ namespace GAS.Runtime
             abi.Owner = _asc;
             GasEntityManager.SetComponentData(ability, abi);
             
-            var buffer = GasEntityManager.GetBuffer<BEAbility>(_asc);
-            buffer.Add(new BEAbility { Ability = ability });
+            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            buffer.Add(new BAbility { Ability = ability });
         }
 
         public void RemoveAbility(int abilityCode)
         {
-            var buffer = GasEntityManager.GetBuffer<BEAbility>(_asc);
+            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
@@ -56,7 +56,7 @@ namespace GAS.Runtime
 
         public void RemoveAbility(Entity ability)
         {
-            var buffer = GasEntityManager.GetBuffer<BEAbility>(_asc);
+            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
                 if (buffer[i].Ability == ability)
                 {
@@ -67,13 +67,13 @@ namespace GAS.Runtime
 
         public void ClearAbilities()
         {
-            var buffer = GasEntityManager.GetBuffer<BEAbility>(_asc);
+            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
             buffer.Clear();
         }
 
         public bool HaveAbility(int abilityCode)
         {
-            var buffer = GasEntityManager.GetBuffer<BEAbility>(_asc);
+            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;

@@ -28,7 +28,7 @@ namespace GAS.Runtime
                 {
                     var inUsage = SystemAPI.GetComponentRO<CEffectInUsage>(ge);
                     var targetAsc = inUsage.ValueRO.Target;
-                    var geContainer = SystemAPI.GetBuffer<BEGameplayEffect>(targetAsc);
+                    var geContainer = SystemAPI.GetBuffer<BGameplayEffect>(targetAsc);
                     for (var i = 0; i < geContainer.Length; i++)
                     {
                         if (geContainer[i].GameplayEffect != ge) continue;

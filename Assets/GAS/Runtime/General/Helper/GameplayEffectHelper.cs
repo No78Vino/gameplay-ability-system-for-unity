@@ -8,9 +8,9 @@ namespace GAS.Runtime
     {
         private static EntityManager GasEntityManager => GASManager.EntityManager;
 
-        public static DynamicBuffer<BEGameplayEffect> GameplayEffectsOf(Entity asc)
+        public static DynamicBuffer<BGameplayEffect> GameplayEffectsOf(Entity asc)
         {
-            return GasEntityManager.GetBuffer<BEGameplayEffect>(asc);
+            return GasEntityManager.GetBuffer<BGameplayEffect>(asc);
         }
 
         public static bool CheckAscAttributeDirty(DynamicBuffer<BEAttrSet> attrSets,MCModifiers modifiers)
@@ -44,7 +44,7 @@ namespace GAS.Runtime
         {
             if (!entityManager.HasComponent<COngoingRequiredTags>(gameplayEffect)) return true;
             var ongoingRequiredTags = entityManager.GetComponentData<COngoingRequiredTags>(gameplayEffect);
-            return ASCUtil.HasAllTags(targetAsc,ongoingRequiredTags.tags);
+            return ASCHelper.HasAllTags(targetAsc,ongoingRequiredTags.tags);
         }
         
                 public static NativeArray<Entity> GetTriggerCues(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager,
@@ -68,7 +68,7 @@ namespace GAS.Runtime
                 if (hasRequiredTags)
                 {
                     var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
-                    if(!ASCUtil.HasAllTags(targetAsc,requiredTags.tags)) continue;
+                    if(!ASCHelper.HasAllTags(targetAsc,requiredTags.tags)) continue;
                 }
                 bool hasImmunitedTags = entityManager.HasComponent<CPlayImmunitedTags>(prefabEntity);
                 if (hasImmunitedTags)
@@ -135,7 +135,7 @@ namespace GAS.Runtime
             if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
             {
                 var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
-                ASCUtil.TryAddDynamicAddedTags(targetAsc, gameplayEffect, grantedTags.tags.ToArray());
+                ASCHelper.TryAddDynamicAddedTags(targetAsc, gameplayEffect, grantedTags.tags.ToArray());
             }
 
             if (entityManager.HasComponent<CCueOnActivate>(gameplayEffect))
@@ -159,7 +159,7 @@ namespace GAS.Runtime
             if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
             {
                 var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
-                ASCUtil.RestoreDynamicTags(targetAsc, gameplayEffect, grantedTags.tags);
+                ASCHelper.RestoreDynamicTags(targetAsc, gameplayEffect, grantedTags.tags);
             }
 
             if (entityManager.HasComponent<CCueOnDeacivate>(gameplayEffect))

@@ -33,7 +33,7 @@ namespace GAS.Runtime
             var oldValue = attr.CurrentValue;
             attr.CurrentValue = attr.BaseValue;
             // 获取GE
-            var gameplayEffects = _entityManager.GetBuffer<BEGameplayEffect>(asc);
+            var gameplayEffects = _entityManager.GetBuffer<BGameplayEffect>(asc);
             foreach (var buffer in gameplayEffects)
             {
                 var ge = buffer.GameplayEffect;

@@ -64,7 +64,7 @@ namespace GAS.Runtime
             if(!hasRequiredTags) return true;
             
             var requiredTags = entityManager.GetComponentData<CApplicationRequiredTags>(ge);
-            bool hasAllTags = ASCUtil.HasAllTags(asc, requiredTags.tags);
+            bool hasAllTags = ASCHelper.HasAllTags(asc, requiredTags.tags);
 
             // 不满足则直接销毁GE
             if (!hasAllTags) ecb.AddComponent<CEffectDestroy>(ge);
@@ -78,7 +78,7 @@ namespace GAS.Runtime
             if(!hasImmunityTag) return true;
 
             var immunityTags = entityManager.GetComponentData<CEffectImmunityTags>(ge);
-            bool hasAnyTags = ASCUtil.HasAnyTags(asc,immunityTags.tags);
+            bool hasAnyTags = ASCHelper.HasAnyTags(asc,immunityTags.tags);
             
             // 有任意免疫标签，则直接销毁
             if (hasAnyTags) ecb.AddComponent<CEffectDestroy>(ge);
@@ -103,7 +103,7 @@ namespace GAS.Runtime
                 {
                     var removeEffectWithTags = entityManager.GetComponentData<CRemoveEffectWithTags>(ge);
                     // 获取ASC的GE容器
-                    var geContainer = entityManager.GetBuffer<BEGameplayEffect>(asc);
+                    var geContainer = entityManager.GetBuffer<BGameplayEffect>(asc);
                     // 遍历ASC的GE，销毁移除符合条件的GE
                     for (var i = 0; i < geContainer.Length; i++)
                     {
@@ -272,12 +272,12 @@ namespace GAS.Runtime
                 if (entityManager.HasComponent<CPlayRequiredTags>(cueEntity))
                 {
                     var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(cueEntity);
-                    if(!ASCUtil.HasAllTags(targetAsc,requiredTags.tags)) continue;
+                    if(!ASCHelper.HasAllTags(targetAsc,requiredTags.tags)) continue;
                 }
                 if (entityManager.HasComponent<CPlayImmunitedTags>(cueEntity))
                 {
                     var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(cueEntity);
-                    if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
+                    if(ASCHelper.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
                 }
                 // 2.重置Cue逻辑单元
                 var cueLogic = entityManager.GetComponentData<MCCue>(cueEntity);
@@ -302,7 +302,7 @@ namespace GAS.Runtime
         
         private Entity GetStackingEffectBySource(int stackingCode,Entity targetAsc, Entity sourceAsc, EntityManager entityManager)
         {
-            var effects = entityManager.GetBuffer<BEGameplayEffect>(targetAsc);
+            var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
          
             for (var i = 0; i < effects.Length; i++)
             {
@@ -325,7 +325,7 @@ namespace GAS.Runtime
         
         private Entity GetStackingEffectByTarget(int stackingCode,Entity targetAsc,EntityManager entityManager)
         {
-            var effects = entityManager.GetBuffer<BEGameplayEffect>(targetAsc);
+            var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
          
             for (var i = 0; i < effects.Length; i++)
             {

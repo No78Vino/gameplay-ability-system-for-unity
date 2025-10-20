@@ -29,7 +29,7 @@ namespace GAS.Runtime
                 if (result)
                 {
                     ecb.RemoveComponent<CAbilityActive>(ability);
-                    ASCUtil.RestoreDynamicTags(ability);
+                    ASCHelper.RestoreDynamicTags(ability);
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
                     abilityLogic.Logic.EndAbility(globalTimer.ValueRO);
                     GASEventCenter.InvokeOnEndAbility(ability);

@@ -126,12 +126,12 @@ namespace GAS.Runtime
             
             if (_requiredTags != null)
             {
-                if(!ASCUtil.HasAllTags(asc,_requiredTags)) return false;
+                if(!ASCHelper.HasAllTags(asc,_requiredTags)) return false;
             }
             
             if (_immunityTags != null)
             {
-                if(ASCUtil.HasAnyTags(asc,_immunityTags)) return false;
+                if(ASCHelper.HasAnyTags(asc,_immunityTags)) return false;
             }
 
             var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);

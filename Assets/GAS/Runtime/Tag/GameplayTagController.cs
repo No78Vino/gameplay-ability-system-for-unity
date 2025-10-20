@@ -30,7 +30,7 @@ namespace GAS.Runtime
         {
             var fixedTags = DynamicBufferFixedTags;
             foreach (var t in fixedTags)
-                if (GTagUtil.HasTag(t.tag, tag))
+                if (TagHelper.HasTag(t.tag, tag))
                     return true;
             return false;
         }
@@ -39,12 +39,12 @@ namespace GAS.Runtime
         {
             var temporaryTags = DynamicBufferTemporaryTags;
             foreach (var t in temporaryTags)
-                if (GTagUtil.HasTag(t.tag, tag))
+                if (TagHelper.HasTag(t.tag, tag))
                     return true;
             return false;
         }
 
-        private bool HasTemporaryTag(Entity source, int tag) => GTagUtil.HasTemporaryTag(_asc, source, tag);
+        private bool HasTemporaryTag(Entity source, int tag) => TagHelper.HasTemporaryTag(_asc, source, tag);
         
         public void KillFixedTag(int tag)
         {
@@ -133,7 +133,7 @@ namespace GAS.Runtime
             return dirty;
         }
 
-        public bool AddTemporaryTag(Entity source, int tag) => GTagUtil.AddTemporaryTagTo(_asc, source, tag);
+        public bool AddTemporaryTag(Entity source, int tag) => TagHelper.AddTemporaryTagTo(_asc, source, tag);
         
         public bool AddTemporaryTags(Entity source,int[] tags)
         {
