@@ -20,8 +20,7 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             _globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
-            var ecb = new EntityCommandBuffer( Allocator.Temp);
-            EntityHelper.RegisterEntityCommandBuffer(ecb);
+            var ecb = EntityHelper.RegisterEntityCommandBuffer();
             foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {

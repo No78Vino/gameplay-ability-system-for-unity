@@ -23,8 +23,7 @@ namespace GAS.Runtime
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
             var currentFrame = globalFrameTimer.ValueRO.Frame;
             var currentTurn = globalFrameTimer.ValueRO.Turn;
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            EntityHelper.RegisterEntityCommandBuffer(ecb);
+            var ecb = EntityHelper.RegisterEntityCommandBuffer();
             foreach (var (duration, _, inUsage, geEntity) in SystemAPI
                          .Query<RefRW<CDuration>, RefRO<CEffectApplied>, RefRO<CEffectInUsage>>()
                          .WithNone<CStacking>()

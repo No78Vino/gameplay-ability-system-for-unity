@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -13,11 +14,12 @@ namespace GAS.Runtime
         /// <summary>
         ///     注册ECB
         /// </summary>
-        /// <param name="ecb"></param>
-        public static void RegisterEntityCommandBuffer(EntityCommandBuffer ecb)
+        /// <param name="allocator"></param>
+        public static EntityCommandBuffer RegisterEntityCommandBuffer(Allocator allocator = Allocator.Temp)
         {
-            _ecb = ecb;
+            _ecb = new EntityCommandBuffer(allocator);
             _usingEcb = true;
+            return _ecb;
         }
 
         /// <summary>
