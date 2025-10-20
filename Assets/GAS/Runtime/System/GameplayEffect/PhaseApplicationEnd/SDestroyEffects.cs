@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime.System.GameplayEffect.PhaseApplicationEnd
 {
-    [UpdateInGroup(typeof(SysGrpApplicationEnd))]
+    [UpdateInGroup(typeof(SysGrpKillEffect))]
     [UpdateAfter(typeof(SRemoveApplicationProgressTag))]
     public partial struct SDestroyEffects : ISystem
     {
