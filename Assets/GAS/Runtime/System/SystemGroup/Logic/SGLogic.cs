@@ -4,7 +4,7 @@ namespace GAS.Runtime
 {
     [DisableAutoCreation]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    public partial class SysGrpLogic : ComponentSystemGroup
+    public partial class SGLogic : ComponentSystemGroup
     {
     }
 }

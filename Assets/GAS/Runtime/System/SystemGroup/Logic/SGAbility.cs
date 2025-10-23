@@ -3,9 +3,9 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [DisableAutoCreation]
-    [UpdateInGroup(typeof(SysGrpLogic))]
+    [UpdateInGroup(typeof(SGLogic))]
     [UpdateAfter(typeof(SGlobalTimer))]
-    public partial class SysGrpAbility : ComponentSystemGroup
+    public partial class SGAbility : ComponentSystemGroup
     {
     }
 }

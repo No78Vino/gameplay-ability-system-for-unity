@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpEffect))]
+    [UpdateInGroup(typeof(SGEffect))]
     [UpdateAfter(typeof(SApplyGameplayEffect))]
     public partial struct SKillGameplayEffect : ISystem
     {

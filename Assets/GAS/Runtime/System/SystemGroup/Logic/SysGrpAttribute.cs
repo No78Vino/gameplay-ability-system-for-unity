@@ -3,8 +3,8 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [DisableAutoCreation]
-    [UpdateInGroup(typeof(SysGrpLogic))]
-    [UpdateAfter(typeof(SysGrpEffect))]
+    [UpdateInGroup(typeof(SGLogic))]
+    [UpdateAfter(typeof(SGEffect))]
     public partial class SysGrpAttribute : ComponentSystemGroup
     {
     }

@@ -59,12 +59,12 @@ namespace GAS.Runtime
 
             // 创建系统组
             // 逻辑帧 系统组
-            var sgLogic = ExWorld.CreateSystemManaged<SysGrpLogic>();
+            var sgLogic = ExWorld.CreateSystemManaged<SGLogic>();
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogic);
 
-            var sgAbility = ExWorld.CreateSystemManaged<SysGrpAbility>();
+            var sgAbility = ExWorld.CreateSystemManaged<SGAbility>();
             var sgAttribute = ExWorld.CreateSystemManaged<SysGrpAttribute>();
-            var sgEffect = ExWorld.CreateSystemManaged<SysGrpEffect>();
+            var sgEffect = ExWorld.CreateSystemManaged<SGEffect>();
             sgLogic.AddSystemToUpdateList(sgAbility);
             sgLogic.AddSystemToUpdateList(sgAttribute);
             sgLogic.AddSystemToUpdateList(sgEffect);

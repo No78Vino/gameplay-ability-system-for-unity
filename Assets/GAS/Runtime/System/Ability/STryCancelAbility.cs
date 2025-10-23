@@ -6,7 +6,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [DisableAutoCreation]
-    [UpdateInGroup(typeof(SysGrpAbility))]
+    [UpdateInGroup(typeof(SGAbility))]
     [UpdateAfter(typeof(STryActivateAbility))]
     public partial struct STryCancelAbility : ISystem
     {

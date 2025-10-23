@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpEffect))]
+    [UpdateInGroup(typeof(SGEffect))]
     public partial struct SApplyGameplayEffect : ISystem
     {
         private GlobalTimer _globalTimer;

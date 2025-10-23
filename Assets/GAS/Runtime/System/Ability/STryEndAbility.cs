@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpAbility))]
+    [UpdateInGroup(typeof(SGAbility))]
     [UpdateAfter(typeof(STryCancelAbility))]
     public partial struct STryEndAbility : ISystem
     {
