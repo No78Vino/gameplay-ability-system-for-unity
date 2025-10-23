@@ -87,7 +87,7 @@ namespace GAS.Runtime
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogicTick);
 
             var sgTickAbility = ExWorld.CreateSystemManaged<SysGrpTickAbility>();
-            var sgTickEffect = ExWorld.CreateSystemManaged<SysGrpTickGameplayEffect>();
+            var sgTickEffect = ExWorld.CreateSystemManaged<SGRunningEffect>();
             sgLogicTick.AddSystemToUpdateList(sgTickAbility);
             sgLogicTick.AddSystemToUpdateList(sgTickEffect);
             

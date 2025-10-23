@@ -172,6 +172,11 @@ namespace GAS.Runtime
     
     
     
+    
+    
+    
+    
+    
     [DisableAutoCreation]
     [UpdateInGroup(typeof(SGEffect))]
     public partial class SysGrpTryApplyEffect:ComponentSystemGroup

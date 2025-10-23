@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpTickGameplayEffect))]
+    [UpdateInGroup(typeof(SGRunningEffect))]
     [UpdateAfter(typeof(SEffectPeriodTick))]
     public partial struct SEffectDurationTick : ISystem
     {

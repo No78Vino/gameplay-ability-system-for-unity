@@ -1,11 +1,10 @@
-﻿using GAS.Runtime;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpTickGameplayEffect))]
+    [UpdateInGroup(typeof(SGRunningEffect))]
     public partial struct SEffectPeriodTick : ISystem
     {
         [BurstCompile]
