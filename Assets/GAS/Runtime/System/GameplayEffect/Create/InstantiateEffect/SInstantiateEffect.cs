@@ -10,7 +10,7 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CTagWaitingInstantiateEffect>();
+            state.RequireForUpdate<CWaitingInstantiateEffect>();
         }
 
         [BurstCompile]
@@ -18,13 +18,14 @@ namespace GAS.Runtime
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             
-            foreach (var (_,ge) in SystemAPI.Query<RefRO<CTagWaitingInstantiateEffect>>().WithEntityAccess())
+            foreach (var (_,ge) in SystemAPI.Query<RefRO<CWaitingInstantiateEffect>>().WithEntityAccess())
             {
                 ecb.AddComponent<CEffectInstance>(ge);
-                ecb.RemoveComponent<CTagWaitingInstantiateEffect>(ge);
+                ecb.RemoveComponent<CWaitingInstantiateEffect>(ge);
             }
             
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]

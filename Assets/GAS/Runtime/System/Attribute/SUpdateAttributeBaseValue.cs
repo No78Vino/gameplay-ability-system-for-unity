@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace GAS.Runtime.System.Attribute
 {
-    [UpdateAfter(typeof(SInstantEffectModifyBaseValue))]
     public partial struct SUpdateAttributeBaseValue : ISystem
     {
         [BurstCompile]
