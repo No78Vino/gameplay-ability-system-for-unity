@@ -9,13 +9,16 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            
+            state.RequireForUpdate<CEffectInstance>();
+            state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipApplyEffect>();
+            state.RequireForUpdate<CStacking>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-
+            // TODO: 实现效果堆叠检查逻辑
         }
 
         [BurstCompile]

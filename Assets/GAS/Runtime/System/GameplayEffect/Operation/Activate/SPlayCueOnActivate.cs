@@ -9,13 +9,29 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            
+            state.RequireForUpdate<WipActivateEffect>();
+            state.RequireForUpdate<CEffectInstance>();
+            state.RequireForUpdate<CCueOnActivate>();
+            state.RequireForUpdate<CEffectInUsage>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            foreach (var (_, _, cueOnActivate, inUsage) in
+                     SystemAPI.Query<
+                         RefRO<CEffectInstance>,
+                         RefRO<WipActivateEffect>,
+                         RefRO<CCueOnActivate>,
+                         RefRO<CEffectInUsage>>())
+            {
 
+                var cues = cueOnActivate.ValueRO.cues;
+                var entityManager = state.EntityManager;
+                var targetAsc = inUsage.ValueRO.Target;
+                foreach (var cueEntity in cues)
+                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity);
+            }
         }
 
         [BurstCompile]

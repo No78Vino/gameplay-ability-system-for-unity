@@ -10,7 +10,7 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CWaitingInstantiateEffect>();
+            state.RequireForUpdate<WipInstantiateEffect>();
         }
 
         [BurstCompile]
@@ -18,10 +18,13 @@ namespace GAS.Runtime
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             
-            foreach (var (_,ge) in SystemAPI.Query<RefRO<CWaitingInstantiateEffect>>().WithEntityAccess())
+            foreach (var (_,ge) in SystemAPI.Query<RefRO<WipInstantiateEffect>>().WithEntityAccess())
             {
                 ecb.AddComponent<CEffectInstance>(ge);
-                ecb.RemoveComponent<CWaitingInstantiateEffect>(ge);
+                ecb.RemoveComponent<WipInstantiateEffect>(ge);
+                
+                // 进入下一阶段（Check Apply Effect）
+                ecb.AddComponent<WipCheckApplyEffect>(ge);
             }
             
             ecb.Playback(state.EntityManager);

@@ -13,14 +13,15 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipApplyEffect>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            foreach (var (_,ge) in SystemAPI
-                         .Query<RefRO<CEffectInstance>>()
+            foreach (var (_,_,ge) in SystemAPI
+                         .Query<RefRO<CEffectInstance>,RefRO<WipApplyEffect>>()
                          .WithNone<CDuration>()
                          .WithEntityAccess())
             {

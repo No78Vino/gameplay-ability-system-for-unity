@@ -4,7 +4,8 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGApplyEffect))]
-    public partial struct SEffectPlayCueOnApply : ISystem
+    [UpdateBefore(typeof(SApplyEnd))]
+    public partial struct SPlayCueOnApply : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -12,19 +13,21 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CCueOnApply>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipApplyEffect>();
         }
 
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, cueOnApply, inUsage, ge) in
+            foreach (var (_, _, cueOnApply, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
+                         RefRO<WipApplyEffect>,
                          RefRO<CCueOnApply>,
                          RefRO<CEffectInUsage>
                      >().WithEntityAccess())
             {
-                
+
                 var cues = cueOnApply.ValueRO.cues;
                 var entityManager = state.EntityManager;
                 var targetAsc = inUsage.ValueRO.Target;

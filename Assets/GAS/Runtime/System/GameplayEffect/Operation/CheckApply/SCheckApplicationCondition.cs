@@ -4,6 +4,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGCheckApplyEffect))]
+    [UpdateBefore(typeof(SCheckApplyEnd))]
     public partial struct SCheckApplicationCondition : ISystem
     {
         [BurstCompile]
@@ -12,6 +13,7 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CApplicationCondition>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipCheckApplyEffect>();
         }
 
         [BurstCompile]

@@ -5,6 +5,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGCheckApplyEffect))]
+    [UpdateBefore(typeof(SCheckApplyEnd))]
     public partial struct SCheckApplicationRequiredTags : ISystem
     {
         [BurstCompile]
@@ -14,6 +15,7 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CApplicationRequiredTags>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipCheckApplyEffect>();
         }
 
         [BurstCompile]
@@ -22,9 +24,10 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
 
-            foreach (var (_, applicationRequiredTags, inUsage, ge) in
+            foreach (var (_,_, applicationRequiredTags, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
+                         RefRO<WipCheckApplyEffect>,
                          RefRO<CApplicationRequiredTags>,
                          RefRO<CEffectInUsage>
                      >().WithEntityAccess())

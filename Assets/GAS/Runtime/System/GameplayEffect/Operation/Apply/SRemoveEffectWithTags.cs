@@ -5,6 +5,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGApplyEffect))]
+    [UpdateBefore(typeof(SApplyEnd))]
     public partial struct SRemoveEffectWithTags : ISystem
     {
         [BurstCompile]
@@ -14,6 +15,7 @@ namespace GAS.Runtime
             state.RequireForUpdate<CRemoveEffectWithTags>();
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipApplyEffect>();
         }
 
         [BurstCompile]
@@ -22,9 +24,10 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
             
-            foreach (var (_, removeEffectWithTags, inUsage) in
+            foreach (var (_,_, removeEffectWithTags, inUsage) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
+                         RefRO<WipApplyEffect>,
                          RefRO<CRemoveEffectWithTags>,
                          RefRO<CEffectInUsage>
                      >())

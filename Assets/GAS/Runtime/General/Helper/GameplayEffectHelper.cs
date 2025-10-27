@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -174,7 +175,51 @@ namespace GAS.Runtime
         }
 
 
+        [BurstCompile]
+        public static Entity GetStackingEffectBySource(int stackingCode,Entity targetAsc, Entity sourceAsc, EntityManager entityManager)
+        {
+            var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
+         
+            for (var i = 0; i < effects.Length; i++)
+            {
+                var effect = effects[i].GameplayEffect;
+ 
+                var hasStacking = entityManager.HasComponent<CStacking>(effect);
+                if (!hasStacking) continue;
+                
+                var stacking = entityManager.GetComponentData<CStacking>(effect);
+                if (stacking.StackType != EffectStackType.AggregateBySource) continue;
 
+                var source = entityManager.GetComponentData<CEffectInUsage>(effect).Source;
+                if (source != sourceAsc) continue;
+                
+                if (stacking.StackingCode == stackingCode)
+                    return effect;
+            }
+            return Entity.Null;
+        }
+
+        [BurstCompile]
+        public static Entity GetStackingEffectByTarget(int stackingCode,Entity targetAsc,EntityManager entityManager)
+        {
+            var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
+         
+            for (var i = 0; i < effects.Length; i++)
+            {
+                var effect = effects[i].GameplayEffect;
+ 
+                var hasStacking = entityManager.HasComponent<CStacking>(effect);
+                if (!hasStacking) continue;
+                
+                var stacking = entityManager.GetComponentData<CStacking>(effect);
+                if (stacking.StackType != EffectStackType.AggregateByTarget) continue;
+                
+                if (stacking.StackingCode == stackingCode)
+                    return effect;
+            }
+            return Entity.Null;
+        }
+        
         #region GameplayEffectConfig
 
         private static Func<int,GameplayEffectConfig> _getConfigByID;

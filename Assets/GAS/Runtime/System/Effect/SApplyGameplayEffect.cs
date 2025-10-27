@@ -203,11 +203,6 @@ namespace GAS.Runtime
         
         private void Operation_AddNewGameplayEffect(Entity gameplayEffect,Entity sourceAsc,Entity targetAsc,EntityManager entityManager,EntityCommandBuffer ecb)
         {
-            // TODO 1.Period 组件生效
-            //     PeriodExecution = GameplayEffect.PeriodExecution?.CreateSpec(source, owner);
-            
-            // TODO 2.GrantedAbilities 组件生效
-            //     SetGrantedAbility(GameplayEffect.GrantedAbilities);
             
             // 优化：快照将在属性类mmc的modifier生效时才捕捉
             // CaptureAttributesSnapshot();

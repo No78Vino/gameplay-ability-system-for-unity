@@ -13,6 +13,7 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<MCModifiers>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipApplyEffect>();
         }
 
 
@@ -22,9 +23,10 @@ namespace GAS.Runtime
 
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            foreach (var (_, modifiers, inUsage, ge) in
+            foreach (var (_,_, modifiers, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
+                         RefRO<WipApplyEffect>,
                          MCModifiers,
                          RefRO<CEffectInUsage>
                      >().WithNone<CDuration>().WithEntityAccess())

@@ -5,6 +5,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGCheckApplyEffect))]
+    [UpdateBefore(typeof(SCheckApplyEnd))]
     public partial struct SCheckImmunityTags : ISystem
     {
         [BurstCompile]
@@ -14,6 +15,7 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectImmunityTags>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<WipCheckApplyEffect>();
         }
 
         [BurstCompile]
@@ -22,9 +24,10 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
 
-            foreach (var (_, immunityTags, inUsage, ge) in
+            foreach (var (_, _, immunityTags, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
+                         RefRO<WipCheckApplyEffect>,
                          RefRO<CEffectImmunityTags>,
                          RefRO<CEffectInUsage>
                      >().WithEntityAccess())
@@ -35,7 +38,7 @@ namespace GAS.Runtime
                 ecb.RemoveComponent<CEffectInstance>(ge);
                 ecb.AddComponent<CEffectDestroy>(ge);
                 // TODO 触发免疫Cue
-                
+
             }
 
             ecb.Playback(state.EntityManager);
