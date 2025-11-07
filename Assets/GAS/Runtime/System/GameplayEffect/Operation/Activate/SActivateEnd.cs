@@ -1,38 +1,38 @@
-﻿using Unity.Burst;
+using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGActivateEffect))]
-    [UpdateBefore(typeof(SActivateEnd))]
-    public partial struct SPlayCueOnActivate : ISystem
+    public partial struct SActivateEnd : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<WipActivateEffect>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate<CCueOnActivate>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<CDuration>();
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, _, cueOnActivate, inUsage) in
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            foreach (var (_, _, inUsage, duration,ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipActivateEffect>,
-                         RefRO<CCueOnActivate>,
-                         RefRO<CEffectInUsage>>())
+                         RefRO<CEffectInUsage>,
+                         RefRO<CDuration>>().WithEntityAccess())
             {
-
-                var cues = cueOnActivate.ValueRO.cues;
-                var entityManager = state.EntityManager;
-                var targetAsc = inUsage.ValueRO.Target;
-                foreach (var cueEntity in cues)
-                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity);
+                // 结束激活阶段
+                ecb.RemoveComponent<WipActivateEffect>(ge);
             }
+            
+            ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]

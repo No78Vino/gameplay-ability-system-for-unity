@@ -1,18 +1,19 @@
-﻿using Unity.Burst;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SGDurationalEffect))]
-    public partial struct SAddEffectToAscBuffList : ISystem
+    [UpdateInGroup(typeof(SGRemoveEffect))]
+    [UpdateBefore(typeof(SEffectRemoveEnd))]
+    public partial struct SRemoveEffectFromAscBuffList : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<WipRemoveEffect>();
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
-            state.RequireForUpdate<WipApplyEffect>();
             state.RequireForUpdate<CDuration>();
         }
 
@@ -20,31 +21,25 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            
-            foreach (var (_,_, _,inUsage, ge) in SystemAPI
+            foreach (var (_, _, _, inUsage, ge) in SystemAPI
                          .Query<
-                             RefRO<CEffectInstance>, 
-                             RefRO<WipApplyEffect>, 
-                             RefRO<CDuration>, 
+                             RefRO<CEffectInstance>,
+                             RefRO<WipRemoveEffect>,
+                             RefRO<CDuration>,
                              RefRO<CEffectInUsage>>()
-                         .WithNone<CStacking>()
                          .WithEntityAccess())
             {
-                // 处理没有Stacking堆叠组件的GameplayEffect
                 var asc = inUsage.ValueRO.Target;
                 var geBuff = SystemAPI.GetBuffer<BGameplayEffect>(asc);
-                var alreadyExist = false;
-                foreach (var geElem in geBuff)
-                    if (geElem.GameplayEffect == ge)
-                    {
-                        alreadyExist = true;
-                        break;
-                    }
-
-                if (!alreadyExist) 
-                    geBuff.Add(new BGameplayEffect { GameplayEffect = ge });
+                // 从geBuff中移除对应的GameplayEffect
+                for (var i = geBuff.Length - 1; i >= 0; i--)
+                {
+                    if (geBuff[i].GameplayEffect != ge) continue;
+                    geBuff.RemoveAt(i);
+                    break;
+                }
             }
-            
+
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
         }

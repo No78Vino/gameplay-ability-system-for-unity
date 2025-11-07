@@ -1,36 +1,37 @@
-﻿using Unity.Burst;
+using Unity.Burst;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SGActivateEffect))]
-    public partial struct SEffectGrantedTagsActivate : ISystem
+    [UpdateInGroup(typeof(SGDeactivateEffect))]
+    [UpdateBefore( typeof(SDeactivateEnd))]
+    public partial struct SPlayCueOnDeactivate : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<WipActivateEffect>();
+            state.RequireForUpdate<WipDeactivateEffect>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate<CEffectGrantedTags>();
+            state.RequireForUpdate<CCueOnDeactivate>();
             state.RequireForUpdate<CEffectInUsage>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, _, grantedTags, inUsage) in
+            foreach (var (_, _, cueOnDeactivate, inUsage) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipActivateEffect>,
-                         RefRO<CEffectGrantedTags>,
+                         RefRO<CCueOnDeactivate>,
                          RefRO<CEffectInUsage>>())
             {
 
-                var tags = grantedTags.ValueRO.tags;
+                var cues = cueOnDeactivate.ValueRO.cues;
                 var entityManager = state.EntityManager;
                 var targetAsc = inUsage.ValueRO.Target;
-                
-                // TODO 添加granted tags到asc
+                foreach (var cueEntity in cues)
+                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity);
             }
         }
 

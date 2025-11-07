@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public struct CCueOnDeacivate : IComponentData
+    public struct CCueOnDeactivate : IComponentData
     {
         public NativeArray<Entity> cues;
         
@@ -18,8 +18,8 @@ namespace GAS.Runtime
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
             var entities = CreateCueEntityArray(ge);
-            EntityHelper.AddComponent<CCueOnDeacivate>(ge);
-            EntityHelper.SetComponent(ge, new CCueOnDeacivate
+            EntityHelper.AddComponent<CCueOnDeactivate>(ge);
+            EntityHelper.SetComponent(ge, new CCueOnDeactivate
             {
                 cues = entities
             });

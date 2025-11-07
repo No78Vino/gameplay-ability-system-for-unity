@@ -1,37 +1,46 @@
-﻿using Unity.Burst;
+using Unity.Burst;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGActivateEffect))]
     [UpdateBefore(typeof(SActivateEnd))]
-    public partial struct SPlayCueOnActivate : ISystem
+    public partial struct SSetEffectActive : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<GlobalTimer>();
             state.RequireForUpdate<WipActivateEffect>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate<CCueOnActivate>();
+            state.RequireForUpdate<CDuration>();
             state.RequireForUpdate<CEffectInUsage>();
         }
 
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, _, cueOnActivate, inUsage) in
+            var globalTimer = SystemAPI.GetSingleton<GlobalTimer>();
+            foreach (var (_, _,inUsage, durationComp, _) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipActivateEffect>,
-                         RefRO<CCueOnActivate>,
+                         RefRO<CEffectInUsage>,
+                         RefRW<CDuration>,
                          RefRO<CEffectInUsage>>())
             {
-
-                var cues = cueOnActivate.ValueRO.cues;
-                var entityManager = state.EntityManager;
+                // 设置效果为激活状态
+                var duration = durationComp.ValueRW;
+                duration.active = true;
+                duration.activeTime = 
+                    duration.timeUnit == TimeUnit.Frame
+                    ? globalTimer.Frame
+                    : globalTimer.Turn;
+                durationComp.ValueRW = duration;
+                
+                
                 var targetAsc = inUsage.ValueRO.Target;
-                foreach (var cueEntity in cues)
-                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity);
+                GASEventCenter.InvokeOnGameplayEffectContainerIsDirty(targetAsc);
             }
         }
 

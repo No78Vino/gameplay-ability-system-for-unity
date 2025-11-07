@@ -13,19 +13,19 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<GlobalTimer>();
             state.RequireForUpdate<CDuration>();
-            state.RequireForUpdate<CEffectApplied>();
+            state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
             var currentFrame = globalFrameTimer.ValueRO.Frame;
             var currentTurn = globalFrameTimer.ValueRO.Turn;
-            var ecb = EntityHelper.RegisterEntityCommandBuffer();
+            var ecb = new EntityCommandBuffer(Allocator.Temp); 
             foreach (var (duration, _, inUsage, geEntity) in SystemAPI
-                         .Query<RefRW<CDuration>, RefRO<CEffectApplied>, RefRO<CEffectInUsage>>()
+                         .Query<RefRW<CDuration>, RefRO<CEffectInstance>, RefRO<CEffectInUsage>>()
                          .WithNone<CStacking>()
                          .WithEntityAccess())
             {
@@ -41,19 +41,18 @@ namespace GAS.Runtime
                     expired = countTime - durRO.lastActiveTime >= durRO.remianTime;
                 else
                     expired = countTime - durRO.activeTime >= durRO.duration;
+                
+                
                 // 过期的GE无效化，并销毁
                 if (expired)
                 {
-                    var targetAsc = inUsage.ValueRO.Target;
-                    GameplayEffectHelper.DeactivateEffect(geEntity, targetAsc, state.EntityManager);
-                    ecb.RemoveComponent<CEffectApplied>(geEntity);
-                    ecb.AddComponent<CEffectDestroy>(geEntity);
+                    ecb.AddComponent<WipDeactivateEffect>(geEntity);
+                    ecb.AddComponent<WipRemoveEffect>(geEntity);
                 }
             }
 
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
-            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

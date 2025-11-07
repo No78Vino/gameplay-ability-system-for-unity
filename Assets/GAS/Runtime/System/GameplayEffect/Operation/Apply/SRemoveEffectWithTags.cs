@@ -43,8 +43,8 @@ namespace GAS.Runtime
                     var hasRemoveTag = tagMap.EffectHasAnyTags(state.EntityManager,ge,tags);
                     if (!hasRemoveTag) continue;
                     
-                    ecb.AddComponent<CWaitingDeactivateEffect>(ge);
-                    ecb.AddComponent<CWaitingRemoveEffect>(ge);
+                    ecb.AddComponent<WipDeactivateEffect>(ge);
+                    ecb.AddComponent<WipRemoveEffect>(ge);
                 }
             }
             

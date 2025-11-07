@@ -163,9 +163,9 @@ namespace GAS.Runtime
                 ASCHelper.RestoreDynamicTags(targetAsc, gameplayEffect, grantedTags.tags);
             }
 
-            if (entityManager.HasComponent<CCueOnDeacivate>(gameplayEffect))
+            if (entityManager.HasComponent<CCueOnDeactivate>(gameplayEffect))
             {
-                var cCue = entityManager.GetComponentData<CCueOnDeacivate>(gameplayEffect);
+                var cCue = entityManager.GetComponentData<CCueOnDeactivate>(gameplayEffect);
                 cCue.runtimeCues = GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
                     cCue.cues);
                 entityManager.SetComponentData(gameplayEffect, cCue);

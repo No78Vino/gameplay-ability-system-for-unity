@@ -1,33 +1,35 @@
-﻿using Unity.Burst;
+using Unity.Burst;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SGActivateEffect))]
-    [UpdateBefore(typeof(SActivateEnd))]
-    public partial struct SPlayCueOnActivate : ISystem
+    [UpdateInGroup(typeof(SGRemoveEffect))]
+    [UpdateBefore(typeof(SEffectRemoveEnd))]
+    public partial struct SPlayCueOnRemove : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<WipActivateEffect>();
+            state.RequireForUpdate<WipRemoveEffect>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate<CCueOnActivate>();
             state.RequireForUpdate<CEffectInUsage>();
+            state.RequireForUpdate<CDuration>();
+            state.RequireForUpdate<CCueOnRemove>();
         }
 
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (_, _, cueOnActivate, inUsage) in
+            // 这里播放移除音效/特效等
+            foreach (var (_, _, inUsage,cueOnRemove, _) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
-                         RefRO<WipActivateEffect>,
-                         RefRO<CCueOnActivate>,
-                         RefRO<CEffectInUsage>>())
+                         RefRO<WipRemoveEffect>,
+                         RefRO<CEffectInUsage>,
+                         RefRO<CCueOnRemove>,
+                         RefRO<CDuration>>())
             {
-
-                var cues = cueOnActivate.ValueRO.cues;
+                var cues = cueOnRemove.ValueRO.cues;
                 var entityManager = state.EntityManager;
                 var targetAsc = inUsage.ValueRO.Target;
                 foreach (var cueEntity in cues)

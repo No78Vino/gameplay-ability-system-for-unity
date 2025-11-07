@@ -40,7 +40,7 @@ namespace GAS.Runtime
                     period.ValueRW.StartTime = time;
                     foreach (var ge in period.ValueRO.GameplayEffects)
                     {
-                        // 实例化GE
+                        // TODO 实例化GE
                         var instanceGe = state.EntityManager.Instantiate(ge);
                         ecb.AddComponent<CEffectApplied>(instanceGe);
                         ecb.AddComponent<CInApplicationProgress>(instanceGe);

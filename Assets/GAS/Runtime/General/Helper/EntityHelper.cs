@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace GAS.Runtime
         ///     注册ECB
         /// </summary>
         /// <param name="allocator"></param>
+        [BurstCompile]
         public static EntityCommandBuffer RegisterEntityCommandBuffer(Allocator allocator = Allocator.Temp)
         {
             _ecb = new EntityCommandBuffer(allocator);
@@ -25,6 +27,7 @@ namespace GAS.Runtime
         /// <summary>
         ///     注销ECB
         /// </summary>
+        [BurstCompile]
         public static void UnregisterEntityCommandBuffer()
         {
             _ecb = default;

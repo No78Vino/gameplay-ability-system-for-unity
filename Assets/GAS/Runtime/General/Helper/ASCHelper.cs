@@ -243,7 +243,7 @@ namespace GAS.Runtime
             TagHelper.AddTemporaryTagTo(asc, source, tag);
         }
         
-        public static void TryAddDynamicAddedTags(Entity asc, Entity source, int[] tags)
+        public static void TryAddDynamicAddedTags(Entity asc, Entity source, IEnumerable<int> tags)
         {
             foreach (var tag in tags)
                 TagHelper.AddTemporaryTagTo(asc, source, tag);

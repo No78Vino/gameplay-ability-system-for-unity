@@ -50,6 +50,23 @@ namespace GAS.Runtime
                 ecb.RemoveComponent<WipCheckActiveEffect>(ge);
             }
 
+            
+            // 没有OngoingRequiredTags的Effect直接进入激活阶段
+            foreach (var (_, _, _, inUsage, ge) in
+                     SystemAPI.Query<
+                         RefRO<CEffectInstance>,
+                         RefRO<WipCheckActiveEffect>,
+                         RefRO<CDuration>,
+                         RefRO<CEffectInUsage>
+                     >().WithNone<COngoingRequiredTags>().WithEntityAccess())
+            {
+
+                // 分配到激活阶段 Activate Effect
+                ecb.AddComponent<WipActivateEffect>(ge);
+                // 完成检查，移除标记组件
+                ecb.RemoveComponent<WipCheckActiveEffect>(ge);
+            }
+
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
         }

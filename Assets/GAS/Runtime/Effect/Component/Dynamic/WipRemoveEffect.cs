@@ -2,7 +2,7 @@
 
 namespace GAS.Runtime
 {
-    public struct CWaitingRemoveEffect : IComponentData
+    public struct WipRemoveEffect : IComponentData
     {
     }
 }
