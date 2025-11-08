@@ -12,7 +12,7 @@ namespace GAS.Runtime
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<GlobalTimer>();
-            state.RequireForUpdate<CEffectApplied>();
+            state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<CStacking>();
         }
@@ -25,7 +25,7 @@ namespace GAS.Runtime
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (duration, stacking,_, _, geEntity) in SystemAPI
-                         .Query<RefRW<CDuration>,RefRW<CStacking>, RefRO<CEffectApplied>, RefRO<CEffectInUsage>>()
+                         .Query<RefRW<CDuration>,RefRW<CStacking>, RefRO<CEffectInstance>, RefRO<CEffectInUsage>>()
                          .WithEntityAccess())
             {
                 // 过滤：
@@ -60,12 +60,12 @@ namespace GAS.Runtime
                             duration,
                             globalFrameTimer.ValueRO);
                         // 2.刷新持续时间
-                        SActivateEffect.UpdateActiveTime(ref duration.ValueRW, globalFrameTimer.ValueRO);
+                        UpdateActiveTime(ref duration.ValueRW, globalFrameTimer.ValueRO);
                     }
                     else if(stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.RefreshDuration)
                     {
                         // 刷新持续时间
-                        SActivateEffect.UpdateActiveTime(ref duration.ValueRW, globalFrameTimer.ValueRO);
+                        UpdateActiveTime(ref duration.ValueRW, globalFrameTimer.ValueRO);
                     }
                 }
             }
@@ -78,6 +78,29 @@ namespace GAS.Runtime
         public void OnDestroy(ref SystemState state)
         {
 
+        }
+
+        private void UpdateActiveTime(ref CDuration duration, GlobalTimer globalFrameTimer)
+        {
+            var currentFrame = globalFrameTimer.Frame;
+            var currentTurn = globalFrameTimer.Turn;
+            //  更新激活时间
+            if (duration.active) return;
+            duration.active = true;
+            if (duration.timeUnit == TimeUnit.Frame)
+            {
+                if (duration.activeTime == 0 || duration.ResetStartTimeWhenActivated)
+                    duration.activeTime = currentFrame;
+
+                duration.lastActiveTime = currentFrame;
+            }
+            else
+            {
+                if (duration.activeTime == 0 || duration.ResetStartTimeWhenActivated)
+                    duration.activeTime = currentTurn;
+
+                duration.lastActiveTime = currentTurn;
+            }
         }
     }
 }

@@ -24,10 +24,13 @@ namespace GAS.Runtime
             var currentFrame = globalFrameTimer.ValueRO.Frame;
             var currentTurn = globalFrameTimer.ValueRO.Turn;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            foreach (var (duration, inUsage, period,_, geEntity) in SystemAPI
-                         .Query<RefRO<CDuration>, RefRO<CEffectInUsage>, RefRW<CPeriod>,RefRO<CEffectApplied>>()
-                         .WithNone<CInApplicationProgress>()
-                         .WithEntityAccess())
+            foreach (var (duration, inUsage, period,_) in SystemAPI
+                         .Query<
+                             RefRO<CDuration>, 
+                             RefRO<CEffectInUsage>, 
+                             RefRW<CPeriod>,
+                             RefRO<CEffectInstance>
+                         >())
             {
                 // 过滤未激活的GE
                 if (!duration.ValueRO.active) continue;
@@ -40,10 +43,8 @@ namespace GAS.Runtime
                     period.ValueRW.StartTime = time;
                     foreach (var ge in period.ValueRO.GameplayEffects)
                     {
-                        // TODO 实例化GE
                         var instanceGe = state.EntityManager.Instantiate(ge);
-                        ecb.AddComponent<CEffectApplied>(instanceGe);
-                        ecb.AddComponent<CInApplicationProgress>(instanceGe);
+                        ecb.AddComponent<WipInstantiateEffect>(instanceGe);
                         ecb.AddComponent<CEffectInUsage>(instanceGe);
                         ecb.SetComponent(instanceGe, new CEffectInUsage()
                         {

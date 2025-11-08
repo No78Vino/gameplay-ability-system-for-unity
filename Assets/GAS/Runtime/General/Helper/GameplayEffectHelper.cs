@@ -220,6 +220,21 @@ namespace GAS.Runtime
             return Entity.Null;
         }
         
+        [BurstCompile]
+        public static Entity InstantiateEffectEntity(EntityManager entityManager,Entity prefabEffect,Entity targetAsc,Entity sourceAsc,int level=1)
+        {
+            var instanceGe = entityManager.Instantiate(prefabEffect);
+            entityManager.AddComponent<CEffectApplied>(instanceGe);
+            entityManager.AddComponent<CInApplicationProgress>(instanceGe);
+            entityManager.AddComponent<CEffectInUsage>(instanceGe);
+            entityManager.SetComponentData(instanceGe, new CEffectInUsage()
+            {
+                Level = level,
+                Target = targetAsc,
+                Source = sourceAsc,
+            });
+            return instanceGe;
+        }
         #region GameplayEffectConfig
 
         private static Func<int,GameplayEffectConfig> _getConfigByID;
