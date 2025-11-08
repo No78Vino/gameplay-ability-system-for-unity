@@ -50,38 +50,25 @@ namespace GAS.Runtime
         private static void CreateSystems()
         {
             // 创建基础系统组
-            var sgInitialization = ExWorld.CreateSystemManaged<InitializationSystemGroup>();
+            ExWorld.CreateSystemManaged<InitializationSystemGroup>();
             var sgSimulation = ExWorld.CreateSystemManaged<SimulationSystemGroup>();
-            var sgPresentation = ExWorld.CreateSystemManaged<PresentationSystemGroup>();
+            ExWorld.CreateSystemManaged<PresentationSystemGroup>();
             var sgFixedStepSimulation = ExWorld.CreateSystemManaged<FixedStepSimulationSystemGroup>();
             sgFixedStepSimulation.RateManager = new RateUtils.FixedRateSimpleManager(Time.fixedDeltaTime);
             sgSimulation.AddSystemToUpdateList(sgFixedStepSimulation);
-
-            // 创建系统组
+            
             //////////////////////// 逻辑 系统组 //////////////////////////////////
             var sgLogic = ExWorld.CreateSystemManaged<SGLogic>();
             sgFixedStepSimulation.AddSystemToUpdateList(sgLogic);
 
             var sgAbility = ExWorld.CreateSystemManaged<SGAbility>();
-            var sgAttribute = ExWorld.CreateSystemManaged<SysGrpAttribute>();
+            var sgAttribute = ExWorld.CreateSystemManaged<SGAttribute>();
             var sgEffect = ExWorld.CreateSystemManaged<SGEffect>();
+            sgLogic.AddSystemToUpdateList(ExWorld.CreateSystem<SGlobalTimer>());
             sgLogic.AddSystemToUpdateList(sgAbility);
             sgLogic.AddSystemToUpdateList(sgAttribute);
             sgLogic.AddSystemToUpdateList(sgEffect);
-
-            var sgLogicTick = ExWorld.CreateSystemManaged<SysGrpLogicTick>();
-            sgFixedStepSimulation.AddSystemToUpdateList(sgLogicTick);
-
-            var sgTickAbility = ExWorld.CreateSystemManaged<SysGrpTickAbility>();
-            sgLogicTick.AddSystemToUpdateList(sgTickAbility);
-
-            #region Core
-
-            sgLogic.AddSystemToUpdateList(
-                ExWorld.CreateSystem<SGlobalTimer>());
             sgLogic.SortSystems();
-
-            #endregion
 
             #region Ability
 
@@ -89,10 +76,8 @@ namespace GAS.Runtime
             sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryActivateAbility>());
             sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryCancelAbility>());
             sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<STryEndAbility>());
+            sgAbility.AddSystemToUpdateList(ExWorld.CreateSystem<SAbilityTick>());
             sgAbility.SortSystems();
-            // tick
-            sgTickAbility.AddSystemToUpdateList(ExWorld.CreateSystem<SAbilityTick>());
-            sgTickAbility.SortSystems();
 
             #endregion
 
@@ -112,6 +97,7 @@ namespace GAS.Runtime
             var sgEffectDestroy = ExWorld.CreateSystemManaged<SGEffectDestroy>();
             var sgEffectTick = ExWorld.CreateSystemManaged<SGEffectTick>();
             sgEffect.AddSystemToUpdateList(sgEffectCreate);
+
             sgEffect.AddSystemToUpdateList(sgEffectOperation);
             sgEffect.AddSystemToUpdateList(sgEffectDestroy);
             sgEffect.AddSystemToUpdateList(sgEffectTick);
@@ -120,16 +106,53 @@ namespace GAS.Runtime
             // 二级：
             // Create: InstantiateEffect
             var sgInstantiateEffect = ExWorld.CreateSystemManaged<SGInstantiateEffect>();
+            sgInstantiateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SInstantiateEffect>());
+            sgInstantiateEffect.SortSystems();
             sgEffectCreate.AddSystemToUpdateList(sgInstantiateEffect);
             sgEffectCreate.SortSystems();
 
             // Operation: CheckApply,Apply,CheckActivate,Activate,Deactivate,Remove
             var sgCheckApplyEffect = ExWorld.CreateSystemManaged<SGCheckApplyEffect>();
+            sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckApplicationCondition>());
+            sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckApplicationRequiredTags>());
+            sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckImmunityTags>());
+            sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckApplyEnd>());
+            sgCheckApplyEffect.SortSystems();
+
             var sgApplyEffect = ExWorld.CreateSystemManaged<SGApplyEffect>();
+            sgApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnApply>());
+            sgApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveEffectWithTags>());
+            sgApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SApplyEnd>());
+            sgApplyEffect.SortSystems();
+
             var sgCheckActivateEffect = ExWorld.CreateSystemManaged<SGCheckActivateEffect>();
+            sgCheckActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckEffectActive>());
+            sgCheckActivateEffect.SortSystems();
+
             var sgActivateEffect = ExWorld.CreateSystemManaged<SGActivateEffect>();
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SActivateEnd>());
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SAddGrantedAbility>());
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SAddModifiers>());
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectAddGrantedTags>());
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnActivate>());
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SSetEffectActive>());
+            sgActivateEffect.SortSystems();
+
             var sgDeactivateEffect = ExWorld.CreateSystemManaged<SGDeactivateEffect>();
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SDeactivateEnd>());
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveGrantedAbility>());
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveModifiers>());
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveGrantedTags>());
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnDeactivate>());
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SSetEffectDeactive>());
+            sgDeactivateEffect.SortSystems();
+
             var sgRemoveEffect = ExWorld.CreateSystemManaged<SGRemoveEffect>();
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveEnd>());
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnRemove>());
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveEffectFromAscBuffList>());
+            sgRemoveEffect.SortSystems();
+
             sgEffectOperation.AddSystemToUpdateList(sgCheckApplyEffect);
             sgEffectOperation.AddSystemToUpdateList(sgApplyEffect);
             sgEffectOperation.AddSystemToUpdateList(sgCheckActivateEffect);
@@ -138,44 +161,54 @@ namespace GAS.Runtime
             sgEffectOperation.AddSystemToUpdateList(sgRemoveEffect);
             sgEffectOperation.SortSystems();
 
-            // Destroy: KillEffect
-            var sgKillEffect = ExWorld.CreateSystemManaged<SGKillEffect>();
-            sgEffectDestroy.AddSystemToUpdateList(sgKillEffect);
+            // Destroy: DestroyEffect
+            sgEffectDestroy.AddSystemToUpdateList(ExWorld.CreateSystem<SDestroyEffects>());
             sgEffectDestroy.SortSystems();
 
             // Tick: RunningEffect
             var sgRunningEffect = ExWorld.CreateSystemManaged<SGRunningEffect>();
+            sgRunningEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectDurationTick>());
+            sgRunningEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectPeriodTick>());
+            sgRunningEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectStackingTick>());
+            sgRunningEffect.SortSystems();
             sgEffectTick.AddSystemToUpdateList(sgRunningEffect);
             sgEffectTick.SortSystems();
 
             // 三级：
             // Apply：InstantEffect,DurationalEffect
             var sgInstantEffectApply = ExWorld.CreateSystemManaged<SGInstantEffect>();
+            sgInstantEffectApply.AddSystemToUpdateList(ExWorld.CreateSystem<SExecuteInstantEffectModifiers>());
+            sgInstantEffectApply.AddSystemToUpdateList(ExWorld.CreateSystem<SExecuteInstantEffectEnd>());
+            sgInstantEffectApply.SortSystems();
+
             var sgDurationalEffectApply = ExWorld.CreateSystemManaged<SGDurationalEffect>();
+            sgDurationalEffectApply.AddSystemToUpdateList(ExWorld.CreateSystem<SAddEffectToAscBuffList>());
+            sgDurationalEffectApply.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckEffectStacking>());
+            sgDurationalEffectApply.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnAdd>());
+            sgDurationalEffectApply.SortSystems();
+
             sgApplyEffect.AddSystemToUpdateList(sgInstantEffectApply);
             sgApplyEffect.AddSystemToUpdateList(sgDurationalEffectApply);
             sgApplyEffect.SortSystems();
-
-            // Gameplay Effect 功能系统
 
             #endregion
 
 
             /////////////////////////// 表现 系统组 //////////////////////////////
-            var sgDisplay = ExWorld.CreateSystemManaged<SysGrpDisplay>();
-            sgSimulation.AddSystemToUpdateList(sgDisplay);
-            sgSimulation.SortSystems();
 
             #region Cue
 
+            var sgDisplay = ExWorld.CreateSystemManaged<SysGrpDisplay>();
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueStart>());
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueTick>());
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueEnd>());
             sgDisplay.AddSystemToUpdateList(ExWorld.CreateSystem<SCueDestroy>());
             sgDisplay.SortSystems();
 
+            sgSimulation.AddSystemToUpdateList(sgDisplay);
+            sgSimulation.SortSystems();
+
             #endregion
-            
 
             // 将world更新同步PlayerLoop
             ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);

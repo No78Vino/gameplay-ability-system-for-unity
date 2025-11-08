@@ -1,11 +1,10 @@
-using GAS.Runtime;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpTickAbility))]
+    [UpdateInGroup(typeof(SGAbility))]
+    [UpdateAfter(typeof(STryEndAbility))]
     public partial struct SAbilityTick : ISystem
     {
         [BurstCompile]

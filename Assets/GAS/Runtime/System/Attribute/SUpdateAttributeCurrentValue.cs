@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    [UpdateInGroup(typeof(SysGrpAttribute))]
+    [UpdateInGroup(typeof(SGAttribute))]
     public partial struct SUpdateAttributeCurrentValue : ISystem
     {
         [BurstCompile]

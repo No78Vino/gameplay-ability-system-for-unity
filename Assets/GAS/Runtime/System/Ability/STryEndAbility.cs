@@ -1,6 +1,4 @@
-using GAS.Runtime;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime

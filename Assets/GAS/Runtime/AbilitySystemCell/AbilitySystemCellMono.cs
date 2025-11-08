@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -9,14 +10,23 @@ namespace GAS.Runtime
         private void Awake()
         {
             _abilitySystemCell = new AbilitySystemCell();
-            EntityHelper.BindGameObjectToEntity(_abilitySystemCell.Entity, gameObject);
         }
 
         private void OnDestroy()
         {
-            EntityHelper.UnbindGameObjectToEntity(_abilitySystemCell.Entity);
             _abilitySystemCell.Dispose();
         }
+        
+        private void OnEnable()
+        {
+            EntityHelper.BindGameObjectToEntity(_abilitySystemCell.Entity, gameObject);
+        }
+
+        private void OnDisable()
+        {
+            EntityHelper.UnbindGameObjectToEntity(_abilitySystemCell.Entity);
+        }
+        
 
         public void Init(AbilitySystemCellConfig config)
         {

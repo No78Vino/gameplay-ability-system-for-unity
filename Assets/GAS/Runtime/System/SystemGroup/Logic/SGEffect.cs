@@ -109,16 +109,6 @@ namespace GAS.Runtime
 
     #endregion
     
-    #region 二级系统组Destroy: KillEffect
-
-    [DisableAutoCreation]
-    [UpdateInGroup(typeof(SGEffectDestroy))]
-    public partial class SGKillEffect : ComponentSystemGroup
-    {
-    }
-
-    #endregion
-    
     #region 二级系统组Tick: RunningEffect
 
     [DisableAutoCreation]
