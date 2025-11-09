@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1920,1080">
   <displayList>
-    <graph id="n18_fay3" name="n18" xy="-277,-42" size="2474,1165" type="rect" fillColor="#ff000000">
+    <graph id="n18_fay3" name="bg" xy="0,0" size="1920,1080" type="rect" fillColor="#00000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <text id="n19_fay3" name="n19" xy="699,358" size="521,79" fontSize="60" color="#ffffff" bold="true" text="Demo For EX-GAS"/>
-    <component id="n20_fay3" name="BtnStart" src="rfg09" fileName="Components/ButtonA.xml" xy="806,572" size="306,61">
+    <text id="n19_fay3" name="title" xy="861,77" size="1014,175" font="ui://vw8ofc6le6hec" fontSize="137" color="#ffffff" align="center" vAlign="middle" strokeColor="#000000" text="EX_GAS  DEMO"/>
+    <component id="n20_fay3" name="BtnStart" src="rfg09" fileName="Components/ButtonA.xml" xy="107,529" size="306,61">
       <Button title="开始游戏"/>
     </component>
-    <component id="n21_fay3" name="BtnQuit" src="rfg09" fileName="Components/ButtonA.xml" xy="807,741" size="306,61">
+    <component id="n21_fay3" name="BtnQuit" src="rfg09" fileName="Components/ButtonA.xml" xy="108,698" size="306,61">
       <Button title="退出游戏"/>
     </component>
-    <component id="n22_fay3" name="BtnGithub" src="rfg09" fileName="Components/ButtonA.xml" xy="807,890" size="306,61">
+    <component id="n22_fay3" name="BtnGithub" src="rfg09" fileName="Components/ButtonA.xml" xy="108,847" size="306,61">
       <Button title="访问插件github网站"/>
     </component>
   </displayList>

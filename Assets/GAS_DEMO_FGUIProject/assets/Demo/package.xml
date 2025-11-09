@@ -11,6 +11,7 @@
     <component id="rfg09" name="ButtonA.xml" path="/Components/" exported="true"/>
     <component id="fay3a" name="Setting.xml" path="/" exported="true"/>
     <component id="fay3b" name="Menu.xml" path="/" exported="true"/>
+    <font id="e6hec" name="sanjililiang_jianti_cu.ttf" path="/Resource/" renderMode="" samplePointSize="16"/>
   </resources>
-  <publish name="" path="C:\gameplay-ability-system-for-unity\Assets\Demo\Resources\FairyGUI\{publish_file_name}" packageCount="2"/>
+  <publish name="" path="F:\MyRepo\gameplay-ability-system-for-unity\Assets\DemoForESC\Resources\FGUI\{publish_file_name}" packageCount="2"/>
 </packageDescription>
