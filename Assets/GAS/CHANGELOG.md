@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-11-11
+
+重大更新，重构了GAS整体的实现逻辑，变为ECS结构。基于DOTS重新实现了GAS的交互逻辑。
+优化了数据分层，舍弃了ScriptableObject的配置方式，改为纯配置表配置。
+
+### Changed
+
+- 进行了一系列的优化
+
 ## [1.1.8] - 2024-07-30
 
 进行了一系列的优化。（From: BCC @kenkinky）
