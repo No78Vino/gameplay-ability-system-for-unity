@@ -1,0 +1,36 @@
+{
+    "FileVersion": "2025.9.30",
+    "EnableAddressable": true,
+    "SupportExtensionless": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "ReplaceAssetPathWithAddress": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 2,
+    "BuildPipeline": "ScriptableBuildPipeline",
+    "PackageName": "MainPackage",
+    "PackageVersion": "2025-11-15-1418",
+    "PackageNote": "2025/11/15 23:38:59",
+    "AssetList": [
+        {
+            "Address": "设计游戏工作室 logo",
+            "AssetPath": "Assets/Resources/UI/Atlas/设计游戏工作室 logo.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "mainpackage_assets_resources_ui_atlas_设计游戏工作室_logo.bundle",
+            "UnityCRC": 2328278975,
+            "FileHash": "8d078863a99c0f79050b6f87908cddf3",
+            "FileCRC": 3070594383,
+            "FileSize": 136439,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

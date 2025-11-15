@@ -18,7 +18,7 @@ MonoBehaviour:
   Packages:
   - PackageName: MainPackage
     PackageDesc: 
-    EnableAddressable: 0
+    EnableAddressable: 1
     SupportExtensionless: 1
     LocationToLower: 0
     IncludeAssetGUID: 0
@@ -29,4 +29,12 @@ MonoBehaviour:
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
-      Collectors: []
+      Collectors:
+      - CollectPath: Assets/Resources/UI
+        CollectorGUID: 434c5358a0c0a214881b01c06d09b081
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
