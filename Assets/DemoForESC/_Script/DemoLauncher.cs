@@ -1,5 +1,6 @@
 using GAS.Runtime;
 using UnityEngine;
+using XYooAsset;
 
 namespace DemoForESC._Script
 {
@@ -9,6 +10,7 @@ namespace DemoForESC._Script
         {
             XLauncher.Launch();
             GASManager.Run();
+            XYooAssetManager.Instance.Initialize("MainPackage");
             
             // 自身设置为不随场景切换而销毁
             DontDestroyOnLoad(gameObject);
@@ -20,7 +22,8 @@ namespace DemoForESC._Script
         private void LoadMainScene()
         {
             // 示例：加载主场景
-            UnityEngine.SceneManagement.SceneManager.LoadScene("DemoForECS");
+            // UnityEngine.SceneManagement.SceneManager.LoadScene(DemoForECS);
+            XYoo.LoadSceneAsync("DemoForECS",null);
         }
     }
 }

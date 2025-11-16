@@ -1,0 +1,35 @@
+{
+    "FileVersion": "1.0.0",
+    "PackageName": "MainPackage",
+    "PackageVersion": "2025-11-16-1054",
+    "Wrappers": [
+        {
+            "BundleGUID": "0b4555ae90d23951911ef5c56a511ba7",
+            "FileName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle"
+        },
+        {
+            "BundleGUID": "def787632249e4cf79831127e2b3693c",
+            "FileName": "mainpackage_assets_demoforesc_scene.bundle"
+        },
+        {
+            "BundleGUID": "a5e0f9f2a10b5cca2d5360d3031578b0",
+            "FileName": "mainpackage_share_assets_demoforesc_resources_animation.bundle"
+        },
+        {
+            "BundleGUID": "34583833b7e5f6df77730f700ac63826",
+            "FileName": "mainpackage_share_assets_demoforesc_resources_texture.bundle"
+        },
+        {
+            "BundleGUID": "818fb07ee2b350713c710da1156d3f34",
+            "FileName": "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle"
+        },
+        {
+            "BundleGUID": "25271fefa15ecf2a607c2111f2104c89",
+            "FileName": "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle"
+        },
+        {
+            "BundleGUID": "1b048f930d5a352afdf3cf90ea9e3bf4",
+            "FileName": "mainpackage_unityshaders.bundle"
+        }
+    ]
+}

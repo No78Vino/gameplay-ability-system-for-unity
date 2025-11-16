@@ -21,7 +21,7 @@ MonoBehaviour:
     EnableAddressable: 1
     SupportExtensionless: 1
     LocationToLower: 0
-    IncludeAssetGUID: 0
+    IncludeAssetGUID: 1
     AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
@@ -30,11 +30,24 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Resources/UI
+      - CollectPath: Assets/DemoForESC/Resources/UI
         CollectorGUID: 434c5358a0c0a214881b01c06d09b081
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Scene
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/DemoForESC/Scene
+        CollectorGUID: d83f606903ea15348bca4a8b6a2df301
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

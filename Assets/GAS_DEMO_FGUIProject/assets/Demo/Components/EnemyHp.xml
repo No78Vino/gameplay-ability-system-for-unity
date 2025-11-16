@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="605,42">
-  <displayList>
-    <text id="n0_jair" name="name" xy="0,0" size="254,42" fontSize="30" color="#cc6600" autoSize="none" strokeColor="#000000" text="enemy name"/>
-    <component id="n1_jair" name="hp" src="jair1" fileName="Components/HpBar.xml" xy="260,15" size="345,21">
-      <ProgressBar value="50" max="100"/>
-    </component>
-  </displayList>
-</component>

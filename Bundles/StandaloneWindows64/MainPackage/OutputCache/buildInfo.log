@@ -1,35 +1,36 @@
-﻿2025-11-15 23:38:59.599 [INFO] Begin to build package : MainPackage by ScriptableBuildPipeline
-2025-11-15 23:38:59.599 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
-2025-11-15 23:38:59.611 [INFO] Delete package root directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage
-2025-11-15 23:38:59.612 [INFO] Create pipeline output directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/OutputCache
-2025-11-15 23:38:59.612 [INFO] TaskPrepare It takes 0 seconds in total
-2025-11-15 23:38:59.614 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
-2025-11-15 23:39:34.511 [INFO] TaskGetBuildMap It takes 34 seconds in total
-2025-11-15 23:39:34.511 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
-2025-11-15 23:39:50.147 [INFO] UnityEngine build success!
-2025-11-15 23:39:50.148 [INFO] TaskBuilding It takes 15 seconds in total
-2025-11-15 23:39:50.148 [INFO] --------------------------------------------->TaskVerifyBuildResult<--------------------------------------------
-2025-11-15 23:39:50.153 [INFO] Build results verify success!
-2025-11-15 23:39:50.153 [INFO] TaskVerifyBuildResult It takes 0 seconds in total
-2025-11-15 23:39:50.153 [INFO] --------------------------------------------->TaskEncryption<--------------------------------------------
-2025-11-15 23:39:50.154 [INFO] TaskEncryption It takes 0 seconds in total
-2025-11-15 23:39:50.154 [INFO] --------------------------------------------->TaskUpdateBundleInfo<--------------------------------------------
-2025-11-15 23:39:50.176 [INFO] TaskUpdateBundleInfo It takes 0 seconds in total
-2025-11-15 23:39:50.176 [INFO] --------------------------------------------->TaskCreateManifest<--------------------------------------------
-2025-11-15 23:39:50.293 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-15-1418/MainPackage_2025-11-15-1418.json
-2025-11-15 23:39:50.340 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-15-1418/MainPackage_2025-11-15-1418.bytes
-2025-11-15 23:39:50.342 [INFO] Create package manifest hash file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-15-1418/MainPackage_2025-11-15-1418.hash
-2025-11-15 23:39:50.346 [INFO] Create package manifest version file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-15-1418/MainPackage.version
-2025-11-15 23:39:50.378 [INFO] TaskCreateManifest It takes 0 seconds in total
-2025-11-15 23:39:50.378 [INFO] --------------------------------------------->TaskCreateReport<--------------------------------------------
-2025-11-15 23:39:50.387 [INFO] Create build report file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-15-1418/MainPackage_2025-11-15-1418.report
-2025-11-15 23:39:50.387 [INFO] TaskCreateReport It takes 0 seconds in total
-2025-11-15 23:39:50.387 [INFO] --------------------------------------------->TaskCreatePackage<--------------------------------------------
-2025-11-15 23:39:50.388 [INFO] Start making patch package: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-15-1418
-2025-11-15 23:39:50.392 [INFO] TaskCreatePackage It takes 0 seconds in total
-2025-11-15 23:39:50.393 [INFO] --------------------------------------------->TaskCopyBuildinFiles<--------------------------------------------
-2025-11-15 23:39:50.394 [INFO] TaskCopyBuildinFiles It takes 0 seconds in total
-2025-11-15 23:39:50.394 [INFO] --------------------------------------------->TaskCreateCatalog<--------------------------------------------
-2025-11-15 23:39:50.395 [INFO] TaskCreateCatalog It takes 0 seconds in total
-2025-11-15 23:39:50.395 [INFO] Total build process time: 49 seconds
-2025-11-15 23:39:50.395 [INFO] Resource pipeline build success
+﻿2025-11-16 17:34:24.159 [INFO] Begin to build package : MainPackage by ScriptableBuildPipeline
+2025-11-16 17:34:24.160 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
+2025-11-16 17:34:24.196 [INFO] Delete package root directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage
+2025-11-16 17:34:24.198 [INFO] Create pipeline output directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/OutputCache
+2025-11-16 17:34:24.199 [INFO] TaskPrepare It takes 0 seconds in total
+2025-11-16 17:34:24.199 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
+2025-11-16 17:34:26.444 [INFO] TaskGetBuildMap It takes 2 seconds in total
+2025-11-16 17:34:26.445 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
+2025-11-16 17:34:42.027 [INFO] UnityEngine build success!
+2025-11-16 17:34:42.028 [INFO] TaskBuilding It takes 15 seconds in total
+2025-11-16 17:34:42.028 [INFO] --------------------------------------------->TaskVerifyBuildResult<--------------------------------------------
+2025-11-16 17:34:42.030 [INFO] Build results verify success!
+2025-11-16 17:34:42.030 [INFO] TaskVerifyBuildResult It takes 0 seconds in total
+2025-11-16 17:34:42.030 [INFO] --------------------------------------------->TaskEncryption<--------------------------------------------
+2025-11-16 17:34:42.031 [INFO] TaskEncryption It takes 0 seconds in total
+2025-11-16 17:34:42.031 [INFO] --------------------------------------------->TaskUpdateBundleInfo<--------------------------------------------
+2025-11-16 17:34:42.088 [INFO] TaskUpdateBundleInfo It takes 0 seconds in total
+2025-11-16 17:34:42.088 [INFO] --------------------------------------------->TaskCreateManifest<--------------------------------------------
+2025-11-16 17:34:42.100 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.json
+2025-11-16 17:34:42.122 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.bytes
+2025-11-16 17:34:42.123 [INFO] Create package manifest hash file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.hash
+2025-11-16 17:34:42.124 [INFO] Create package manifest version file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage.version
+2025-11-16 17:34:42.129 [INFO] TaskCreateManifest It takes 0 seconds in total
+2025-11-16 17:34:42.130 [INFO] --------------------------------------------->TaskCreateReport<--------------------------------------------
+2025-11-16 17:34:42.145 [INFO] Create build report file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.report
+2025-11-16 17:34:42.145 [INFO] TaskCreateReport It takes 0 seconds in total
+2025-11-16 17:34:42.145 [INFO] --------------------------------------------->TaskCreatePackage<--------------------------------------------
+2025-11-16 17:34:42.146 [INFO] Start making patch package: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054
+2025-11-16 17:34:42.155 [INFO] TaskCreatePackage It takes 0 seconds in total
+2025-11-16 17:34:42.155 [INFO] --------------------------------------------->TaskCopyBuildinFiles<--------------------------------------------
+2025-11-16 17:34:43.302 [INFO] Buildin files copy complete: F:/MyRepo/gameplay-ability-system-for-unity/Assets/StreamingAssets/yoo/MainPackage
+2025-11-16 17:34:43.302 [INFO] TaskCopyBuildinFiles It takes 1 seconds in total
+2025-11-16 17:34:43.302 [INFO] --------------------------------------------->TaskCreateCatalog<--------------------------------------------
+2025-11-16 17:34:43.917 [INFO] TaskCreateCatalog It takes 0 seconds in total
+2025-11-16 17:34:43.917 [INFO] Total build process time: 18 seconds
+2025-11-16 17:34:43.917 [INFO] Resource pipeline build success
