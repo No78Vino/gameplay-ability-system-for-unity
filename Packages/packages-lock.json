@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "5cc97c7f0085624b6ef57853d70b404440060cef"
     },
-    "com.exhard.exmaidforui": {
-      "version": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "b469ae66a33df51d1f5a9aa01f2213ea5826400f"
-    },
     "com.exhard.exopensourcepluginmanager": {
       "version": "https://gitee.com/exhard/EX_Toy_Lib.git?path=Assets/ExOpenSourcePluginManager",
       "depth": 0,
