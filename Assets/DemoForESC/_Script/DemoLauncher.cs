@@ -1,6 +1,7 @@
 using GAS.Runtime;
 using UnityEngine;
 using XYooAsset;
+using YooAsset;
 
 namespace DemoForESC._Script
 {
@@ -21,9 +22,18 @@ namespace DemoForESC._Script
         
         private void LoadMainScene()
         {
-            // 示例：加载主场景
-            // UnityEngine.SceneManagement.SceneManager.LoadScene(DemoForECS);
-            XYoo.LoadSceneAsync("DemoForECS",null);
+            //加载主场景
+            XYoo.LoadSceneAsync("DemoForECS",OnMainSceneLoaded);
+        }
+
+        private void OnMainSceneLoaded(SceneHandle sceneHandle)
+        {
+            // 主场景加载完成后的逻辑
+            Debug.Log("主场景加载完成");
+            // 1.加载菜单UI
+            // 2.镜头布局
+            // 2.场景资源加载
+            
         }
     }
 }
