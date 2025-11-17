@@ -4,13 +4,19 @@ using Loxodon.Framework.ViewModels;
 
 public class ViewModelCommon : ViewModelBase
 {
-    public InteractionRequest<string> transitionRequest = new InteractionRequest<string>();
-    public InteractionRequest<string> commonRequest = new InteractionRequest<string>();
+    public InteractionRequest<string> request = new InteractionRequest<string>();
 
     /// <summary>
     /// UI打开回调
     /// </summary>
-    public virtual void OnOpen()
+    public virtual void OnShow()
+    {
+    }
+    
+    /// <summary>
+    /// UI关闭回调
+    /// </summary>
+    public virtual void OnHide()
     {
     }
     
@@ -19,7 +25,6 @@ public class ViewModelCommon : ViewModelBase
     /// </summary>
     public virtual void Update_s()
     {
-        
     }
     
     /// <summary>
@@ -27,9 +32,13 @@ public class ViewModelCommon : ViewModelBase
     /// </summary>
     public virtual void Update_f()
     {
-        
     }
 
-    public virtual void OnLoaded(){ }
-    public virtual void OnUnload(){}
+    public virtual void OnLoaded()
+    {
+    }
+
+    public virtual void OnUnload()
+    {
+    }
 }
