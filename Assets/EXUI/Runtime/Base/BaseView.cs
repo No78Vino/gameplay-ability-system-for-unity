@@ -1,21 +1,14 @@
 using Loxodon.Framework.Binding;
-using Loxodon.Framework.Binding.Builder;
 using Loxodon.Framework.Binding.Contexts;
-using Loxodon.Framework.Contexts;
 using Loxodon.Framework.Interactivity;
 using Loxodon.Framework.Views;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace FairyGUI.Extension
+namespace EXUI
 {
-    public abstract class BaseView<T> : UIView  where T : ViewModelCommon
+    public abstract class BaseView: UIView
     {
-        protected string _name;
-        public string Name => _name;
-        
-        protected string _prefabPath;
-        public string PrefabPath => _prefabPath;
+        protected IBindingContext _bindingContext;
 
         /// <summary>
         ///     是否全屏
@@ -23,44 +16,23 @@ namespace FairyGUI.Extension
         protected bool _isFullScreen;
 
         /// <summary>
-        /// 是否为模态窗口
+        ///     是否为模态窗口
         /// </summary>
         protected bool _isModal;
 
-        protected IBindingContext _bindingContext;
+        protected string _name;
 
-        // // UI控件引用
-        // // 静态：只执行一次绑定和同步
-        // public Text title;
-        //
-        // // 动态：执行 双向/单向/逆向 绑定和同步
-        // public Text username;
+        protected string _prefabPath;
+        
+        public string Name => _name;
+        public string PrefabPath => _prefabPath;
 
-        protected T _vm;
-        public T VM => _vm;
+        protected ViewModelCommon _viewModel;
+        public ViewModelCommon ViewModel => _viewModel;
 
-        private IBindingContext BindingContext
+        protected IBindingContext BindingContext
         {
             get { return _bindingContext ??= this.BindingContext(); }
-        }
-
-        public virtual void Init<TView>(string viewName, T vm) 
-            where TView:BaseView<T>
-        {
-            _name = viewName;
-            _vm = vm;
-            //将视图模型赋值到DataContext
-            BindingContext.DataContext = _vm;
-
-            // 动态绑定
-            BindingSet<TView, T> dynamicBindingSet = this.CreateBindingSet<TView, T>();
-            BindDynamic(dynamicBindingSet);
-            dynamicBindingSet.Build();
-            
-            // 静态绑定
-            BindingSet<TView> staticBindingSet = this.CreateBindingSet<TView>();
-            BindStatic(staticBindingSet);
-            staticBindingSet.Build();
         }
 
         public virtual void Show()
@@ -68,29 +40,15 @@ namespace FairyGUI.Extension
             gameObject.SetActive(true);
             PlayShowAnim();
         }
-        
+
         public virtual void Hide()
         {
             PlayHideAnim();
         }
-        
-        protected virtual void OnShow()
-        {
-            _vm.OnShow();
-        }
-
-        protected virtual void OnHide()
-        {
-            _vm.OnHide();
-        }
 
         protected virtual void OnHideAnimEnd()
         {
-            gameObject.SetActive(false);    
-        }
-        
-        public virtual void OnDispose()
-        {
+            gameObject.SetActive(false);
         }
 
         public virtual void PlayShowAnim()
@@ -101,7 +59,7 @@ namespace FairyGUI.Extension
         {
             OnHideAnimEnd();
         }
-        
+
         protected virtual void OnReceiveMessage(object sender, InteractionEventArgs args)
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -110,18 +68,58 @@ namespace FairyGUI.Extension
 #endif
         }
 
-        /// <summary>
-        /// 绑定动态同步的视图属性和模型数据
-        ///  bindingSet.Bind(xxx).For(v => v.attr).To(vm => vm.data).OneWay();
-        ///  bindingSet.Bind(xxx).For(v => v.attr).To(vm => vm.data).TwoWay();
-        ///  bindingSet.Bind(xxx).For(v => v.attr).To(vm => vm.data).OneWayToSource();
-        /// </summary>
-        protected abstract void BindDynamic(BindingSet<TView, T> bindingSet) where TView:BaseView<T>;
+        public bool IsShowing => gameObject.activeSelf;
         
+        public virtual void DestroySelf()
+        {
+            Destroy(gameObject);
+        }
+
         /// <summary>
-        /// 绑定静态的视图属性和模型数据（只初始化一次的显示属性）
-        ///  bindingSet.Bind(xxx).For(v => v.attr).To(vm => vm.data).OneTime();
+        ///     BehaviourBindingExtension
+        ///     // 动态绑定
+        ///     BindingSet
+        ///     <TView, T>
+        ///         dynamicBindingSet = this.CreateBindingSet
+        ///         <TView, T>
+        ///             ();
+        ///             BindDynamic(dynamicBindingSet);
+        ///             dynamicBindingSet.Build();
+        ///             // 静态绑定
+        ///             BindingSet
+        ///             <TView>
+        ///                 staticBindingSet = this.CreateBindingSet
+        ///                 <TView>
+        ///                     ();
+        ///                     BindStatic(staticBindingSet);
+        ///                     staticBindingSet.Build();
         /// </summary>
-        protected abstract void BindStatic(BindingSet<TView> bindingSet) where TView:BaseView<T>;
+        protected abstract void BindData();
+    }
+
+    public abstract class BaseView<T> : BaseView where T : ViewModelCommon
+    {
+        protected T _vm;
+        public T VM => _vm;
+        
+        protected virtual void OnShow()
+        {
+            _vm.OnShow();
+        }
+
+        protected virtual void OnHide()
+        {
+            _vm.OnHide();
+        }
+        
+        public virtual void Init(string viewName, T vm)
+        {
+            _name = viewName;
+            _vm = vm;
+            //将视图模型赋值到DataContext
+            BindingContext.DataContext = _vm;
+            // 绑定
+            BindData();
+        }
     }
 }
