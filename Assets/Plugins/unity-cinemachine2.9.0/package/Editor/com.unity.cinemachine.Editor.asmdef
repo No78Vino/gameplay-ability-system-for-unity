@@ -1,0 +1,91 @@
+{
+    "name": "com.unity.cinemachine.editor",
+    "rootNamespace": "",
+    "references": [
+        "Cinemachine",
+        "Unity.Timeline",
+        "Unity.Timeline.Editor",
+        "Unity.Postprocessing.Runtime",
+        "Unity.Postprocessing.Editor",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Core.Editor",
+        "Unity.RenderPipelines.HighDefinition.Runtime",
+        "Unity.RenderPipelines.HighDefinition.Editor",
+        "Unity.ugui",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.Editor",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.postprocessing",
+            "expression": "2.1.0",
+            "define": "CINEMACHINE_POST_PROCESSING_V2"
+        },
+        {
+            "name": "com.unity.timeline",
+            "expression": "0.0.0-builtin",
+            "define": "CINEMACHINE_TIMELINE"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "5.3.1",
+            "define": "CINEMACHINE_HDRP"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "7.3.1",
+            "define": "CINEMACHINE_HDRP_7_3_1"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_PHYSICS_2D"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_PHYSICS"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UGUI"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "7.3.1",
+            "define": "CINEMACHINE_LWRP_7_3_1"
+        },
+        {
+            "name": "com.unity.timeline",
+            "expression": "1.5.0-preview.5",
+            "define": "CINEMACHINE_TIMELINE_1_5_0"
+        },
+        {
+            "name": "com.unity.modules.animation",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UNITY_ANIMATION"
+        },
+        {
+            "name": "com.unity.modules.imgui",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UNITY_IMGUI"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UNITY_INPUTSYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

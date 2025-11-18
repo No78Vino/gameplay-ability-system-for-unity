@@ -1,0 +1,85 @@
+{
+    "name": "Cinemachine",
+    "references": [
+        "Unity.Timeline",
+        "Unity.Postprocessing.Runtime",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.HighDefinition.Runtime",
+        "Unity.ugui",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.2D.PixelPerfect",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "clipper_library.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.postprocessing",
+            "expression": "2.1.0",
+            "define": "CINEMACHINE_POST_PROCESSING_V2"
+        },
+        {
+            "name": "com.unity.timeline",
+            "expression": "0.0.0-builtin",
+            "define": "CINEMACHINE_TIMELINE"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "5.3.1",
+            "define": "CINEMACHINE_HDRP"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "7.3.1",
+            "define": "CINEMACHINE_HDRP_7_3_1"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_PHYSICS_2D"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_PHYSICS"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UGUI"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "7.3.1",
+            "define": "CINEMACHINE_LWRP_7_3_1"
+        },
+        {
+            "name": "com.unity.2d.pixel-perfect",
+            "expression": "2.0.3",
+            "define": "CINEMACHINE_PIXEL_PERFECT_2_0_3"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0-preview",
+            "define": "CINEMACHINE_UNITY_INPUTSYSTEM"
+        },
+        {
+            "name": "com.unity.modules.animation",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UNITY_ANIMATION"
+        },
+        {
+            "name": "com.unity.modules.imgui",
+            "expression": "1.0.0",
+            "define": "CINEMACHINE_UNITY_IMGUI"
+        }
+    ],
+    "noEngineReferences": false
+}

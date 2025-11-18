@@ -48,8 +48,13 @@ namespace EXUI
             var path = _viewPrefabPathMap[typeof(TView)];
             var prefab = PrefabLoadHandle(path);
             var instance = Object.Instantiate(prefab);
-            var view = instance.getadd
-            return view
+            TView view;
+            if (!instance.TryGetComponent(typeof(TView),out var com))
+                view = com as TView;
+            else
+                view = instance.AddComponent<TView>();
+            
+            return view;
         }
         
         public TView LoadWindow<TView>(string name = null) where TView : BaseView

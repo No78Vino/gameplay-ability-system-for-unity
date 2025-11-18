@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f59e54f2bfd184b9dd451a678d089b, type: 3}
+  m_Name: 6D Wobble
+  m_EditorClassIdentifier: 
+  PositionNoise:
+  - X:
+      Frequency: 3.2
+      Amplitude: 0.35
+      Constant: 0
+    Y:
+      Frequency: 1.9
+      Amplitude: 0.35
+      Constant: 0
+    Z:
+      Frequency: 3.33
+      Amplitude: 0.39
+      Constant: 0
+  - X:
+      Frequency: 12.77
+      Amplitude: 0.09
+      Constant: 0
+    Y:
+      Frequency: 9.8
+      Amplitude: 0.23
+      Constant: 0
+    Z:
+      Frequency: 9.9
+      Amplitude: 0.18
+      Constant: 0
+  - X:
+      Frequency: 9.8
+      Amplitude: 0.08
+      Constant: 0
+    Y:
+      Frequency: 10.21
+      Amplitude: 0.2
+      Constant: 0
+    Z:
+      Frequency: 16.12
+      Amplitude: 0.2
+      Constant: 0
+  OrientationNoise:
+  - X:
+      Frequency: 5.2
+      Amplitude: 0.987
+      Constant: 0
+    Y:
+      Frequency: 5.39
+      Amplitude: 1.34
+      Constant: 0
+    Z:
+      Frequency: 2.23
+      Amplitude: 2
+      Constant: 0
+  - X:
+      Frequency: 9.17
+      Amplitude: 0.73
+      Constant: 0
+    Y:
+      Frequency: 11.35
+      Amplitude: 0.86
+      Constant: 0
+    Z:
+      Frequency: 8.31
+      Amplitude: 0.51
+      Constant: 0
+  - X:
+      Frequency: 13.52
+      Amplitude: 0.78
+      Constant: 0
+    Y:
+      Frequency: 27.66
+      Amplitude: 0.55
+      Constant: 0
+    Z:
+      Frequency: 18.91
+      Amplitude: 0.28
+      Constant: 0

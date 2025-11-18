@@ -1,0 +1,60 @@
+#include "StdLib.hlsl"
+
+RWStructuredBuffer<uint4> _WaveformBuffer;
+Texture2D<float4> _Source;
+SamplerState sampler_Source;
+
+cbuffer name
+{
+    float4 _Params; // x: source width, y: source height, z: linear, w: histogramResolution
+};
+
+#if defined SHADER_API_GLES3
+    #define GROUP_SIZE 128
+    #define GROUP_SIZE_X 16
+    #define GROUP_SIZE_Y 8
+#else
+    #define GROUP_SIZE 256
+    #define GROUP_SIZE_X 16
+    #define GROUP_SIZE_Y 16
+#endif
+
+half3 LinearToSRGB(half3 c)
+{
+	half3 sRGBLo = c * 12.92;
+	half3 sRGBHi = (PositivePow(c, half3(1.0 / 2.4, 1.0 / 2.4, 1.0 / 2.4)) * 1.055) - 0.055;
+	half3 sRGB = (c <= 0.0031308) ? sRGBLo : sRGBHi;
+	return sRGB;
+}
+
+#pragma kernel KCMWaveformGather
+[numthreads(1, GROUP_SIZE, 1)]
+void KCMWaveformGather(uint2 dispatchThreadId : SV_DispatchThreadID)
+{
+    // Gather local group histogram
+    if (dispatchThreadId.x < uint(_Params.x) && dispatchThreadId.y < uint(_Params.y))
+    {
+        float3 color = _Source[dispatchThreadId].rgb;
+        color = saturate(color);
+
+        // We want a gamma-corrected histogram (like Photoshop & all)
+        if (_Params.z > 0)
+            color = LinearToSRGB(color);
+
+        // Convert channel values to histogram bins
+        uint3 idx = (uint3)(round(color * (_Params.w - 1)));
+        idx += dispatchThreadId.x * _Params.w;
+
+        if (idx.x > 0u) InterlockedAdd(_WaveformBuffer[idx.x].x, 1u); // Red
+        if (idx.y > 0u) InterlockedAdd(_WaveformBuffer[idx.y].y, 1u); // Green
+        if (idx.z > 0u) InterlockedAdd(_WaveformBuffer[idx.z].z, 1u); // Blue
+    }
+}
+
+#pragma kernel KCMWaveformClear
+[numthreads(GROUP_SIZE_X, GROUP_SIZE_Y, 1)]
+void KCMWaveformClear(uint2 dispatchThreadId : SV_DispatchThreadID)
+{
+    if (dispatchThreadId.x < uint(_Params.x) && dispatchThreadId.y < uint(_Params.w))
+        _WaveformBuffer[dispatchThreadId.y * uint(_Params.x) + dispatchThreadId.x] = uint4(0u, 0u, 0u, 0u);
+}
