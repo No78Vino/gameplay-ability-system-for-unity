@@ -1,36 +1,14 @@
-﻿2025-11-16 17:34:24.159 [INFO] Begin to build package : MainPackage by ScriptableBuildPipeline
-2025-11-16 17:34:24.160 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
-2025-11-16 17:34:24.196 [INFO] Delete package root directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage
-2025-11-16 17:34:24.198 [INFO] Create pipeline output directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/OutputCache
-2025-11-16 17:34:24.199 [INFO] TaskPrepare It takes 0 seconds in total
-2025-11-16 17:34:24.199 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
-2025-11-16 17:34:26.444 [INFO] TaskGetBuildMap It takes 2 seconds in total
-2025-11-16 17:34:26.445 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
-2025-11-16 17:34:42.027 [INFO] UnityEngine build success!
-2025-11-16 17:34:42.028 [INFO] TaskBuilding It takes 15 seconds in total
-2025-11-16 17:34:42.028 [INFO] --------------------------------------------->TaskVerifyBuildResult<--------------------------------------------
-2025-11-16 17:34:42.030 [INFO] Build results verify success!
-2025-11-16 17:34:42.030 [INFO] TaskVerifyBuildResult It takes 0 seconds in total
-2025-11-16 17:34:42.030 [INFO] --------------------------------------------->TaskEncryption<--------------------------------------------
-2025-11-16 17:34:42.031 [INFO] TaskEncryption It takes 0 seconds in total
-2025-11-16 17:34:42.031 [INFO] --------------------------------------------->TaskUpdateBundleInfo<--------------------------------------------
-2025-11-16 17:34:42.088 [INFO] TaskUpdateBundleInfo It takes 0 seconds in total
-2025-11-16 17:34:42.088 [INFO] --------------------------------------------->TaskCreateManifest<--------------------------------------------
-2025-11-16 17:34:42.100 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.json
-2025-11-16 17:34:42.122 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.bytes
-2025-11-16 17:34:42.123 [INFO] Create package manifest hash file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.hash
-2025-11-16 17:34:42.124 [INFO] Create package manifest version file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage.version
-2025-11-16 17:34:42.129 [INFO] TaskCreateManifest It takes 0 seconds in total
-2025-11-16 17:34:42.130 [INFO] --------------------------------------------->TaskCreateReport<--------------------------------------------
-2025-11-16 17:34:42.145 [INFO] Create build report file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054/MainPackage_2025-11-16-1054.report
-2025-11-16 17:34:42.145 [INFO] TaskCreateReport It takes 0 seconds in total
-2025-11-16 17:34:42.145 [INFO] --------------------------------------------->TaskCreatePackage<--------------------------------------------
-2025-11-16 17:34:42.146 [INFO] Start making patch package: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2025-11-16-1054
-2025-11-16 17:34:42.155 [INFO] TaskCreatePackage It takes 0 seconds in total
-2025-11-16 17:34:42.155 [INFO] --------------------------------------------->TaskCopyBuildinFiles<--------------------------------------------
-2025-11-16 17:34:43.302 [INFO] Buildin files copy complete: F:/MyRepo/gameplay-ability-system-for-unity/Assets/StreamingAssets/yoo/MainPackage
-2025-11-16 17:34:43.302 [INFO] TaskCopyBuildinFiles It takes 1 seconds in total
-2025-11-16 17:34:43.302 [INFO] --------------------------------------------->TaskCreateCatalog<--------------------------------------------
-2025-11-16 17:34:43.917 [INFO] TaskCreateCatalog It takes 0 seconds in total
-2025-11-16 17:34:43.917 [INFO] Total build process time: 18 seconds
-2025-11-16 17:34:43.917 [INFO] Resource pipeline build success
+﻿2025-11-18 23:39:54.830 [INFO] Begin to build package : MainPackage by ScriptableBuildPipeline
+2025-11-18 23:39:54.830 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
+2025-11-18 23:39:54.854 [INFO] Delete package root directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage
+2025-11-18 23:39:54.855 [INFO] Create pipeline output directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/OutputCache
+2025-11-18 23:39:54.856 [INFO] TaskPrepare It takes 0 seconds in total
+2025-11-18 23:39:54.856 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
+2025-11-18 23:39:57.196 [INFO] TaskGetBuildMap It takes 2 seconds in total
+2025-11-18 23:39:57.196 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
+2025-11-18 23:40:05.657 [INFO] Total build process time: 2 seconds
+2025-11-18 23:40:05.657 [ERROR] ScriptableBuildPipeline build failed !
+2025-11-18 23:40:05.657 [ERROR] An error occurred in build task TaskBuilding_SBP
+2025-11-18 23:40:05.658 [ERROR] System.Exception: [ErrorCode300] UnityEngine build failed ! ReturnCode : Exception
+  at YooAsset.Editor.TaskBuilding_SBP.YooAsset.Editor.IBuildTask.Run (YooAsset.Editor.BuildContext context) [0x00090] in F:\MyRepo\gameplay-ability-system-for-unity\Assets\Plugins\YooAsset\Editor\AssetBundleBuilder\BuildPipeline\ScriptableBuildPipeline\BuildTasks\TaskBuilding_SBP.cs:40 
+  at YooAsset.Editor.BuildRunner.Run (System.Collections.Generic.List`1[T] pipeline, YooAsset.Editor.BuildContext context) [0x00085] in F:\MyRepo\gameplay-ability-system-for-unity\Assets\Plugins\YooAsset\Editor\AssetBundleBuilder\BuildSystem\BuildRunner.cs:41 

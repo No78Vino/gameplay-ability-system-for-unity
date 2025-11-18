@@ -1,0 +1,80 @@
+{
+    "FileVersion": "2025.9.30",
+    "EnableAddressable": true,
+    "SupportExtensionless": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": true,
+    "ReplaceAssetPathWithAddress": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 1,
+    "BuildPipeline": "EditorSimulateBuildPipeline",
+    "PackageName": "MainPackage",
+    "PackageVersion": "Simulate",
+    "PackageNote": "2025/11/18 23:50:14",
+    "AssetList": [
+        {
+            "Address": "logo",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/logo.png",
+            "AssetGUID": "23e2312f2a7b9ef4b8c66890dc2c3b4a",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "DemoForECS",
+            "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
+            "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "ReflectionProbe-0",
+            "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
+            "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Init",
+            "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
+            "AssetGUID": "edac8363a1c534b4799e555f89a24386",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle",
+            "UnityCRC": 0,
+            "FileHash": "ec6f21a8b59c046b9fcd33097d22457f",
+            "FileCRC": 0,
+            "FileSize": 283023,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "UnityCRC": 0,
+            "FileHash": "09f7730a0f7920446b1d2e51f61e91ea",
+            "FileCRC": 0,
+            "FileSize": 164849,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+            "UnityCRC": 0,
+            "FileHash": "5d368e0565e70762e910b01fff3f7714",
+            "FileCRC": 0,
+            "FileSize": 133554,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

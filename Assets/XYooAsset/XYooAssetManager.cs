@@ -24,17 +24,23 @@ namespace XYooAsset
         public IEnumerator InitPackage(string defaultPackageName)
         {
             YooAssets.Initialize();
-            
             var package = YooAssets.CreatePackage(defaultPackageName);
             _defaultPackage = package;
             YooAssets.SetDefaultPackage(package);
             
+#if UNITY_EDITOR
+            var buildResult = EditorSimulateModeHelper.SimulateBuild(defaultPackageName);    
+            var packageRoot = buildResult.PackageRootDirectory;
+            var fileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
+            var createParameters = new EditorSimulateModeParameters();
+            createParameters.EditorFileSystemParameters = fileSystemParams;
+#else
             var fileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
-    
             var createParameters = new OfflinePlayModeParameters
             {
                 BuildinFileSystemParameters = fileSystemParams
             };
+#endif
 
             // 1. 初始化资源包
             var initOperation = package.InitializeAsync(createParameters);
