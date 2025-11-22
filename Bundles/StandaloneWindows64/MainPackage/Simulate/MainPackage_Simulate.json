@@ -10,7 +10,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "MainPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/11/18 23:50:14",
+    "PackageNote": "2025/11/22 16:59:52",
     "AssetList": [
         {
             "Address": "logo",
@@ -34,6 +34,14 @@
             "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
             "AssetTags": [],
             "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "EditorUI",
+            "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
+            "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6",
+            "AssetTags": [],
+            "BundleID": 1,
             "DependBundleIDs": []
         },
         {
@@ -61,7 +69,7 @@
             "UnityCRC": 0,
             "FileHash": "09f7730a0f7920446b1d2e51f61e91ea",
             "FileCRC": 0,
-            "FileSize": 164849,
+            "FileSize": 193295,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

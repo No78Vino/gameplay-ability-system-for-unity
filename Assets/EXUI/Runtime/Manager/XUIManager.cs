@@ -4,12 +4,19 @@ using System.Linq;
 using Loxodon.Framework.Binding;
 using Loxodon.Framework.Contexts;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace EXUI
 {
     public sealed class XUIManager
     {
+        // UI场景
+        private XUICanvasLoader _canvasLoader;
+        // 运行主机
+        private XUIHost _host;
+        public XUIHost Host => _host;
+        
         private BindingServiceBundle _bundle;
         private float _secondCount;
         private readonly Dictionary<string, ViewModelCommon> _vms;
@@ -30,17 +37,33 @@ namespace EXUI
             _vmTypeToDefaultNameMap = new Dictionary<string, string>();
         }
 
+        public void Init()
+        {
+            LaunchBindingService();
+            CreateUIScene();
+            _host = new GameObject("EXUIHost").AddComponent<XUIHost>();
+            _host.transform.SetParent(_canvasLoader.UIRoot.transform);
+            _host.Init(this);
+        }
+        
         public void RegisterViewPrefabPath(Dictionary<Type, string> config,Func<string, GameObject> prefabLoadHandle)
         {
             _viewPrefabPathMap = new Dictionary<Type, string>(config);
             PrefabLoadHandle = prefabLoadHandle;
         }
+        
         public void LaunchBindingService()
         {
             var context = Context.GetApplicationContext();
             var container = context.GetContainer();
             _bundle = new BindingServiceBundle(container);
             _bundle.Start();
+        }
+
+        public void CreateUIScene()
+        {
+            _canvasLoader = new XUICanvasLoader();
+            _canvasLoader.Create();
         }
 
         private TView CreateWindow<TView>() where TView : BaseView
@@ -139,6 +162,10 @@ namespace EXUI
         {
             UnloadAllWindows();
             _bundle.Stop();
+            
+            Object.Destroy(_canvasLoader.UIRoot);
+            _host = null;
+            _canvasLoader = null;
         }
 
         private void UnloadAllWindows()

@@ -2,7 +2,7 @@
 
 namespace EXUI
 {
-    public class EXUIHost : MonoBehaviour
+    public class XUIHost : MonoBehaviour
     {
         private XUIManager _xuiManager;
 

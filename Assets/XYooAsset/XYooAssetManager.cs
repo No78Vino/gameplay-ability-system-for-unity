@@ -78,7 +78,15 @@ namespace XYooAsset
             return YooAssets.GetPackage(packageName);
         }
 
-        public void LoadSceneAsync(string path, System.Action<SceneHandle> completed = null)
+        public void LoadAdditiveSceneAsync(string path, System.Action<SceneHandle> completed = null)
+        {
+            var sceneMode = LoadSceneMode.Additive;
+            var physicsMode = LocalPhysicsMode.None;
+            SceneHandle handle = YooAssets.LoadSceneAsync(path, sceneMode, physicsMode);
+            handle.Completed += completed;
+        }
+        
+        public void LoadSingleSceneAsync(string path, System.Action<SceneHandle> completed = null)
         {
             var sceneMode = LoadSceneMode.Single;
             var physicsMode = LocalPhysicsMode.None;
@@ -124,9 +132,14 @@ namespace XYooAsset
             XYooAssetManager.Instance.LoadAssetAsync(assetPath, completed);
         }
         
-        public static void LoadSceneAsync(string path, System.Action<SceneHandle> completed = null)
+        public static void LoadAdditiveSceneAsync(string path, System.Action<SceneHandle> completed = null)
         {
-            XYooAssetManager.Instance.LoadSceneAsync(path, completed);
+            XYooAssetManager.Instance.LoadAdditiveSceneAsync(path, completed);
         }
+        
+        public static void LoadSingleSceneAsync(string path, System.Action<SceneHandle> completed = null)
+        {
+            XYooAssetManager.Instance.LoadSingleSceneAsync(path, completed);
+        } 
     }
 }
