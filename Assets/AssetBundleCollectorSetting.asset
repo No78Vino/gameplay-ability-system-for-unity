@@ -38,6 +38,46 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/DemoForESC/Resources/Prefabs
+        CollectorGUID: 1209592b4fe03334399af03e14a1e793
+        CollectorType: 0
+        AddressRuleName: AddressByFolderAndFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/DemoForESC/Resources/Animation
+        CollectorGUID: a0ab7365fd228cc41bd98127ff8a11fe
+        CollectorType: 0
+        AddressRuleName: AddressByFolderAndFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/DemoForESC/Resources/Tables
+        CollectorGUID: 101900642e684674e991b3dface4ceca
+        CollectorType: 0
+        AddressRuleName: AddressByFolderAndFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/DemoForESC/Resources/Texture
+        CollectorGUID: 8c8dd7e4cbab2cf4bbf0e59fdfc6731f
+        CollectorType: 0
+        AddressRuleName: AddressByFolderAndFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/DemoForESC/Resources/Timeline
+        CollectorGUID: 562c959faa4b9d74aa75be3df07ea146
+        CollectorType: 0
+        AddressRuleName: AddressByFolderAndFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: Scene
       GroupDesc: 
       AssetTags: 

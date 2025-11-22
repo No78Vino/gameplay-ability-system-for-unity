@@ -66,16 +66,18 @@ namespace EXUI
             _canvasLoader.Create();
         }
 
-        private TView CreateWindow<TView>() where TView : BaseView
+        private TView CreateWindow<TView>(string name) where TView : BaseView
         {
             var path = _viewPrefabPathMap[typeof(TView)];
             var prefab = PrefabLoadHandle(path);
-            var instance = Object.Instantiate(prefab);
+            var instance = Object.Instantiate(prefab, _canvasLoader.UIRoot.transform, true);
+            instance.name = name;
             TView view;
-            if (!instance.TryGetComponent(typeof(TView),out var com))
+            if (instance.TryGetComponent(typeof(TView),out var com))
                 view = com as TView;
             else
                 view = instance.AddComponent<TView>();
+            view?.Init(name);
             
             return view;
         }
@@ -128,8 +130,8 @@ namespace EXUI
             {
                 if (ifNullLoadIt)
                 {
-                    var w = CreateWindow<TView>();
-                    _windows.Add(name, w as BaseView);
+                    var w = CreateWindow<TView>(name);
+                    _windows.Add(name, w);
                     var vm = _windows[name].ViewModel;
                     _vms.Add(name, vm);
                     _vmTypeToDefaultNameMap.Add(vm.GetType().Name,typeof(TView).Name);

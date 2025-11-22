@@ -1,3 +1,6 @@
+using DemoForESC._Script.UI;
+using DemoForESC._Script.UI.View;
+using DemoForESC._Script.UI.ViewModel;
 using EXUI;
 using GAS.Runtime;
 using UnityEngine;
@@ -14,6 +17,7 @@ namespace DemoForESC._Script
             GASManager.Run();
             XYooAssetManager.Instance.Initialize("MainPackage");
             XUI.Launch();
+            XUI.M.RegisterViewPrefabPath(UIConfig.WindowPathMap,XYooAssetManager.Instance.LoadAssetSync<GameObject>);
             
             // 自身设置为不随场景切换而销毁
             DontDestroyOnLoad(gameObject);
@@ -32,10 +36,14 @@ namespace DemoForESC._Script
         {
             // 主场景加载完成后的逻辑
             Debug.Log("主场景加载完成");
+            XUI.M.OpenWindow<MaskWindow>();
+            //XUI.M.VM<VMMaskWindow>().MaskFadeIn(false);
+
+            XUI.M.VM<VMMaskWindow>().MaskFadeOut();
             // 1.加载菜单UI
             // 2.镜头布局
             // 2.场景资源加载
-            
+
         }
     }
 }

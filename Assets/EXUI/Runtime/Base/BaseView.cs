@@ -1,3 +1,4 @@
+using System;
 using Loxodon.Framework.Binding;
 using Loxodon.Framework.Binding.Contexts;
 using Loxodon.Framework.Interactivity;
@@ -35,6 +36,17 @@ namespace EXUI
             get { return _bindingContext ??= this.BindingContext(); }
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+            InitViewComponents();
+        }
+        
+        public virtual void Init(string viewName)
+        {
+            _name = viewName;
+        }
+
         public virtual void Show()
         {
             gameObject.SetActive(true);
@@ -59,7 +71,7 @@ namespace EXUI
         {
             OnHideAnimEnd();
         }
-
+        
         protected virtual void OnReceiveMessage(object sender, InteractionEventArgs args)
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -95,6 +107,22 @@ namespace EXUI
         ///                     staticBindingSet.Build();
         /// </summary>
         protected abstract void BindData();
+        
+        protected abstract void InitViewComponents();
+
+        private Transform Node(string path)
+        {
+            return transform.Find(path);
+        }
+        
+        protected TCom GetComponentByNode<TCom>(string path) where TCom : Component
+        {
+            var node = Node(path);
+            if (node != null) return Node(path).GetComponent<TCom>();
+            
+            Debug.LogError($"Can't Find Node {path}");
+            return null;
+        }
     }
 
     public abstract class BaseView<T> : BaseView where T : ViewModelCommon
@@ -112,10 +140,11 @@ namespace EXUI
             _vm.OnHide();
         }
         
-        public virtual void Init(string viewName, T vm)
+        public override void Init(string viewName)
         {
-            _name = viewName;
-            _vm = vm;
+            base.Init(viewName);
+            _vm = Activator.CreateInstance<T>();
+            _viewModel = _vm;
             //将视图模型赋值到DataContext
             BindingContext.DataContext = _vm;
             // 绑定

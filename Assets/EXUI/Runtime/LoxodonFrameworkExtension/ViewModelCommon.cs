@@ -4,8 +4,13 @@ using Loxodon.Framework.ViewModels;
 
 public class ViewModelCommon : ViewModelBase
 {
-    public InteractionRequest<string> request = new InteractionRequest<string>();
+    public InteractionRequest<string> request;
 
+    public ViewModelCommon()
+    {
+        request = new InteractionRequest<string>(this);
+    }
+    
     /// <summary>
     /// UI打开回调
     /// </summary>
