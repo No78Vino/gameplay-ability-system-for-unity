@@ -9,6 +9,7 @@ namespace DemoForESC._Script.UI
         public readonly static Dictionary<Type,string> WindowPathMap = new Dictionary<Type, string>()
         {
             [typeof(MaskWindow)] = "Assets/DemoForESC/Resources/Prefabs/UI/MaskWindow",
+            [typeof(MenuWindow)] = "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow",
         };
     }
 }

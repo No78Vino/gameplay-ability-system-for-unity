@@ -47,15 +47,27 @@ namespace EXUI
             _name = viewName;
         }
 
+        protected virtual void OnShow()
+        {
+            _viewModel.OnShow();
+        }
+
+        protected virtual void OnHide()
+        {
+            _viewModel.OnHide();
+        }
+        
         public virtual void Show()
         {
             gameObject.SetActive(true);
             PlayShowAnim();
+            OnShow();
         }
 
         public virtual void Hide()
         {
             PlayHideAnim();
+            OnHide();
         }
 
         protected virtual void OnHideAnimEnd()
@@ -86,26 +98,7 @@ namespace EXUI
         {
             Destroy(gameObject);
         }
-
-        /// <summary>
-        ///     BehaviourBindingExtension
-        ///     // 动态绑定
-        ///     BindingSet
-        ///     <TView, T>
-        ///         dynamicBindingSet = this.CreateBindingSet
-        ///         <TView, T>
-        ///             ();
-        ///             BindDynamic(dynamicBindingSet);
-        ///             dynamicBindingSet.Build();
-        ///             // 静态绑定
-        ///             BindingSet
-        ///             <TView>
-        ///                 staticBindingSet = this.CreateBindingSet
-        ///                 <TView>
-        ///                     ();
-        ///                     BindStatic(staticBindingSet);
-        ///                     staticBindingSet.Build();
-        /// </summary>
+        
         protected abstract void BindData();
         
         protected abstract void InitViewComponents();
@@ -129,16 +122,6 @@ namespace EXUI
     {
         protected T _vm;
         public T VM => _vm;
-        
-        protected virtual void OnShow()
-        {
-            _vm.OnShow();
-        }
-
-        protected virtual void OnHide()
-        {
-            _vm.OnHide();
-        }
         
         public override void Init(string viewName)
         {

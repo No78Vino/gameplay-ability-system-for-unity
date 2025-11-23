@@ -37,13 +37,26 @@ namespace DemoForESC._Script
             // 主场景加载完成后的逻辑
             Debug.Log("主场景加载完成");
             XUI.M.OpenWindow<MaskWindow>();
-            //XUI.M.VM<VMMaskWindow>().MaskFadeIn(false);
+            var vmMaskWindow = XUI.M.VM<VMMaskWindow>();
+            vmMaskWindow.SetOnOpen(LoadMenu);
+            vmMaskWindow.MaskFadeIn(false);
+        }
 
+        /// <summary>
+        /// 加载开始主菜单
+        /// 1.加载MenuWindow
+        /// 2.加载timeline所需的场景，动画等资源
+        /// 3.设置好timeline所需参数
+        /// 4.播放timeline
+        /// 5.关闭MaskWindow
+        /// </summary>
+        private void LoadMenu()
+        {
+            // 1.加载MenuWindow
+            XUI.M.OpenWindow<MenuWindow>();
+            
+            // 5.关闭MaskWindow
             XUI.M.VM<VMMaskWindow>().MaskFadeOut();
-            // 1.加载菜单UI
-            // 2.镜头布局
-            // 2.场景资源加载
-
         }
     }
 }

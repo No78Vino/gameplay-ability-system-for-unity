@@ -26,30 +26,41 @@ namespace DemoForESC._Script.UI.View
         protected override void OnReceiveMessage(object sender, InteractionEventArgs args)
         {
             base.OnReceiveMessage(sender, args);
-            if (args.Context is string message)
-                switch (message)
+            if (args.Context is not string message) return;
+            switch (message)
+            {
+                case "FadeIn":
                 {
-                    case "FadeIn":
-                    {
-                        _bg.DOFade(1, 0.5f);
-                        break;
-                    }
-                    case "FadeOut":
-                    {
-                        _bg.DOFade(0, 0.5f).OnComplete(Hide);
-                        break;
-                    }
-                    case "FadeInNoAnim":
-                    {
-                        _bg.DOFade(1, 0);
-                        break;
-                    }
-                    case "FadeOutNoAnim":
-                    {
-                        _bg.DOFade(0, 0).OnComplete(Hide);
-                        break;
-                    }
+                    _bg.DOFade(1, 1f).OnComplete(OnFadeInEnd);
+                    break;
                 }
+                case "FadeOut":
+                {
+                    _bg.DOFade(0, 1f).OnComplete(OnFadeOutEnd);
+                    break;
+                }
+                case "FadeInNoAnim":
+                {
+                    _bg.DOFade(1, 0).OnComplete(OnFadeInEnd);
+                    break;
+                }
+                case "FadeOutNoAnim":
+                {
+                    _bg.DOFade(0, 0).OnComplete(OnFadeOutEnd);
+                    break;
+                }
+            }
+        }
+        
+        private void OnFadeInEnd()
+        {
+            _vm.InvokeOnOpen();
+        }
+
+        private void OnFadeOutEnd()
+        {
+            _vm.InvokeOnClose();
+            Hide();
         }
     }
 }

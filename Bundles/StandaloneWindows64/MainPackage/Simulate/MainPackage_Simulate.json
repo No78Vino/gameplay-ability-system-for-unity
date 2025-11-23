@@ -10,7 +10,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "MainPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/11/23 0:04:48",
+    "PackageNote": "2025/11/23 16:33:22",
     "AssetList": [
         {
             "Address": "Animation_logo",
@@ -37,8 +37,8 @@
             "DependBundleIDs": []
         },
         {
-            "Address": "UI_OpeningWindow",
-            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/OpeningWindow.prefab",
+            "Address": "UI_MenuWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow.prefab",
             "AssetGUID": "2ba0f5cfbd5a3e848b72fb2c3242f903",
             "AssetTags": [],
             "BundleID": 3,
@@ -149,11 +149,19 @@
             "DependBundleIDs": []
         },
         {
+            "Address": "sanjililiang_jianti_cu",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+            "AssetGUID": "69267910aca4b2840947de018347b614",
+            "AssetTags": [],
+            "BundleID": 17,
+            "DependBundleIDs": []
+        },
+        {
             "Address": "DemoForECS",
             "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
             "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c",
             "AssetTags": [],
-            "BundleID": 17,
+            "BundleID": 18,
             "DependBundleIDs": []
         },
         {
@@ -161,7 +169,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
             "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
             "AssetTags": [],
-            "BundleID": 18,
+            "BundleID": 19,
             "DependBundleIDs": []
         },
         {
@@ -169,7 +177,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
             "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6",
             "AssetTags": [],
-            "BundleID": 17,
+            "BundleID": 18,
             "DependBundleIDs": []
         },
         {
@@ -177,7 +185,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
             "AssetGUID": "edac8363a1c534b4799e555f89a24386",
             "AssetTags": [],
-            "BundleID": 17,
+            "BundleID": 18,
             "DependBundleIDs": []
         }
     ],
@@ -197,7 +205,7 @@
             "UnityCRC": 0,
             "FileHash": "cdfb6ed7495c588a088e7f0faeeb86c9",
             "FileCRC": 0,
-            "FileSize": 7613,
+            "FileSize": 5999,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -213,11 +221,11 @@
             "DependBundleIDs": []
         },
         {
-            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_openingwindow.bundle",
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
             "UnityCRC": 0,
-            "FileHash": "181922673d2ff15f926187f054c73975",
+            "FileHash": "89025d63075262234530fd3c5037ec42",
             "FileCRC": 0,
-            "FileSize": 27148,
+            "FileSize": 29762,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -353,11 +361,21 @@
             "DependBundleIDs": []
         },
         {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+            "UnityCRC": 0,
+            "FileHash": "db7d0f079885c850afbc6a5bcd4c001e",
+            "FileCRC": 0,
+            "FileSize": 3847808,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
             "BundleName": "mainpackage_assets_demoforesc_scene.bundle",
             "UnityCRC": 0,
             "FileHash": "09f7730a0f7920446b1d2e51f61e91ea",
             "FileCRC": 0,
-            "FileSize": 193295,
+            "FileSize": 262657,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
