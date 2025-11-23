@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-namespace DemoForESC._Script.Camera
+namespace DemoForESC._Script
 {
     [RequireComponent(typeof(CinemachineFreeLook))]
     public class ThirdPersonCameraController : MonoBehaviour

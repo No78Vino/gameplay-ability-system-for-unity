@@ -10,7 +10,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "MainPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/11/23 16:36:41",
+    "PackageNote": "2025/11/23 23:56:57",
     "AssetList": [
         {
             "Address": "Animation_logo",
@@ -126,10 +126,18 @@
         },
         {
             "Address": "Timeline_opening",
-            "AssetPath": "Assets/DemoForESC/Resources/Timeline/opening.playable",
-            "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/opening.prefab",
+            "AssetGUID": "0865ebc6936baa24582b924288cdcd89",
             "AssetTags": [],
             "BundleID": 14,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Timeline_TimelineOpening",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/TimelineOpening.playable",
+            "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb",
+            "AssetTags": [],
+            "BundleID": 15,
             "DependBundleIDs": []
         },
         {
@@ -137,7 +145,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Timeline/Virtual Camera.controller",
             "AssetGUID": "a69fc2dfe912ab449ba0419f1a60f681",
             "AssetTags": [],
-            "BundleID": 15,
+            "BundleID": 16,
             "DependBundleIDs": []
         },
         {
@@ -145,7 +153,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/logo.png",
             "AssetGUID": "23e2312f2a7b9ef4b8c66890dc2c3b4a",
             "AssetTags": [],
-            "BundleID": 16,
+            "BundleID": 17,
             "DependBundleIDs": []
         },
         {
@@ -153,7 +161,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
             "AssetGUID": "69267910aca4b2840947de018347b614",
             "AssetTags": [],
-            "BundleID": 17,
+            "BundleID": 18,
             "DependBundleIDs": []
         },
         {
@@ -161,7 +169,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
             "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c",
             "AssetTags": [],
-            "BundleID": 18,
+            "BundleID": 19,
             "DependBundleIDs": []
         },
         {
@@ -169,7 +177,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
             "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
             "AssetTags": [],
-            "BundleID": 19,
+            "BundleID": 20,
             "DependBundleIDs": []
         },
         {
@@ -177,7 +185,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
             "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6",
             "AssetTags": [],
-            "BundleID": 18,
+            "BundleID": 19,
             "DependBundleIDs": []
         },
         {
@@ -185,7 +193,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
             "AssetGUID": "edac8363a1c534b4799e555f89a24386",
             "AssetTags": [],
-            "BundleID": 18,
+            "BundleID": 19,
             "DependBundleIDs": []
         }
     ],
@@ -335,7 +343,17 @@
             "UnityCRC": 0,
             "FileHash": "7d50bf80be9892492dc7b0b1a7ec1609",
             "FileCRC": 0,
-            "FileSize": 9690,
+            "FileSize": 5877,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+            "UnityCRC": 0,
+            "FileHash": "e429a6bd82d920a8e4026f08f3f2a11c",
+            "FileCRC": 0,
+            "FileSize": 9698,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -375,7 +393,7 @@
             "UnityCRC": 0,
             "FileHash": "09f7730a0f7920446b1d2e51f61e91ea",
             "FileCRC": 0,
-            "FileSize": 262657,
+            "FileSize": 257102,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

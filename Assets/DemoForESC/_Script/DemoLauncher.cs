@@ -1,9 +1,11 @@
+using Cinemachine;
 using DemoForESC._Script.UI;
 using DemoForESC._Script.UI.View;
 using DemoForESC._Script.UI.ViewModel;
 using EXUI;
 using GAS.Runtime;
 using UnityEngine;
+using UnityEngine.Timeline;
 using XYooAsset;
 using YooAsset;
 
@@ -54,6 +56,24 @@ namespace DemoForESC._Script
         {
             // 1.加载MenuWindow
             XUI.M.OpenWindow<MenuWindow>();
+            // 2.加载timeline所需的场景，动画等资源
+            var timelinePath = "Assets/DemoForESC/Resources/Timeline/opening";
+            var playableDirector = TimelineHelper.CreateTimeline(timelinePath);
+            // if (Camera.main != null)
+            // {
+            //     var mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
+            //     if (mainCameraBrain == null)
+            //     {
+            //         Debug.LogError("Main Camera上未找到CinemachineBrain组件，请确保相机配置了CinemachineBrain！");
+            //         return;
+            //     }
+            //     var timeline = playableDirector.playableAsset as TimelineAsset;
+            //     var track = timeline.GetTrackByName("Cinemachine Track");
+            //     playableDirector.SetGenericBinding(track, mainCameraBrain);
+            // }
+
+            // 4. 播放Timeline（可选，根据需求决定是否自动播放）
+            playableDirector.Play();
             
             // 5.关闭MaskWindow
             XUI.M.VM<VMMaskWindow>().MaskFadeOut();
