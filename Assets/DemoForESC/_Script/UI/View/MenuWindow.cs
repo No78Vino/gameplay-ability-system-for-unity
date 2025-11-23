@@ -42,6 +42,7 @@ namespace DemoForESC._Script.UI.View
         protected override void BindData()
         {
             var bindingSet = new BindingSet<MenuWindow, VMMenuWindow>(_bindingContext, this);
+            bindingSet.Bind(this).For(v => OnReceiveMessage).To(vm => vm.request);
             bindingSet.Bind(titleText).For(v => v.text).To(vm => vm.title.Value).OneWay();
             bindingSet.Bind(infoText).For(v => v.text).To(vm => vm.info.Value).OneWay();
 
@@ -74,6 +75,16 @@ namespace DemoForESC._Script.UI.View
         private void PointerExitHandle(PointerEventData data)
         {
             _vm.OnHoverOut();
+        }
+
+        protected override void OnReceiveMessage(object sender, InteractionEventArgs args)
+        {
+            base.OnReceiveMessage(sender, args);
+            if (args.Context is string msg)
+            {
+                if (msg == "close")
+                    Hide();
+            }
         }
     }
 }

@@ -16,7 +16,8 @@ namespace DemoForESC._Script.UI.ViewModel
 
         public void GameStart()
         {
-            // TODO: 开始游戏
+            EventCenter.Trigger("StartGame");
+            request.Raise("close");
         }
 
         public void Quit()
