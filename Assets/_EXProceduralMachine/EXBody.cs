@@ -6,13 +6,34 @@ namespace EXProceduralMachine
 {
     public class EXBody : MonoBehaviour
     {
+        private Vector3 _lastPos;
+        public Transform Zigzag1;
+        public Transform Zigzag2;
+        
         public List<Transform> castPoints;
         public List<Transform> groundPoints;
         public float maxDistance = 10f;
         public float moveStep = 3f;
-        
+        public float bodyMoveStep = 1f;
+
+        private void Awake()
+        {
+            _lastPos = transform.position;
+        }
+
         private void Update()
         {
+            if ((transform.position - _lastPos).magnitude > moveStep)
+            {
+                _lastPos = transform.position;
+                var zigzagDist1 = Vector3.Distance(Zigzag1.position, _lastPos);
+                var zigzagDist2 = Vector3.Distance(Zigzag2.position, _lastPos);
+                if (zigzagDist1 > zigzagDist2)
+                    Zigzag1.position = _lastPos;
+                else
+                    Zigzag2.position = _lastPos;
+            }
+
             for (var i = 0; i < castPoints.Count; i++)
             {
                 var cast = castPoints[i];
