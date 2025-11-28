@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace EXProceduralMachine
 {
@@ -12,9 +13,13 @@ namespace EXProceduralMachine
         
         public List<Transform> castPoints;
         public List<Transform> groundPoints;
+        public List<ParabolaMover> movers;
+        
         public float maxDistance = 10f;
         public float moveStep = 3f;
         public float bodyMoveStep = 1f;
+        public float stepMoveTime = 0.1f;
+        public float stepHeight = 0.5f;
 
         private void Awake()
         {
@@ -38,8 +43,11 @@ namespace EXProceduralMachine
             {
                 var cast = castPoints[i];
                 var gPos = GetGroundPoint(cast.position, maxDistance, LayerMask.GetMask("Terrain"));
-                if((gPos-groundPoints[i].position).magnitude > moveStep)
+                if ((gPos - groundPoints[i].position).magnitude > moveStep)
+                {
                     groundPoints[i].position = gPos;
+                    movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+                }
             }
         }
 
