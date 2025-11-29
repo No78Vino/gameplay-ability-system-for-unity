@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b226821ebedc48d7b708b976523f606d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TokenFilePath: C:/Users/fangmenglu/Desktop/TOKEN.txt
+  TokenFilePath: 
   repoInfos:
   - userName: No78Vino
     repoName: EX_Toy_Lib

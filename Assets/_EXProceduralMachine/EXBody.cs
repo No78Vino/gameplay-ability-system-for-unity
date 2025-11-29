@@ -17,6 +17,7 @@ namespace EXProceduralMachine
         
         public float maxDistance = 10f;
         public float moveStep = 3f;
+        public float moveMaxStep = 3f;
         public float bodyMoveStep = 1f;
         public float stepMoveTime = 0.1f;
         public float stepHeight = 0.5f;
@@ -34,9 +35,15 @@ namespace EXProceduralMachine
                 var zigzagDist1 = Vector3.Distance(Zigzag1.position, _lastPos);
                 var zigzagDist2 = Vector3.Distance(Zigzag2.position, _lastPos);
                 if (zigzagDist1 > zigzagDist2)
-                    Zigzag1.position = _lastPos;
+                {
+                    if(!movers[1].IsMoving||(Zigzag1.position - _lastPos).magnitude > moveMaxStep)
+                        Zigzag1.position = _lastPos;
+                }
                 else
-                    Zigzag2.position = _lastPos;
+                {
+                    if(!movers[0].IsMoving||(Zigzag2.position - _lastPos).magnitude > moveMaxStep)
+                        Zigzag2.position = _lastPos;
+                }
             }
 
             for (var i = 0; i < castPoints.Count; i++)

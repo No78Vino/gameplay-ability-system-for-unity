@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.exhard.exopensourcepluginmanager": "https://gitee.com/exhard/EX_Toy_Lib.git?path=Assets/ExOpenSourcePluginManager",
     "com.unity.animation.rigging": "1.2.1",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.entities": "1.2.3",

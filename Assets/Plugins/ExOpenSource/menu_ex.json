@@ -89,6 +89,34 @@
       "GitURL_Path": "",
       "IntroductionURL": "https://github.com/focus-creative-games/luban_unity",
       "Dependencies": []
+    },
+    {
+      "Name": "时序活动队列管理器",
+      "Version": "1.0",
+      "Intro": "时序活动队列管理器是一个用于时序执行活动需求的小框架",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "Sequence",
+        "时序播放"
+      ],
+      "MenuPath": "EXHard开源插件收藏/业务框架/时序活动队列管理器",
+      "LocalPath": "Assets/Plugins/ExOpenSource/ActivityQueueController",
+      "GitURL_Path": "Assets/_EXToyLib/ActivityQueueController",
+      "IntroductionURL": "https://github.com/No78Vino/EX_Toy_Lib/blob/main/Assets/_EXToyLib/ActivityQueueController/GUIDE.md"
+    },
+    {
+      "Name": "二阶动力学模拟器",
+      "Version": "1.0",
+      "Intro": "二阶动力学模拟器是把计算机经典的简化过后的雅各布森动力学算法，简单实现的插件。插件参考了著名视频https://www.youtube.com/watch?v=KPoeNZZ6H4s\nGiving Personality to Procedural Animations using Math",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "运动",
+        "次级运动模拟"
+      ],
+      "MenuPath": "EXHard开源插件收藏/运动/二阶动力学模拟器",
+      "LocalPath": "Assets/Plugins/ExOpenSource/ValueSecondOrderSystem",
+      "GitURL_Path": "Assets/_EXToyLib/ValueSecondOrderSystem",
+      "IntroductionURL": "https://github.com/No78Vino/EX_Toy_Lib/blob/main/Assets/_EXToyLib/ValueSecondOrderSystem/GUIDE.md"
     }
   ]
 }
