@@ -18,7 +18,6 @@ namespace EXProceduralMachine
         public float maxDistance = 10f;
         public float moveStep = 3f;
         public float moveMaxStep = 3f;
-        public float bodyMoveStep = 1f;
         public float stepMoveTime = 0.1f;
         public float stepHeight = 0.5f;
 
@@ -77,15 +76,6 @@ namespace EXProceduralMachine
             // 没有找到交点或超过最大距离，使用最大距离点
             var fallbackPoint = origin + direction * maxDistance;
             return fallbackPoint;
-        }
-
-        private List<Vector3> GetCastPoints()
-        {
-            var points = new List<Vector3>()
-            {
-                
-            };
-            return points;
         }
     }
 }

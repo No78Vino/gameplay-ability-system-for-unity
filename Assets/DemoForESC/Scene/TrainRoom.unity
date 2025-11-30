@@ -3089,6 +3089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1379354660}
   - component: {fileID: 1379354661}
+  - component: {fileID: 1379354662}
   m_Layer: 0
   m_Name: Avator
   m_TagString: Untagged
@@ -3130,6 +3131,23 @@ MonoBehaviour:
   - {fileID: 1237773957}
   - {fileID: 2120939416}
   offset: 1
+--- !u!114 &1379354662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379354659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65ef00b8307444d4834cbd1a8203c01e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  T: 0.5
+  L: 0.74
+  LegPhaseDifference: 0.5
+  R: 0
+  h: 0
 --- !u!1 &1386998781
 GameObject:
   m_ObjectHideFlags: 0
@@ -4047,9 +4065,8 @@ MonoBehaviour:
   - {fileID: 1237773958}
   - {fileID: 2120939417}
   maxDistance: 10
-  moveStep: 0
+  moveStep: 1
   moveMaxStep: 2
-  bodyMoveStep: 1.5
   stepMoveTime: 0.15
   stepHeight: 0.5
 --- !u!114 &1937078009
