@@ -7,16 +7,16 @@ namespace EXProceduralMachine
         public static EXProceduralMachineManager Instance => _instance ??= new EXProceduralMachineManager();
         private static EXProceduralMachineManager _instance;
 
-        private Transform _managerRoot;
-        
+        public Transform ManagerRoot { get; }
+
         public EXProceduralMachineManager()
         {
-            _managerRoot = new GameObject("EXProceduralMachineManager").transform;
+            ManagerRoot = new GameObject("EXProceduralMachineManager").transform;
         }
 
         public void Dispose()
         {
-            Object.Destroy(_managerRoot);
+            Object.Destroy(ManagerRoot);
         }
     }
 }
