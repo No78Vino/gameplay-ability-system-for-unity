@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -10,12 +11,12 @@ namespace EXProceduralMachine
     public abstract class BaseMultiLeggedLocomotion:MonoBehaviour
     {
         protected const string BASE_BOX_GROUP = "运动基础参数";
-        
+
         [BoxGroup(BASE_BOX_GROUP)] 
         [LabelText("步态运动落地点分组")]
         [InfoBox("将肢体分为N组交替运动")]
-        [TableList]
-        public List<Transform[]> MotionGroup;
+        [ShowInInspector]
+        public FootMotionGroup[] MotionGroup;
         
         /// <summary>
         /// 步态周期
@@ -106,25 +107,11 @@ namespace EXProceduralMachine
         [BoxGroup(BASE_BOX_GROUP)]
         public float h;
         
-        /// <summary>
-        /// 从指定点向下发射垂直射线获取地面交点
-        /// </summary>
-        /// <param name="origin">发射点位置</param>
-        /// <param name="maxDistance">最大检测距离</param>
-        /// <param name="layerMask">要检测的层级</param>
-        /// <returns>与地面的交点位置</returns>
-        public static Vector3 GetGroundPoint(Vector3 origin, float maxDistance, LayerMask layerMask)
+        public bool IsMoving => v == 0;
+
+        private void Update()
         {
-            // 射线方向（向下）
-            var direction = Vector3.down;
-        
-            // 执行射线检测
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, maxDistance, layerMask))
-                return hit.point;
             
-            // 没有找到交点或超过最大距离，使用最大距离点
-            var fallbackPoint = origin + direction * maxDistance;
-            return fallbackPoint;
         }
     }
 }
