@@ -31,6 +31,7 @@ namespace EXProceduralMachine
         private Transform _currentStepPoint;
 
         public Transform IkTrackPoint => _ikTrackPoint;
+        public Transform StepPoint => _currentStepPoint;
         
         public FootPlacement(FootMotionGroup group,FootConfig cfg,Transform stepPoint)
         {

@@ -116,11 +116,16 @@ namespace EXProceduralMachine
         [BoxGroup(BASE_BOX_GROUP)]
         public bool CheckSelfVelocity;
         
+        [BoxGroup(BASE_BOX_GROUP)] [LabelText("视觉辅助Gizmos")]
+        public bool gizmosOn;
+        
         public Transform MotionTransform { get; private set; }
 
         public bool IsMoving => v == 0;
 
         private Vector3 _lastBodyPosition;
+
+        private XVisualLine _visualLine;
 
         protected virtual void Awake()
         {
@@ -158,6 +163,9 @@ namespace EXProceduralMachine
             }
 
             CheckVelocity();
+#if UNITY_EDITOR
+            CheckGizmos();
+#endif
         }
 
         private void CheckVelocity()
@@ -205,6 +213,38 @@ namespace EXProceduralMachine
                     height += footPlacement.IkTrackPoint.position.y;
             }
             return height/count;
+        }
+
+        private void CheckGizmos()
+        {
+            if (gizmosOn)
+            {
+                if (_visualLine == null)
+                {
+                    _visualLine = gameObject.GetComponent<XVisualLine>();
+                    if (_visualLine == null)
+                        _visualLine = gameObject.AddComponent<XVisualLine>();
+                }
+
+                int i = -1;
+                foreach (var motionGroup in MotionGroup)
+                {
+                    foreach (var footPlacement in motionGroup.FootPlacements)
+                    {
+                        i++;
+                        XVisualLine.XVisualLineData lineData;
+                        if (i < _visualLine.lines.Count-1)
+                        {
+                            _visualLine.lines.Add(new XVisualLine.XVisualLineData());
+                        }
+                        lineData = _visualLine.lines[i];
+                        lineData.gizmoColor = Color.white;
+                        lineData.pointA = footPlacement.IkTrackPoint.position;
+                        lineData.pointA = footPlacement.StepPoint.position;
+                    }
+                }
+
+            }
         }
         
         public abstract Vector3 CalculateFootPlacementMovingPoint(Vector3 startPos, Vector3 targetPos,
