@@ -233,7 +233,7 @@ namespace EXProceduralMachine
                     {
                         i++;
                         XVisualLine.XVisualLineData lineData;
-                        if (i < _visualLine.lines.Count-1)
+                        if (i+1 >= _visualLine.lines.Count)
                         {
                             _visualLine.lines.Add(new XVisualLine.XVisualLineData());
                         }
