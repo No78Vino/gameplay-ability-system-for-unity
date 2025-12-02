@@ -13,13 +13,19 @@ namespace EXProceduralMachine
         [BoxGroup(BASE_BOX_GROUP)] [LabelText("步态运动落地点分组")] [InfoBox("将肢体分为N组交替运动")] [ShowInInspector]
         public FootMotionGroup[] MotionGroup;
 
+        [BoxGroup(BASE_BOX_GROUP)] [LabelText("躯干")]
+        public Transform Body;
+
         /// <summary>
         ///     步态周期
         ///     Gait Cycle (T)
         ///     单条腿完成 “支撑 - 摆动” 一次的总时间（s）
         /// </summary>
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("步态周期(s)")]
-        public float T = 0.5f;
+        [BoxGroup(BASE_BOX_GROUP)]
+        [ShowInInspector]
+        [LabelText("步态周期(s)")]
+        [DisplayAsString]
+        public float T => v == 0 ? 0 : (L / v);
 
         /// <summary>
         ///     步长
@@ -94,16 +100,27 @@ namespace EXProceduralMachine
         [LabelText("移动速度(m/s)")]
         [DisplayAsString]
         [BoxGroup(BASE_BOX_GROUP)]
-        public float v => L * f;
+        public float v => Velocity.magnitude;
+        
+        [ShowInInspector]
+        [LabelText("速度(m/s)")]
+        [BoxGroup(BASE_BOX_GROUP)]
+        public Vector3 Velocity;
 
         [ShowInInspector]
         [ReadOnly]
         [LabelText("移动方向")]
-        public Vector3 Direction { get; private set; }
-
+        public Vector3 Direction => Velocity.normalized;
+        
+        [LabelText("是否自我计算速度")]
+        [BoxGroup(BASE_BOX_GROUP)]
+        public bool CheckSelfVelocity;
+        
         public Transform MotionTransform { get; private set; }
 
         public bool IsMoving => v == 0;
+
+        private Vector3 _lastBodyPosition;
 
         protected virtual void Awake()
         {
@@ -115,6 +132,8 @@ namespace EXProceduralMachine
                 var motionGroup = MotionGroup[i];
                 motionGroup.Initialize(this, LegPhaseDifference[i]);
             }
+
+            _lastBodyPosition = Body.position;
         }
 
         private void Update()
@@ -129,36 +148,25 @@ namespace EXProceduralMachine
             {
                 group.Tick();
             }
-            
-            // if ((transform.position - _lastPos).magnitude > moveStep)
-            // {
-            //     _lastPos = transform.position;
-            //     var zigzagDist1 = Vector3.Distance(Zigzag1.position, _lastPos);
-            //     var zigzagDist2 = Vector3.Distance(Zigzag2.position, _lastPos);
-            //     if (zigzagDist1 > zigzagDist2)
-            //     {
-            //         if(!movers[1].IsMoving||(Zigzag1.position - _lastPos).magnitude > moveMaxStep)
-            //             Zigzag1.position = _lastPos;
-            //     }
-            //     else
-            //     {
-            //         if(!movers[0].IsMoving||(Zigzag2.position - _lastPos).magnitude > moveMaxStep)
-            //             Zigzag2.position = _lastPos;
-            //     }
-            // }
 
-            // for (var i = 0; i < castPoints.Count; i++)
-            // {
-            //     var cast = castPoints[i];
-            //     var gPos = GetGroundPoint(cast.position, maxDistance, LayerMask.GetMask("Terrain"));
-            //     if ((gPos - groundPoints[i].position).magnitude > moveStep)
-            //     {
-            //         groundPoints[i].position = gPos;
-            //         movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
-            //     }
-            // }
+            if (Body != null)
+            {
+                var bodyPosition = Body.position;
+                var ave = GetAverageFootHeight();
+                bodyPosition.y = ave + h;
+                Body.position = bodyPosition;
+            }
+
+            CheckVelocity();
         }
 
+        private void CheckVelocity()
+        {
+            if (!CheckSelfVelocity) return;
+            Velocity = (Body.position - _lastBodyPosition) / Time.deltaTime;
+            _lastBodyPosition = Body.position;
+        }
+        
         protected void OnDestroy()
         {
             if (MotionTransform != null)
@@ -186,6 +194,19 @@ namespace EXProceduralMachine
             return MotionGroup[index];
         }
 
+        private float GetAverageFootHeight()
+        {
+            float height = 0;
+            var count = 0;
+            foreach (var group in MotionGroup)
+            {
+                count += group.FootPlacements.Length;
+                foreach (var footPlacement in group.FootPlacements)
+                    height += footPlacement.IkTrackPoint.position.y;
+            }
+            return height/count;
+        }
+        
         public abstract Vector3 CalculateFootPlacementMovingPoint(Vector3 startPos, Vector3 targetPos,
             float timeNormalized);
     }

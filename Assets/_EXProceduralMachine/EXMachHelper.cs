@@ -30,13 +30,12 @@ namespace EXProceduralMachine
         /// <param name="B">参考点B</param>
         /// <param name="N">方向向量N（非零）</param>
         /// <return>A相对于B的投影距离（输出）</return>
-        /// <exception cref="System.ArgumentException">方向向量N为零向量时抛出</exception>
         public static float CalculateProjectionDistance(Vector3 A, Vector3 B, Vector3 N)
         {
-            // 检查方向向量是否为零（避免单位化出错）
+            // 检查方向向量是否为零
             if (N.sqrMagnitude < Mathf.Epsilon)
-                throw new System.ArgumentException("方向向量N不能为零向量！");
-
+                return 0;
+            
             // 2. 构造从C指向A、C指向B的向量
             var ab = A - B;
 

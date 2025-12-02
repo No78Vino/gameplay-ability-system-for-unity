@@ -12,6 +12,7 @@ namespace EXProceduralMachine
         public EXProceduralMachineManager()
         {
             ManagerRoot = new GameObject("EXProceduralMachineManager").transform;
+            Object.DontDestroyOnLoad(ManagerRoot.gameObject);
         }
 
         public void Dispose()

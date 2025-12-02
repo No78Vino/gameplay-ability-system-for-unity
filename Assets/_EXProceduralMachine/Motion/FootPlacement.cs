@@ -6,7 +6,8 @@ namespace EXProceduralMachine
     {
         private BaseMultiLeggedLocomotion _locomotion;
         private FootMotionGroup _group;
-
+        private Vector3 _offset;
+        
         // 移动状态变量
         private bool _isMoving;          // 是否正在移动
         private float _currentTime;      // 当前已移动时间
@@ -28,13 +29,16 @@ namespace EXProceduralMachine
         /// 当前足目标点（地面投射起点）
         /// </summary>
         private Transform _currentStepPoint;
+
+        public Transform IkTrackPoint => _ikTrackPoint;
         
-        public FootPlacement(FootMotionGroup group,Transform fixedIdlePoint,Transform stepPoint)
+        public FootPlacement(FootMotionGroup group,FootConfig cfg,Transform stepPoint)
         {
             _group = group;
             _locomotion = _group.Locomotion;
-            _fixedIdlePoint = fixedIdlePoint;
+            _fixedIdlePoint = cfg.idlePoint;
             _currentStepPoint = stepPoint;
+            _ikTrackPoint = cfg.ikTrack;
         }
 
         public void Tick()
@@ -56,14 +60,14 @@ namespace EXProceduralMachine
 
             // 计算当前位置
             Vector3 currentPos = _locomotion.CalculateFootPlacementMovingPoint(_startPos,_targetPos,timeNormalized);
-            _ikTrackPoint.position = currentPos;
+            _ikTrackPoint.position = currentPos + _offset;
 
             // 检查是否到达终点
             if (timeNormalized >= 1f)
             {
                 _isMoving = false;
                 // 确保最终位置精准匹配目标点（避免浮点误差）
-                _ikTrackPoint.position = _targetPos;
+                _ikTrackPoint.position = _targetPos + _offset;
             }
         }
 
@@ -85,13 +89,13 @@ namespace EXProceduralMachine
             var duration = _locomotion.T * _group.PhaseDifference;
             if (duration <= 0.01f)
             {
-                _ikTrackPoint.position = _currentStepPoint.position;
+                _ikTrackPoint.position = _currentStepPoint.position + _offset;
                 _isMoving = false;
                 return;
             }
 
             // 重置移动状态（打断原有移动，顺滑衔接）
-            _startPos = _ikTrackPoint.position;    // 起始点设为当前位置
+            _startPos = _ikTrackPoint.position - _offset;    // 起始点设为当前位置
             _targetPos = _currentStepPoint.position;
             _totalDuration = duration;
             _currentTime = 0f;

@@ -6,9 +6,10 @@ namespace EXProceduralMachine
     [Serializable]
     public class FootMotionGroup
     {
-        public Transform[] feet;
+        public FootConfig[] feet;
 
         private FootPlacement[] _footPlacements;
+        public FootPlacement[] FootPlacements => _footPlacements;
 
         public BaseMultiLeggedLocomotion Locomotion { get;private set; }
 
@@ -35,7 +36,7 @@ namespace EXProceduralMachine
                 {
                     var foot = new GameObject("Foot" + i).transform;
                     foot.SetParent(_tfGroup);
-                    foot.position = feet[i].position;
+                    foot.position = feet[i].idlePoint.position;
                     _footPlacements[i] = new FootPlacement(this, feet[i],foot);
                 }
             }

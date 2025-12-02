@@ -6,15 +6,16 @@ namespace EXProceduralMachine
 {
     public class SyncAveHeight : MonoBehaviour
     {
+        public Transform body;
+        
         public List<Transform> Targets;
         public float offset = 2;
         
         void Update()
         {
             var pos = transform.position;
-            float ave = Targets.Sum(target => target.position.y);
-            ave /= Targets.Count;
-            transform.position = new Vector3(pos.x, ave + offset, pos.z);
+            pos.y = body.position.y;
+            transform.position = pos;
         }
     }
 }
