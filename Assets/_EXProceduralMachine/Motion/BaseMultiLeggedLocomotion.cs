@@ -112,6 +112,12 @@ namespace EXProceduralMachine
         [LabelText("移动方向")]
         public Vector3 Direction => Velocity.normalized;
         
+        [BoxGroup(BASE_BOX_GROUP)] [LabelText("地面检测最远距离")]
+        public float castMaxDistance;
+        
+        [BoxGroup(BASE_BOX_GROUP)] [LabelText("地面检测Layer")]
+        public LayerMask groundLayer;
+        
         [LabelText("是否自我计算速度")]
         [BoxGroup(BASE_BOX_GROUP)]
         public bool CheckSelfVelocity;
@@ -144,10 +150,10 @@ namespace EXProceduralMachine
         private void Update()
         {
             var motionGroup = GetCurrentMotionGroup();
-            if (!motionGroup.IsMoving())
-            {
+            // if (!motionGroup.IsMoving())
+            // {
                 motionGroup.UpdateFootPlacements();
-            }
+            //}
 
             foreach (var group in MotionGroup)
             {
@@ -240,7 +246,17 @@ namespace EXProceduralMachine
                         lineData = _visualLine.lines[i];
                         lineData.gizmoColor = Color.white;
                         lineData.pointA = footPlacement.IkTrackPoint.position;
-                        lineData.pointA = footPlacement.StepPoint.position;
+                        lineData.pointB = footPlacement.StepPoint.position;
+                        
+                        i++;
+                        if (i+1 >= _visualLine.lines.Count)
+                        {
+                            _visualLine.lines.Add(new XVisualLine.XVisualLineData());
+                        }
+                        lineData = _visualLine.lines[i];
+                        lineData.gizmoColor = Color.red;
+                        lineData.pointA = footPlacement.CastPosition;
+                        lineData.pointB = footPlacement.StepPoint.position;
                     }
                 }
 

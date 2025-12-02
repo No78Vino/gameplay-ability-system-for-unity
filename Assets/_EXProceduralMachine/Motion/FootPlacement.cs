@@ -32,7 +32,10 @@ namespace EXProceduralMachine
 
         public Transform IkTrackPoint => _ikTrackPoint;
         public Transform StepPoint => _currentStepPoint;
-        
+
+        private Vector3 _castPosition;
+        public Vector3 CastPosition => _castPosition;
+
         public FootPlacement(FootMotionGroup group,FootConfig cfg,Transform stepPoint)
         {
             _group = group;
@@ -52,8 +55,14 @@ namespace EXProceduralMachine
         /// </summary>
         private void Move()
         {
-            if (!_isMoving) return;
+            // if (!_isMoving) return;
 
+            _castPosition = EXMachHelper.GetGroundPoint(
+                _currentStepPoint.position,
+                _locomotion.castMaxDistance,
+                _locomotion.groundLayer,
+                Vector3.down);
+            
             // 累加移动时间
             _currentTime += Time.deltaTime;
             // 归一化时间（0~1），超过1则设为1（到达终点）
@@ -68,7 +77,7 @@ namespace EXProceduralMachine
             {
                 _isMoving = false;
                 // 确保最终位置精准匹配目标点（避免浮点误差）
-                _ikTrackPoint.position = _targetPos + _offset;
+                _ikTrackPoint.position = _targetPos;
             }
         }
 
@@ -90,14 +99,14 @@ namespace EXProceduralMachine
             var duration = _locomotion.T * _group.PhaseDifference;
             if (duration <= 0.01f)
             {
-                _ikTrackPoint.position = _currentStepPoint.position + _offset;
+                _ikTrackPoint.position = _castPosition + _offset;
                 _isMoving = false;
                 return;
             }
 
             // 重置移动状态（打断原有移动，顺滑衔接）
             _startPos = _ikTrackPoint.position - _offset;    // 起始点设为当前位置
-            _targetPos = _currentStepPoint.position;
+            _targetPos = _castPosition + _offset;                 // 目标点设为新的地面投射点
             _totalDuration = duration;
             _currentTime = 0f;
             _isMoving = true;

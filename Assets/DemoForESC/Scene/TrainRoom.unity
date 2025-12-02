@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2675,7 +2675,7 @@ MonoBehaviour:
     IKPosition: {x: 4.3809996, y: 0.7800001, z: 0.1910001}
     IKPositionWeight: 1
     root: {fileID: 1214511702}
-    target: {fileID: 0}
+    target: {fileID: 685741460}
     IKRotationWeight: 1
     IKRotation: {x: -0, y: -0, z: -0, w: 1}
     bendNormal: {x: 0, y: 1, z: 0}
@@ -3112,10 +3112,10 @@ MonoBehaviour:
   fixTransforms: 1
   solver:
     executedInEditor: 0
-    IKPosition: {x: -3.5349998, y: 0.7800001, z: -2.204}
+    IKPosition: {x: -4.325, y: 0.7800001, z: -2.204}
     IKPositionWeight: 1
     root: {fileID: 1266753100}
-    target: {fileID: 0}
+    target: {fileID: 1237773957}
     IKRotationWeight: 1
     IKRotation: {x: -0, y: -0, z: -0, w: 1}
     bendNormal: {x: 0, y: 4.71815, z: -0}
@@ -3134,7 +3134,7 @@ MonoBehaviour:
       weight: 1
       solverPosition: {x: 0, y: 0, z: 0}
       solverRotation: {x: 0, y: 0, z: 0, w: 1}
-      defaultLocalPosition: {x: -1.13, y: 0, z: 0}
+      defaultLocalPosition: {x: -1.92, y: 0, z: 0}
       defaultLocalRotation: {x: 0, y: 0, z: 0, w: 1}
       length: 0
       sqrMag: 0
@@ -3553,7 +3553,7 @@ MonoBehaviour:
     IKPosition: {x: 4.351, y: 0.7800001, z: -2.204}
     IKPositionWeight: 1
     root: {fileID: 1460766473}
-    target: {fileID: 0}
+    target: {fileID: 1240161788}
     IKRotationWeight: 1
     IKRotation: {x: -0, y: -0, z: -0, w: 1}
     bendNormal: {x: 0, y: 1, z: 0}
@@ -3641,10 +3641,10 @@ MonoBehaviour:
   fixTransforms: 1
   solver:
     executedInEditor: 0
-    IKPosition: {x: -3.505, y: 0.7800001, z: 0.19300008}
+    IKPosition: {x: -4.325, y: 0.7800001, z: 0.19300008}
     IKPositionWeight: 1
     root: {fileID: 1503821445}
-    target: {fileID: 0}
+    target: {fileID: 2120939416}
     IKRotationWeight: 1
     IKRotation: {x: -0, y: -0, z: -0, w: 1}
     bendNormal: {x: -0, y: 1, z: -0}
@@ -3663,7 +3663,7 @@ MonoBehaviour:
       weight: 1
       solverPosition: {x: 0, y: 0, z: 0}
       solverRotation: {x: 0, y: 0, z: 0, w: 1}
-      defaultLocalPosition: {x: -1.1, y: 0, z: 0}
+      defaultLocalPosition: {x: -1.92, y: 0, z: 0}
       defaultLocalRotation: {x: 0, y: 0, z: 0, w: 1}
       length: 0
       sqrMag: 0
@@ -4362,14 +4362,20 @@ MonoBehaviour:
     - idlePoint: {fileID: 1164883357}
       ikTrack: {fileID: 2120939416}
       offset: {x: 0, y: 0.7, z: 0}
-  Body: {fileID: 0}
-  T: 0.5
+  Body: {fileID: 1937078007}
   L: 2
   LegPhaseDifference:
   - 0.5
   - 0.5
   R: 0
   h: 1
+  Velocity: {x: 0, y: 0, z: 0}
+  castMaxDistance: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  CheckSelfVelocity: 1
+  gizmosOn: 1
   maxRelativeHeight: 0.1
 --- !u!1 &2018802933
 GameObject:
