@@ -15,7 +15,7 @@ namespace EXProceduralMachine
         }
 
         public bool showGizmo = true;
-        public List<XVisualLineData> lines;
+        public List<XVisualLineData> lines = new List<XVisualLineData>();
         
         #if UNITY_EDITOR
         private void OnDrawGizmos()
