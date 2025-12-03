@@ -56,7 +56,7 @@ namespace EXProceduralMachine
         /// </summary>
         private void Move()
         {
-            // if (!_isMoving) return;
+            if (!_isMoving) return;
 
             _castPosition = EXMachHelper.GetGroundPoint(
                 _currentStepPoint.position,
@@ -93,10 +93,12 @@ namespace EXProceduralMachine
         
         public void RefreshStepPoint()
         {
-            if ((_currentStepPoint.position-_fixedIdlePoint.position).magnitude>=_group.PhaseDifference*_locomotion.L)
-                _currentStepPoint.position = _fixedIdlePoint.position;
+            if (!((_currentStepPoint.position - _fixedIdlePoint.position).magnitude >=
+                  _group.PhaseDifference * _locomotion.L)) 
+                return;
             
             
+            _currentStepPoint.position = _fixedIdlePoint.position;
             // 处理极限参数（避免除零/无效高度）
             var duration = _locomotion.T * _group.PhaseDifference;
             if (duration <= 0.01f)
@@ -107,8 +109,8 @@ namespace EXProceduralMachine
             }
 
             // 重置移动状态（打断原有移动，顺滑衔接）
-            _startPos = _ikTrackPoint.position - _offset;    // 起始点设为当前位置
-            _targetPos = _castPosition + _offset;                 // 目标点设为新的地面投射点
+            _startPos = _ikTrackPoint.position; // 起始点设为当前位置
+            _targetPos = _castPosition + _offset; // 目标点设为新的地面投射点
             _totalDuration = duration;
             _currentTime = 0f;
             _isMoving = true;

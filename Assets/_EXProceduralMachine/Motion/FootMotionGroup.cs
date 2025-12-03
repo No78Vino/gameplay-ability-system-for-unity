@@ -66,9 +66,7 @@ namespace EXProceduralMachine
         public void UpdateFootPlacements()
         {
             foreach (var foot in _footPlacements)
-            {
                 foot.RefreshStepPoint();
-            }
         }
     }
 }

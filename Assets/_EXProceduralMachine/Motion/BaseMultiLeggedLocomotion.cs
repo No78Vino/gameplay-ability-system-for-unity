@@ -152,23 +152,24 @@ namespace EXProceduralMachine
 
         private void Update()
         {
-            var motionGroup = GetCurrentMotionGroup();
-            // if (!motionGroup.IsMoving())
-            // {
-                motionGroup.UpdateFootPlacements();
-            //}
-
-            foreach (var group in MotionGroup)
-            {
-                group.Tick();
-            }
-
             if (Body != null)
             {
                 var bodyPosition = Body.position;
                 var ave = GetAverageFootHeight();
                 bodyPosition.y = ave + h;
                 Body.position = bodyPosition;
+            }
+
+            //MotionTransform.position = Body.position;
+            
+            var motionGroup = GetCurrentMotionGroup();
+            if (!motionGroup.IsMoving())
+                motionGroup.UpdateFootPlacements();
+
+            foreach (var group in MotionGroup)
+            {
+                if(group.IsMoving())
+                    group.Tick();
             }
 
             CheckVelocity();
@@ -256,16 +257,19 @@ namespace EXProceduralMachine
                     foreach (var footPlacement in motionGroup.FootPlacements)
                     {
                         i++;
-                        SetVisualLine(_visualLine.lines, i, Color.white, footPlacement.IkTrackPoint.position,
-                            footPlacement.StepPoint.position);
+                        var stepPos = footPlacement.StepPoint.position;
+                        var ikPos = footPlacement.IkTrackPoint.position;
+                        SetVisualLine(_visualLine.lines, i, Color.white, ikPos,
+                            stepPos);
                         
                         i++;
-                        SetVisualLine(_visualLine.lines, i, Color.red, footPlacement.CastPosition,
-                            footPlacement.StepPoint.position);
+                        var moveColor = footPlacement.IsMoving()?Color.green:Color.red;
+                        SetVisualLine(_visualLine.lines, i, moveColor, footPlacement.CastPosition,
+                            ikPos);
                         
                         i++;
                         SetVisualLine(_visualLine.lines, i, Color.cyan, footPlacement.IdlePoint.position,
-                            footPlacement.StepPoint.position);
+                            stepPos);
                     }
                 }
                 i++;
