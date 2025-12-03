@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,12 +9,14 @@ namespace EXProceduralMachine
     /// </summary>
     public abstract class BaseMultiLeggedLocomotion : MonoBehaviour
     {
-        protected const string BASE_BOX_GROUP = "运动基础参数";
+        protected const string BASE_TAB_GROUP = "运动参数";
+        protected const string TAB_BASE = "基础参数";
+        protected const string TAB_BIND = "绑定";
 
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("步态运动落地点分组")] [InfoBox("将肢体分为N组交替运动")] [ShowInInspector]
+        [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("步态运动落地点分组")] [InfoBox("将肢体分为N组交替运动")] [ShowInInspector]
         public FootMotionGroup[] MotionGroup;
 
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("躯干")]
+        [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("躯干")]
         public Transform Body;
 
         /// <summary>
@@ -21,7 +24,7 @@ namespace EXProceduralMachine
         ///     Gait Cycle (T)
         ///     单条腿完成 “支撑 - 摆动” 一次的总时间（s）
         /// </summary>
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         [ShowInInspector]
         [LabelText("步态周期(s)")]
         [DisplayAsString]
@@ -32,14 +35,14 @@ namespace EXProceduralMachine
         ///     Step Length (L)
         ///     单步前进的直线距离（m），与肢体长度、摆动角度正相关
         /// </summary>
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("步长")]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("步长")]
         public float L;
 
         /// <summary>
         ///     肢体相位差
         ///     相邻肢体运动的时间差占步态周期的比例（%），决定步态类型
         /// </summary>
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("肢体相位差占比(%)")]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("肢体相位差占比(%)")]
         public float[] LegPhaseDifference = { 0.5f, 0.5f };
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace EXProceduralMachine
         ///     Turning Radius (R)
         ///     转向时的旋转中心到机器人质心的距离（m），R=0 为原地转向
         /// </summary>
-        [LabelText("转向半径")] [BoxGroup(BASE_BOX_GROUP)]
+        [LabelText("转向半径")] [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         public float R;
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace EXProceduralMachine
         ///     Ground Clearance (h)
         ///     机器人机身最低处到地面的垂直距离（m），影响越障能力
         /// </summary>
-        [LabelText("离地间隙")] [BoxGroup(BASE_BOX_GROUP)]
+        [LabelText("离地间隙")] [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         public float h;
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace EXProceduralMachine
         ///     Step Frequency (f)
         ///     单位时间内的步数（Hz），f=1/T
         /// </summary>
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         [ShowInInspector]
         [LabelText("步频(Hz)")]
         [DisplayAsString]
@@ -74,7 +77,7 @@ namespace EXProceduralMachine
         ///     Number of Legs (n)
         ///     机器人支撑与驱动用肢体总数
         /// </summary>
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         [ShowInInspector]
         [LabelText("足数")]
         [DisplayAsString]
@@ -88,7 +91,7 @@ namespace EXProceduralMachine
         [ShowInInspector]
         [LabelText("腿节数")]
         [DisplayAsString]
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         public virtual int SegmentsNumber => 3;
 
         /// <summary>
@@ -99,12 +102,12 @@ namespace EXProceduralMachine
         [ShowInInspector]
         [LabelText("移动速度(m/s)")]
         [DisplayAsString]
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         public float v => Velocity.magnitude;
         
         [ShowInInspector]
         [LabelText("速度(m/s)")]
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         public Vector3 Velocity;
 
         [ShowInInspector]
@@ -112,17 +115,17 @@ namespace EXProceduralMachine
         [LabelText("移动方向")]
         public Vector3 Direction => Velocity.normalized;
         
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("地面检测最远距离")]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("地面检测最远距离")]
         public float castMaxDistance;
         
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("地面检测Layer")]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("地面检测Layer")]
         public LayerMask groundLayer;
         
         [LabelText("是否自我计算速度")]
-        [BoxGroup(BASE_BOX_GROUP)]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)]
         public bool CheckSelfVelocity;
         
-        [BoxGroup(BASE_BOX_GROUP)] [LabelText("视觉辅助Gizmos")]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("视觉辅助Gizmos")]
         public bool gizmosOn;
         
         public Transform MotionTransform { get; private set; }
@@ -178,6 +181,7 @@ namespace EXProceduralMachine
         {
             if (!CheckSelfVelocity) return;
             Velocity = (Body.position - _lastBodyPosition) / Time.deltaTime;
+            Velocity.y = 0;
             _lastBodyPosition = Body.position;
         }
         
@@ -221,6 +225,20 @@ namespace EXProceduralMachine
             return height/count;
         }
 
+        private void SetVisualLine(List<XVisualLine.XVisualLineData> list, int index,Color color,Vector3 A,Vector3 B)
+        {
+            if (index + 1 >= list.Count)
+            {
+                list.Add(new XVisualLine.XVisualLineData());
+                index = list.Count - 1;
+            }
+            
+            var lineData = _visualLine.lines[index];
+            lineData.gizmoColor = color;
+            lineData.pointA = A;
+            lineData.pointB = B;
+        }
+        
         private void CheckGizmos()
         {
             if (gizmosOn)
@@ -238,28 +256,21 @@ namespace EXProceduralMachine
                     foreach (var footPlacement in motionGroup.FootPlacements)
                     {
                         i++;
-                        XVisualLine.XVisualLineData lineData;
-                        if (i+1 >= _visualLine.lines.Count)
-                        {
-                            _visualLine.lines.Add(new XVisualLine.XVisualLineData());
-                        }
-                        lineData = _visualLine.lines[i];
-                        lineData.gizmoColor = Color.white;
-                        lineData.pointA = footPlacement.IkTrackPoint.position;
-                        lineData.pointB = footPlacement.StepPoint.position;
+                        SetVisualLine(_visualLine.lines, i, Color.white, footPlacement.IkTrackPoint.position,
+                            footPlacement.StepPoint.position);
                         
                         i++;
-                        if (i+1 >= _visualLine.lines.Count)
-                        {
-                            _visualLine.lines.Add(new XVisualLine.XVisualLineData());
-                        }
-                        lineData = _visualLine.lines[i];
-                        lineData.gizmoColor = Color.red;
-                        lineData.pointA = footPlacement.CastPosition;
-                        lineData.pointB = footPlacement.StepPoint.position;
+                        SetVisualLine(_visualLine.lines, i, Color.red, footPlacement.CastPosition,
+                            footPlacement.StepPoint.position);
+                        
+                        i++;
+                        SetVisualLine(_visualLine.lines, i, Color.cyan, footPlacement.IdlePoint.position,
+                            footPlacement.StepPoint.position);
                     }
                 }
-
+                i++;
+                SetVisualLine(_visualLine.lines, i, Color.green, Body.position,
+                    Body.position + Velocity);
             }
         }
         

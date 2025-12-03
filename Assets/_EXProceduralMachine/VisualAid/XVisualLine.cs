@@ -26,9 +26,13 @@ namespace EXProceduralMachine
             foreach (var data in lines)
             {
                 // 设置颜色
-                Gizmos.color = data.gizmoColor;
+                var c = data.gizmoColor;
+                c.a = 0.5f;
+                Gizmos.color = c;
                 // 划线
                 Gizmos.DrawLine(data.pointA,data.pointB);
+                Gizmos.DrawCube(data.pointA,Vector3.one*0.2f);
+                Gizmos.DrawCube(data.pointB,Vector3.one*0.2f);
             }
         }
 

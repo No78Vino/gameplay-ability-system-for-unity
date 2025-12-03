@@ -32,6 +32,7 @@ namespace EXProceduralMachine
 
         public Transform IkTrackPoint => _ikTrackPoint;
         public Transform StepPoint => _currentStepPoint;
+        public Transform IdlePoint => _fixedIdlePoint;
 
         private Vector3 _castPosition;
         public Vector3 CastPosition => _castPosition;
@@ -92,7 +93,8 @@ namespace EXProceduralMachine
         
         public void RefreshStepPoint()
         {
-            _currentStepPoint.position = _fixedIdlePoint.position;
+            if ((_currentStepPoint.position-_fixedIdlePoint.position).magnitude>=_group.PhaseDifference*_locomotion.L)
+                _currentStepPoint.position = _fixedIdlePoint.position;
             
             
             // 处理极限参数（避免除零/无效高度）
