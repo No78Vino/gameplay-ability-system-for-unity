@@ -178,16 +178,36 @@ namespace EXProceduralMachine
             //         movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
             //     }
             // }
-            foreach (var group in MotionGroup)
+            var movingIndex = GetMovingGroupIndex();
+            if (movingIndex > 0)
             {
+                var group = MotionGroup[movingIndex];
                 foreach (var footPlacement in group.FootPlacements)
                 {
-                    var gPos = footPlacement.CastPosition;
-                    if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
+                        var gPos = footPlacement.CastPosition;
+                        if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
+                        {
+                            footPlacement.SetMoving();
+                            // groundPoints[i].position = gPos;
+                            // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+                        }
+                }
+            }
+
+            for (var i = 0; i < MotionGroup.Length; i++)
+            {
+                var group = MotionGroup[i];
+                foreach (var footPlacement in group.FootPlacements)
+                {
+                   //  if (footPlacement.IsMoving())
                     {
-                        footPlacement.SetMoving();
-                        // groundPoints[i].position = gPos;
-                        // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+                        var gPos = footPlacement.CastPosition;
+                        if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
+                        {
+                            footPlacement.SetMoving();
+                            // groundPoints[i].position = gPos;
+                            // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+                        }
                     }
                 }
             }
@@ -225,6 +245,9 @@ namespace EXProceduralMachine
             var index = 0;
             for (var i = 0; i < MotionGroup.Length; i++)
             {
+                if(MotionGroup[i].IsMoving())
+                    return MotionGroup[index];
+                
                 var rate = MotionGroup[i].DistanceRate();
                 if (rate > maxDistRate)
                 {
@@ -300,7 +323,16 @@ namespace EXProceduralMachine
                     Body.position + Velocity);
             }
         }
-        
+
+        public int GetMovingGroupIndex()
+        {
+            for (var i = 0; i < MotionGroup.Length; i++)
+            {
+                if (MotionGroup[i].IsMoving())
+                    return i;
+            }
+            return -1;
+        }
         public abstract Vector3 CalculateFootPlacementMovingPoint(Vector3 startPos, Vector3 targetPos,
             float timeNormalized);
     }

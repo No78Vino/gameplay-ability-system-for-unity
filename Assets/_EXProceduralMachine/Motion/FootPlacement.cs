@@ -93,10 +93,10 @@ namespace EXProceduralMachine
         
         public void RefreshStepPoint()
         {
-            if (!((_currentStepPoint.position - _fixedIdlePoint.position).magnitude >=
-                  _group.PhaseDifference * _locomotion.L)) 
-                return;
-            
+            // if (!((_currentStepPoint.position - _fixedIdlePoint.position).magnitude >=
+            //       _group.PhaseDifference * _locomotion.L)) 
+            //     return;
+            //
             _currentStepPoint.position = _fixedIdlePoint.position;
         }
 
