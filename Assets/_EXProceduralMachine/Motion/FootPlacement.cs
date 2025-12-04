@@ -48,6 +48,12 @@ namespace EXProceduralMachine
 
         public void Tick()
         {
+            _castPosition = EXMachHelper.GetGroundPoint(
+                _currentStepPoint.position,
+                _locomotion.castMaxDistance,
+                _locomotion.groundLayer,
+                Vector3.down);
+            
             Move();
         }
 
@@ -57,12 +63,6 @@ namespace EXProceduralMachine
         private void Move()
         {
             if (!_isMoving) return;
-
-            _castPosition = EXMachHelper.GetGroundPoint(
-                _currentStepPoint.position,
-                _locomotion.castMaxDistance,
-                _locomotion.groundLayer,
-                Vector3.down);
             
             // 累加移动时间
             _currentTime += Time.deltaTime;
@@ -97,10 +97,14 @@ namespace EXProceduralMachine
                   _group.PhaseDifference * _locomotion.L)) 
                 return;
             
-            
             _currentStepPoint.position = _fixedIdlePoint.position;
+        }
+
+        public void SetMoving()
+        {
             // 处理极限参数（避免除零/无效高度）
-            var duration = _locomotion.T * _group.PhaseDifference;
+            //var duration = _locomotion.T * _group.PhaseDifference;
+            var duration = _locomotion.stepTime;
             if (duration <= 0.01f)
             {
                 _ikTrackPoint.position = _castPosition + _offset;

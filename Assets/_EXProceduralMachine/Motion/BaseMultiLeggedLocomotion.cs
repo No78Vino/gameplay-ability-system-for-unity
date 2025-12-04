@@ -127,6 +127,8 @@ namespace EXProceduralMachine
         
         [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("视觉辅助Gizmos")]
         public bool gizmosOn;
+
+        public float stepTime = 1;
         
         public Transform MotionTransform { get; private set; }
 
@@ -163,14 +165,35 @@ namespace EXProceduralMachine
             //MotionTransform.position = Body.position;
             
             var motionGroup = GetCurrentMotionGroup();
-            if (!motionGroup.IsMoving())
-                motionGroup.UpdateFootPlacements();
+            motionGroup.UpdateFootPlacements();
 
+            
+            // for (var i = 0; i < castPoints.Count; i++)
+            // {
+            //     var cast = castPoints[i];
+            //     var gPos = GetGroundPoint(cast.position, maxDistance, LayerMask.GetMask("Terrain"));
+            //     if ((gPos - groundPoints[i].position).magnitude > moveStep)
+            //     {
+            //         groundPoints[i].position = gPos;
+            //         movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+            //     }
+            // }
             foreach (var group in MotionGroup)
             {
-                if(group.IsMoving())
-                    group.Tick();
+                foreach (var footPlacement in group.FootPlacements)
+                {
+                    var gPos = footPlacement.CastPosition;
+                    if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
+                    {
+                        footPlacement.SetMoving();
+                        // groundPoints[i].position = gPos;
+                        // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+                    }
+                }
             }
+
+            foreach (var group in MotionGroup)
+                group.Tick();
 
             CheckVelocity();
 #if UNITY_EDITOR
@@ -198,14 +221,14 @@ namespace EXProceduralMachine
         /// <returns></returns>
         private FootMotionGroup GetCurrentMotionGroup()
         {
-            var minDistance = float.MaxValue;
+            float maxDistRate = 0f;
             var index = 0;
             for (var i = 0; i < MotionGroup.Length; i++)
             {
-                var d = MotionGroup[i].DistanceInDirection();
-                if (d < minDistance)
+                var rate = MotionGroup[i].DistanceRate();
+                if (rate > maxDistRate)
                 {
-                    minDistance = d;
+                    maxDistRate = rate;
                     index = i;
                 }
             }

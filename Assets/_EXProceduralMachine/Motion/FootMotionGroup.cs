@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 namespace EXProceduralMachine
@@ -17,6 +18,8 @@ namespace EXProceduralMachine
         public Transform GroupTransform => _tfGroup;
         
         public float PhaseDifference { get; private set; }
+
+        public float SplitStepLength => PhaseDifference * Locomotion.L;
         
         public void Initialize(BaseMultiLeggedLocomotion locomotion,float phaseDifference)
         {
@@ -50,8 +53,38 @@ namespace EXProceduralMachine
         public float DistanceInDirection()
         {
             if (_footPlacements.Length == 0) return 0;
-            var foot = _footPlacements[0];
-            return foot.DistanceInSpeedDirection();
+            Vector3 fixedIdleCenter = IdleCenter();
+            Vector3 currentCenter = CurrentCenter();
+            return (fixedIdleCenter - currentCenter).magnitude;
+        }
+        
+        public float DistanceRate()
+        {
+            var dist = DistanceInDirection();
+            var splitL = Locomotion.L * PhaseDifference;
+            return dist / splitL;
+        }
+
+        public Vector3 IdleCenter()
+        {
+            if (_footPlacements.Length == 0) return Locomotion.Body.transform.position;
+            
+            var fixedIdleCenter = Vector3.zero;
+            foreach (var foot in _footPlacements)
+                fixedIdleCenter += foot.IdlePoint.position;
+            
+            return fixedIdleCenter / _footPlacements.Length;
+        }
+        
+        public Vector3 CurrentCenter()
+        {
+            if (_footPlacements.Length == 0) return Locomotion.Body.transform.position;
+            
+            var fixedIdleCenter = Vector3.zero;
+            foreach (var foot in _footPlacements)
+                fixedIdleCenter += foot.StepPoint.position;
+            
+            return fixedIdleCenter / _footPlacements.Length;
         }
 
         public void Tick()
