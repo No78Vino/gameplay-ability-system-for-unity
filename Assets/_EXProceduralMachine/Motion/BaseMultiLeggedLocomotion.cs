@@ -135,6 +135,7 @@ namespace EXProceduralMachine
         public bool IsMoving => v == 0;
 
         private Vector3 _lastBodyPosition;
+        private Vector3 _lastBodyStepPos;
 
         private XVisualLine _visualLine;
 
@@ -150,6 +151,7 @@ namespace EXProceduralMachine
             }
 
             _lastBodyPosition = Body.position;
+            _lastBodyStepPos = Body.position;
         }
 
         private void Update()
@@ -163,11 +165,16 @@ namespace EXProceduralMachine
             }
 
             //MotionTransform.position = Body.position;
-            
-            var motionGroup = GetCurrentMotionGroup();
-            motionGroup.UpdateFootPlacements();
 
-            
+            if ((Body.position - _lastBodyStepPos).magnitude > L)
+            {
+                _lastBodyStepPos = Body.position;
+                var motionGroup = GetCurrentMotionGroup();
+                var movingGroupIndex = GetMovingGroupIndex();
+                if(movingGroupIndex<0 || motionGroup==MotionGroup[movingGroupIndex])
+                    motionGroup.UpdateFootPlacements();
+            }
+
             // for (var i = 0; i < castPoints.Count; i++)
             // {
             //     var cast = castPoints[i];
@@ -178,21 +185,23 @@ namespace EXProceduralMachine
             //         movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
             //     }
             // }
-            var movingIndex = GetMovingGroupIndex();
-            if (movingIndex > 0)
-            {
-                var group = MotionGroup[movingIndex];
-                foreach (var footPlacement in group.FootPlacements)
-                {
-                        var gPos = footPlacement.CastPosition;
-                        if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
-                        {
-                            footPlacement.SetMoving();
-                            // groundPoints[i].position = gPos;
-                            // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
-                        }
-                }
-            }
+
+            
+            // var movingIndex = GetMovingGroupIndex();
+            // if (movingIndex > 0)
+            // {
+            //     var group = MotionGroup[movingIndex];
+            //     foreach (var footPlacement in group.FootPlacements)
+            //     {
+            //             var gPos = footPlacement.CastPosition;
+            //             if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
+            //             {
+            //                 footPlacement.SetMoving();
+            //                 // groundPoints[i].position = gPos;
+            //                 // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
+            //             }
+            //     }
+            // }
 
             for (var i = 0; i < MotionGroup.Length; i++)
             {
@@ -223,9 +232,12 @@ namespace EXProceduralMachine
 
         private void CheckVelocity()
         {
-            if (!CheckSelfVelocity) return;
-            Velocity = (Body.position - _lastBodyPosition) / Time.deltaTime;
-            Velocity.y = 0;
+            if (CheckSelfVelocity)
+            {
+                Velocity = (Body.position - _lastBodyPosition) / Time.deltaTime;
+                Velocity.y = 0;
+            }
+
             _lastBodyPosition = Body.position;
         }
         
