@@ -127,6 +127,9 @@ namespace EXProceduralMachine
         
         [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("视觉辅助Gizmos")]
         public bool gizmosOn;
+        
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("拉扯极限距离")]
+        public float stepDistanceLimit;
 
         public float stepTime = 1;
         
@@ -171,52 +174,20 @@ namespace EXProceduralMachine
                 _lastBodyStepPos = Body.position;
                 var motionGroup = GetCurrentMotionGroup();
                 var movingGroupIndex = GetMovingGroupIndex();
-                if(movingGroupIndex<0 || motionGroup==MotionGroup[movingGroupIndex])
+                if(movingGroupIndex<0 
+                   || motionGroup==MotionGroup[movingGroupIndex] 
+                   || motionGroup.DistanceInDirection() > stepDistanceLimit )
                     motionGroup.UpdateFootPlacements();
             }
 
-            // for (var i = 0; i < castPoints.Count; i++)
-            // {
-            //     var cast = castPoints[i];
-            //     var gPos = GetGroundPoint(cast.position, maxDistance, LayerMask.GetMask("Terrain"));
-            //     if ((gPos - groundPoints[i].position).magnitude > moveStep)
-            //     {
-            //         groundPoints[i].position = gPos;
-            //         movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
-            //     }
-            // }
-
-            
-            // var movingIndex = GetMovingGroupIndex();
-            // if (movingIndex > 0)
-            // {
-            //     var group = MotionGroup[movingIndex];
-            //     foreach (var footPlacement in group.FootPlacements)
-            //     {
-            //             var gPos = footPlacement.CastPosition;
-            //             if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
-            //             {
-            //                 footPlacement.SetMoving();
-            //                 // groundPoints[i].position = gPos;
-            //                 // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
-            //             }
-            //     }
-            // }
-
-            for (var i = 0; i < MotionGroup.Length; i++)
+            foreach (var group in MotionGroup)
             {
-                var group = MotionGroup[i];
                 foreach (var footPlacement in group.FootPlacements)
                 {
-                   //  if (footPlacement.IsMoving())
+                    var gPos = footPlacement.CastPosition;
+                    if ((gPos - footPlacement.IkTrackPoint.position).magnitude > L)
                     {
-                        var gPos = footPlacement.CastPosition;
-                        if ((gPos - footPlacement.IkTrackPoint.position).magnitude > group.SplitStepLength)
-                        {
-                            footPlacement.SetMoving();
-                            // groundPoints[i].position = gPos;
-                            // movers[i].MoveToParabola(gPos,stepMoveTime,stepHeight);
-                        }
+                        footPlacement.SetMoving();
                     }
                 }
             }
@@ -253,19 +224,14 @@ namespace EXProceduralMachine
         /// <returns></returns>
         private FootMotionGroup GetCurrentMotionGroup()
         {
-            float maxDistRate = 0f;
+            var maxDistRate = 0f;
             var index = 0;
             for (var i = 0; i < MotionGroup.Length; i++)
             {
-                if(MotionGroup[i].IsMoving())
-                    return MotionGroup[index];
-                
                 var rate = MotionGroup[i].DistanceRate();
-                if (rate > maxDistRate)
-                {
-                    maxDistRate = rate;
-                    index = i;
-                }
+                if (!(rate > maxDistRate)) continue;
+                maxDistRate = rate;
+                index = i;
             }
 
             return MotionGroup[index];

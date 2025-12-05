@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 
 namespace EXProceduralMachine
 {
@@ -67,19 +68,17 @@ namespace EXProceduralMachine
             // 累加移动时间
             _currentTime += Time.deltaTime;
             // 归一化时间（0~1），超过1则设为1（到达终点）
-            float timeNormalized = Mathf.Clamp01(_currentTime / _totalDuration);
+            var timeNormalized = Mathf.Clamp01(_currentTime / _totalDuration);
 
             // 计算当前位置
-            Vector3 currentPos = _locomotion.CalculateFootPlacementMovingPoint(_startPos,_targetPos,timeNormalized);
-            _ikTrackPoint.position = currentPos + _offset;
+            var currentPos = _locomotion.CalculateFootPlacementMovingPoint(_startPos,_targetPos,timeNormalized);
+            _ikTrackPoint.position = currentPos;
 
             // 检查是否到达终点
-            if (timeNormalized >= 1f)
-            {
-                _isMoving = false;
-                // 确保最终位置精准匹配目标点（避免浮点误差）
-                _ikTrackPoint.position = _targetPos;
-            }
+            if (!(timeNormalized >= 1f)) return;
+            _isMoving = false;
+            // 确保最终位置精准匹配目标点（避免浮点误差）
+            _ikTrackPoint.position = _targetPos;
         }
 
         public bool IsMoving() => _isMoving;
@@ -103,18 +102,17 @@ namespace EXProceduralMachine
         public void SetMoving()
         {
             // 处理极限参数（避免除零/无效高度）
-            //var duration = _locomotion.T * _group.PhaseDifference;
-            var duration = _locomotion.stepTime;
+            var duration = math.min(_locomotion.T * _group.PhaseDifference,_locomotion.stepTime);
+            _targetPos = _castPosition + _offset; // 目标点设为新的地面投射点
             if (duration <= 0.01f)
             {
-                _ikTrackPoint.position = _castPosition + _offset;
+                _ikTrackPoint.position = _targetPos;
                 _isMoving = false;
                 return;
             }
 
             // 重置移动状态（打断原有移动，顺滑衔接）
             _startPos = _ikTrackPoint.position; // 起始点设为当前位置
-            _targetPos = _castPosition + _offset; // 目标点设为新的地面投射点
             _totalDuration = duration;
             _currentTime = 0f;
             _isMoving = true;
