@@ -45,6 +45,7 @@ namespace EXProceduralMachine
             _fixedIdlePoint = cfg.idlePoint;
             _currentStepPoint = stepPoint;
             _ikTrackPoint = cfg.ikTrack;
+            _offset = cfg.offset;
         }
 
         public void Tick()
@@ -53,7 +54,7 @@ namespace EXProceduralMachine
                 _currentStepPoint.position,
                 _locomotion.castMaxDistance,
                 _locomotion.groundLayer,
-                Vector3.down);
+                Vector3.down) + _offset;
             
             Move();
         }
@@ -103,7 +104,7 @@ namespace EXProceduralMachine
         {
             // 处理极限参数（避免除零/无效高度）
             var duration = math.min(_locomotion.T * _group.PhaseDifference,_locomotion.stepTime);
-            _targetPos = _castPosition + _offset; // 目标点设为新的地面投射点
+            _targetPos = _castPosition; // 目标点设为新的地面投射点
             if (duration <= 0.01f)
             {
                 _ikTrackPoint.position = _targetPos;
