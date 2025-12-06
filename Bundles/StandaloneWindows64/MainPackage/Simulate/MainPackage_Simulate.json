@@ -10,7 +10,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "MainPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/11/24 0:08:31",
+    "PackageNote": "2025/12/6 18:00:48",
     "AssetList": [
         {
             "Address": "Animation_logo",
@@ -21,11 +21,19 @@
             "DependBundleIDs": []
         },
         {
+            "Address": "Monster_Spider",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/Spider.prefab",
+            "AssetGUID": "d59493e6e44c27344a6e537171e6aecb",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
             "Address": "UI_ButtonA",
             "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
             "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445",
             "AssetTags": [],
-            "BundleID": 1,
+            "BundleID": 2,
             "DependBundleIDs": []
         },
         {
@@ -33,7 +41,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MaskWindow.prefab",
             "AssetGUID": "49d0844cf90395f4fa281c8fdde769f8",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 3,
             "DependBundleIDs": []
         },
         {
@@ -41,7 +49,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow.prefab",
             "AssetGUID": "2ba0f5cfbd5a3e848b72fb2c3242f903",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 4,
             "DependBundleIDs": []
         },
         {
@@ -49,7 +57,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbability.json",
             "AssetGUID": "7f0ab7c822c557f4380e5fe1ef119902",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 5,
             "DependBundleIDs": []
         },
         {
@@ -57,7 +65,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbasc.json",
             "AssetGUID": "142c6dd35781acf418a2595051f4a5b2",
             "AssetTags": [],
-            "BundleID": 5,
+            "BundleID": 6,
             "DependBundleIDs": []
         },
         {
@@ -65,7 +73,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattribute.json",
             "AssetGUID": "a3dcd8da191ab79499b971f73e618fdb",
             "AssetTags": [],
-            "BundleID": 6,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -73,7 +81,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattributeset.json",
             "AssetGUID": "a6cc655a571d9ef4f98b84193944bfcd",
             "AssetTags": [],
-            "BundleID": 7,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -81,7 +89,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaycue.json",
             "AssetGUID": "b9dd4b27b4a4ce44bacc57e3dc58999d",
             "AssetTags": [],
-            "BundleID": 8,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -89,7 +97,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplayeffect.json",
             "AssetGUID": "d14042b62cbbf98418ddfc78b704b02b",
             "AssetTags": [],
-            "BundleID": 9,
+            "BundleID": 10,
             "DependBundleIDs": []
         },
         {
@@ -97,7 +105,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaytags.json",
             "AssetGUID": "ac1695dbfebf55449bfbaa4640208d87",
             "AssetTags": [],
-            "BundleID": 10,
+            "BundleID": 11,
             "DependBundleIDs": []
         },
         {
@@ -105,7 +113,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbmmc.json",
             "AssetGUID": "f0010d70d40472c4597c4b8fcabde76b",
             "AssetTags": [],
-            "BundleID": 11,
+            "BundleID": 12,
             "DependBundleIDs": []
         },
         {
@@ -113,7 +121,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Texture/ex_hard_studio_logo.png",
             "AssetGUID": "9cc34e2e7dfc62645b359f4e79546d08",
             "AssetTags": [],
-            "BundleID": 12,
+            "BundleID": 13,
             "DependBundleIDs": []
         },
         {
@@ -121,7 +129,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
             "AssetGUID": "741ee455797b320409a46850c1e97a82",
             "AssetTags": [],
-            "BundleID": 13,
+            "BundleID": 14,
             "DependBundleIDs": []
         },
         {
@@ -129,7 +137,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Timeline/opening.prefab",
             "AssetGUID": "0865ebc6936baa24582b924288cdcd89",
             "AssetTags": [],
-            "BundleID": 14,
+            "BundleID": 15,
             "DependBundleIDs": []
         },
         {
@@ -137,7 +145,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Timeline/TimelineOpening.playable",
             "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb",
             "AssetTags": [],
-            "BundleID": 15,
+            "BundleID": 16,
             "DependBundleIDs": []
         },
         {
@@ -145,7 +153,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/Timeline/Virtual Camera.controller",
             "AssetGUID": "a69fc2dfe912ab449ba0419f1a60f681",
             "AssetTags": [],
-            "BundleID": 16,
+            "BundleID": 17,
             "DependBundleIDs": []
         },
         {
@@ -153,7 +161,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/logo.png",
             "AssetGUID": "23e2312f2a7b9ef4b8c66890dc2c3b4a",
             "AssetTags": [],
-            "BundleID": 17,
+            "BundleID": 18,
             "DependBundleIDs": []
         },
         {
@@ -161,7 +169,7 @@
             "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
             "AssetGUID": "69267910aca4b2840947de018347b614",
             "AssetTags": [],
-            "BundleID": 18,
+            "BundleID": 19,
             "DependBundleIDs": []
         },
         {
@@ -169,7 +177,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
             "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c",
             "AssetTags": [],
-            "BundleID": 19,
+            "BundleID": 20,
             "DependBundleIDs": []
         },
         {
@@ -177,7 +185,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
             "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
             "AssetTags": [],
-            "BundleID": 20,
+            "BundleID": 21,
             "DependBundleIDs": []
         },
         {
@@ -185,7 +193,7 @@
             "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
             "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6",
             "AssetTags": [],
-            "BundleID": 19,
+            "BundleID": 20,
             "DependBundleIDs": []
         },
         {
@@ -193,7 +201,15 @@
             "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
             "AssetGUID": "edac8363a1c534b4799e555f89a24386",
             "AssetTags": [],
-            "BundleID": 19,
+            "BundleID": 20,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "TrainRoom",
+            "AssetPath": "Assets/DemoForESC/Scene/TrainRoom.unity",
+            "AssetGUID": "b99fc8da31000a444ad6f7e0227bbc03",
+            "AssetTags": [],
+            "BundleID": 20,
             "DependBundleIDs": []
         }
     ],
@@ -204,6 +220,16 @@
             "FileHash": "11079b79ca1133b14f48921015e5b0ab",
             "FileCRC": 0,
             "FileSize": 11389,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+            "UnityCRC": 0,
+            "FileHash": "b80f21ade8e1491b5d4539efae624935",
+            "FileCRC": 0,
+            "FileSize": 87572,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -393,7 +419,7 @@
             "UnityCRC": 0,
             "FileHash": "09f7730a0f7920446b1d2e51f61e91ea",
             "FileCRC": 0,
-            "FileSize": 257102,
+            "FileSize": 286322,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

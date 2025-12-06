@@ -167,8 +167,6 @@ namespace EXProceduralMachine
                 Body.position = bodyPosition;
             }
 
-            //MotionTransform.position = Body.position;
-
             if ((Body.position - _lastBodyStepPos).magnitude > L)
             {
                 _lastBodyStepPos = Body.position;
@@ -185,10 +183,8 @@ namespace EXProceduralMachine
                 foreach (var footPlacement in group.FootPlacements)
                 {
                     var gPos = footPlacement.CastPosition;
-                    if ((gPos - footPlacement.IkTrackPoint.position).magnitude > L)
-                    {
+                    if ((gPos - footPlacement.IkTrackPoint.position).magnitude > L*group.PhaseDifference)
                         footPlacement.SetMoving();
-                    }
                 }
             }
 
@@ -311,6 +307,7 @@ namespace EXProceduralMachine
             }
             return -1;
         }
+        
         public abstract Vector3 CalculateFootPlacementMovingPoint(Vector3 startPos, Vector3 targetPos,
             float timeNormalized);
     }
