@@ -15,6 +15,9 @@ namespace EXProceduralMachine
         private float _totalDuration;    // 本次移动总时长
         private Vector3 _startPos;       // 本次移动的起始位置
         private Vector3 _targetPos;      // 本次移动的目标位置
+
+        public Vector3 StartPos => _startPos;
+        public Vector3 TargetPos => _targetPos;
         
         /// <summary>
         /// IK追踪目标点
@@ -105,6 +108,11 @@ namespace EXProceduralMachine
             // 处理极限参数（避免除零/无效高度）
             var duration = math.min(_locomotion.T * _group.PhaseDifference,_locomotion.stepTime);
             _targetPos = _castPosition; // 目标点设为新的地面投射点
+            _targetPos = EXMachHelper.GetGroundPoint(
+                _currentStepPoint.position,
+                _locomotion.castMaxDistance,
+                _locomotion.groundLayer,
+                Vector3.down) + _offset;
             if (duration <= 0.01f)
             {
                 _ikTrackPoint.position = _targetPos;

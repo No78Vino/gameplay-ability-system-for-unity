@@ -169,7 +169,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1851871172954606914}
   - component: {fileID: 3331073488992645963}
-  - component: {fileID: 57222198783398607}
   m_Layer: 0
   m_Name: body
   m_TagString: Untagged
@@ -216,55 +215,14 @@ MonoBehaviour:
     target: {fileID: 0}
     autoUpdate: 0
     ValueType: 0
+    x: 1
+    y: 1
+    z: 1
     Frequency: 3.25
     Damping: 0.506
     Scale: 0
   drawCurve: 1
   drawCurveIndex: 0
---- !u!114 &57222198783398607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1031652344769246199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65ef00b8307444d4834cbd1a8203c01e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MotionGroup:
-  - feet:
-    - idlePoint: {fileID: 8343799650137694258}
-      ikTrack: {fileID: 884760083187934156}
-      offset: {x: 0, y: 0.7, z: 0}
-    - idlePoint: {fileID: 1499835809795273696}
-      ikTrack: {fileID: 791490889311982409}
-      offset: {x: 0, y: 0.7, z: 0}
-  - feet:
-    - idlePoint: {fileID: 4779907921344940841}
-      ikTrack: {fileID: 8002768292126711061}
-      offset: {x: 0, y: 0.7, z: 0}
-    - idlePoint: {fileID: 805229388763636627}
-      ikTrack: {fileID: 6792797942191805156}
-      offset: {x: 0, y: 0.7, z: 0}
-  Body: {fileID: 1851871172954606914}
-  L: 1
-  LegPhaseDifference:
-  - 0.5
-  - 0.5
-  R: 0
-  h: 0.5
-  Velocity: {x: 0, y: 0, z: 0}
-  castMaxDistance: 20
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  CheckSelfVelocity: 1
-  gizmosOn: 1
-  stepDistanceLimit: 1.5
-  stepTime: 0.3
-  maxRelativeHeight: 0.3
 --- !u!1 &1379703783340583508
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,6 +506,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8116483671025549369}
+  - component: {fileID: 2380824077433122572}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Untagged
@@ -572,6 +531,50 @@ Transform:
   - {fileID: 4961747006476251950}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2380824077433122572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839834720109347251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65ef00b8307444d4834cbd1a8203c01e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MotionGroup:
+  - feet:
+    - idlePoint: {fileID: 8343799650137694258}
+      ikTrack: {fileID: 884760083187934156}
+      offset: {x: 0, y: 0.7, z: 0}
+    - idlePoint: {fileID: 1499835809795273696}
+      ikTrack: {fileID: 791490889311982409}
+      offset: {x: 0, y: 0.7, z: 0}
+  - feet:
+    - idlePoint: {fileID: 4779907921344940841}
+      ikTrack: {fileID: 8002768292126711061}
+      offset: {x: 0, y: 0.7, z: 0}
+    - idlePoint: {fileID: 805229388763636627}
+      ikTrack: {fileID: 6792797942191805156}
+      offset: {x: 0, y: 0.7, z: 0}
+  Body: {fileID: 1851871172954606914}
+  L: 1
+  LegPhaseDifference:
+  - 0.5
+  - 0.5
+  R: 0
+  h: 0.5
+  Velocity: {x: 0, y: 0, z: 0}
+  castMaxDistance: 20
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  CheckSelfVelocity: 1
+  gizmosOn: 1
+  stepDistanceLimit: 1.5
+  stepTime: 0.3
+  maxRelativeHeight: 0.3
 --- !u!1 &1864615784347499539
 GameObject:
   m_ObjectHideFlags: 0
