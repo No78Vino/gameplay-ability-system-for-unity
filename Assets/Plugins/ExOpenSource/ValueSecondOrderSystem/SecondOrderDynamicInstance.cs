@@ -25,6 +25,25 @@ namespace EXToyLib
         [EnumToggleButtons]
         [LabelText("影响属性")]
         public SecondOrderDynamicValueType ValueType = SecondOrderDynamicValueType.Position;
+
+        [BoxGroup("次级运动/影响维度")]
+        [HorizontalGroup("次级运动/影响维度/axis")]
+        [HideIf("@ValueType==SecondOrderDynamicValueType.Custom")]
+        [LabelText("x")]
+        [LabelWidth(20)]
+        public bool x = true;
+        
+        [HorizontalGroup("次级运动/影响维度/axis")]
+        [HideIf("@ValueType==SecondOrderDynamicValueType.Custom")]
+        [LabelText("y")]
+        [LabelWidth(20)]
+        public bool y = true;
+        
+        [HorizontalGroup("次级运动/影响维度/axis")]
+        [HideIf("@ValueType==SecondOrderDynamicValueType.Custom")]
+        [LabelText("z")]
+        [LabelWidth(20)]
+        public bool z = true;
         
         [BoxGroup("次级运动")]
         [LabelText("震荡频率")]
@@ -59,6 +78,14 @@ namespace EXToyLib
             Dynamics.UpdateFactors();
         }
         
+        public Vector3 CheckEffectedAxis(Vector3 source, Vector3 origin)
+        {
+            Vector3 value = source;
+            if (!x) value.x = origin.x;
+            if (!y) value.y = origin.y;
+            if (!z) value.z = origin.z;
+            return value;
+        }
         
         private static float DrawerFrequency(float value, GUIContent label)
         {

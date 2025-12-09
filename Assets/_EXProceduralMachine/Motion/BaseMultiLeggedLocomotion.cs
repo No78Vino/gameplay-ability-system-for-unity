@@ -241,7 +241,7 @@ namespace EXProceduralMachine
             {
                 count += group.FootPlacements.Length;
                 foreach (var footPlacement in group.FootPlacements)
-                    height += footPlacement.IkTrackPoint.position.y;
+                    height += footPlacement.CastPosition.y;
             }
             return height/count;
         }

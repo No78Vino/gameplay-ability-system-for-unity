@@ -80,13 +80,16 @@ namespace EXToyLib
                         switch (inst.ValueType)
                         {
                             case SecondOrderDynamicValueType.Position:
-                                transform.position = inst.Dynamics.Update(Time.deltaTime, inst.target.position);
+                                var pos = inst.Dynamics.Update(Time.deltaTime, inst.target.position);
+                                transform.position = inst.CheckEffectedAxis(pos,transform.position);
                                 break;
                             case SecondOrderDynamicValueType.Rotation:
-                                transform.localEulerAngles = inst.Dynamics.Update(Time.deltaTime, inst.target.localEulerAngles);
+                                var angle = inst.Dynamics.Update(Time.deltaTime, inst.target.localEulerAngles);
+                                transform.localEulerAngles = inst.CheckEffectedAxis(angle,transform.localEulerAngles);
                                 break;
                             case SecondOrderDynamicValueType.Scale:
-                                transform.localScale = inst.Dynamics.Update(Time.deltaTime, inst.target.localScale);
+                                var scale = inst.Dynamics.Update(Time.deltaTime, inst.target.localScale);
+                                transform.localScale = inst.CheckEffectedAxis(scale,transform.localScale);
                                 break;
                             case SecondOrderDynamicValueType.Custom:
                             default:
@@ -97,13 +100,16 @@ namespace EXToyLib
                     switch (inst.ValueType)
                     {
                         case SecondOrderDynamicValueType.Position:
-                            transform.position = inst.Dynamics.Update(Time.deltaTime);
+                            var pos = inst.Dynamics.Update(Time.deltaTime);
+                            transform.position = inst.CheckEffectedAxis(pos,transform.position);
                             break;
                         case SecondOrderDynamicValueType.Rotation:
-                            transform.localEulerAngles = inst.Dynamics.Update(Time.deltaTime);
+                            var angle = inst.Dynamics.Update(Time.deltaTime);
+                            transform.localEulerAngles = inst.CheckEffectedAxis(angle,transform.localEulerAngles);
                             break;
                         case SecondOrderDynamicValueType.Scale:
-                            transform.localScale = inst.Dynamics.Update(Time.deltaTime);
+                            var scale = inst.Dynamics.Update(Time.deltaTime);
+                            transform.localScale = inst.CheckEffectedAxis(scale,transform.localScale);
                             break;
                         case SecondOrderDynamicValueType.Custom:
                         default:
