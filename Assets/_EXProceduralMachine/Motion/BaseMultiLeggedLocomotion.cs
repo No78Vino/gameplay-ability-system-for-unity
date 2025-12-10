@@ -131,6 +131,13 @@ namespace EXProceduralMachine
         [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("拉扯极限距离")]
         public float stepDistanceLimit;
 
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("停止后复位")]
+        public bool resetWhenStop;
+        
+        [ShowIf(nameof(resetWhenStop))]
+        [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("复位延迟")]
+        public float resetWaitingDuration;
+        
         public float stepTime = 1;
         
         public Transform MotionTransform { get; private set; }
@@ -141,6 +148,7 @@ namespace EXProceduralMachine
         private Vector3 _lastBodyStepPos;
 
         private XVisualLine _visualLine;
+        private float _stopTime;
 
         protected virtual void Awake()
         {
@@ -169,13 +177,10 @@ namespace EXProceduralMachine
                 var forward = Body.forward;
                 forward.y = 0;
                 // 4. 平滑应用旋转
-                //if (grp.FootPlacements.Length > 2)
-                {
-                    Body.eulerAngles = EXMachHelper.CalculateBodyRotationAngle(forward,
-                        MotionGroup[0].FootPlacements[0].IkTrackPoint.position,
-                        MotionGroup[0].FootPlacements[1].IkTrackPoint.position,
-                        MotionGroup[1].FootPlacements[0].IkTrackPoint.position);
-                }
+                Body.eulerAngles = EXMachHelper.CalculateBodyRotationAngle(forward,
+                    MotionGroup[0].FootPlacements[0].IkTrackPoint.position,
+                    MotionGroup[0].FootPlacements[1].IkTrackPoint.position,
+                    MotionGroup[1].FootPlacements[0].IkTrackPoint.position);
             }
 
             if ((Body.position - _lastBodyStepPos).magnitude > L)
@@ -203,6 +208,8 @@ namespace EXProceduralMachine
                 group.Tick();
 
             CheckVelocity();
+
+            CheckStop();
 #if UNITY_EDITOR
             CheckGizmos();
 #endif
@@ -217,6 +224,30 @@ namespace EXProceduralMachine
             }
 
             _lastBodyPosition = Body.position;
+        }
+
+        private void CheckStop()
+        {
+            if (!resetWhenStop) return;
+
+            if (_stopTime<0)
+            {
+                if(!IsMoving) _stopTime = Time.time;
+            }
+            else
+            {
+                if (IsMoving)
+                    _stopTime = -1;
+                else
+                {
+                    if (Time.time >= _stopTime + resetWaitingDuration)
+                    {
+                        _stopTime = -1;
+                        foreach (var motionGroup in MotionGroup)
+                            motionGroup.UpdateFootPlacements();
+                    }
+                }
+            }
         }
         
         protected void OnDestroy()
