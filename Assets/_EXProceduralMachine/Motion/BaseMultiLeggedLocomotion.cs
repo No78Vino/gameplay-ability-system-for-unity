@@ -165,6 +165,17 @@ namespace EXProceduralMachine
                 var ave = GetAverageFootHeight();
                 bodyPosition.y = ave + h;
                 Body.position = bodyPosition;
+
+                var forward = Body.forward;
+                forward.y = 0;
+                // 4. 平滑应用旋转
+                //if (grp.FootPlacements.Length > 2)
+                {
+                    Body.eulerAngles = EXMachHelper.CalculateBodyRotationAngle(forward,
+                        MotionGroup[0].FootPlacements[0].IkTrackPoint.position,
+                        MotionGroup[0].FootPlacements[1].IkTrackPoint.position,
+                        MotionGroup[1].FootPlacements[0].IkTrackPoint.position);
+                }
             }
 
             if ((Body.position - _lastBodyStepPos).magnitude > L)
