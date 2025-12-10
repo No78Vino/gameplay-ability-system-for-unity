@@ -11,8 +11,8 @@ namespace EXProceduralMachine
         
         // 移动状态变量
         private bool _isMoving;          // 是否正在移动
-        private float _currentTime;      // 当前已移动时间
-        private float _totalDuration;    // 本次移动总时长
+        private float _startMoveTime;      // 开始移动时间
+        private float _endMoveTime;    // 结束移动时间
         private Vector3 _startPos;       // 本次移动的起始位置
         private Vector3 _targetPos;      // 本次移动的目标位置
 
@@ -69,11 +69,9 @@ namespace EXProceduralMachine
         {
             if (!_isMoving) return;
             
-            // 累加移动时间
-            _currentTime += Time.deltaTime;
             // 归一化时间（0~1），超过1则设为1（到达终点）
-            var timeNormalized = Mathf.Clamp01(_currentTime / _totalDuration);
-
+            var timeNormalized = Mathf.Clamp01((Time.time-_startMoveTime) / (_endMoveTime-_startMoveTime));
+            Debug.Log("timeNormalized = " + timeNormalized);
             // 计算当前位置
             var currentPos = _locomotion.CalculateFootPlacementMovingPoint(_startPos,_targetPos,timeNormalized);
             _ikTrackPoint.position = currentPos;
@@ -108,22 +106,19 @@ namespace EXProceduralMachine
             // 处理极限参数（避免除零/无效高度）
             var duration = math.min(_locomotion.T * _group.PhaseDifference,_locomotion.stepTime);
             _targetPos = _castPosition; // 目标点设为新的地面投射点
-            _targetPos = EXMachHelper.GetGroundPoint(
-                _currentStepPoint.position,
-                _locomotion.castMaxDistance,
-                _locomotion.groundLayer,
-                Vector3.down) + _offset;
-            if (duration <= 0.01f)
+            
+            if (duration <= 0.02f)
             {
                 _ikTrackPoint.position = _targetPos;
                 _isMoving = false;
                 return;
             }
 
+            if (_isMoving) return;
             // 重置移动状态（打断原有移动，顺滑衔接）
             _startPos = _ikTrackPoint.position; // 起始点设为当前位置
-            _totalDuration = duration;
-            _currentTime = 0f;
+            _startMoveTime = Time.time;
+            _endMoveTime = _startMoveTime + duration;
             _isMoving = true;
         }
     }

@@ -290,9 +290,6 @@ namespace EXProceduralMachine
                         i++;
                         SetVisualLine(_visualLine.lines, i, Color.cyan, footPlacement.IdlePoint.position,
                             stepPos);
-                        i++;
-                        SetVisualLine(_visualLine.lines, i, Color.black, footPlacement.StartPos,
-                            footPlacement.TargetPos);
                     }
                 }
                 i++;
