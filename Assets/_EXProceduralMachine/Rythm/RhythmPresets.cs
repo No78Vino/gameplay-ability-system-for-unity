@@ -66,7 +66,7 @@ namespace EXProceduralMachine
         }
 
         // 创建正弦波曲线
-        public static AnimationCurve CreateSineCurve(int points = 20)
+        public static AnimationCurve SineCurve(int points = 20)
         {
             var curve = new AnimationCurve();
             for (var i = 0; i <= points; i++)
@@ -80,7 +80,7 @@ namespace EXProceduralMachine
         }
 
         // 创建三角波曲线
-        public static AnimationCurve CreateTriangleCurve()
+        public static AnimationCurve TriangleCurve()
         {
             return new AnimationCurve(
                 new Keyframe(0f, 0f),
@@ -91,7 +91,7 @@ namespace EXProceduralMachine
         }
 
         // 创建方波曲线
-        public static AnimationCurve CreateSquareCurve()
+        public static AnimationCurve SquareCurve()
         {
             return new AnimationCurve(
                 new Keyframe(0f, 1f),
