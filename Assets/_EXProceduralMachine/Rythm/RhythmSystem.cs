@@ -14,16 +14,19 @@ namespace EXProceduralMachine
             Min // 取最小值
         }
 
-        [Header("周期列表")] public List<RhythmCycle> cycles = new();
+        [LabelText("周期列表")] public List<RhythmCycle> cycles = new();
 
-        [Header("混合参数")] [Tooltip("组合方式：叠加、相乘、最大、最小")]
+        [LabelText("混合参数")] [Tooltip("组合方式：叠加、相乘、最大、最小")]
         public BlendMode blendMode = BlendMode.Additive;
 
-        [Header("输出")] [ReadOnly] public float combinedValue;
+        [LabelText("输出")]
+        [ShowInInspector]
+        [DisplayAsString]
+        private float _combinedValue;
 
         [ReadOnly] public float rawValue;
 
-        [Header("时间控制")] public bool isPlaying = true;
+        public bool isPlaying { get; private set; } = true;
 
         public float timeScale = 1.0f;
 
@@ -51,7 +54,7 @@ namespace EXProceduralMachine
         {
             if (cycles.Count == 0)
             {
-                combinedValue = 0f;
+                _combinedValue = 0f;
                 return;
             }
 
@@ -85,13 +88,13 @@ namespace EXProceduralMachine
             }
 
             rawValue = value;
-            combinedValue = Mathf.Clamp(value, -1f, 1f);
+            _combinedValue = Mathf.Clamp(value, -1f, 1f);
         }
 
         // 公共接口
         public float GetValue()
         {
-            return combinedValue;
+            return _combinedValue;
         }
 
         public float GetValueUnclamped()
@@ -185,7 +188,7 @@ namespace EXProceduralMachine
             var desc = "";
             for (var i = 0; i < cycles.Count; i++)
                 desc += $"Cycle {i}: phase={cycles[i].phase:F2}, value={cycles[i].GetValue():F2}\n";
-            desc += $"Combined: {combinedValue:F2}";
+            desc += $"Combined: {_combinedValue:F2}";
             return desc;
         }
     }

@@ -12,6 +12,7 @@ namespace EXProceduralMachine
         protected const string BASE_TAB_GROUP = "运动参数";
         protected const string TAB_BASE = "基础参数";
         protected const string TAB_BIND = "绑定";
+        protected const string TAB_RHYTHM = "节奏";
 
         [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("步态运动落地点分组")] [InfoBox("将肢体分为N组交替运动")] [ShowInInspector]
         public FootMotionGroup[] MotionGroup;
@@ -137,6 +138,14 @@ namespace EXProceduralMachine
         [ShowIf(nameof(resetWhenStop))]
         [TabGroup(BASE_TAB_GROUP,TAB_BASE)] [LabelText("复位延迟")]
         public float resetWaitingDuration;
+
+        [TabGroup(BASE_TAB_GROUP,TAB_RHYTHM)]
+        [LabelText("呼吸节奏")]
+        public RhythmSystem RhythmSystem;
+        
+        [TabGroup(BASE_TAB_GROUP,TAB_RHYTHM)]
+        [LabelText("呼吸强度")]
+        public float Intensity;
         
         public float stepTime = 1;
         
@@ -173,7 +182,15 @@ namespace EXProceduralMachine
                 var ave = GetAverageFootHeight();
                 bodyPosition.y = ave + h;
                 Body.position = bodyPosition;
-
+                
+                if (RhythmSystem != null)
+                {
+                    var value = RhythmSystem.GetValue();
+                    var bPos = Body.localPosition;
+                    bPos.y += value * Intensity;
+                    Body.localPosition = bPos;
+                }
+                
                 var forward = Body.forward;
                 forward.y = 0;
                 // 4. 平滑应用旋转
