@@ -94,11 +94,27 @@ namespace EXUI
 
         public bool IsShowing => gameObject.activeSelf;
         
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void DestroySelf()
         {
             Destroy(gameObject);
         }
         
+        /// <summary>
+        /// 使用格式如下：
+        /// var bindingDynamic = new BindingSet XXXWindow, VMXXXWindow (_bindingContext, this);
+        /// bindingDynamic.Bind(this).For(v => OnReceiveMessage).To(vm => vm.request);
+        /// bindingDynamic.Bind(titleText).For(v => v.text).To(vm => vm.title.Value).OneWay();
+        /// bindingDynamic.Bind(btnStartText).For(v => v.text).To(vm => vm.btnStartText.Value).OneWay();
+        /// bindingDynamic.Bind(btnStart).For(v => v.onClick).To(vm => vm.GameStart);
+        /// bindingDynamic.Build();
+        /// 
+        /// var bindingStatic = new BindingSet XXXWindow, VMXXXWindow (_bindingContext, this);
+        /// bindingDynamic.Bind(titleText).For(v => v.text).To(vm => vm.title.Value).OneWay();
+        /// bindingStatic.Build();
+        /// </summary>
         protected abstract void BindData();
         
         protected abstract void InitViewComponents();

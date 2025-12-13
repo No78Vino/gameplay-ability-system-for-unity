@@ -79,6 +79,8 @@ namespace DemoForESC._Script
         {
             if (_openingTimeline != null)
                 _openingTimeline.gameObject.SetActive(false);
+
+            XUI.M.OpenWindow<MainWindow>();
         }
     }
 }

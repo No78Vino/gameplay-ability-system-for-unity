@@ -7,12 +7,10 @@ namespace DemoForESC._Script.UI.View
     {
         protected override void BindData()
         {
-            throw new System.NotImplementedException();
         }
 
         protected override void InitViewComponents()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
