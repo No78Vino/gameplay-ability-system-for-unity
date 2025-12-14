@@ -26,7 +26,22 @@
   },
   {
     "id": 6,
-    "name": "Posture",
-    "desc": "架势，平衡值"
+    "name": "Sp",
+    "desc": "耐力"
+  },
+  {
+    "id": 7,
+    "name": "HpMax",
+    "desc": "血上限"
+  },
+  {
+    "id": 8,
+    "name": "MpMax",
+    "desc": "魔力上限"
+  },
+  {
+    "id": 9,
+    "name": "SpMax",
+    "desc": "耐力上限"
   }
 ]

@@ -22,7 +22,7 @@
       },
       {
         "id": 3,
-        "initValue": 100,
+        "initValue": 10,
         "minValue": 0,
         "maxValue": 999,
         "useMinValue": true,
@@ -46,7 +46,31 @@
       },
       {
         "id": 6,
-        "initValue": 0,
+        "initValue": 100,
+        "minValue": 0,
+        "maxValue": 999,
+        "useMinValue": true,
+        "useMaxValue": true
+      },
+      {
+        "id": 7,
+        "initValue": 100,
+        "minValue": 0,
+        "maxValue": 999,
+        "useMinValue": true,
+        "useMaxValue": true
+      },
+      {
+        "id": 8,
+        "initValue": 100,
+        "minValue": 0,
+        "maxValue": 999,
+        "useMinValue": true,
+        "useMaxValue": true
+      },
+      {
+        "id": 9,
+        "initValue": 100,
         "minValue": 0,
         "maxValue": 999,
         "useMinValue": true,

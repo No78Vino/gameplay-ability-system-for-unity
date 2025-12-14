@@ -12,6 +12,9 @@ namespace GAS.Runtime
         public const int Spd = 3;
         public const int Atk = 4;
         public const int Def = 5;
-        public const int Posture = 6;
+        public const int Sp = 6;
+        public const int HpMax = 7;
+        public const int MpMax = 8;
+        public const int SpMax = 9;
     }
 }

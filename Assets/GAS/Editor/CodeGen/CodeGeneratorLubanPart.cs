@@ -395,12 +395,12 @@ namespace GAS.Editor
                         writer.WriteLine("{");
                         writer.Indent++;
                         writer.WriteLine("Debug.LogError($\"Ability_ID:{id}  不存在.\");");
-                        writer.WriteLine("return new AbilityConfig(Array.Empty<GameplayAbilityComponentConfig>());");
+                        writer.WriteLine("return new AbilityConfig(Array.Empty<AbilityComponentConfig>());");
                         writer.Indent--;
                         writer.WriteLine("}");
                         writer.WriteLine("");
 
-                        writer.WriteLine("var configs = new List<GameplayAbilityComponentConfig>();");
+                        writer.WriteLine("var configs = new List<AbilityComponentConfig>();");
                         writer.WriteLine("");
                         
                         writer.WriteLine("// baseInfo");
