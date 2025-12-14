@@ -26,9 +26,19 @@ namespace DemoForESC._Script.UI.ViewModel
             var player = DemoPlayer.Player();
             var asc = player.AbilitySystemCellMono;
             var hp = asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.Hp);
-            var hpMax = 8000f; //asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.HpMax);
+            var hpMax = asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.HpMax);
             HpText.Value = $"{hp}/{hpMax}";
             Hp.Value = hp / hpMax;
+            
+            var mp = asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.Mp);
+            var mpMax = asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.MpMax);
+            MpText.Value = $"{mp}/{mpMax}";
+            Mp.Value = mp / mpMax;
+            
+            var sp = asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.Sp);
+            var spMax = asc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.SpMax);
+            SpText.Value = $"{sp}/{spMax}";
+            Sp.Value = sp / spMax;
         }
     }
 }
