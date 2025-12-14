@@ -5,6 +5,15 @@ namespace DemoForESC._Script
 {
     public class DemoPlayer : BaseUnit
     {
+        private static DemoPlayer _player;
+        public static DemoPlayer Player()
+        {
+            if (_player == null)
+                _player = FindObjectOfType<DemoPlayer>();
+            
+            return _player;
+        }
+        
         UnityEngine.Camera _mainCamera;
         
         protected override void Awake()

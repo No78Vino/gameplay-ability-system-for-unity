@@ -118,16 +118,11 @@ namespace EXUI
         protected abstract void BindData();
         
         protected abstract void InitViewComponents();
-
-        private Transform Node(string path)
-        {
-            return transform.Find(path);
-        }
         
         protected TCom GetComponentByNode<TCom>(string path) where TCom : Component
         {
-            var node = Node(path);
-            if (node != null) return Node(path).GetComponent<TCom>();
+            var node = transform.Node(path);
+            if (node != null) return transform.Node(path).GetComponent<TCom>();
             
             Debug.LogError($"Can't Find Node {path}");
             return null;
