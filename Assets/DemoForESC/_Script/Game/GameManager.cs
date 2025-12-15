@@ -84,15 +84,20 @@ namespace DemoForESC._Script
 
         private void OnGlobalAscTagChange(int tag, GameplayTagChangeEvent tagChangeEvent)
         {
-            if (tag == XTag.State) // (tag == XTag.Guide_Type1)
+            if (tagChangeEvent == GameplayTagChangeEvent.AddTag)
             {
-                // 进入类型1引导
-                if (tagChangeEvent == GameplayTagChangeEvent.AddTag)
+                if (tag == XTag.State) // (tag == XTag.Guide_Type1)
                 {
-                    
+                    // 进入类型1引导
                 }
             }
-            Debug.Log($"tag:{tag} GameplayTagChangeEvent:{tagChangeEvent}");
+            else if (tagChangeEvent == GameplayTagChangeEvent.RemoveTag)
+            {
+                if (TagHelper.HasTag(tag, XTag.State)) // ,XTag.Guide)
+                {
+                    // 结束引导
+                }
+            }
         }
     }
 }

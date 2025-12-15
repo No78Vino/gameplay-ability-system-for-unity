@@ -33,37 +33,10 @@ namespace DemoForESC._Script.Controller
 
         private void HandleInput()
         {
-            // 获取原始输入（保持原始值用于动画混合）
-            var horizontal = Input.GetAxis("Horizontal");
-            var vertical = Input.GetAxis("Vertical");
-
-            // 转换为基于相机的移动方向
-            _cameraForward = Vector3.ProjectOnPlane(_mainCamera.transform.forward, Vector3.up).normalized;
-            var cameraRight = Vector3.Cross(Vector3.up, _cameraForward).normalized;
-
-            // 构建移动向量
-            _movement = (_cameraForward * vertical + cameraRight * horizontal).normalized;
-            
-            // 奔跑开关
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-                demoPlayer.StartRun();
-            else if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                demoPlayer.StopRun();
-                Debug.Log("StopRun");
-            }
-            
-            // 调试GE1
-            if (Input.GetKeyDown(KeyCode.E)) 
-                demoPlayer.StartDebugGE1();
-            else if (Input.GetKeyUp(KeyCode.E))
-                demoPlayer.StopDebugGE1();
-            
-            // 调试GE2
-            if (Input.GetKeyDown(KeyCode.F))
-                demoPlayer.StartDebugGE2();
-            else if (Input.GetKeyUp(KeyCode.F))
-                demoPlayer.StopDebugGE2();
+            HandleMove();
+            HandleRun();
+            HandleAttack();
+            HandleDodge();
         }
 
         private void UpdateMovement()
@@ -73,14 +46,10 @@ namespace DemoForESC._Script.Controller
 
             // 应用移动
             if (_movement.magnitude > 0.1f)
-            {
                 if(demoPlayer != null) demoPlayer.Move(_movement);
-            }
             else
-            {
-                // 停止移动
                 if(demoPlayer != null) demoPlayer.StopMove();
-            }
+            
         }
 
         // 供动画系统调用的参数
@@ -98,5 +67,48 @@ namespace DemoForESC._Script.Controller
         {
             return _isRunning;
         }
+
+        #region InputHandle
+
+        private void HandleMove()
+        {
+            // 获取原始输入（保持原始值用于动画混合）
+            var horizontal = Input.GetAxis("Horizontal");
+            var vertical = Input.GetAxis("Vertical");
+
+            // 转换为基于相机的移动方向
+            _cameraForward = Vector3.ProjectOnPlane(_mainCamera.transform.forward, Vector3.up).normalized;
+            var cameraRight = Vector3.Cross(Vector3.up, _cameraForward).normalized;
+            _movement = (_cameraForward * vertical + cameraRight * horizontal).normalized;
+        }
+
+        private void HandleRun()
+        {
+            // 奔跑开关
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                demoPlayer.StartRun();
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+                demoPlayer.StopRun();
+        }
+
+        private void HandleAttack()
+        {
+            // 调试GE1
+            if (Input.GetKeyDown(KeyCode.E)) 
+                demoPlayer.StartDebugGE1();
+            else if (Input.GetKeyUp(KeyCode.E))
+                demoPlayer.StopDebugGE1();
+        }
+        
+        private void HandleDodge()
+        {
+            // 调试GE2
+            if (Input.GetKeyDown(KeyCode.F))
+                demoPlayer.StartDebugGE2();
+            else if (Input.GetKeyUp(KeyCode.F))
+                demoPlayer.StopDebugGE2();
+        }
+        
+        #endregion
     }
 }
