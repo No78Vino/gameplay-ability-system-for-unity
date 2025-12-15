@@ -7,7 +7,7 @@ namespace DemoForESC._Script
     {
         public readonly static Dictionary<int, List<GuideInfo>> Data = new Dictionary<int, List<GuideInfo>>()
         {
-            [1] = new List<GuideInfo>()
+            [0] = new List<GuideInfo>()
             {
               new GuideInfo()
               {
@@ -48,7 +48,7 @@ namespace DemoForESC._Script
         };
     }
 
-    public struct GuideInfo
+    public class GuideInfo
     {
         public string title;
         public string content;
