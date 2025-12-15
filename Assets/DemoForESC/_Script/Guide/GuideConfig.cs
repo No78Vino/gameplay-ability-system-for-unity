@@ -24,6 +24,21 @@ namespace DemoForESC._Script
                   title = "这是移动。",
                   content = "按键：W/A/S/D"
               },
+              new GuideInfo()
+              {
+                  title = "这是奔跑。",
+                  content = "按键：【W/A/S/D】 + 【左Shift】"
+              },
+              new GuideInfo()
+              {
+                  title = "这是攻击。",
+                  content = "按键：鼠标左键"
+              },
+              new GuideInfo()
+              {
+                  title = "这是【SPIDER 终结者】。",
+                  content = "加油！"
+              },
             },
         };
     }
