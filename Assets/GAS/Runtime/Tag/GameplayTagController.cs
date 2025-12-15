@@ -56,7 +56,12 @@ namespace GAS.Runtime
                 index = i;
                 break;
             }
-            if(index>=0) fixedTags.RemoveAt(index);
+
+            if (index >= 0)
+            {
+                fixedTags.RemoveAt(index);
+                GASEventCenter.InvokeOnTagIsDirty(_asc,tag,GameplayTagChangeEvent.RemoveTag);
+            }
         }
 
         public void KillFixedTags(IEnumerable<int> tags)
@@ -120,8 +125,13 @@ namespace GAS.Runtime
             
             DynamicBufferFixedTags.Add(new BFixedTag { tag = tag });
             bool containTemporary = HasAnyTemporaryTag(tag);
+            
             // 从临时tag中剔除
-            if (containTemporary) KillTemporaryTag(tag);
+            if (containTemporary) 
+                KillTemporaryTag(tag);
+            else
+                GASEventCenter.InvokeOnTagIsDirty(_asc,tag,GameplayTagChangeEvent.AddTag);
+            
             return !containTemporary;
         }
 

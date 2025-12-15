@@ -35,7 +35,7 @@ namespace GAS.Runtime
         {
             SetOnBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode, action);
         }
-        
+
         public static void ClearOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode)
         {
             if (!_onBaseValueChangeBefore.TryGetValue(entity, out var value)) return;
@@ -59,7 +59,7 @@ namespace GAS.Runtime
 
             return value;
         }
-        
+
         public static float InvokeOnBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode,
             float value)
         {
@@ -81,7 +81,7 @@ namespace GAS.Runtime
 
             _onBaseValueChangeAfter[entity][Tuple.Create(attrSetCode, attrCode)] += action;
         }
-        
+
         public static void RegisterOnBaseValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
@@ -102,7 +102,7 @@ namespace GAS.Runtime
                 _onBaseValueChangeAfter[entity].Remove(Tuple.Create(attrSetCode, attrCode));
             if (_onBaseValueChangeAfter[entity].Count == 0) _onBaseValueChangeAfter.Remove(entity);
         }
-        
+
         public static void UnRegisterOnBaseValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
@@ -117,7 +117,7 @@ namespace GAS.Runtime
             if (dictionary.TryGetValue(Tuple.Create(attrSetCode, attrCode), out var action))
                 action?.Invoke(oldValue, newValue);
         }
-        
+
         public static void InvokeOnBaseValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             float oldValue, float newValue)
         {
@@ -139,7 +139,7 @@ namespace GAS.Runtime
 
             _onCurrentValueChangeAfter[entity][Tuple.Create(attrSetCode, attrCode)] += action;
         }
-        
+
         public static void RegisterOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
@@ -161,7 +161,7 @@ namespace GAS.Runtime
 
             if (_onCurrentValueChangeAfter[entity].Count == 0) _onCurrentValueChangeAfter.Remove(entity);
         }
-        
+
         public static void UnRegisterOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
@@ -176,7 +176,7 @@ namespace GAS.Runtime
             if (dictionary.TryGetValue(Tuple.Create(attrSetCode, attrCode), out var action))
                 action?.Invoke(oldValue, newValue);
         }
-        
+
         public static void InvokeOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             float oldValue, float newValue)
         {
@@ -195,7 +195,7 @@ namespace GAS.Runtime
                 _onGameplayEffectContainerIsDirty[entity] =
                     (Action)Delegate.Combine(_onGameplayEffectContainerIsDirty[entity], action);
         }
-        
+
         public static void RegisterOnGameplayEffectContainerIsDirty(AbilitySystemCell asc, Action action)
         {
             RegisterOnGameplayEffectContainerIsDirty(asc.Entity, action);
@@ -210,7 +210,7 @@ namespace GAS.Runtime
             else
                 _onGameplayEffectContainerIsDirty[entity] = newAction;
         }
-        
+
         public static void UnRegisterOnGameplayEffectContainerIsDirty(AbilitySystemCell asc, Action action)
         {
             UnRegisterOnGameplayEffectContainerIsDirty(asc.Entity, action);
@@ -221,7 +221,7 @@ namespace GAS.Runtime
             if (_onGameplayEffectContainerIsDirty.TryGetValue(dirtyAsc, out var action))
                 action?.Invoke();
         }
-        
+
         public static void InvokeOnGameplayEffectContainerIsDirty(AbilitySystemCell asc)
         {
             InvokeOnGameplayEffectContainerIsDirty(asc.Entity);
@@ -264,17 +264,18 @@ namespace GAS.Runtime
         // protected event Action<AbilityActivateResult> _onActivateResult;
         // protected event Action _onEndAbility;
         // protected event Action _onCancelAbility;
-        
+
         private static readonly Dictionary<Entity, Action<AbilityActivationResult>> _onActivateResult = new();
         private static readonly Dictionary<Entity, Action> _onEndAbility = new();
         private static readonly Dictionary<Entity, Action> _onCancelAbility = new();
-        
+
         public static void RegisterOnActivateResult(Entity abilityEntity, Action<AbilityActivationResult> action)
         {
             if (!_onActivateResult.TryAdd(abilityEntity, action))
-                _onActivateResult[abilityEntity] = (Action<AbilityActivationResult>)Delegate.Combine(_onActivateResult[abilityEntity], action);
+                _onActivateResult[abilityEntity] =
+                    (Action<AbilityActivationResult>)Delegate.Combine(_onActivateResult[abilityEntity], action);
         }
-        
+
         public static void UnRegisterOnActivateResult(Entity abilityEntity, Action<AbilityActivationResult> action)
         {
             if (!_onActivateResult.TryGetValue(abilityEntity, out var existingAction)) return;
@@ -284,19 +285,19 @@ namespace GAS.Runtime
             else
                 _onActivateResult[abilityEntity] = newAction;
         }
-        
+
         public static void InvokeOnActivateResult(Entity abilityEntity, AbilityActivationResult result)
         {
             if (_onActivateResult.TryGetValue(abilityEntity, out var action))
                 action?.Invoke(result);
         }
-        
+
         public static void RegisterOnEndAbility(Entity abilityEntity, Action action)
         {
             if (!_onEndAbility.TryAdd(abilityEntity, action))
                 _onEndAbility[abilityEntity] = (Action)Delegate.Combine(_onEndAbility[abilityEntity], action);
         }
-        
+
         public static void UnRegisterOnEndAbility(Entity abilityEntity, Action action)
         {
             if (!_onEndAbility.TryGetValue(abilityEntity, out var existingAction)) return;
@@ -306,19 +307,19 @@ namespace GAS.Runtime
             else
                 _onEndAbility[abilityEntity] = newAction;
         }
-        
+
         public static void InvokeOnEndAbility(Entity abilityEntity)
         {
             if (_onEndAbility.TryGetValue(abilityEntity, out var action))
                 action?.Invoke();
         }
-        
+
         public static void RegisterOnCancelAbility(Entity abilityEntity, Action action)
         {
             if (!_onCancelAbility.TryAdd(abilityEntity, action))
                 _onCancelAbility[abilityEntity] = (Action)Delegate.Combine(_onCancelAbility[abilityEntity], action);
         }
-        
+
         public static void UnRegisterOnCancelAbility(Entity abilityEntity, Action action)
         {
             if (!_onCancelAbility.TryGetValue(abilityEntity, out var existingAction)) return;
@@ -328,38 +329,50 @@ namespace GAS.Runtime
             else
                 _onCancelAbility[abilityEntity] = newAction;
         }
-        
+
         public static void InvokeOnCancelAbility(Entity abilityEntity)
         {
             if (_onCancelAbility.TryGetValue(abilityEntity, out var action))
                 action?.Invoke();
         }
+
         #endregion
 
         #region Tag 事件
 
-        private static readonly Dictionary<Entity, Action<Entity,int,GameplayTagChangeEvent>> _onTagIsDirty = new();
-        
-        public static void RegisterOnTagIsDirty(Entity entity, Action<Entity,int,GameplayTagChangeEvent> action)
+        private static readonly Dictionary<Entity, Action<int, GameplayTagChangeEvent>> _onTagIsDirty = new();
+
+        public static void RegisterOnTagIsDirty(Entity entity, Action<int, GameplayTagChangeEvent> action)
         {
             if (!_onTagIsDirty.TryAdd(entity, action))
-                _onTagIsDirty[entity] = (Action<Entity,int,GameplayTagChangeEvent>)Delegate.Combine(_onTagIsDirty[entity], action);
+                _onTagIsDirty[entity] =
+                    (Action<int, GameplayTagChangeEvent>)Delegate.Combine(_onTagIsDirty[entity], action);
         }
-        
-        public static void UnRegisterOnTagIsDirty(Entity entity, Action<Entity,int,GameplayTagChangeEvent> action)
+
+        public static void RegisterOnTagIsDirty(AbilitySystemCell asc, Action<int, GameplayTagChangeEvent> action)
+        {
+            RegisterOnTagIsDirty(asc.Entity, action);
+        }
+
+        public static void UnRegisterOnTagIsDirty(Entity entity, Action<int, GameplayTagChangeEvent> action)
         {
             if (!_onTagIsDirty.TryGetValue(entity, out var existingAction)) return;
-            var newAction = (Action<Entity,int,GameplayTagChangeEvent>)Delegate.Remove(existingAction, action);
+            var newAction = (Action<int, GameplayTagChangeEvent>)Delegate.Remove(existingAction, action);
             if (newAction == null)
                 _onTagIsDirty.Remove(entity);
             else
                 _onTagIsDirty[entity] = newAction;
         }
-        
+
+        public static void UnRegisterOnTagIsDirty(AbilitySystemCell asc, Action<int, GameplayTagChangeEvent> action)
+        {
+            UnRegisterOnTagIsDirty(asc.Entity, action);
+        }
+
         public static void InvokeOnTagIsDirty(Entity entity, int tag, GameplayTagChangeEvent changeEvent)
         {
             if (_onTagIsDirty.TryGetValue(entity, out var action))
-                action?.Invoke(entity,tag,changeEvent);
+                action?.Invoke(tag, changeEvent);
         }
 
         #endregion

@@ -18,10 +18,16 @@ namespace DemoForESC._Script
         // I For Instance
         public static GameManager I => _inst ??= new GameManager();
 
-        public AbilitySystemCell GlobalAsc { get; } = new();
+        public AbilitySystemCell GlobalAsc { get; } 
 
         private PlayableDirector _openingTimeline;
 
+        public GameManager()
+        {
+            GlobalAsc= new();
+            GASEventCenter.RegisterOnTagIsDirty(GlobalAsc,OnGlobalAscTagChange);
+        }
+        
         public void LoadMainScene()
         {
             //加载主场景
@@ -73,7 +79,20 @@ namespace DemoForESC._Script
 
             XUI.M.OpenWindow<MainWindow>();
             // 启动引导,挂上引导类型
-            GlobalAsc.AddFixedTag(XTag.State); //AddFixedTag(XTag.Guide_Type1);
+            GlobalAsc.AddFixedTag(XTag.State_Buff_BulkUp); //AddFixedTag(XTag.Guide_Type1);
+        }
+
+        private void OnGlobalAscTagChange(int tag, GameplayTagChangeEvent tagChangeEvent)
+        {
+            if (tag == XTag.State) // (tag == XTag.Guide_Type1)
+            {
+                // 进入类型1引导
+                if (tagChangeEvent == GameplayTagChangeEvent.AddTag)
+                {
+                    
+                }
+            }
+            Debug.Log($"tag:{tag} GameplayTagChangeEvent:{tagChangeEvent}");
         }
     }
 }
