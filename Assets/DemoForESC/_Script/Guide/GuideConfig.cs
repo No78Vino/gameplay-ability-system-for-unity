@@ -12,27 +12,32 @@ namespace DemoForESC._Script
               new GuideInfo()
               {
                   title = "EX-HARD",
-                  content = "你好欢迎来到EX-GAS演示训练场。"
+                  content = "你好欢迎来到EX-GAS演示训练场。",
+                  LearningKey = GuideLearningKey.None,
               },
               new GuideInfo()
               {
                   title = "EX-HARD",
-                  content = "接下来，我会为你进行简单的引导。"
+                  content = "接下来，我会为你进行简单的引导。",
+                  LearningKey = GuideLearningKey.None,
               },
               new GuideInfo()
               {
                   title = "这是移动。",
-                  content = "按键：W/A/S/D"
+                  content = "按键：W/A/S/D",
+                  LearningKey = GuideLearningKey.Move
               },
               new GuideInfo()
               {
                   title = "这是奔跑。",
-                  content = "按键：【W/A/S/D】 + 【左Shift】"
+                  content = "按键：【W/A/S/D】 + 【左Shift】",
+                  LearningKey = GuideLearningKey.Run
               },
               new GuideInfo()
               {
                   title = "这是攻击。",
-                  content = "按键：鼠标左键"
+                  content = "按键：鼠标左键",
+                  LearningKey = GuideLearningKey.MeleeAttack
               },
               new GuideInfo()
               {
@@ -47,6 +52,7 @@ namespace DemoForESC._Script
     {
         public string title;
         public string content;
+        public GuideLearningKey LearningKey;
         public Action onBegin;
         public Func<bool> checkFunction;
     }
