@@ -79,7 +79,7 @@ namespace DemoForESC._Script
 
             XUI.M.OpenWindow<MainWindow>();
             // 启动引导,挂上引导类型
-            GlobalAsc.AddFixedTag(XTag.State_Buff_BulkUp); //AddFixedTag(XTag.Guide_Type1);
+            GlobalAsc.AddFixedTag(XTag.Guide_Type1);
         }
 
         private void OnGlobalAscTagChange(int tag, GameplayTagChangeEvent tagChangeEvent)
@@ -89,6 +89,7 @@ namespace DemoForESC._Script
                 if (tag == XTag.Guide_Type1)
                 {
                     // 进入类型1引导
+                    GuideManager.I.StartGuide();
                 }
             }
             else if (tagChangeEvent == GameplayTagChangeEvent.RemoveTag)
@@ -96,6 +97,7 @@ namespace DemoForESC._Script
                 if (TagHelper.HasTag(tag, XTag.Guide))
                 {
                     // 结束引导
+                    GuideManager.I.OnGuideEnd();
                 }
             }
         }

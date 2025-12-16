@@ -72,6 +72,11 @@ namespace DemoForESC._Script.Controller
 
         private void HandleMove()
         {
+            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run
+                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Move)
+                return;
+
             // 获取原始输入（保持原始值用于动画混合）
             var horizontal = Input.GetAxis("Horizontal");
             var vertical = Input.GetAxis("Vertical");
@@ -84,6 +89,10 @@ namespace DemoForESC._Script.Controller
 
         private void HandleRun()
         {
+            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run)
+                return;
+            
             // 奔跑开关
             if (Input.GetKeyDown(KeyCode.LeftShift))
                 demoPlayer.StartRun();
@@ -93,22 +102,30 @@ namespace DemoForESC._Script.Controller
 
         private void HandleAttack()
         {
+            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.MeleeAttack)
+                return;
+            
             // 调试GE1
             if (Input.GetKeyDown(KeyCode.E)) 
                 demoPlayer.StartDebugGE1();
             else if (Input.GetKeyUp(KeyCode.E))
                 demoPlayer.StopDebugGE1();
         }
-        
+
         private void HandleDodge()
         {
+            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Dodge)
+                return;
+            
             // 调试GE2
             if (Input.GetKeyDown(KeyCode.F))
                 demoPlayer.StartDebugGE2();
             else if (Input.GetKeyUp(KeyCode.F))
                 demoPlayer.StopDebugGE2();
         }
-        
+
         #endregion
     }
 }
