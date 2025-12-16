@@ -28,6 +28,10 @@ namespace GAS.Runtime
         public const int State_Debuff = 4002;
         public const int State_Buff_BulkUp = 4001001;
         public const int State_Buff_SpeedUp = 4001002;
+        public const int Guide = 500;
+        public const int Guide_Type1 = 5001;
+        public const int Guide_Type2 = 5002;
+        public const int Guide_Type3 = 5003;
 
         public static void InitTagList()
         {
@@ -52,6 +56,10 @@ namespace GAS.Runtime
                 { State_Debuff, new GameplayTag(State_Debuff, new int[] { State }, new int[] {  }) },
                 { State_Buff_BulkUp, new GameplayTag(State_Buff_BulkUp, new int[] { State, State_Buff }, new int[] {  }) },
                 { State_Buff_SpeedUp, new GameplayTag(State_Buff_SpeedUp, new int[] { State, State_Buff }, new int[] {  }) },
+                { Guide, new GameplayTag(Guide, new int[] {  }, new int[] { Guide_Type1, Guide_Type2, Guide_Type3 }) },
+                { Guide_Type1, new GameplayTag(Guide_Type1, new int[] { Guide }, new int[] {  }) },
+                { Guide_Type2, new GameplayTag(Guide_Type2, new int[] { Guide }, new int[] {  }) },
+                { Guide_Type3, new GameplayTag(Guide_Type3, new int[] { Guide }, new int[] {  }) },
             },
             new Dictionary<int, string>()
             {
@@ -74,6 +82,10 @@ namespace GAS.Runtime
                 { State_Debuff, "State.Debuff" },
                 { State_Buff_BulkUp, "State.Buff.BulkUp" },
                 { State_Buff_SpeedUp, "State.Buff.SpeedUp" },
+                { Guide, "Guide" },
+                { Guide_Type1, "Guide.Type1" },
+                { Guide_Type2, "Guide.Type2" },
+                { Guide_Type3, "Guide.Type3" },
             }
             );
         }

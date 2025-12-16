@@ -93,5 +93,25 @@
     "id": 4001002,
     "name": "State.Buff.SpeedUp",
     "desc": "状态：移速增加"
+  },
+  {
+    "id": 500,
+    "name": "Guide",
+    "desc": "新手引导"
+  },
+  {
+    "id": 5001,
+    "name": "Guide.Type1",
+    "desc": "新手引导：类型1"
+  },
+  {
+    "id": 5002,
+    "name": "Guide.Type2",
+    "desc": "新手引导：类型2"
+  },
+  {
+    "id": 5003,
+    "name": "Guide.Type3",
+    "desc": "新手引导：类型3"
   }
 ]
