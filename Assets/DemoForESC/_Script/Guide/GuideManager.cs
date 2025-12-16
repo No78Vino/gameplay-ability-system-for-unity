@@ -1,4 +1,7 @@
-﻿namespace DemoForESC._Script
+﻿using DemoForESC._Script.UI.View;
+using EXUI;
+
+namespace DemoForESC._Script
 {
     public class GuideManager
     {
@@ -46,7 +49,10 @@
         private void TriggerGuide()
         {
             // 1.刷新 GuideWindow
+            var w = XUI.M.OpenWindow<GuideWindow>();
+            w.VM.UpdateInfo(GuideInfo);
             // 2.重置Player位置状态
+            
             // 3.更新限制按键
         }
     }
