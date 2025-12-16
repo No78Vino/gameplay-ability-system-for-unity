@@ -86,14 +86,14 @@ namespace DemoForESC._Script
         {
             if (tagChangeEvent == GameplayTagChangeEvent.AddTag)
             {
-                if (tag == XTag.State) // (tag == XTag.Guide_Type1)
+                if (tag == XTag.Guide_Type1)
                 {
                     // 进入类型1引导
                 }
             }
             else if (tagChangeEvent == GameplayTagChangeEvent.RemoveTag)
             {
-                if (TagHelper.HasTag(tag, XTag.State)) // ,XTag.Guide)
+                if (TagHelper.HasTag(tag, XTag.Guide))
                 {
                     // 结束引导
                 }
