@@ -121,7 +121,8 @@ namespace DemoForESC._Script
         /// </summary>
         public void ResetPlayerStateToGuidePoint(bool limitFovRotation)
         {
-            Player.transform.position = GuidePlayerPosition;
+            if(GuideManager.I.GuideInfo.resetPosition)
+                Player.transform.position = GuidePlayerPosition;
             
             PlayerFreeLookCameraControl.Instance.SetInputActive(!limitFovRotation);
             PlayerFreeLookCameraControl.Instance.AlignViewToPlayer();

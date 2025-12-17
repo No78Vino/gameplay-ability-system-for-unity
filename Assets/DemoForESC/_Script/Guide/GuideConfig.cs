@@ -15,6 +15,7 @@ namespace DemoForESC._Script
                   content = "你好欢迎来到EX-GAS演示训练场。",
                   LearningKey = GuideLearningKey.None,
                   limitFovRotation = true,
+                  resetPosition = true,
               },
               new GuideInfo()
               {
@@ -22,6 +23,7 @@ namespace DemoForESC._Script
                   content = "接下来，我会为你进行简单的引导。",
                   LearningKey = GuideLearningKey.None,
                   limitFovRotation = true,
+                  resetPosition = false,
               },
               new GuideInfo()
               {
@@ -29,6 +31,7 @@ namespace DemoForESC._Script
                   content = "按键：W/A/S/D",
                   LearningKey = GuideLearningKey.Move,
                   limitFovRotation = false,
+                  resetPosition = false,
               },
               new GuideInfo()
               {
@@ -36,6 +39,7 @@ namespace DemoForESC._Script
                   content = "按键：【W/A/S/D】 + 【左Shift】",
                   LearningKey = GuideLearningKey.Run,
                   limitFovRotation = false,
+                  resetPosition = true,
               },
               new GuideInfo()
               {
@@ -43,12 +47,14 @@ namespace DemoForESC._Script
                   content = "按键：鼠标左键",
                   LearningKey = GuideLearningKey.MeleeAttack,
                   limitFovRotation = false,
+                  resetPosition = true,
               },
               new GuideInfo()
               {
                   title = "这是【SPIDER 终结者】。",
                   content = "加油！",
                   limitFovRotation = false,
+                  resetPosition = true,
               },
             },
         };
@@ -59,6 +65,7 @@ namespace DemoForESC._Script
         public string title;
         public string content;
         public bool limitFovRotation = false;
+        public bool resetPosition = false;
         public GuideLearningKey LearningKey;
         public Action onBegin;
         public Func<bool> checkFunction;
