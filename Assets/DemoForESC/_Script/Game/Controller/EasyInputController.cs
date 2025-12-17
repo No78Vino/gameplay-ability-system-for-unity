@@ -33,6 +33,7 @@ namespace DemoForESC._Script.Controller
 
         private void HandleInput()
         {
+            HandleGuideClick();
             HandleMove();
             HandleRun();
             HandleAttack();
@@ -72,9 +73,10 @@ namespace DemoForESC._Script.Controller
 
         private void HandleMove()
         {
-            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+            if (GuideManager.I.GuideInfo!=null
+                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
                 || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run
-                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Move)
+                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Move))
                 return;
 
             // 获取原始输入（保持原始值用于动画混合）
@@ -89,8 +91,9 @@ namespace DemoForESC._Script.Controller
 
         private void HandleRun()
         {
-            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
-                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run)
+            if (GuideManager.I.GuideInfo!=null
+                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                    || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run))
                 return;
             
             // 奔跑开关
@@ -102,8 +105,9 @@ namespace DemoForESC._Script.Controller
 
         private void HandleAttack()
         {
-            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
-                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.MeleeAttack)
+            if (GuideManager.I.GuideInfo!=null
+                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                    || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.MeleeAttack))
                 return;
             
             // 调试GE1
@@ -115,8 +119,9 @@ namespace DemoForESC._Script.Controller
 
         private void HandleDodge()
         {
-            if (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
-                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Dodge)
+            if (GuideManager.I.GuideInfo!=null
+                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+                    || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Dodge))
                 return;
             
             // 调试GE2
@@ -126,6 +131,14 @@ namespace DemoForESC._Script.Controller
                 demoPlayer.StopDebugGE2();
         }
 
+        private void HandleGuideClick()
+        {
+            if (!Input.anyKeyDown) return;
+            if (!GuideManager.I.IsInGuide) return;
+            var guideInfo = GuideManager.I.GuideInfo;
+            if (guideInfo.LearningKey == GuideLearningKey.None)
+                GuideManager.I.ContinueGuide();
+        }
         #endregion
     }
 }

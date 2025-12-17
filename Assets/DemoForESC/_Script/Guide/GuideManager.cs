@@ -15,7 +15,9 @@ namespace DemoForESC._Script
 
         public GuideInfo GuideInfo =>
             _guideType >= 0 && _guideIndex >= 0 ? GuideConfig.Data[_guideType][_guideIndex] : null;
-        
+
+        public bool IsInGuide => GuideInfo != null;
+
         /// <summary>
         /// 1.禁止输入
         /// 2.启动当前引导允许的输入
@@ -52,8 +54,8 @@ namespace DemoForESC._Script
             var w = XUI.M.OpenWindow<GuideWindow>();
             w.VM.UpdateInfo(GuideInfo);
             // 2.重置Player位置状态
-            
-            // 3.更新限制按键
+            GameManager.I.ResetPlayerStateToGuidePoint();
+            // 3.锁定
         }
     }
 }

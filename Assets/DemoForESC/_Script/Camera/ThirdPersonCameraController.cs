@@ -107,11 +107,11 @@ namespace DemoForESC._Script
 
         private void HandleCameraRotation()
         {
-            float targetX = Input.GetAxis("Mouse X") * xSensitivity;
-            float targetY = Input.GetAxis("Mouse Y") * ySensitivity;
-
-            _freeLookCam.m_XAxis.Value += Mathf.SmoothDamp(0, targetX, ref _xVelocity, xDamping);
-            _freeLookCam.m_YAxis.Value -= Mathf.SmoothDamp(0, targetY, ref _yVelocity, yDamping);
+            // float targetX = Input.GetAxis("MouseX") * xSensitivity;
+            // float targetY = Input.GetAxis("MouseY") * ySensitivity;
+            //
+            // _freeLookCam.m_XAxis.Value += Mathf.SmoothDamp(0, targetX, ref _xVelocity, xDamping);
+            // _freeLookCam.m_YAxis.Value -= Mathf.SmoothDamp(0, targetY, ref _yVelocity, yDamping);
         }
 
         private void UpdateDynamicParameters()

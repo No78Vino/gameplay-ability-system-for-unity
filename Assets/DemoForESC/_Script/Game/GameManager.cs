@@ -21,7 +21,20 @@ namespace DemoForESC._Script
         public AbilitySystemCell GlobalAsc { get; } 
 
         private PlayableDirector _openingTimeline;
+        
+        private DemoPlayer _player;
 
+        public DemoPlayer Player
+        {
+            get
+            {
+                if (_player != null) return _player;
+                _player = Object.FindObjectOfType<DemoPlayer>();
+                return _player;
+            }
+        }
+        
+        
         public GameManager()
         {
             GlobalAsc= new();
@@ -100,6 +113,17 @@ namespace DemoForESC._Script
                     GuideManager.I.OnGuideEnd();
                 }
             }
+        }
+
+        private static readonly Vector3 GuidePlayerPosition = new Vector3(0,2.5f,0);
+        /// <summary>
+        /// 重置玩家位置
+        /// </summary>
+        public void ResetPlayerStateToGuidePoint()
+        {
+            Player.transform.position = GuidePlayerPosition;
+            PlayerFreeLookCameraControl.Instance.SetInputActive(false);
+            PlayerFreeLookCameraControl.Instance.AlignViewToPlayer();
         }
     }
 }
