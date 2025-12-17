@@ -479,6 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8116483671025549369}
   - component: {fileID: 2380824077433122572}
+  - component: {fileID: 4010507084091274626}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Untagged
@@ -545,8 +546,37 @@ MonoBehaviour:
   CheckSelfVelocity: 1
   gizmosOn: 1
   stepDistanceLimit: 1.5
+  resetWhenStop: 0
+  resetWaitingDuration: 0
+  RhythmSystem: {fileID: 0}
+  Intensity: 0
   stepTime: 0.3
   maxRelativeHeight: 0.3
+--- !u!114 &4010507084091274626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839834720109347251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed365a8ea67d499bb39d0c33c533ec7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instances:
+  - avator: 0
+    target: {fileID: 0}
+    autoUpdate: 0
+    ValueType: 0
+    x: 1
+    y: 0
+    z: 1
+    Frequency: 3.25
+    Damping: 0.506
+    Scale: 0
+  drawCurve: 1
+  drawCurveIndex: 0
 --- !u!1 &1864615784347499539
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +836,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6012790083332736803}
-  - component: {fileID: 6396443141214812532}
   m_Layer: 0
   m_Name: mesh
   m_TagString: Untagged
@@ -832,31 +861,6 @@ Transform:
   - {fileID: 4072707002204905383}
   m_Father: {fileID: 8116483671025549369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6396443141214812532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2484234410941090457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed365a8ea67d499bb39d0c33c533ec7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  instances:
-  - avator: 1
-    target: {fileID: 0}
-    autoUpdate: 0
-    ValueType: 0
-    x: 1
-    y: 0
-    z: 1
-    Frequency: 3.25
-    Damping: 0.506
-    Scale: 0
-  drawCurve: 1
-  drawCurveIndex: 0
 --- !u!1 &2543257662984037015
 GameObject:
   m_ObjectHideFlags: 0

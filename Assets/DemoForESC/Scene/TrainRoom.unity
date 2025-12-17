@@ -1231,6 +1231,14 @@ PrefabInstance:
       propertyPath: instances.Array.data[0].target
       value: 
       objectReference: {fileID: 1379354660}
+    - target: {fileID: 4010507084091274626, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
+      propertyPath: instances.Array.data[0].avator
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4010507084091274626, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
+      propertyPath: instances.Array.data[0].target
+      value: 
+      objectReference: {fileID: 1379354660}
     - target: {fileID: 6396443141214812532, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
       propertyPath: instances.Array.data[0].target
       value: 
