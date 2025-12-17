@@ -119,10 +119,11 @@ namespace DemoForESC._Script
         /// <summary>
         /// 重置玩家位置
         /// </summary>
-        public void ResetPlayerStateToGuidePoint()
+        public void ResetPlayerStateToGuidePoint(bool limitFovRotation)
         {
             Player.transform.position = GuidePlayerPosition;
-            PlayerFreeLookCameraControl.Instance.SetInputActive(false);
+            
+            PlayerFreeLookCameraControl.Instance.SetInputActive(!limitFovRotation);
             PlayerFreeLookCameraControl.Instance.AlignViewToPlayer();
         }
     }

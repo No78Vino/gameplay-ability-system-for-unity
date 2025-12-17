@@ -80,8 +80,8 @@ namespace DemoForESC._Script
             _freeLookCam.m_CommonLens = true;
 
             // 禁用Cinemachine自带输入
-            _freeLookCam.m_XAxis.m_MaxSpeed = 0;
-            _freeLookCam.m_YAxis.m_MaxSpeed = 0;
+            // _freeLookCam.m_XAxis.m_MaxSpeed = 0;
+            // _freeLookCam.m_YAxis.m_MaxSpeed = 0;
 
             // 自动居中配置
             var recenter = _freeLookCam.m_RecenterToTargetHeading;

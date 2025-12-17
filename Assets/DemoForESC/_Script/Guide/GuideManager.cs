@@ -54,7 +54,7 @@ namespace DemoForESC._Script
             var w = XUI.M.OpenWindow<GuideWindow>();
             w.VM.UpdateInfo(GuideInfo);
             // 2.重置Player位置状态
-            GameManager.I.ResetPlayerStateToGuidePoint();
+            GameManager.I.ResetPlayerStateToGuidePoint(GuideInfo.limitFovRotation);
             // 3.锁定
         }
     }

@@ -56,9 +56,6 @@ namespace DemoForESC._Script
                 freeLookCamera.m_XAxis.m_InputAxisValue = 0;
                 freeLookCamera.m_YAxis.m_InputAxisValue = 0;
             }
-
-            freeLookCamera.enabled = false;
-            freeLookCamera.enabled = true;
         }
 
         /// <summary>
@@ -73,7 +70,7 @@ namespace DemoForESC._Script
             freeLookCamera.m_XAxis.Value = playerTransform.eulerAngles.y;
 
             // 可选：重置高度到中间
-            // freeLookCamera.m_YAxis.Value = 0.5f; 
+            freeLookCamera.m_YAxis.Value = 0.5f; 
         }
     }
 }
