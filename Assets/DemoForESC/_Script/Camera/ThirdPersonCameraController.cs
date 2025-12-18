@@ -109,12 +109,21 @@ namespace DemoForESC._Script
         {
             if (GuideManager.I.IsInGuide && GuideManager.I.GuideInfo.limitFovRotation)
             {
-                // 直接修改 Value 是不受 Input 影响的底层操作
-                // 设置 X 轴的值等于玩家的 Y 轴旋转，即可对齐朝向
-                _freeLookCam.m_XAxis.Value = 0f; //GameManager.I.Player.transform.eulerAngles.y;
+                // 1. 获取目标（玩家）当前的 Y 轴朝向
+                float targetYRotation = _freeLookCam.Follow.eulerAngles.y;
 
-                // 可选：重置高度到中间
-                _freeLookCam.m_YAxis.Value = 0f; 
+                // 2. 直接赋值给 FreeLook 的 X 轴
+                // 这样相机的观察方向就和玩家朝向一致了（即正后方）
+                _freeLookCam.m_XAxis.Value = targetYRotation;
+
+                // 3. (可选) 重置高度到中间
+                // 0 = 底部, 0.5 = 中间, 1 = 顶部
+                _freeLookCam.m_YAxis.Value = 0.5f;
+
+                // 4. 清除惯性（非常重要！）
+                // 否则如果在旋转过程中按下，相机还会因为残留速度继续滑行
+                _freeLookCam.m_XAxis.m_InputAxisValue = 0;
+                _freeLookCam.m_YAxis.m_InputAxisValue = 0;
                 return;
             }
             
