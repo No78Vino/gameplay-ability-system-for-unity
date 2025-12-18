@@ -80,8 +80,8 @@ namespace DemoForESC._Script
             _freeLookCam.m_CommonLens = true;
 
             // 禁用Cinemachine自带输入
-            // _freeLookCam.m_XAxis.m_MaxSpeed = 0;
-            // _freeLookCam.m_YAxis.m_MaxSpeed = 0;
+            _freeLookCam.m_XAxis.m_MaxSpeed = 0;
+            _freeLookCam.m_YAxis.m_MaxSpeed = 0;
 
             // 自动居中配置
             var recenter = _freeLookCam.m_RecenterToTargetHeading;
@@ -107,11 +107,22 @@ namespace DemoForESC._Script
 
         private void HandleCameraRotation()
         {
-            // float targetX = Input.GetAxis("MouseX") * xSensitivity;
-            // float targetY = Input.GetAxis("MouseY") * ySensitivity;
-            //
-            // _freeLookCam.m_XAxis.Value += Mathf.SmoothDamp(0, targetX, ref _xVelocity, xDamping);
-            // _freeLookCam.m_YAxis.Value -= Mathf.SmoothDamp(0, targetY, ref _yVelocity, yDamping);
+            if (GuideManager.I.IsInGuide && GuideManager.I.GuideInfo.limitFovRotation)
+            {
+                // 直接修改 Value 是不受 Input 影响的底层操作
+                // 设置 X 轴的值等于玩家的 Y 轴旋转，即可对齐朝向
+                _freeLookCam.m_XAxis.Value = 0f; //GameManager.I.Player.transform.eulerAngles.y;
+
+                // 可选：重置高度到中间
+                _freeLookCam.m_YAxis.Value = 0f; 
+                return;
+            }
+            
+            float targetX = Input.GetAxis("MouseX") * xSensitivity;
+            float targetY = Input.GetAxis("MouseY") * ySensitivity;
+            
+            _freeLookCam.m_XAxis.Value += Mathf.SmoothDamp(0, targetX, ref _xVelocity, xDamping);
+            _freeLookCam.m_YAxis.Value -= Mathf.SmoothDamp(0, targetY, ref _yVelocity, yDamping);
         }
 
         private void UpdateDynamicParameters()

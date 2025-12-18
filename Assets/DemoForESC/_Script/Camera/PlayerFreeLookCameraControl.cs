@@ -38,24 +38,24 @@ namespace DemoForESC._Script
         /// <param name="active">true=允许鼠标控制, false=禁止鼠标控制</param>
         public void SetInputActive(bool active)
         {
-            if (freeLookCamera == null) return;
-
-            if (active)
-            {
-                // 恢复：把名字设回去，让它能读到 "Mouse X"
-                freeLookCamera.m_XAxis.m_InputAxisName = originalXAxisName;
-                freeLookCamera.m_YAxis.m_InputAxisName = originalYAxisName;
-            }
-            else
-            {
-                // 禁用：把名字清空，Cinemachine 读不到任何输入
-                freeLookCamera.m_XAxis.m_InputAxisName = "";
-                freeLookCamera.m_YAxis.m_InputAxisName = "";
-
-                // 重要：强制把当前的输入值归零，防止禁用瞬间的惯性漂移
-                freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-                freeLookCamera.m_YAxis.m_InputAxisValue = 0;
-            }
+            // if (freeLookCamera == null) return;
+            //
+            // if (active)
+            // {
+            //     // 恢复：把名字设回去，让它能读到 "Mouse X"
+            //     freeLookCamera.m_XAxis.m_InputAxisName = originalXAxisName;
+            //     freeLookCamera.m_YAxis.m_InputAxisName = originalYAxisName;
+            // }
+            // else
+            // {
+            //     // 禁用：把名字清空，Cinemachine 读不到任何输入
+            //     freeLookCamera.m_XAxis.m_InputAxisName = "";
+            //     freeLookCamera.m_YAxis.m_InputAxisName = "";
+            //
+            //     // 重要：强制把当前的输入值归零，防止禁用瞬间的惯性漂移
+            //     freeLookCamera.m_XAxis.m_InputAxisValue = 0;
+            //     freeLookCamera.m_YAxis.m_InputAxisValue = 0;
+            // }
         }
 
         /// <summary>
