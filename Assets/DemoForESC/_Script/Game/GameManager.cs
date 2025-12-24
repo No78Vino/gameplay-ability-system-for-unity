@@ -124,7 +124,6 @@ namespace DemoForESC._Script
             if(GuideManager.I.GuideInfo.resetPosition)
                 Player.transform.position = GuidePlayerPosition;
             
-            PlayerFreeLookCameraControl.Instance.SetInputActive(!limitFovRotation);
             PlayerFreeLookCameraControl.Instance.AlignViewToPlayer();
         }
     }

@@ -20,6 +20,9 @@ namespace EXProceduralMachine
         [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("躯干")]
         public Transform Body;
 
+        [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("足绑定目标物体组父节点")]
+        public Transform FootTargetGroupNode;
+
         /// <summary>
         ///     步态周期
         ///     Gait Cycle (T)
@@ -163,7 +166,9 @@ namespace EXProceduralMachine
         {
             MotionTransform = new GameObject(name).transform;
             MotionTransform.SetParent(EXProceduralMachineManager.Instance.ManagerRoot);
-
+            FootTargetGroupNode.name = name + "_foot_target_group";
+            FootTargetGroupNode.SetParent(MotionTransform);
+            
             for (var i = 0; i < MotionGroup.Length; i++)
             {
                 var motionGroup = MotionGroup[i];

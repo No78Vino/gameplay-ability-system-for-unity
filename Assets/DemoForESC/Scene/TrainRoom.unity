@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -909,33 +909,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1177578713 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2543257662984037015, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-  m_PrefabInstance: {fileID: 4896897589305186151}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1177578714 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8953054986304280433, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-  m_PrefabInstance: {fileID: 4896897589305186151}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1177578718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177578713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afc3ef39a64f492d95059e758a148f0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rhythmSystem: {fileID: 680696085}
-  controlledTransform: {fileID: 1177578714}
-  scaleRange: {x: 0.1, y: 0.1, z: 0.1}
-  positionRange: {x: 0, y: 0, z: 0}
-  rotationRange: {x: 0, y: 0, z: 0}
 --- !u!1 &1327538381
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,46 +1173,22 @@ PrefabInstance:
       value: Spider
       objectReference: {fileID: 0}
     - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      propertyPath: L
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      propertyPath: stepTime
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
       propertyPath: RhythmSystem
       value: 
       objectReference: {fileID: 680696085}
     - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      propertyPath: maxRelativeHeight
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      propertyPath: stepDistanceLimit
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
       propertyPath: LegPhaseDifference.Array.data[0]
-      value: 0.2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2380824077433122572, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
       propertyPath: LegPhaseDifference.Array.data[1]
-      value: 0.4
+      value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3331073488992645963, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
+    - target: {fileID: 3651662135505931134, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
       propertyPath: instances.Array.data[0].target
       value: 
       objectReference: {fileID: 1379354660}
-    - target: {fileID: 4010507084091274626, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      propertyPath: instances.Array.data[0].avator
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4010507084091274626, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      propertyPath: instances.Array.data[0].target
-      value: 
-      objectReference: {fileID: 1379354660}
-    - target: {fileID: 6396443141214812532, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
+    - target: {fileID: 4218238418981820659, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
       propertyPath: instances.Array.data[0].target
       value: 
       objectReference: {fileID: 1379354660}
@@ -1283,13 +1232,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8321387682922601851, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
+      propertyPath: rhythmSystem
+      value: 
+      objectReference: {fileID: 680696085}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2543257662984037015, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1177578718}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
