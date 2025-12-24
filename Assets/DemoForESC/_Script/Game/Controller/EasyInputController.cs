@@ -74,10 +74,14 @@ namespace DemoForESC._Script.Controller
         private void HandleMove()
         {
             if (GuideManager.I.GuideInfo!=null
-                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
-                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run
-                || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Move))
+                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None))
                 return;
+            
+            // if (GuideManager.I.GuideInfo!=null
+            //     && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+            //     || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run
+            //     || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Move))
+            //     return;
 
             // 获取原始输入（保持原始值用于动画混合）
             var horizontal = Input.GetAxis("Horizontal");
