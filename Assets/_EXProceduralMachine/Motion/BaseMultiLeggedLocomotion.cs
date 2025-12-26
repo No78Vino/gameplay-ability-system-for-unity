@@ -20,6 +20,9 @@ namespace EXProceduralMachine
         [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("躯干")]
         public Transform Body;
 
+        [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("模型根节点")]
+        public Transform MeshRoot;
+        
         [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("足绑定目标物体组父节点")]
         public Transform FootTargetGroupNode;
         
@@ -199,21 +202,23 @@ namespace EXProceduralMachine
                     Body.localPosition = bPos;
                 }
 
-                if (SyncRotationWithRoot)
-                {
-                    var rootAngles = transform.eulerAngles;
-                    var t = Body.eulerAngles;
-                    t.y = rootAngles.y;
-                    Body.eulerAngles = t;
-                }
+                // if (SyncRotationWithRoot)
+                // {
+                //     var rootAngles = transform.eulerAngles;
+                //     var t = Body.eulerAngles;
+                //     t.y = rootAngles.y;
+                //     Body.eulerAngles = t;
+                // }
                 
                 var forward = Body.forward;
                 forward.y = 0;
                 // 4. 平滑应用旋转
-                Body.eulerAngles = EXMachHelper.CalculateBodyRotationAngle(forward,
+                var rot = EXMachHelper.CalculateBodyRotationAngle(forward,
                     MotionGroup[0].FootPlacements[0].IkTrackPoint.position,
                     MotionGroup[0].FootPlacements[1].IkTrackPoint.position,
                     MotionGroup[1].FootPlacements[0].IkTrackPoint.position);
+                //rot.y = transform.eulerAngles.y;
+                //Body.eulerAngles = rot;
             }
 
             if ((Body.position - _lastBodyStepPos).magnitude > L)
