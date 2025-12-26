@@ -22,6 +22,9 @@ namespace EXProceduralMachine
 
         [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("足绑定目标物体组父节点")]
         public Transform FootTargetGroupNode;
+        
+        [TabGroup(BASE_TAB_GROUP,TAB_BIND)] [LabelText("和根节点旋转同步")]
+        public bool SyncRotationWithRoot;
 
         /// <summary>
         ///     步态周期
@@ -194,6 +197,14 @@ namespace EXProceduralMachine
                     var bPos = Body.localPosition;
                     bPos.y += value * Intensity;
                     Body.localPosition = bPos;
+                }
+
+                if (SyncRotationWithRoot)
+                {
+                    var rootAngles = transform.eulerAngles;
+                    var t = Body.eulerAngles;
+                    t.y = rootAngles.y;
+                    Body.eulerAngles = t;
                 }
                 
                 var forward = Body.forward;

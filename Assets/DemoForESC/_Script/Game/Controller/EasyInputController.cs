@@ -47,9 +47,19 @@ namespace DemoForESC._Script.Controller
 
             // 应用移动
             if (_movement.magnitude > 0.1f)
-                if(demoPlayer != null) demoPlayer.Move(_movement);
+            {
+                if (demoPlayer != null)
+                {
+                    demoPlayer.Move(_movement);
+                }
+            }
             else
-                if(demoPlayer != null) demoPlayer.StopMove();
+            {
+                if (demoPlayer != null)
+                {
+                    demoPlayer.StopMove();
+                }
+            }
             
         }
 
