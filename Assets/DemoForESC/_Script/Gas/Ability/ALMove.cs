@@ -102,7 +102,7 @@ namespace DemoForESC._Script.Gas.Ability
             
             // 移动执行
             var speed = _unit.GetSpeed();
-            var motion = _param.MoveDirection * speed * Time.fixedDeltaTime;
+            var motion = _param.MoveDirection * speed * Time.fixedDeltaTime / 10;
             _controller.Move(motion);
         }
         

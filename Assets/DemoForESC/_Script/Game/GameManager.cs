@@ -119,7 +119,7 @@ namespace DemoForESC._Script
         /// <summary>
         /// 重置玩家位置
         /// </summary>
-        public void ResetPlayerStateToGuidePoint(bool limitFovRotation)
+        public void ResetPlayerStateToGuidePoint()
         {
             if(GuideManager.I.GuideInfo.resetPosition)
                 Player.transform.position = GuidePlayerPosition;

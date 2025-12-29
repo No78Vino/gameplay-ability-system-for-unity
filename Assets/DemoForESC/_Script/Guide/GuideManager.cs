@@ -1,5 +1,8 @@
-﻿using DemoForESC._Script.UI.View;
+﻿using DemoForESC._Script.Controller;
+using DemoForESC._Script.UI.View;
 using EXUI;
+using UnityEngine;
+using XYooAsset;
 
 namespace DemoForESC._Script
 {
@@ -50,12 +53,42 @@ namespace DemoForESC._Script
 
         private void TriggerGuide()
         {
+            GuideInfo.BeginGuide();
             // 1.刷新 GuideWindow
             var w = XUI.M.OpenWindow<GuideWindow>();
             w.VM.UpdateInfo(GuideInfo);
             // 2.重置Player位置状态
-            GameManager.I.ResetPlayerStateToGuidePoint(GuideInfo.limitFovRotation);
+            GameManager.I.ResetPlayerStateToGuidePoint();
             // 3.锁定
         }
+
+        #region 引导事件合集
+
+        private GameObject _guideTargetMove;
+        public void OnGuideStart_Move()
+        {
+            var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab");
+            _guideTargetMove = Object.Instantiate(prefab);
+        }
+        
+        public void OnGuideFinish_Move()
+        {
+            EasyInputController.Inst().SetBanInput(true);
+            var player = GameManager.I.Player;
+            player.StopMove();
+            var w = XUI.M.OpenWindow<MaskWindow>();
+            w.VM.SetOnOpen(()=>
+            {
+                player.StopMove();
+                GameManager.I.ResetPlayerStateToGuidePoint();
+                w.VM.MaskFadeOut();
+            });
+            w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
+            w.VM.MaskFadeIn();
+            
+            Object.Destroy(_guideTargetMove);
+        }
+
+        #endregion
     }
 }

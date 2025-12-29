@@ -5,6 +5,15 @@ namespace DemoForESC._Script.Controller
     [RequireComponent(typeof(CharacterController))]
     public class EasyInputController : MonoBehaviour
     {
+        private static EasyInputController _inst;
+        public static EasyInputController Inst()
+        {
+            if (_inst == null)
+                _inst = FindObjectOfType<EasyInputController>();
+            
+            return _inst;
+        }
+        
         private float Speed => demoPlayer.GetSpeed(); // 行走速度
 
         [SerializeField] [Range(0.1f, 3f)] private float acceleration = 0.5f; // 加速时间
@@ -19,6 +28,7 @@ namespace DemoForESC._Script.Controller
         private bool _isRunning;
         private UnityEngine.Camera _mainCamera;
         private Vector3 _movement;
+        private bool _banInput;
 
         private void Awake()
         {
@@ -33,6 +43,7 @@ namespace DemoForESC._Script.Controller
 
         private void HandleInput()
         {
+            if(_banInput) return;
             HandleGuideClick();
             HandleMove();
             HandleRun();
@@ -79,6 +90,10 @@ namespace DemoForESC._Script.Controller
             return _isRunning;
         }
 
+        public void SetBanInput(bool ban)
+        {
+            _banInput = ban;
+        }
         #region InputHandle
 
         private void HandleMove()
