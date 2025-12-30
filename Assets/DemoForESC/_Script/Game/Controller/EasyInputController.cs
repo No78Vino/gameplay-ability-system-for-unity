@@ -43,7 +43,11 @@ namespace DemoForESC._Script.Controller
 
         private void HandleInput()
         {
-            if(_banInput) return;
+            if (_banInput)
+            {
+                _movement = Vector3.zero;
+                return;
+            }
             HandleGuideClick();
             HandleMove();
             HandleRun();
@@ -57,7 +61,9 @@ namespace DemoForESC._Script.Controller
             _currentSpeed = Mathf.Lerp(_currentSpeed, Speed, acceleration * Time.deltaTime);
 
             // 应用移动
-            if (_movement.magnitude > 0.1f)
+            var horizontal = Mathf.Abs(Input.GetAxis("Horizontal"));
+            var vertical = Mathf.Abs(Input.GetAxis("Vertical"));
+            if (horizontal+vertical > 0.2f)
             {
                 if (demoPlayer != null)
                 {

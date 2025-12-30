@@ -43,6 +43,9 @@ namespace DemoForESC._Script
                   LearningKey = GuideLearningKey.Run,
                   limitFovRotation = false,
                   resetPosition = true,
+                  GuideEvent = "GuideRun",
+                  onBegin = GuideManager.I.OnGuideStart_Run,
+                  onFinish = GuideManager.I.OnGuideFinish_Run,
               },
               new GuideInfo()
               {

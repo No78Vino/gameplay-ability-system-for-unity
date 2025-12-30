@@ -115,7 +115,7 @@ namespace DemoForESC._Script
             }
         }
 
-        private static readonly Vector3 GuidePlayerPosition = new Vector3(0,2.5f,0);
+        private static readonly Vector3 GuidePlayerPosition = new Vector3(0,1.5f,0);
         /// <summary>
         /// 重置玩家位置
         /// </summary>

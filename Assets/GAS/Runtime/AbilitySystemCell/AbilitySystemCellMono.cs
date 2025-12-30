@@ -60,5 +60,14 @@ namespace GAS.Runtime
         }
         
         #endregion
+
+        #region GameplayTag
+
+        public bool HasTag(int gameplayTag)
+        {
+            return _abilitySystemCell.HasTag(gameplayTag);
+        }
+
+        #endregion
     }
 }

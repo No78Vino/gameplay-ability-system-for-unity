@@ -1,4 +1,5 @@
-﻿using DemoForESC._Script.Controller;
+﻿using System.Threading.Tasks;
+using DemoForESC._Script.Controller;
 using DemoForESC._Script.UI.View;
 using EXUI;
 using UnityEngine;
@@ -65,6 +66,7 @@ namespace DemoForESC._Script
         #region 引导事件合集
 
         private GameObject _guideTargetMove;
+        private GameObject _guideTargetRun;
         public void OnGuideStart_Move()
         {
             var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab");
@@ -77,11 +79,10 @@ namespace DemoForESC._Script
             var player = GameManager.I.Player;
             player.StopMove();
             var w = XUI.M.OpenWindow<MaskWindow>();
-            w.VM.SetOnOpen(()=>
+            w.VM.SetOnOpen(() =>
             {
                 player.StopMove();
-                GameManager.I.ResetPlayerStateToGuidePoint();
-                w.VM.MaskFadeOut();
+                OnWaitGuideFinish_Move();
             });
             w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
             w.VM.MaskFadeIn();
@@ -89,6 +90,36 @@ namespace DemoForESC._Script
             Object.Destroy(_guideTargetMove);
         }
 
+        async void OnWaitGuideFinish_Move()
+        {
+            await Task.Delay(1000);
+            GameManager.I.ResetPlayerStateToGuidePoint();
+            var w = XUI.M.OpenWindow<MaskWindow>();
+            w.VM.MaskFadeOut();
+        }
+        
+        public void OnGuideStart_Run()
+        {
+            var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Run.prefab");
+            _guideTargetRun = Object.Instantiate(prefab);
+        }
+        
+        public void OnGuideFinish_Run()
+        {
+            EasyInputController.Inst().SetBanInput(true);
+            var player = GameManager.I.Player;
+            var w = XUI.M.OpenWindow<MaskWindow>();
+            w.VM.SetOnOpen(() =>
+            {
+                player.StopMove();
+                player.StopRun();
+                OnWaitGuideFinish_Move();
+            });
+            w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
+            w.VM.MaskFadeIn();
+            
+            Object.Destroy(_guideTargetRun);
+        }
         #endregion
     }
 }
