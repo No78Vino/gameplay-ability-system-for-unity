@@ -14,8 +14,7 @@ namespace GAS.Runtime
 
         public override void ActivateAbility(GlobalTimer timer)
         {
-            var baseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
-            var owner = baseInfo.Owner;
+            var owner = GetOwnerAsc();
             foreach (var effectCode in _param.Value)
             {
                 var effectCfg = GameplayEffectHelper.GetConfigByID(effectCode);
@@ -31,7 +30,7 @@ namespace GAS.Runtime
 
         public override void EndAbility(GlobalTimer timer)
         {
-            var ownerAsc = GetOwnerAsc();
+            var ownerAsc = GetOwnerAscEntity();
             var geEntities = _entityManager.GetBuffer<BGameplayEffect>(ownerAsc);
             foreach (var beEffect in geEntities)
             {

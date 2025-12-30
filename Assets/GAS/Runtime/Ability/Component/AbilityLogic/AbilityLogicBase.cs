@@ -7,10 +7,22 @@ namespace GAS.Runtime
         protected static EntityManager _entityManager => GASManager.EntityManager;
         protected IAbilityParam _paramRaw;
         protected Entity _abilityEntity;
+        protected int _code;
+
+        public AbilitySpec Spec
+        {
+            get
+            {
+                var owner = GetOwnerAsc();
+                return owner.GetAbilitySpec(_code);
+            }
+        }
         
         protected AbilityLogicBase(Entity ability)
         {
             _abilityEntity = ability;
+            var basicInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
+            _code = basicInfo.Code;
         }
         
         public abstract void ActivateAbility(GlobalTimer timer);
@@ -47,7 +59,7 @@ namespace GAS.Runtime
             }
         }
 
-        public Entity GetOwnerAsc()
+        public Entity GetOwnerAscEntity()
         {
             if (_entityManager.HasComponent<CAbilityBaseInfo>(_abilityEntity))
             {
@@ -55,6 +67,14 @@ namespace GAS.Runtime
                 return basicInfo.Owner;
             }
             return Entity.Null;
+        }
+        
+        public AbilitySystemCell GetOwnerAsc()
+        {
+            var owner = GetAscEntity();
+            if (owner == Entity.Null) return null;
+            var asc = GASManager.GetAscFromEntity(owner);
+            return asc;
         }
         
         public virtual void SetParam(IAbilityParam abilityParam)
@@ -75,6 +95,11 @@ namespace GAS.Runtime
             {
                 sourceAbility = _abilityEntity
             });
+        }
+        
+        protected void ApplyGameplayEffectTo(Entity gameplayEffect, AbilitySystemCell target, AbilitySystemCell source)
+        {
+            ApplyGameplayEffectTo(gameplayEffect, target.Entity, source.Entity);
         }
 
         protected void RemoveGameplayEffect(Entity geEntity)

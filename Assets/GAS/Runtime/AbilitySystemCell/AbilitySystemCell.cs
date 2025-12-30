@@ -17,6 +17,7 @@ namespace GAS.Runtime
         {
             Entity = EntityManager.CreateEntity();
             EntityManager.SetName(Entity, $"ASC_V{Entity.Version}_{Entity.Index}");
+            GASManager.BindAscToEntity(Entity, this);
 
             // 1.基础信息
             _basicDataController = new BasicDataController(Entity);
@@ -35,6 +36,7 @@ namespace GAS.Runtime
 
         public void Dispose()
         {
+            GASManager.UnbindAscToEntity(Entity);
             EntityHelper.DestroyEntity(Entity);
             Entity = Entity.Null;
         }
@@ -45,11 +47,8 @@ namespace GAS.Runtime
             _gameplayTagController.AddFixedTags(baseTags);
             // 2.创建属性集
             foreach (var attrSet in attrSets)
-            {
-                //var attrSetConfig = XAttrSet.AttributeSetMap[attrSetCode];
                 _attrSetController.AddAttrSet(attrSet);
-            }
-
+            
             // 3.初始化基础技能
             foreach (var abilityConfig in baseAbilities)
                 GrantAbility(abilityConfig);
@@ -162,6 +161,11 @@ namespace GAS.Runtime
         public MCAbilityLogic GetAbilityLogic(int abilityCode)
         {
             return _abilityController.GetAbilityLogic(abilityCode);
+        }
+        
+        public AbilitySpec GetAbilitySpec(int abilityCode)
+        {
+            return _abilityController.GetAbilitySpec(abilityCode);
         }
 
         public void GrantAbility(AbilityConfig abilityCfg)

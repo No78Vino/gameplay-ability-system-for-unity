@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GAS.Runtime.System.Attribute;
 using Unity.Entities;
 using UnityEngine;
@@ -213,5 +214,44 @@ namespace GAS.Runtime
             // 将world更新同步PlayerLoop
             ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(ExWorld);
         }
+
+        #region AbilitySystemCell 绑定
+
+        private static readonly Dictionary<Entity, AbilitySystemCell> _bindingAsc = new();
+
+        public static void ClearAscBinding()
+        {
+            _bindingAsc.Clear();
+        }
+
+        /// <summary>
+        ///     绑定gameObject到entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="asc"></param>
+        public static void BindAscToEntity(Entity entity, AbilitySystemCell asc)
+        {
+            if (EntityManager.Exists(entity) && asc != null) _bindingAsc.Add(entity, asc);
+        }
+
+        /// <summary>
+        ///     解绑gameObject
+        /// </summary>
+        /// <param name="entity"></param>
+        public static void UnbindAscToEntity(Entity entity)
+        {
+            if (EntityManager.Exists(entity)) _bindingAsc.Remove(entity);
+        }
+        
+        /// <summary>
+        ///     获取entity绑定的gameObject
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static AbilitySystemCell GetAscFromEntity(Entity entity)
+        {
+            return _bindingAsc.GetValueOrDefault(entity);
+        }
+        #endregion
     }
 }

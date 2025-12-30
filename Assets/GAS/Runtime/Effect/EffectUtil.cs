@@ -101,6 +101,11 @@ namespace GAS.Runtime
             });
         }
         
+        public static void ApplyGameplayEffectTo(Entity gameplayEffect, AbilitySystemCell target, AbilitySystemCell source)
+        {
+            ApplyGameplayEffectTo(gameplayEffect, target.Entity, source.Entity);
+        }
+        
         public static void RemoveGameplayEffect(Entity gameplayEffect)
         {
             if (!_entityManager.HasComponent<CEffectInUsage>(gameplayEffect)) return;

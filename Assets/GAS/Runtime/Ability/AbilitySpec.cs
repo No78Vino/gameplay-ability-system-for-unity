@@ -14,5 +14,7 @@ namespace GAS.Runtime
         {
             _entityAbility = entityAbility;
         }
+        
+        
     }
 }

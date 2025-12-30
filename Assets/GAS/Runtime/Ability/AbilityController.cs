@@ -31,9 +31,14 @@ namespace GAS.Runtime
         /// <returns></returns>
         public AbilitySpec GetAbilitySpec(int code)
         {
-                
+            return _specs.GetValueOrDefault(code);
         }
-        
+
+        public Dictionary<int,AbilitySpec> GetAllAbilitySpecs()
+        {
+            return _specs;
+        }
+
         public void GrantAbility(AbilityConfig abilityConfig)
         {
             var abilityEntity = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
@@ -49,6 +54,8 @@ namespace GAS.Runtime
             
             var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
             buffer.Add(new BAbility { Ability = ability });
+            
+            _specs[abi.Code] = new AbilitySpec(ability);
         }
 
         public void RemoveAbility(int abilityCode)
@@ -61,6 +68,7 @@ namespace GAS.Runtime
                 if (abi.Code == abilityCode)
                 {
                     buffer.RemoveAt(i);
+                    _specs.Remove(abilityCode);
                     break;
                 }
             }
@@ -83,6 +91,19 @@ namespace GAS.Runtime
             buffer.Clear();
         }
 
+        private Entity GetAbilityEntity(int abilityCode)
+        {
+            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            for (var i = 0; i < buffer.Length; i++)
+            {
+                var a = buffer[i].Ability;
+                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                if (abi.Code == abilityCode) return a;
+            }
+
+            return Entity.Null;
+        }
+        
         public bool HaveAbility(int abilityCode)
         {
             var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);

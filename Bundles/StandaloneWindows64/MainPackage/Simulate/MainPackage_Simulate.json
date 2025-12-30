@@ -10,7 +10,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "MainPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/12/30 17:55:19",
+    "PackageNote": "2025/12/31 0:13:18",
     "AssetList": [
         {
             "Address": "Animation_logo",
@@ -297,9 +297,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
             "UnityCRC": 0,
-            "FileHash": "5bfe011318982ca3535590e5c55f425e",
+            "FileHash": "11079b79ca1133b14f48921015e5b0ab",
             "FileCRC": 0,
-            "FileSize": 11869,
+            "FileSize": 11389,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -307,9 +307,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
             "UnityCRC": 0,
-            "FileHash": "e49526cb3a498f629c00cdaf01f89501",
+            "FileHash": "67b3c3b3adee1aea5bccab33bd6f4877",
             "FileCRC": 0,
-            "FileSize": 11896,
+            "FileSize": 11497,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -317,9 +317,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
             "UnityCRC": 0,
-            "FileHash": "beff855fb164eaa43d5161629c0d2eef",
+            "FileHash": "84ed514cc97a3cb517fbb5fde8d897c5",
             "FileCRC": 0,
-            "FileSize": 11493,
+            "FileSize": 11892,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -327,9 +327,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
             "UnityCRC": 0,
-            "FileHash": "7f91f01e156cc8cb6b05aaee77e0ac92",
+            "FileHash": "f2a32ce0a73cf0b2a56e8fefdfff0318",
             "FileCRC": 0,
-            "FileSize": 20693,
+            "FileSize": 19984,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -337,9 +337,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
             "UnityCRC": 0,
-            "FileHash": "d1e7118acd273e1e82b10fe6abc8d411",
+            "FileHash": "b80f21ade8e1491b5d4539efae624935",
             "FileCRC": 0,
-            "FileSize": 91162,
+            "FileSize": 94319,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -347,9 +347,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
             "UnityCRC": 0,
-            "FileHash": "3a6f3ac75c9e72d237d0b52c366a06a1",
+            "FileHash": "b4d8e8b3bf5e97a1948ba7eaf5decf8a",
             "FileCRC": 0,
-            "FileSize": 11668,
+            "FileSize": 11287,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -357,9 +357,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
             "UnityCRC": 0,
-            "FileHash": "be6231e9744be4cf191ae4dc1f7dde1a",
+            "FileHash": "cdfb6ed7495c588a088e7f0faeeb86c9",
             "FileCRC": 0,
-            "FileSize": 6201,
+            "FileSize": 5999,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -367,9 +367,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
             "UnityCRC": 0,
-            "FileHash": "04faa63f61860db12c6a9d5c8e336527",
+            "FileHash": "7ad8fe0ca611dbca171bd18150cf1d28",
             "FileCRC": 0,
-            "FileSize": 14515,
+            "FileSize": 14094,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -377,9 +377,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
             "UnityCRC": 0,
-            "FileHash": "8a4bd5eba11994591a1c5e709dc45d08",
+            "FileHash": "35c418aa3fdd690e48d377ee4de0e1a7",
             "FileCRC": 0,
-            "FileSize": 12954,
+            "FileSize": 12531,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -387,9 +387,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
             "UnityCRC": 0,
-            "FileHash": "7e1b3f87b37a121198bebf1a3b18d754",
+            "FileHash": "b04854790e30ea3a15ce218172262da4",
             "FileCRC": 0,
-            "FileSize": 58699,
+            "FileSize": 57206,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -397,9 +397,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_maskwindow.bundle",
             "UnityCRC": 0,
-            "FileHash": "17d6333eb6fc399f4066d219f35bd0c4",
+            "FileHash": "518858a5d9b9c7a246d4c87560ed758a",
             "FileCRC": 0,
-            "FileSize": 5729,
+            "FileSize": 5534,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -407,9 +407,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
             "UnityCRC": 0,
-            "FileHash": "0d4f7f3aac157888b15c3fb01c8edc64",
+            "FileHash": "89025d63075262234530fd3c5037ec42",
             "FileCRC": 0,
-            "FileSize": 30603,
+            "FileSize": 29762,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -417,9 +417,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
             "UnityCRC": 0,
-            "FileHash": "f3e52484f3ac07aab749c1720566d6cd",
+            "FileHash": "08816245638c17df53a3576e21ecaf1f",
             "FileCRC": 0,
-            "FileSize": 11673,
+            "FileSize": 11292,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -427,9 +427,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
             "UnityCRC": 0,
-            "FileHash": "bdd87b4561283cf9cb503fa3f25160ac",
+            "FileHash": "b9b393c320f8ea8371583763b9aed722",
             "FileCRC": 0,
-            "FileSize": 16954,
+            "FileSize": 16401,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -437,7 +437,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbability.bundle",
             "UnityCRC": 0,
-            "FileHash": "1470fa1cdbdcae5bb1224769dd82c097",
+            "FileHash": "9be21fd8b8e8af02402d19139a85131b",
             "FileCRC": 0,
             "FileSize": 1712,
             "Encrypted": false,
@@ -447,7 +447,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbasc.bundle",
             "UnityCRC": 0,
-            "FileHash": "26447951bd27d48ba1d3cdb9a0ea1ac1",
+            "FileHash": "b4c52bb263d28f99ba3af47683eb8e67",
             "FileCRC": 0,
             "FileSize": 651,
             "Encrypted": false,
@@ -457,7 +457,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattribute.bundle",
             "UnityCRC": 0,
-            "FileHash": "1da5cf45c9877fefb568e0851ba71ab9",
+            "FileHash": "ba9b23a23b7b52dd2c7c3b54f30e5595",
             "FileCRC": 0,
             "FileSize": 630,
             "Encrypted": false,
@@ -467,7 +467,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattributeset.bundle",
             "UnityCRC": 0,
-            "FileHash": "617d0da5deff909f8c2b2cb0db8d60be",
+            "FileHash": "8c1332e891ae9440123e8a4f0a1acebb",
             "FileCRC": 0,
             "FileSize": 2144,
             "Encrypted": false,
@@ -477,7 +477,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaycue.bundle",
             "UnityCRC": 0,
-            "FileHash": "67a530f8ca0f489baf38e932d49191e8",
+            "FileHash": "9b3e7f5a34102d356f443581dfbf592b",
             "FileCRC": 0,
             "FileSize": 977,
             "Encrypted": false,
@@ -487,7 +487,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplayeffect.bundle",
             "UnityCRC": 0,
-            "FileHash": "c61c9b05cfec0782aee51f8e0e9e7c40",
+            "FileHash": "c57131989338adbc4fa11100b24acd50",
             "FileCRC": 0,
             "FileSize": 3380,
             "Encrypted": false,
@@ -497,7 +497,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaytags.bundle",
             "UnityCRC": 0,
-            "FileHash": "0284ec20363fcd7ad9e2bba738a50e9a",
+            "FileHash": "7035c523f734d0c9571eae5eed0a38d3",
             "FileCRC": 0,
             "FileSize": 2029,
             "Encrypted": false,
@@ -507,7 +507,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbmmc.bundle",
             "UnityCRC": 0,
-            "FileHash": "c045ce583080ec92cc16f5df30ecddff",
+            "FileHash": "5b69d01900821930359aa9afb2a35f9a",
             "FileCRC": 0,
             "FileSize": 536,
             "Encrypted": false,
@@ -517,7 +517,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
             "UnityCRC": 0,
-            "FileHash": "7f25de78c64a350448bb71c2e255986a",
+            "FileHash": "f99449363d6f5dd6be512e66a7f4aac2",
             "FileCRC": 0,
             "FileSize": 444593,
             "Encrypted": false,
@@ -527,9 +527,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
             "UnityCRC": 0,
-            "FileHash": "59380e5f3979b312890fef87933a4fb3",
+            "FileHash": "5c1b5ffb6b7bf29306bcbd05d99383e1",
             "FileCRC": 0,
-            "FileSize": 6692,
+            "FileSize": 6443,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -537,9 +537,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_timeline_opening.bundle",
             "UnityCRC": 0,
-            "FileHash": "618f52d7b69012ecaa44b5f782e1dc4f",
+            "FileHash": "7d50bf80be9892492dc7b0b1a7ec1609",
             "FileCRC": 0,
-            "FileSize": 6072,
+            "FileSize": 5877,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -547,9 +547,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
             "UnityCRC": 0,
-            "FileHash": "79c662d814478fb8dfb26b73b1d01076",
+            "FileHash": "e429a6bd82d920a8e4026f08f3f2a11c",
             "FileCRC": 0,
-            "FileSize": 10078,
+            "FileSize": 9698,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -557,9 +557,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle",
             "UnityCRC": 0,
-            "FileHash": "0bbcea0f5d4de0ab23cb1b43a772a8e5",
+            "FileHash": "7b07dba0d795adabc4157201bad75f0a",
             "FileCRC": 0,
-            "FileSize": 2104,
+            "FileSize": 2032,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -567,7 +567,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle",
             "UnityCRC": 0,
-            "FileHash": "aecb2d616f769e482e9a6bd8b9fed67c",
+            "FileHash": "ec6f21a8b59c046b9fcd33097d22457f",
             "FileCRC": 0,
             "FileSize": 283023,
             "Encrypted": false,
@@ -577,7 +577,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
             "UnityCRC": 0,
-            "FileHash": "78acdc6ab3618052b05a4d077e06ddba",
+            "FileHash": "e2bd77e4011f1a43d2a39360841c3005",
             "FileCRC": 0,
             "FileSize": 725,
             "Encrypted": false,
@@ -587,7 +587,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
             "UnityCRC": 0,
-            "FileHash": "a913a98c19cf81a82372e0e7d7976b90",
+            "FileHash": "db7d0f079885c850afbc6a5bcd4c001e",
             "FileCRC": 0,
             "FileSize": 3847808,
             "Encrypted": false,
@@ -597,9 +597,9 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_scene.bundle",
             "UnityCRC": 0,
-            "FileHash": "b1eeba69681eff096e77c2e192193207",
+            "FileHash": "09f7730a0f7920446b1d2e51f61e91ea",
             "FileCRC": 0,
-            "FileSize": 322605,
+            "FileSize": 314641,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -607,7 +607,7 @@
         {
             "BundleName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
             "UnityCRC": 0,
-            "FileHash": "46cd7eff38fda761aebcc156faef60b8",
+            "FileHash": "5d368e0565e70762e910b01fff3f7714",
             "FileCRC": 0,
             "FileSize": 133554,
             "Encrypted": false,
