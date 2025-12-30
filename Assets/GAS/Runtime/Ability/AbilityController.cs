@@ -11,6 +11,8 @@ namespace GAS.Runtime
     {
         private readonly Entity _asc;
 
+        private Dictionary<int, AbilitySpec> _specs = new Dictionary<int, AbilitySpec>();
+        
         public AbilityController(Entity asc)
         {
             _asc = asc;
@@ -22,6 +24,16 @@ namespace GAS.Runtime
         public DynamicBuffer<BAbility> CurrentAbilities =>
             GasEntityManager.GetBuffer<BAbility>(_asc);
 
+        /// <summary>
+        /// 获取Mono【OOP】形态的能力实例
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public AbilitySpec GetAbilitySpec(int code)
+        {
+                
+        }
+        
         public void GrantAbility(AbilityConfig abilityConfig)
         {
             var abilityEntity = AbilityHelper.CreateAbilityEntity(abilityConfig.ComponentConfigs);
