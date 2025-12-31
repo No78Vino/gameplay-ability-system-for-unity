@@ -11,7 +11,9 @@
     ],
     "cancelAbilityWithTags": [],
     "blockAbilityWithTags": [],
-    "activationOwnedTags": [],
+    "activationOwnedTags": [
+      3001
+    ],
     "activationRequiredTags": [],
     "activationBlockedTags": [],
     "abilityLogic": {
@@ -30,7 +32,9 @@
     "cancelAbilityWithTags": [],
     "blockAbilityWithTags": [],
     "activationOwnedTags": [],
-    "activationRequiredTags": [],
+    "activationRequiredTags": [
+      3001
+    ],
     "activationBlockedTags": [],
     "abilityLogic": {
       "$type": "ALApplyEffect",

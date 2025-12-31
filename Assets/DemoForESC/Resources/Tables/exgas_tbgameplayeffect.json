@@ -1,25 +1,27 @@
 [
   {
     "id": 1001,
-    "name": "测试受伤",
-    "desc": "受到2点伤害",
-    "assetTags": [
-      3003
-    ],
+    "name": "奔跑耐力消耗",
+    "desc": "耐力减少2点/5帧",
+    "assetTags": [],
     "grantedTags": [],
     "applicationRequiredTags": [],
     "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],
     "immunityTags": [],
-    "modifiers": [
-      {
-        "attrSet": 1,
-        "attribute": 1,
-        "magnitude": 2,
-        "operation": 3,
-        "mmc": 1001
-      }
-    ],
+    "duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "period": {
+      "Time": 5,
+      "Effects": [
+        9001
+      ],
+      "FirstTrigger": true
+    },
+    "modifiers": [],
     "cueOnApply": [],
     "cueOnTick": [],
     "cueOnAdd": [],
@@ -33,12 +35,9 @@
     "name": "speed_up",
     "desc": "加速buff",
     "assetTags": [
-      4001001,
       3001
     ],
-    "grantedTags": [
-      4001001
-    ],
+    "grantedTags": [],
     "applicationRequiredTags": [],
     "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],
@@ -167,5 +166,32 @@
         1001
       ]
     }
+  },
+  {
+    "id": 9001,
+    "name": "奔跑耐力消耗",
+    "desc": "耐力消耗2点",
+    "assetTags": [],
+    "grantedTags": [],
+    "applicationRequiredTags": [],
+    "ongoingRequiredTags": [],
+    "removeGameplayEffectsWithTags": [],
+    "immunityTags": [],
+    "modifiers": [
+      {
+        "attrSet": 1,
+        "attribute": 6,
+        "magnitude": 2,
+        "operation": 3,
+        "mmc": 1001
+      }
+    ],
+    "cueOnApply": [],
+    "cueOnTick": [],
+    "cueOnAdd": [],
+    "cueOnRemove": [],
+    "cueOnActivate": [],
+    "cueOnDeactivate": [],
+    "grantedAbility": []
   }
 ]

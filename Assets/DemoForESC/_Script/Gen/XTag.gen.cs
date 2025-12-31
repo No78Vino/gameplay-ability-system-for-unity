@@ -9,7 +9,7 @@ namespace GAS.Runtime
 {
     public static class XTag
     {
-        public const int Faction = 100;
+        public const int Faction = 1000000;
         public const int Faction_Player = 1001;
         public const int Faction_Enemy = 1002;
         public const int Ability = 200;

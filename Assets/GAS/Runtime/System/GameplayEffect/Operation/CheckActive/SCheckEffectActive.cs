@@ -14,7 +14,6 @@ namespace GAS.Runtime
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<CDuration>();
-            state.RequireForUpdate<COngoingRequiredTags>();
             state.RequireForUpdate<SingletonGameplayTagMap>();
         }
 
@@ -24,28 +23,37 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
             
-            foreach (var (_,_,_, ongoingRequiredTags, inUsage, ge) in
+            foreach (var (_,_,_, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipCheckActiveEffect>,
                          RefRO<CDuration>,
-                         RefRO<COngoingRequiredTags>,
                          RefRO<CEffectInUsage>
                      >().WithEntityAccess())
             {
                 var asc = inUsage.ValueRO.Target;
-                var tags = ongoingRequiredTags.ValueRO.tags;
-                if (tagMap.AscHasAllTags(state.EntityManager, asc, tags))
+                var hasOngoingRequiredTags = SystemAPI.HasComponent<COngoingRequiredTags>(asc);
+                if (hasOngoingRequiredTags)
+                {
+                    var ongoingRequiredTags = SystemAPI.GetComponentRO<COngoingRequiredTags>(asc);
+                    var tags = ongoingRequiredTags.ValueRO.tags;
+                    if (tagMap.AscHasAllTags(state.EntityManager, asc, tags))
+                    {
+                        // 分配到激活阶段 Activate Effect
+                        ecb.AddComponent<WipActivateEffect>(ge);
+                    }
+                    else
+                    {
+                        // 分配到失活阶段 Deactivate Effect
+                        ecb.AddComponent<WipDeactivateEffect>(ge);
+                    }
+                }
+                else
                 {
                     // 分配到激活阶段 Activate Effect
                     ecb.AddComponent<WipActivateEffect>(ge);
                 }
-                else
-                {
-                    // 分配到失活阶段 Deactivate Effect
-                    ecb.AddComponent<WipDeactivateEffect>(ge);
-                }
-                
+
                 // 完成检查，移除标记组件
                 ecb.RemoveComponent<WipCheckActiveEffect>(ge);
             }

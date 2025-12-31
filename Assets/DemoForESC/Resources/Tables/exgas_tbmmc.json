@@ -1,12 +1,12 @@
 [
   {
     "id": 1001,
-    "name": "模值x1.5",
-    "desc": "描述:模值x1.5",
+    "name": "模值x1",
+    "desc": "描述:模值x1",
     "mmcLogic": {
       "$type": "MMCScalableFloat",
-      "K": 2,
-      "B": 1
+      "K": 1,
+      "B": 0
     }
   },
   {
