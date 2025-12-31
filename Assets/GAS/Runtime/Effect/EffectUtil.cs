@@ -94,6 +94,7 @@ namespace GAS.Runtime
         public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
             EntityHelper.AddComponent<CEffectInUsage>(gameplayEffect);
+            EntityHelper.AddComponent<WipInstantiateEffect>(gameplayEffect);
             EntityHelper.SetComponent(gameplayEffect, new CEffectInUsage
             {
                 Source = source,

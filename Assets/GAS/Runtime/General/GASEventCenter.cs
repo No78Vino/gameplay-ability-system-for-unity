@@ -128,7 +128,7 @@ namespace GAS.Runtime
         private static readonly Dictionary<Entity, Dictionary<Tuple<int, int>, Action<float, float>>>
             _onCurrentValueChangeAfter = new();
 
-        public static void RegisterOnCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode,
+        public static void RegisterOnAttrCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
             if (!_onCurrentValueChangeAfter.ContainsKey(entity))
@@ -140,13 +140,13 @@ namespace GAS.Runtime
             _onCurrentValueChangeAfter[entity][Tuple.Create(attrSetCode, attrCode)] += action;
         }
 
-        public static void RegisterOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+        public static void RegisterOnAttrCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
-            RegisterOnCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
+            RegisterOnAttrCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
         }
 
-        public static void UnRegisterOnCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode,
+        public static void UnRegisterOnAttrCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
             if (!_onCurrentValueChangeAfter.ContainsKey(entity)) return;
@@ -162,10 +162,10 @@ namespace GAS.Runtime
             if (_onCurrentValueChangeAfter[entity].Count == 0) _onCurrentValueChangeAfter.Remove(entity);
         }
 
-        public static void UnRegisterOnCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
+        public static void UnRegisterOnAttrCurrentValueChangeAfter(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Action<float, float> action)
         {
-            UnRegisterOnCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
+            UnRegisterOnAttrCurrentValueChangeAfter(asc.Entity, attrSetCode, attrCode, action);
         }
 
         public static void InvokeOnCurrentValueChangeAfter(Entity entity, int attrSetCode, int attrCode, float oldValue,
