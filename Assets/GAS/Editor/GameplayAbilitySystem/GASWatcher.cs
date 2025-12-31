@@ -110,6 +110,25 @@ namespace GAS.Editor
             RefreshASCContent();
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        private void OnPlayModeStateChanged(PlayModeStateChange playModeStateChange)
+        {
+            if (playModeStateChange != PlayModeStateChange.EnteredPlayMode &&
+                playModeStateChange != PlayModeStateChange.ExitingPlayMode) return;
+            _cachedAscEntities.Clear();
+            entityWatching = Entity.Null;
+        }
         #region cache
 
         private static readonly List<(string, Entity)> _cachedAscEntities = new();
