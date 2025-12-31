@@ -126,10 +126,10 @@ namespace DemoForESC._Script.Controller
 
         private void HandleRun()
         {
-            if (GuideManager.I.GuideInfo!=null
-                && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
-                    || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run))
-                return;
+            // if (!(GuideManager.I.GuideInfo!=null
+            //     && (GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.None
+            //         || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.Run)))
+            //     return;
             
             // 奔跑开关
             if (Input.GetKeyDown(KeyCode.LeftShift))
