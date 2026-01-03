@@ -18,33 +18,33 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            _globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
-            var ecb = EntityHelper.RegisterEntityCommandBuffer();
-            foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
-                         .WithEntityAccess())
-            {
-                var target = inUsage.ValueRO.Target;
-                var source = inUsage.ValueRO.Source;
-                
-                // 1.校验 ApplicationRequiredTags
-                if(!CheckCanApply(state.EntityManager,ge,target,ecb))
-                    continue;
-                
-                // 2.校验免疫
-                if(!CheckImmunity(state.EntityManager,ge,target,ecb))
-                    continue;
-                
-                // 3.Instant GE应用逻辑
-                if(!TryExecuteInstantEffect(state.EntityManager,ge,target,ecb))
-                    continue;
-                
-                // 4.Durational GE逻辑
-                CheckDurationAndStacking(state.EntityManager, ge, target, ecb);
-            }
-            
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
-            EntityHelper.UnregisterEntityCommandBuffer();
+            // _globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>().ValueRO;
+            // var ecb = EntityHelper.RegisterEntityCommandBuffer();
+            // foreach (var (inUsage, ge) in SystemAPI.Query<RefRO<CEffectInUsage>>()
+            //              .WithEntityAccess())
+            // {
+            //     var target = inUsage.ValueRO.Target;
+            //     var source = inUsage.ValueRO.Source;
+            //     
+            //     // 1.校验 ApplicationRequiredTags
+            //     if(!CheckCanApply(state.EntityManager,ge,target,ecb))
+            //         continue;
+            //     
+            //     // 2.校验免疫
+            //     if(!CheckImmunity(state.EntityManager,ge,target,ecb))
+            //         continue;
+            //     
+            //     // 3.Instant GE应用逻辑
+            //     if(!TryExecuteInstantEffect(state.EntityManager,ge,target,ecb))
+            //         continue;
+            //     
+            //     // 4.Durational GE逻辑
+            //     CheckDurationAndStacking(state.EntityManager, ge, target, ecb);
+            // }
+            //
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
+            // EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

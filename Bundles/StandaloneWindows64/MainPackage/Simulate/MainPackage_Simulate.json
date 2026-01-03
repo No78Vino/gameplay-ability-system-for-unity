@@ -10,7 +10,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "MainPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/1/1 0:22:53",
+    "PackageNote": "2026/1/3 23:59:26",
     "AssetList": [
         {
             "Address": "Animation_logo",
@@ -489,7 +489,7 @@
             "UnityCRC": 0,
             "FileHash": "c57131989338adbc4fa11100b24acd50",
             "FileCRC": 0,
-            "FileSize": 4032,
+            "FileSize": 4053,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

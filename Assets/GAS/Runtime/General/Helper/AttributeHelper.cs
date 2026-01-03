@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -8,6 +9,7 @@ namespace GAS.Runtime
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
         
+        [BurstCompile]
         public static int IndexOfAttrCode(this NativeArray<CAttributeData> attrs, int attrCode)
         {
             for (var i = 0; i < attrs.Length; i++)
@@ -63,7 +65,11 @@ namespace GAS.Runtime
                 asc, attrSet.Code, attr.Code, oldValue, newCurrentValue);
             return newCurrentValue;
         }
-        
-        
+
+        [BurstCompile]
+        public static void MakeCurrentValueDirtyForRecalculate(Entity asc, int attrSetCode, int attrCode)
+        {
+            
+        }
     }
 }

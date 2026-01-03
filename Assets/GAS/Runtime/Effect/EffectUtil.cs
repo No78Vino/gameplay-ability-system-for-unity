@@ -110,19 +110,10 @@ namespace GAS.Runtime
         public static void RemoveGameplayEffect(Entity gameplayEffect)
         {
             if (!_entityManager.HasComponent<CEffectInUsage>(gameplayEffect)) return;
-            EntityHelper.RemoveComponent<CEffectApplied>(gameplayEffect);
-            EntityHelper.AddComponent<CEffectDestroy>(gameplayEffect);
-            // 从ASC容器中移除
-            var inUsage = _entityManager.GetComponentData<CEffectInUsage>(gameplayEffect);
-            var target = inUsage.Target;
             
-            var gameplayEffects = _entityManager.GetBuffer<BGameplayEffect>(target);;
-            for (var i = 0; i < gameplayEffects.Length; i++)
-            {
-                if (gameplayEffects[i].GameplayEffect != gameplayEffect) continue;
-                gameplayEffects.RemoveAt(i);
-                break;
-            }
+            EntityHelper.AddComponent<CEffectDestroy>(gameplayEffect);
+            EntityHelper.AddComponent<WipDeactivateEffect>(gameplayEffect);
+            EntityHelper.AddComponent<WipRemoveEffect>(gameplayEffect);
         }
 
         public static void RemoveGameplayEffect(Entity gameplayEffect,EntityCommandBuffer ecb)

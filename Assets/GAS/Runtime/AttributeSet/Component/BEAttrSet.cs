@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -10,6 +11,7 @@ namespace GAS.Runtime
         public NativeArray<CAttributeData> Attributes;
     }
 
+    [BurstCompile]
     public static class AttributeSetBufferElementExtension
     {
         public static int IndexOfAttrSetCode(this DynamicBuffer<BEAttrSet> attrSets, int attrSetCode)

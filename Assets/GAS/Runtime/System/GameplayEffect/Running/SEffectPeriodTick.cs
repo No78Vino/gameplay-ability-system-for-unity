@@ -12,12 +12,12 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<GlobalTimer>();
             state.RequireForUpdate<CPeriod>();
-            state.RequireForUpdate<CEffectApplied>();
+            state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CDuration>();
             state.RequireForUpdate<CEffectInUsage>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var globalFrameTimer = SystemAPI.GetSingletonRW<GlobalTimer>();

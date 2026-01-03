@@ -37,7 +37,9 @@
     "assetTags": [
       3001
     ],
-    "grantedTags": [],
+    "grantedTags": [
+      4001002
+    ],
     "applicationRequiredTags": [],
     "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],

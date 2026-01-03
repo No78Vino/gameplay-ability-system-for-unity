@@ -61,6 +61,8 @@ namespace DemoForESC._Script.UI.ViewModel
         {
             var asc = PlayerAsc;
             GASEventCenter.RegisterOnAttrCurrentValueChangeAfter(asc.Cell,XAttrSet.FightUnit,XAttribute.Hp,OnHpChange);
+            GASEventCenter.RegisterOnAttrCurrentValueChangeAfter(asc.Cell,XAttrSet.FightUnit,XAttribute.Mp,OnMpChange);
+            GASEventCenter.RegisterOnAttrCurrentValueChangeAfter(asc.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChange);
         }
         
         private void UnregisterUpdateEvent()

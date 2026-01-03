@@ -35,6 +35,8 @@ namespace GAS.Runtime
                 for (var i = geBuff.Length - 1; i >= 0; i--)
                 {
                     if (geBuff[i].GameplayEffect != ge) continue;
+                    // 触发属性重计算
+                    //CheckEffectAttrDirty(state.EntityManager, ecb, asc, ge);
                     geBuff.RemoveAt(i);
                     break;
                 }
@@ -47,6 +49,35 @@ namespace GAS.Runtime
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
+        }
+
+        private void CheckEffectAttrDirty(EntityManager entityManager, EntityCommandBuffer ecb, Entity asc, Entity ge)
+        {
+            if (!entityManager.HasComponent<MCModifiers>(ge)) return;
+            
+            var modifiers = entityManager.GetComponentData<MCModifiers>(ge);
+            if (modifiers.Modifiers.Length == 0) return;
+            
+            var attrSets = entityManager.GetBuffer<BEAttrSet>(asc);
+            foreach (var modifier in modifiers.Modifiers)
+            {
+                var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
+                if (attrSetIndex == -1) continue;
+
+                var attrSet = attrSets[attrSetIndex];
+                var attributes = attrSet.Attributes;
+
+                var attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
+                if (attrIndex == -1) continue;
+
+                var data = attributes[attrIndex];
+                // 标记Dirty
+                data.Dirty = true;
+                attrSet.Attributes[attrIndex] = data;
+                attrSets[attrSetIndex] = attrSet;
+            }
+            
+            ecb.AddComponent<CAttributeIsDirty>(asc);
         }
     }
 }
