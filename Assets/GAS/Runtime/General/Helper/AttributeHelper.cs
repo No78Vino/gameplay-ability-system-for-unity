@@ -34,6 +34,7 @@ namespace GAS.Runtime
             
             var oldValue = attr.CurrentValue;
             attr.CurrentValue = attr.BaseValue;
+            
             // 获取GE
             var gameplayEffects = _entityManager.GetBuffer<BGameplayEffect>(asc);
             foreach (var buffer in gameplayEffects)
@@ -56,6 +57,10 @@ namespace GAS.Runtime
                 }
             }
 
+            // 结算钳制计算处理
+            if (attr.IsClampMin) attr.CurrentValue = math.max(attr.CurrentValue, attr.MinValue);
+            if (attr.IsClampMax) attr.CurrentValue = math.min(attr.CurrentValue, attr.MaxValue);
+            
             attr.Dirty = false;
             var newCurrentValue = attr.CurrentValue;
             attrSet.Attributes[attrIndex] = attr;

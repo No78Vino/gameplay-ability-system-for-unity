@@ -23,6 +23,11 @@ namespace DemoForESC._Script
 
 
             AbilitySystemCellMono.Cell.AddFixedTag(XTag.Ability);
+            var buff1 = new GameplayEffectSpec(XLuban.GetGameplayEffectConfig(1007).ComponentConfigs);
+            AbilitySystemCellMono.Cell.ApplyGameplayEffectToSelf(buff1);
+            
+            // 血量，蓝量，耐力最大值钳制回调
+            
         }
 
         public override void Move(Vector3 direction)

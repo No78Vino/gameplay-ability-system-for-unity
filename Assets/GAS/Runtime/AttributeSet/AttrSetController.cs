@@ -44,11 +44,6 @@ namespace GAS.Runtime
             for (var i = 0; i < config.Settings.Length; i++)
             {
                 var setting = config.Settings[i];
-                // 创建每个属性的追踪器
-                // var tracker = EntityManager.CreateEntity();
-                // EntityManager.AddBuffer<BuffEleDependentAttribute>(tracker);
-                // EntityManager.AddBuffer<BuffEleEffectedGameplayEffect>(tracker);
-                
                 newAttrs[i] = new CAttributeData
                 {
                     Code = setting.Code,

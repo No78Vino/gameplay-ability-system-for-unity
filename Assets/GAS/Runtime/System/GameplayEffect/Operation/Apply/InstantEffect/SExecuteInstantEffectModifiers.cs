@@ -1,6 +1,7 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace GAS.Runtime
 {
@@ -48,9 +49,11 @@ namespace GAS.Runtime
                     var data = attributes[attrIndex];
                     var oldValue = data.BaseValue;
                     var newValue = MmcHelper.Calculate(ge, modifier, data.BaseValue);
-
+                    // 钳制计算处理
+                    if (data.IsClampMin) newValue = math.max(newValue, data.MinValue);
+                    if (data.IsClampMax) newValue = math.min(newValue, data.MaxValue);
+                    
                     // OnChangeBefore
-                    // BaseValue 不做钳制，因为Max，Min是只针对Current Value
                     newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(asc, modifier.AttrSetCode,
                         modifier.AttrCode,
                         newValue);

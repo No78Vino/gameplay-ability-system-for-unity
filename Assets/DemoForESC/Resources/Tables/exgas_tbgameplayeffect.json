@@ -15,7 +15,7 @@
       "ResetStartTimeWhenActivated": false
     },
     "period": {
-      "Time": 5,
+      "Time": 10,
       "Effects": [
         9001
       ],
@@ -188,6 +188,64 @@
         "mmc": 1001
       }
     ],
+    "cueOnApply": [],
+    "cueOnTick": [],
+    "cueOnAdd": [],
+    "cueOnRemove": [],
+    "cueOnActivate": [],
+    "cueOnDeactivate": [],
+    "grantedAbility": []
+  },
+  {
+    "id": 1006,
+    "name": "自动恢复耐力",
+    "desc": "耐力恢复2点/60帧",
+    "assetTags": [],
+    "grantedTags": [],
+    "applicationRequiredTags": [],
+    "ongoingRequiredTags": [],
+    "removeGameplayEffectsWithTags": [],
+    "immunityTags": [],
+    "modifiers": [
+      {
+        "attrSet": 1,
+        "attribute": 6,
+        "magnitude": 2,
+        "operation": 0,
+        "mmc": 1001
+      }
+    ],
+    "cueOnApply": [],
+    "cueOnTick": [],
+    "cueOnAdd": [],
+    "cueOnRemove": [],
+    "cueOnActivate": [],
+    "cueOnDeactivate": [],
+    "grantedAbility": []
+  },
+  {
+    "id": 1007,
+    "name": "自动恢复耐力",
+    "desc": "自动恢复耐力",
+    "assetTags": [],
+    "grantedTags": [],
+    "applicationRequiredTags": [],
+    "ongoingRequiredTags": [],
+    "removeGameplayEffectsWithTags": [],
+    "immunityTags": [],
+    "duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "period": {
+      "Time": 60,
+      "Effects": [
+        1006
+      ],
+      "FirstTrigger": false
+    },
+    "modifiers": [],
     "cueOnApply": [],
     "cueOnTick": [],
     "cueOnAdd": [],
