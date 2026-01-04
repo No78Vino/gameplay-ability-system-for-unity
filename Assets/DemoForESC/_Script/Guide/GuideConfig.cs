@@ -54,6 +54,9 @@ namespace DemoForESC._Script
                   LearningKey = GuideLearningKey.MeleeAttack,
                   limitFovRotation = false,
                   resetPosition = true,
+                  GuideEvent = "GuideAttack",
+                  onBegin = GuideManager.I.OnGuideStart_Attack,
+                  onFinish = GuideManager.I.OnGuideFinish_Attack,
               },
               new GuideInfo()
               {

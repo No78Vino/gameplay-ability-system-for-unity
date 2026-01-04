@@ -120,6 +120,29 @@ namespace DemoForESC._Script
             
             Object.Destroy(_guideTargetRun);
         }
+        
+        public void OnGuideStart_Attack()
+        {
+            var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab");
+            _guideTargetRun = Object.Instantiate(prefab);
+        }
+        
+        public void OnGuideFinish_Attack()
+        {
+            EasyInputController.Inst().SetBanInput(true);
+            var player = GameManager.I.Player;
+            var w = XUI.M.OpenWindow<MaskWindow>();
+            w.VM.SetOnOpen(() =>
+            {
+                player.StopMove();
+                player.StopRun();
+                OnWaitGuideFinish_Move();
+            });
+            w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
+            w.VM.MaskFadeIn();
+            
+            Object.Destroy(_guideTargetRun);
+        }
         #endregion
     }
 }
