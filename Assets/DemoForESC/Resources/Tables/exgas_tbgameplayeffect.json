@@ -15,7 +15,7 @@
       "ResetStartTimeWhenActivated": false
     },
     "period": {
-      "Time": 10,
+      "Time": 5,
       "Effects": [
         9001
       ],
@@ -172,7 +172,7 @@
   {
     "id": 9001,
     "name": "奔跑耐力消耗",
-    "desc": "耐力消耗2点",
+    "desc": "耐力消耗1点",
     "assetTags": [],
     "grantedTags": [],
     "applicationRequiredTags": [],
@@ -183,7 +183,7 @@
       {
         "attrSet": 1,
         "attribute": 6,
-        "magnitude": 2,
+        "magnitude": 1,
         "operation": 3,
         "mmc": 1001
       }

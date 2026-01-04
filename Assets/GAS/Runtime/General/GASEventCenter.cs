@@ -21,7 +21,7 @@ namespace GAS.Runtime
         private static readonly Dictionary<Entity, Dictionary<Tuple<int, int>, Func<float, float>>>
             _onBaseValueChangeBefore = new();
 
-        public static void SetOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode,
+        public static void SetOnAttrBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode,
             Func<float, float> action)
         {
             if (!_onBaseValueChangeBefore.ContainsKey(entity))
@@ -30,13 +30,13 @@ namespace GAS.Runtime
             _onBaseValueChangeBefore[entity][Tuple.Create(attrSetCode, attrCode)] = action;
         }
 
-        public static void SetOnBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode,
+        public static void SetOnAttrBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode,
             Func<float, float> action)
         {
-            SetOnBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode, action);
+            SetOnAttrBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode, action);
         }
 
-        public static void ClearOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode)
+        public static void ClearOnAttrBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode)
         {
             if (!_onBaseValueChangeBefore.TryGetValue(entity, out var value)) return;
             if (!value.ContainsKey(Tuple.Create(attrSetCode, attrCode))) return;
@@ -45,9 +45,9 @@ namespace GAS.Runtime
             if (_onBaseValueChangeBefore[entity].Count == 0) _onBaseValueChangeBefore.Remove(entity);
         }
 
-        public static void ClearOnBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode)
+        public static void ClearOnAttrBaseValueChangeBefore(AbilitySystemCell asc, int attrSetCode, int attrCode)
         {
-            ClearOnBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode);
+            ClearOnAttrBaseValueChangeBefore(asc.Entity, attrSetCode, attrCode);
         }
 
         public static float InvokeOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode, float value)

@@ -14,7 +14,7 @@ namespace DemoForESC._Script
             return _player;
         }
         
-        UnityEngine.Camera _mainCamera;
+        Camera _mainCamera;
         
         protected override void Awake()
         {
@@ -25,9 +25,6 @@ namespace DemoForESC._Script
             AbilitySystemCellMono.Cell.AddFixedTag(XTag.Ability);
             var buff1 = new GameplayEffectSpec(XLuban.GetGameplayEffectConfig(1007).ComponentConfigs);
             AbilitySystemCellMono.Cell.ApplyGameplayEffectToSelf(buff1);
-            
-            // 血量，蓝量，耐力最大值钳制回调
-            
         }
 
         public override void Move(Vector3 direction)
@@ -75,5 +72,7 @@ namespace DemoForESC._Script
             if(AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_debug_ge_2)) 
                 AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_debug_ge_2);
         }
+
+        
     }
 }

@@ -2,6 +2,7 @@ using DemoForESC._Script.Gas.Ability;
 using EXToyLib;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -29,14 +30,22 @@ namespace DemoForESC._Script
             ((ALMove)abilityLogic.Logic).SetUnit(this);
         }
         
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             GravityForCharacterController.Instance.Register(GetComponent<CharacterController>());
+            // 血量，蓝量，耐力最大值钳制回调
+            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Hp,OnHpChangeBefore);
+            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Mp,OnMpChangeBefore);
+            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeBefore);
         }
         
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             GravityForCharacterController.Instance.Unregister(GetComponent<CharacterController>());
+            // 血量，蓝量，耐力最大值钳制回调
+            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Hp);
+            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Mp);
+            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp);
         }
         
         public virtual void Move(Vector3 direction)
@@ -78,6 +87,22 @@ namespace DemoForESC._Script
             return AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit ,XAttribute.Spd);
         }
 
+        private float OnHpChangeBefore(float newHp)
+        {
+            var hpMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.HpMax);
+            return math.min(newHp, hpMax);
+        }
+        private float OnMpChangeBefore(float newMp)
+        {
+            var mpMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.MpMax);
+            return math.min(newMp, mpMax);
+        }
+        private float OnSpChangeBefore(float newSp)
+        {
+            var spMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.SpMax);
+            return math.min(newSp, spMax);
+        }
+        
         #endregion
     }
 }
