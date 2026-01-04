@@ -47,6 +47,9 @@
         public const string JSON_FILE_NAME_OF_ASC = "exgas_tbasc";
         public const string EXCEL_FILE_NAME_OF_ASC = "#exgas.asc";
         
+        public const string JSON_FILE_NAME_OF_TIMELINE_ABILITY = "exgas_tbtimelineability";
+        public const string EXCEL_FILE_NAME_OF_TIMELINE_ABILITY = "#exgas.timelineAbility";
+        
         public const string CODE_FILE_NAME_OF_LUBAN = "XLuban.gen";
         public const string CODE_FILE_NAME_OF_LAUNCHER = "XLauncher.gen";
 

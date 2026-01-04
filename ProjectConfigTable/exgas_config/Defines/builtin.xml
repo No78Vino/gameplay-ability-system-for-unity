@@ -63,4 +63,9 @@
         <var name="ClearStackOnOverflow" type="bool"/>
         <var name="OverflowEffects" type="(array#sep=;),int"/>
     </bean>
+
+    <bean name="track" valueType="1" sep=",">
+        <var name="name" type="string"/>
+        <var name="abilityTask" type="array,AbilityTask?"/>
+    </bean>
 </module>

@@ -95,6 +95,11 @@
     "desc": "状态：移速增加"
   },
   {
+    "id": 4001003,
+    "name": "State.Buff.SpCosting",
+    "desc": "状态：耐力消耗中"
+  },
+  {
     "id": 500,
     "name": "Guide",
     "desc": "新手引导"

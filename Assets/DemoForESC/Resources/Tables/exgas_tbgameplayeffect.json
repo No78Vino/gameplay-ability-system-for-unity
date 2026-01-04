@@ -2,9 +2,11 @@
   {
     "id": 1001,
     "name": "奔跑耐力消耗",
-    "desc": "耐力减少2点/5帧",
+    "desc": "耐力减少1点/5帧",
     "assetTags": [],
-    "grantedTags": [],
+    "grantedTags": [
+      4001003
+    ],
     "applicationRequiredTags": [],
     "ongoingRequiredTags": [],
     "removeGameplayEffectsWithTags": [],
