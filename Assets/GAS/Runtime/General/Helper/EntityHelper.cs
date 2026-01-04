@@ -35,6 +35,48 @@ namespace GAS.Runtime
         }
 
         /// <summary>
+        /// 获取非托管组件
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetComponentData<T>(Entity entity) where T : unmanaged, IComponentData
+        {
+            return _entityManager.GetComponentData<T>(entity);
+        }
+
+        /// <summary>
+        /// 获取非托管组件
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetManagedComponentData<T>(Entity entity) where T : class, IComponentData, new()
+        {
+            return _entityManager.GetComponentData<T>(entity);
+        }
+        
+        public static DynamicBuffer<T> GetBuffer<T>(Entity entity) where T : unmanaged, IBufferElementData
+        {
+            return _entityManager.GetBuffer<T>(entity);
+        }
+        
+        public static void AddBuffer<T>(Entity entity) where T : unmanaged, IBufferElementData
+        {
+            _entityManager.AddBuffer<T>(entity);
+        }
+
+        public static bool HasComponent<T>(Entity entity) where T : unmanaged, IComponentData
+        {
+            return _entityManager.HasComponent<T>(entity);
+        }
+        
+        public static bool HasManagedComponent<T>(Entity entity) where T : class, IComponentData
+        {
+            return _entityManager.HasComponent<T>(entity);
+        }
+        
+        /// <summary>
         ///     添加非托管组件
         /// </summary>
         /// <param name="entity"></param>

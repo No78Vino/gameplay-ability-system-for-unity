@@ -14,42 +14,18 @@ namespace GAS.Runtime
             return GasEntityManager.GetBuffer<BGameplayEffect>(asc);
         }
 
-        public static bool CheckAscAttributeDirty(DynamicBuffer<BEAttrSet> attrSets,MCModifiers modifiers)
-        {
-            var isDirty = false;
-            foreach (var modifier in modifiers.Modifiers)
-            {
-                int attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
-                if(attrSetIndex==-1) continue;
-                    
-                var attrSet = attrSets[attrSetIndex];
-                var attributes = attrSet.Attributes;
 
-                int attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
-                if(attrIndex==-1) continue;
-                
-                isDirty = true;
-                
-                var attr = attributes[attrIndex];
-                if(attr.Dirty) continue;
-                
-                attr.Dirty = true;
-                attrSet.Attributes[attrIndex] = attr;
-                attrSets[attrSetIndex] = attrSet;
-            }
-            return isDirty;
-        }
-
-
-        private static bool CheckOngoingRequiredTags(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager)
+        private static bool CheckOngoingRequiredTags(Entity gameplayEffect, Entity targetAsc,
+            EntityManager entityManager)
         {
             if (!entityManager.HasComponent<COngoingRequiredTags>(gameplayEffect)) return true;
             var ongoingRequiredTags = entityManager.GetComponentData<COngoingRequiredTags>(gameplayEffect);
-            return ASCHelper.HasAllTags(targetAsc,ongoingRequiredTags.tags);
+            return ASCHelper.HasAllTags(targetAsc, ongoingRequiredTags.tags);
         }
-        
-                public static NativeArray<Entity> GetTriggerCues(Entity gameplayEffect,Entity targetAsc,EntityManager entityManager,
-            NativeArray<Entity> lastCueInstances,NativeArray<Entity> prefabCues)
+
+        public static NativeArray<Entity> GetTriggerCues(Entity gameplayEffect, Entity targetAsc,
+            EntityManager entityManager,
+            NativeArray<Entity> lastCueInstances, NativeArray<Entity> prefabCues)
         {
             // 0.先清楚已实例化的cue
             foreach (var cueInstance in lastCueInstances)
@@ -58,6 +34,7 @@ namespace GAS.Runtime
                 var mcCue = entityManager.GetComponentData<MCCue>(cueInstance);
                 mcCue.cue.KillSelf();
             }
+
             // 1.实例化Cue
             var prefabCue = prefabCues;
             var cueEntities = new NativeArray<Entity>(prefabCue.Length, Allocator.Persistent);
@@ -69,8 +46,9 @@ namespace GAS.Runtime
                 if (hasRequiredTags)
                 {
                     var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
-                    if(!ASCHelper.HasAllTags(targetAsc,requiredTags.tags)) continue;
+                    if (!ASCHelper.HasAllTags(targetAsc, requiredTags.tags)) continue;
                 }
+
                 bool hasImmunitedTags = entityManager.HasComponent<CPlayImmunitedTags>(prefabEntity);
                 if (hasImmunitedTags)
                 {
@@ -79,8 +57,9 @@ namespace GAS.Runtime
                 }
 
                 // 2.创建运行cue实例
-                cueEntities[i] = entityManager.CreateEntity(); 
-                entityManager.SetName(cueEntities[i], $"RuntimeCue_{cueEntities[i].Version}_{cueEntities[i].Index}");;
+                cueEntities[i] = entityManager.CreateEntity();
+                entityManager.SetName(cueEntities[i], $"RuntimeCue_{cueEntities[i].Version}_{cueEntities[i].Index}");
+                ;
                 // 2.1 复制RequiredTags
                 if (hasRequiredTags)
                 {
@@ -91,6 +70,7 @@ namespace GAS.Runtime
                         tags = new NativeArray<int>(requiredTags.tags.ToArray(), Allocator.Persistent)
                     });
                 }
+
                 // 2.2 复制ImmunitedTags
                 if (hasImmunitedTags)
                 {
@@ -101,11 +81,12 @@ namespace GAS.Runtime
                         tags = new NativeArray<int>(immunitedTags.tags.ToArray(), Allocator.Persistent)
                     });
                 }
+
                 // 2.3 复制 ECCuePlayable,ECCuePlaying,ECKillCue
                 EntityHelper.AddComponent<ECCuePlaying>(cueEntities[i]);
                 EntityHelper.AddComponent<ECCuePlayable>(cueEntities[i]);
                 EntityHelper.AddComponent<ECKillCue>(cueEntities[i]);
-                
+
                 // 2.4 复制Cue逻辑
                 var cueLogic = entityManager.GetComponentData<MCCue>(prefabEntity);
                 EntityHelper.AddManagedComponent<MCCue>(cueEntities[i]);
@@ -113,12 +94,12 @@ namespace GAS.Runtime
                 cloneCue = CueHelper.InitInstantCueFromGameplayEffect(cloneCue, cueEntities[i], gameplayEffect);
                 cloneCue.cue.AddToTargetAsc(targetAsc);
                 cloneCue.cue.Play(true);
-                EntityHelper.SetManagedComponent(cueEntities[i],cloneCue);
+                EntityHelper.SetManagedComponent(cueEntities[i], cloneCue);
             }
 
             return cueEntities;
         }
-                
+
         public static bool ActivateEffect(Entity gameplayEffect, Entity targetAsc, EntityManager entityManager,
             GlobalTimer globalTimer)
         {
@@ -126,7 +107,7 @@ namespace GAS.Runtime
 
             var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
             if (duration.active) return false;
-            
+
             duration.active = true;
             duration.activeTime = duration.timeUnit == TimeUnit.Frame
                 ? globalTimer.Frame
@@ -146,6 +127,7 @@ namespace GAS.Runtime
                     cCue.cues);
                 entityManager.SetComponentData(gameplayEffect, cCue);
             }
+
             return true;
 
         }
@@ -176,52 +158,56 @@ namespace GAS.Runtime
 
 
         [BurstCompile]
-        public static Entity GetStackingEffectBySource(int stackingCode,Entity targetAsc, Entity sourceAsc, EntityManager entityManager)
+        public static Entity GetStackingEffectBySource(int stackingCode, Entity targetAsc, Entity sourceAsc,
+            EntityManager entityManager)
         {
             var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
-         
+
             for (var i = 0; i < effects.Length; i++)
             {
                 var effect = effects[i].GameplayEffect;
- 
+
                 var hasStacking = entityManager.HasComponent<CStacking>(effect);
                 if (!hasStacking) continue;
-                
+
                 var stacking = entityManager.GetComponentData<CStacking>(effect);
                 if (stacking.StackType != EffectStackType.AggregateBySource) continue;
 
                 var source = entityManager.GetComponentData<CEffectInUsage>(effect).Source;
                 if (source != sourceAsc) continue;
-                
+
                 if (stacking.StackingCode == stackingCode)
                     return effect;
             }
+
             return Entity.Null;
         }
 
         [BurstCompile]
-        public static Entity GetStackingEffectByTarget(int stackingCode,Entity targetAsc,EntityManager entityManager)
+        public static Entity GetStackingEffectByTarget(int stackingCode, Entity targetAsc, EntityManager entityManager)
         {
             var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
-         
+
             for (var i = 0; i < effects.Length; i++)
             {
                 var effect = effects[i].GameplayEffect;
- 
+
                 var hasStacking = entityManager.HasComponent<CStacking>(effect);
                 if (!hasStacking) continue;
-                
+
                 var stacking = entityManager.GetComponentData<CStacking>(effect);
                 if (stacking.StackType != EffectStackType.AggregateByTarget) continue;
-                
+
                 if (stacking.StackingCode == stackingCode)
                     return effect;
             }
+
             return Entity.Null;
         }
-        
+
         [BurstCompile]
-        public static Entity InstantiateEffectEntity(EntityManager entityManager,Entity prefabEffect,Entity targetAsc,Entity sourceAsc,int level=1)
+        public static Entity InstantiateEffectEntity(EntityManager entityManager, Entity prefabEffect, Entity targetAsc,
+            Entity sourceAsc, int level = 1)
         {
             var instanceGe = entityManager.Instantiate(prefabEffect);
             entityManager.AddComponent<CEffectApplied>(instanceGe);
@@ -235,14 +221,16 @@ namespace GAS.Runtime
             });
             return instanceGe;
         }
+
         #region GameplayEffectConfig
 
-        private static Func<int,GameplayEffectConfig> _getConfigByID;
-        public static void RegisterGetConfigByIDFunc(Func<int,GameplayEffectConfig> func)
+        private static Func<int, GameplayEffectConfig> _getConfigByID;
+
+        public static void RegisterGetConfigByIDFunc(Func<int, GameplayEffectConfig> func)
         {
             _getConfigByID = func;
         }
-        
+
         public static GameplayEffectConfig GetConfigByID(int id)
         {
             return _getConfigByID?.Invoke(id);

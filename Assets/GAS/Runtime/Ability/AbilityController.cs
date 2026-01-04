@@ -16,13 +16,11 @@ namespace GAS.Runtime
         public AbilityController(Entity asc)
         {
             _asc = asc;
-            GasEntityManager.AddBuffer<BAbility>(_asc);
+            EntityHelper.AddBuffer<BAbility>(_asc);
         }
-
-        private static EntityManager GasEntityManager => GASManager.EntityManager;
-
+        
         public DynamicBuffer<BAbility> CurrentAbilities =>
-            GasEntityManager.GetBuffer<BAbility>(_asc);
+            EntityHelper.GetBuffer<BAbility>(_asc);
 
         /// <summary>
         /// 获取Mono【OOP】形态的能力实例
@@ -48,11 +46,11 @@ namespace GAS.Runtime
         private void AttachAbility(Entity ability)
         {
             // 设置ability的owner
-            var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(ability);
+            var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(ability);
             abi.Owner = _asc;
-            GasEntityManager.SetComponentData(ability, abi);
+            EntityHelper.SetComponent(ability, abi);
             
-            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            var buffer = EntityHelper.GetBuffer<BAbility>(_asc);
             buffer.Add(new BAbility { Ability = ability });
             
             _specs[abi.Code] = new AbilitySpec(ability);
@@ -60,11 +58,11 @@ namespace GAS.Runtime
 
         public void RemoveAbility(int abilityCode)
         {
-            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            var buffer = EntityHelper.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code == abilityCode)
                 {
                     buffer.RemoveAt(i);
@@ -76,7 +74,7 @@ namespace GAS.Runtime
 
         public void RemoveAbility(Entity ability)
         {
-            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            var buffer = EntityHelper.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
                 if (buffer[i].Ability == ability)
                 {
@@ -87,17 +85,17 @@ namespace GAS.Runtime
 
         public void ClearAbilities()
         {
-            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            var buffer = EntityHelper.GetBuffer<BAbility>(_asc);
             buffer.Clear();
         }
 
         private Entity GetAbilityEntity(int abilityCode)
         {
-            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            var buffer = EntityHelper.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code == abilityCode) return a;
             }
 
@@ -106,11 +104,11 @@ namespace GAS.Runtime
         
         public bool HaveAbility(int abilityCode)
         {
-            var buffer = GasEntityManager.GetBuffer<BAbility>(_asc);
+            var buffer = EntityHelper.GetBuffer<BAbility>(_asc);
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code == abilityCode) return true;
             }
 
@@ -123,9 +121,9 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code == abilityCode)
-                    return GasEntityManager.GetComponentData<MCAbilityLogic>(a);
+                    return EntityHelper.GetManagedComponentData<MCAbilityLogic>(a);
             }
 
             return default;
@@ -137,8 +135,8 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
-                if (abi.Code == abilityCode) return GasEntityManager.HasComponent<CAbilityActive>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
+                if (abi.Code == abilityCode) return EntityHelper.HasComponent<CAbilityActive>(a);
             }
 
             return false;
@@ -150,9 +148,9 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code != abilityCode) continue;
-                GasEntityManager.AddComponent<CAbilityInTryActivate>(a);
+                EntityHelper.AddComponent<CAbilityInTryActivate>(a);
                 break;
             }
         }
@@ -163,9 +161,9 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code != abilityCode) continue;
-                var logic = GasEntityManager.GetComponentData<MCAbilityLogic>(a);
+                var logic = EntityHelper.GetManagedComponentData<MCAbilityLogic>(a);
                 logic.Logic.SetParam(param);
                 break;
             }
@@ -176,9 +174,9 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code != abilityCode) continue;
-                GasEntityManager.AddComponent<CAbilityInTryEnd>(a);
+                EntityHelper.AddComponent<CAbilityInTryEnd>(a);
                 break;
             }
         }
@@ -190,7 +188,7 @@ namespace GAS.Runtime
             {
                 var a = buffer[i].Ability;
                 // TODO
-                // var ability = GasEntityManager.GetComponentObject<AbstractAbility>(a);
+                // var ability = EntityHelper.GetComponentObject<AbstractAbility>(a);
                 // ability.EndAbility();
             }
         }
@@ -201,10 +199,10 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code == abilityCode)
                     // TODO
-                    // var ability = GasEntityManager.GetComponentObject<AbstractAbility>(a);
+                    // var ability = EntityHelper.GetComponentObject<AbstractAbility>(a);
                     // ability.CancelAbility();
                     break;
             }
@@ -217,7 +215,7 @@ namespace GAS.Runtime
             {
                 var a = buffer[i].Ability;
                 // TODO
-                // var ability = GasEntityManager.GetComponentObject<AbstractAbility>(a);
+                // var ability = EntityHelper.GetComponentObject<AbstractAbility>(a);
                 // ability.CancelAbility();
             }
         }
@@ -228,9 +226,9 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 // TODO
-                // var ability = GasEntityManager.GetComponentObject<AbstractAbility>(a);
+                // var ability = EntityHelper.GetComponentObject<AbstractAbility>(a);
                 // if (ability.Tag.HasAnyTags(tags))
                 // {
                 //     ability.CancelAbility();
@@ -244,9 +242,9 @@ namespace GAS.Runtime
             for (var i = 0; i < buffer.Length; i++)
             {
                 var a = buffer[i].Ability;
-                var abi = GasEntityManager.GetComponentData<CAbilityBaseInfo>(a);
+                var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 // TODO
-                // var ability = GasEntityManager.GetComponentObject<AbstractAbility>(a);
+                // var ability = EntityHelper.GetComponentObject<AbstractAbility>(a);
                 // if (ability.Tag.HasAnyTags(tags))
                 // {
                 //     ability.CancelAbility();

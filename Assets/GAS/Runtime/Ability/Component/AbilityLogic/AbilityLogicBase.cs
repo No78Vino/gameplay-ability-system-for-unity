@@ -13,7 +13,7 @@ namespace GAS.Runtime
         {
             get
             {
-                var owner = GetOwnerAsc();
+                var owner = Owner;
                 return owner.GetAbilitySpec(_code);
             }
         }
@@ -68,15 +68,18 @@ namespace GAS.Runtime
             }
             return Entity.Null;
         }
-        
-        public AbilitySystemCell GetOwnerAsc()
+
+        public AbilitySystemCell Owner
         {
-            var owner = GetAscEntity();
-            if (owner == Entity.Null) return null;
-            var asc = GASManager.GetAscFromEntity(owner);
-            return asc;
+            get
+            {
+                var owner = GetAscEntity();
+                if (owner == Entity.Null) return null;
+                var asc = GASManager.GetAscFromEntity(owner);
+                return asc;
+            }
         }
-        
+
         public virtual void SetParam(IAbilityParam abilityParam)
         {
             _paramRaw = abilityParam;

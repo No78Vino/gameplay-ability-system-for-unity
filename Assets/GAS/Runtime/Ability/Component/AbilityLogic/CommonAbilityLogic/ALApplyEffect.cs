@@ -14,7 +14,7 @@ namespace GAS.Runtime
 
         public override void ActivateAbility(GlobalTimer timer)
         {
-            var owner = GetOwnerAsc();
+            var owner = Owner;
             foreach (var effectCode in _param.Value)
             {
                 var effectCfg = GameplayEffectHelper.GetConfigByID(effectCode);

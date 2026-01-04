@@ -73,6 +73,10 @@ namespace DemoForESC._Script
                 AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_debug_ge_2);
         }
 
-        
+        protected override void OnSpChangeAfter(float lastSp, float newSp)
+        {
+            base.OnSpChangeAfter(lastSp, newSp);
+            if(newSp<=0) StopRun();
+        }
     }
 }

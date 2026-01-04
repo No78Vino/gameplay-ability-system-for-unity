@@ -17,7 +17,7 @@ namespace GAS.Runtime
         //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = EntityHelper.RegisterEntityCommandBuffer();
             
             foreach (var (_,attrSets,asc) in SystemAPI.Query<RefRO<CAttributeIsDirty>,DynamicBuffer<BEAttrSet>>().WithEntityAccess())
             {
@@ -37,6 +37,7 @@ namespace GAS.Runtime
             
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
+            EntityHelper.UnregisterEntityCommandBuffer();
         }
 
         [BurstCompile]

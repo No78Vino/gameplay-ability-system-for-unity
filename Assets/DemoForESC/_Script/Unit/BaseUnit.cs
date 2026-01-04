@@ -37,6 +37,7 @@ namespace DemoForESC._Script
             GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Hp,OnHpChangeBefore);
             GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Mp,OnMpChangeBefore);
             GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeBefore);
+            GASEventCenter.RegisterOnAttrCurrentValueChangeAfter(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeAfter);
         }
         
         protected virtual void OnDisable()
@@ -46,6 +47,7 @@ namespace DemoForESC._Script
             GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Hp);
             GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Mp);
             GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp);
+            GASEventCenter.UnRegisterOnAttrCurrentValueChangeAfter(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeAfter);
         }
         
         public virtual void Move(Vector3 direction)
@@ -102,6 +104,11 @@ namespace DemoForESC._Script
             var spMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.SpMax);
             return math.min(newSp, spMax);
         }
+        
+        protected virtual void OnSpChangeAfter(float lastSp,float newSp)
+        {
+        }
+        
         
         #endregion
     }
