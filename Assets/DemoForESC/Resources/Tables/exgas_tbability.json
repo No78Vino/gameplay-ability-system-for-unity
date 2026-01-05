@@ -83,5 +83,27 @@
         1005
       ]
     }
+  },
+  {
+    "id": 20001,
+    "name": "Attack",
+    "desc": "玩家普通攻击",
+    "cost": 0,
+    "cdEffect": 0,
+    "cd": 0,
+    "assetTags": [],
+    "cancelAbilityWithTags": [],
+    "blockAbilityWithTags": [],
+    "activationOwnedTags": [
+      3003
+    ],
+    "activationRequiredTags": [],
+    "activationBlockedTags": [
+      3003
+    ],
+    "abilityLogic": {
+      "$type": "ALTimeline",
+      "TimelineID": 101
+    }
   }
 ]

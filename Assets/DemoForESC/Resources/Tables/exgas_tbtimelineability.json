@@ -1,0 +1,69 @@
+[
+  {
+    "id": 101,
+    "name": "测试时间轴1",
+    "desc": "测试描述1",
+    "lifeTime": 100,
+    "manualEndAbility": false,
+    "tracks": [
+      {
+        "name": "轨道1",
+        "abilityTask": [
+          {
+            "$type": "TaskDoCost",
+            "StartTimePoint": 1,
+            "EndTimePoint": 3
+          },
+          {
+            "$type": "TaskDebug",
+            "StartTimePoint": 2,
+            "EndTimePoint": 4,
+            "Text": "测试1"
+          }
+        ]
+      },
+      {
+        "name": "轨道2",
+        "abilityTask": [
+          {
+            "$type": "TaskDoCost",
+            "StartTimePoint": 1,
+            "EndTimePoint": 1
+          },
+          {
+            "$type": "TaskDebug",
+            "StartTimePoint": 5,
+            "EndTimePoint": 6,
+            "Text": "测试135"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "name": "测试时间轴2",
+    "desc": "测试描述2",
+    "lifeTime": 50,
+    "manualEndAbility": false,
+    "tracks": [
+      {
+        "name": "轨道1",
+        "abilityTask": [
+          {
+            "$type": "TaskDebug",
+            "StartTimePoint": 3,
+            "EndTimePoint": 4,
+            "Text": "开头"
+          },
+          {
+            "$type": "TaskDebug",
+            "StartTimePoint": 15,
+            "EndTimePoint": 50,
+            "Text": "结尾"
+          }
+        ]
+      }
+    ]
+  }
+]

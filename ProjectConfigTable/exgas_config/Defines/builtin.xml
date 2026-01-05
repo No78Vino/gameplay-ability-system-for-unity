@@ -66,6 +66,6 @@
 
     <bean name="track" valueType="1" sep=",">
         <var name="name" type="string"/>
-        <var name="abilityTask" type="array,AbilityTask?"/>
+        <var name="abilityTask" type="array,AbilityTask"/>
     </bean>
 </module>

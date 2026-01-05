@@ -22,6 +22,7 @@ public partial class Tables
     public exgas.TbgameplayEffect TbgameplayEffect {get; }
     public exgas.TbgameplayTags TbgameplayTags {get; }
     public exgas.Tbmmc Tbmmc {get; }
+    public exgas.TbtimelineAbility TbtimelineAbility {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -33,6 +34,7 @@ public partial class Tables
         TbgameplayEffect = new exgas.TbgameplayEffect(loader("exgas_tbgameplayeffect"));
         TbgameplayTags = new exgas.TbgameplayTags(loader("exgas_tbgameplaytags"));
         Tbmmc = new exgas.Tbmmc(loader("exgas_tbmmc"));
+        TbtimelineAbility = new exgas.TbtimelineAbility(loader("exgas_tbtimelineability"));
         ResolveRef();
     }
     
@@ -46,6 +48,7 @@ public partial class Tables
         TbgameplayEffect.ResolveRef(this);
         TbgameplayTags.ResolveRef(this);
         Tbmmc.ResolveRef(this);
+        TbtimelineAbility.ResolveRef(this);
     }
 }
 

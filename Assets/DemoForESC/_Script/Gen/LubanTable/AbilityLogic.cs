@@ -26,6 +26,7 @@ public abstract partial class AbilityLogic : Luban.BeanBase
             case "ALDebugLog": return new ALDebugLog(_buf);
             case "ALApplyEffect": return new ALApplyEffect(_buf);
             case "ALMove": return new ALMove(_buf);
+            case "ALTimeline": return new ALTimeline(_buf);
             default: throw new SerializationException();
         }
     }
