@@ -48,11 +48,12 @@ namespace GAS.Editor
         /// <summary>
         /// 这个方法被反射引用到, 重构请小心!!
         /// </summary>
-        public static void ShowWindow(TimelineAbilityAssetBase asset)
+        [MenuItem("EXTool/EX-GAS/时间轴技能编辑器")]
+        public static void ShowWindow()
         {
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
-            wnd.InitAbility(asset);
+            //wnd.InitAbility(asset);
 
             // 打开子Inspector
             EditorApplication.delayCall += () => wnd.ShowChildInspector();
