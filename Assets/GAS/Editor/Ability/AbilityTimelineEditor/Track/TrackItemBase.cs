@@ -2,7 +2,6 @@
 namespace GAS.Editor
 {
     using UnityEngine.UIElements;
-
     
     public abstract class TrackItemBase
     {

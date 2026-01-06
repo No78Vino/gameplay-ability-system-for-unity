@@ -93,23 +93,9 @@ namespace GAS.Editor
         private int CurrentAddIndex()
         {
             var baseIndex = TrackParent.IndexOf(TrackRoot);
-            if (_trackType == typeof(InstantCueTrack))
-                return baseIndex + (AbilityAsset.InstantCues?.Count ?? 0);
 
             if (_trackType == typeof(TaskMarkEventTrack))
                 return baseIndex + (AbilityAsset.InstantTasks?.Count ?? 0);
-
-            if (_trackType == typeof(ReleaseGameplayEffectTrack))
-                return baseIndex + (AbilityAsset.ReleaseGameplayEffect?.Count ?? 0);
-
-            if (_trackType == typeof(BuffGameplayEffectTrack))
-                return baseIndex + (AbilityAsset.BuffGameplayEffects?.Count ?? 0);
-
-            // if (_trackType == typeof(TaskClipEventTrack))
-            //     return baseIndex + (AbilityAsset.OngoingTasks?.Count ?? 0);
-
-            if (_trackType == typeof(DurationalCueTrack))
-                return baseIndex + (AbilityAsset.DurationalCues?.Count ?? 0);
 
             return -1;
         }

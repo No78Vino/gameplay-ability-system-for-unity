@@ -208,17 +208,6 @@ namespace GAS.Editor
                     AbilityTimelineEditorConfig.StandardFrameUnitWidth,
                     Mathf.RoundToInt(AbilityTimelineEditorConfig.MaxFrameUnitLevel *
                                      AbilityTimelineEditorConfig.StandardFrameUnitWidth));
-
-            // 以鼠标为缩放中心
-            // var mousePos = evt.localMousePosition.x;
-            // var mouseFrame = GetFrameIndexByMouse(mousePos);
-            // var mouseFramePos = mouseFrame * Config.FrameUnitWidth;
-            // var deltaFrame = mouseFramePos - EditorInst.CurrentFramePos;
-            // var contentWidth = contentViewPort.contentRect.width;
-            // var scrollViewWidth = MainContent.worldBound.width;
-            // var scrollOffsetDelta = (EditorInst.CurrentFramePos + deltaFrame * Config.FrameUnitWidth) / contentWidth *
-            //                         scrollViewWidth;
-            // MainContent.scrollOffset = new Vector2(MainContent.scrollOffset.x - scrollOffsetDelta, 0);
             
             RefreshTimerDraw();
             EditorInst.TrackView.UpdateContentSize();
@@ -249,7 +238,7 @@ namespace GAS.Editor
                 var isDraw = !tooSmall || index % drawStepFrame == 0;
                 if (isDraw)
                 {
-                    var isTick = index % tickStep == 0;
+                    var isTick = index % (int)tickStep == 0;
                     var x = i;
                     var startY = isTick ? rect.height * 0.5f : rect.height * 0.85f;
                     var endY = rect.height;

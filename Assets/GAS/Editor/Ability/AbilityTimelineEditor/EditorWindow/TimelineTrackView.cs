@@ -50,33 +50,6 @@ namespace GAS.Editor
             _trackMenuParent.Clear();
             if (AbilityAsset == null) return;
 
-            // Instant Cue
-            _menuInstantCue = new MenuTrack();
-            _menuInstantCue.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                typeof(InstantCueTrack), typeof(InstantCueTrackData), "Instant Cue",
-                new Color(0.1f, 0.2f, 0.6f, 0.2f), new Color(0.1f, 0.6f, 0.9f, 0.9f));
-            foreach (var durationalCueTrackData in AbilityAsset.InstantCues)
-            {
-                var instantCueTrack = new InstantCueTrack();
-                instantCueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                    durationalCueTrackData);
-                TrackList.Add(instantCueTrack);
-            }
-
-
-            // Release GameplayEffect
-            _menuReleaseGameplayEffect = new MenuTrack();
-            _menuReleaseGameplayEffect.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                typeof(ReleaseGameplayEffectTrack), typeof(ReleaseGameplayEffectTrackData), "Release Effect",
-                new Color(0.9f, 0.3f, 0.35f, 0.2f), new Color(0.9f, 0.3f, 0.35f, 0.9f));
-            foreach (var releaseGameplayEffectTrackData in AbilityAsset.ReleaseGameplayEffect)
-            {
-                var releaseGameplayEffectTrack = new ReleaseGameplayEffectTrack();
-                releaseGameplayEffectTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                    releaseGameplayEffectTrackData);
-                TrackList.Add(releaseGameplayEffectTrack);
-            }
-
 
             // Instant Task
             _menuInstantTask = new MenuTrack();
@@ -90,32 +63,7 @@ namespace GAS.Editor
                     instantTaskEventTrackData);
                 TrackList.Add(instantTaskEventTrack);
             }
-
-
-            // Durational Cue
-            _menuDurationalCue = new MenuTrack();
-            _menuDurationalCue.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                typeof(DurationalCueTrack), typeof(DurationalCueTrackData), "Durational Cue",
-                new Color(0.1f, 0.6f, 0.1f, 0.2f), new Color(0.1f, 0.6f, 0.1f, 1));
-            foreach (var durationalCueTrackData in AbilityAsset.DurationalCues)
-            {
-                var cueTrack = new DurationalCueTrack();
-                cueTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth, durationalCueTrackData);
-                TrackList.Add(cueTrack);
-            }
-
-            // Buff GameplayEffect
-            _menuBuffGameplayEffect = new MenuTrack();
-            _menuBuffGameplayEffect.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                typeof(BuffGameplayEffectTrack), typeof(BuffGameplayEffectTrackData), "Buff",
-                new Color(0.9f, 0.6f, 0.6f, 0.2f), new Color(0.9f, 0.6f, 0.6f, 1));
-            foreach (var buffGameplayEffectTrackData in AbilityAsset.BuffGameplayEffects)
-            {
-                var buffTrack = new BuffGameplayEffectTrack();
-                buffTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                    buffGameplayEffectTrackData);
-                TrackList.Add(buffTrack);
-            }
+            
 
             // Ongoing Task
             _menuOngoingTask = new MenuTrack();
