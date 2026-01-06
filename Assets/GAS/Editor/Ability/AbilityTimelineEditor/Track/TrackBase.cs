@@ -125,7 +125,7 @@ namespace GAS.Editor
         {
             var x = mouseLocalPositionX - EditorInst.TimerShaftView.TimerShaft.worldBound.x +
                     EditorInst.CurrentFramePos;
-            return Mathf.RoundToInt(x) / EditorInst.Config.FrameUnitWidth;
+            return Mathf.RoundToInt(x / EditorInst.Config.FrameUnitWidth);
         }
 
         #region Select

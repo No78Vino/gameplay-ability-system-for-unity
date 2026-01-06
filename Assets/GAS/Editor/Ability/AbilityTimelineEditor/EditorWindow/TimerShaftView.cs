@@ -134,7 +134,7 @@ namespace GAS.Editor
 
         public int GetFrameIndexByPosition(float x)
         {
-            return Mathf.RoundToInt(x) / Config.FrameUnitWidth;
+            return Mathf.RoundToInt(x / Config.FrameUnitWidth);
         }
 
         private void OnSelectLineGUI()
