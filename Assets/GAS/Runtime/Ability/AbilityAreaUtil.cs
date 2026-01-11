@@ -38,7 +38,7 @@ namespace GAS.Runtime
             return count;
         }
 
-        public static int TimelineAbilityOverlapBox2D(this TimelineAbilitySpec spec,
+        public static int TimelineAbilityOverlapBox2D(this EdtTimelineAbilitySpec spec,
             Vector2 offset, Vector2 size, float angle, int layerMask, Collider2D[] results,
             EffectCenterType centerType, Transform relativeTransform = null)
         {

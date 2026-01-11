@@ -57,6 +57,8 @@ namespace GAS.Editor
 
             // 打开子Inspector
             EditorApplication.delayCall += () => wnd.ShowChildInspector();
+            
+            var abilities = GasAbilityTimelineXlsxReadWrite.GetTimelineAbilities(true);
         }
 
         public void Save()

@@ -64,9 +64,9 @@ namespace GAS.Runtime
     /// <summary>
     /// 这是一个最朴素的TimelineAbilitySpec实现, 如果要实现更复杂的TimelineAbility, 请用TimelineAbilityT<T>和TimelineAbilitySpecT<T>为基类
     /// </summary>
-    public sealed class TimelineAbilitySpec : TimelineAbilitySpecT<TimelineAbility>
+    public sealed class EdtTimelineAbilitySpec : TimelineAbilitySpecT<TimelineAbility>
     {
-        public TimelineAbilitySpec(TimelineAbility ability, AbilitySystemCellMono owner) : base(ability, owner)
+        public EdtTimelineAbilitySpec(TimelineAbility ability, AbilitySystemCellMono owner) : base(ability, owner)
         {
         }
     }

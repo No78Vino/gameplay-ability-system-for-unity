@@ -86,6 +86,10 @@ namespace GAS.Editor
         public string PathOfCodeLubanExtesion => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LUBAN}.cs";
         public string PathOfCodeLauncher => $"{CodeGeneratePath}/{GASConstDefine.CODE_FILE_NAME_OF_LAUNCHER}.cs";
         
+        public string PathOfJsonTimelineAbility => $"{TableOutpuPath}/{GASConstDefine.JSON_FILE_NAME_OF_TIMELINE_ABILITY}.json";
+        public string PathOfExcelTimelineAbility => $"{ConfigProjectPath}/Datas/{GASConstDefine.EXCEL_FILE_NAME_OF_TIMELINE_ABILITY}.xlsx";
+        
+        
         [TitleGroup("A/文件路径一览",Order = 99)]
         [DisplayAsString(TextAlignment.Left, true)]
         [HideLabel]
