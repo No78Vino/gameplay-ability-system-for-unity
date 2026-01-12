@@ -49,7 +49,7 @@ namespace GAS.Editor
             foreach (var trackInfo in AbilityConfig.Tracks)
             {
                 var track = new TaskClipEventTrack();
-                track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth);
+                track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,trackInfo);
                 TrackList.Add(track);
             }
 

@@ -64,7 +64,7 @@ namespace GAS.Editor
             //data.AddToAbilityAsset(AbilityAsset);
 
             // 初始化View
-            track.Init(TrackParent, MenuParent, Config.FrameUnitWidth, data);
+            //track.Init(TrackParent, MenuParent, Config.FrameUnitWidth, data);
             TrackParent.Remove(track.TrackRoot);
             MenuParent.Remove(track.MenuRoot);
             var index = CurrentAddIndex();

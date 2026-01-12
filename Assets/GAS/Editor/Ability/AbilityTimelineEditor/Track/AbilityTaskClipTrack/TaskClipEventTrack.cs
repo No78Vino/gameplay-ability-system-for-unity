@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.Collections.Generic;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using System;
@@ -36,11 +38,10 @@ namespace GAS.Editor
             }
         }
 
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData = null)
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,EdtTrack trackInfo)
         {
-            base.Init(trackParent, menuParent, frameWidth, trackData);
-            _taskClipEventTrackData = trackData as TaskClipEventTrackData;
-            MenuText.text = _taskClipEventTrackData.trackName;
+            base.Init(trackParent, menuParent, frameWidth, trackInfo);
+            MenuText.text = trackInfo.Name;
         }
 
         public override void RefreshShow(float newFrameWidth)

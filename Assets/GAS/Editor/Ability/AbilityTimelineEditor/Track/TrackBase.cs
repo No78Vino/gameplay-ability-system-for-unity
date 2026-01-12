@@ -12,7 +12,7 @@ namespace GAS.Editor
     public abstract class TrackBase
     {
         protected float _frameWidth;
-        protected TrackDataBase _trackData;
+        protected EdtTrack _trackInfo;
         protected List<TrackItemBase> _trackItems = new();
         protected VisualElement BoundingBox;
         protected VisualElement Lock;
@@ -44,9 +44,9 @@ namespace GAS.Editor
 
 
         public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
-            TrackDataBase trackData)
+            EdtTrack tasks)
         {
-            _trackData = trackData;
+            _trackInfo = tasks;
             TrackParent = trackParent;
             MenuParent = menuParent;
             var trackAssetPath = AssetDatabase.GUIDToAssetPath(TrackAssetGuid);

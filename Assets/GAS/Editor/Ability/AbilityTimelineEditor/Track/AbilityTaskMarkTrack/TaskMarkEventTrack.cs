@@ -28,13 +28,13 @@ namespace GAS.Editor
         protected override Color TrackColor => new(0.1f, 0.6f, 0.6f, 0.2f);
         protected override Color MenuColor => new(0.1f, 0.6f, 0.6f, 0.9f);
 
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
-            TrackDataBase trackData)
-        {
-            base.Init(trackParent, menuParent, frameWidth, trackData);
-            _instantTasksTrackData = trackData as TaskMarkEventTrackData;
-            MenuText.text = _instantTasksTrackData.trackName;
-        }
+        // public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
+        //     TrackDataBase trackData)
+        // {
+        //     base.Init(trackParent, menuParent, frameWidth, trackData);
+        //     _instantTasksTrackData = trackData as TaskMarkEventTrackData;
+        //     MenuText.text = _instantTasksTrackData.trackName;
+        // }
 
         public override void TickView(int frameIndex, params object[] param)
         {
