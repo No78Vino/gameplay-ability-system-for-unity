@@ -13,7 +13,7 @@ namespace GAS.Editor
         private Color _trackColor;
         private Type _trackDataType;
         private Type _trackType;
-        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
         private static TimelineTrackView TrackView => AbilityTimelineEditorWindow.Instance.TrackView;
         public override Type TrackDataType { get; }
@@ -61,7 +61,7 @@ namespace GAS.Editor
             // 创建Data
             var data = (TrackDataBase)Activator.CreateInstance(_trackDataType);
             data.DefaultInit();
-            data.AddToAbilityAsset(AbilityAsset);
+            //data.AddToAbilityAsset(AbilityAsset);
 
             // 初始化View
             track.Init(TrackParent, MenuParent, Config.FrameUnitWidth, data);
@@ -71,11 +71,11 @@ namespace GAS.Editor
             TrackParent.Insert(index, track.TrackRoot);
             MenuParent.Insert(index, track.MenuRoot);
 
-            TrackView.TrackList.Add(track);
+            //TrackView.TrackList.Add(track);
 
             Debug.Log("[EX] Add a new track:" + _trackType.Name);
 
-            AbilityAsset.Save();
+            //AbilityAsset.Save();
         }
 
         public override void TickView(int frameIndex, params object[] param)
@@ -94,8 +94,8 @@ namespace GAS.Editor
         {
             var baseIndex = TrackParent.IndexOf(TrackRoot);
 
-            if (_trackType == typeof(TaskMarkEventTrack))
-                return baseIndex + (AbilityAsset.InstantTasks?.Count ?? 0);
+            // if (_trackType == typeof(TaskMarkEventTrack))
+            //     return baseIndex + (AbilityAsset.InstantTasks?.Count ?? 0);
 
             return -1;
         }

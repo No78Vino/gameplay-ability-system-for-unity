@@ -42,7 +42,7 @@ namespace GAS.Editor
         
         private const string GRP_BOX = "GRP_BOX";
         private const string GRP_BOX_TASK = "GRP_BOX/Task";
-        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         private TaskClip _clip;
         
         public static TaskClipEditor Create(TaskClip clip)
@@ -114,7 +114,7 @@ namespace GAS.Editor
         private void OnDurationFrameChanged()
         {
             // 钳制
-            var max = AbilityAsset.FrameCount - _clip.ClipDataForSave.startFrame;
+            var max = AbilityAsset.LifeTime - _clip.ClipDataForSave.startFrame;
             Duration = Mathf.Clamp(Duration, 1, max);
             _clip.UpdateClipDataDurationFrame(Duration);
             _clip.RefreshShow(_clip.FrameUnitWidth);

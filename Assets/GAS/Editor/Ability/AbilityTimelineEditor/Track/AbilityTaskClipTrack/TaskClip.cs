@@ -8,7 +8,7 @@ namespace GAS.Editor
     
     public class TaskClip : TrackClip<TaskClipEventTrack>
     {
-        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private EdtTimelineAbility AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         public TaskClipEvent TaskClipData => null;//clipData as TaskClipEvent;
 
         public TaskClipEvent ClipDataForSave

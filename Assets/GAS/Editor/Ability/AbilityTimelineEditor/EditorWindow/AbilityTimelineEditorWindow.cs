@@ -63,13 +63,13 @@ namespace GAS.Editor
 
         public void Save()
         {
-            AbilityAsset.Save();
+            //AbilityConfig.Save();
         }
 
         private void InitAbility(TimelineAbilityAssetBase asset)
         {
             //_abilityAsset.value = asset;
-            MaxFrame.value = AbilityAsset.FrameCount;
+            MaxFrame.value = AbilityConfig.LifeTime;
             CurrentSelectFrameIndex = 0;
             TimerShaftView.RefreshTimerDraw();
             TrackView.RefreshTrackDraw();
@@ -84,10 +84,10 @@ namespace GAS.Editor
         #region Config
 
         public AbilityTimelineEditorConfig Config { get; } = new();
+        
+        private DropdownField _dropDownAbilityID;
 
-        private ObjectField _abilityAsset;
-        private Button _btnShowAbilityAssetDetail;
-        public TimelineAbilityAssetBase AbilityAsset => null;// _abilityAsset.value as TimelineAbilityAssetBase;
+        public EdtTimelineAbility AbilityConfig => GasAbilityTimelineXlsxReadWrite.GetTimelineAbility(_dropDownAbilityID.value);
 
         // private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
         //     ? UnityEditor.Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
@@ -95,33 +95,23 @@ namespace GAS.Editor
 
         private void InitAbilityAssetBar()
         {
-            _abilityAsset = _root.Q<ObjectField>("SequentialAbilityAsset");
-            _abilityAsset.RegisterValueChangedCallback(OnSequentialAbilityAssetChanged);
-
-            _btnShowAbilityAssetDetail = _root.Q<Button>("BtnShowAbilityAssetDetail");
-            _btnShowAbilityAssetDetail.clickable.clicked += ShowAbilityAssetDetail;
+            _dropDownAbilityID = _root.Q<DropdownField>("DropdownField");
+            _dropDownAbilityID.choices = GasAbilityTimelineXlsxReadWrite.GetTimelineAbilityIDList();
+            _dropDownAbilityID.index = _dropDownAbilityID.choices.Count > 0 ? 0 : -1;
+            _dropDownAbilityID.RegisterValueChangedCallback(OnAbilityIDChanged);
         }
 
-        private void OnSequentialAbilityAssetChanged(ChangeEvent<Object> evt)
+        private void OnAbilityIDChanged(ChangeEvent<string> evt)
         {
-            if (AbilityAsset != null)
-            {
-                MaxFrame.value = AbilityAsset.FrameCount;
-            }
+            if (AbilityConfig != null)
+                MaxFrame.value = AbilityConfig.LifeTime;
             else
-            {
                 Selection.activeObject = null;
-            }
+            
 
             CurrentSelectFrameIndex = 0;
             TimerShaftView.RefreshTimerDraw();
             TrackView.RefreshTrackDraw();
-        }
-
-        private void ShowAbilityAssetDetail()
-        {
-            if (AbilityAsset == null) return;
-            //Selection.activeObject = AbilityAsset;
         }
 
         #endregion
@@ -203,7 +193,7 @@ namespace GAS.Editor
             get => _currentMaxFrame;
             private set
             {
-                if (AbilityAsset == null)
+                if (AbilityConfig == null)
                 {
                     _currentMaxFrame = 0;
                     return;
@@ -211,7 +201,7 @@ namespace GAS.Editor
 
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
-                AbilityAsset.FrameCount = _currentMaxFrame;
+                AbilityConfig.LifeTime = _currentMaxFrame;
                 SaveAsset();
                 MaxFrame.value = _currentMaxFrame;
                 TrackView.UpdateContentSize();
@@ -297,20 +287,20 @@ namespace GAS.Editor
 
         private void OnPlay()
         {
-            if (AbilityAsset == null) return;
+            if (AbilityConfig == null) return;
             IsPlaying = !IsPlaying;
         }
 
         private void OnLeftFrame()
         {
-            if (AbilityAsset == null) return;
+            if (AbilityConfig == null) return;
             IsPlaying = false;
             CurrentSelectFrameIndex -= 1;
         }
 
         private void OnRightFrame()
         {
-            if (AbilityAsset == null) return;
+            if (AbilityConfig == null) return;
             IsPlaying = false;
             CurrentSelectFrameIndex += 1;
         }
@@ -323,7 +313,7 @@ namespace GAS.Editor
 
         public void SetInspector(object target = null)
         {
-            if (AbilityAsset == null) return;
+            if (AbilityConfig == null) return;
             TimelineInspector.SetInspector(target);
         }
 
@@ -370,7 +360,7 @@ namespace GAS.Editor
 
         private void EvaluateFrame(int frameIndex)
         {
-            if (AbilityAsset == null || _previewObjectField.value == null) return;
+            if (AbilityConfig == null || _previewObjectField.value == null) return;
 
             foreach (var track in TrackView.TrackList)
                 track.TickView(frameIndex);
@@ -378,7 +368,7 @@ namespace GAS.Editor
 
         private bool CanPlay()
         {
-            var canPlay = AbilityAsset != null && _previewObjectField.value != null;
+            var canPlay = AbilityConfig != null && _previewObjectField.value != null;
             return canPlay;
         }
 

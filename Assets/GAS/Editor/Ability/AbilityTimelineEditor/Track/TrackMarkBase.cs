@@ -8,7 +8,7 @@ namespace GAS.Editor
     using UnityEngine.UIElements;
     public abstract class TrackMarkBase:TrackItemBase
     {
-        protected static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        protected static EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         private static string MarkAssetGuid => "5a3b3360bcba29b4cac2875f518af19d";
         public float FrameUnitWidth { get;protected set; }
         public int StartFrameIndex=>markData.startFrame;
@@ -96,14 +96,14 @@ namespace GAS.Editor
             ApplyMarkDrag();
             TimerShaftView.DottedLineFrameIndex = -1;
         }
-
+        
         private void OnMainMouseMove(Vector2 delta)
         {
             var offsetFrame = delta.x / FrameUnitWidth;
             _newStartFramePos = _lastMainDragStartPos + offsetFrame;
             if (offsetFrame == 0 || _newStartFramePos < 0) return;
             int minFrame =  0;
-            int maxFrame =  AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
+            int maxFrame =  AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
             if (NewStartFrame >= minFrame && NewStartFrame <= maxFrame)
             {
                 TimerShaftView.DottedLineFrameIndex = NewStartFrame;
@@ -113,7 +113,7 @@ namespace GAS.Editor
         private void ApplyMarkDrag()
         {
             int minFrame =  0;
-            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityAsset.FrameCount;
+            int maxFrame = AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
             var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame);
             if (newStartFrame == StartFrameIndex) return;
             

@@ -11,16 +11,10 @@ namespace GAS.Editor
     public class TimelineTrackView
     {
         private static List<Type> _trackTypeList;
-        private static readonly Dictionary<string, Type> _trackTypeMap = new();
         private readonly VisualElement _root;
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
-        private MenuTrack _menuBuffGameplayEffect;
-        private MenuTrack _menuDurationalCue;
-        private MenuTrack _menuInstantCue;
-        private MenuTrack _menuInstantTask;
-        private MenuTrack _menuOngoingTask;
-        private MenuTrack _menuReleaseGameplayEffect;
+        private List<MenuTrack> _menuTracks = new();
         private VisualElement _trackMenuParent;
 
         public TimelineTrackView(VisualElement root)
@@ -29,10 +23,10 @@ namespace GAS.Editor
             InitTracks();
         }
 
-        public List<TrackBase> TrackList { get; } = new();
+        public List<TaskClipEventTrack> TrackList { get; } = new();
 
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
-        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static EdtTimelineAbility AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
         private void InitTracks()
         {
@@ -48,35 +42,16 @@ namespace GAS.Editor
             TrackList.Clear();
             _contentTrackListParent.Clear();
             _trackMenuParent.Clear();
-            if (AbilityAsset == null) return;
+            if (AbilityConfig == null) return;
 
 
-            // Instant Task
-            _menuInstantTask = new MenuTrack();
-            _menuInstantTask.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                typeof(TaskMarkEventTrack), typeof(TaskMarkEventTrackData), "Instant Task",
-                new Color(0.1f, 0.6f, 0.6f, 0.2f), new Color(0.1f, 0.6f, 0.6f, 0.9f));
-            foreach (var instantTaskEventTrackData in AbilityAsset.InstantTasks)
+            // Tracks
+            foreach (var trackInfo in AbilityConfig.Tracks)
             {
-                var instantTaskEventTrack = new TaskMarkEventTrack();
-                instantTaskEventTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-                    instantTaskEventTrackData);
-                TrackList.Add(instantTaskEventTrack);
+                var track = new TaskClipEventTrack();
+                track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth);
+                TrackList.Add(track);
             }
-            
-
-            // Ongoing Task
-            _menuOngoingTask = new MenuTrack();
-            // _menuOngoingTask.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-            //     typeof(TaskClipEventTrack), typeof(TaskClipEventTrackData), "Ongoing Task",
-            //     new Color(0.7f, 0.3f, 0.7f, 0.2f), new Color(0.5f, 0.3f, 0.5f, 1));
-            // foreach (var customClipEventTrackData in AbilityAsset.OngoingTasks)
-            // {
-            //     var customClipTrack = new TaskClipEventTrack();
-            //     customClipTrack.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,
-            //         customClipEventTrackData);
-            //     TrackList.Add(customClipTrack);
-            // }
 
             UpdateContentSize();
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using OfficeOpenXml;
 
 namespace GAS.Editor
@@ -121,6 +122,20 @@ namespace GAS.Editor
             if (_timelineAbilities == null||forceReload)
                 LoadTimelineAbilities();
             return _timelineAbilities;
+        }
+
+        public static List<string> GetTimelineAbilityIDList()
+        {
+            var abilities = GetTimelineAbilities();
+
+            return abilities.Select(ability => ability.Id.ToString()).ToList();
+        }
+        
+        public static EdtTimelineAbility GetTimelineAbility(string id)
+        {
+            var abilities = GetTimelineAbilities();
+
+            return abilities.FirstOrDefault(ability => ability.Id.ToString() == id);
         }
     }
 }

@@ -11,15 +11,15 @@ namespace GAS.Editor
     public class TaskMarkEventTrack : TrackBase
     {
         private TaskMarkEventTrackData _instantTasksTrackData;
-        private static TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private static EdtTimelineAbility AbilityCfg => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
         public TaskMarkEventTrackData InstantTaskEventTrackData
         {
             get
             {
-                for (var i = 0; i < AbilityAsset.InstantTasks.Count; i++)
-                    if (AbilityAsset.InstantTasks[i] == _instantTasksTrackData)
-                        return AbilityAsset.InstantTasks[i];
+                // for (var i = 0; i < AbilityCfg.InstantTasks.Count; i++)
+                //     if (AbilityCfg.InstantTasks[i] == _instantTasksTrackData)
+                //         return AbilityCfg.InstantTasks[i];
                 return null;
             }
         }
@@ -48,7 +48,7 @@ namespace GAS.Editor
             foreach (var item in _trackItems) Track.Remove(((TrackMarkBase)item).Ve);
             _trackItems.Clear();
 
-            if (AbilityTimelineEditorWindow.Instance.AbilityAsset == null) return;
+            if (AbilityTimelineEditorWindow.Instance.AbilityConfig == null) return;
 
             foreach (var markEvent in _instantTasksTrackData.markEvents)
             {
@@ -82,7 +82,7 @@ namespace GAS.Editor
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
             // 删除数据
-            AbilityAsset.InstantTasks.Remove(_instantTasksTrackData);
+            //AbilityCfg.Tracks.Remove(_instantTasksTrackData);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
             TrackParent.Remove(TrackRoot);

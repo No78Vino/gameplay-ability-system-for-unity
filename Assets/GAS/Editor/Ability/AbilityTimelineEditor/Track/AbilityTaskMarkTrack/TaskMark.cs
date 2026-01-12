@@ -24,10 +24,10 @@ namespace GAS.Editor
         public override void Duplicate()
         {
             // 添加Mark数据
-            var startFrame = markData.startFrame < AbilityAsset.FrameCount
+            var startFrame = markData.startFrame < AbilityAsset.LifeTime
                 ? markData.startFrame + 1
                 : markData.startFrame - 1;
-            startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.FrameCount);
+            startFrame = Mathf.Clamp(startFrame, 0, AbilityAsset.LifeTime);
             var markEvent = new TaskMarkEvent
             {
                 startFrame = startFrame,

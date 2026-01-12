@@ -13,7 +13,7 @@ namespace GAS.Editor
         protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
         protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
 
-        private TimelineAbilityAssetBase AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityAsset;
+        private EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         public TaskClipEventTrackData TaskClipTrackDataForSave
         {
             get
@@ -36,7 +36,7 @@ namespace GAS.Editor
             }
         }
 
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData)
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth, TrackDataBase trackData = null)
         {
             base.Init(trackParent, menuParent, frameWidth, trackData);
             _taskClipEventTrackData = trackData as TaskClipEventTrackData;
@@ -49,7 +49,7 @@ namespace GAS.Editor
             foreach (var item in _trackItems) Track.Remove(((TrackClipBase)item).ClipVe);
             _trackItems.Clear();
 
-            if (AbilityTimelineEditorWindow.Instance.AbilityAsset != null)
+            if (AbilityTimelineEditorWindow.Instance.AbilityConfig != null)
                 foreach (var clipEvent in _taskClipEventTrackData.clipEvents)
                 {
                     var item = new TaskClip();
