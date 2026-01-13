@@ -3,7 +3,6 @@
     public abstract class AbilityTaskBase
     {
         protected AbilityLogicBase _logic;
-        public AbilityLogicBase Logic => _logic;
 
         public virtual void Init(AbilityLogicBase logic)
         {

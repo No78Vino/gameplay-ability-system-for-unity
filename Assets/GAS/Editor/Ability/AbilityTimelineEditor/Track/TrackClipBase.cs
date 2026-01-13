@@ -1,23 +1,20 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using Runtime;
     using UnityEngine.UIElements;
     
     public abstract class TrackClipBase : TrackItemBase
     {
-        protected ClipEventBase clipData;
+        protected EdtAbilityTask clipData;
 
         protected TrackBase trackBase;
 
         //protected TrackClipVisualElement ve;
         public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
-        public int StartFrameIndex => clipData.startFrame;
-        public int EndFrameIndex => clipData.EndFrame;
-        public int DurationFrame => clipData.durationFrame;
-        public TrackBase TrackBase => trackBase;
-        public ClipEventBase ClipData => clipData;
+        public int StartFrameIndex => int.Parse(clipData.Parameters[0]);
+        public int EndFrameIndex => int.Parse(clipData.Parameters[1]);
+        public int DurationFrame => EndFrameIndex - StartFrameIndex;
 
         public Label ItemLabel => ClipVe.ItemLabel;
 
@@ -25,7 +22,7 @@ namespace GAS.Editor
             TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            ClipEventBase clipData)
+            EdtAbilityTask clipData)
         {
             trackBase = track;
             FrameUnitWidth = frameUnitWidth;
@@ -54,7 +51,7 @@ namespace GAS.Editor
             var mainPos = ve.transform.position;
             mainPos.x = StartFrameIndex * FrameUnitWidth;
             ve.transform.position = mainPos;
-            ve.style.width = clipData.durationFrame * FrameUnitWidth;
+            ve.style.width = DurationFrame * FrameUnitWidth;
         }
 
         public abstract void UpdateClipDataStartFrame(int newStartFrame);
@@ -73,7 +70,7 @@ namespace GAS.Editor
             TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            ClipEventBase clipData)
+            EdtAbilityTask clipData)
         {
             this.track = (T)track;
             base.InitTrackClip(track, parent, frameUnitWidth, clipData);

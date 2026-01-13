@@ -51,10 +51,10 @@ namespace GAS.Editor
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityConfig != null)
-                foreach (var clipEvent in _taskClipEventTrackData.clipEvents)
+                foreach (var task in _trackInfo.AbilityTasks)
                 {
                     var item = new TaskClip();
-                    //item.InitTrackClip(this, Track, _frameWidth, clipEvent);
+                    item.InitTrackClip(this, Track, _frameWidth, task);
                     _trackItems.Add(item);
                 }
         }
