@@ -23,9 +23,8 @@ namespace GAS.Editor
 
             if (CurrentInspectorObject != null && !force)
             {
-                if (CurrentInspectorObject is TrackClipBase oldTrackItem) oldTrackItem.ClipVe.OnUnSelect();
-                if (CurrentInspectorObject is TrackBase oldTrack) oldTrack.OnUnSelect();
-                if (CurrentInspectorObject is TrackMarkBase oldMark) oldMark.OnUnSelect();
+                if (CurrentInspectorObject is TrackClipBase oldTrackItem)
+                    oldTrackItem.ClipVe.OnUnSelect();
             }
 
             CurrentInspectorObject = target;
