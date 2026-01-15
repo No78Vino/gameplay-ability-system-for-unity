@@ -18,7 +18,7 @@ namespace GAS.Runtime
     internal class RuntimeTaskMark
     {
         public int startFrame;
-        public InstantAbilityTask task;
+        public AbilityTaskBase task;
     }
 
     public class TimelineAbilityPlayer<T> 
@@ -93,21 +93,21 @@ namespace GAS.Runtime
         private void Cache_InstantTasks()
         {
             _cacheInstantTasks.Clear();
-            foreach (var trackData in AbilityAsset.InstantTasks)
-            {
-                foreach (var markEvent in trackData.markEvents)
-                {
-                    foreach (var taskData in markEvent.InstantTasks)
-                    {
-                        var runtimeTaskMark = new RuntimeTaskMark
-                        {
-                            //startFrame = markEvent.startFrame,
-                            //task = taskData.CreateTask(_abilitySpec)
-                        };
-                        _cacheInstantTasks.Add(runtimeTaskMark);
-                    }
-                }
-            }
+            // foreach (var trackData in AbilityAsset.InstantTasks)
+            // {
+            //     foreach (var markEvent in trackData.markEvents)
+            //     {
+            //         foreach (var taskData in markEvent.InstantTasks)
+            //         {
+            //             var runtimeTaskMark = new RuntimeTaskMark
+            //             {
+            //                 //startFrame = markEvent.startFrame,
+            //                 //task = taskData.CreateTask(_abilitySpec)
+            //             };
+            //             _cacheInstantTasks.Add(runtimeTaskMark);
+            //         }
+            //     }
+            // }
 
             _cacheInstantTasks.Sort((a, b) => a.startFrame.CompareTo(b.startFrame));
         }
@@ -206,7 +206,7 @@ namespace GAS.Runtime
 
             foreach (var clip in _cacheOngoingTaskTrack)
             {
-                clip.task.OnEnd(clip.endFrame);
+                clip.task.Finish(clip.endFrame);
             }
 
             IsPlaying = false;
@@ -304,7 +304,7 @@ namespace GAS.Runtime
             {
                 if (frame == instantTask.startFrame)
                 {
-                    instantTask.task.OnExecute();
+                    instantTask.task.Begin(frame);
                 }
             }
         }
@@ -364,33 +364,17 @@ namespace GAS.Runtime
 
         private void TickFrame_OngoingTasks(int frame)
         {
-            // Profiler.BeginSample("TickFrame_OngoingTasks");
-            // {
-                foreach (var taskClip in _cacheOngoingTaskTrack)
-                {
-                    if (frame == taskClip.startFrame)
-                    {
-                        //Profiler.BeginSample("Ongoing Task.OnStart()");
-                        taskClip.task.OnStart(frame);
-                        //Profiler.EndSample();
-                    }
+            foreach (var taskClip in _cacheOngoingTaskTrack)
+            {
+                if (frame == taskClip.startFrame) 
+                    taskClip.task.Begin(frame);
 
-                    if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
-                    {
-                        //Profiler.BeginSample("Ongoing Task.OnTick()");
-                        taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
-                        //Profiler.EndSample();
-                    }
+                if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
+                    taskClip.task.Tick(frame);
 
-                    if (frame == taskClip.endFrame)
-                    {
-                        //Profiler.BeginSample("Ongoing Task.OnEnd()");
-                        taskClip.task.OnEnd(frame);
-                        //Profiler.EndSample();
-                    }
-                }
-            // }
-            // Profiler.EndSample();
+                if (frame == taskClip.endFrame)
+                    taskClip.task.Finish(frame);
+            }
         }
     }
 }

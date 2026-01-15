@@ -12,7 +12,7 @@ namespace GAS.Runtime
     {
         private Entity _cueEntity;
         private Type _cueType;
-        private ICueParameter _cueParameter;
+        private IExParameterBase _exParameterBase;
         private int[] _requiredTags;
         private int[] _immunityTags;
         
@@ -22,13 +22,13 @@ namespace GAS.Runtime
         /// GameplayCue独立控制单位
         /// </summary>
         /// <param name="cueType">Cue 类型</param>
-        /// <param name="parameter">Cue 对应的自定义参数</param>
+        /// <param name="exParameterBase">Cue 对应的自定义参数</param>
         /// <param name="requiredTags">可选：添加到ASC时，ASC播放需求的tag</param>
         /// <param name="immunityTags">>可选：添加到ASC时，ASC播放免疫的tag</param>
-        public GameplayCueUnit(Type cueType,ICueParameter parameter,int[] requiredTags = null, int[] immunityTags = null)
+        public GameplayCueUnit(Type cueType,IExParameterBase exParameterBase,int[] requiredTags = null, int[] immunityTags = null)
         {
             _cueType = cueType;
-            _cueParameter = parameter;
+            _exParameterBase = exParameterBase;
             _requiredTags = requiredTags;
             _immunityTags = immunityTags;
         }
@@ -36,7 +36,7 @@ namespace GAS.Runtime
         public GameplayCueUnit(GameplayCueConfig config)
         {
             _cueType = config.CueType;
-            _cueParameter = config.CueParameter;
+            _exParameterBase = config.ExParameterBase;
             _requiredTags = config.RequiredTags;
             _immunityTags = config.ImmunityTags;
         }
@@ -69,7 +69,7 @@ namespace GAS.Runtime
             _cueEntity = EntityManager.CreateEntity();
             EntityManager.SetName(_cueEntity,$"Cue_{_cueType.Name}_{_cueEntity.Version}_{_cueEntity.Index}");
             
-            var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _cueParameter));
+            var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _exParameterBase));
             mcCue.cue.SetCueEntity(_cueEntity);
             mcCue.cue.SetSourceEntity(Entity.Null, CueSourceType.None);
             EntityHelper.AddManagedComponent<MCCue>(_cueEntity);

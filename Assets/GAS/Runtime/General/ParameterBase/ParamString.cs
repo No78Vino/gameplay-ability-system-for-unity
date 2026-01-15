@@ -1,25 +1,25 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
-    public class CueParamFloat:ICueParameter
+    public class ParamString:IExParameterBase
     {
-        [LabelText("值")]
+        [LabelText("文本值")]
         [ShowInInspector]
-        public float Value { get; private set; }
+        public string Value { get; private set; }
         
-        public CueParamFloat()
+        public ParamString()
         {
-            Value = 0;
+            Value = string.Empty;
         }
         
-        public CueParamFloat(float v)
+        public ParamString(string v)
         {
             Value = v;
         }
 
-        public void SetValue(float v)
+        public void SetValue(string v)
         {
             Value = v;
         }
@@ -27,7 +27,7 @@ namespace GAS.Runtime
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
-            Value = paramData.Count > 0 ? float.Parse(paramData[0].ToString()) : 0;
+            Value = paramData.Count > 0 ? paramData[0].ToString() : string.Empty;
         }
 
         public List<object> EncodeExcelData()

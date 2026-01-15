@@ -16,7 +16,7 @@ namespace GAS.Editor
 
     public class TaskClipEditor:OdinEditorWindow
     {
-        private static IEnumerable OngoingTaskSonTypes = OngoingTaskData.OngoingTaskSonTypeChoices;
+        private static IEnumerable OngoingTaskSonTypes = TaskData.OngoingTaskSonTypeChoices;
         
         private static Type[] _ongoingTaskInspectorTypes;
 

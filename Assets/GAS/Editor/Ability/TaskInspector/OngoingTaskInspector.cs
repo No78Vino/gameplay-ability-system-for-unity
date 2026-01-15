@@ -6,8 +6,8 @@ namespace GAS.Editor
     
     public abstract class OngoingTaskInspector
     {
-        protected OngoingAbilityTask _taskBase;
-        public virtual void Init(OngoingAbilityTask task)
+        protected AbilityTaskBase _taskBase;
+        public virtual void Init(AbilityTaskBase task)
         {
             _taskBase = task;
         }

@@ -3,11 +3,15 @@
 namespace GAS.Runtime
 {
     [Serializable]
-    public class ApplyCostAndCoolDown : AbilityTaskBase
+    public class ApplyCostAndCoolDown : AbilityTaskBase<ParamNone>
     {
-        public override void OnStart(int startFrame)
+        protected override void OnBegin(int startFrame)
         {
             GAUtil.DoCost(_logic.GetAbilityEntity());
+        }
+
+        public ApplyCostAndCoolDown(AbilityLogicBase logic) : base(logic)
+        {
         }
     }
 }

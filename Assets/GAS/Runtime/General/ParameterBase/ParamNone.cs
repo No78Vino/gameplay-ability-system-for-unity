@@ -2,16 +2,12 @@
 
 namespace GAS.Runtime
 {
-    public class CueParamNone:ICueParameter
+    public class ParamNone:IExParameterBase
     {
-        public CueParamNone()
+        public ParamNone()
         {
         }
-        
-        public void LoadConfigParameterData(object cfgCueLogic)
-        {
-        }
-        
+
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

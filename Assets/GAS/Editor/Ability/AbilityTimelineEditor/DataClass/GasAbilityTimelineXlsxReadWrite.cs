@@ -20,7 +20,7 @@ namespace GAS.Editor
             using (var package = new ExcelPackage(new FileInfo(filePath)))
             {
                 var worksheet = package.Workbook.Worksheets[1]; // 使用第一个工作表
-                var row = 5; // 数据从第4行开始
+                var row = 6; // 数据从第6行开始
                 var safeCnt = 99999;
                 EdtTimelineAbility currentAbility = null;
                 EdtTrack currentEdtTrack = null;
@@ -35,7 +35,9 @@ namespace GAS.Editor
                     var lifeTimeCell = worksheet.Cells[row, 4].Value;
                     var manualEndCell = worksheet.Cells[row, 5].Value;
                     var trackNameCell = worksheet.Cells[row, 6].Value;
-                    var taskTypeCell = worksheet.Cells[row, 7].Value;
+                    var startTimeCell = worksheet.Cells[row, 7].Value;
+                    var endTimeCell = worksheet.Cells[row, 8].Value;
+                    var taskTypeCell = worksheet.Cells[row, 9].Value;
 
                     // 如果所有关键单元格都为空，结束解析
                     if (idCell == null && nameCell == null && lifeTimeCell == null &&
@@ -51,7 +53,6 @@ namespace GAS.Editor
                             if (currentEdtTrack != null)
                             {
                                 currentAbility.Tracks.Add(currentEdtTrack);
-                                currentEdtTrack = null;
                             }
 
                             _timelineAbilities.Add(currentAbility);
@@ -92,11 +93,13 @@ namespace GAS.Editor
 
                         var task = new EdtAbilityTask
                         {
-                            TaskType = taskTypeCell.ToString()
+                            TaskType = taskTypeCell.ToString(),
+                            StartTime = startTimeCell != null ? int.Parse(startTimeCell.ToString()) : 0,
+                            EndTime = endTimeCell != null ? int.Parse(endTimeCell.ToString()) : 0,
                         };
 
-                        // 读取参数（假设最多10个参数，从第8列到第17列）
-                        for (var col = 8; col <= 17; col++)
+                        // 读取参数（假设最多10个参数，从第10列到第19列）
+                        for (var col = 10; col <= 19; col++)
                         {
                             var paramCell = worksheet.Cells[row, col].Value;
                             if (paramCell != null) task.Parameters.Add(paramCell.ToString());

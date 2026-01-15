@@ -1,14 +1,29 @@
-﻿namespace GAS.Runtime
+﻿using UnityEngine;
+
+namespace GAS.Runtime
 {
     public abstract class AbilityTaskBase
     {
         protected AbilityLogicBase _logic;
-
-        public virtual void Init(AbilityLogicBase logic)
+        protected AbilitySpec _spec;
+        protected AbilitySystemCell _owner;
+        protected TimeUnit _timeUnit = TimeUnit.Frame;
+        protected int _startTime;
+        
+        public AbilityTaskBase(AbilityLogicBase logic)
         {
             _logic = logic;
+            _spec = _logic.Spec;
+            _owner = _logic.Owner;
         }
+        
+        public abstract void InitParameters(IExParameterBase parameter);
 
+        /// <summary>
+        /// 修改 AbilityTask 的生效时间单位，默认是Frame（以帧为单位）
+        /// </summary>
+        /// <param name="timeUnit"></param>
+        public void SetTimeUnit(TimeUnit timeUnit) => _timeUnit = timeUnit;
 #if UNITY_EDITOR
         /// <summary>
         /// 编辑器预览用
@@ -21,21 +36,51 @@
         {
         }
 #endif
-        public virtual void OnStart(int startFrame)
+        public void Begin(int startTime)
+        {
+            _startTime = startTime;
+            OnBegin(startTime);
+        }
+
+        public void Tick(int tickTime)
+        {
+            OnTick(tickTime);
+        }
+        
+        public void Finish(int endTime)
+        {
+            OnFinish(endTime);
+        }
+        
+        protected virtual void OnBegin(int startFrame)
         {
         }
 
-        public virtual void OnEnd(int endFrame)
+        protected virtual void OnFinish(int endFrame)
         {
         }
 
-        public virtual void OnTick(int frameIndex, int startFrame, int endFrame)
+        protected virtual void OnTick(int frameIndex)
         {
         }
     }
 
-    public abstract class AbilityTaskBase<T> : AbilityTaskBase where T : AbilityLogicBase
+    public abstract class AbilityTaskBase<T> : AbilityTaskBase where T : IExParameterBase
     {
-        public new T Logic => (T)_logic;
+        public T Parameter { get; private set; }
+
+        protected AbilityTaskBase(AbilityLogicBase logic) : base(logic)
+        {
+        }
+        
+        public override void InitParameters(IExParameterBase parameter)
+        {
+            if (parameter is T t)
+                Parameter = t;
+#if UNITY_EDITOR
+            else
+                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {parameter.GetType()}");
+#endif
+        }
     }
 }

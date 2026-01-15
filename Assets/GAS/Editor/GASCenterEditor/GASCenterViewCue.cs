@@ -162,7 +162,7 @@ namespace GAS.Editor
                     : string.Empty;
                 // cue_logic需要特殊处理
                 worksheet.Cells[row, _headerMap["cueLogic"]].Value = type;
-                var cueParams = cueParam.EncodeExcelData();
+                var cueParams = Param.EncodeExcelData();
                 for (var i = 0; i < cueParams.Count; i++)
                 {
                     var colIndex = _headerMap["cueLogic"] + 1 + i;
@@ -198,7 +198,7 @@ namespace GAS.Editor
 
         private void OnTypeChange()
         {
-            cueParam = EditorCueHelper.CreateCueParameter(type);
+            Param = EditorCueHelper.CreateCueParameter(type);
         }
 
         public ValueDropdownItem[] TagChoices => GasJsonReader.TagChoices();
@@ -228,7 +228,7 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["cueLogic"]]?.ToString()
                 : string.Empty;
 
-            cueParam = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;
+            Param = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;
         }
 
         #endregion
@@ -305,7 +305,7 @@ namespace GAS.Editor
         public string type;
 
         [BoxGroup("编辑配置/Cue逻辑")] [HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
-        public ICueParameter cueParam;
+        public IExParameterBase Param;
 
         #endregion
     }

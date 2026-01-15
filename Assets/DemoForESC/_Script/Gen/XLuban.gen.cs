@@ -75,14 +75,14 @@ namespace GAS.Runtime
             var cueLogic = data.CueLogic;
             var cueLogicName = cueLogic.GetType().Name;
             var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
-            var cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;
+            var cueParam = Activator.CreateInstance(cueParamType) as IExParameterBase;
             if (cueParam != null)
             {
                 switch (cueLogic)
                 {
                     case cfg.GameplayCueLog cData:
                     {
-                        var cp = cueParam as GAS.Runtime.CueParamString;
+                        var cp = cueParam as GAS.Runtime.ParamString;
                         cp?.SetValue(cData.Value);
                         cueParam = cp;
                         break;

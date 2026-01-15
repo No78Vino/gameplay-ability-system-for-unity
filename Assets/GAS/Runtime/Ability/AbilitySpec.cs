@@ -8,13 +8,33 @@ namespace GAS.Runtime
     /// </summary>
     public class AbilitySpec
     {
-        private Entity _entityAbility;
-
-        public AbilitySpec(Entity entityAbility)
+        private Entity _abilityEntity;
+        private Entity _ascEntity;
+        
+        protected static EntityManager _entityManager => GASManager.EntityManager;
+        public AbilitySpec(Entity abilityEntity)
         {
-            _entityAbility = entityAbility;
+            _abilityEntity = abilityEntity;
+            _ascEntity = GetAscEntity();
+            
         }
         
+        private Entity GetAscEntity()
+        {
+            if (!_entityManager.Exists(_abilityEntity)) return Entity.Null;
+            
+            var basicInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
+            return basicInfo.Owner;
+        }
         
+        public AbilitySystemCell Owner
+        {
+            get
+            {
+                if (_ascEntity == Entity.Null) return null;
+                var asc = GASManager.GetAscFromEntity(_ascEntity);
+                return asc;
+            }
+        }
     }
 }

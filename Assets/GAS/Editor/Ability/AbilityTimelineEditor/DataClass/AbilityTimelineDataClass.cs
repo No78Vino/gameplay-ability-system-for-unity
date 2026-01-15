@@ -19,6 +19,8 @@ namespace GAS.Editor
 
     public class EdtAbilityTask
     {
+        public int StartTime;
+        public int EndTime;
         public string TaskType { get; set; }
         public List<string> Parameters { get; set; } = new List<string>();
     }

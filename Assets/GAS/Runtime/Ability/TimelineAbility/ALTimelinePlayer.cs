@@ -107,7 +107,7 @@ namespace GAS.Runtime
                 if (_currentFrame <= clip.endFrame)
                     clip.cueUnit.Stop();
 
-            foreach (var clip in _cacheTaskTrack) clip.task.OnEnd(clip.endFrame);
+            foreach (var clip in _cacheTaskTrack) clip.task.Finish(clip.endFrame);
 
             IsPlaying = false;
         }
@@ -174,13 +174,13 @@ namespace GAS.Runtime
             foreach (var taskClip in _cacheTaskTrack)
             {
                 if (frame == taskClip.startFrame)
-                    taskClip.task.OnStart(frame);
+                    taskClip.task.Begin(frame);
                 
                 if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
-                    taskClip.task.OnTick(frame, taskClip.startFrame, taskClip.endFrame);
+                    taskClip.task.Tick(frame);
                 
                 if (frame == taskClip.endFrame)
-                    taskClip.task.OnEnd(frame);
+                    taskClip.task.Finish(frame);
             }
         }
     }

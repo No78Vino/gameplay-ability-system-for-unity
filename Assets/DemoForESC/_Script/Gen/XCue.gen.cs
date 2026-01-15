@@ -13,9 +13,9 @@ namespace GAS.Runtime
         public static void LoadCueType()
         {
             var CLCameraFovShake = typeof(DemoForESC._Script.Gas.Cue.CLCameraFovShake);
-            CueHelper.RegisterCue(CUE_CLCameraFovShake, CLCameraFovShake, typeof(GAS.Runtime.CueParamFloat));
+            CueHelper.RegisterCue(CUE_CLCameraFovShake, CLCameraFovShake, typeof(GAS.Runtime.ParamFloat));
             var GameplayCueLog = typeof(GAS.Runtime.GameplayCueLog);
-            CueHelper.RegisterCue(CUE_GameplayCueLog, GameplayCueLog, typeof(GAS.Runtime.CueParamString));
+            CueHelper.RegisterCue(CUE_GameplayCueLog, GameplayCueLog, typeof(GAS.Runtime.ParamString));
         }
     }
 }

@@ -10,10 +10,10 @@ namespace GAS.Runtime
     {
         public static GameplayCueBase TryCreateCue(GameplayCueConfig param)
         {
-            return TryCreateCue(param.CueType, param.CueParameter);
+            return TryCreateCue(param.CueType, param.ExParameterBase);
         }
         
-        public static GameplayCueBase TryCreateCue(string cueType, ICueParameter param)
+        public static GameplayCueBase TryCreateCue(string cueType, IExParameterBase param)
         {
             if (CueTypeMap.TryGetValue(cueType, out var type))
                 return TryCreateCue(type, param);
@@ -24,7 +24,7 @@ namespace GAS.Runtime
             return null;
         }
 
-        public static GameplayCueBase TryCreateCue(Type type, ICueParameter param)
+        public static GameplayCueBase TryCreateCue(Type type, IExParameterBase param)
         {
             try
             {

@@ -19,6 +19,5 @@ namespace GAS.Runtime
     [Serializable]
     public class TaskMarkEvent:MarkEventBase
     {
-        public List<InstantTaskData> InstantTasks = new List<InstantTaskData>();
     }
 }

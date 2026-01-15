@@ -38,12 +38,12 @@ namespace GAS.Editor
             return _cachedCueToParamTypeMap;
         }
 
-        public static ICueParameter CreateCueParameter(string type, List<object> paramData = null)
+        public static IExParameterBase CreateCueParameter(string type, List<object> paramData = null)
         {
             var map = CueToCueParamTypeMap();
             if (!map.TryGetValue(type, out var cueParamConfigType))
                 throw new KeyNotFoundException($"未找到类型为 {type} 的 ICueParameter 类型。");
-            var cueParamEditor = (ICueParameter)Activator.CreateInstance(cueParamConfigType);
+            var cueParamEditor = (IExParameterBase)Activator.CreateInstance(cueParamConfigType);
             if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
             return cueParamEditor;
         }

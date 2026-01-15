@@ -12,7 +12,7 @@ namespace GAS.Runtime
 
         protected static EntityManager EntityManager => GASManager.EntityManager; 
         
-        public abstract void InitParameters(ICueParameter parameter);
+        public abstract void InitParameters(IExParameterBase exParameterBase);
         public abstract void Reset();
         
         public void SetCueEntity(Entity e)
@@ -124,17 +124,17 @@ namespace GAS.Runtime
         #endregion
     }
 
-    public abstract class GameplayCueBase<T> : GameplayCueBase where T : ICueParameter
+    public abstract class GameplayCueBase<T> : GameplayCueBase where T : IExParameterBase
     {
         public T Parameter { get; private set; }
         
-        public override void InitParameters(ICueParameter parameter)
+        public override void InitParameters(IExParameterBase exParameterBase)
         {
-            if (parameter is T t)
+            if (exParameterBase is T t)
                 Parameter = t;
 #if UNITY_EDITOR
             else
-                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {parameter.GetType()}");
+                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {exParameterBase.GetType()}");
 #endif
         }
     }
