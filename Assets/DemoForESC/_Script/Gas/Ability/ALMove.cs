@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DemoForESC._Script.Gas.Ability
 {
-    public class AbilityParamMove : IAbilityParam
+    public class ExParameterBaseMove : IExParameterBase
     {
         private Vector3 _moveDirection;
         private Vector3 _viewPointForward;
@@ -17,7 +17,7 @@ namespace DemoForESC._Script.Gas.Ability
         public Vector3 ViewPointForward => _viewPointForward;
         public Vector3 MoveDirection => _moveDirection;
         
-        public AbilityParamMove()
+        public ExParameterBaseMove()
         {
             _moveDirection = Vector3.zero;
             _viewPointForward = Vector3.forward;
@@ -58,7 +58,7 @@ namespace DemoForESC._Script.Gas.Ability
 #endif
     }
     
-    public class ALMove : AbilityLogicBase<AbilityParamMove>
+    public class ALMove : AbilityLogicBase<ExParameterBaseMove>
     {
         private BaseUnit _unit;
         private CharacterController _controller;

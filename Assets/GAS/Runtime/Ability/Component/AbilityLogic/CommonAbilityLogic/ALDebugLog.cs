@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class ALDebugLog : AbilityLogicBase<AbilityParamString>
+    public class ALDebugLog : AbilityLogicBase<XParamString>
     {
         public ALDebugLog(Entity ability) : base(ability)
         {

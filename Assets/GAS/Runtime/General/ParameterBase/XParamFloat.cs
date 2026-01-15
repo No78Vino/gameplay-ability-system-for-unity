@@ -3,18 +3,18 @@ using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
-    public class ParamFloat:IExParameterBase
+    public class XParamFloat:IExParameterBase
     {
         [LabelText("值")]
         [ShowInInspector]
         public float Value { get; private set; }
         
-        public ParamFloat()
+        public XParamFloat()
         {
             Value = 0;
         }
         
-        public ParamFloat(float v)
+        public XParamFloat(float v)
         {
             Value = v;
         }

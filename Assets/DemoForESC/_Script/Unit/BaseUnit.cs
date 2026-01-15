@@ -13,7 +13,7 @@ namespace DemoForESC._Script
     /// </summary>
     public class BaseUnit : MonoBehaviour
     {
-        protected AbilityParamMove _cacheParamMove = new AbilityParamMove();
+        protected ExParameterBaseMove _cacheParamMove = new ExParameterBaseMove();
 
         public AbilitySystemCellMono AbilitySystemCellMono { get; private set; }
 

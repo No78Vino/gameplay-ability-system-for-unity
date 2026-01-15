@@ -2,9 +2,9 @@
 
 namespace GAS.Runtime
 {
-    public class ParamNone:IExParameterBase
+    public class XParamNone:IExParameterBase
     {
-        public ParamNone()
+        public XParamNone()
         {
         }
 

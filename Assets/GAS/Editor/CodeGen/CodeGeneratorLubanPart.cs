@@ -141,7 +141,7 @@ namespace GAS.Editor
                         writer.WriteLine("var cueLogic = data.CueLogic;");
                         writer.WriteLine("var cueLogicName = cueLogic.GetType().Name;");
                         writer.WriteLine("var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);");
-                        writer.WriteLine("var cueParam = Activator.CreateInstance(cueParamType) as ICueParameter;");
+                        writer.WriteLine("var cueParam = Activator.CreateInstance(cueParamType) as IExParameterBase;");
                         writer.WriteLine("if (cueParam != null)");
                         writer.WriteLine("{");
                         writer.Indent++;
@@ -471,7 +471,7 @@ namespace GAS.Editor
                             writer.WriteLine(
                                 "var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);");
                             writer.WriteLine(
-                                "var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;");
+                                "var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IExParameterBase;");
                             writer.WriteLine("if (abilityParam != null)");
                             writer.WriteLine("{");
                             writer.Indent++;

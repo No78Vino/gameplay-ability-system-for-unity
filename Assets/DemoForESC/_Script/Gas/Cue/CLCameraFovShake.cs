@@ -2,7 +2,7 @@ using GAS.Runtime;
 
 namespace DemoForESC._Script.Gas.Cue
 {
-    public class CLCameraFovShake:GameplayCueBase<ParamFloat>
+    public class CLCameraFovShake:GameplayCueBase<XParamFloat>
     {
         public override void OnActivate(float time)
         {

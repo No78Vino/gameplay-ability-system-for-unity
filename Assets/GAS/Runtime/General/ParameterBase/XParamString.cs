@@ -3,17 +3,17 @@ using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
-    public class AbilityParamString : IAbilityParam
+    public class XParamString : IExParameterBase
     {
         [ShowInInspector]
         public string Value { get; private set; }
         
-        public AbilityParamString()
+        public XParamString()
         {
             Value = string.Empty;
         }
         
-        public AbilityParamString(string value)
+        public XParamString(string value)
         {
             SetValue(value);
         }

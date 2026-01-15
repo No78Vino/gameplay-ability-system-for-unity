@@ -1,6 +1,6 @@
 ﻿namespace GAS.Runtime
 {
-    public class DefaultAbilityTask : AbilityTaskBase<ParamNone>
+    public class DefaultAbilityTask : AbilityTaskBase<XParamNone>
     {
         public DefaultAbilityTask(AbilityLogicBase logic) : base(logic)
         {

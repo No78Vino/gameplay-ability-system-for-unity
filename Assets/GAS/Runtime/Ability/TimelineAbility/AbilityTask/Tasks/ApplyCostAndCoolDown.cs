@@ -3,7 +3,7 @@
 namespace GAS.Runtime
 {
     [Serializable]
-    public class ApplyCostAndCoolDown : AbilityTaskBase<ParamNone>
+    public class ApplyCostAndCoolDown : AbilityTaskBase<XParamNone>
     {
         protected override void OnBegin(int startFrame)
         {

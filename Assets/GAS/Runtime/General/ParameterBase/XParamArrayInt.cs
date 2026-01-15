@@ -4,49 +4,49 @@ using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
-    public class AbilityParamArrayFloat : IAbilityParam
+    public class XParamArrayInt: IExParameterBase
     {
-        public AbilityParamArrayFloat()
+        [ShowInInspector]
+        public int[] Value { get; private set; }
+
+        public void SetValue(int[] value)
         {
-            Value = Array.Empty<float>();
+            Value = value;
         }
         
-        public AbilityParamArrayFloat(float[] value)
+        public XParamArrayInt()
+        {
+            Value = Array.Empty<int>();
+        }
+        
+        public XParamArrayInt(int[] value)
         {
             Value = value;
         }
-
-        [ShowInInspector]
-        public float[] Value { get; private set; }
-
-        public void SetValue(float[] value)
-        {
-            Value = value;
-        }
-
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
             if (paramData == null || paramData.Count == 0)
             {
-                Value = Array.Empty<float>();
+                Value = Array.Empty<int>();
                 return;
             }
 
             var strData = paramData[0] as string;
             if (string.IsNullOrEmpty(strData))
             {
-                Value = Array.Empty<float>();
+                Value = Array.Empty<int>();
                 return;
             }
 
             var strArray = strData.Split(';');
-            Value = new float[strArray.Length];
+            Value = new int[strArray.Length];
             for (var i = 0; i < strArray.Length; i++)
-                if (float.TryParse(strArray[i], out var val))
+                if (int.TryParse(strArray[i], out var val))
                     Value[i] = val;
                 else
-                    Value[i] = 0f;
+                    Value[i] = 0;
         }
 
         public List<object> EncodeExcelData()

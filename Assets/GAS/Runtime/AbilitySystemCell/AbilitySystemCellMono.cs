@@ -33,7 +33,7 @@ namespace GAS.Runtime
             _abilitySystemCell.Init(config.BaseTags, config.AttrSets, config.BaseAbilities, config.Level);
         }
 
-        public void TryActivateAbility(int abilityId, IAbilityParam param = null) =>
+        public void TryActivateAbility(int abilityId, IExParameterBase param = null) =>
             _abilitySystemCell.TryActivateAbility(abilityId, param);
 
         public void TryEndAbility(int abilityCode) => _abilitySystemCell.TryEndAbility(abilityCode);

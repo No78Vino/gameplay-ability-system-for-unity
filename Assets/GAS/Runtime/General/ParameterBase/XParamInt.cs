@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GAS.Runtime
 {
-    public class AbilityParamInt: IAbilityParam
+    public class XParamInt: IExParameterBase
     {
         private int _value;
         public int Value => _value;
@@ -12,12 +12,12 @@ namespace GAS.Runtime
             _value = value;
         }
         
-        public AbilityParamInt(int value)
+        public XParamInt(int value)
         {
             _value = value;
         }
         
-        public AbilityParamInt()
+        public XParamInt()
         {
             _value = 0;
         }

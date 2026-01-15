@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public class ALApplyEffect : AbilityLogicBase<AbilityParamArrayInt>
+    public class ALApplyEffect : AbilityLogicBase<XParamArrayInt>
     {
         public ALApplyEffect(Entity ability) : base(ability)
         {

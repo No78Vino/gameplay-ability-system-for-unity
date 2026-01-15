@@ -3,7 +3,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     
-    public class ALTimeline: AbilityLogicBase<AbilityParamTimeline>
+    public class ALTimeline: AbilityLogicBase<ExParameterBaseTimeline>
     {
         protected ALTimelinePlayer _player;
 
@@ -17,7 +17,7 @@ namespace GAS.Runtime
             _player = new ALTimelinePlayer(this);
         }
 
-        public AbilityParamTimeline GetParam()
+        public ExParameterBaseTimeline GetParam()
         {
             return _param;
         }

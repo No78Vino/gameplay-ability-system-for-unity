@@ -142,7 +142,7 @@ namespace GAS.Runtime
             return false;
         }
 
-        public void TryActivateAbility(int abilityCode, IAbilityParam param = null)
+        public void TryActivateAbility(int abilityCode, IExParameterBase param = null)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)
@@ -155,7 +155,7 @@ namespace GAS.Runtime
             }
         }
 
-        public void SetAbilityParam(int abilityCode, IAbilityParam param)
+        public void SetAbilityParam(int abilityCode, IExParameterBase param)
         {
             var buffer = CurrentAbilities;
             for (var i = 0; i < buffer.Length; i++)

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GAS.Runtime
 {
-    public class AbilityParamTimeline : IAbilityParam
+    public class ExParameterBaseTimeline : IExParameterBase
     {
         public bool ManualEndAbility;
         public int FrameCount; // 技能时长

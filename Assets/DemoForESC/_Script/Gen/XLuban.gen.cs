@@ -82,7 +82,7 @@ namespace GAS.Runtime
                 {
                     case cfg.GameplayCueLog cData:
                     {
-                        var cp = cueParam as GAS.Runtime.ParamString;
+                        var cp = cueParam as GAS.Runtime.XParamString;
                         cp?.SetValue(cData.Value);
                         cueParam = cp;
                         break;
@@ -307,28 +307,28 @@ namespace GAS.Runtime
                 var abilityLogic = data.AbilityLogic;
                 var abilityLogicName = abilityLogic.GetType().Name;
                 var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);
-                var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IAbilityParam;
+                var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IExParameterBase;
                 if (abilityParam != null)
                 {
                     switch (abilityLogic)
                     {
                         case cfg.ALMove aData:
                         {
-                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.AbilityParamMove;
+                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.ExParameterBaseMove;
                             ap?.SetRotationOffset(aData.RotationOffset);
                             abilityParam = ap;
                             break;
                         }
                         case cfg.ALApplyEffect aData:
                         {
-                            var ap = abilityParam as GAS.Runtime.AbilityParamArrayInt;
+                            var ap = abilityParam as GAS.Runtime.XParamArrayInt;
                             ap?.SetValue(aData.Value);
                             abilityParam = ap;
                             break;
                         }
                         case cfg.ALDebugLog aData:
                         {
-                            var ap = abilityParam as GAS.Runtime.AbilityParamString;
+                            var ap = abilityParam as GAS.Runtime.XParamString;
                             ap?.SetValue(aData.Value);
                             abilityParam = ap;
                             break;
@@ -338,7 +338,7 @@ namespace GAS.Runtime
                 configs.Add(new MCConfAbilityLogic()
                 {
                     AbilityLogicType = abilityLogicName,
-                    abilityParam = abilityParam
+                    ExParameterBase = abilityParam
                 });
             }
 

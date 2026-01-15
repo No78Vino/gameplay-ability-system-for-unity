@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class GameplayCueLog : GameplayCueBase<ParamString>
+    public class GameplayCueLog : GameplayCueBase<XParamString>
     {
         public override void OnActivate(float time)
         {

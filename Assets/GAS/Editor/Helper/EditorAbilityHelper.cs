@@ -97,12 +97,12 @@ namespace GAS.Editor
             return _cachedAbilityToParamTypeMap;
         }
         
-        public static IAbilityParam CreateAbilityParameter(string type, List<object> paramData = null)
+        public static IExParameterBase CreateAbilityParameter(string type, List<object> paramData = null)
         {
             var map = AbilityToAbilityParamTypeMap();
             if (!map.TryGetValue(type, out var abilityParamConfigType))
-                throw new KeyNotFoundException($"未找到类型为 {type} 的 IAbilityParam 类型。");
-            var abilityParamEditor = (IAbilityParam)Activator.CreateInstance(abilityParamConfigType);
+                throw new KeyNotFoundException($"未找到类型为 {type} 的 IExParameterBase 类型。");
+            var abilityParamEditor = (IExParameterBase)Activator.CreateInstance(abilityParamConfigType);
             if (paramData != null) abilityParamEditor.DecodeExcelData(paramData);
             return abilityParamEditor;
         }

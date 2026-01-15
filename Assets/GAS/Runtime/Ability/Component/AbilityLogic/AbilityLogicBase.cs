@@ -5,7 +5,7 @@ namespace GAS.Runtime
     public abstract class AbilityLogicBase
     {
         protected static EntityManager _entityManager => GASManager.EntityManager;
-        protected IAbilityParam _paramRaw;
+        protected IExParameterBase _paramRaw;
         protected Entity _abilityEntity;
         protected int _code;
 
@@ -80,7 +80,7 @@ namespace GAS.Runtime
             }
         }
 
-        public virtual void SetParam(IAbilityParam abilityParam)
+        public virtual void SetParam(IExParameterBase abilityParam)
         {
             _paramRaw = abilityParam;
         }
@@ -111,7 +111,7 @@ namespace GAS.Runtime
         }
     }
 
-    public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:IAbilityParam
+    public abstract class AbilityLogicBase<T>:AbilityLogicBase where T:IExParameterBase
     {
         protected T _param;
         
@@ -119,7 +119,7 @@ namespace GAS.Runtime
         {
         }
 
-        public override void SetParam(IAbilityParam abilityParam)
+        public override void SetParam(IExParameterBase abilityParam)
         {
             base.SetParam(abilityParam);
             SetParam((T)abilityParam);

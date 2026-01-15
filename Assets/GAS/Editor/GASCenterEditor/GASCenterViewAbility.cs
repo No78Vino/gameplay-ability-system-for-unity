@@ -174,7 +174,7 @@ namespace GAS.Editor
                 
                 // abilityLogic需要特殊处理
                 worksheet.Cells[row, _headerMap["abilityLogic"]].Value = type;
-                var abilityParams = abilityParam.EncodeExcelData();
+                var abilityParams = ExParameterBase.EncodeExcelData();
                 for (var i = 0; i < abilityParams.Count; i++)
                 {
                     var colIndex = _headerMap["abilityLogic"] + 1 + i;
@@ -206,7 +206,7 @@ namespace GAS.Editor
 
         private void OnTypeChange()
         {
-            abilityParam = EditorAbilityHelper.CreateAbilityParameter(type);
+            ExParameterBase = EditorAbilityHelper.CreateAbilityParameter(type);
         }
         
         private void OnSelectedIdChanged()
@@ -287,7 +287,7 @@ namespace GAS.Editor
             type = selectInfo.ContainsKey(_headerMap["abilityLogic"])
                 ? selectInfo[_headerMap["abilityLogic"]]?.ToString()
                 : string.Empty;
-            abilityParam = _abilityLogicParameter.TryGetValue(SelectedId, out var abilityParams) ? EditorAbilityHelper.CreateAbilityParameter(type, abilityParams) : null;
+            ExParameterBase = _abilityLogicParameter.TryGetValue(SelectedId, out var abilityParams) ? EditorAbilityHelper.CreateAbilityParameter(type, abilityParams) : null;
             
             // Components加载
             ComponentTypes = new List<AbilityEditComponent>();
@@ -383,7 +383,7 @@ namespace GAS.Editor
         public string type;
 
         [BoxGroup(T_G_AL)][HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
-        public IAbilityParam abilityParam;
+        public IExParameterBase ExParameterBase;
         
         [TabGroup(T_G_TAB, "组件列表")] 
         [ValueDropdown(nameof(ComponentChoice), IsUniqueList = true)] 

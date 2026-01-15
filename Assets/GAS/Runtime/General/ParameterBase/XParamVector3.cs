@@ -2,17 +2,17 @@ using System.Collections.Generic;
 
 namespace GAS.Runtime
 {
-    public class AbilityParamVector3: IAbilityParam
+    public class XParamVector3: IExParameterBase
     {
         private UnityEngine.Vector3 _value;
         public UnityEngine.Vector3 Value => _value;
         
-        public AbilityParamVector3()
+        public XParamVector3()
         {
             _value = UnityEngine.Vector3.zero;
         }
         
-        public AbilityParamVector3(UnityEngine.Vector3 value)
+        public XParamVector3(UnityEngine.Vector3 value)
         {
             _value = value;
         }
