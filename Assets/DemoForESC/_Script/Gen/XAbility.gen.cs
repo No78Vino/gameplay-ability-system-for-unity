@@ -21,7 +21,7 @@ namespace GAS.Runtime
             var ALDebugLog = typeof(GAS.Runtime.ALDebugLog);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.Runtime.XParamString));
             var ALTimeline = typeof(GAS.Runtime.ALTimeline);
-            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.ExParameterBaseTimeline));
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.XParamTimeline));
         }
     }
 }

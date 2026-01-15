@@ -87,7 +87,7 @@ namespace GAS.Editor
         
         private DropdownField _dropDownAbilityID;
 
-        public EdtTimelineAbility AbilityConfig => GasAbilityTimelineXlsxReadWrite.GetTimelineAbility(_dropDownAbilityID.value);
+        public XParamTimeline AbilityConfig => GasAbilityTimelineXlsxReadWrite.GetTimelineAbility(_dropDownAbilityID.value);
 
         // private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
         //     ? UnityEditor.Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
@@ -201,7 +201,7 @@ namespace GAS.Editor
 
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
-                AbilityConfig.LifeTime = _currentMaxFrame;
+                AbilityConfig.SetLifeTime(_currentMaxFrame);
                 SaveAsset();
                 MaxFrame.value = _currentMaxFrame;
                 TrackView.UpdateContentSize();

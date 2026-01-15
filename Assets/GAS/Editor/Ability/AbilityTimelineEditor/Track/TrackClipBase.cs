@@ -1,19 +1,21 @@
-﻿#if UNITY_EDITOR
+﻿using GAS.Runtime;
+
+#if UNITY_EDITOR
 namespace GAS.Editor
 {
     using UnityEngine.UIElements;
     
     public abstract class TrackClipBase : TrackItemBase
     {
-        protected EdtAbilityTask clipData;
+        protected Runtime.TaskClipData TaskClipData;
 
         protected TrackBase trackBase;
 
         //protected TrackClipVisualElement ve;
         public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
-        public int StartFrameIndex => int.Parse(clipData.Parameters[0]);
-        public int EndFrameIndex => int.Parse(clipData.Parameters[1]);
+        public int StartFrameIndex => int.Parse(TaskClipData.Parameters[0]);
+        public int EndFrameIndex => int.Parse(TaskClipData.Parameters[1]);
         public int DurationFrame => EndFrameIndex - StartFrameIndex;
 
         public Label ItemLabel => ClipVe.ItemLabel;
@@ -22,17 +24,17 @@ namespace GAS.Editor
             TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            EdtAbilityTask clipData)
+            Runtime.TaskClipData taskClipDataData)
         {
             trackBase = track;
             FrameUnitWidth = frameUnitWidth;
-            this.clipData = clipData;
+            this.TaskClipData = taskClipDataData;
 
             ve = new TrackClipVisualElement();
             ClipVe.InitClipInfo(this);
             parent.Add(ve);
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject is TrackClipBase clipBase &&
-                clipData == clipBase.clipData)
+                taskClipDataData == clipBase.TaskClipData)
                 ClipVe.OnSelect();
             else
                 ClipVe.OnUnSelect();
@@ -70,10 +72,10 @@ namespace GAS.Editor
             TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            EdtAbilityTask clipData)
+            Runtime.TaskClipData taskClipDataData)
         {
             this.track = (T)track;
-            base.InitTrackClip(track, parent, frameUnitWidth, clipData);
+            base.InitTrackClip(track, parent, frameUnitWidth, taskClipDataData);
 
             RefreshShow(FrameUnitWidth);
         }

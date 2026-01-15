@@ -42,7 +42,7 @@ namespace GAS.Editor
         
         private const string GRP_BOX = "GRP_BOX";
         private const string GRP_BOX_TASK = "GRP_BOX/Task";
-        private EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
+        private XParamTimeline AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         private TaskClip _clip;
         
         public static TaskClipEditor Create(TaskClip clip)

@@ -26,7 +26,7 @@ namespace GAS.Editor
         public List<TaskClipEventTrack> TrackList { get; } = new();
 
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
-        private static EdtTimelineAbility AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
+        private static XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
         private void InitTracks()
         {

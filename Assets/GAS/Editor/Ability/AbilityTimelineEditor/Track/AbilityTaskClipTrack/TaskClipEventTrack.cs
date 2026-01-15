@@ -15,7 +15,7 @@ namespace GAS.Editor
         protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
         protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
 
-        private EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
+        private XParamTimeline AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         public TaskClipEventTrackData TaskClipTrackDataForSave
         {
             get
@@ -38,7 +38,7 @@ namespace GAS.Editor
             }
         }
 
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,EdtTrack trackInfo)
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,Track trackInfo)
         {
             base.Init(trackParent, menuParent, frameWidth, trackInfo);
             MenuText.text = trackInfo.Name;
@@ -51,7 +51,7 @@ namespace GAS.Editor
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityConfig != null)
-                foreach (var task in _trackInfo.AbilityTasks)
+                foreach (var task in _trackInfo.TaskClips)
                 {
                     var item = new TaskClip();
                     item.InitTrackClip(this, Track, _frameWidth, task);

@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GAS.Runtime;
 using OfficeOpenXml;
 
 namespace GAS.Editor
 {
     public static class GasAbilityTimelineXlsxReadWrite
     {
-        private static List<EdtTimelineAbility> _timelineAbilities;
+        private static List<XParamTimeline> _timelineAbilities;
 
         public static void LoadTimelineAbilities()
         {
@@ -15,15 +16,15 @@ namespace GAS.Editor
             // 假设GASSettingAsset已添加PathOfExcelTimelineAbility属性
             var filePath = setting.PathOfExcelTimelineAbility;
 
-            _timelineAbilities = new List<EdtTimelineAbility>();
+            _timelineAbilities = new List<XParamTimeline>();
 
             using (var package = new ExcelPackage(new FileInfo(filePath)))
             {
                 var worksheet = package.Workbook.Worksheets[1]; // 使用第一个工作表
                 var row = 6; // 数据从第6行开始
                 var safeCnt = 99999;
-                EdtTimelineAbility currentAbility = null;
-                EdtTrack currentEdtTrack = null;
+                XParamTimeline currentAbility = null;
+                Track currentTrack = null;
 
                 while (safeCnt > 0 && row <= worksheet.Dimension.End.Row)
                 {
@@ -50,32 +51,30 @@ namespace GAS.Editor
                         // 保存之前的技能
                         if (currentAbility != null)
                         {
-                            if (currentEdtTrack != null)
+                            if (currentTrack != null)
                             {
-                                currentAbility.Tracks.Add(currentEdtTrack);
+                                currentAbility.Tracks.Add(currentTrack);
                             }
 
                             _timelineAbilities.Add(currentAbility);
                         }
 
                         // 创建新技能
-                        currentAbility = new EdtTimelineAbility
-                        {
-                            Id = int.Parse(idCell.ToString()),
-                            Name = nameCell?.ToString() ?? "",
-                            LifeTime = lifeTimeCell != null ? int.Parse(lifeTimeCell.ToString()) : 0,
-                            ManualEndAbility = manualEndCell != null && bool.Parse(manualEndCell.ToString())
-                        };
-                        currentEdtTrack = null;
+                        currentAbility = new XParamTimeline();
+                        currentAbility.SetID(int.Parse(idCell.ToString()));
+                        currentAbility.SetName(nameCell?.ToString() ?? "");
+                        currentAbility.SetLifeTime(lifeTimeCell != null ? int.Parse(lifeTimeCell.ToString()) : 0);
+                        currentAbility.SetManualEndAbility(manualEndCell != null && bool.Parse(manualEndCell.ToString()));
+                        currentTrack = null;
                     }
 
                     // 处理新轨道
                     if (trackNameCell != null)
                     {
-                        if (currentAbility != null && currentEdtTrack != null)
-                            currentAbility.Tracks.Add(currentEdtTrack);
+                        if (currentAbility != null && currentTrack != null)
+                            currentAbility.Tracks.Add(currentTrack);
 
-                        currentEdtTrack = new EdtTrack
+                        currentTrack = new Track
                         {
                             Name = trackNameCell.ToString()
                         };
@@ -84,14 +83,14 @@ namespace GAS.Editor
                     // 处理任务
                     if (taskTypeCell != null)
                     {
-                        if (currentEdtTrack == null)
+                        if (currentTrack == null)
                         {
                             // 如果轨道名为空，创建默认轨道（根据数据逻辑，通常不会发生）
-                            currentEdtTrack = new EdtTrack { Name = "Default" };
-                            if (currentAbility != null) currentAbility.Tracks.Add(currentEdtTrack);
+                            currentTrack = new Track { Name = "Default" };
+                            if (currentAbility != null) currentAbility.Tracks.Add(currentTrack);
                         }
 
-                        var task = new EdtAbilityTask
+                        var task = new Runtime.TaskClipData
                         {
                             TaskType = taskTypeCell.ToString(),
                             StartTime = startTimeCell != null ? int.Parse(startTimeCell.ToString()) : 0,
@@ -105,7 +104,7 @@ namespace GAS.Editor
                             if (paramCell != null) task.Parameters.Add(paramCell.ToString());
                         }
 
-                        currentEdtTrack.AbilityTasks.Add(task);
+                        currentTrack.TaskClips.Add(task);
                     }
 
                     row++;
@@ -114,13 +113,13 @@ namespace GAS.Editor
                 // 添加最后一个技能
                 if (currentAbility != null)
                 {
-                    if (currentEdtTrack != null) currentAbility.Tracks.Add(currentEdtTrack);
+                    if (currentTrack != null) currentAbility.Tracks.Add(currentTrack);
                     _timelineAbilities.Add(currentAbility);
                 }
             }
         }
 
-        public static List<EdtTimelineAbility> GetTimelineAbilities(bool forceReload = false)
+        public static List<XParamTimeline> GetTimelineAbilities(bool forceReload = false)
         {
             if (_timelineAbilities == null||forceReload)
                 LoadTimelineAbilities();
@@ -131,14 +130,14 @@ namespace GAS.Editor
         {
             var abilities = GetTimelineAbilities();
 
-            return abilities.Select(ability => ability.Id.ToString()).ToList();
+            return abilities.Select(ability => ability.ID.ToString()).ToList();
         }
         
-        public static EdtTimelineAbility GetTimelineAbility(string id)
+        public static XParamTimeline GetTimelineAbility(string id)
         {
             var abilities = GetTimelineAbilities();
 
-            return abilities.FirstOrDefault(ability => ability.Id.ToString() == id);
+            return abilities.FirstOrDefault(ability => ability.ID.ToString() == id);
         }
     }
 }

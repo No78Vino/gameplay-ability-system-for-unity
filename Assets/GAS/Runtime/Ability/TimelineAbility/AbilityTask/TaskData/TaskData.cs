@@ -15,7 +15,7 @@ namespace GAS.Runtime
         
         public AbilityTaskBase CreateTask(AbilityLogicBase abilityLogic)
         {
-            return base.Create(abilityLogic);;
+            return base.Create(abilityLogic);
         }
 
         public override AbilityTaskBase Load()

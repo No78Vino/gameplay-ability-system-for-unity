@@ -13,7 +13,7 @@ namespace GAS.Editor
         private Color _trackColor;
         private Type _trackDataType;
         private Type _trackType;
-        private static EdtTimelineAbility AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
+        private static XParamTimeline AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
         private static TimelineTrackView TrackView => AbilityTimelineEditorWindow.Instance.TrackView;
         public override Type TrackDataType { get; }

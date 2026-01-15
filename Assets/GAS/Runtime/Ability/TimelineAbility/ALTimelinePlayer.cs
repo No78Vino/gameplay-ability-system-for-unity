@@ -40,47 +40,27 @@ namespace GAS.Runtime
 
         public bool IsPlaying { get; private set; }
         
-        public ExParameterBaseTimeline Param => _alTimeline.GetParam();
+        public XParamTimeline Param => _alTimeline.GetParam();
             
-        private int FrameCount => Param.FrameCount;
+        private int LifeTime => Param.LifeTime;
         private int FrameRate => GASTimer.FrameRate;
 
         private void Cache()
         {
-            CacheGameplayCues();
             CacheTasks();
-        }
-
-        private void CacheGameplayCues()
-        {
-            _cacheCueTrack.Clear();
-            foreach (var track in Param.Cues)
-            foreach (var clipEvent in track.clipEvents)
-            {
-                var cueUnit = clipEvent.cue;
-                cueUnit.SetSource(_alTimeline.GetAscEntity(),CueSourceType.AbilitySystemCell);
-                cueUnit.Create();
-                var runtimeDurationCueClip = new RuntimeCueClip
-                {
-                    startFrame = clipEvent.startFrame,
-                    endFrame = clipEvent.EndFrame,
-                    cueUnit = cueUnit
-                };
-                _cacheCueTrack.Add(runtimeDurationCueClip);
-            }
         }
 
         private void CacheTasks()
         {
             _cacheTaskTrack.Clear();
-            foreach (var track in Param.Tasks)
-            foreach (var clip in track.clipEvents)
+            foreach (var track in Param.Tracks)
+            foreach (var clip in track.TaskClips)
             {
                 var runtimeTaskClip = new RuntimeTaskClip
                 {
-                    startFrame = clip.startFrame,
-                    endFrame = clip.EndFrame,
-                    task = clip.task.CreateTask(_alTimeline)
+                    startFrame = clip.StartTime,
+                    endFrame = clip.EndTime,
+                    task = clip.CreateTask(_alTimeline)
                 };
                 _cacheTaskTrack.Add(runtimeTaskClip);
             }
@@ -126,7 +106,7 @@ namespace GAS.Runtime
                 TickFrame(_currentFrame);
             }
 
-            if (_currentFrame >= FrameCount)
+            if (_currentFrame >= LifeTime)
             {
                 _currentFrame++; //确保不重复触发cue的onRemove
                 OnPlayEnd();
