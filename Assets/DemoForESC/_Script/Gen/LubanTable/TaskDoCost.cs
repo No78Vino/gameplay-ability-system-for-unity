@@ -36,8 +36,6 @@ public sealed partial class TaskDoCost : AbilityTask
     public override string ToString()
     {
         return "{ "
-        + "StartTimePoint:" + StartTimePoint + ","
-        + "EndTimePoint:" + EndTimePoint + ","
         + "}";
     }
 }

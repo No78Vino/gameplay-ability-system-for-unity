@@ -38,8 +38,6 @@ public sealed partial class TaskDebug : AbilityTask
     public override string ToString()
     {
         return "{ "
-        + "StartTimePoint:" + StartTimePoint + ","
-        + "EndTimePoint:" + EndTimePoint + ","
         + "Text:" + Text + ","
         + "}";
     }

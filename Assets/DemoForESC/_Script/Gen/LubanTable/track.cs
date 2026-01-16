@@ -13,33 +13,32 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct track
+public partial struct Track
 {
-    public track(JSONNode _buf) 
+    public Track(JSONNode _buf) 
     {
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { var __json0 = _buf["abilityTask"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; AbilityTask = new AbilityTask[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { AbilityTask __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.AbilityTask.DeserializeAbilityTask(__e0);  }  AbilityTask[__index0++] = __v0; }   }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { var __json0 = _buf["TaskClips"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; TaskClips = new TaskClip[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { TaskClip __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.TaskClip.DeserializeTaskClip(__e0);  }  TaskClips[__index0++] = __v0; }   }
     }
 
-    public static track Deserializetrack(JSONNode _buf)
+    public static Track DeserializeTrack(JSONNode _buf)
     {
-        return new track(_buf);
+        return new Track(_buf);
     }
 
     public readonly string Name;
-    public readonly AbilityTask[] AbilityTask;
+    public readonly TaskClip[] TaskClips;
    
 
     public  void ResolveRef(Tables tables)
     {
-        foreach (var _e in AbilityTask) { _e?.ResolveRef(tables); }
     }
 
     public override string ToString()
     {
         return "{ "
-        + "name:" + Name + ","
-        + "abilityTask:" + Luban.StringUtil.CollectionToString(AbilityTask) + ","
+        + "Name:" + Name + ","
+        + "TaskClips:" + Luban.StringUtil.CollectionToString(TaskClips) + ","
         + "}";
     }
 }

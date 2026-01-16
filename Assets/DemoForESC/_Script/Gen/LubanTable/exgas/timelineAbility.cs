@@ -17,12 +17,11 @@ public sealed partial class timelineAbility : Luban.BeanBase
 {
     public timelineAbility(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { if(!_buf["lifeTime"].IsNumber) { throw new SerializationException(); }  LifeTime = _buf["lifeTime"]; }
-        { if(!_buf["manualEndAbility"].IsBoolean) { throw new SerializationException(); }  ManualEndAbility = _buf["manualEndAbility"]; }
-        { var __json0 = _buf["tracks"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Tracks = new track[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { track __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.track.Deserializetrack(__e0);  }  Tracks[__index0++] = __v0; }   }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["LifeTime"].IsNumber) { throw new SerializationException(); }  LifeTime = _buf["LifeTime"]; }
+        { if(!_buf["ManualEndAbility"].IsBoolean) { throw new SerializationException(); }  ManualEndAbility = _buf["ManualEndAbility"]; }
+        { var __json0 = _buf["Tracks"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Tracks = new Track[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { Track __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.Track.DeserializeTrack(__e0);  }  Tracks[__index0++] = __v0; }   }
     }
 
     public static timelineAbility DeserializetimelineAbility(JSONNode _buf)
@@ -33,15 +32,11 @@ public sealed partial class timelineAbility : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 时间轴技能名字
     /// </summary>
     public readonly string Name;
-    /// <summary>
-    /// 时间轴技能描述
-    /// </summary>
-    public readonly string Desc;
     /// <summary>
     /// 技能生命时长
     /// </summary>
@@ -50,7 +45,7 @@ public sealed partial class timelineAbility : Luban.BeanBase
     /// 需要手动结束技能
     /// </summary>
     public readonly bool ManualEndAbility;
-    public readonly track[] Tracks;
+    public readonly Track[] Tracks;
    
     public const int __ID__ = 1297436929;
     public override int GetTypeId() => __ID__;
@@ -62,12 +57,11 @@ public sealed partial class timelineAbility : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "lifeTime:" + LifeTime + ","
-        + "manualEndAbility:" + ManualEndAbility + ","
-        + "tracks:" + Luban.StringUtil.CollectionToString(Tracks) + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "LifeTime:" + LifeTime + ","
+        + "ManualEndAbility:" + ManualEndAbility + ","
+        + "Tracks:" + Luban.StringUtil.CollectionToString(Tracks) + ","
         + "}";
     }
 }

@@ -17,8 +17,6 @@ public abstract partial class AbilityTask : Luban.BeanBase
 {
     public AbilityTask(JSONNode _buf) 
     {
-        { if(!_buf["StartTimePoint"].IsNumber) { throw new SerializationException(); }  StartTimePoint = _buf["StartTimePoint"]; }
-        { if(!_buf["EndTimePoint"].IsNumber) { throw new SerializationException(); }  EndTimePoint = _buf["EndTimePoint"]; }
     }
 
     public static AbilityTask DeserializeAbilityTask(JSONNode _buf)
@@ -31,14 +29,6 @@ public abstract partial class AbilityTask : Luban.BeanBase
         }
     }
 
-    /// <summary>
-    /// 起始时间点
-    /// </summary>
-    public readonly int StartTimePoint;
-    /// <summary>
-    /// 结束时间点
-    /// </summary>
-    public readonly int EndTimePoint;
    
 
     public virtual void ResolveRef(Tables tables)
@@ -48,8 +38,6 @@ public abstract partial class AbilityTask : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "StartTimePoint:" + StartTimePoint + ","
-        + "EndTimePoint:" + EndTimePoint + ","
         + "}";
     }
 }

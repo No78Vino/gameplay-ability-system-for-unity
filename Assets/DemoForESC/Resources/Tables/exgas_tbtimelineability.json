@@ -1,66 +1,76 @@
 [
   {
-    "id": 101,
-    "name": "测试时间轴1",
-    "desc": "测试描述1",
-    "lifeTime": 100,
-    "manualEndAbility": false,
-    "tracks": [
+    "ID": 101,
+    "Name": "测试时间轴1",
+    "LifeTime": 100,
+    "ManualEndAbility": false,
+    "Tracks": [
       {
-        "name": "轨道1",
-        "abilityTask": [
+        "Name": "轨道1",
+        "TaskClips": [
           {
-            "$type": "TaskDoCost",
-            "StartTimePoint": 1,
-            "EndTimePoint": 3
+            "StartTime": 1,
+            "EndTime": 3,
+            "Task": {
+              "$type": "TaskDoCost"
+            }
           },
           {
-            "$type": "TaskDebug",
-            "StartTimePoint": 2,
-            "EndTimePoint": 4,
-            "Text": "测试1"
+            "StartTime": 2,
+            "EndTime": 4,
+            "Task": {
+              "$type": "TaskDebug",
+              "Text": "测试1"
+            }
           }
         ]
       },
       {
-        "name": "轨道2",
-        "abilityTask": [
+        "Name": "轨道2",
+        "TaskClips": [
           {
-            "$type": "TaskDoCost",
-            "StartTimePoint": 1,
-            "EndTimePoint": 1
+            "StartTime": 1,
+            "EndTime": 1,
+            "Task": {
+              "$type": "TaskDoCost"
+            }
           },
           {
-            "$type": "TaskDebug",
-            "StartTimePoint": 5,
-            "EndTimePoint": 6,
-            "Text": "测试135"
+            "StartTime": 5,
+            "EndTime": 6,
+            "Task": {
+              "$type": "TaskDebug",
+              "Text": "测试135"
+            }
           }
         ]
       }
     ]
   },
   {
-    "id": 102,
-    "name": "测试时间轴2",
-    "desc": "测试描述2",
-    "lifeTime": 50,
-    "manualEndAbility": false,
-    "tracks": [
+    "ID": 102,
+    "Name": "测试时间轴2",
+    "LifeTime": 50,
+    "ManualEndAbility": false,
+    "Tracks": [
       {
-        "name": "轨道1",
-        "abilityTask": [
+        "Name": "轨道1",
+        "TaskClips": [
           {
-            "$type": "TaskDebug",
-            "StartTimePoint": 3,
-            "EndTimePoint": 4,
-            "Text": "开头"
+            "StartTime": 3,
+            "EndTime": 4,
+            "Task": {
+              "$type": "TaskDebug",
+              "Text": "开头"
+            }
           },
           {
-            "$type": "TaskDebug",
-            "StartTimePoint": 15,
-            "EndTimePoint": 50,
-            "Text": "结尾"
+            "StartTime": 15,
+            "EndTime": 50,
+            "Task": {
+              "$type": "TaskDebug",
+              "Text": "结尾"
+            }
           }
         ]
       }
