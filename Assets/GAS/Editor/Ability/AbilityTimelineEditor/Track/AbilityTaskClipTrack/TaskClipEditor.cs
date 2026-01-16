@@ -16,7 +16,8 @@ namespace GAS.Editor
 
     public class TaskClipEditor:OdinEditorWindow
     {
-        private static IEnumerable OngoingTaskSonTypes = TaskData.OngoingTaskSonTypeChoices;
+        private static IEnumerable AbilityTaskTypes =
+            EditorAbilityHelper.GetCachedAbilityTaskTypes().Select(t => t.Name).ToArray();
         
         private static Type[] _ongoingTaskInspectorTypes;
 
@@ -67,7 +68,7 @@ namespace GAS.Editor
         [Delayed]
         [BoxGroup(GRP_BOX_TASK)]
         [LabelText("OngoingTask")]
-        [ValueDropdown("OngoingTaskSonTypes")]
+        [ValueDropdown(nameof(AbilityTaskTypes))]
         [InfoBox("This Task has no inspector!",InfoMessageType.Warning, "OngoingTaskIsNull")]
         [OnValueChanged("OnTaskTypeChanged")]
         public string OngoingTaskType;
