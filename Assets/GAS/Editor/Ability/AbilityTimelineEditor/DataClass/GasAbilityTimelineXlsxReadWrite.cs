@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,7 +39,8 @@ namespace GAS.Editor
                     var trackNameCell = worksheet.Cells[row, 6].Value;
                     var startTimeCell = worksheet.Cells[row, 7].Value;
                     var endTimeCell = worksheet.Cells[row, 8].Value;
-                    var taskTypeCell = worksheet.Cells[row, 9].Value;
+                    var taskNameCell = worksheet.Cells[row, 9].Value;
+                    var taskTypeCell = worksheet.Cells[row, 10].Value;
 
                     // 如果所有关键单元格都为空，结束解析
                     if (idCell == null && nameCell == null && lifeTimeCell == null &&
@@ -51,11 +53,8 @@ namespace GAS.Editor
                         // 保存之前的技能
                         if (currentAbility != null)
                         {
-                            if (currentTrack != null)
-                            {
-                                currentAbility.Tracks.Add(currentTrack);
-                            }
-
+                            if (currentTrack != null) currentAbility.Tracks.Add(currentTrack);
+                            
                             _timelineAbilities.Add(currentAbility);
                         }
 
@@ -95,15 +94,22 @@ namespace GAS.Editor
                             TaskType = taskTypeCell.ToString(),
                             StartTime = startTimeCell != null ? int.Parse(startTimeCell.ToString()) : 0,
                             EndTime = endTimeCell != null ? int.Parse(endTimeCell.ToString()) : 0,
+                            Name = taskNameCell?.ToString() ?? "",
                         };
-
+         
                         // 读取参数（假设最多10个参数，从第10列到第19列）
-                        for (var col = 10; col <= 19; col++)
+                        var parameters = new List<object>();
+                        for (var col = 11; col <= 20; col++)
                         {
                             var paramCell = worksheet.Cells[row, col].Value;
-                            if (paramCell != null) task.Parameters.Add(paramCell.ToString());
+                            if (paramCell != null)
+                                parameters.Add(paramCell);
                         }
 
+                        var paramType = AbilityHelper.GetAbilityTaskParamType(taskTypeCell.ToString());
+                        var param = (IExParameterBase)Activator.CreateInstance(paramType);
+                        param.DecodeExcelData(parameters);
+                        task.SetParameter(param);
                         currentTrack.TaskClips.Add(task);
                     }
 
@@ -119,6 +125,13 @@ namespace GAS.Editor
             }
         }
 
+        public static void Write()
+        {
+            if(_timelineAbilities==null)
+                return;
+            
+            
+        }
         public static List<XParamTimeline> GetTimelineAbilities(bool forceReload = false)
         {
             if (_timelineAbilities == null||forceReload)

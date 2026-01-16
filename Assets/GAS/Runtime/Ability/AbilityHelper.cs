@@ -56,6 +56,55 @@ namespace GAS.Runtime
         
         #endregion
         
+        #region AbilityTask
+        private static readonly Dictionary<string, Type> AbilityTaskMap = new();
+        private static readonly Dictionary<string, Type> AbilityTaskParamTypeMap = new();
+        private static readonly Dictionary<string, string> AbilityTaskType2AbilityTaskParamTypeMap = new();
+        
+        public static void RegisterAbilityTask(string sType, Type taskType,Type taskParamType)
+        {
+            AbilityTaskMap[sType] = taskType;
+            AbilityTaskParamTypeMap[taskParamType.Name] = taskParamType;
+            AbilityTaskType2AbilityTaskParamTypeMap[sType] = taskParamType.Name;
+        }
+
+        public static Type GetAbilityTaskType(string sType)
+        {
+            return AbilityTaskMap[sType];
+        }
+
+        public static AbilityTaskBase TryCreateAbilityTask(string taskType,AbilityLogicBase abilityLogic)
+        {
+            if (AbilityTaskMap.TryGetValue(taskType, out var type))
+                try
+                {
+                    var abilityTask = Activator.CreateInstance(type,abilityLogic) as AbilityTaskBase;
+                    return abilityTask;
+                }
+                catch (MissingMethodException e)
+                {
+                    Debug.LogError("[EX] 创建能力Task失败: " +
+                                   $"请检查这个类【'{type.FullName}'】是否继承自AbilityTaskBase;" +
+                                   "或者，AbilityTask的Type映射脚本是否更新，重新生成。" +
+                                   $"Error Exception:{e.Message}");
+                    throw;
+                }
+#if UNITY_EDITOR
+            Debug.LogError($"[EX] 创建AbilityTask失败:Can't find AbilityTask for taskType [{taskType}]. " +
+                           "AbilityTask的Type映射脚本错误，请重新生成。");
+#endif
+
+            return null;
+        }
+
+        public static Type GetAbilityTaskParamType(string abilityTaskName)
+        {
+            var abilityParam = AbilityTaskType2AbilityTaskParamTypeMap[abilityTaskName];
+            return AbilityTaskParamTypeMap[abilityParam];
+        }
+        
+        #endregion
+        
         public static Entity CreateAbilityEntity(AbilityComponentConfig[] configs)
         {
             var entity = GASManager.EntityManager.CreateEntity();

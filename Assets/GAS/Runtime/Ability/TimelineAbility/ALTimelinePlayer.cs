@@ -60,7 +60,7 @@ namespace GAS.Runtime
                 {
                     startFrame = clip.StartTime,
                     endFrame = clip.EndTime,
-                    task = clip.CreateTask(_alTimeline)
+                    task = clip.InstantiateTask(_alTimeline)
                 };
                 _cacheTaskTrack.Add(runtimeTaskClip);
             }

@@ -11,9 +11,11 @@ namespace GAS.Runtime
         public const int ABILITY_RunSpeedUp = 10002;
         public const int ABILITY_debug_ge_ability = 1003;
         public const int ABILITY_debug_ge_2 = 1005;
+        public const int ABILITY_Attack = 20001;
 
         public static void LoadAbilityCode()
         {
+            ///  AbilityLogic
             var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.ExParameterBaseMove));
             var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);
@@ -22,6 +24,12 @@ namespace GAS.Runtime
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALDebugLog.Name, ALDebugLog,typeof(GAS.Runtime.XParamString));
             var ALTimeline = typeof(GAS.Runtime.ALTimeline);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.XParamTimeline));
+
+            ///  AbilityTask
+            var ApplyCostAndCoolDown = typeof(GAS.Runtime.ApplyCostAndCoolDown);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(ApplyCostAndCoolDown.Name, ApplyCostAndCoolDown,typeof(GAS.Runtime.XParamNone));
+            var DefaultAbilityTask = typeof(GAS.Runtime.DefaultAbilityTask);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(DefaultAbilityTask.Name, DefaultAbilityTask,typeof(GAS.Runtime.XParamNone));
         }
     }
 }

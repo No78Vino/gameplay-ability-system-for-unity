@@ -62,13 +62,14 @@ namespace GAS.Editor
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Clip数据
-            var clipEvent = new TaskClipEvent
+            var startTime = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x);
+            var clipEvent = new TaskClipData()
             {
-                startFrame = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x),
-                durationFrame = 5,
+                StartTime = startTime,
+                EndTime = startTime + 5,
                 //ongoingTask = new OngoingTaskData()
             };
-            TaskClipTrackDataForSave.clipEvents.Add(clipEvent);
+            TaskClipTrackDataForSave.clipDatas.Add(clipEvent);
             
             // 刷新显示
             var item = new TaskClip();

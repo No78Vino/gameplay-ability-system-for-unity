@@ -6,7 +6,7 @@ namespace GAS.Runtime
     [Serializable]
     public class TaskClipEventTrackData:TrackDataBase
     {
-        public List<TaskClipEvent> clipEvents = new List<TaskClipEvent>();
+        public List<TaskClipData> clipDatas = new List<TaskClipData>();
 
         // public override void AddToAbilityAsset(TimelineAbilityAssetBase abilityAsset)
         // {
@@ -18,17 +18,6 @@ namespace GAS.Runtime
         {
             base.DefaultInit();
             trackName = "Task Clips";
-        }
-    }
-    
-    [Serializable]
-    public class TaskClipEvent : TrackEventBase
-    {
-        public TaskData task;
-
-        public AbilityTaskBase Load()
-        {
-            return task.Load();
         }
     }
 }

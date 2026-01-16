@@ -67,6 +67,7 @@
     <bean name="TaskClip" valueType="1" sep=",">
         <var name="StartTime" type="int"/>
         <var name="EndTime" type="int"/>
+        <var name="Name" type="string"/>
         <var name="Task" type="AbilityTask"/>
     </bean>
     

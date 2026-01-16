@@ -14,8 +14,8 @@ namespace GAS.Editor
         //protected TrackClipVisualElement ve;
         public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
-        public int StartFrameIndex => int.Parse(TaskClipData.Parameters[0]);
-        public int EndFrameIndex => int.Parse(TaskClipData.Parameters[1]);
+        public int StartFrameIndex => TaskClipData.StartTime;
+        public int EndFrameIndex => TaskClipData.EndTime;
         public int DurationFrame => EndFrameIndex - StartFrameIndex;
 
         public Label ItemLabel => ClipVe.ItemLabel;

@@ -34,7 +34,7 @@ namespace GAS.Editor
         void UpdateTrackInfo()
         {
             string info = "";
-            foreach (var clip in _track.TaskClipTrackDataForSave.clipEvents)
+            foreach (var clip in _track.TaskClipTrackDataForSave.clipDatas)
             {
                 // var taskName = clip.ongoingTask.TaskData.Type;
                 // var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
