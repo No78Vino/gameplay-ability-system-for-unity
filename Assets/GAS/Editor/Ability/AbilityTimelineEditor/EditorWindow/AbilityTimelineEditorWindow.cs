@@ -66,15 +66,6 @@ namespace GAS.Editor
             //AbilityConfig.Save();
         }
 
-        private void InitAbility(TimelineAbilityAssetBase asset)
-        {
-            //_abilityAsset.value = asset;
-            MaxFrame.value = AbilityConfig.LifeTime;
-            CurrentSelectFrameIndex = 0;
-            TimerShaftView.RefreshTimerDraw();
-            TrackView.RefreshTrackDraw();
-        }
-
         private void SaveAsset()
         {
             // EditorUtility.SetDirty(AbilityAsset);

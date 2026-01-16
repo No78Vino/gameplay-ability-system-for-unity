@@ -2,7 +2,6 @@
 namespace GAS.Editor
 {
     using Runtime;
-    using UnityEditor;
     using UnityEngine;
     
     using UnityEngine.UIElements;
@@ -11,43 +10,15 @@ namespace GAS.Editor
         protected static XParamTimeline AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         private static string MarkAssetGuid => "5a3b3360bcba29b4cac2875f518af19d";
         public float FrameUnitWidth { get;protected set; }
-        public int StartFrameIndex=>markData.startFrame;
+        public int StartFrameIndex=>markData.StartTime;
         
-        protected MarkEventBase markData;
-        public MarkEventBase MarkData => markData;
-        
+        protected TaskClipData markData;
+
         protected TrackBase trackBase;
         public TrackBase TrackBase => trackBase;
 
         private DragAreaManipulator MarkDragAreaManipulator;
         public Label ItemLabel { get;protected set; }
-
-        public virtual void InitTrackMark(
-            TrackBase track,
-            VisualElement parent,
-            float frameUnitWidth,
-            MarkEventBase markData)
-        {
-            trackBase = track;
-            FrameUnitWidth = frameUnitWidth;
-            this.markData = markData;
-            
-            string markAssetPath = AssetDatabase.GUIDToAssetPath(MarkAssetGuid);
-            ve = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(markAssetPath).Instantiate().Query().ToList()[1];
-            ItemLabel = ve.Q<Label>("MarkText");
-            parent.Add(ve);
-            MarkDragAreaManipulator = new DragAreaManipulator(MouseCursorType.None, OnMainMouseMove,
-                OnMainMouseDown, OnMainMouseUp);
-            ve.AddManipulator(MarkDragAreaManipulator);
-            ve.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
-            
-            
-            if(AbilityTimelineEditorWindow.Instance.CurrentInspectorObject is TrackMarkBase markBase &&
-               markData == markBase.markData)
-                OnSelect();
-            else
-                OnUnSelect();
-        }
 
         //public abstract VisualElement Inspector();
         public abstract UnityEngine.Object DataInspector { get; }
@@ -143,23 +114,6 @@ namespace GAS.Editor
         }
 
         #endregion
-    }
-    
-    public abstract class TrackMark<T>:TrackMarkBase where T : TrackBase
-    {
-        protected T track;
-
-        public override void InitTrackMark(
-            TrackBase track,
-            VisualElement parent,
-            float frameUnitWidth,
-            MarkEventBase markData)
-        {
-            this.track = (T) track;
-            base.InitTrackMark(track, parent, frameUnitWidth, markData);
-            
-            RefreshShow(FrameUnitWidth);
-        }
     }
 }
 
