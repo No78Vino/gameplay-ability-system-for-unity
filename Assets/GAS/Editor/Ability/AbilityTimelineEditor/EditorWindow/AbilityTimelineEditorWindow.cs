@@ -299,7 +299,7 @@ namespace GAS.Editor
 
         #region Clip Inspector
 
-        public object CurrentInspectorObject => TimelineInspector.CurrentInspectorObject;
+        public object CurrentInspectorObject => TimelineInspector??TimelineInspector.CurrentInspectorObject;
 
         public void SetInspector(object target = null)
         {

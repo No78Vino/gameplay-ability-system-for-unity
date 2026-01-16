@@ -169,6 +169,16 @@ namespace GAS.Editor
             return _cachedAbilityTaskToParamTypeMap;
         }
         
+        public static IExParameterBase CreateAbilityTaskParameter(string type, List<object> paramData = null)
+        {
+            var map = AbilityTaskToAbilityTaskParamTypeMap();
+            if (!map.TryGetValue(type, out var abilityParamConfigType))
+                throw new KeyNotFoundException($"未找到类型为 {type} 的 IExParameterBase 类型。");
+            var abilityParamEditor = (IExParameterBase)Activator.CreateInstance(abilityParamConfigType);
+            if (paramData != null) abilityParamEditor.DecodeExcelData(paramData);
+            return abilityParamEditor;
+        }
+        
         #endregion
     }
 }

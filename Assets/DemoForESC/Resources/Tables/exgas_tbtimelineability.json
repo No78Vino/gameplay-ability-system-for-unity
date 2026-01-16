@@ -11,6 +11,7 @@
           {
             "StartTime": 1,
             "EndTime": 3,
+            "Name": "消耗，产生CD",
             "Task": {
               "$type": "TaskDoCost"
             }
@@ -18,9 +19,10 @@
           {
             "StartTime": 2,
             "EndTime": 4,
+            "Name": "调试1",
             "Task": {
               "$type": "TaskDebug",
-              "Text": "测试1"
+              "Value": "测试1"
             }
           }
         ]
@@ -31,6 +33,7 @@
           {
             "StartTime": 1,
             "EndTime": 1,
+            "Name": "消耗，产生CD",
             "Task": {
               "$type": "TaskDoCost"
             }
@@ -38,9 +41,10 @@
           {
             "StartTime": 5,
             "EndTime": 6,
+            "Name": "调试2",
             "Task": {
               "$type": "TaskDebug",
-              "Text": "测试135"
+              "Value": "测试135"
             }
           }
         ]
@@ -59,17 +63,19 @@
           {
             "StartTime": 3,
             "EndTime": 4,
+            "Name": "调试3",
             "Task": {
               "$type": "TaskDebug",
-              "Text": "开头"
+              "Value": "开头"
             }
           },
           {
             "StartTime": 15,
             "EndTime": 50,
+            "Name": "调试5",
             "Task": {
               "$type": "TaskDebug",
-              "Text": "结尾"
+              "Value": "结尾"
             }
           }
         ]

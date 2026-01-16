@@ -17,7 +17,7 @@ public sealed partial class TaskDebug : AbilityTask
 {
     public TaskDebug(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["Text"].IsString) { throw new SerializationException(); }  Text = _buf["Text"]; }
+        { if(!_buf["Value"].IsString) { throw new SerializationException(); }  Value = _buf["Value"]; }
     }
 
     public static TaskDebug DeserializeTaskDebug(JSONNode _buf)
@@ -25,7 +25,7 @@ public sealed partial class TaskDebug : AbilityTask
         return new TaskDebug(_buf);
     }
 
-    public readonly string Text;
+    public readonly string Value;
    
     public const int __ID__ = -2135475282;
     public override int GetTypeId() => __ID__;
@@ -38,7 +38,7 @@ public sealed partial class TaskDebug : AbilityTask
     public override string ToString()
     {
         return "{ "
-        + "Text:" + Text + ","
+        + "Value:" + Value + ","
         + "}";
     }
 }

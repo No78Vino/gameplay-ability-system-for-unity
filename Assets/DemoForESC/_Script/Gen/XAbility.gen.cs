@@ -26,10 +26,12 @@ namespace GAS.Runtime
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.XParamTimeline));
 
             ///  AbilityTask
-            var ApplyCostAndCoolDown = typeof(GAS.Runtime.ApplyCostAndCoolDown);
-            GAS.Runtime.AbilityHelper.RegisterAbilityTask(ApplyCostAndCoolDown.Name, ApplyCostAndCoolDown,typeof(GAS.Runtime.XParamNone));
-            var DefaultAbilityTask = typeof(GAS.Runtime.DefaultAbilityTask);
-            GAS.Runtime.AbilityHelper.RegisterAbilityTask(DefaultAbilityTask.Name, DefaultAbilityTask,typeof(GAS.Runtime.XParamNone));
+            var TaskDebug = typeof(GAS.Runtime.TaskDebug);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDebug.Name, TaskDebug,typeof(GAS.Runtime.XParamString));
+            var TaskDoCost = typeof(GAS.Runtime.TaskDoCost);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDoCost.Name, TaskDoCost,typeof(GAS.Runtime.XParamNone));
+            var TaskDoNothing = typeof(GAS.Runtime.TaskDoNothing);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDoNothing.Name, TaskDoNothing,typeof(GAS.Runtime.XParamNone));
         }
     }
 }
