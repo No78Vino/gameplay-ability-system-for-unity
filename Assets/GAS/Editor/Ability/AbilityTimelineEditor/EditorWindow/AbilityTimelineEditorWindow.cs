@@ -40,9 +40,10 @@ namespace GAS.Editor
             InitAbilityAssetBar();
             InitTopBar();
             InitController();
+            
+            TimelineInspector = new TimelineInspector(_root);
             TimerShaftView = new TimerShaftView(_root);
             TrackView = new TimelineTrackView(_root);
-            TimelineInspector = new TimelineInspector(_root);
         }
 
         /// <summary>
