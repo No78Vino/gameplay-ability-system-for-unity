@@ -89,8 +89,8 @@ namespace GAS.Editor
         
         void Refresh()
         {
-            RunInfo = $"<b>Run(f):{_clip.TaskClipData.StartTime} -> {_clip.TaskClipData.EndTime}</b>";
-            Duration = _clip.TaskClipData.Duration;
+            RunInfo = $"<b>Run(f):{_clip.ClipDataForSave.StartTime} -> {_clip.ClipDataForSave.EndTime}</b>";
+            Duration = _clip.ClipDataForSave.Duration;
             //OngoingTaskType = _clip.TaskClipData.ongoingTask.TaskData.Type;
 
             RefreshTaskInspector();
@@ -99,11 +99,11 @@ namespace GAS.Editor
         void RefreshTaskInspector()
         {
             // 根据选择的OngoingAbilityTask子类，显示对应的属性
-            var ongoingAbilityTask = _clip.TaskClipData.CreateTaskInEditor();
-            if (OngoingTaskInspectorMap.TryGetValue(ongoingAbilityTask.GetType(), out var inspectorType))
+            var task = EditorAbilityHelper.CreateTaskInEditor(_clip.ClipDataForSave.TaskType, _clip.ClipDataForSave.Parameter);
+            if (OngoingTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
             {
                 var taskInspector = (AbilityTaskInspector)Activator.CreateInstance(inspectorType);
-                taskInspector.Init(ongoingAbilityTask);
+                taskInspector.Init(task);
                 AbilityTask = taskInspector;
             }
             else

@@ -9,12 +9,16 @@ namespace GAS.Runtime
         protected AbilitySystemCell _owner;
         protected TimeUnit _timeUnit = TimeUnit.Frame;
         protected int _startTime;
+
+        public AbilityTaskBase()
+        {
+        }
         
         public AbilityTaskBase(AbilityLogicBase logic)
         {
             _logic = logic;
-            _spec = _logic.Spec;
-            _owner = _logic.Owner;
+            _spec = _logic?.Spec;
+            _owner = _logic?.Owner;
         }
         
         public abstract void InitParameters(IExParameterBase parameter);
@@ -72,7 +76,7 @@ namespace GAS.Runtime
         protected AbilityTaskBase(AbilityLogicBase logic) : base(logic)
         {
         }
-        
+
         public override void InitParameters(IExParameterBase parameter)
         {
             if (parameter is T t)

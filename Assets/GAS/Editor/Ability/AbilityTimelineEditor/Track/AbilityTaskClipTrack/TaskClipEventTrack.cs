@@ -10,25 +10,14 @@ namespace GAS.Editor
 
     public class TaskClipEventTrack:TrackBase
     {
-        private TaskClipEventTrackData _taskClipEventTrackData;
-        public override Type TrackDataType => typeof(TaskClipEventTrackData);
+        private Track _taskClipEventTrackData;
+        public override Type TrackDataType => typeof(Track);
         protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
         protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
 
         private XParamTimeline AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
-        public TaskClipEventTrackData TaskClipTrackDataForSave
-        {
-            get
-            {
-                // for (int i = 0; i < AbilityAsset.OngoingTasks.Count; i++)
-                // {
-                //     if(AbilityAsset.OngoingTasks[i] == _taskClipEventTrackData)
-                //         return AbilityAsset.OngoingTasks[i];
-                // }
-                return null;
-            }
-        }
-        
+        public Track TrackData => _trackInfo;
+
         public override void TickView(int frameIndex, params object[] param)
         {
             foreach (var item in _trackItems)
@@ -69,7 +58,7 @@ namespace GAS.Editor
                 EndTime = startTime + 5,
                 //ongoingTask = new OngoingTaskData()
             };
-            TaskClipTrackDataForSave.clipDatas.Add(clipEvent);
+            TrackData.TaskClips.Add(clipEvent);
             
             // 刷新显示
             var item = new TaskClip();

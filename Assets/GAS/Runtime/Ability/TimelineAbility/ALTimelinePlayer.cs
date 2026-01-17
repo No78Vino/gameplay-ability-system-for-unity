@@ -25,8 +25,6 @@ namespace GAS.Runtime
     {
         private readonly ALTimeline _alTimeline;
 
-        private readonly List<RuntimeCueClip> _cacheCueTrack = new();
-
         private readonly List<RuntimeTaskClip> _cacheTaskTrack = new();
 
         private int _currentFrame;
@@ -83,10 +81,6 @@ namespace GAS.Runtime
         {
             if (!IsPlaying) return;
 
-            foreach (var clip in _cacheCueTrack)
-                if (_currentFrame <= clip.endFrame)
-                    clip.cueUnit.Stop();
-
             foreach (var clip in _cacheTaskTrack) clip.task.Finish(clip.endFrame);
 
             IsPlaying = false;
@@ -129,27 +123,6 @@ namespace GAS.Runtime
         /// </summary>
         /// <param name="frame"></param>
         private void TickFrame(int frame)
-        {
-            TickFrameGameplayCues(frame);
-            TickFrameTasks(frame);
-        }
-
-        private void TickFrameGameplayCues(int frame)
-        {
-            foreach (var cueClip in _cacheCueTrack)
-            {
-                if (frame == cueClip.startFrame)
-                    cueClip.cueUnit.Play();
-
-                if (frame >= cueClip.startFrame && frame <= cueClip.endFrame)
-                    cueClip.cueUnit.Tick();
-
-                if (frame == cueClip.endFrame)
-                    cueClip.cueUnit.Stop();
-            }
-        }
-
-        private void TickFrameTasks(int frame)
         {
             foreach (var taskClip in _cacheTaskTrack)
             {

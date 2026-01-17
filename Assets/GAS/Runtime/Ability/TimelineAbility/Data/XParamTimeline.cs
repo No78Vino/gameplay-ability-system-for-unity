@@ -61,6 +61,20 @@ namespace GAS.Runtime
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
+            // if (paramData == null || paramData.Count == 0)
+            // {
+            //     Value = string.Empty;
+            //     return;
+            // }
+            //
+            // var strData = paramData[0] as string;
+            // if (string.IsNullOrEmpty(strData))
+            // {
+            //     Value = string.Empty;
+            //     return;
+            // }
+            //
+            // Value = strData;
         }
 
         public List<object> EncodeExcelData()

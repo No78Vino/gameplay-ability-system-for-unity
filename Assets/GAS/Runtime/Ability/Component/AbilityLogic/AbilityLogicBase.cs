@@ -20,6 +20,9 @@ namespace GAS.Runtime
         
         protected AbilityLogicBase(Entity ability)
         {
+#if UNITY_EDITOR
+            if (!UnityEngine.Application.isPlaying && ability == Entity.Null) return;
+#endif
             _abilityEntity = ability;
             var basicInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(_abilityEntity);
             _code = basicInfo.Code;

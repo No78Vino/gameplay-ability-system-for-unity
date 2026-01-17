@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
+using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.Editor
 {
@@ -179,6 +181,28 @@ namespace GAS.Editor
             return abilityParamEditor;
         }
         
+        public static AbilityTaskBase CreateTaskInEditor(string taskType,IExParameterBase parameter)
+        {
+            var taskTypes = GetCachedAbilityTaskTypes();
+            var type = taskTypes.FirstOrDefault(t => t.Name == taskType);
+            
+            if(type == null)
+            {
+                Debug.LogError($"Ability Task Type [{taskType}] not found");
+                return null;
+            }
+            
+            ALTimeline al = new ALTimeline(Entity.Null);
+            al.SetParam(parameter);
+            if (Activator.CreateInstance(type,al) is AbilityTaskBase task)
+            {
+                task.InitParameters(parameter);
+                return task;
+            }
+
+            Debug.LogError($"Ability Task Type [{taskType}] not found");
+            return null;
+        }
         #endregion
     }
 }

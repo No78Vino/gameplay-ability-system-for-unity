@@ -9,16 +9,15 @@ namespace GAS.Editor
     public class TaskClip : TrackClip<TaskClipEventTrack>
     {
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
-        public TaskClipData TaskClipData => null;//clipData as TaskClipEvent;
 
         public TaskClipData ClipDataForSave
         {
             get
             {
-                var cueTrackDataForSave = track.TaskClipTrackDataForSave;
-                for (var i = 0; i < cueTrackDataForSave.clipDatas.Count; i++)
-                    if (cueTrackDataForSave.clipDatas[i] == TaskClipData)
-                        return track.TaskClipTrackDataForSave.clipDatas[i];
+                var trackData = track.TrackData;
+                for (var i = 0; i < trackData.TaskClips.Count; i++)
+                    if (trackData.TaskClips[i] == TaskClipData)
+                        return track.TrackData.TaskClips[i];
                 return null;
             }
         }
@@ -26,7 +25,7 @@ namespace GAS.Editor
         
         public override void Delete()
         {
-            var success = track.TaskClipTrackDataForSave.clipDatas.Remove(TaskClipData);
+            var success = track.TrackData.TaskClips.Remove(TaskClipData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             track.RemoveTrackItem(this);
@@ -60,8 +59,8 @@ namespace GAS.Editor
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
             if (frameIndex < startFrame || frameIndex > endFrame) return;
-            var ongoingAbilityTask = TaskClipData.CreateTaskInEditor();
-            ongoingAbilityTask.OnEditorPreview( frameIndex, startFrame, endFrame);
+            var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType, TaskClipData.Parameter); 
+            task.OnEditorPreview( frameIndex, startFrame, endFrame);
         }
 
         public override UnityEngine.Object DataInspector => TaskClipEditor.Create(this);

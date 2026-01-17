@@ -11,6 +11,7 @@ namespace GAS.Runtime
         public string TaskType { get; set; }
         
         private IExParameterBase _parameter;
+        public IExParameterBase Parameter => _parameter;
 
         public int Duration => EndTime - StartTime;
         
@@ -18,20 +19,6 @@ namespace GAS.Runtime
         public void SetParameter(IExParameterBase parameter)
         {
             _parameter = parameter;
-        }
-        
-        public AbilityTaskBase CreateTaskInEditor()
-        {
-            var type = AbilityHelper.GetAbilityTaskType(TaskType);
-            var task = Activator.CreateInstance(type) as AbilityTaskBase;
-            if (task != null)
-            {
-                task.InitParameters(_parameter);
-                return task;
-            }
-
-            Debug.LogError($"Ability Task Type [{TaskType}] not found");
-            return null;
         }
         
         public AbilityTaskBase InstantiateTask(AbilityLogicBase logic)

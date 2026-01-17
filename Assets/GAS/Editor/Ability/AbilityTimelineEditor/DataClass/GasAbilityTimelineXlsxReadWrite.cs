@@ -107,7 +107,6 @@ namespace GAS.Editor
                         }
 
                         var param = EditorAbilityHelper.CreateAbilityTaskParameter(taskTypeCell.ToString());
-                        //var param = (IExParameterBase)Activator.CreateInstance(paramType);
                         param.DecodeExcelData(parameters);
                         task.SetParameter(param);
                         currentTrack.TaskClips.Add(task);

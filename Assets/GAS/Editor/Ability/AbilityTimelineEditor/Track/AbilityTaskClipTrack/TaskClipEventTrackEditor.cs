@@ -15,7 +15,7 @@ namespace GAS.Editor
         {
             var window = new TaskClipEventTrackEditor();
             window._track = track;
-            window.TrackName = track.TaskClipTrackDataForSave.trackName;
+            window.TrackName = track.TrackData.Name;
             window.UpdateTrackInfo();
             return window;
         }
@@ -34,7 +34,7 @@ namespace GAS.Editor
         void UpdateTrackInfo()
         {
             string info = "";
-            foreach (var clip in _track.TaskClipTrackDataForSave.clipDatas)
+            foreach (var clip in _track.TrackData.TaskClips)
             {
                 // var taskName = clip.ongoingTask.TaskData.Type;
                 // var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
@@ -46,7 +46,7 @@ namespace GAS.Editor
 
         void OnTrackNameChanged()
         {
-            _track.TaskClipTrackDataForSave.trackName = TrackName;
+            _track.TrackData.Name = TrackName;
             _track.MenuText.text = TrackName;
             AbilityTimelineEditorWindow.Instance.Save();
         }
