@@ -22,7 +22,7 @@ namespace GAS.Editor
         private static Type[] _ongoingTaskInspectorTypes;
 
         public static Type[] OngoingTaskInspectorTypes =>
-            _ongoingTaskInspectorTypes ??= TypeUtil.GetAllSonTypesOf(typeof(OngoingTaskInspector));
+            _ongoingTaskInspectorTypes ??= TypeUtil.GetAllSonTypesOf(typeof(AbilityTaskInspector));
         
         private static Dictionary<Type, Type> _ongoingTaskInspectorMap;
         private static Dictionary<Type, Type> OngoingTaskInspectorMap
@@ -77,7 +77,7 @@ namespace GAS.Editor
         [HideReferenceObjectPicker]
         [HideIf("OngoingTaskIsNull")]
         [LabelText("Task Detail")]
-        public OngoingTaskInspector OngoingTask;
+        public AbilityTaskInspector AbilityTask;
         
         [BoxGroup(GRP_BOX)]
         [Button]
@@ -102,13 +102,13 @@ namespace GAS.Editor
             var ongoingAbilityTask = _clip.TaskClipData.CreateTaskInEditor();
             if (OngoingTaskInspectorMap.TryGetValue(ongoingAbilityTask.GetType(), out var inspectorType))
             {
-                var taskInspector = (OngoingTaskInspector)Activator.CreateInstance(inspectorType);
-                //taskInspector.Init(ongoingAbilityTask);
-                OngoingTask = taskInspector;
+                var taskInspector = (AbilityTaskInspector)Activator.CreateInstance(inspectorType);
+                taskInspector.Init(ongoingAbilityTask);
+                AbilityTask = taskInspector;
             }
             else
             {
-                OngoingTask = null;
+                AbilityTask = null;
             }
         }
 
@@ -134,7 +134,7 @@ namespace GAS.Editor
 
         bool OngoingTaskIsNull()
         {
-            return OngoingTask == null;
+            return AbilityTask == null;
         }
     }
     

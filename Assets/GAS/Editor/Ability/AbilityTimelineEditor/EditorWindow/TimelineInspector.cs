@@ -39,9 +39,6 @@ namespace GAS.Editor
                 case TrackBase track:
                     UnityEditor.Selection.activeObject = track.DataInspector;
                     break;
-                case TrackMarkBase mark:
-                    UnityEditor.Selection.activeObject = mark.DataInspector;
-                    break;
             }
         }
         

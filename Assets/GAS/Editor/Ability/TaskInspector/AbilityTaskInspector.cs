@@ -1,15 +1,14 @@
 ﻿#if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using Editor;
     using Runtime;
     
-    public abstract class OngoingTaskInspector
+    public class AbilityTaskInspector
     {
-        protected AbilityTaskBase _taskBase;
+        protected AbilityTaskBase _task;
         public virtual void Init(AbilityTaskBase task)
         {
-            _taskBase = task;
+            _task = task;
         }
     }
 }

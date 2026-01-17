@@ -14,7 +14,6 @@ namespace GAS.Editor
         private readonly VisualElement _root;
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
-        private List<MenuTrack> _menuTracks = new();
         private VisualElement _trackMenuParent;
 
         public TimelineTrackView(VisualElement root)
