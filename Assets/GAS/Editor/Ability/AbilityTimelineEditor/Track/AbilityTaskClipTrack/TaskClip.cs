@@ -1,28 +1,16 @@
-﻿
+﻿using GAS.Runtime;
+using UnityEngine;
+
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System.Linq;
-    using GAS.Runtime;
-
-    
     public class TaskClip : TrackClip<TaskClipEventTrack>
     {
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
-        public TaskClipData ClipDataForSave
-        {
-            get
-            {
-                var trackData = track.TrackData;
-                for (var i = 0; i < trackData.TaskClips.Count; i++)
-                    if (trackData.TaskClips[i] == TaskClipData)
-                        return track.TrackData.TaskClips[i];
-                return null;
-            }
-        }
-        
-        
+        public override Object DataInspector => TaskClipEditor.Create(this);
+
+
         public override void Delete()
         {
             var success = track.TrackData.TaskClips.Remove(TaskClipData);
@@ -35,35 +23,28 @@ namespace GAS.Editor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
-            // var taskType = TaskClipData.ongoingTask.TaskData.Type;
-            // var shortName = taskType.Split('.').Last();
-            // ItemLabel.text = !string.IsNullOrEmpty(shortName) ? shortName : "Null!";
+            ItemLabel.text = TaskClipData.Name;
         }
 
         public override void UpdateClipDataStartFrame(int newStartFrame)
         {
-            var updatedClip = ClipDataForSave;
-            ClipDataForSave.StartTime = newStartFrame;
+            TaskClipData.StartTime = newStartFrame;
             AbilityTimelineEditorWindow.Instance.Save();
-            //clipData = updatedClip;
         }
 
         public override void UpdateClipDataDurationFrame(int newDurationFrame)
         {
-            var updatedClip = ClipDataForSave;
-            ClipDataForSave.EndTime = ClipDataForSave.StartTime + newDurationFrame;
+            TaskClipData.EndTime = TaskClipData.StartTime + newDurationFrame;
             AbilityTimelineEditorWindow.Instance.Save();
-            //clipData = updatedClip;
         }
 
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
             if (frameIndex < startFrame || frameIndex > endFrame) return;
-            var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType,AbilityConfig, TaskClipData.Parameter); 
-            task.OnEditorPreview( frameIndex, startFrame, endFrame);
+            var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType, AbilityConfig,
+                TaskClipData.Parameter);
+            task.OnEditorPreview(frameIndex, startFrame, endFrame);
         }
-
-        public override UnityEngine.Object DataInspector => TaskClipEditor.Create(this);
     }
 }
 #endif

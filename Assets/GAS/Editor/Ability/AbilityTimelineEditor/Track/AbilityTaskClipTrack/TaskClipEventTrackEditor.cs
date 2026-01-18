@@ -1,59 +1,47 @@
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
+using UnityEditor;
+using UnityEngine;
+
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using UnityEditor;
-    using Editor;
-    using UnityEngine;
-    using Sirenix.OdinInspector.Editor;
-    using Sirenix.OdinInspector;
-
-    public class TaskClipEventTrackEditor:OdinEditorWindow
+    public class TaskClipEventTrackEditor : OdinEditorWindow
     {
+        [Delayed] [BoxGroup] [LabelText("Name")] [OnValueChanged(nameof(OnTrackNameChanged))]
+        public string trackName;
+
+        [BoxGroup] [HideLabel] [DisplayAsString(TextAlignment.Left, true)]
+        public string trackInfo;
+
         private TaskClipEventTrack _track;
-        
+
         public static TaskClipEventTrackEditor Create(TaskClipEventTrack track)
         {
-            var window = new TaskClipEventTrackEditor();
+            var window = CreateInstance<TaskClipEventTrackEditor>();
             window._track = track;
-            window.TrackName = track.TrackData.Name;
+            window.trackName = track.TrackData.Name;
             window.UpdateTrackInfo();
             return window;
         }
-        
-        [Delayed]
-        [BoxGroup]
-        [LabelText("Name")]
-        [OnValueChanged("OnTrackNameChanged")]
-        public string TrackName;
 
-        [BoxGroup]
-        [HideLabel]
-        [DisplayAsString(TextAlignment.Left,true)]
-        public string TrackInfo;
-        
-        void UpdateTrackInfo()
+        private void UpdateTrackInfo()
         {
-            string info = "";
+            trackInfo = "";
             foreach (var clip in _track.TrackData.TaskClips)
-            {
-                // var taskName = clip.ongoingTask.TaskData.Type;
-                // var shortName = taskName.Substring(taskName.LastIndexOf('.') + 1);
-                // info += $"[{shortName}]  Run(f):{clip.startFrame} -> {clip.EndFrame} \n";
-            }
-            TrackInfo = $"<b>{info}</b>";
-        }
-        
+                trackInfo += $"[{clip.TaskType}:{clip.Name}]\n   Run(f):{clip.StartTime} -> {clip.EndTime} \n";
 
-        void OnTrackNameChanged()
+            trackInfo = $"<b>{trackInfo}</b>";
+        }
+
+        private void OnTrackNameChanged()
         {
-            _track.TrackData.Name = TrackName;
-            _track.MenuText.text = TrackName;
-            AbilityTimelineEditorWindow.Instance.Save();
+            _track.TrackData.Name = trackName;
         }
     }
-    
+
     [CustomEditor(typeof(TaskClipEventTrackEditor))]
-    public class TaskClipEventTrackInspector:OdinEditorWithoutHeader
+    public class TaskClipEventTrackInspector : OdinEditorWithoutHeader
     {
     }
 }

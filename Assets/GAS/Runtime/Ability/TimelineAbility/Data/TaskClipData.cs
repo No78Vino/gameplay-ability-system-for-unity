@@ -1,24 +1,24 @@
 ﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace GAS.Runtime
 {
+    [Serializable]
     public class TaskClipData
     {
         public string Name;
         public int StartTime;
         public int EndTime;
-        public string TaskType { get; set; }
-        
-        private IExParameterBase _parameter;
-        public IExParameterBase Parameter => _parameter;
+        public string TaskType;
+        public IExParameterBase Parameter;
 
         public int Duration => EndTime - StartTime;
         
         
         public void SetParameter(IExParameterBase parameter)
         {
-            _parameter = parameter;
+            Parameter = parameter;
         }
         
         public AbilityTaskBase InstantiateTask(AbilityLogicBase logic)

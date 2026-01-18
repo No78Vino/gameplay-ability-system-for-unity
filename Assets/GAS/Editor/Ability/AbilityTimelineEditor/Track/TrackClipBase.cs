@@ -7,7 +7,7 @@ namespace GAS.Editor
     
     public abstract class TrackClipBase : TrackItemBase
     {
-        protected Runtime.TaskClipData TaskClipData;
+        public TaskClipData TaskClipData { get;private set; }
 
         protected TrackBase trackBase;
 
@@ -24,11 +24,11 @@ namespace GAS.Editor
             TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            Runtime.TaskClipData taskClipDataData)
+            TaskClipData taskClipDataData)
         {
             trackBase = track;
             FrameUnitWidth = frameUnitWidth;
-            this.TaskClipData = taskClipDataData;
+            TaskClipData = taskClipDataData;
 
             ve = new TrackClipVisualElement();
             ClipVe.InitClipInfo(this);

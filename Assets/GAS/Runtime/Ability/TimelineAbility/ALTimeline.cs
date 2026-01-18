@@ -2,7 +2,6 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    
     public class ALTimeline: AbilityLogicBase<XParamTimeline>
     {
         protected ALTimelinePlayer _player;
@@ -21,11 +20,6 @@ namespace GAS.Runtime
         {
             base.SetParam(abilityParam);
             _player?.InitData();
-        }
-
-        public XParamTimeline GetParam()
-        {
-            return _param;
         }
         
         public void SetAbilityTarget(Entity mainTarget)
