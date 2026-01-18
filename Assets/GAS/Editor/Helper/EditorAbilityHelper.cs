@@ -181,7 +181,8 @@ namespace GAS.Editor
             return abilityParamEditor;
         }
         
-        public static AbilityTaskBase CreateTaskInEditor(string taskType,IExParameterBase parameter)
+        public static AbilityTaskBase CreateTaskInEditor(string taskType,
+            IExParameterBase paramLogic,IExParameterBase paramTask)
         {
             var taskTypes = GetCachedAbilityTaskTypes();
             var type = taskTypes.FirstOrDefault(t => t.Name == taskType);
@@ -193,10 +194,10 @@ namespace GAS.Editor
             }
             
             ALTimeline al = new ALTimeline(Entity.Null);
-            al.SetParam(parameter);
+            al.SetParam(paramLogic);
             if (Activator.CreateInstance(type,al) is AbilityTaskBase task)
             {
-                task.InitParameters(parameter);
+                task.InitParameters(paramTask);
                 return task;
             }
 

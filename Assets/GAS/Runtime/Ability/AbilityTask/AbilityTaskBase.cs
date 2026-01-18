@@ -13,14 +13,22 @@ namespace GAS.Runtime
         public AbilityTaskBase()
         {
         }
-        
+
         public AbilityTaskBase(AbilityLogicBase logic)
         {
             _logic = logic;
-            _spec = _logic?.Spec;
-            _owner = _logic?.Owner;
+#if UNITY_EDITOR
+            if(Application.isPlaying)
+            {
+                _spec = _logic.Spec;
+                _owner = _logic.Owner;
+            }
+#else
+            _spec = _logic.Spec;
+            _owner = _logic.Owner;
+#endif
         }
-        
+
         public abstract void InitParameters(IExParameterBase parameter);
 
         /// <summary>

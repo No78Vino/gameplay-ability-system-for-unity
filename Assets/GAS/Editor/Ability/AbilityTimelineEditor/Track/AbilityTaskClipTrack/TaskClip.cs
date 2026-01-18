@@ -59,7 +59,7 @@ namespace GAS.Editor
         public override void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
             if (frameIndex < startFrame || frameIndex > endFrame) return;
-            var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType, TaskClipData.Parameter); 
+            var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType,AbilityConfig, TaskClipData.Parameter); 
             task.OnEditorPreview( frameIndex, startFrame, endFrame);
         }
 

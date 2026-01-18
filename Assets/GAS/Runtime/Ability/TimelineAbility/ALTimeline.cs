@@ -17,6 +17,12 @@ namespace GAS.Runtime
             _player = new ALTimelinePlayer(this);
         }
 
+        public override void SetParam(IExParameterBase abilityParam)
+        {
+            base.SetParam(abilityParam);
+            _player?.InitData();
+        }
+
         public XParamTimeline GetParam()
         {
             return _param;

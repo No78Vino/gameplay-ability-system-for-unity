@@ -33,7 +33,6 @@ namespace GAS.Runtime
         public ALTimelinePlayer(ALTimeline alTimeline)
         {
             _alTimeline = alTimeline;
-            Cache();
         }
 
         public bool IsPlaying { get; private set; }
@@ -43,12 +42,7 @@ namespace GAS.Runtime
         private int LifeTime => Param.LifeTime;
         private int FrameRate => GASTimer.FrameRate;
 
-        private void Cache()
-        {
-            CacheTasks();
-        }
-
-        private void CacheTasks()
+        public void InitData()
         {
             _cacheTaskTrack.Clear();
             foreach (var track in Param.Tracks)
@@ -63,8 +57,7 @@ namespace GAS.Runtime
                 _cacheTaskTrack.Add(runtimeTaskClip);
             }
         }
-
-
+        
         private void Prepare()
         {
         }

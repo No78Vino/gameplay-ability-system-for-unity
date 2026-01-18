@@ -99,7 +99,7 @@ namespace GAS.Editor
         void RefreshTaskInspector()
         {
             // 根据选择的OngoingAbilityTask子类，显示对应的属性
-            var task = EditorAbilityHelper.CreateTaskInEditor(_clip.ClipDataForSave.TaskType, _clip.ClipDataForSave.Parameter);
+            var task = EditorAbilityHelper.CreateTaskInEditor(_clip.ClipDataForSave.TaskType,AbilityAsset, _clip.ClipDataForSave.Parameter);
             if (OngoingTaskInspectorMap.TryGetValue(task.GetType(), out var inspectorType))
             {
                 var taskInspector = (AbilityTaskInspector)Activator.CreateInstance(inspectorType);
