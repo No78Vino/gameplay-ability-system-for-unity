@@ -238,7 +238,8 @@ namespace GAS.Editor
                 var isDraw = !tooSmall || index % drawStepFrame == 0;
                 if (isDraw)
                 {
-                    var isTick = index % (int)tickStep == 0;
+                    var splitStep = tickStep < 10 ? (int)tickStep : ((int)(Mathf.Min(tickStep,100) / 10) * 10);
+                    var isTick = index % splitStep == 0;
                     var x = i;
                     var startY = isTick ? rect.height * 0.5f : rect.height * 0.85f;
                     var endY = rect.height;

@@ -44,6 +44,8 @@ namespace GAS.Editor
             TimelineInspector = new TimelineInspector(_root);
             TimerShaftView = new TimerShaftView(_root);
             TrackView = new TimelineTrackView(_root);
+
+            OnUpdateShow();
         }
 
         /// <summary>
@@ -54,24 +56,23 @@ namespace GAS.Editor
         {
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
-            //wnd.InitAbility(asset);
-
             // 打开子Inspector
             EditorApplication.delayCall += () => wnd.ShowChildInspector();
         }
 
         public void Save()
         {
-            //AbilityConfig.Save();
             GasAbilityTimelineXlsxReadWrite.Write();
         }
 
-        private void SaveAsset()
+        private void OnUpdateShow()
         {
-            // EditorUtility.SetDirty(AbilityAsset);
-            // AssetDatabase.SaveAssetIfDirty(AbilityAsset);
+            CurrentSelectFrameIndex = 0;
+            _currentMaxFrame = AbilityConfig?.LifeTime ?? 0;
+            MaxFrame.value = AbilityConfig?.LifeTime ?? 0;
+            TimerShaftView.RefreshTimerDraw();
+            TrackView.RefreshTrackDraw();
         }
-
         #region Config
 
         public AbilityTimelineEditorConfig Config { get; } = new();
@@ -79,10 +80,6 @@ namespace GAS.Editor
         private DropdownField _dropDownAbilityID;
 
         public XParamTimeline AbilityConfig => GasAbilityTimelineXlsxReadWrite.GetTimelineAbility(_dropDownAbilityID.value);
-
-        // private TimelineAbilityEditorWindow AbilityAssetEditor => AbilityAsset != null
-        //     ? UnityEditor.Editor.CreateEditor(AbilityAsset) as TimelineAbilityEditorWindow
-        //     : null;
 
         private void InitAbilityAssetBar()
         {
@@ -94,15 +91,10 @@ namespace GAS.Editor
 
         private void OnAbilityIDChanged(ChangeEvent<string> evt)
         {
-            if (AbilityConfig != null)
-                MaxFrame.value = AbilityConfig.LifeTime;
-            else
+            if (AbilityConfig == null)
                 Selection.activeObject = null;
-            
 
-            CurrentSelectFrameIndex = 0;
-            TimerShaftView.RefreshTimerDraw();
-            TrackView.RefreshTrackDraw();
+            OnUpdateShow();
         }
 
         #endregion
@@ -193,7 +185,7 @@ namespace GAS.Editor
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
                 AbilityConfig.SetLifeTime(_currentMaxFrame);
-                SaveAsset();
+                Save();
                 MaxFrame.value = _currentMaxFrame;
                 TrackView.UpdateContentSize();
                 TimerShaftView.RefreshTimerDraw();
