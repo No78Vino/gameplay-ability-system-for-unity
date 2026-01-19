@@ -15,6 +15,7 @@ namespace GAS.Editor
         private Button _btnAddTrack;
         private VisualElement _contentTrackListParent;
         private VisualElement _trackMenuParent;
+        private VisualElement _trackMain;
 
         public TimelineTrackView(VisualElement root)
         {
@@ -31,7 +32,9 @@ namespace GAS.Editor
         {
             _contentTrackListParent = _root.Q<VisualElement>("ContentTrackList");
             _trackMenuParent = _root.Q<VisualElement>("TrackMenu");
-
+            //_trackMain = _root.Q<VisualElement>("");
+            _trackMenuParent.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
+            
             RefreshTrackDraw();
             UpdateContentSize();
         }
@@ -60,6 +63,19 @@ namespace GAS.Editor
             _contentTrackListParent.style.width =
                 AbilityTimelineEditorWindow.Instance.CurrentMaxFrame * Config.FrameUnitWidth;
             foreach (var track in TrackList) track.RefreshShow(Config.FrameUnitWidth);
+        }
+        
+        private void OnContextMenu(ContextualMenuPopulateEvent obj)
+        {
+            obj.menu.AppendAction("添加轨道", action =>
+            {
+                var newTrack = new Track();
+                AbilityConfig.Tracks.Add(newTrack);
+                var track = new TaskClipEventTrack();
+                track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,newTrack);
+                TrackList.Add(track);
+                UpdateContentSize();
+            });
         }
     }
 }

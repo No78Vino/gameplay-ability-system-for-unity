@@ -21,10 +21,10 @@ namespace GAS.Editor
         [BoxGroup(GRP_BOX)] [Delayed] [LabelText("任务名[展示用]")] [OnValueChanged(nameof(OnNameChange))]
         public string Name;
 
-        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("起始帧(f)")] [OnValueChanged(nameof(OnClipFrameChanged))]
+        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("起始帧(f)")] [OnValueChanged(nameof(OnClipStartFrameChanged))]
         public int StartTime;
 
-        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("结束帧(f)")] [OnValueChanged(nameof(OnClipFrameChanged))]
+        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("结束帧(f)")] [OnValueChanged(nameof(OnClipEndFrameChanged))]
         public int EndTime;
 
         [Delayed]
@@ -67,12 +67,18 @@ namespace GAS.Editor
             Parameter = EditorAbilityHelper.CreateAbilityTaskParameter(TaskType);
         }
 
-        private void OnClipFrameChanged()
+        private void OnClipStartFrameChanged()
         {
             // 钳制
             StartTime = Mathf.Clamp(StartTime, 0, EndTime);
-            EndTime = Mathf.Clamp(EndTime, StartTime, AbilityConfig.LifeTime);
             _clip.UpdateClipDataStartFrame(StartTime);
+            _clip.RefreshShow(_clip.FrameUnitWidth);
+        }
+        
+        private void OnClipEndFrameChanged()
+        {
+            // 钳制
+            EndTime = Mathf.Clamp(EndTime, StartTime, AbilityConfig.LifeTime);
             _clip.UpdateClipDataEndFrame(EndTime);
             _clip.RefreshShow(_clip.FrameUnitWidth);
         }

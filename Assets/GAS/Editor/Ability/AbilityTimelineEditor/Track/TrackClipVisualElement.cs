@@ -77,7 +77,7 @@ namespace GAS.Editor
 
         private void OnContextMenu(ContextualMenuPopulateEvent obj)
         {
-            obj.menu.AppendAction("Delete Clip", action => _clip.Delete());
+            obj.menu.AppendAction("删除任务", action => _clip.Delete());
         }
 
         public void InitClipInfo(TrackClipBase trackClipBase)

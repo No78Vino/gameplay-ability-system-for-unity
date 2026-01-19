@@ -149,13 +149,13 @@ namespace GAS.Editor
 
         private void OnMenuContextMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendAction("Delete", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("删除轨道", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
         }
 
         private void OnContextMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendAction("Add Item", OnAddTrackItem, DropdownMenuAction.AlwaysEnabled);
-            evt.menu.AppendAction("Delete Track", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("添加任务", OnAddTrackItem, DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("删除轨道", OnRemoveTrack, DropdownMenuAction.AlwaysEnabled);
         }
 
         protected abstract void OnAddTrackItem(DropdownMenuAction action);
