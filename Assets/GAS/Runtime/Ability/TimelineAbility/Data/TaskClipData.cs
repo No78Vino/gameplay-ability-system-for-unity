@@ -1,6 +1,4 @@
 ﻿using System;
-using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -23,8 +21,7 @@ namespace GAS.Runtime
         
         public AbilityTaskBase InstantiateTask(AbilityLogicBase logic)
         {
-            // TODO
-            return null;
+            return AbilityHelper.TryCreateAbilityTask(TaskType,logic);
         }
     }
 }
