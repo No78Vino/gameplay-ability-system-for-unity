@@ -82,22 +82,11 @@ namespace GAS.Editor
         }
 
         #region Main Area Mouse Event
-
-        private Func<float, int> getMinStartFrameIndex;
-        private Func<float, int> getMaxEndFrameIndex;
+        
         private float _lastMainDragStartPos;
         private float _newStartFramePos;
         private int NewStartFrame => (int)_newStartFramePos;
-
-        public void RegisterFuncGetMinStartFrameIndex(Func<float, int> func)
-        {
-            getMinStartFrameIndex = func;
-        }
-
-        public void RegisterFuncGetMaxEndFrameIndex(Func<float, int> func)
-        {
-            getMaxEndFrameIndex = func;
-        }
+        
 
         protected void OnMainMouseDown(PointerDownEvent evt)
         {
@@ -119,9 +108,8 @@ namespace GAS.Editor
             var offsetFrame = delta.x / FrameUnitWidth;
             _newStartFramePos = _lastMainDragStartPos + offsetFrame;
             if (offsetFrame == 0 || _newStartFramePos < 0) return;
-            var minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            var maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ??
-                           AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
+            var minFrame = 0;
+            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
             if (NewStartFrame >= minFrame && NewStartFrame + DurationFrame <= maxFrame)
             {
                 var mainContent = TimerShaftView.MainContent;
@@ -141,13 +129,11 @@ namespace GAS.Editor
 
         private void OnMainAreaApplyDrag()
         {
-            var minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            var maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ??
-                           AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
-            var newStartFrame = Mathf.Clamp(NewStartFrame, minFrame, maxFrame - DurationFrame);
-            if (newStartFrame == StartFrameIndex) return;
-
+            var newStartFrame = Mathf.Clamp(NewStartFrame, 0, 
+                AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime - DurationFrame);
+            var newEndFrame = newStartFrame + DurationFrame;
             _clip.UpdateClipDataStartFrame(newStartFrame);
+            _clip.UpdateClipDataEndFrame(newEndFrame);
             _clip.RefreshShow(FrameUnitWidth);
 
             AbilityTimelineEditorWindow.Instance.TimelineInspector.RefreshInspector();
@@ -233,10 +219,8 @@ namespace GAS.Editor
             _newResizeStartFramePos = _lastResizeDragStartPos + offsetFrame;
 
             if (offsetFrame == 0 || _newResizeStartFramePos < 0 || NewResizeStartFrame + 1 >= EndFrameIndex) return;
-
-            var minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            var maxFrame = EndFrameIndex - 1;
-            if (NewResizeStartFrame >= minFrame && NewResizeStartFrame <= maxFrame)
+            
+            if (NewResizeStartFrame >= 0 && NewResizeStartFrame <= EndFrameIndex - 1)
                 TimerShaftView.DottedLineFrameIndex = NewResizeStartFrame;
         }
 
@@ -247,13 +231,10 @@ namespace GAS.Editor
 
         private void OnLeftResizeDragEnd()
         {
-            var lastEndFrame = EndFrameIndex;
-            var minFrame = getMinStartFrameIndex?.Invoke(_lastMainDragStartPos) ?? 0;
-            var maxFrame = EndFrameIndex - 1;
-            var newStartFrame = Mathf.Clamp(NewResizeStartFrame, minFrame, maxFrame);
+            var newStartFrame = Mathf.Clamp(NewResizeStartFrame, 0, EndFrameIndex);
 
             _clip.UpdateClipDataStartFrame(newStartFrame);
-            _clip.UpdateClipDataDurationFrame(lastEndFrame - _clip.StartFrameIndex);
+            _clip.UpdateClipDataEndFrame(EndFrameIndex);
             if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime)
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);
@@ -269,8 +250,7 @@ namespace GAS.Editor
             _newResizeEndFramePos = _lastResizeDragEndPos + offsetFrame;
             if (offsetFrame == 0 || _newResizeEndFramePos < 0 || NewResizeEndFrame - 1 <= StartFrameIndex) return;
 
-            var maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ??
-                           AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
+            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
             var minFrame = _clip.StartFrameIndex + 1;
             if (NewResizeEndFrame >= minFrame && NewResizeEndFrame <= maxFrame)
                 TimerShaftView.DottedLineFrameIndex = NewResizeEndFrame;
@@ -283,10 +263,9 @@ namespace GAS.Editor
 
         private void OnRightResizeDragEnd()
         {
-            var maxFrame = getMaxEndFrameIndex?.Invoke(_lastMainDragStartPos) ??
-                           AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
-            var newEndFrame = Mathf.Clamp(NewResizeEndFrame, StartFrameIndex + 1, maxFrame);
-            _clip.UpdateClipDataDurationFrame(newEndFrame - _clip.StartFrameIndex);
+            var maxFrame = AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime;
+            var newEndFrame = Mathf.Clamp(NewResizeEndFrame, StartFrameIndex, maxFrame);
+            _clip.UpdateClipDataEndFrame(newEndFrame);
             if (EndFrameIndex > AbilityTimelineEditorWindow.Instance.AbilityConfig.LifeTime)
                 AbilityTimelineEditorWindow.Instance.CurrentSelectFrameIndex = EndFrameIndex;
             _clip.RefreshShow(FrameUnitWidth);

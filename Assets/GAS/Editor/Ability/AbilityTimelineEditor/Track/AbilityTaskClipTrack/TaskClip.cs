@@ -32,9 +32,9 @@ namespace GAS.Editor
             AbilityTimelineEditorWindow.Instance.Save();
         }
 
-        public override void UpdateClipDataDurationFrame(int newDurationFrame)
+        public override void UpdateClipDataEndFrame(int endFrame)
         {
-            TaskClipData.EndTime = TaskClipData.StartTime + newDurationFrame;
+            TaskClipData.EndTime = endFrame;
             AbilityTimelineEditorWindow.Instance.Save();
         }
 

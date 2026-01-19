@@ -75,8 +75,9 @@ namespace GAS.Editor
         private void OnDurationFrameChanged()
         {
             // 钳制
+            StartTime = Mathf.Clamp(StartTime, 0, EndTime);
             EndTime = Mathf.Clamp(EndTime, StartTime, AbilityConfig.LifeTime);
-            _clip.UpdateClipDataDurationFrame(EndTime - StartTime);
+            _clip.UpdateClipDataEndFrame(EndTime);
             _clip.RefreshShow(_clip.FrameUnitWidth);
             Refresh();
         }

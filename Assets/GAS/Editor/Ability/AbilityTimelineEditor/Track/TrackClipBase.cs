@@ -59,7 +59,7 @@ namespace GAS.Editor
         public abstract void UpdateClipDataStartFrame(int newStartFrame);
 
 
-        public abstract void UpdateClipDataDurationFrame(int newDurationFrame);
+        public abstract void UpdateClipDataEndFrame(int endFrame);
 
         public abstract void OnTickView(int frameIndex, int startFrame, int endFrame);
     }
