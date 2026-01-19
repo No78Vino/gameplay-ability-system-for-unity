@@ -14,6 +14,7 @@ namespace GAS.Editor
         private readonly VisualElement _mainArea;
 
         private readonly DragAreaManipulator _mainAreaDragAreaManipulator;
+        private readonly DragAreaManipulator _markAreaDragAreaManipulator;
 
         private readonly VisualElement _outsideBox;
         private readonly DragAreaManipulator _rightDragAreaManipulator;
@@ -31,6 +32,7 @@ namespace GAS.Editor
             ItemLabel = this.Q<Label>("ItemLabel");
             OverLine = this.Q<VisualElement>("OverLine");
             _selectedBottomLine = this.Q<VisualElement>("SelectedBottomLine");
+            Mark = this.Q<VisualElement>("Mark");
             _mainArea = this.Q<VisualElement>("Main");
             _leftResizeArea = this.Q<PointerIMGUIContainer>("LeftResizeArea");
             _rightResizeArea = this.Q<IMGUIContainer>("RightResizeArea");
@@ -39,6 +41,10 @@ namespace GAS.Editor
             _mainAreaDragAreaManipulator = new DragAreaManipulator(MouseCursorType.None, OnMainMouseMove,
                 OnMainMouseDown, OnMainMouseUp);
             _mainArea.AddManipulator(_mainAreaDragAreaManipulator);
+            
+            _markAreaDragAreaManipulator = new DragAreaManipulator(MouseCursorType.None, OnMainMouseMove,
+                OnMainMouseDown, OnMainMouseUp);
+            Mark.AddManipulator(_markAreaDragAreaManipulator);
 
             _leftDragAreaManipulator = new DragAreaManipulator(MouseCursorType.ResizeHorizontal, OnLeftResizeDragMove,
                 OnLeftResizeDragStart, OnLeftResizeDragEnd);
@@ -57,6 +63,8 @@ namespace GAS.Editor
 
         public VisualElement OverLine { get; }
 
+        public VisualElement Mark { get; }
+        
         private float FrameUnitWidth => _clip.FrameUnitWidth;
         private int StartFrameIndex => _clip.StartFrameIndex;
         private int EndFrameIndex => _clip.EndFrameIndex;
@@ -77,6 +85,19 @@ namespace GAS.Editor
             _clip = trackClipBase;
         }
 
+        /// <summary>
+        /// 切换形态：MARK / CLIP， 标记/片段  两种情况
+        /// </summary>
+        /// <param name="mark"></param>
+        public void UpdateState(bool mark)
+        {
+            Mark.visible = mark;
+            _leftResizeArea.visible = !mark;
+            _rightResizeArea.visible = !mark;
+            _leftDragAreaManipulator.Enable = !mark;
+            _rightDragAreaManipulator.Enable = !mark;
+        }
+        
         public new class UxmlFactory : UxmlFactory<TrackClipVisualElement, UxmlTraits>
         {
         }

@@ -19,6 +19,7 @@ namespace GAS.Editor
         public int DurationFrame => EndFrameIndex - StartFrameIndex;
 
         public Label ItemLabel => ClipVe.ItemLabel;
+        public VisualElement Mark => ClipVe.Mark;
 
         public virtual void InitTrackClip(
             TrackBase track,

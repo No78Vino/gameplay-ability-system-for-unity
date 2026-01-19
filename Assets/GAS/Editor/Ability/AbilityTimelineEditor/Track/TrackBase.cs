@@ -32,11 +32,6 @@ namespace GAS.Editor
         protected abstract Color TrackColor { get; }
         protected abstract Color MenuColor { get; }
 
-        public virtual bool IsFixedTrack()
-        {
-            return false;
-        }
-
         public abstract void TickView(int frameIndex, params object[] param);
         // public abstract VisualElement Inspector();
 

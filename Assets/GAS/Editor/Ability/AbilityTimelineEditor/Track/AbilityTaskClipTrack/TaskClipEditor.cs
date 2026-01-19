@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using GAS.Runtime;
 using Sirenix.OdinInspector;
@@ -19,17 +17,14 @@ namespace GAS.Editor
         private static IEnumerable _abilityTaskTypes =
             EditorAbilityHelper.GetCachedAbilityTaskTypes().Select(t => t.Name).ToArray();
 
-        private static Type[] _ongoingTaskInspectorTypes;
 
-        private static Dictionary<Type, Type> _taskInspectorMap;
-
-        [BoxGroup(GRP_BOX)] [LabelText("任务名[展示用]")] [OnValueChanged(nameof(OnNameChange))]
+        [BoxGroup(GRP_BOX)] [Delayed] [LabelText("任务名[展示用]")] [OnValueChanged(nameof(OnNameChange))]
         public string Name;
 
-        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("起始帧(f)")] [OnValueChanged(nameof(OnDurationFrameChanged))]
+        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("起始帧(f)")] [OnValueChanged(nameof(OnClipFrameChanged))]
         public int StartTime;
 
-        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("结束帧(f)")] [OnValueChanged(nameof(OnDurationFrameChanged))]
+        [Delayed] [BoxGroup(GRP_BOX)] [LabelText("结束帧(f)")] [OnValueChanged(nameof(OnClipFrameChanged))]
         public int EndTime;
 
         [Delayed]
@@ -39,13 +34,13 @@ namespace GAS.Editor
         [OnValueChanged(nameof(OnTaskTypeChanged))]
         public string TaskType;
 
-        private TaskClip _clip;
-
         [BoxGroup(GRP_BOX_TASK)] [HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
         public IExParameterBase Parameter;
 
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
+        private TaskClip _clip;
+        
         public static TaskClipEditor Create(TaskClip clip)
         {
             var window = CreateInstance<TaskClipEditor>();
@@ -72,14 +67,14 @@ namespace GAS.Editor
             Parameter = EditorAbilityHelper.CreateAbilityTaskParameter(TaskType);
         }
 
-        private void OnDurationFrameChanged()
+        private void OnClipFrameChanged()
         {
             // 钳制
             StartTime = Mathf.Clamp(StartTime, 0, EndTime);
             EndTime = Mathf.Clamp(EndTime, StartTime, AbilityConfig.LifeTime);
+            _clip.UpdateClipDataStartFrame(StartTime);
             _clip.UpdateClipDataEndFrame(EndTime);
             _clip.RefreshShow(_clip.FrameUnitWidth);
-            Refresh();
         }
 
         private void OnTaskTypeChanged()
@@ -90,7 +85,8 @@ namespace GAS.Editor
 
         private void OnNameChange()
         {
-            
+            _clip.TaskClipData.Name = Name;
+            _clip.RefreshShow(_clip.FrameUnitWidth);
         }
     }
 

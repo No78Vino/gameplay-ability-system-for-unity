@@ -23,6 +23,7 @@ namespace GAS.Editor
         public override void RefreshShow(float newFrameUnitWidth)
         {
             base.RefreshShow(newFrameUnitWidth);
+            ClipVe.UpdateState(TaskClipData.StartTime == TaskClipData.EndTime);
             ItemLabel.text = TaskClipData.Name;
         }
 
