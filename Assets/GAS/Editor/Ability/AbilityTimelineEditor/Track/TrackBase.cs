@@ -76,7 +76,7 @@ namespace GAS.Editor
         private void OnPointerOut(PointerOutEvent evt)
         {
             foreach (var trackItemBase in _trackItems)
-                if (trackItemBase is TrackClipBase clipViewPair)
+                if (trackItemBase is TaskClip clipViewPair)
                     clipViewPair.ClipVe.OnHover(false);
         }
 
@@ -84,7 +84,7 @@ namespace GAS.Editor
         {
             var mousePos = evt.position;
             foreach (var trackItemBase in _trackItems)
-                if (trackItemBase is TrackClipBase clipViewPair)
+                if (trackItemBase is TaskClip clipViewPair)
                 {
                     clipViewPair.ClipVe.OnHover(false);
                     if (!clipViewPair.ClipVe.InClipRect(mousePos)) continue;

@@ -23,7 +23,7 @@ namespace GAS.Editor
 
             if (CurrentInspectorObject != null && !force)
             {
-                if (CurrentInspectorObject is TrackClipBase oldTrackItem)
+                if (CurrentInspectorObject is TaskClip oldTrackItem)
                     oldTrackItem.ClipVe.OnUnSelect();
             }
 
@@ -33,7 +33,7 @@ namespace GAS.Editor
                 case null:
                     UnityEditor.Selection.activeObject = null;
                     return;
-                case TrackClipBase trackClip:
+                case TaskClip trackClip:
                     UnityEditor.Selection.activeObject = trackClip.DataInspector;
                     break;
                 case AbilityTimelineTrack track:

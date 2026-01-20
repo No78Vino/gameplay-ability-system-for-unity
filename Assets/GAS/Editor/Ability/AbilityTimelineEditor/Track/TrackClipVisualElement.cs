@@ -7,7 +7,7 @@ namespace GAS.Editor
     
     public class TrackClipVisualElement : VisualElement
     {
-        private TrackClipBase _clip;
+        private TaskClip _clip;
         private readonly DragAreaManipulator _leftDragAreaManipulator;
         private readonly PointerIMGUIContainer _leftResizeArea;
         private readonly VisualElement _mainArea;
@@ -80,7 +80,7 @@ namespace GAS.Editor
             obj.menu.AppendAction("删除任务", action => _clip.Delete());
         }
 
-        public void InitClipInfo(TrackClipBase trackClipBase)
+        public void InitClipInfo(TaskClip trackClipBase)
         {
             _clip = trackClipBase;
         }

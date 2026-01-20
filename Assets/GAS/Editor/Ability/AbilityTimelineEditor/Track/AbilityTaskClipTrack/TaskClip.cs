@@ -1,59 +1,87 @@
 ﻿using GAS.Runtime;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    public class TaskClip : TrackClipBase
+    using UnityEngine.UIElements;
+    
+    public class TaskClip : TrackItemBase
     {
+        public TaskClipData TaskClipData { get;private set; }
+
+        public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
+        public float FrameUnitWidth { get; protected set; }
+        public int StartFrameIndex => TaskClipData.StartTime;
+        public int EndFrameIndex => TaskClipData.EndTime;
+        public int DurationFrame => EndFrameIndex - StartFrameIndex;
+
+        public Label ItemLabel => ClipVe.ItemLabel;
+        
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
-        public override Object DataInspector => TaskClipEditor.Create(this);
+        public Object DataInspector => TaskClipEditor.Create(this);
 
-        protected AbilityTimelineTrack Track;
+        private AbilityTimelineTrack _track;
 
-        public override void InitTrackClip(
+        public void InitTrackClip(
             AbilityTimelineTrack track,
             VisualElement parent,
             float frameUnitWidth,
             TaskClipData taskClipDataData)
         {
-            Track = track;
-            base.InitTrackClip(track, parent, frameUnitWidth, taskClipDataData);
+            _track = track;
+            
+            FrameUnitWidth = frameUnitWidth;
+            TaskClipData = taskClipDataData;
 
+            ve = new TrackClipVisualElement();
+            ClipVe.InitClipInfo(this);
+            parent.Add(ve);
+            if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject is TaskClip clipBase &&
+                taskClipDataData == clipBase.TaskClipData)
+                ClipVe.OnSelect();
+            else
+                ClipVe.OnUnSelect();
+  
             RefreshShow(FrameUnitWidth);
         }
 
-        public override void Delete()
+        public void Delete()
         {
-            var success = Track.TrackData.TaskClips.Remove(TaskClipData);
+            var success = _track.TrackData.TaskClips.Remove(TaskClipData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
-            Track.RemoveTrackItem(this);
+            _track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();
         }
 
-        public override void RefreshShow(float newFrameUnitWidth)
+        public void RefreshShow(float newFrameUnitWidth)
         {
-            base.RefreshShow(newFrameUnitWidth);
+            FrameUnitWidth = newFrameUnitWidth;
+            // clip位置，宽度
+            var mainPos = ve.transform.position;
+            mainPos.x = StartFrameIndex * FrameUnitWidth;
+            ve.transform.position = mainPos;
+            ve.style.width = DurationFrame * FrameUnitWidth;
+            
             ClipVe.UpdateState(TaskClipData.StartTime == TaskClipData.EndTime);
             ItemLabel.text = TaskClipData.Name;
         }
 
-        public override void UpdateClipDataStartFrame(int newStartFrame)
+        public void UpdateClipDataStartFrame(int newStartFrame)
         {
             TaskClipData.StartTime = newStartFrame;
             AbilityTimelineEditorWindow.Instance.Save();
         }
 
-        public override void UpdateClipDataEndFrame(int endFrame)
+        public void UpdateClipDataEndFrame(int endFrame)
         {
             TaskClipData.EndTime = endFrame;
             AbilityTimelineEditorWindow.Instance.Save();
         }
 
-        public override void OnTickView(int frameIndex, int startFrame, int endFrame)
+        public void OnTickView(int frameIndex, int startFrame, int endFrame)
         {
             if (frameIndex < startFrame || frameIndex > endFrame) return;
             var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType, AbilityConfig,
