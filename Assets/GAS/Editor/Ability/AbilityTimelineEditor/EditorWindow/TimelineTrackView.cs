@@ -23,7 +23,7 @@ namespace GAS.Editor
             InitTracks();
         }
 
-        public List<TaskClipEventTrack> TrackList { get; } = new();
+        public List<AbilityTimelineTrack> TrackList { get; } = new();
 
         private static AbilityTimelineEditorConfig Config => AbilityTimelineEditorWindow.Instance.Config;
         private static XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
@@ -50,7 +50,7 @@ namespace GAS.Editor
             // Tracks
             foreach (var trackInfo in AbilityConfig.Tracks)
             {
-                var track = new TaskClipEventTrack();
+                var track = new AbilityTimelineTrack();
                 track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,trackInfo);
                 TrackList.Add(track);
             }
@@ -71,7 +71,7 @@ namespace GAS.Editor
             {
                 var newTrack = new Track();
                 AbilityConfig.Tracks.Add(newTrack);
-                var track = new TaskClipEventTrack();
+                var track = new AbilityTimelineTrack();
                 track.Init(_contentTrackListParent, _trackMenuParent, Config.FrameUnitWidth,newTrack);
                 TrackList.Add(track);
                 UpdateContentSize();

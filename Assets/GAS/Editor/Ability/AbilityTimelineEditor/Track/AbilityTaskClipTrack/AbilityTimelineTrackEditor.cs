@@ -6,19 +6,19 @@ using UnityEngine;
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    public class TaskClipEventTrackEditor : OdinEditorWindow
+    public class AbilityTimelineTrackEditor : OdinEditorWindow
     {
-        [Delayed] [BoxGroup] [LabelText("Name")] [OnValueChanged(nameof(OnTrackNameChanged))]
+        [Delayed] [BoxGroup] [LabelText("轨道名[展示用]")] [OnValueChanged(nameof(OnTrackNameChanged))]
         public string trackName;
 
         [BoxGroup] [HideLabel] [DisplayAsString(TextAlignment.Left, true)]
         public string trackInfo;
 
-        private TaskClipEventTrack _track;
+        private AbilityTimelineTrack _track;
 
-        public static TaskClipEventTrackEditor Create(TaskClipEventTrack track)
+        public static AbilityTimelineTrackEditor Create(AbilityTimelineTrack track)
         {
-            var window = CreateInstance<TaskClipEventTrackEditor>();
+            var window = CreateInstance<AbilityTimelineTrackEditor>();
             window._track = track;
             window.trackName = track.TrackData.Name;
             window.UpdateTrackInfo();
@@ -40,7 +40,7 @@ namespace GAS.Editor
         }
     }
 
-    [CustomEditor(typeof(TaskClipEventTrackEditor))]
+    [CustomEditor(typeof(AbilityTimelineTrackEditor))]
     public class TaskClipEventTrackInspector : OdinEditorWithoutHeader
     {
     }

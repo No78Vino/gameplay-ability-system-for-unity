@@ -4,7 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    public class TaskClip : TrackClip<TaskClipEventTrack>
+    public class TaskClip : TrackClip<AbilityTimelineTrack>
     {
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
@@ -13,10 +13,10 @@ namespace GAS.Editor
 
         public override void Delete()
         {
-            var success = track.TrackData.TaskClips.Remove(TaskClipData);
+            var success = Track.TrackData.TaskClips.Remove(TaskClipData);
             AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
-            track.RemoveTrackItem(this);
+            Track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();
         }
 

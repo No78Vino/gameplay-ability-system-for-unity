@@ -9,9 +9,6 @@ namespace GAS.Editor
     {
         public TaskClipData TaskClipData { get;private set; }
 
-        protected TrackBase trackBase;
-
-        //protected TrackClipVisualElement ve;
         public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
         public int StartFrameIndex => TaskClipData.StartTime;
@@ -19,7 +16,6 @@ namespace GAS.Editor
         public int DurationFrame => EndFrameIndex - StartFrameIndex;
 
         public Label ItemLabel => ClipVe.ItemLabel;
-        public VisualElement Mark => ClipVe.Mark;
 
         public virtual void InitTrackClip(
             TrackBase track,
@@ -27,7 +23,6 @@ namespace GAS.Editor
             float frameUnitWidth,
             TaskClipData taskClipDataData)
         {
-            trackBase = track;
             FrameUnitWidth = frameUnitWidth;
             TaskClipData = taskClipDataData;
 
@@ -41,7 +36,6 @@ namespace GAS.Editor
                 ClipVe.OnUnSelect();
         }
 
-        //public abstract VisualElement Inspector();
         public virtual UnityEngine.Object DataInspector=>null;
 
         public abstract void Delete();
@@ -67,15 +61,15 @@ namespace GAS.Editor
 
     public abstract class TrackClip<T> : TrackClipBase where T : TrackBase
     {
-        protected T track;
+        protected T Track;
 
         public override void InitTrackClip(
             TrackBase track,
             VisualElement parent,
             float frameUnitWidth,
-            Runtime.TaskClipData taskClipDataData)
+            TaskClipData taskClipDataData)
         {
-            this.track = (T)track;
+            Track = (T)track;
             base.InitTrackClip(track, parent, frameUnitWidth, taskClipDataData);
 
             RefreshShow(FrameUnitWidth);

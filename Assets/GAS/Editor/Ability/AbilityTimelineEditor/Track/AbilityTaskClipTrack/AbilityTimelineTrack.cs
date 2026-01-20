@@ -8,9 +8,8 @@ namespace GAS.Editor
     using UnityEngine.UIElements;
     using GAS.Runtime;
 
-    public class TaskClipEventTrack:TrackBase
+    public class AbilityTimelineTrack:TrackBase
     {
-        private Track _taskClipEventTrackData;
         public override Type TrackDataType => typeof(Track);
         protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
         protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
@@ -69,13 +68,13 @@ namespace GAS.Editor
             // 选中新Clip
             item.ClipVe.OnSelect();
             
-            Debug.Log("[EX] Add a new Custom Clip Event");
+            Debug.Log("[EX] Add a new Custom Task Clip");
         }
 
         protected override void OnRemoveTrack(DropdownMenuAction action)
         {
             // 删除数据
-            //AbilityAsset.OngoingTasks.Remove(_taskClipEventTrackData);
+            AbilityConfig.Tracks.Remove(_trackInfo);
             AbilityTimelineEditorWindow.Instance.Save();
             // 删除显示
             TrackParent.Remove(TrackRoot);
@@ -83,7 +82,7 @@ namespace GAS.Editor
             Debug.Log("[EX] Remove Task Clip Track");
         }
         
-        public override UnityEngine.Object DataInspector => TaskClipEventTrackEditor.Create(this);
+        public override UnityEngine.Object DataInspector => AbilityTimelineTrackEditor.Create(this);
     }
 }
 #endif
