@@ -15,7 +15,7 @@ namespace GAS.Editor
         protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
         protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
 
-        private XParamTimeline AbilityAsset => AbilityTimelineEditorWindow.Instance.AbilityConfig;
+        private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         public Track TrackData => _trackInfo;
 
         public override void TickView(int frameIndex, params object[] param)
@@ -54,15 +54,16 @@ namespace GAS.Editor
             var startTime = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x);
             var clipEvent = new TaskClipData()
             {
+                Name = "新任务",
                 StartTime = startTime,
-                EndTime = startTime + 5,
-                //ongoingTask = new OngoingTaskData()
+                EndTime = Math.Min(startTime + 5,AbilityConfig.LifeTime),
+                TaskType = "TaskDoNothing"
             };
             TrackData.TaskClips.Add(clipEvent);
             
             // 刷新显示
             var item = new TaskClip();
-            //item.InitTrackClip(this, Track, _frameWidth, clipEvent);
+            item.InitTrackClip(this, Track, _frameWidth, clipEvent);
             _trackItems.Add(item);
             
             // 选中新Clip

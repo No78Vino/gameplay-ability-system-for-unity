@@ -55,6 +55,7 @@ namespace GAS.Editor
             _rightResizeArea.AddManipulator(_rightDragAreaManipulator);
 
             _mainArea.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
+            Mark.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
         }
 
         protected string ItemAssetGUID => "3197d239f4ce79b41b2278ecea5aaab8";
@@ -168,6 +169,9 @@ namespace GAS.Editor
         protected static readonly Color SelectColor = new(0.6f, 0.1f, 0.1f, 0.75f);
         protected static readonly Color OutsideBoxSelectColor = new(0.8f, 0.5f, 0.1f, 1f);
         protected static readonly Color OutsideBoxHoverColor = new(0.8f, 0.8f, 0.7f, 0.9f);
+        protected static readonly Color MarkNormalColor = new(1f, 1f, 1f, 1f);
+        protected static readonly Color MarkSelectColor = new(0.7f, 1f, 0.7f, 1f);
+        protected static readonly Color MarkHoverColor = new(0.7f, 1f, 1f, 1f);
 
         private const int TipBoundingSize = 4;
 
@@ -188,6 +192,10 @@ namespace GAS.Editor
                 _outsideBox.style.height = new StyleLength(_mainArea.worldBound.height + TipBoundingSize);
                 _outsideBox.style.display = DisplayStyle.Flex;
                 _outsideBox.MarkDirtyRepaint();
+                
+                var markColor = Selected ? MarkSelectColor : MarkHoverColor;
+                Mark.style.unityBackgroundImageTintColor = markColor;
+                Mark.MarkDirtyRepaint();
             }
             else
             {
@@ -212,6 +220,7 @@ namespace GAS.Editor
             AbilityTimelineEditorWindow.Instance.SetInspector(_clip);
             Selected = true;
             ItemLabel.style.backgroundColor = SelectColor;
+            Mark.style.unityBackgroundImageTintColor = MarkSelectColor;
             SwitchBounding();
         }
 
@@ -219,6 +228,7 @@ namespace GAS.Editor
         {
             Selected = false;
             ItemLabel.style.backgroundColor = NormalColor;
+            Mark.style.unityBackgroundImageTintColor = MarkNormalColor;
             SwitchBounding();
         }
 
