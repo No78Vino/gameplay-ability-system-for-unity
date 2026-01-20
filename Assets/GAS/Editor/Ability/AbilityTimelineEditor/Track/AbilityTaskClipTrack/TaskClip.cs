@@ -1,15 +1,29 @@
 ﻿using GAS.Runtime;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    public class TaskClip : TrackClip<AbilityTimelineTrack>
+    public class TaskClip : TrackClipBase
     {
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 
         public override Object DataInspector => TaskClipEditor.Create(this);
 
+        protected AbilityTimelineTrack Track;
+
+        public override void InitTrackClip(
+            AbilityTimelineTrack track,
+            VisualElement parent,
+            float frameUnitWidth,
+            TaskClipData taskClipDataData)
+        {
+            Track = track;
+            base.InitTrackClip(track, parent, frameUnitWidth, taskClipDataData);
+
+            RefreshShow(FrameUnitWidth);
+        }
 
         public override void Delete()
         {

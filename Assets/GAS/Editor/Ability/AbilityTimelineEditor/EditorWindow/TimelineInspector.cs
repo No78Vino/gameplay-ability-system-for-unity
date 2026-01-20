@@ -36,7 +36,7 @@ namespace GAS.Editor
                 case TrackClipBase trackClip:
                     UnityEditor.Selection.activeObject = trackClip.DataInspector;
                     break;
-                case TrackBase track:
+                case AbilityTimelineTrack track:
                     UnityEditor.Selection.activeObject = track.DataInspector;
                     break;
             }

@@ -22,18 +22,15 @@ namespace GAS.Editor
         public Label MenuText;
         protected VisualElement TrackParent;
         public VisualElement TrackRoot;
-        public List<TrackItemBase> TrackItems => _trackItems;
         public VisualElement Track { get; protected set; }
 
         protected virtual string TrackAssetGuid => "67e1b3c42dcc09a4dbb9e9b107500dfd";
         protected virtual string MenuAssetGuid => "afb618c74510baa41a7d3928c0e57641";
         protected static AbilityTimelineEditorWindow EditorInst => AbilityTimelineEditorWindow.Instance;
-        public abstract Type TrackDataType { get; }
         protected abstract Color TrackColor { get; }
         protected abstract Color MenuColor { get; }
 
         public abstract void TickView(int frameIndex, params object[] param);
-        // public abstract VisualElement Inspector();
 
         public virtual UnityEngine.Object DataInspector => null;
 
@@ -66,9 +63,6 @@ namespace GAS.Editor
             TrackRoot.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             TrackRoot.RegisterCallback<PointerOutEvent>(OnPointerOut);
             TrackRoot.AddManipulator(new ContextualMenuManipulator(OnContextMenu));
-
-            // Track.style.backgroundColor = new Color(0, 0, 0, 0); //TrackColor;
-            // BoundingBox.style.backgroundColor = MenuColor;
 
             MenuBox.style.right = 0;
             MenuBox.style.left = new StyleLength(StyleKeyword.Auto);

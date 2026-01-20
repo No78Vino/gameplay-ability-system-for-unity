@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using GAS.Runtime;
+using UnityEngine;
+using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
-    using UnityEngine;
-    using UnityEngine.UIElements;
-    using GAS.Runtime;
-
-    public class AbilityTimelineTrack:TrackBase
+    public class AbilityTimelineTrack : TrackBase
     {
-        public override Type TrackDataType => typeof(Track);
-        protected override Color TrackColor => new Color(0.7f, 0.3f, 0.7f, 0.2f);
-        protected override Color MenuColor => new Color(0.5f, 0.3f, 0.5f, 1);
+        protected override Color TrackColor => new(0.7f, 0.3f, 0.7f, 0.2f);
+        protected override Color MenuColor => new(0.5f, 0.3f, 0.5f, 1);
 
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
         public Track TrackData => _trackInfo;
+
+        public override Object DataInspector => AbilityTimelineTrackEditor.Create(this);
 
         public override void TickView(int frameIndex, params object[] param)
         {
@@ -26,7 +26,8 @@ namespace GAS.Editor
             }
         }
 
-        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,Track trackInfo)
+        public override void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
+            Track trackInfo)
         {
             base.Init(trackParent, menuParent, frameWidth, trackInfo);
             MenuText.text = trackInfo.Name;
@@ -46,28 +47,28 @@ namespace GAS.Editor
                     _trackItems.Add(item);
                 }
         }
-        
+
         protected override void OnAddTrackItem(DropdownMenuAction action)
         {
             // 添加Clip数据
             var startTime = GetTrackIndexByMouse(action.eventInfo.localMousePosition.x);
-            var clipEvent = new TaskClipData()
+            var clipEvent = new TaskClipData
             {
                 Name = "新任务",
                 StartTime = startTime,
-                EndTime = Math.Min(startTime + 5,AbilityConfig.LifeTime),
+                EndTime = Math.Min(startTime + 5, AbilityConfig.LifeTime),
                 TaskType = "TaskDoNothing"
             };
             TrackData.TaskClips.Add(clipEvent);
-            
+
             // 刷新显示
             var item = new TaskClip();
             item.InitTrackClip(this, Track, _frameWidth, clipEvent);
             _trackItems.Add(item);
-            
+
             // 选中新Clip
             item.ClipVe.OnSelect();
-            
+
             Debug.Log("[EX] Add a new Custom Task Clip");
         }
 
@@ -81,8 +82,6 @@ namespace GAS.Editor
             MenuParent.Remove(MenuRoot);
             Debug.Log("[EX] Remove Task Clip Track");
         }
-        
-        public override UnityEngine.Object DataInspector => AbilityTimelineTrackEditor.Create(this);
     }
 }
 #endif

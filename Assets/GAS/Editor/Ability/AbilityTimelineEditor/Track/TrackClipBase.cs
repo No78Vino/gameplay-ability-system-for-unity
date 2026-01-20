@@ -18,7 +18,7 @@ namespace GAS.Editor
         public Label ItemLabel => ClipVe.ItemLabel;
 
         public virtual void InitTrackClip(
-            TrackBase track,
+            AbilityTimelineTrack track,
             VisualElement parent,
             float frameUnitWidth,
             TaskClipData taskClipDataData)
@@ -57,23 +57,6 @@ namespace GAS.Editor
         public abstract void UpdateClipDataEndFrame(int endFrame);
 
         public abstract void OnTickView(int frameIndex, int startFrame, int endFrame);
-    }
-
-    public abstract class TrackClip<T> : TrackClipBase where T : TrackBase
-    {
-        protected T Track;
-
-        public override void InitTrackClip(
-            TrackBase track,
-            VisualElement parent,
-            float frameUnitWidth,
-            TaskClipData taskClipDataData)
-        {
-            Track = (T)track;
-            base.InitTrackClip(track, parent, frameUnitWidth, taskClipDataData);
-
-            RefreshShow(FrameUnitWidth);
-        }
     }
 }
 #endif
