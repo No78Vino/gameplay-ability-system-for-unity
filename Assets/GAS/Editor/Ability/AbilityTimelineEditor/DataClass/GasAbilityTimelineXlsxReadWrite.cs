@@ -54,7 +54,7 @@ namespace GAS.Editor
                         if (currentAbility != null)
                         {
                             if (currentTrack != null) currentAbility.Tracks.Add(currentTrack);
-                            
+
                             _timelineAbilities.Add(currentAbility);
                         }
 
@@ -63,7 +63,8 @@ namespace GAS.Editor
                         currentAbility.SetID(int.Parse(idCell.ToString()));
                         currentAbility.SetName(nameCell?.ToString() ?? "");
                         currentAbility.SetLifeTime(lifeTimeCell != null ? int.Parse(lifeTimeCell.ToString()) : 0);
-                        currentAbility.SetManualEndAbility(manualEndCell != null && bool.Parse(manualEndCell.ToString()));
+                        currentAbility.SetManualEndAbility(
+                            manualEndCell != null && bool.Parse(manualEndCell.ToString()));
                         currentTrack = null;
                     }
 
@@ -89,14 +90,14 @@ namespace GAS.Editor
                             if (currentAbility != null) currentAbility.Tracks.Add(currentTrack);
                         }
 
-                        var task = new Runtime.TaskClipData
+                        var task = new TaskClipData
                         {
                             TaskType = taskTypeCell.ToString(),
                             StartTime = startTimeCell != null ? int.Parse(startTimeCell.ToString()) : 0,
                             EndTime = endTimeCell != null ? int.Parse(endTimeCell.ToString()) : 0,
-                            Name = taskNameCell?.ToString() ?? "",
+                            Name = taskNameCell?.ToString() ?? ""
                         };
-         
+
                         // 读取参数（假设最多10个参数，从第10列到第19列）
                         var parameters = new List<object>();
                         for (var col = 11; col <= 20; col++)
@@ -138,40 +139,32 @@ namespace GAS.Editor
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
 
-            bool isNewFile = !File.Exists(filePath);
+            var isNewFile = !File.Exists(filePath);
             var fileInfo = new FileInfo(filePath);
 
             using (var package = isNewFile ? new ExcelPackage() : new ExcelPackage(fileInfo))
             {
-                ExcelWorksheet worksheet;
+                if (isNewFile) return;
 
-                if (isNewFile)
-                {
-                    // 新建文件时，创建表并写入 luban 风格头部
-                    return;
-                }
-                else
-                {
-                    // 复用原有第一个 sheet（里面头几行已有 luban 的定义）
-                    worksheet = package.Workbook.Worksheets[1];
-                }
+                // 复用原有第一个 sheet（里面头几行已有 luban 的定义）
+                var worksheet = package.Workbook.Worksheets[1];
 
                 // 清除旧数据：从第 6 行开始都是数据区
                 const int dataStartRow = 6;
                 if (worksheet.Dimension != null && worksheet.Dimension.End.Row >= dataStartRow)
                 {
-                    int delCount = worksheet.Dimension.End.Row - dataStartRow + 1;
+                    var delCount = worksheet.Dimension.End.Row - dataStartRow + 1;
                     if (delCount > 0)
                         worksheet.DeleteRow(dataStartRow, delCount);
                 }
 
-                int row = dataStartRow;
+                var row = dataStartRow;
 
                 // 按 XParamTimeline -> Track -> TaskClipData 的层级写回
                 foreach (var ability in _timelineAbilities)
                 {
                     // 标记：当前 ability 的第一条任务所在行，需要写 ID/Name/LifeTime/ManualEndAbility
-                    bool firstTrackInAbility = true;
+                    var firstTrackInAbility = true;
 
                     // 如果某个技能没有任何 Track/Task，也可以选择至少写一行，只写基础信息；
                     // 下面代码选择：只有存在 Task 时才写行；若你需要“空技能”也写一行，可额外处理。
@@ -180,7 +173,7 @@ namespace GAS.Editor
 
                     foreach (var track in ability.Tracks)
                     {
-                        bool firstTaskInTrack = true;
+                        var firstTaskInTrack = true;
 
                         if (track.TaskClips == null || track.TaskClips.Count == 0)
                             continue;
@@ -197,10 +190,7 @@ namespace GAS.Editor
                             }
 
                             // ===== 写 Track 名（只在该轨道第一条任务那一行写一次） =====
-                            if (firstTaskInTrack)
-                            {
-                                worksheet.Cells[row, 6].Value = track.Name;
-                            }
+                            if (firstTaskInTrack) worksheet.Cells[row, 6].Value = track.Name;
 
                             // ===== 写 TaskClipData 基本信息，每条任务一行 =====
                             worksheet.Cells[row, 7].Value = task.StartTime;
@@ -215,12 +205,9 @@ namespace GAS.Editor
                                 if (paramList != null)
                                 {
                                     // 最多占用 10 列（11~20）
-                                    int maxParamCols = 10;
-                                    int count = Math.Min(maxParamCols, paramList.Count);
-                                    for (int i = 0; i < count; i++)
-                                    {
-                                        worksheet.Cells[row, 11 + i].Value = paramList[i];
-                                    }
+                                    var maxParamCols = 10;
+                                    var count = Math.Min(maxParamCols, paramList.Count);
+                                    for (var i = 0; i < count; i++) worksheet.Cells[row, 11 + i].Value = paramList[i];
                                 }
                             }
 
@@ -235,16 +222,13 @@ namespace GAS.Editor
                 }
 
                 // 保存 Excel 文件
-                if (isNewFile)
-                    package.SaveAs(fileInfo);
-                else
-                    package.Save();
+                package.Save();
             }
         }
 
         public static List<XParamTimeline> GetTimelineAbilities(bool forceReload = false)
         {
-            if (_timelineAbilities == null||forceReload)
+            if (_timelineAbilities == null || forceReload)
                 LoadTimelineAbilities();
             return _timelineAbilities;
         }
@@ -255,7 +239,7 @@ namespace GAS.Editor
 
             return abilities.Select(ability => ability.ID.ToString()).ToList();
         }
-        
+
         public static XParamTimeline GetTimelineAbility(string id)
         {
             var abilities = GetTimelineAbilities();

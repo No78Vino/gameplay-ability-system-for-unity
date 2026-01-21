@@ -64,7 +64,7 @@ namespace GAS.Editor
             StartTime = _clip.TaskClipData.StartTime;
             EndTime = _clip.TaskClipData.EndTime;
             TaskType = _clip.TaskClipData.TaskType;
-            Parameter = EditorAbilityHelper.CreateAbilityTaskParameter(TaskType);
+            Parameter = _clip.TaskClipData.Parameter;
         }
 
         private void OnClipStartFrameChanged()
