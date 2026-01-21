@@ -36,7 +36,7 @@ namespace GAS.Runtime
         public GameplayCueUnit(GameplayCueConfig config)
         {
             _cueType = config.CueType;
-            _exParameterBase = config.ExParameterBase;
+            _exParameterBase = config.Param;
             _requiredTags = config.RequiredTags;
             _immunityTags = config.ImmunityTags;
         }

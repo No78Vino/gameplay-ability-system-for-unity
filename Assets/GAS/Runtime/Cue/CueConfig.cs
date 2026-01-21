@@ -6,16 +6,16 @@ namespace GAS.Runtime
     {
         public Type CueType { get; set; }
 
-        public IExParameterBase ExParameterBase { get; set; }
+        public IExParameterBase Param { get; set; }
 
         public int[] RequiredTags { get; set; }
 
         public int[] ImmunityTags { get; set; }
 
-        public GameplayCueConfig(Type cueType, IExParameterBase exParameterBase, int[] requiredTags = null, int[] immunityTags = null)
+        public GameplayCueConfig(Type cueType, IExParameterBase param, int[] requiredTags = null, int[] immunityTags = null)
         {
             CueType = cueType;
-            ExParameterBase = exParameterBase;
+            Param = param;
             RequiredTags = requiredTags;
             ImmunityTags = immunityTags;
         }
@@ -23,7 +23,7 @@ namespace GAS.Runtime
         public void SetCueTypeAndParameter(Type cueType, IExParameterBase exParameterBase)
         {
             CueType = cueType;
-            ExParameterBase = exParameterBase;
+            Param = exParameterBase;
         }
         
         public void SetRequiredTags(int[] requiredTags)
@@ -38,7 +38,7 @@ namespace GAS.Runtime
         
         public GameplayCueBase CreateCue()
         {
-            return CueHelper.TryCreateCue(CueType, ExParameterBase);
+            return CueHelper.TryCreateCue(CueType, Param);
         }
     }
 }

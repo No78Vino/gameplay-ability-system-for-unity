@@ -10,7 +10,7 @@ namespace GAS.Runtime
     {
         public static GameplayCueBase TryCreateCue(GameplayCueConfig param)
         {
-            return TryCreateCue(param.CueType, param.ExParameterBase);
+            return TryCreateCue(param.CueType, param.Param);
         }
         
         public static GameplayCueBase TryCreateCue(string cueType, IExParameterBase param)

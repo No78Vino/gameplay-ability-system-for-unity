@@ -10,11 +10,6 @@ namespace GAS.Runtime
         public int startFrame;
     }
 
-    internal class RuntimeCueClip : RuntimeClipInfo
-    {
-        public GameplayCueUnit cueUnit;
-    }
-
     internal class RuntimeTaskClip : RuntimeClipInfo
     {
         public AbilityTaskBase task;
