@@ -6,11 +6,14 @@ namespace GAS.Editor
 {
     using UnityEngine.UIElements;
     
-    public class TaskClip : TrackItemBase
+    public class TaskClip
     {
+        private VisualElement _ve;
+        public VisualElement Ve => _ve;
+        
         public TaskClipData TaskClipData { get;private set; }
 
-        public TrackClipVisualElement ClipVe => ve as TrackClipVisualElement;
+        public TrackClipVisualElement ClipVe => _ve as TrackClipVisualElement;
         public float FrameUnitWidth { get; protected set; }
         public int StartFrameIndex => TaskClipData.StartTime;
         public int EndFrameIndex => TaskClipData.EndTime;
@@ -35,9 +38,9 @@ namespace GAS.Editor
             FrameUnitWidth = frameUnitWidth;
             TaskClipData = taskClipDataData;
 
-            ve = new TrackClipVisualElement();
+            _ve = new TrackClipVisualElement();
             ClipVe.InitClipInfo(this);
-            parent.Add(ve);
+            parent.Add(_ve);
             if (AbilityTimelineEditorWindow.Instance.CurrentInspectorObject is TaskClip clipBase &&
                 taskClipDataData == clipBase.TaskClipData)
                 ClipVe.OnSelect();
@@ -60,10 +63,10 @@ namespace GAS.Editor
         {
             FrameUnitWidth = newFrameUnitWidth;
             // clip位置，宽度
-            var mainPos = ve.transform.position;
+            var mainPos = _ve.transform.position;
             mainPos.x = StartFrameIndex * FrameUnitWidth;
-            ve.transform.position = mainPos;
-            ve.style.width = DurationFrame * FrameUnitWidth;
+            _ve.transform.position = mainPos;
+            _ve.style.width = DurationFrame * FrameUnitWidth;
             
             ClipVe.UpdateState(TaskClipData.StartTime == TaskClipData.EndTime);
             ItemLabel.text = TaskClipData.Name;

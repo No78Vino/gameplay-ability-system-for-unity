@@ -23,8 +23,15 @@ namespace GAS.Editor
 
             if (CurrentInspectorObject != null && !force)
             {
-                if (CurrentInspectorObject is TaskClip oldTrackItem)
-                    oldTrackItem.ClipVe.OnUnSelect();
+                switch (CurrentInspectorObject)
+                {
+                    case TaskClip oldTrackItem:
+                        oldTrackItem.ClipVe.OnUnSelect();
+                        break;
+                    case AbilityTimelineTrack oldTrack:
+                        oldTrack.OnUnSelect();
+                        break;
+                }
             }
 
             CurrentInspectorObject = target;

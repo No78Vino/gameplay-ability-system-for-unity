@@ -1,19 +1,17 @@
+using System.Collections.Generic;
+using GAS.Runtime;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
 namespace GAS.Editor
 {
-    using System;
-    using System.Collections.Generic;
-    using Runtime;
-    using UnityEditor;
-    using UnityEngine;
-    using UnityEngine.UIElements;
-    
     public abstract class TrackBase
     {
         protected float _frameWidth;
         protected Track _trackInfo;
-        protected List<TrackItemBase> _trackItems = new();
+        protected List<TaskClip> _trackItems = new();
         protected VisualElement BoundingBox;
         protected VisualElement Lock;
         protected VisualElement MenuBox;
@@ -30,9 +28,9 @@ namespace GAS.Editor
         protected abstract Color TrackColor { get; }
         protected abstract Color MenuColor { get; }
 
-        public abstract void TickView(int frameIndex, params object[] param);
+        public virtual Object DataInspector => null;
 
-        public virtual UnityEngine.Object DataInspector => null;
+        public abstract void TickView(int frameIndex, params object[] param);
 
 
         public virtual void Init(VisualElement trackParent, VisualElement menuParent, float frameWidth,
@@ -104,7 +102,7 @@ namespace GAS.Editor
             RefreshShow(_frameWidth);
         }
 
-        public void RemoveTrackItem(TrackItemBase item)
+        public void RemoveTrackItem(TaskClip item)
         {
             Track.Remove(item.Ve);
             _trackItems.Remove(item);
