@@ -126,11 +126,122 @@ namespace GAS.Editor
 
         public static void Write()
         {
-            if(_timelineAbilities==null)
+            // 内存中还没加载或没有任何技能，不需要写
+            if (_timelineAbilities == null || _timelineAbilities.Count == 0)
                 return;
-            
-            
+
+            var setting = GASSettingAsset.LoadOrCreate();
+            var filePath = setting.PathOfExcelTimelineAbility;
+
+            // 确保目录存在
+            var dir = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            bool isNewFile = !File.Exists(filePath);
+            var fileInfo = new FileInfo(filePath);
+
+            using (var package = isNewFile ? new ExcelPackage() : new ExcelPackage(fileInfo))
+            {
+                ExcelWorksheet worksheet;
+
+                if (isNewFile)
+                {
+                    // 新建文件时，创建表并写入 luban 风格头部
+                    return;
+                }
+                else
+                {
+                    // 复用原有第一个 sheet（里面头几行已有 luban 的定义）
+                    worksheet = package.Workbook.Worksheets[1];
+                }
+
+                // 清除旧数据：从第 6 行开始都是数据区
+                const int dataStartRow = 6;
+                if (worksheet.Dimension != null && worksheet.Dimension.End.Row >= dataStartRow)
+                {
+                    int delCount = worksheet.Dimension.End.Row - dataStartRow + 1;
+                    if (delCount > 0)
+                        worksheet.DeleteRow(dataStartRow, delCount);
+                }
+
+                int row = dataStartRow;
+
+                // 按 XParamTimeline -> Track -> TaskClipData 的层级写回
+                foreach (var ability in _timelineAbilities)
+                {
+                    // 标记：当前 ability 的第一条任务所在行，需要写 ID/Name/LifeTime/ManualEndAbility
+                    bool firstTrackInAbility = true;
+
+                    // 如果某个技能没有任何 Track/Task，也可以选择至少写一行，只写基础信息；
+                    // 下面代码选择：只有存在 Task 时才写行；若你需要“空技能”也写一行，可额外处理。
+                    if (ability.Tracks == null || ability.Tracks.Count == 0)
+                        continue;
+
+                    foreach (var track in ability.Tracks)
+                    {
+                        bool firstTaskInTrack = true;
+
+                        if (track.TaskClips == null || track.TaskClips.Count == 0)
+                            continue;
+
+                        foreach (var task in track.TaskClips)
+                        {
+                            // ===== 写 Ability 基本信息（只在该技能第一条任务那一行写一次） =====
+                            if (firstTrackInAbility && firstTaskInTrack)
+                            {
+                                worksheet.Cells[row, 2].Value = ability.ID;
+                                worksheet.Cells[row, 3].Value = ability.Name;
+                                worksheet.Cells[row, 4].Value = ability.LifeTime;
+                                worksheet.Cells[row, 5].Value = ability.ManualEndAbility;
+                            }
+
+                            // ===== 写 Track 名（只在该轨道第一条任务那一行写一次） =====
+                            if (firstTaskInTrack)
+                            {
+                                worksheet.Cells[row, 6].Value = track.Name;
+                            }
+
+                            // ===== 写 TaskClipData 基本信息，每条任务一行 =====
+                            worksheet.Cells[row, 7].Value = task.StartTime;
+                            worksheet.Cells[row, 8].Value = task.EndTime;
+                            worksheet.Cells[row, 9].Value = task.Name;
+                            worksheet.Cells[row, 10].Value = task.TaskType;
+
+                            // ===== 写参数（列 11~20），调用 IExParameterBase.EncodeExcelData() =====
+                            if (task.Parameter != null)
+                            {
+                                var paramList = task.Parameter.EncodeExcelData(); // List<object>
+                                if (paramList != null)
+                                {
+                                    // 最多占用 10 列（11~20）
+                                    int maxParamCols = 10;
+                                    int count = Math.Min(maxParamCols, paramList.Count);
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        worksheet.Cells[row, 11 + i].Value = paramList[i];
+                                    }
+                                }
+                            }
+
+                            // 移动到下一行，后续任务继续写
+                            row++;
+                            firstTaskInTrack = false;
+                        }
+
+                        // 当前 ability 已经至少写过一行了，后续 Track 都不再写 ID/Name/LifeTime/ManualEndAbility
+                        firstTrackInAbility = false;
+                    }
+                }
+
+                // 保存 Excel 文件
+                if (isNewFile)
+                    package.SaveAs(fileInfo);
+                else
+                    package.Save();
+            }
         }
+
         public static List<XParamTimeline> GetTimelineAbilities(bool forceReload = false)
         {
             if (_timelineAbilities == null||forceReload)
