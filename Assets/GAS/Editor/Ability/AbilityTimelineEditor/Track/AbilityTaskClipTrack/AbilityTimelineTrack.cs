@@ -46,6 +46,8 @@ namespace GAS.Editor
                     item.InitTrackClip(this, Track, _frameWidth, task);
                     _trackItems.Add(item);
                 }
+            
+            MenuText.text = _trackInfo.Name;
         }
 
         protected override void OnAddTrackItem(DropdownMenuAction action)

@@ -37,6 +37,7 @@ namespace GAS.Editor
         private void OnTrackNameChanged()
         {
             _track.TrackData.Name = trackName;
+            _track.RefreshShow();
         }
     }
 
