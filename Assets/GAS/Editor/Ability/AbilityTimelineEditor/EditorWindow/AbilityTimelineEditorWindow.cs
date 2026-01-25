@@ -70,6 +70,8 @@ namespace GAS.Editor
             CurrentSelectFrameIndex = 0;
             _currentMaxFrame = AbilityConfig?.LifeTime ?? 0;
             MaxFrame.value = AbilityConfig?.LifeTime ?? 0;
+            _toggleManualEndAbility.value = AbilityConfig?.ManualEndAbility ?? false;
+            _abilityName.value = AbilityConfig?.Name ?? string.Empty;
             TimerShaftView.RefreshTimerDraw();
             TrackView.RefreshTrackDraw();
         }
@@ -78,12 +80,21 @@ namespace GAS.Editor
         public AbilityTimelineEditorConfig Config { get; } = new();
         
         private DropdownField _dropDownAbilityID;
+        private Toggle _toggleManualEndAbility;
+        private TextField _abilityName;
 
         public XParamTimeline AbilityConfig => GasAbilityTimelineXlsxReadWrite.GetTimelineAbility(_dropDownAbilityID.value);
 
         private void InitAbilityAssetBar()
         {
             _dropDownAbilityID = _root.Q<DropdownField>("DropdownField");
+            _toggleManualEndAbility = _root.Q<Toggle>("ManualEnd");
+            _abilityName = _root.Q<TextField>("AbilityName");
+            
+            _toggleManualEndAbility.RegisterValueChangedCallback(OnToggleManualEndAbility);
+            _abilityName.RegisterValueChangedCallback(OnAbilityNameChanged);
+            _abilityName.isDelayed = true;
+            
             _dropDownAbilityID.choices = GasAbilityTimelineXlsxReadWrite.GetTimelineAbilityIDList();
             _dropDownAbilityID.index = _dropDownAbilityID.choices.Count > 0 ? 0 : -1;
             _dropDownAbilityID.RegisterValueChangedCallback(OnAbilityIDChanged);
@@ -97,6 +108,19 @@ namespace GAS.Editor
             OnUpdateShow();
         }
 
+        private void OnToggleManualEndAbility(ChangeEvent<bool> evt)
+        {
+            if (AbilityConfig == null) return;
+            AbilityConfig.SetManualEndAbility(evt.newValue);
+            Save();
+        }
+        
+        private void OnAbilityNameChanged(ChangeEvent<string> evt)
+        {
+            if (AbilityConfig == null) return;
+            AbilityConfig.SetName(evt.newValue);
+            Save();
+        }
         #endregion
 
         #region TopBar
