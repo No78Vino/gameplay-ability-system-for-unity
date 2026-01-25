@@ -36,7 +36,7 @@ namespace GAS.Editor
         public override void RefreshShow(float newFrameWidth)
         {
             base.RefreshShow(newFrameWidth);
-            foreach (var item in _trackItems) Track.Remove(((TaskClip)item).ClipVe);
+            foreach (var item in _trackItems) Track.Remove(item.ClipVe);
             _trackItems.Clear();
 
             if (AbilityTimelineEditorWindow.Instance.AbilityConfig != null)
