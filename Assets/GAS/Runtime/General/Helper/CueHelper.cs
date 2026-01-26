@@ -45,6 +45,17 @@ namespace GAS.Runtime
             return null;
         }
 
+        public static IExParameterBase CreateCueParameter(string type, List<object> paramData = null)
+        {
+            // var map = CueToCueParamTypeMap();
+            // if (!map.TryGetValue(type, out var cueParamConfigType))
+            //     throw new KeyNotFoundException($"未找到类型为 {type} 的 IExParameterBase 类型。");
+            // var cueParamEditor = (IExParameterBase)Activator.CreateInstance(cueParamConfigType);
+            // if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
+            // return cueParamEditor;
+            return null;
+        }
+        
         public static Type GetCueLogicParamType(string cueType)
         {
             var cueParam = CueType2CueParamTypeMap[cueType];

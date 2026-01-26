@@ -9,12 +9,15 @@ namespace GAS.Runtime
         protected Entity _sourceEntity;
         protected CueSourceType _sourceType;
         protected Entity _targetAscEntity;
-
+        protected AbilitySystemCell _abilitySystemCell;
         protected static EntityManager EntityManager => GASManager.EntityManager; 
         
         public abstract void InitParameters(IExParameterBase exParameterBase);
-        public abstract void Reset();
-        
+
+        public virtual void Reset()
+        {
+        }
+
         public void SetCueEntity(Entity e)
         {
             _cueEntity = e;
@@ -35,6 +38,7 @@ namespace GAS.Runtime
             if (e != Entity.Null)
             {
                 _targetAscEntity = e;
+                _abilitySystemCell = GASManager.GetAscFromEntity(_targetAscEntity);
                 OnAdd(Time.time);
             }
         }
@@ -45,6 +49,7 @@ namespace GAS.Runtime
         public void RemoveFromTargetAsc()
         {
             OnRemove(Time.time);
+            _abilitySystemCell = null;
             _targetAscEntity = Entity.Null;
         }
    
@@ -120,6 +125,11 @@ namespace GAS.Runtime
 
         public virtual void OnDestroy(float time)
         {
+        }
+        
+        public virtual void OnPreview(int frame, int startFrame, int endFrame,params object[] args)
+        {
+            
         }
         #endregion
     }

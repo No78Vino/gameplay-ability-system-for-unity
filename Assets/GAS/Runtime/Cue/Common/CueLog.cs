@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class GameplayCueLog : GameplayCueBase<XParamString>
+    public class CueLog : GameplayCueBase<XParamString>
     {
         public override void OnActivate(float time)
         {
@@ -22,6 +22,12 @@ namespace GAS.Runtime
         public override void Reset()
         {
             
+        }
+
+        public override void OnPreview(int frame, int startFrame, int endFrame,params object[] args)
+        {
+            base.OnPreview(frame, startFrame, endFrame);
+            Debug.Log($"[Preview Frame {frame}]Msg:{Parameter.Value}");
         }
     }
 }

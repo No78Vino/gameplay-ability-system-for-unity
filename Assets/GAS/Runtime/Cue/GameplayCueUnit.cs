@@ -13,6 +13,7 @@ namespace GAS.Runtime
         private Entity _cueEntity;
         private Type _cueType;
         private IExParameterBase _exParameterBase;
+        private AbilitySystemCell _asc;
         private int[] _requiredTags;
         private int[] _immunityTags;
         
@@ -136,6 +137,8 @@ namespace GAS.Runtime
 
             var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
             mcCue.cue.AddToTargetAsc(asc);
+            
+            _asc = GASManager.GetAscFromEntity(asc);
             return true;
         }
         
@@ -191,5 +194,19 @@ namespace GAS.Runtime
             mcCue.cue.SetSourceEntity(source, sourceType);
             EntityHelper.SetManagedComponent(_cueEntity,mcCue);
         }
+
+#if UNITY_EDITOR
+        /// <summary>
+        ///     编辑器预览Cue效果
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="startFrame"></param>
+        /// <param name="endFrame"></param>
+        public void OnPreview(int frame, int startFrame, int endFrame)
+        {
+            var cue = CueHelper.TryCreateCue(_cueType, _exParameterBase);
+            cue.OnPreview(frame, startFrame, endFrame);
+        }
+#endif
     }
 }

@@ -14,7 +14,7 @@ namespace GAS.Runtime
         {
             var CLCameraFovShake = typeof(DemoForESC._Script.Gas.Cue.CLCameraFovShake);
             CueHelper.RegisterCue(CUE_CLCameraFovShake, CLCameraFovShake, typeof(GAS.Runtime.XParamFloat));
-            var GameplayCueLog = typeof(GAS.Runtime.GameplayCueLog);
+            var GameplayCueLog = typeof(GAS.Runtime.CueLog);
             CueHelper.RegisterCue(CUE_GameplayCueLog, GameplayCueLog, typeof(GAS.Runtime.XParamString));
         }
     }

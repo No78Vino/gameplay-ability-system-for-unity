@@ -2,6 +2,7 @@ using System;
 
 namespace GAS.Runtime
 {
+    [Serializable]
     public class GameplayCueConfig
     {
         public Type CueType { get; set; }

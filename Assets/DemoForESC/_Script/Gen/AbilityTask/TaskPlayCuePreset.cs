@@ -1,10 +1,10 @@
 ﻿namespace GAS.Runtime
 {
-    public class TaskPlayCue: AbilityTaskBase<XParamCueList>
+    public class TaskPlayCuePreset: AbilityTaskBase<XParamCueList>
     {
         private GameplayCueUnit[] _cueUnits;
         
-        public TaskPlayCue(AbilityLogicBase logic) : base(logic)
+        public TaskPlayCuePreset(AbilityLogicBase logic) : base(logic)
         {
         }
 
@@ -51,7 +51,7 @@
             base.OnEditorPreview(frame, startFrame, endFrame);
             foreach (var cueUnit in _cueUnits)
             {
-                // cueUnit.OnPreview(frame, startFrame, endFrame);
+                cueUnit.OnPreview(frame, startFrame, endFrame);
             }
         }
     }
