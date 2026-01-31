@@ -479,59 +479,57 @@ namespace GAS.Runtime
         }
 
 
-        private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
+    private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
+    {
+        var cueLogicName = cueLogic.GetType().Name;
+        var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
+        var cueParam = Activator.CreateInstance(cueParamType) as XParam;
+        if (cueParam != null)
         {
-            var cueLogicName = cueLogic.GetType().Name;
-            var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
-            var cueParam = Activator.CreateInstance(cueParamType) as XParam;
-            if (cueParam != null)
+            switch (cueLogic)
             {
-                switch (cueLogic)
+                case cfg.CueLog cData:
                 {
-                    case cfg.CueLog cData:
-                    {
-                        var cp = cueParam as GAS.Runtime.XParamString;
-                        cp?.SetValue(cData.Param.Value);
-                        cueParam = cp;
-                        break;
-                    }
-                    case cfg.CueLogging cData:
-                    {
-                        var cp = cueParam as GAS.Runtime.XParamLogging;
-                        cp?.SetValue(cData.Param.Value);
-                        cp?.SetDuration(cData.Param.Duration);
-                        cueParam = cp;
-                        break;
-                    }
+                    var cp = cueParam as GAS.Runtime.XParamString;
+                    cp?.SetValue(cData.Param.Value);
+                    cueParam = cp;
+                    break;
+                }
+                case cfg.CueLogging cData:
+                {
+                    var cp = cueParam as GAS.Runtime.XParamLogging;
+                    cp?.SetValue(cData.Param.Value);
+                    cp?.SetDuration(cData.Param.Duration);
+                    cueParam = cp;
+                    break;
                 }
             }
-
-            var cueLogicType = CueHelper.GetCueType(cueLogicName);
-            return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
         }
-
-        public static string GetAbilityNameByCode(int id)
-        {
-            var data = Tables.Tbability.Get(id);
-            if (data != null) return data.Name;
-            Debug.LogError($"Ability_ID:{id}  不存在.");
-            return string.Empty;
-        }
-
-        public static string GetAttrSetNameByCode(int code)
-        {
-            var data = Tables.TbattributeSet.Get(code);
-            if (data != null) return data.Name;
-            Debug.LogError($"AttrSet_Code:{code}  不存在.");
-            return string.Empty;
-        }
-
-        public static string GetAttributeNameByCode(int code)
-        {
-            var data = Tables.Tbattribute.Get(code);
-            if (data != null) return data.Name;
-            Debug.LogError($"Attribute_Code:{code}  不存在.");
-            return string.Empty;
-        }
+        var cueLogicType = CueHelper.GetCueType(cueLogicName);
+        return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
     }
+    public static string GetAbilityNameByCode(int id)
+    {
+        var data = Tables.Tbability.Get(id);
+        if (data != null) return data.Name;
+        Debug.LogError($"Ability_ID:{id}  不存在.");
+        return string.Empty;
+    }
+
+    public static string GetAttrSetNameByCode(int code)
+    {
+        var data = Tables.TbattributeSet.Get(code);
+        if (data != null) return data.Name;
+        Debug.LogError($"AttrSet_Code:{code}  不存在.");
+        return string.Empty;
+    }
+
+    public static string GetAttributeNameByCode(int code)
+    {
+        var data = Tables.Tbattribute.Get(code);
+        if (data != null) return data.Name;
+        Debug.LogError($"Attribute_Code:{code}  不存在.");
+        return string.Empty;
+    }
+}
 }
