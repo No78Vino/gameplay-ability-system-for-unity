@@ -11,10 +11,10 @@
         public override void InitParameters(XParam parameter)
         {
             base.InitParameters(parameter);
-            _cueUnits = new GameplayCueUnit[Parameter.Cues.Length];
-            for (var i = 0; i < Parameter.Cues.Length; i++)
+            _cueUnits = new GameplayCueUnit[Parameter.IDs.Length];
+            for (var i = 0; i < Parameter.IDs.Length; i++)
             {
-                var cueID = Parameter.Cues[i];
+                var cueID = Parameter.IDs[i];
                 var cfg = XLuban.GetGameplayCueConfig(cueID);
                 var unit = new GameplayCueUnit(cfg);
                 _cueUnits[i] = unit;

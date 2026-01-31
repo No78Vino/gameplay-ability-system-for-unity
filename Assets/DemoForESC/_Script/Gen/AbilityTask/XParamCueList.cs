@@ -10,28 +10,28 @@ namespace GAS.Runtime
         
         [ShowInInspector]
         [ValueDropdown(nameof(CueIDs))]
-        public int[] Cues { get; private set; }
+        public int[] IDs { get; private set; }
 
-        public void SetCues(int[] value)
+        public void SetIDs(int[] value)
         {
-            Cues = value;
+            IDs = value;
         }
         
         public XParamCueList(int[] value)
         {
-            Cues = value;
+            IDs = value;
         }
         
         public XParamCueList()
         {
-            Cues = Array.Empty<int>();
+            IDs = Array.Empty<int>();
         }
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
             if (paramData == null || paramData.Count == 0)
             {
-                Cues = Array.Empty<int>();
+                IDs = Array.Empty<int>();
                 return;
             }
 
@@ -39,17 +39,17 @@ namespace GAS.Runtime
             var strData = paramData[0] as string;
             if (string.IsNullOrEmpty(strData))
             {
-                Cues = Array.Empty<int>();
+                IDs = Array.Empty<int>();
                 return;
             }
 
             var ids = strData.Split(';');
-            Cues = new int[ids.Length];
+            IDs = new int[ids.Length];
             for (var i = 0; i < ids.Length; i++)
             {
                 var strID = ids[i];
                 if (!int.TryParse(strID, out var id))
-                    Cues[i] = id;
+                    IDs[i] = id;
             }
 
             if (CueIDs.Count == 0)
@@ -63,10 +63,10 @@ namespace GAS.Runtime
         public List<object> EncodeExcelData()
         {
             var strIDs = "";
-            for (var i = 0; i < Cues.Length; i++)
+            for (var i = 0; i < IDs.Length; i++)
             {
-                strIDs += Cues[i].ToString();
-                if (i < Cues.Length - 1) strIDs += ";";
+                strIDs += IDs[i].ToString();
+                if (i < IDs.Length - 1) strIDs += ";";
             }
             var result = new List<object> { strIDs };
             return result;

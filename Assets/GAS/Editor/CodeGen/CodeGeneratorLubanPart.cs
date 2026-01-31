@@ -781,6 +781,91 @@ namespace GAS.Editor
 
                     writer.WriteLine("");
 
+                    #region 动态创建CueLogic
+
+                    // private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
+                    // {
+                    //     var cueLogicName = cueLogic.GetType().Name;
+                    //     var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
+                    //     var cueParam = Activator.CreateInstance(cueParamType) as XParam;
+                    //     if (cueParam != null)
+                    //     {
+                    //         switch (cueLogic)
+                    //         {
+                    //             case cfg.CueLog cData:
+                    //             {
+                    //                 var cp = cueParam as GAS.Runtime.XParamString;
+                    //                 cp?.SetValue(cData.Param.Value);
+                    //                 cueParam = cp;
+                    //                 break;
+                    //             }
+                    //             case cfg.CueLogging cData:
+                    //             {
+                    //                 var cp = cueParam as GAS.Runtime.XParamLogging;
+                    //                 cp?.SetValue(cData.Param.Value);
+                    //                 cp?.SetDuration(cData.Param.Duration);
+                    //                 cueParam = cp;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }
+                    //     var cueLogicType = CueHelper.GetCueType(cueLogicName);
+                    //     return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
+                    // } 
+                    
+                    writer.WriteLine("private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)"); writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("var cueLogicName = cueLogic.GetType().Name;");
+                        writer.WriteLine("var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);");
+                        writer.WriteLine("var cueParam = Activator.CreateInstance(cueParamType) as XParam;");
+                        writer.WriteLine("if (cueParam != null)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine("switch (cueLogic)");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            
+                            
+                            var allCueLogic = EditorCueHelper.GetCachedCueTypes();
+                            var cueLogicTypes = allCueLogic as Type[] ?? allCueLogic.ToArray();
+                            foreach (var cueLogicType in cueLogicTypes)
+                            {
+                                var cueLogicTypeName = cueLogicType.Name;
+                                var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueLogicTypeName];
+                                var tType = ReflectionHelper.GetMemberType($"cfg.{cueLogicTypeName}", "Param");
+
+                                if (tType == null) continue;
+
+                                writer.WriteLine($"case cfg.{cueLogicTypeName} cData:");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
+                                foreach (var fieldName in readOnlyFields)
+                                {
+                                    writer.WriteLine($"cp?.Set{fieldName}(cData.Param.{fieldName});");
+                                }
+
+                                writer.WriteLine("cueParam = cp;");
+                                writer.WriteLine("break;");
+                                writer.Indent--;
+                                writer.WriteLine("}");
+                            }
+                            
+                            
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("var cueLogicType = CueHelper.GetCueType(cueLogicName);");
+                        writer.WriteLine("return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);");
+                    }
+
+                    #endregion
+                    
                     #region Utils
 
                     writer.WriteLine("public static string GetAbilityNameByCode(int id)");

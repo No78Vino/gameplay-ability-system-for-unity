@@ -351,7 +351,6 @@ namespace GAS.Runtime
                                 var xParamTimeline = GetTimelineAbilityParam(aData.Param.ID);
                                 ap.CacheTimelineParam(xParamTimeline);
                             }
-
                             abilityParam = ap;
                             break;
                         }
@@ -402,6 +401,7 @@ namespace GAS.Runtime
             };
         }
 
+
         public static XParamTimeline GetTimelineAbilityParam(int id)
         {
             XParamTimeline timelineParam = new XParamTimeline();
@@ -411,12 +411,10 @@ namespace GAS.Runtime
                 Debug.LogError($"TimelineAbility_ID:{id}  不存在.");
                 return new XParamTimeline() { };
             }
-
             timelineParam.SetID(data.ID);
             timelineParam.SetName(data.Name);
             timelineParam.SetLifeTime(data.LifeTime);
             timelineParam.SetManualEndAbility(data.ManualEndAbility);
-            
             List<Track> tracks = new List<Track>();
             foreach (var trackData in data.Tracks)
             {
@@ -430,16 +428,16 @@ namespace GAS.Runtime
                     taskClip.StartTime = clipData.StartTime;
                     taskClip.EndTime = clipData.EndTime;
                     taskClip.TaskType = clipData.Task.GetType().Name;
-                    
                     var taskParamType = AbilityHelper.GetAbilityTaskParamType(taskClip.TaskType);
                     var taskParam = Activator.CreateInstance(taskParamType) as XParam;
                     if (taskParam != null)
                     {
                         switch (clipData.Task)
                         {
-                            case cfg.TaskDoNothing taskData:
+                            case cfg.TaskPlayCuePreset taskData:
                             {
-                                var tp = taskParam as GAS.Runtime.XParamNone;
+                                var tp = taskParam as GAS.Runtime.XParamCueList;
+                                tp?.SetIDs(taskData.Param.IDs);
                                 taskParam = tp;
                                 break;
                             }
@@ -450,10 +448,28 @@ namespace GAS.Runtime
                                 taskParam = tp;
                                 break;
                             }
+                            case cfg.TaskDoCost taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamNone;
+                                taskParam = tp;
+                                break;
+                            }
+                            case cfg.TaskDoNothing taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamNone;
+                                taskParam = tp;
+                                break;
+                            }
+                            case cfg.TaskPlayCue taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamCue;
+                                tp?.SetCueLogic(CreateCueLogicUnit(taskData.Param.CueLogic,taskData.Param.RequiredTags,taskData.Param.ImmunityTags));
+                                taskParam = tp;
+                                break;
+                            }
                         }
                     }
                     taskClip.Parameter = taskParam;
-                    
                     track.TaskClips.Add(taskClip);
                 }
                 tracks.Add(track);
@@ -461,29 +477,60 @@ namespace GAS.Runtime
             timelineParam.SetTracks(tracks);
             return timelineParam;
         }
-        
-        public static string GetAbilityNameByCode(int id)
-        {
-            var data = Tables.Tbability.Get(id);
-            if (data != null) return data.Name;
-            Debug.LogError($"Ability_ID:{id}  不存在.");
-            return string.Empty;
-        }
 
-        public static string GetAttrSetNameByCode(int code)
+        private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
         {
-            var data = Tables.TbattributeSet.Get(code);
-            if (data != null) return data.Name;
-            Debug.LogError($"AttrSet_Code:{code}  不存在.");
-            return string.Empty;
-        }
+            var cueLogicName = cueLogic.GetType().Name;
+            var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
+            var cueParam = Activator.CreateInstance(cueParamType) as XParam;
+            if (cueParam != null)
+            {
+                switch (cueLogic)
+                {
+                    case cfg.CueLog cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamString;
+                        cp?.SetValue(cData.Param.Value);
+                        cueParam = cp;
+                        break;
+                    }
+                    case cfg.CueLogging cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamLogging;
+                        cp?.SetValue(cData.Param.Value);
+                        cp?.SetDuration(cData.Param.Duration);
+                        cueParam = cp;
+                        break;
+                    }
+                }
+            }
+            var cueLogicType = CueHelper.GetCueType(cueLogicName);
+            return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
+        } 
 
-        public static string GetAttributeNameByCode(int code)
-        {
-            var data = Tables.Tbattribute.Get(code);
-            if (data != null) return data.Name;
-            Debug.LogError($"Attribute_Code:{code}  不存在.");
-            return string.Empty;
-        }
+
+    public static string GetAbilityNameByCode(int id)
+    {
+        var data = Tables.Tbability.Get(id);
+        if (data != null) return data.Name;
+        Debug.LogError($"Ability_ID:{id}  不存在.");
+        return string.Empty;
     }
+
+    public static string GetAttrSetNameByCode(int code)
+    {
+        var data = Tables.TbattributeSet.Get(code);
+        if (data != null) return data.Name;
+        Debug.LogError($"AttrSet_Code:{code}  不存在.");
+        return string.Empty;
+    }
+
+    public static string GetAttributeNameByCode(int code)
+    {
+        var data = Tables.Tbattribute.Get(code);
+        if (data != null) return data.Name;
+        Debug.LogError($"Attribute_Code:{code}  不存在.");
+        return string.Empty;
+    }
+}
 }

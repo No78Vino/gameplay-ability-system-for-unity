@@ -24,6 +24,12 @@ namespace GAS.Runtime
             Param = param;
         }
 
+        public void SetCueLogic(GameplayCueUnit cueLogic)
+        {
+            CueType = cueLogic.CueType.Name;
+            Param = cueLogic.Param;
+        }
+        
         public void SetRequiredTags(int[] requiredTags)
         {
             RequiredTags = requiredTags;

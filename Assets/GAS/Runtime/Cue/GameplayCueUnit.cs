@@ -19,6 +19,8 @@ namespace GAS.Runtime
         
         private static EntityManager EntityManager=>GASManager.EntityManager;
         
+        public Type CueType => _cueType;
+        public XParam Param => _xParam;
         /// <summary>
         /// GameplayCue独立控制单位
         /// </summary>
