@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DemoForESC._Script.Gas.Ability
 {
-    public class ExParameterBaseMove : IExParameterBase
+    public class XParamMove : XParam
     {
         private Vector3 _moveDirection;
         private Vector3 _viewPointForward;
@@ -17,20 +17,20 @@ namespace DemoForESC._Script.Gas.Ability
         public Vector3 ViewPointForward => _viewPointForward;
         public Vector3 MoveDirection => _moveDirection;
         
-        public ExParameterBaseMove()
+        public XParamMove()
         {
             _moveDirection = Vector3.zero;
             _viewPointForward = Vector3.forward;
             RotationOffset = 0.1f;
         }
         
-        public void SetValue(Vector3 moveDirection,Vector3 viewPointForward)
+        public void SetDirection(Vector3 moveDirection,Vector3 viewPointForward)
         {
             _moveDirection = moveDirection;
             _viewPointForward = viewPointForward;
         }
         
-        public void SetRotationOffset(float offset)
+        public void SetValue(float offset)
         {
             RotationOffset = offset;
         }
@@ -58,7 +58,7 @@ namespace DemoForESC._Script.Gas.Ability
 #endif
     }
     
-    public class ALMove : AbilityLogicBase<ExParameterBaseMove>
+    public class ALMove : AbilityLogicBase<XParamMove>
     {
         private BaseUnit _unit;
         private CharacterController _controller;

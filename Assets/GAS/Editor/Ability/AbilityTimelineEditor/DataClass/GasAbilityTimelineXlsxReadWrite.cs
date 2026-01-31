@@ -198,7 +198,7 @@ namespace GAS.Editor
                             worksheet.Cells[row, 9].Value = task.Name;
                             worksheet.Cells[row, 10].Value = task.TaskType;
 
-                            // ===== 写参数（列 11~20），调用 IExParameterBase.EncodeExcelData() =====
+                            // ===== 写参数（列 11~20），调用 XParam.EncodeExcelData() =====
                             if (task.Parameter != null)
                             {
                                 var paramList = task.Parameter.EncodeExcelData(); // List<object>

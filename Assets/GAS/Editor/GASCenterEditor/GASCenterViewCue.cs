@@ -305,7 +305,7 @@ namespace GAS.Editor
         public string type;
 
         [BoxGroup("编辑配置/Cue逻辑")] [HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
-        public IExParameterBase Param;
+        public XParam Param;
 
         #endregion
     }

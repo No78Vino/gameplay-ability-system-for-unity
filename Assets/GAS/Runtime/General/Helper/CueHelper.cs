@@ -13,7 +13,7 @@ namespace GAS.Runtime
             return TryCreateCue(param.CueType, param.Param);
         }
         
-        public static GameplayCueBase TryCreateCue(string cueType, IExParameterBase param)
+        public static GameplayCueBase TryCreateCue(string cueType, XParam param)
         {
             if (CueTypeMap.TryGetValue(cueType, out var type))
                 return TryCreateCue(type, param);
@@ -24,7 +24,7 @@ namespace GAS.Runtime
             return null;
         }
 
-        public static GameplayCueBase TryCreateCue(Type type, IExParameterBase param)
+        public static GameplayCueBase TryCreateCue(Type type, XParam param)
         {
             try
             {
@@ -45,12 +45,12 @@ namespace GAS.Runtime
             return null;
         }
 
-        public static IExParameterBase CreateCueParameter(string type, List<object> paramData = null)
+        public static XParam CreateCueParameter(string type, List<object> paramData = null)
         {
             // var map = CueToCueParamTypeMap();
             // if (!map.TryGetValue(type, out var cueParamConfigType))
-            //     throw new KeyNotFoundException($"未找到类型为 {type} 的 IExParameterBase 类型。");
-            // var cueParamEditor = (IExParameterBase)Activator.CreateInstance(cueParamConfigType);
+            //     throw new KeyNotFoundException($"未找到类型为 {type} 的 XParam 类型。");
+            // var cueParamEditor = (XParam)Activator.CreateInstance(cueParamConfigType);
             // if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
             // return cueParamEditor;
             return null;

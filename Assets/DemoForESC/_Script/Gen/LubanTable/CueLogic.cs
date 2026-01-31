@@ -23,12 +23,8 @@ public abstract partial class CueLogic : Luban.BeanBase
     {
         switch ((string)_buf["$type"])
         {
-            case "GameplayCueLog": return new GameplayCueLog(_buf);
-            case "CueLoging": return new CueLoging(_buf);
-            case "GameplayCueLogFloat": return new GameplayCueLogFloat(_buf);
-            case "GameplayCueLogBool": return new GameplayCueLogBool(_buf);
-            case "GameplayCueLogVector2": return new GameplayCueLogVector2(_buf);
-            case "GameplayCueVector3": return new GameplayCueVector3(_buf);
+            case "CueLog": return new CueLog(_buf);
+            case "CueLogging": return new CueLogging(_buf);
             default: throw new SerializationException();
         }
     }

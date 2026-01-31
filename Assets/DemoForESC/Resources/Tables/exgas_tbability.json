@@ -18,7 +18,9 @@
     "activationBlockedTags": [],
     "abilityLogic": {
       "$type": "ALMove",
-      "RotationOffset": 0.5
+      "Param": {
+        "Value": 0.5
+      }
     }
   },
   {
@@ -38,10 +40,12 @@
     "activationBlockedTags": [],
     "abilityLogic": {
       "$type": "ALApplyEffect",
-      "Value": [
-        1002,
-        1001
-      ]
+      "Param": {
+        "IDs": [
+          1002,
+          1001
+        ]
+      }
     }
   },
   {
@@ -59,9 +63,11 @@
     "activationBlockedTags": [],
     "abilityLogic": {
       "$type": "ALApplyEffect",
-      "Value": [
-        1003
-      ]
+      "Param": {
+        "IDs": [
+          1003
+        ]
+      }
     }
   },
   {
@@ -79,9 +85,11 @@
     "activationBlockedTags": [],
     "abilityLogic": {
       "$type": "ALApplyEffect",
-      "Value": [
-        1005
-      ]
+      "Param": {
+        "IDs": [
+          1005
+        ]
+      }
     }
   },
   {
@@ -103,7 +111,9 @@
     ],
     "abilityLogic": {
       "$type": "ALTimeline",
-      "TimelineID": 101
+      "Param": {
+        "ID": 101
+      }
     }
   }
 ]

@@ -13,7 +13,7 @@ namespace DemoForESC._Script
     /// </summary>
     public class BaseUnit : MonoBehaviour
     {
-        protected ExParameterBaseMove _cacheParamMove = new ExParameterBaseMove();
+        protected XParamMove _cacheParamMove = new XParamMove();
 
         public AbilitySystemCellMono AbilitySystemCellMono { get; private set; }
 
@@ -56,7 +56,7 @@ namespace DemoForESC._Script
                 AbilitySystemCellMono.TryActivateAbility(XAbility.ABILITY_move,_cacheParamMove);
             
             var viewPointForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            _cacheParamMove.SetValue(direction,viewPointForward);
+            _cacheParamMove.SetDirection(direction,viewPointForward);
             AbilitySystemCellMono.Cell.SetAbilityParam(XAbility.ABILITY_move,_cacheParamMove);
         }
         

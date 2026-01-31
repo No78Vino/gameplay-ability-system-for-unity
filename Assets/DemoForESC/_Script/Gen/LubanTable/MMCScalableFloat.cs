@@ -17,8 +17,7 @@ public sealed partial class MMCScalableFloat : MmcLogic
 {
     public MMCScalableFloat(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["K"].IsNumber) { throw new SerializationException(); }  K = _buf["K"]; }
-        { if(!_buf["B"].IsNumber) { throw new SerializationException(); }  B = _buf["B"]; }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamMMCScalable.DeserializeXParamMMCScalable(_buf["Param"]);  }
     }
 
     public static MMCScalableFloat DeserializeMMCScalableFloat(JSONNode _buf)
@@ -26,8 +25,7 @@ public sealed partial class MMCScalableFloat : MmcLogic
         return new MMCScalableFloat(_buf);
     }
 
-    public readonly float K;
-    public readonly float B;
+    public readonly XParamMMCScalable Param;
    
     public const int __ID__ = -1201348828;
     public override int GetTypeId() => __ID__;
@@ -35,13 +33,13 @@ public sealed partial class MMCScalableFloat : MmcLogic
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
+        Param?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
-        + "K:" + K + ","
-        + "B:" + B + ","
+        + "Param:" + Param + ","
         + "}";
     }
 }

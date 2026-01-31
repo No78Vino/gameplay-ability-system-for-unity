@@ -8,7 +8,7 @@ namespace GAS.Runtime
         {
         }
 
-        public override void InitParameters(IExParameterBase parameter)
+        public override void InitParameters(XParam parameter)
         {
             base.InitParameters(parameter);
             _cueUnit = new GameplayCueUnit(Parameter.GetCueConfig());

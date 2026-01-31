@@ -17,7 +17,7 @@ public sealed partial class ALTimeline : AbilityLogic
 {
     public ALTimeline(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["TimelineID"].IsNumber) { throw new SerializationException(); }  TimelineID = _buf["TimelineID"]; }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamALTimelineID.DeserializeXParamALTimelineID(_buf["Param"]);  }
     }
 
     public static ALTimeline DeserializeALTimeline(JSONNode _buf)
@@ -25,7 +25,7 @@ public sealed partial class ALTimeline : AbilityLogic
         return new ALTimeline(_buf);
     }
 
-    public readonly int TimelineID;
+    public readonly XParamALTimelineID Param;
    
     public const int __ID__ = -1828067956;
     public override int GetTypeId() => __ID__;
@@ -33,12 +33,13 @@ public sealed partial class ALTimeline : AbilityLogic
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
+        Param?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
-        + "TimelineID:" + TimelineID + ","
+        + "Param:" + Param + ","
         + "}";
     }
 }

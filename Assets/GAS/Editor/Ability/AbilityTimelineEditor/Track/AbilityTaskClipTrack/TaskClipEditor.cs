@@ -35,7 +35,7 @@ namespace GAS.Editor
         public string TaskType;
 
         [BoxGroup(GRP_BOX_TASK)] [HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
-        public IExParameterBase Parameter;
+        public XParam Parameter;
 
         private XParamTimeline AbilityConfig => AbilityTimelineEditorWindow.Instance.AbilityConfig;
 

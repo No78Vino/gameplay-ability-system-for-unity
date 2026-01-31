@@ -12,8 +12,11 @@
       2001
     ],
     "cueLogic": {
-      "$type": "GameplayCueLog",
-      "Value": "testMessageA"
+      "$type": "CueLogging",
+      "Param": {
+        "Value": "testMessageA",
+        "Duration": 2.5
+      }
     }
   },
   {
@@ -28,9 +31,11 @@
     ],
     "immunity_tag": [],
     "cueLogic": {
-      "$type": "CueLoging",
-      "Value": "testValue2",
-      "Duration": 1.55
+      "$type": "CueLogging",
+      "Param": {
+        "Value": "testValue2",
+        "Duration": 1.55
+      }
     }
   },
   {
@@ -51,9 +56,11 @@
       1001
     ],
     "cueLogic": {
-      "$type": "CueLoging",
-      "Value": "卧槽",
-      "Duration": 30
+      "$type": "CueLogging",
+      "Param": {
+        "Value": "卧槽",
+        "Duration": 30
+      }
     }
   }
 ]

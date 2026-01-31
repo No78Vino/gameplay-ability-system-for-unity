@@ -17,6 +17,7 @@ public sealed partial class TaskDoCost : AbilityTask
 {
     public TaskDoCost(JSONNode _buf)  : base(_buf) 
     {
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamNone.DeserializeXParamNone(_buf["Param"]);  }
     }
 
     public static TaskDoCost DeserializeTaskDoCost(JSONNode _buf)
@@ -24,6 +25,7 @@ public sealed partial class TaskDoCost : AbilityTask
         return new TaskDoCost(_buf);
     }
 
+    public readonly XParamNone Param;
    
     public const int __ID__ = -1766917891;
     public override int GetTypeId() => __ID__;
@@ -31,11 +33,13 @@ public sealed partial class TaskDoCost : AbilityTask
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
+        Param?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
+        + "Param:" + Param + ","
         + "}";
     }
 }

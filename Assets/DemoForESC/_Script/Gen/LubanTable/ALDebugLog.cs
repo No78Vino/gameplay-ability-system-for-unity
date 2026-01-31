@@ -17,7 +17,7 @@ public sealed partial class ALDebugLog : AbilityLogic
 {
     public ALDebugLog(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["Value"].IsString) { throw new SerializationException(); }  Value = _buf["Value"]; }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamString.DeserializeXParamString(_buf["Param"]);  }
     }
 
     public static ALDebugLog DeserializeALDebugLog(JSONNode _buf)
@@ -25,7 +25,7 @@ public sealed partial class ALDebugLog : AbilityLogic
         return new ALDebugLog(_buf);
     }
 
-    public readonly string Value;
+    public readonly XParamString Param;
    
     public const int __ID__ = 796369212;
     public override int GetTypeId() => __ID__;
@@ -33,12 +33,13 @@ public sealed partial class ALDebugLog : AbilityLogic
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
+        Param?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
-        + "Value:" + Value + ","
+        + "Param:" + Param + ","
         + "}";
     }
 }

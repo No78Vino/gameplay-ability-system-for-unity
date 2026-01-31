@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
-    public class XParamTimeline : IExParameterBase
+    public class XParamTimeline : XParam
     {
         [ShowInInspector]
         public int ID { get; private set; }

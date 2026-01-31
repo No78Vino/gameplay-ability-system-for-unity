@@ -102,12 +102,12 @@ namespace GAS.Editor
             return _cachedAbilityToParamTypeMap;
         }
 
-        public static IExParameterBase CreateAbilityParameter(string type, List<object> paramData = null)
+        public static XParam CreateAbilityParameter(string type, List<object> paramData = null)
         {
             var map = AbilityToAbilityParamTypeMap();
             if (!map.TryGetValue(type, out var abilityParamConfigType))
-                throw new KeyNotFoundException($"未找到类型为 {type} 的 IExParameterBase 类型。");
-            var abilityParamEditor = (IExParameterBase)Activator.CreateInstance(abilityParamConfigType);
+                throw new KeyNotFoundException($"未找到类型为 {type} 的 XParam 类型。");
+            var abilityParamEditor = (XParam)Activator.CreateInstance(abilityParamConfigType);
             if (paramData != null) abilityParamEditor.DecodeExcelData(paramData);
             return abilityParamEditor;
         }
@@ -171,18 +171,18 @@ namespace GAS.Editor
             return _cachedAbilityTaskToParamTypeMap;
         }
         
-        public static IExParameterBase CreateAbilityTaskParameter(string type, List<object> paramData = null)
+        public static XParam CreateAbilityTaskParameter(string type, List<object> paramData = null)
         {
             var map = AbilityTaskToAbilityTaskParamTypeMap();
             if (!map.TryGetValue(type, out var abilityParamConfigType))
-                throw new KeyNotFoundException($"未找到类型为 {type} 的 IExParameterBase 类型。");
-            var abilityParamEditor = (IExParameterBase)Activator.CreateInstance(abilityParamConfigType);
+                throw new KeyNotFoundException($"未找到类型为 {type} 的 XParam 类型。");
+            var abilityParamEditor = (XParam)Activator.CreateInstance(abilityParamConfigType);
             if (paramData != null) abilityParamEditor.DecodeExcelData(paramData);
             return abilityParamEditor;
         }
         
         public static AbilityTaskBase CreateTaskInEditor(string taskType,
-            IExParameterBase paramLogic,IExParameterBase paramTask)
+            XParam paramLogic,XParam paramTask)
         {
             var taskTypes = GetCachedAbilityTaskTypes();
             var type = taskTypes.FirstOrDefault(t => t.Name == taskType);

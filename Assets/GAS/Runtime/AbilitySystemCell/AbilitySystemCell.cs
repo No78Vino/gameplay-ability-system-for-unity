@@ -133,7 +133,7 @@ namespace GAS.Runtime
 
         #region Ability
 
-        public void TryActivateAbility(int abilityCode, IExParameterBase param = null)
+        public void TryActivateAbility(int abilityCode, XParam param = null)
         {
             _abilityController.TryActivateAbility(abilityCode, param);
         }
@@ -153,7 +153,7 @@ namespace GAS.Runtime
             return _abilityController.IsAbilityActive(abilityCode);
         }
 
-        public void SetAbilityParam(int abilityCode, IExParameterBase param)
+        public void SetAbilityParam(int abilityCode, XParam param)
         {
             _abilityController.SetAbilityParam(abilityCode, param);
         }

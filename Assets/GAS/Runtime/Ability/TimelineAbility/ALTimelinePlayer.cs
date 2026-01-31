@@ -32,7 +32,7 @@ namespace GAS.Runtime
 
         public bool IsPlaying { get; private set; }
         
-        public XParamTimeline Param => _alTimeline.GetParam();
+        public XParamTimeline Param => _alTimeline.GetParam().CreateTimelineParam();
             
         private int LifeTime => Param.LifeTime;
         private int FrameRate => GASTimer.FrameRate;

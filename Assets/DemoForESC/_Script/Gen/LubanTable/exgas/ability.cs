@@ -29,7 +29,7 @@ public sealed partial class ability : Luban.BeanBase
         { var __json0 = _buf["activationOwnedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationOwnedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationOwnedTags.Add(__v0); }   }
         { var __json0 = _buf["activationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationRequiredTags.Add(__v0); }   }
         { var __json0 = _buf["activationBlockedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationBlockedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationBlockedTags.Add(__v0); }   }
-        { var _j = _buf["abilityLogic"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogic.DeserializeAbilityLogic(_j);  } } else { AbilityLogic = null; } }
+        { if(!_buf["abilityLogic"].IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogic.DeserializeAbilityLogic(_buf["abilityLogic"]);  }
     }
 
     public static ability Deserializeability(JSONNode _buf)

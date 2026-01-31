@@ -9,12 +9,12 @@ namespace GAS.Runtime
         public int StartTime;
         public int EndTime;
         public string TaskType;
-        public IExParameterBase Parameter;
+        public XParam Parameter;
 
         public int Duration => EndTime - StartTime;
         
         
-        public void SetParameter(IExParameterBase parameter)
+        public void SetParameter(XParam parameter)
         {
             Parameter = parameter;
         }

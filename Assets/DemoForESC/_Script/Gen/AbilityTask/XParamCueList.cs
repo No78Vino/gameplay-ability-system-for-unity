@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
-    public class XParamCueList: IExParameterBase
+    public class XParamCueList: XParam
     {
         private static List<ValueDropdownItem> CueIDs = new List<ValueDropdownItem>();
         

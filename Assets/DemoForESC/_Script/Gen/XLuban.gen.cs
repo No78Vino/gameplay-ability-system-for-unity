@@ -75,15 +75,23 @@ namespace GAS.Runtime
             var cueLogic = data.CueLogic;
             var cueLogicName = cueLogic.GetType().Name;
             var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
-            var cueParam = Activator.CreateInstance(cueParamType) as IExParameterBase;
+            var cueParam = Activator.CreateInstance(cueParamType) as XParam;
             if (cueParam != null)
             {
                 switch (cueLogic)
                 {
-                    case cfg.GameplayCueLog cData:
+                    case cfg.CueLog cData:
                     {
                         var cp = cueParam as GAS.Runtime.XParamString;
-                        cp?.SetValue(cData.Value);
+                        cp?.SetValue(cData.Param.Value);
+                        cueParam = cp;
+                        break;
+                    }
+                    case cfg.CueLogging cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamLogging;
+                        cp?.SetValue(cData.Param.Value);
+                        cp?.SetDuration(cData.Param.Duration);
                         cueParam = cp;
                         break;
                     }
@@ -307,29 +315,43 @@ namespace GAS.Runtime
                 var abilityLogic = data.AbilityLogic;
                 var abilityLogicName = abilityLogic.GetType().Name;
                 var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);
-                var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IExParameterBase;
+                var abilityParam = Activator.CreateInstance(abilityLogicParamType) as XParam;
                 if (abilityParam != null)
                 {
                     switch (abilityLogic)
                     {
                         case cfg.ALMove aData:
                         {
-                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.ExParameterBaseMove;
-                            ap?.SetRotationOffset(aData.RotationOffset);
+                            var ap = abilityParam as DemoForESC._Script.Gas.Ability.XParamMove;
+                            ap?.SetValue(aData.Param.Value);
                             abilityParam = ap;
                             break;
                         }
                         case cfg.ALApplyEffect aData:
                         {
-                            var ap = abilityParam as GAS.Runtime.XParamArrayInt;
-                            ap?.SetValue(aData.Value);
+                            var ap = abilityParam as GAS.Runtime.XParamEffectIDs;
+                            ap?.SetIDs(aData.Param.IDs);
                             abilityParam = ap;
                             break;
                         }
                         case cfg.ALDebugLog aData:
                         {
                             var ap = abilityParam as GAS.Runtime.XParamString;
-                            ap?.SetValue(aData.Value);
+                            ap?.SetValue(aData.Param.Value);
+                            abilityParam = ap;
+                            break;
+                        }
+                        case cfg.ALTimeline aData:
+                        {
+                            var ap = abilityParam as GAS.Runtime.XParamALTimelineID;
+                            ap?.SetID(aData.Param.ID);
+                            // 缓存Timeline参数
+                            if (ap != null)
+                            {
+                                var xParamTimeline = GetTimelineAbilityParam(aData.Param.ID);
+                                ap.CacheTimelineParam(xParamTimeline);
+                            }
+
                             abilityParam = ap;
                             break;
                         }
@@ -338,7 +360,7 @@ namespace GAS.Runtime
                 configs.Add(new MCConfAbilityLogic()
                 {
                     AbilityLogicType = abilityLogicName,
-                    ExParameterBase = abilityParam
+                    Param = abilityParam
                 });
             }
 
@@ -365,8 +387,8 @@ namespace GAS.Runtime
                     case cfg.MMCScalableFloat mmcData:
                     {
                         var mp = mmcParam as GAS.Runtime.MmcParaFloatScale;
-                        mp?.SetK(mmcData.K);
-                        mp?.SetB(mmcData.B);
+                        mp?.SetK(mmcData.Param.K);
+                        mp?.SetB(mmcData.Param.B);
                         mmcParam = mp;
                         break;
                     }
@@ -380,6 +402,66 @@ namespace GAS.Runtime
             };
         }
 
+        public static XParamTimeline GetTimelineAbilityParam(int id)
+        {
+            XParamTimeline timelineParam = new XParamTimeline();
+            var data = Tables.TbtimelineAbility.Get(id);
+            if (data == null)
+            {
+                Debug.LogError($"TimelineAbility_ID:{id}  不存在.");
+                return new XParamTimeline() { };
+            }
+
+            timelineParam.SetID(data.ID);
+            timelineParam.SetName(data.Name);
+            timelineParam.SetLifeTime(data.LifeTime);
+            timelineParam.SetManualEndAbility(data.ManualEndAbility);
+            
+            List<Track> tracks = new List<Track>();
+            foreach (var trackData in data.Tracks)
+            {
+                var track = new Track();
+                track.Name = trackData.Name;
+                track.TaskClips = new List<TaskClipData>();
+                foreach (var clipData in trackData.TaskClips)
+                {
+                    var taskClip = new TaskClipData();
+                    taskClip.Name = clipData.Name;
+                    taskClip.StartTime = clipData.StartTime;
+                    taskClip.EndTime = clipData.EndTime;
+                    taskClip.TaskType = clipData.Task.GetType().Name;
+                    
+                    var taskParamType = AbilityHelper.GetAbilityTaskParamType(taskClip.TaskType);
+                    var taskParam = Activator.CreateInstance(taskParamType) as XParam;
+                    if (taskParam != null)
+                    {
+                        switch (clipData.Task)
+                        {
+                            case cfg.TaskDoNothing taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamNone;
+                                taskParam = tp;
+                                break;
+                            }
+                            case cfg.TaskDebug taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamString;
+                                tp?.SetValue(taskData.Param.Value);
+                                taskParam = tp;
+                                break;
+                            }
+                        }
+                    }
+                    taskClip.Parameter = taskParam;
+                    
+                    track.TaskClips.Add(taskClip);
+                }
+                tracks.Add(track);
+            }
+            timelineParam.SetTracks(tracks);
+            return timelineParam;
+        }
+        
         public static string GetAbilityNameByCode(int id)
         {
             var data = Tables.Tbability.Get(id);

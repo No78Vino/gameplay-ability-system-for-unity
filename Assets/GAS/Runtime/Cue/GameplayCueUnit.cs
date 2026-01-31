@@ -12,7 +12,7 @@ namespace GAS.Runtime
     {
         private Entity _cueEntity;
         private Type _cueType;
-        private IExParameterBase _exParameterBase;
+        private XParam _xParam;
         private AbilitySystemCell _asc;
         private int[] _requiredTags;
         private int[] _immunityTags;
@@ -23,13 +23,13 @@ namespace GAS.Runtime
         /// GameplayCue独立控制单位
         /// </summary>
         /// <param name="cueType">Cue 类型</param>
-        /// <param name="exParameterBase">Cue 对应的自定义参数</param>
+        /// <param name="xParam">Cue 对应的自定义参数</param>
         /// <param name="requiredTags">可选：添加到ASC时，ASC播放需求的tag</param>
         /// <param name="immunityTags">>可选：添加到ASC时，ASC播放免疫的tag</param>
-        public GameplayCueUnit(Type cueType,IExParameterBase exParameterBase,int[] requiredTags = null, int[] immunityTags = null)
+        public GameplayCueUnit(Type cueType,XParam xParam,int[] requiredTags = null, int[] immunityTags = null)
         {
             _cueType = cueType;
-            _exParameterBase = exParameterBase;
+            _xParam = xParam;
             _requiredTags = requiredTags;
             _immunityTags = immunityTags;
         }
@@ -37,7 +37,7 @@ namespace GAS.Runtime
         public GameplayCueUnit(GameplayCueConfig config)
         {
             _cueType = config.CueType;
-            _exParameterBase = config.Param;
+            _xParam = config.Param;
             _requiredTags = config.RequiredTags;
             _immunityTags = config.ImmunityTags;
         }
@@ -70,7 +70,7 @@ namespace GAS.Runtime
             _cueEntity = EntityManager.CreateEntity();
             EntityManager.SetName(_cueEntity,$"Cue_{_cueType.Name}_{_cueEntity.Version}_{_cueEntity.Index}");
             
-            var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _exParameterBase));
+            var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _xParam));
             mcCue.cue.SetCueEntity(_cueEntity);
             mcCue.cue.SetSourceEntity(Entity.Null, CueSourceType.None);
             EntityHelper.AddManagedComponent<MCCue>(_cueEntity);
@@ -204,7 +204,7 @@ namespace GAS.Runtime
         /// <param name="endFrame"></param>
         public void OnPreview(int frame, int startFrame, int endFrame)
         {
-            var cue = CueHelper.TryCreateCue(_cueType, _exParameterBase);
+            var cue = CueHelper.TryCreateCue(_cueType, _xParam);
             cue.OnPreview(frame, startFrame, endFrame);
         }
 #endif

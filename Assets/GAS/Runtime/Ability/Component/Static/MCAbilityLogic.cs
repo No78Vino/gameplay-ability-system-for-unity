@@ -19,13 +19,13 @@ namespace GAS.Runtime
     public sealed class MCConfAbilityLogic:AbilityComponentConfig
     {
         public string AbilityLogicType;
-        public IExParameterBase ExParameterBase;
+        public XParam Param;
         private AbilityLogicBase GetAbilityLogic(Entity ability) => AbilityHelper.TryCreateAbilityLogic(AbilityLogicType,ability);
         
         public override void LoadToGameplayAbilityEntity(Entity ability)
         {
             var logic = GetAbilityLogic(ability);
-            logic.SetParam(ExParameterBase);
+            logic.SetParam(Param);
             _entityManager.AddComponentData(ability, new MCAbilityLogic(logic));
         }
     }

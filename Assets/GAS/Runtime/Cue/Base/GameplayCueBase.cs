@@ -12,7 +12,7 @@ namespace GAS.Runtime
         protected AbilitySystemCell _abilitySystemCell;
         protected static EntityManager EntityManager => GASManager.EntityManager; 
         
-        public abstract void InitParameters(IExParameterBase exParameterBase);
+        public abstract void InitParameters(XParam xParam);
 
         public virtual void Reset()
         {
@@ -134,17 +134,17 @@ namespace GAS.Runtime
         #endregion
     }
 
-    public abstract class GameplayCueBase<T> : GameplayCueBase where T : IExParameterBase
+    public abstract class GameplayCueBase<T> : GameplayCueBase where T : XParam
     {
         public T Parameter { get; private set; }
         
-        public override void InitParameters(IExParameterBase exParameterBase)
+        public override void InitParameters(XParam xParam)
         {
-            if (exParameterBase is T t)
+            if (xParam is T t)
                 Parameter = t;
 #if UNITY_EDITOR
             else
-                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {exParameterBase.GetType()}");
+                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {xParam.GetType()}");
 #endif
         }
     }

@@ -8,7 +8,7 @@
         {
         }
 
-        public override void InitParameters(IExParameterBase parameter)
+        public override void InitParameters(XParam parameter)
         {
             base.InitParameters(parameter);
             _cueUnits = new GameplayCueUnit[Parameter.Cues.Length];

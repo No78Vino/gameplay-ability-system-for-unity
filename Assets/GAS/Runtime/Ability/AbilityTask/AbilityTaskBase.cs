@@ -29,7 +29,7 @@ namespace GAS.Runtime
 #endif
         }
 
-        public abstract void InitParameters(IExParameterBase parameter);
+        public abstract void InitParameters(XParam parameter);
 
         /// <summary>
         /// 修改 AbilityTask 的生效时间单位，默认是Frame（以帧为单位）
@@ -77,7 +77,7 @@ namespace GAS.Runtime
         }
     }
 
-    public abstract class AbilityTaskBase<T> : AbilityTaskBase where T : IExParameterBase
+    public abstract class AbilityTaskBase<T> : AbilityTaskBase where T : XParam
     {
         public T Parameter { get; private set; }
 
@@ -85,7 +85,7 @@ namespace GAS.Runtime
         {
         }
 
-        public override void InitParameters(IExParameterBase parameter)
+        public override void InitParameters(XParam parameter)
         {
             if (parameter is T t)
                 Parameter = t;

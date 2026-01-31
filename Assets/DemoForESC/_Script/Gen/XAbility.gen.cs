@@ -17,7 +17,7 @@ namespace GAS.Runtime
         {
             ///  AbilityLogic
             var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
-            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.ExParameterBaseMove));
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.XParamMove));
             var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALApplyEffect.Name, ALApplyEffect,typeof(GAS.Runtime.XParamArrayInt));
             var ALDebugLog = typeof(GAS.Runtime.ALDebugLog);

@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public class ALApplyEffect : AbilityLogicBase<XParamArrayInt>
+    public class ALApplyEffect : AbilityLogicBase<XParamEffectIDs>
     {
         public ALApplyEffect(Entity ability) : base(ability)
         {
@@ -15,7 +15,7 @@ namespace GAS.Runtime
         public override void ActivateAbility(GlobalTimer timer)
         {
             var owner = Owner;
-            foreach (var effectCode in _param.Value)
+            foreach (var effectCode in _param.IDs)
             {
                 var effectCfg = GameplayEffectHelper.GetConfigByID(effectCode);
                 var geEntity = CreateGameplayEffectEntity(effectCfg);

@@ -17,7 +17,7 @@ public sealed partial class ALMove : AbilityLogic
 {
     public ALMove(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["RotationOffset"].IsNumber) { throw new SerializationException(); }  RotationOffset = _buf["RotationOffset"]; }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamFloat.DeserializeXParamFloat(_buf["Param"]);  }
     }
 
     public static ALMove DeserializeALMove(JSONNode _buf)
@@ -25,7 +25,7 @@ public sealed partial class ALMove : AbilityLogic
         return new ALMove(_buf);
     }
 
-    public readonly float RotationOffset;
+    public readonly XParamFloat Param;
    
     public const int __ID__ = 1933486748;
     public override int GetTypeId() => __ID__;
@@ -33,12 +33,13 @@ public sealed partial class ALMove : AbilityLogic
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
+        Param?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
-        + "RotationOffset:" + RotationOffset + ","
+        + "Param:" + Param + ","
         + "}";
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using GAS.General;
+
 namespace GAS.Editor
 {
     public static class CodeGeneratorLubanPart
@@ -63,7 +65,7 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     writer.WriteLine("");
-                    
+
                     writer.WriteLine("public static void Init()");
                     writer.WriteLine("{");
                     writer.Indent++;
@@ -71,9 +73,9 @@ namespace GAS.Editor
                     writer.WriteLine("GameplayEffectHelper.RegisterGetConfigByIDFunc(GetGameplayEffectConfig);");
                     writer.Indent--;
                     writer.WriteLine("}");
-                    
+
                     writer.WriteLine("");
-                    
+
                     #region ASC
 
                     writer.WriteLine("public static AbilitySystemCellConfig GetAscConfig(int id)");
@@ -98,11 +100,11 @@ namespace GAS.Editor
                         writer.WriteLine("abilities[i] = GetAbilityConfig(abilityId);");
                         writer.Indent--;
                         writer.WriteLine("}");
-                        
+
                         writer.WriteLine("var attrSets = new AttrSetConfig[data.AttrSet.Length];");
                         writer.WriteLine("for (var i = 0; i < data.AttrSet.Length; i++)");
                         writer.WriteLine("    attrSets[i] = XAttrSet.AttributeSetMap[data.AttrSet[i]];");
-                        
+
                         writer.WriteLine(
                             "return new AbilitySystemCellConfig(data.Tag, attrSets, abilities, data.Level);");
                     }
@@ -141,7 +143,7 @@ namespace GAS.Editor
                         writer.WriteLine("var cueLogic = data.CueLogic;");
                         writer.WriteLine("var cueLogicName = cueLogic.GetType().Name;");
                         writer.WriteLine("var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);");
-                        writer.WriteLine("var cueParam = Activator.CreateInstance(cueParamType) as IExParameterBase;");
+                        writer.WriteLine("var cueParam = Activator.CreateInstance(cueParamType) as XParam;");
                         writer.WriteLine("if (cueParam != null)");
                         writer.WriteLine("{");
                         writer.Indent++;
@@ -156,7 +158,7 @@ namespace GAS.Editor
                             {
                                 var cueName = cueType.Name;
                                 var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];
-                                var tType = EXEditorHelper.GetTypeByName($"cfg.{cueName}");
+                                Type tType = ReflectionHelper.GetMemberType($"cfg.{cueName}", "Param");
                                 if (tType == null) continue;
 
                                 writer.WriteLine($"case cfg.{cueName} cData:");
@@ -166,7 +168,7 @@ namespace GAS.Editor
 
                                 var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
                                 foreach (var fieldName in readOnlyFields)
-                                    writer.WriteLine($"cp?.Set{fieldName}(cData.{fieldName});");
+                                    writer.WriteLine($"cp?.Set{fieldName}(cData.Param.{fieldName});");
 
                                 writer.WriteLine("cueParam = cp;");
                                 writer.WriteLine("break;");
@@ -238,7 +240,8 @@ namespace GAS.Editor
                         writer.Indent++;
                         writer.WriteLine("duration = data.Duration.Value.Time,");
                         writer.WriteLine("timeUnit = (TimeUnit)data.Duration.Value.TimeUnit,");
-                        writer.WriteLine("ResetStartTimeWhenActivated = data.Duration.Value.ResetStartTimeWhenActivated");
+                        writer.WriteLine(
+                            "ResetStartTimeWhenActivated = data.Duration.Value.ResetStartTimeWhenActivated");
                         writer.Indent--;
                         writer.WriteLine("});");
                         writer.Indent--;
@@ -402,10 +405,10 @@ namespace GAS.Editor
 
                         writer.WriteLine("var configs = new List<AbilityComponentConfig>();");
                         writer.WriteLine("");
-                        
+
                         writer.WriteLine("// baseInfo");
                         writer.WriteLine("configs.Add(new ConfAbilityBaseInfo { Code = id, Level = 0 });");
-                        
+
                         writer.WriteLine("// cost");
                         writer.WriteLine("if (data.Cost != 0)");
                         writer.WriteLine(
@@ -471,7 +474,7 @@ namespace GAS.Editor
                             writer.WriteLine(
                                 "var abilityLogicParamType = AbilityHelper.GetAbilityLogicParamType(abilityLogicName);");
                             writer.WriteLine(
-                                "var abilityParam = Activator.CreateInstance(abilityLogicParamType) as IExParameterBase;");
+                                "var abilityParam = Activator.CreateInstance(abilityLogicParamType) as XParam;");
                             writer.WriteLine("if (abilityParam != null)");
                             writer.WriteLine("{");
                             writer.Indent++;
@@ -488,7 +491,7 @@ namespace GAS.Editor
                                     var abilityTypeName = abilityType.Name;
                                     var abilityParamType =
                                         EditorAbilityHelper.AbilityToAbilityParamTypeMap()[abilityTypeName];
-                                    var tType = EXEditorHelper.GetTypeByName($"cfg.{abilityTypeName}");
+                                    Type tType = ReflectionHelper.GetMemberType($"cfg.{abilityTypeName}", "Param");
                                     if (tType == null) continue;
 
                                     writer.WriteLine($"case cfg.{abilityTypeName} aData:");
@@ -498,7 +501,21 @@ namespace GAS.Editor
                                     var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
                                     foreach (var fieldName in readOnlyFields)
                                     {
-                                        writer.WriteLine($"ap?.Set{fieldName}(aData.{fieldName});");
+                                        writer.WriteLine($"ap?.Set{fieldName}(aData.Param.{fieldName});");
+                                    }
+
+                                    if (abilityParamType.Name == "XParamALTimelineID")
+                                    {
+                                        // 特殊处理TimelineAbility的Param，主动生成XParamTimeline的缓存
+                                        writer.WriteLine("// 缓存Timeline参数");
+                                        writer.WriteLine("if (ap != null)");
+                                        writer.WriteLine("{");
+                                        writer.Indent++;
+                                        writer.WriteLine(
+                                            "var xParamTimeline = GetTimelineAbilityParam(aData.Param.ID);");
+                                        writer.WriteLine("ap.CacheTimelineParam(xParamTimeline);");
+                                        writer.Indent--;
+                                        writer.WriteLine("}");
                                     }
 
                                     writer.WriteLine("abilityParam = ap;");
@@ -516,7 +533,7 @@ namespace GAS.Editor
                             writer.WriteLine("{");
                             writer.Indent++;
                             writer.WriteLine("AbilityLogicType = abilityLogicName,");
-                            writer.WriteLine("abilityParam = abilityParam");
+                            writer.WriteLine("Param = abilityParam");
                             writer.Indent--;
                             writer.WriteLine("});");
                         }
@@ -569,7 +586,8 @@ namespace GAS.Editor
                             {
                                 var mmcTypeName = mmcType.Name;
                                 var mmcParamType = EditorMmcHelper.MmcToMmcParamTypeMap()[mmcTypeName];
-                                var tType = EXEditorHelper.GetTypeByName($"cfg.{mmcTypeName}");
+                                var tType = ReflectionHelper.GetMemberType($"cfg.{mmcTypeName}", "Param");
+
                                 if (tType == null) continue;
 
                                 writer.WriteLine($"case cfg.{mmcTypeName} mmcData:");
@@ -579,7 +597,7 @@ namespace GAS.Editor
                                 var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
                                 foreach (var fieldName in readOnlyFields)
                                 {
-                                    writer.WriteLine($"mp?.Set{fieldName}(mmcData.{fieldName});");
+                                    writer.WriteLine($"mp?.Set{fieldName}(mmcData.Param.{fieldName});");
                                 }
 
                                 writer.WriteLine("mmcParam = mp;");
@@ -608,7 +626,161 @@ namespace GAS.Editor
                     #endregion
 
                     writer.WriteLine("");
-                    
+
+                    #region TimelineAbility
+
+                    //                     public static XParamTimeline GetTimelineAbilityParam(int id)
+                    // {
+                    //     XParamTimeline timelineParam = new XParamTimeline();
+                    //     var data = Tables.TbtimelineAbility.Get(id);
+                    //     if (data == null)
+                    //     {
+                    //         Debug.LogError($"TimelineAbility_ID:{id}  不存在.");
+                    //         return new XParamTimeline() { };
+                    //     }
+                    //
+                    //     timelineParam.SetID(data.ID);
+                    //     timelineParam.SetName(data.Name);
+                    //     timelineParam.SetLifeTime(data.LifeTime);
+                    //     timelineParam.SetManualEndAbility(data.ManualEndAbility);
+                    //     
+                    //     List<Track> tracks = new List<Track>();
+                    //     foreach (var trackData in data.Tracks)
+                    //     {
+                    //         var track = new Track();
+                    //         track.Name = trackData.Name;
+                    //         track.TaskClips = new List<TaskClipData>();
+                    //         foreach (var clipData in trackData.TaskClips)
+                    //         {
+                    //             var taskClip = new TaskClipData();
+                    //             taskClip.Name = clipData.Name;
+                    //             taskClip.StartTime = clipData.StartTime;
+                    //             taskClip.EndTime = clipData.EndTime;
+                    //             taskClip.TaskType = clipData.Task.GetType().Name;
+                    //             
+                    //             var taskParamType = AbilityHelper.GetAbilityTaskParamType(taskClip.TaskType);
+                    //             var taskParam = Activator.CreateInstance(taskParamType) as XParam;
+                    //             if (taskParam != null)
+                    //             {
+                    //                 switch (clipData.Task)
+                    //                 {
+                    //                     case cfg.TaskDoNothing taskData:
+                    //                     {
+                    //                         var tp = taskParam as GAS.Runtime.XParamNone;
+                    //                         taskParam = tp;
+                    //                         break;
+                    //                     }
+                    //                     case cfg.TaskDebug taskData:
+                    //                     {
+                    //                         var tp = taskParam as GAS.Runtime.XParamString;
+                    //                         tp?.SetValue(taskData.Param.Value);
+                    //                         taskParam = tp;
+                    //                         break;
+                    //                     }
+                    //                 }
+                    //             }
+                    //             taskClip.Parameter = taskParam;
+                    //             
+                    //             track.TaskClips.Add(taskClip);
+                    //         }
+                    //         tracks.Add(track);
+                    //     }
+                    //     timelineParam.SetTracks(tracks);
+                    //     return timelineParam;
+                    // }
+                    writer.WriteLine("");
+                    writer.WriteLine("public static XParamTimeline GetTimelineAbilityParam(int id)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine("XParamTimeline timelineParam = new XParamTimeline();");
+                    writer.WriteLine("var data = Tables.TbtimelineAbility.Get(id);");
+                    writer.WriteLine("if (data == null)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine("Debug.LogError($\"TimelineAbility_ID:{id}  不存在.\");");
+                    writer.WriteLine("return new XParamTimeline() { };");
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("timelineParam.SetID(data.ID);");
+                    writer.WriteLine("timelineParam.SetName(data.Name);");
+                    writer.WriteLine("timelineParam.SetLifeTime(data.LifeTime);");
+                    writer.WriteLine("timelineParam.SetManualEndAbility(data.ManualEndAbility);");
+                    writer.WriteLine("List<Track> tracks = new List<Track>();");
+                    writer.WriteLine("foreach (var trackData in data.Tracks)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine("var track = new Track();");
+                    writer.WriteLine("track.Name = trackData.Name;");
+                    writer.WriteLine("track.TaskClips = new List<TaskClipData>();");
+                    writer.WriteLine("foreach (var clipData in trackData.TaskClips)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine("var taskClip = new TaskClipData();");
+                    writer.WriteLine("taskClip.Name = clipData.Name;");
+                    writer.WriteLine("taskClip.StartTime = clipData.StartTime;");
+                    writer.WriteLine("taskClip.EndTime = clipData.EndTime;");
+                    writer.WriteLine("taskClip.TaskType = clipData.Task.GetType().Name;");
+                    writer.WriteLine("var taskParamType = AbilityHelper.GetAbilityTaskParamType(taskClip.TaskType);");
+                    writer.WriteLine("var taskParam = Activator.CreateInstance(taskParamType) as XParam;");
+                    writer.WriteLine("if (taskParam != null)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("switch (clipData.Task)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        
+                        
+                        var allTasks = EditorAbilityHelper.GetCachedAbilityTaskTypes();
+                        var taskTypes = allTasks as Type[] ?? allTasks.ToArray();
+                        foreach (var taskType in taskTypes)
+                        {
+                            var taskTypeName = taskType.Name;
+                            var taskParamType = EditorAbilityHelper.AbilityTaskToAbilityTaskParamTypeMap()[taskTypeName];
+                            var tType = ReflectionHelper.GetMemberType($"cfg.{taskTypeName}", "Param");
+
+                            if (tType == null) continue;
+
+                            writer.WriteLine($"case cfg.{taskTypeName} taskData:");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            writer.WriteLine($"var tp = taskParam as {taskParamType.FullName};");
+                            var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
+                            foreach (var fieldName in readOnlyFields)
+                            {
+                                writer.WriteLine($"tp?.Set{fieldName}(taskData.Param.{fieldName});");
+                            }
+
+                            writer.WriteLine("taskParam = tp;");
+                            writer.WriteLine("break;");
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                        }
+                        
+                        
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("taskClip.Parameter = taskParam;");
+                    writer.WriteLine("track.TaskClips.Add(taskClip);");
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("tracks.Add(track);");
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("timelineParam.SetTracks(tracks);");
+                    writer.WriteLine("return timelineParam;");
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.Indent--;
+                    writer.WriteLine("");
+
+                    #endregion
+
+                    writer.WriteLine("");
+
                     #region Utils
 
                     writer.WriteLine("public static string GetAbilityNameByCode(int id)");
@@ -623,7 +795,7 @@ namespace GAS.Editor
                     writer.Indent--;
                     writer.WriteLine("}");
                     writer.WriteLine("");
-                    
+
                     writer.WriteLine("public static string GetAttrSetNameByCode(int code)");
                     writer.WriteLine("{");
                     writer.Indent++;
@@ -636,7 +808,7 @@ namespace GAS.Editor
                     writer.Indent--;
                     writer.WriteLine("}");
                     writer.WriteLine("");
-                    
+
                     writer.WriteLine("public static string GetAttributeNameByCode(int code)");
                     writer.WriteLine("{");
                     writer.Indent++;
@@ -648,6 +820,7 @@ namespace GAS.Editor
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
+
                     #endregion
                 }
                 writer.Indent--;

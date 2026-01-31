@@ -23,8 +23,11 @@ public abstract partial class AbilityTask : Luban.BeanBase
     {
         switch ((string)_buf["$type"])
         {
+            case "TaskDoNothing": return new TaskDoNothing(_buf);
             case "TaskDoCost": return new TaskDoCost(_buf);
             case "TaskDebug": return new TaskDebug(_buf);
+            case "TaskPlayCue": return new TaskPlayCue(_buf);
+            case "TaskPlayCuePreset": return new TaskPlayCuePreset(_buf);
             default: throw new SerializationException();
         }
     }

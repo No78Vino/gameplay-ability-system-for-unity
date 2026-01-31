@@ -1,50 +1,89 @@
 [
   {
     "ID": 101,
-    "Name": "测试时间轴1",
-    "LifeTime": 100,
+    "Name": "普通攻击",
+    "LifeTime": 30,
     "ManualEndAbility": false,
     "Tracks": [
       {
-        "Name": "轨道1",
+        "Name": "动画轨道",
         "TaskClips": [
           {
-            "StartTime": 1,
-            "EndTime": 3,
-            "Name": "消耗，产生CD",
+            "StartTime": 3,
+            "EndTime": 25,
+            "Name": "播放攻击动画",
             "Task": {
-              "$type": "TaskDoCost"
-            }
-          },
-          {
-            "StartTime": 2,
-            "EndTime": 4,
-            "Name": "调试1",
-            "Task": {
-              "$type": "TaskDebug",
-              "Value": "测试1"
+              "$type": "TaskPlayCue",
+              "Param": {
+                "RequiredTags": [
+                  0,
+                  0
+                ],
+                "ImmunityTags": [
+                  1,
+                  25
+                ],
+                "CueLogic": {
+                  "$type": "CueLogging",
+                  "Param": {
+                    "Value": "测试新输出",
+                    "Duration": 1.5
+                  }
+                }
+              }
             }
           }
         ]
       },
       {
-        "Name": "轨道2",
+        "Name": "音效轨道",
+        "TaskClips": [
+          {
+            "StartTime": 6,
+            "EndTime": 6,
+            "Name": "播放攻击音效",
+            "Task": {
+              "$type": "TaskDebug",
+              "Param": {
+                "Value": "测试135"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "Name": "特效轨道",
+        "TaskClips": [
+          {
+            "StartTime": 3,
+            "EndTime": 24,
+            "Name": "添加拖尾特效",
+            "Task": {
+              "$type": "TaskDoNothing",
+              "Param": {}
+            }
+          }
+        ]
+      },
+      {
+        "Name": "GE轨道",
         "TaskClips": [
           {
             "StartTime": 1,
             "EndTime": 1,
-            "Name": "消耗，产生CD",
+            "Name": "消耗",
             "Task": {
-              "$type": "TaskDoCost"
+              "$type": "TaskDoCost",
+              "Param": {}
             }
           },
           {
-            "StartTime": 5,
-            "EndTime": 6,
-            "Name": "调试2",
+            "StartTime": 9,
+            "EndTime": 9,
+            "Name": "造成伤害",
             "Task": {
-              "$type": "TaskDebug",
-              "Value": "测试135"
+              "$type": "TaskDoCost",
+              "Param": {}
             }
           }
         ]
@@ -66,7 +105,9 @@
             "Name": "调试3",
             "Task": {
               "$type": "TaskDebug",
-              "Value": "开头"
+              "Param": {
+                "Value": "开头"
+              }
             }
           },
           {
@@ -75,7 +116,9 @@
             "Name": "调试5",
             "Task": {
               "$type": "TaskDebug",
-              "Value": "结尾"
+              "Param": {
+                "Value": "结尾"
+              }
             }
           }
         ]
