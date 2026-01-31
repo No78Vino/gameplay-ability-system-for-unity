@@ -745,11 +745,20 @@ namespace GAS.Editor
                             writer.WriteLine("{");
                             writer.Indent++;
                             writer.WriteLine($"var tp = taskParam as {taskParamType.FullName};");
-                            var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                            foreach (var fieldName in readOnlyFields)
+                            if (taskParamType.Name == "XParamCue")
                             {
-                                writer.WriteLine($"tp?.Set{fieldName}(taskData.Param.{fieldName});");
+                                // 特殊处理XParamCue的创建逻辑
+                                writer.WriteLine($"tp?.SetCueLogic(CreateCueLogicUnit(taskData.Param.CueLogic,taskData.Param.RequiredTags,taskData.Param.ImmunityTags));");
                             }
+                            else
+                            {
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
+                                foreach (var fieldName in readOnlyFields)
+                                {
+                                    writer.WriteLine($"tp?.Set{fieldName}(taskData.Param.{fieldName});");
+                                }
+                            }
+                            
 
                             writer.WriteLine("taskParam = tp;");
                             writer.WriteLine("break;");
@@ -782,36 +791,6 @@ namespace GAS.Editor
                     writer.WriteLine("");
 
                     #region 动态创建CueLogic
-
-                    // private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
-                    // {
-                    //     var cueLogicName = cueLogic.GetType().Name;
-                    //     var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
-                    //     var cueParam = Activator.CreateInstance(cueParamType) as XParam;
-                    //     if (cueParam != null)
-                    //     {
-                    //         switch (cueLogic)
-                    //         {
-                    //             case cfg.CueLog cData:
-                    //             {
-                    //                 var cp = cueParam as GAS.Runtime.XParamString;
-                    //                 cp?.SetValue(cData.Param.Value);
-                    //                 cueParam = cp;
-                    //                 break;
-                    //             }
-                    //             case cfg.CueLogging cData:
-                    //             {
-                    //                 var cp = cueParam as GAS.Runtime.XParamLogging;
-                    //                 cp?.SetValue(cData.Param.Value);
-                    //                 cp?.SetDuration(cData.Param.Duration);
-                    //                 cueParam = cp;
-                    //                 break;
-                    //             }
-                    //         }
-                    //     }
-                    //     var cueLogicType = CueHelper.GetCueType(cueLogicName);
-                    //     return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
-                    // } 
                     
                     writer.WriteLine("private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)"); writer.WriteLine("{");
                     writer.Indent++;
@@ -863,6 +842,8 @@ namespace GAS.Editor
                         writer.WriteLine("var cueLogicType = CueHelper.GetCueType(cueLogicName);");
                         writer.WriteLine("return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);");
                     }
+                    writer.Indent--;
+                    writer.WriteLine("}");
 
                     #endregion
                     

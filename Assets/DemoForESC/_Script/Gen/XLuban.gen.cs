@@ -478,6 +478,7 @@ namespace GAS.Runtime
             return timelineParam;
         }
 
+
         private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
         {
             var cueLogicName = cueLogic.GetType().Name;
@@ -504,33 +505,33 @@ namespace GAS.Runtime
                     }
                 }
             }
+
             var cueLogicType = CueHelper.GetCueType(cueLogicName);
             return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
-        } 
+        }
 
+        public static string GetAbilityNameByCode(int id)
+        {
+            var data = Tables.Tbability.Get(id);
+            if (data != null) return data.Name;
+            Debug.LogError($"Ability_ID:{id}  不存在.");
+            return string.Empty;
+        }
 
-    public static string GetAbilityNameByCode(int id)
-    {
-        var data = Tables.Tbability.Get(id);
-        if (data != null) return data.Name;
-        Debug.LogError($"Ability_ID:{id}  不存在.");
-        return string.Empty;
+        public static string GetAttrSetNameByCode(int code)
+        {
+            var data = Tables.TbattributeSet.Get(code);
+            if (data != null) return data.Name;
+            Debug.LogError($"AttrSet_Code:{code}  不存在.");
+            return string.Empty;
+        }
+
+        public static string GetAttributeNameByCode(int code)
+        {
+            var data = Tables.Tbattribute.Get(code);
+            if (data != null) return data.Name;
+            Debug.LogError($"Attribute_Code:{code}  不存在.");
+            return string.Empty;
+        }
     }
-
-    public static string GetAttrSetNameByCode(int code)
-    {
-        var data = Tables.TbattributeSet.Get(code);
-        if (data != null) return data.Name;
-        Debug.LogError($"AttrSet_Code:{code}  不存在.");
-        return string.Empty;
-    }
-
-    public static string GetAttributeNameByCode(int code)
-    {
-        var data = Tables.Tbattribute.Get(code);
-        if (data != null) return data.Name;
-        Debug.LogError($"Attribute_Code:{code}  不存在.");
-        return string.Empty;
-    }
-}
 }
