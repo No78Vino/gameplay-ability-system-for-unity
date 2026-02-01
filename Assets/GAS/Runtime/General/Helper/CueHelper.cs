@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
@@ -47,19 +48,15 @@ namespace GAS.Runtime
 
         public static XParam CreateCueParameter(string type, List<object> paramData = null)
         {
-            // var map = CueToCueParamTypeMap();
-            // if (!map.TryGetValue(type, out var cueParamConfigType))
-            //     throw new KeyNotFoundException($"未找到类型为 {type} 的 XParam 类型。");
-            // var cueParamEditor = (XParam)Activator.CreateInstance(cueParamConfigType);
-            // if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
-            // return cueParamEditor;
-            return null;
+            var cueParamConfigType = GetCueLogicParamType(type);
+            var cueParamEditor = (XParam)Activator.CreateInstance(cueParamConfigType);
+            if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
+            return cueParamEditor;
         }
         
         public static Type GetCueLogicParamType(string cueType)
         {
-            var cueParam = CueType2CueParamTypeMap[cueType];
-            return CueParamTypeMap[cueParam];
+            return CueType2CueParamTypeMap.TryGetValue(cueType,out var cueParam) ? CueParamTypeMap[cueParam] : null;
         }
         
         public static Type GetCueLogicParamType(Type cueType)
@@ -95,6 +92,11 @@ namespace GAS.Runtime
             RegisterCue(sType, typeof(T),cueParam);
         }
 
+        public static List<string> GetCueTypeNames()
+        {
+            return CueTypeMap.Keys.ToList();
+        }
+        
         #endregion
 
         [BurstCompile]

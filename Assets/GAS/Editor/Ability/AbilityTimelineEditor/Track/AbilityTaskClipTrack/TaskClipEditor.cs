@@ -88,7 +88,6 @@ namespace GAS.Editor
             _clip.TaskClipData.TaskType = TaskType;
             Parameter = EditorAbilityHelper.CreateAbilityTaskParameter(TaskType);
             _clip.TaskClipData.Parameter = Parameter;
-            AbilityTimelineEditorWindow.Instance.Save();
         }
 
         private void OnNameChange()

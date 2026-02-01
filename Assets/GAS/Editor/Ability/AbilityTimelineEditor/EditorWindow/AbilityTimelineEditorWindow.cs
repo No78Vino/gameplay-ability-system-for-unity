@@ -1,4 +1,5 @@
 using System;
+using GAS.General;
 using GAS.Runtime;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -28,6 +29,13 @@ namespace GAS.Editor
 
         private static EditorWindow _childInspector;
 
+        private const float AUTO_SAVE_INTERVAL = 10f;
+        // 上一次自动保存的时间
+        private double _lastAutoSaveTime;
+
+        // 当前是否启用自动保存（随焦点开启/关闭）
+        private bool _autoSaveRunning = true;
+        
         public void CreateGUI()
         {
             Instance = this;
@@ -48,12 +56,18 @@ namespace GAS.Editor
             OnUpdateShow();
         }
 
+        private void OnGUI()
+        {
+            HandleShortcut();
+        }
+
         /// <summary>
         /// 这个方法被反射引用到, 重构请小心!!
         /// </summary>
         [MenuItem("EXTool/EX-GAS/时间轴技能编辑器")]
         public static void ShowWindow()
         {
+            GeneralGasChoiceHelper.LoadCache();
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
             // 打开子Inspector
@@ -98,6 +112,9 @@ namespace GAS.Editor
             _dropDownAbilityID.choices = GasAbilityTimelineXlsxReadWrite.GetTimelineAbilityIDList();
             _dropDownAbilityID.index = _dropDownAbilityID.choices.Count > 0 ? 0 : -1;
             _dropDownAbilityID.RegisterValueChangedCallback(OnAbilityIDChanged);
+
+            var btnSave = _root.Q<Button>("btn_save");
+            btnSave.clicked += OnClickSave;
         }
 
         private void OnAbilityIDChanged(ChangeEvent<string> evt)
@@ -112,14 +129,19 @@ namespace GAS.Editor
         {
             if (AbilityConfig == null) return;
             AbilityConfig.SetManualEndAbility(evt.newValue);
-            Save();
         }
         
         private void OnAbilityNameChanged(ChangeEvent<string> evt)
         {
             if (AbilityConfig == null) return;
             AbilityConfig.SetName(evt.newValue);
+        }
+        
+        private void OnClickSave()
+        {
+            if (AbilityConfig == null) return;
             Save();
+            Debug.Log("TimelineAbility保存成功");
         }
         #endregion
 
@@ -209,7 +231,6 @@ namespace GAS.Editor
                 if (_currentMaxFrame == value) return;
                 _currentMaxFrame = value;
                 AbilityConfig.SetLifeTime(_currentMaxFrame);
-                Save();
                 MaxFrame.value = _currentMaxFrame;
                 TrackView.UpdateContentSize();
                 TimerShaftView.RefreshTimerDraw();
@@ -393,5 +414,20 @@ namespace GAS.Editor
         }
 
         #endregion
+        
+        
+        private void HandleShortcut()
+        {
+            var e = Event.current;
+            if (e == null) return;
+            // 只在 KeyDown 事件中检查
+            if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.S)
+            {
+                // 调用你的保存逻辑
+                Save();
+                // 阻止 Unity 默认的 Ctrl+S（保存场景/工程）
+                e.Use();
+            }
+        }
     }
 }

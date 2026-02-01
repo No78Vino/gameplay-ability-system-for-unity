@@ -1,18 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GAS.General;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class XParamCue : XParam
     {
-        [ShowInInspector] public int[] RequiredTags { get; set; }
+        [ShowInInspector] [LabelText("需求标签")] [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
+        public List<int> RequiredTags;
 
-        [ShowInInspector] public int[] ImmunityTags { get; set; }
+        [ShowInInspector] [LabelText("免疫标签")] [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
+        public List<int> ImmunityTags;
         
-        [ShowInInspector] public string CueType { get; private set; }
+        
+        [ShowInInspector]
+        [LabelText("Cue类型")]
+        [ValueDropdown(nameof(CueClassChoice))]
+        [OnValueChanged(nameof(OnTypeChange))]
+        public string CueType { get; private set; }
 
-        [ShowInInspector] public XParam Param { get; set; }
+        [ShowInInspector]
+        [HideLabel]
+        [HideReferenceObjectPicker]
+        public XParam Param { get; set; }
         
         public void SetCueType(string cueType)
         {
@@ -32,20 +44,20 @@ namespace GAS.Runtime
         
         public void SetRequiredTags(int[] requiredTags)
         {
-            RequiredTags = requiredTags;
+            RequiredTags = requiredTags.ToList();
         }
 
         public void SetImmunityTags(int[] immunityTags)
         {
-            ImmunityTags = immunityTags;
+            ImmunityTags = immunityTags.ToList();
         }
 
         public XParamCue()
         {
             CueType = "";
             Param = null;
-            RequiredTags = Array.Empty<int>();
-            ImmunityTags = Array.Empty<int>();
+            RequiredTags = new List<int>();
+            ImmunityTags = new List<int>();
         }
 
         public XParamCue(string cueType, XParam param = null, int[] requiredTags = null,
@@ -53,16 +65,25 @@ namespace GAS.Runtime
         {
             CueType = cueType;
             Param = param;
-            RequiredTags = requiredTags ?? Array.Empty<int>();
-            ImmunityTags = immunityTags ?? Array.Empty<int>();
+            RequiredTags = requiredTags!=null ? requiredTags.ToList(): new List<int>();
+            ImmunityTags = immunityTags!=null ? immunityTags.ToList(): new List<int>();
         }
 
         public GameplayCueConfig GetCueConfig()
         {
             var cueType = CueHelper.GetCueType(CueType);
-            return new GameplayCueConfig(cueType, Param, RequiredTags, ImmunityTags);
+            return new GameplayCueConfig(cueType, Param, RequiredTags.ToArray(), ImmunityTags.ToArray());
+        }
+        
+        public List<ValueDropdownItem> TagChoices => GeneralGasChoiceHelper.Tags();
+        public IEnumerable<string> CueClassChoice => CueHelper.GetCueTypeNames();
+
+        private void OnTypeChange()
+        {
+            Param = CueHelper.CreateCueParameter(CueType);
         }
 
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
@@ -112,23 +133,44 @@ namespace GAS.Runtime
                 {
                     paramDataForCue.Add(paramData[i]);
                 }
-                //Param = 
+
+                var cueParamType = CueHelper.GetCueLogicParamType(CueType);
+                Param = (XParam)Activator.CreateInstance(cueParamType);
+                Param.DecodeExcelData(paramDataForCue);
             }
         }
 
         public List<object> EncodeExcelData()
         {
             var result = new List<object>();
-            // if (Value == null || Value.Length == 0)
-            // {
-            //     result.Add(string.Empty);
-            //     return result;
-            // }
-            //
-            // var strData = string.Join(";", Value);
-            // result.Add(strData);
+            // RequiredTags
+            var strRequiredTags = "";
+            for (var i = 0; i < RequiredTags.Count; i++)
+            {
+                strRequiredTags += RequiredTags[i].ToString();
+                if (i < RequiredTags.Count - 1) strRequiredTags += ";";
+            }
+
+            result.Add(strRequiredTags);
+            // ImmunityTags
+            var strImmunityTags = "";
+            for (var i = 0; i < ImmunityTags.Count; i++)
+            {
+                strImmunityTags += ImmunityTags[i].ToString();
+                if (i < ImmunityTags.Count - 1) strImmunityTags += ";";
+            }
+
+            result.Add(strImmunityTags);
+            // CueType
+            result.Add(CueType);
+            // Param
+            if (Param != null)
+                result.AddRange(Param.EncodeExcelData());
+           
             return result;
         }
+
+
 #endif
     }
 }

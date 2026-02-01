@@ -1,3 +1,4 @@
+using GAS.General;
 using GAS.Runtime;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
@@ -25,6 +26,7 @@ namespace GAS.Editor
             var window = GetWindow<GASCenterWindow>();
             window.position = GUIHelper.GetEditorWindowRect().AlignCenter(1200, 600);
             GasJsonReader.ReadAllAndCache();
+            GeneralGasChoiceHelper.LoadCache();
         }
         
         protected override OdinMenuTree BuildMenuTree()

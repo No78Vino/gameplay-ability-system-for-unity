@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -76,5 +77,24 @@ namespace GAS.Runtime
 #endif
             return null;
         }
+
+        #region Runtime内用于编辑器的部分
+
+        private static List<ValueDropdownItem> _choices;
+
+        public static void LoadTagChoices()
+        {
+            _choices = new List<ValueDropdownItem>();
+#if UNITY_EDITOR
+            
+#endif
+        }
+        
+        public static List<ValueDropdownItem> TagChoices()
+        {
+            return _choices;
+        }
+
+        #endregion
     }
 }

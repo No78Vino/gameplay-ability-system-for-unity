@@ -78,7 +78,7 @@ namespace GAS.Editor
         {
             // 删除数据
             AbilityConfig.Tracks.Remove(_trackInfo);
-            AbilityTimelineEditorWindow.Instance.Save();
+
             // 删除显示
             TrackParent.Remove(TrackRoot);
             MenuParent.Remove(MenuRoot);

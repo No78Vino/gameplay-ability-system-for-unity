@@ -361,5 +361,97 @@ namespace GAS.General
         }
 
         #endregion
+
+        #region 新增：实例方法调用
+
+        /// <summary>
+        /// 调用实例方法，例如：tableObj.Get(id)
+        /// </summary>
+        public static object InvokeInstanceMethod(object instance, string methodName, params object[] parameters)
+        {
+            if (instance == null)
+            {
+                Debug.LogError("[ReflectionHelper] 实例对象为 null");
+                return null;
+            }
+
+            Type type = instance.GetType();
+            MethodInfo method = type.GetMethod(methodName,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (method == null)
+            {
+                Debug.LogError($"[ReflectionHelper] 实例方法未找到：{type.FullName}.{methodName}");
+                return null;
+            }
+
+            try
+            {
+                return method.Invoke(instance, parameters);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[ReflectionHelper] 调用实例方法 {type.FullName}.{methodName} 发生异常：{ex.Message}");
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 新增：实例属性/字段读取
+
+        /// <summary>
+        /// 读取实例上的属性或字段值（object 版）。
+        /// </summary>
+        public static object GetProperty(object obj, string memberName)
+        {
+            if (obj == null)
+            {
+                Debug.LogError("[ReflectionHelper] 对 null 对象读取属性/字段");
+                return null;
+            }
+
+            Type type = obj.GetType();
+
+            // 先属性
+            PropertyInfo prop = type.GetProperty(memberName,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (prop != null && prop.CanRead)
+            {
+                return prop.GetValue(obj, null);
+            }
+
+            // 再字段
+            FieldInfo field = type.GetField(memberName,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (field != null)
+            {
+                return field.GetValue(obj);
+            }
+
+            Debug.LogError($"[ReflectionHelper] 实例属性/字段未找到：{type.FullName}.{memberName}");
+            return null;
+        }
+
+        /// <summary>
+        /// 读取实例上的属性或字段值（泛型版，直接拿强类型）。
+        /// </summary>
+        public static T GetProperty<T>(object obj, string memberName)
+        {
+            object value = GetProperty(obj, memberName);
+            if (value == null) return default;
+
+            try
+            {
+                return (T)value;
+            }
+            catch
+            {
+                Debug.LogWarning($"[ReflectionHelper] {obj.GetType().FullName}.{memberName} 无法转换为类型 {typeof(T).Name}");
+                return default;
+            }
+        }
+
+        #endregion
     }
 }

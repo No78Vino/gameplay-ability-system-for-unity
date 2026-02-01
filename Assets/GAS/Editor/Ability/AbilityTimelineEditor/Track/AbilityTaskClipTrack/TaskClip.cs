@@ -53,7 +53,6 @@ namespace GAS.Editor
         public void Delete()
         {
             var success = _track.TrackData.TaskClips.Remove(TaskClipData);
-            AbilityTimelineEditorWindow.Instance.Save();
             if (!success) return;
             _track.RemoveTrackItem(this);
             AbilityTimelineEditorWindow.Instance.SetInspector();
@@ -75,13 +74,11 @@ namespace GAS.Editor
         public void UpdateClipDataStartFrame(int newStartFrame)
         {
             TaskClipData.StartTime = newStartFrame;
-            AbilityTimelineEditorWindow.Instance.Save();
         }
 
         public void UpdateClipDataEndFrame(int endFrame)
         {
             TaskClipData.EndTime = endFrame;
-            AbilityTimelineEditorWindow.Instance.Save();
         }
 
         public void OnTickView(int frameIndex, int startFrame, int endFrame)

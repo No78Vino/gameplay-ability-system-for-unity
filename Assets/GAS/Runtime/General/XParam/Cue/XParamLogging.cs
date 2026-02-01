@@ -56,7 +56,7 @@ namespace GAS.Runtime
             
             var durationData = paramData.Count > 1 ? paramData[1] : null;
             if (durationData != null)
-                Duration = (float)durationData;
+                 float.TryParse(durationData as string,out Duration);
 
         }
 

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using cfg;
 using SimpleJSON;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace GAS.Runtime
@@ -526,6 +527,8 @@ namespace GAS.Runtime
 
     public static string GetAttributeNameByCode(int code)
     {
+        var d = Tables.TbgameplayTags.Get(6).Name;
+        
         var data = Tables.Tbattribute.Get(code);
         if (data != null) return data.Name;
         Debug.LogError($"Attribute_Code:{code}  不存在.");
