@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace GAS.Runtime
 {
     public class TaskPlayCue : AbilityTaskBase<XParamCue>
@@ -34,10 +36,10 @@ namespace GAS.Runtime
         }
         
 #if UNITY_EDITOR
-        public override void OnEditorPreview(int frame, int startFrame, int endFrame)
+        public override void OnEditorPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
-            base.OnEditorPreview(frame, startFrame, endFrame);
-            _cueUnit.OnPreview(frame, startFrame, endFrame);
+            base.OnEditorPreview(target,frame, startFrame, endFrame);
+            _cueUnit.OnPreview(target,frame, startFrame, endFrame);
         }
 #endif
     }

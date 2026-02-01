@@ -86,7 +86,7 @@ namespace GAS.Editor
             if (frameIndex < startFrame || frameIndex > endFrame) return;
             var task = EditorAbilityHelper.CreateTaskInEditor(TaskClipData.TaskType, AbilityConfig,
                 TaskClipData.Parameter);
-            task.OnEditorPreview(frameIndex, startFrame, endFrame);
+            task.OnEditorPreview(AbilityTimelineEditorWindow.Instance.PreviewObject,frameIndex, startFrame, endFrame);
         }
     }
 }

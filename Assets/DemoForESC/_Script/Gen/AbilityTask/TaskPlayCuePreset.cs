@@ -1,4 +1,6 @@
-﻿namespace GAS.Runtime
+﻿using UnityEngine;
+
+namespace GAS.Runtime
 {
     public class TaskPlayCuePreset: AbilityTaskBase<XParamCueList>
     {
@@ -46,12 +48,12 @@
             base.OnTick(frameIndex);
         }
 
-        public override void OnEditorPreview(int frame, int startFrame, int endFrame)
+        public override void OnEditorPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
-            base.OnEditorPreview(frame, startFrame, endFrame);
+            base.OnEditorPreview(target,frame, startFrame, endFrame);
             foreach (var cueUnit in _cueUnits)
             {
-                cueUnit.OnPreview(frame, startFrame, endFrame);
+                cueUnit.OnPreview(target,frame, startFrame, endFrame);
             }
         }
     }

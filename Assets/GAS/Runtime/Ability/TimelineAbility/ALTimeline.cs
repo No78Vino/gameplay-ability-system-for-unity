@@ -5,6 +5,12 @@ namespace GAS.Runtime
     public class ALTimeline: AbilityLogicBase<XParamALTimelineID>
     {
         protected ALTimelinePlayer _player;
+        protected XParamTimeline _data;
+        public XParamTimeline Data
+        {
+            get => _data;
+            private set => _data = value;
+        }
 
         /// <summary>
         /// 向性技能的作用目标
@@ -19,6 +25,13 @@ namespace GAS.Runtime
         public override void SetParam(XParam abilityParam)
         {
             base.SetParam(abilityParam);
+            _data = _param.CreateTimelineParam();
+            _player?.InitData();
+        }
+        
+        public void SetTimelineParam(XParamTimeline abilityParam)
+        {
+            Data = abilityParam;
             _player?.InitData();
         }
         

@@ -127,7 +127,7 @@ namespace GAS.Runtime
         {
         }
         
-        public virtual void OnPreview(int frame, int startFrame, int endFrame,params object[] args)
+        public virtual void OnPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
             
         }

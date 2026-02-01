@@ -37,11 +37,28 @@ namespace GAS.Runtime
             if (_animator != null) _animator.StopPlayback();
         }
 
-        public override void OnPreview(int frame, int startFrame, int endFrame,params object[] args)
+        public override void OnPreview(GameObject targetObject,int frame, int startFrame, int endFrame)
         {
-            base.OnPreview(frame, startFrame, endFrame);
-            GameObject target = args.Length > 0 ? args[0] as GameObject : null;
-            AnimationClip clip = args.Length > 1 ? args[1] as AnimationClip : null;
+            base.OnPreview(targetObject,frame, startFrame, endFrame);
+            GameObject target = null;
+            if (targetObject != null)
+            {
+                var tf = targetObject.transform.Find(Parameter.AnimatorNodePath);
+                if (tf != null) target = tf.gameObject;
+            }
+            
+            Animator animator = target != null ? target.GetComponent<Animator>() : null;
+            AnimationClip clip = null;
+            if (animator != null)
+            {
+                var clips = animator.runtimeAnimatorController.animationClips;
+                foreach (var c in clips)
+                {
+                    if (c.name != Parameter.AnimationName) continue;
+                    clip = c;
+                    break;
+                }
+            }
             if (target == null || clip == null) return;
 
             // 进入动画采样模式，这确保了对象属性的修改可以安全地被记录/撤销
@@ -55,7 +72,7 @@ namespace GAS.Runtime
             UnityEditor.AnimationMode.SampleAnimationClip(target, clip, timeInSeconds);
         
             // 采样完成后，可以选择结束动画模式
-            UnityEditor.AnimationMode.StopAnimationMode();
+            // UnityEditor.AnimationMode.StopAnimationMode();
         
             // 刷新场景视图以立即看到变化
             UnityEditor.SceneView.RepaintAll();

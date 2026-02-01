@@ -194,7 +194,7 @@ namespace GAS.Editor
             }
             
             ALTimeline al = new ALTimeline(Entity.Null);
-            al.SetParam(paramLogic);
+            al.SetTimelineParam(paramLogic as XParamTimeline);
             if (Activator.CreateInstance(type,al) is AbilityTaskBase task)
             {
                 task.InitParameters(paramTask);

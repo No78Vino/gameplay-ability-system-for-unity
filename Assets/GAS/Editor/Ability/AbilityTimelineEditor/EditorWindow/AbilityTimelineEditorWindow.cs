@@ -68,6 +68,7 @@ namespace GAS.Editor
         public static void ShowWindow()
         {
             GeneralGasChoiceHelper.LoadCache();
+            GasAbilityTimelineXlsxReadWrite.GetTimelineAbilities(true);
             var wnd = GetWindow<AbilityTimelineEditorWindow>();
             wnd.titleContent = new GUIContent("AbilityTimelineEditorWindow");
             // 打开子Inspector

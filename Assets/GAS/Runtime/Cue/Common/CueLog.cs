@@ -24,9 +24,9 @@ namespace GAS.Runtime
             
         }
 
-        public override void OnPreview(int frame, int startFrame, int endFrame,params object[] args)
+        public override void OnPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
-            base.OnPreview(frame, startFrame, endFrame);
+            base.OnPreview(target,frame, startFrame, endFrame);
             Debug.Log($"[Preview Frame {frame}]Msg:{Parameter.Value}");
         }
     }

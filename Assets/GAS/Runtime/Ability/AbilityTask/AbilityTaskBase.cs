@@ -44,7 +44,7 @@ namespace GAS.Runtime
         /// <param name="frame"></param>
         /// <param name="startFrame"></param>
         /// <param name="endFrame"></param>
-        public virtual void OnEditorPreview(int frame, int startFrame, int endFrame)
+        public virtual void OnEditorPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
         }
 #endif

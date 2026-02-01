@@ -204,10 +204,10 @@ namespace GAS.Runtime
         /// <param name="frame"></param>
         /// <param name="startFrame"></param>
         /// <param name="endFrame"></param>
-        public void OnPreview(int frame, int startFrame, int endFrame)
+        public void OnPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
             var cue = CueHelper.TryCreateCue(_cueType, _xParam);
-            cue.OnPreview(frame, startFrame, endFrame);
+            cue.OnPreview(target,frame, startFrame, endFrame);
         }
 #endif
     }
