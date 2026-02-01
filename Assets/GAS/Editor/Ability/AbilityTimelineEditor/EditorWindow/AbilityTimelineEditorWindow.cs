@@ -77,6 +77,7 @@ namespace GAS.Editor
         public void Save()
         {
             GasAbilityTimelineXlsxReadWrite.Write();
+            Debug.Log("TimelineAbility保存成功");
         }
 
         private void OnUpdateShow()
@@ -141,7 +142,6 @@ namespace GAS.Editor
         {
             if (AbilityConfig == null) return;
             Save();
-            Debug.Log("TimelineAbility保存成功");
         }
         #endregion
 
