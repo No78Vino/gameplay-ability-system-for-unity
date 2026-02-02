@@ -39,6 +39,7 @@ public abstract partial class XParam : Luban.BeanBase
             case "XParamEffectIDs": return new XParamEffectIDs(_buf);
             case "XParamMMCScalable": return new XParamMMCScalable(_buf);
             case "XParamLogging": return new XParamLogging(_buf);
+            case "XParamAnimator": return new XParamAnimator(_buf);
             default: throw new SerializationException();
         }
     }

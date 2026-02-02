@@ -25,6 +25,7 @@ public abstract partial class CueLogic : Luban.BeanBase
         {
             case "CueLog": return new CueLog(_buf);
             case "CueLogging": return new CueLogging(_buf);
+            case "CuePlayAnimator": return new CuePlayAnimator(_buf);
             default: throw new SerializationException();
         }
     }

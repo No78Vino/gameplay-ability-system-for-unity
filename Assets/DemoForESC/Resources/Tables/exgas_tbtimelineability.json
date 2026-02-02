@@ -9,25 +9,23 @@
         "Name": "动画轨道",
         "TaskClips": [
           {
-            "StartTime": 3,
-            "EndTime": 25,
+            "StartTime": 2,
+            "EndTime": 24,
             "Name": "播放攻击动画",
             "Task": {
               "$type": "TaskPlayCue",
               "Param": {
                 "RequiredTags": [
-                  0,
                   0
                 ],
                 "ImmunityTags": [
-                  1,
-                  25
+                  0
                 ],
                 "CueLogic": {
-                  "$type": "CueLogging",
+                  "$type": "CuePlayAnimator",
                   "Param": {
-                    "Value": "测试新输出",
-                    "Duration": 1.5
+                    "AnimatorNodePath": "",
+                    "AnimationName": "attack"
                   }
                 }
               }
