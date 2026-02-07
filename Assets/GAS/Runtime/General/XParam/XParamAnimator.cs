@@ -33,16 +33,19 @@ namespace GAS.Runtime
                 return;
             }
 
-            AnimatorNodePath = paramData[0] as string ?? string.Empty;
-            AnimationName = paramData[1] as string ?? string.Empty;
+            if (paramData[0] is string s)
+                AnimatorNodePath = s == XParamDefault.DefaultString ? string.Empty : s;
+
+            if (paramData[1] is string s2)
+                AnimationName = s2 == XParamDefault.DefaultString ? string.Empty : s2;
         }
 
         public List<object> EncodeExcelData()
         {
             var paramData = new List<object>
             {
-                AnimatorNodePath,
-                AnimationName
+                string.IsNullOrEmpty(AnimatorNodePath)?XParamDefault.DefaultString:AnimatorNodePath,
+                string.IsNullOrEmpty(AnimationName)?XParamDefault.DefaultString:AnimationName,     
             };
             return paramData;
         }

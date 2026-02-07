@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
@@ -51,8 +52,8 @@ namespace GAS.Runtime
                 Value = string.Empty;
                 return;
             }
-            Value = strData;
-            
+
+            Value = strData == XParamDefault.DefaultString ? string.Empty : strData;
             
             var durationData = paramData.Count > 1 ? paramData[1] : null;
             if (durationData != null)
@@ -65,7 +66,7 @@ namespace GAS.Runtime
             var result = new List<object>();
             if (string.IsNullOrEmpty(Value))
             {
-                result.Add(string.Empty);
+                result.Add(XParamDefault.DefaultString);
                 result.Add(0f);
                 return result;
             }

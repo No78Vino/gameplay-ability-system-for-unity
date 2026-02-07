@@ -201,6 +201,7 @@ namespace GAS.Runtime
         /// <summary>
         ///     编辑器预览Cue效果
         /// </summary>
+        /// <param name="target"></param>
         /// <param name="frame"></param>
         /// <param name="startFrame"></param>
         /// <param name="endFrame"></param>

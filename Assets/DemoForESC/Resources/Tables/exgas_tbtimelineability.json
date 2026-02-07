@@ -16,7 +16,7 @@
               "$type": "TaskPlayCue",
               "Param": {
                 "RequiredTags": [
-                  0
+                  2001
                 ],
                 "ImmunityTags": [
                   0

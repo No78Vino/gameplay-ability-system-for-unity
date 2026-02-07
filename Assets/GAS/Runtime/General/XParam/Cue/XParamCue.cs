@@ -88,42 +88,36 @@ namespace GAS.Runtime
         public void DecodeExcelData(List<object> paramData)
         {
             // RequiredTags
+            RequiredTags = new List<int>();
             if (paramData.Count > 0)
             {
                 var strTags = paramData[0].ToString();
-                var tags = strTags.Split(';');
-                var tagList = new List<int>();
-                if (tagList == null) throw new ArgumentNullException(nameof(tagList));
-                foreach (var tag in tags)
+                if (strTags != "0")
                 {
-                    if (int.TryParse(tag, out var tagInt))
-                    {
-                        tagList.Add(tagInt);
-                    }
+                    var tags = strTags.Split(';');
+                    foreach (var tag in tags)
+                        if (int.TryParse(tag, out var tagInt))
+                            RequiredTags.Add(tagInt);
                 }
             }
             
             // ImmunityTags
+            ImmunityTags = new List<int>();
             if (paramData.Count > 1)
             {
                 var strTags = paramData[1].ToString();
-                var tags = strTags.Split(';');
-                var tagList = new List<int>();
-                if (tagList == null) throw new ArgumentNullException(nameof(tagList));
-                foreach (var tag in tags)
+                if (strTags != "0")
                 {
-                    if (int.TryParse(tag, out var tagInt))
-                    {
-                        tagList.Add(tagInt);
-                    }
+                    var tags = strTags.Split(';');
+                    foreach (var tag in tags)
+                        if (int.TryParse(tag, out var tagInt))
+                            ImmunityTags.Add(tagInt);
                 }
             }
             
             // CueType
-            if (paramData.Count > 2)
-            {
+            if (paramData.Count > 2) 
                 CueType = paramData[2].ToString();
-            }
             
             // Param
             if (paramData.Count > 3)
@@ -145,19 +139,34 @@ namespace GAS.Runtime
             var result = new List<object>();
             // RequiredTags
             var strRequiredTags = "";
-            for (var i = 0; i < RequiredTags.Count; i++)
+            if (RequiredTags.Count == 0)
             {
-                strRequiredTags += RequiredTags[i].ToString();
-                if (i < RequiredTags.Count - 1) strRequiredTags += ";";
+                strRequiredTags = "0";
+            }
+            else
+            {
+                for (var i = 0; i < RequiredTags.Count; i++)
+                {
+                    strRequiredTags += RequiredTags[i].ToString();
+                    if (i < RequiredTags.Count - 1) strRequiredTags += ";";
+                }
             }
 
             result.Add(strRequiredTags);
+            
             // ImmunityTags
             var strImmunityTags = "";
-            for (var i = 0; i < ImmunityTags.Count; i++)
+            if (ImmunityTags.Count == 0)
             {
-                strImmunityTags += ImmunityTags[i].ToString();
-                if (i < ImmunityTags.Count - 1) strImmunityTags += ";";
+                strImmunityTags = "0";
+            }
+            else
+            {
+                for (var i = 0; i < ImmunityTags.Count; i++)
+                {
+                    strImmunityTags += ImmunityTags[i].ToString();
+                    if (i < ImmunityTags.Count - 1) strImmunityTags += ";";
+                }
             }
 
             result.Add(strImmunityTags);
