@@ -18,8 +18,8 @@ public sealed partial class gameplayTags : Luban.BeanBase
     public gameplayTags(JSONNode _buf) 
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
     }
 
     public static gameplayTags DeserializegameplayTags(JSONNode _buf)
@@ -51,8 +51,8 @@ public sealed partial class gameplayTags : Luban.BeanBase
     {
         return "{ "
         + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
         + "}";
     }
 }

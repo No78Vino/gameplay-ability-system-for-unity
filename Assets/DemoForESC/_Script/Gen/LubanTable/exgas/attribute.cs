@@ -17,9 +17,9 @@ public sealed partial class attribute : Luban.BeanBase
 {
     public attribute(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
     }
 
     public static attribute Deserializeattribute(JSONNode _buf)
@@ -30,7 +30,7 @@ public sealed partial class attribute : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 属性名:生成代码时会用到，需要符合C#的变量命名规范
     /// </summary>
@@ -50,9 +50,9 @@ public sealed partial class attribute : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
         + "}";
     }
 }

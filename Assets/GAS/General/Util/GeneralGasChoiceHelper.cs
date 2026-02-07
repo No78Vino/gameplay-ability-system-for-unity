@@ -33,6 +33,7 @@ namespace GAS.General
         private static List<ValueDropdownItem> _ascs;
         private static List<ValueDropdownItem> _attrSets;
         private static Dictionary<int,List<ValueDropdownItem>> _attrs;
+        private static List<ValueDropdownItem> _timelineAbilityIDs;
 
         public static List<ValueDropdownItem> Tags()
         {
@@ -47,6 +48,36 @@ namespace GAS.General
             }
 
             return _tags;
+        }
+
+        public static List<ValueDropdownItem> TimelineAbilityIDs()
+        {
+            if (_timelineAbilityIDs != null) return _timelineAbilityIDs;
+            
+            _timelineAbilityIDs = new List<ValueDropdownItem>();
+            var ids = GasChoiceRawAccessor.GetTimelineAbilityIDs();
+            foreach (var id in ids)
+            {
+                string name = GasChoiceRawAccessor.GetTimelineAbilityName(id);
+                _timelineAbilityIDs.Add(new ValueDropdownItem($"[{id}]{name}",id));
+            }
+
+            return _timelineAbilityIDs;
+        }
+
+        public static List<ValueDropdownItem> GameplayEffects()
+        {
+            if (_effects != null) return _effects;
+            
+            _effects = new List<ValueDropdownItem>();
+            var ids = GasChoiceRawAccessor.GetGameplayEffectIDs();
+            foreach (var id in ids)
+            {
+                string name = GasChoiceRawAccessor.GetGameplayEffectName(id);
+                _effects.Add(new ValueDropdownItem($"[{id}]{name}",id));
+            }
+
+            return _effects;
         }
     }
 }

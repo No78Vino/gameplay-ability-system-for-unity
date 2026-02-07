@@ -1,9 +1,9 @@
 [
   {
-    "id": 1001,
-    "name": "模值x1",
-    "desc": "描述:模值x1",
-    "mmcLogic": {
+    "ID": 1001,
+    "Name": "模值x1",
+    "Desc": "描述:模值x1",
+    "MmcLogic": {
       "$type": "MMCScalableFloat",
       "Param": {
         "K": 1,
@@ -12,10 +12,10 @@
     }
   },
   {
-    "id": 1002,
-    "name": "模值x3",
-    "desc": "描述:模值x3",
-    "mmcLogic": {
+    "ID": 1002,
+    "Name": "模值x3",
+    "Desc": "描述:模值x3",
+    "MmcLogic": {
       "$type": "MMCScalableFloat",
       "Param": {
         "K": 3,
@@ -24,10 +24,10 @@
     }
   },
   {
-    "id": 1003,
-    "name": "测试3",
-    "desc": "test message3",
-    "mmcLogic": {
+    "ID": 1003,
+    "Name": "测试3",
+    "Desc": "test message3",
+    "MmcLogic": {
       "$type": "MMCScalableFloat",
       "Param": {
         "K": 1.5,

@@ -28,7 +28,7 @@ public partial class Tbasc
             exgas.asc _v;
             { if(!_ele.IsObject) { throw new SerializationException(); }  _v = global::cfg.exgas.asc.Deserializeasc(_ele);  }
             _dataList.Add(_v);
-            _dataMap.Add(_v.Id, _v);
+            _dataMap.Add(_v.ID, _v);
         }
     }
 

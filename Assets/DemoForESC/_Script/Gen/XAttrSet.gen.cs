@@ -47,9 +47,9 @@ namespace GAS.Runtime
                         for (var i = 0; i < attrSet.Attribute.Length; i++)
                         {
                             var a = attrSet.Attribute[i];
-                            settings[i] = new AttributeBaseSetting(a.Id, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);
+                            settings[i] = new AttributeBaseSetting(a.ID, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);
                         }
-                        _attributeSetMap.Add(attrSet.Id,new AttrSetConfig(attrSet.Id,settings));
+                        _attributeSetMap.Add(attrSet.ID,new AttrSetConfig(attrSet.ID,settings));
                     }
                 }
                 return _attributeSetMap;

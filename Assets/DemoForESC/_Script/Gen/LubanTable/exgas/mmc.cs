@@ -17,10 +17,10 @@ public sealed partial class mmc : Luban.BeanBase
 {
     public mmc(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { if(!_buf["mmcLogic"].IsObject) { throw new SerializationException(); }  MmcLogic = global::cfg.MmcLogic.DeserializeMmcLogic(_buf["mmcLogic"]);  }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
+        { if(!_buf["MmcLogic"].IsObject) { throw new SerializationException(); }  MmcLogic = global::cfg.MmcLogic.DeserializeMmcLogic(_buf["MmcLogic"]);  }
     }
 
     public static mmc Deserializemmc(JSONNode _buf)
@@ -31,7 +31,7 @@ public sealed partial class mmc : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 名字
     /// </summary>
@@ -56,10 +56,10 @@ public sealed partial class mmc : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "mmcLogic:" + MmcLogic + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
+        + "MmcLogic:" + MmcLogic + ","
         + "}";
     }
 }

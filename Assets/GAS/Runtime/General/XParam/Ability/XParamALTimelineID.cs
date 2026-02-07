@@ -1,10 +1,17 @@
 using System.Collections.Generic;
+using GAS.General;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class XParamALTimelineID:XParam
     {
+        [ShowInInspector] 
+        [LabelText("时间轴技能ID")] 
+        [ValueDropdown(nameof(TimelineAbilityIDChoices), IsUniqueList = true)]
         public int ID;
+        
+        
         private XParamTimeline _timelineParam;
         
         public void SetID(int value)
@@ -36,6 +43,7 @@ namespace GAS.Runtime
             return _timelineParam;
         }
         
+        public List<ValueDropdownItem> TimelineAbilityIDChoices => GeneralGasChoiceHelper.TimelineAbilityIDs();
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
@@ -45,16 +53,17 @@ namespace GAS.Runtime
                 return;
             }
 
-            var strData = paramData[0] as string;
-            if (string.IsNullOrEmpty(strData))
+            switch (paramData[0])
             {
-                ID = 0;
-                return;
-            }
-
-            if (!int.TryParse(strData, out ID))
-            {
-                ID = 0;
+                case string strData:
+                    ID = string.IsNullOrEmpty(strData) ? 0 : int.Parse(strData);
+                    break;
+                case int intData:
+                    ID = intData;
+                    break;
+                case double doubleData:
+                    ID = (int)doubleData;
+                    break;
             }
         }
 

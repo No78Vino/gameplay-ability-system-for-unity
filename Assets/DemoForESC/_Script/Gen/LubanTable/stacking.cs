@@ -13,9 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct stacking
+public partial struct Stacking
 {
-    public stacking(JSONNode _buf) 
+    public Stacking(JSONNode _buf) 
     {
         { if(!_buf["StackingType"].IsNumber) { throw new SerializationException(); }  StackingType = _buf["StackingType"]; }
         { if(!_buf["StackCode"].IsNumber) { throw new SerializationException(); }  StackCode = _buf["StackCode"]; }
@@ -28,9 +28,9 @@ public partial struct stacking
         { var __json0 = _buf["OverflowEffects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; OverflowEffects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OverflowEffects[__index0++] = __v0; }   }
     }
 
-    public static stacking Deserializestacking(JSONNode _buf)
+    public static Stacking DeserializeStacking(JSONNode _buf)
     {
-        return new stacking(_buf);
+        return new Stacking(_buf);
     }
 
     public readonly int StackingType;

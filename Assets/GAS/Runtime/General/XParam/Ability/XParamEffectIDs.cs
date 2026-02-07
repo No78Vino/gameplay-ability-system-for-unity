@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using GAS.General;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class XParamEffectIDs:XParam
     {
-        [ShowInInspector] public int[] IDs;
+        [ShowInInspector] 
+        [LabelText("buff效果ID")] 
+        [ValueDropdown(nameof(GameplayEffectIDChoices), IsUniqueList = true)]
+        public int[] IDs;
 
         public void SetIDs(int[] value)
         {
@@ -23,6 +27,7 @@ namespace GAS.Runtime
             IDs = ds;
         }
         
+        public List<ValueDropdownItem> GameplayEffectIDChoices => GeneralGasChoiceHelper.GameplayEffects();
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

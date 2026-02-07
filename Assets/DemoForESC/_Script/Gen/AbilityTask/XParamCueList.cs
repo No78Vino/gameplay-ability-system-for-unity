@@ -56,7 +56,7 @@ namespace GAS.Runtime
             {
                 XLuban.Init();
                 foreach (var cue in XLuban.Tables.TbgameplayCue.DataList)
-                    CueIDs.Add(new ValueDropdownItem($"{cue.Id}[{cue.Name}]",cue.Id));
+                    CueIDs.Add(new ValueDropdownItem($"{cue.ID}[{cue.Name}]",cue.ID));
             }
         }
 

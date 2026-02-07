@@ -17,10 +17,10 @@ public sealed partial class attributeSet : Luban.BeanBase
 {
     public attributeSet(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { var __json0 = _buf["attribute"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Attribute = new attributeInSet[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { attributeInSet __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.attributeInSet.DeserializeattributeInSet(__e0);  }  Attribute[__index0++] = __v0; }   }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
+        { var __json0 = _buf["Attribute"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Attribute = new AttributeInSet[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { AttributeInSet __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.AttributeInSet.DeserializeAttributeInSet(__e0);  }  Attribute[__index0++] = __v0; }   }
     }
 
     public static attributeSet DeserializeattributeSet(JSONNode _buf)
@@ -31,7 +31,7 @@ public sealed partial class attributeSet : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 属性集名:生成代码时会用到，需要符合C#的变量命名规范
     /// </summary>
@@ -40,7 +40,7 @@ public sealed partial class attributeSet : Luban.BeanBase
     /// 属性描述：定义和作用等
     /// </summary>
     public readonly string Desc;
-    public readonly attributeInSet[] Attribute;
+    public readonly AttributeInSet[] Attribute;
    
     public const int __ID__ = 1083625422;
     public override int GetTypeId() => __ID__;
@@ -52,10 +52,10 @@ public sealed partial class attributeSet : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "attribute:" + Luban.StringUtil.CollectionToString(Attribute) + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
+        + "Attribute:" + Luban.StringUtil.CollectionToString(Attribute) + ","
         + "}";
     }
 }

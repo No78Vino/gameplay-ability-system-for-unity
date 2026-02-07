@@ -17,26 +17,26 @@ public sealed partial class gameplayEffect : Luban.BeanBase
 {
     public gameplayEffect(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { var __json0 = _buf["assetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
-        { var __json0 = _buf["grantedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } GrantedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  GrantedTags.Add(__v0); }   }
-        { var __json0 = _buf["applicationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ApplicationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ApplicationRequiredTags.Add(__v0); }   }
-        { var __json0 = _buf["ongoingRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } OngoingRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OngoingRequiredTags.Add(__v0); }   }
-        { var __json0 = _buf["removeGameplayEffectsWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } RemoveGameplayEffectsWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RemoveGameplayEffectsWithTags.Add(__v0); }   }
-        { var __json0 = _buf["immunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags.Add(__v0); }   }
-        { var _j = _buf["duration"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Duration = global::cfg.duration.Deserializeduration(_j);  } } else { Duration = null; } }
-        { var _j = _buf["period"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Period = global::cfg.period.Deserializeperiod(_j);  } } else { Period = null; } }
-        { var __json0 = _buf["modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<modifier>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { modifier __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.modifier.Deserializemodifier(__e0);  }  Modifiers.Add(__v0); }   }
-        { var __json0 = _buf["cueOnApply"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnApply = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnApply.Add(__v0); }   }
-        { var __json0 = _buf["cueOnTick"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnTick = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnTick.Add(__v0); }   }
-        { var __json0 = _buf["cueOnAdd"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnAdd = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnAdd.Add(__v0); }   }
-        { var __json0 = _buf["cueOnRemove"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnRemove = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnRemove.Add(__v0); }   }
-        { var __json0 = _buf["cueOnActivate"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnActivate = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnActivate.Add(__v0); }   }
-        { var __json0 = _buf["cueOnDeactivate"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnDeactivate = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnDeactivate.Add(__v0); }   }
-        { var __json0 = _buf["grantedAbility"]; if(!__json0.IsArray) { throw new SerializationException(); } GrantedAbility = new System.Collections.Generic.List<grantedAbility>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { grantedAbility __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.grantedAbility.DeserializegrantedAbility(__e0);  }  GrantedAbility.Add(__v0); }   }
-        { var _j = _buf["stacking"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Stacking = global::cfg.stacking.Deserializestacking(_j);  } } else { Stacking = null; } }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
+        { var __json0 = _buf["AssetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
+        { var __json0 = _buf["GrantedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } GrantedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  GrantedTags.Add(__v0); }   }
+        { var __json0 = _buf["ApplicationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ApplicationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ApplicationRequiredTags.Add(__v0); }   }
+        { var __json0 = _buf["OngoingRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } OngoingRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OngoingRequiredTags.Add(__v0); }   }
+        { var __json0 = _buf["RemoveGameplayEffectsWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } RemoveGameplayEffectsWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RemoveGameplayEffectsWithTags.Add(__v0); }   }
+        { var __json0 = _buf["ImmunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags.Add(__v0); }   }
+        { var _j = _buf["Duration"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Duration = global::cfg.Duration.DeserializeDuration(_j);  } } else { Duration = null; } }
+        { var _j = _buf["Period"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Period = global::cfg.Period.DeserializePeriod(_j);  } } else { Period = null; } }
+        { var __json0 = _buf["Modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<Modifier>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { Modifier __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.Modifier.DeserializeModifier(__e0);  }  Modifiers.Add(__v0); }   }
+        { var __json0 = _buf["CueOnApply"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnApply = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnApply.Add(__v0); }   }
+        { var __json0 = _buf["CueOnTick"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnTick = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnTick.Add(__v0); }   }
+        { var __json0 = _buf["CueOnAdd"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnAdd = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnAdd.Add(__v0); }   }
+        { var __json0 = _buf["CueOnRemove"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnRemove = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnRemove.Add(__v0); }   }
+        { var __json0 = _buf["CueOnActivate"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnActivate = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnActivate.Add(__v0); }   }
+        { var __json0 = _buf["CueOnDeactivate"]; if(!__json0.IsArray) { throw new SerializationException(); } CueOnDeactivate = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CueOnDeactivate.Add(__v0); }   }
+        { var __json0 = _buf["GrantedAbility"]; if(!__json0.IsArray) { throw new SerializationException(); } GrantedAbility = new System.Collections.Generic.List<GrantedAbility>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { GrantedAbility __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.GrantedAbility.DeserializeGrantedAbility(__e0);  }  GrantedAbility.Add(__v0); }   }
+        { var _j = _buf["Stacking"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Stacking = global::cfg.Stacking.DeserializeStacking(_j);  } } else { Stacking = null; } }
     }
 
     public static gameplayEffect DeserializegameplayEffect(JSONNode _buf)
@@ -47,7 +47,7 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// 效果id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 效果名
     /// </summary>
@@ -80,15 +80,15 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// 时间单位
     /// </summary>
-    public readonly duration? Duration;
+    public readonly Duration? Duration;
     /// <summary>
     /// 间隔时间
     /// </summary>
-    public readonly period? Period;
+    public readonly Period? Period;
     /// <summary>
     /// 属性数值修改器（每组共5个参数：1.AttrSet属性集ID；2.Attribute属性ID；3.Magnitude基础模值；4.Operation操作类型；5.MMC计算逻辑【即exgas.mmc中的计算类型ID】）
     /// </summary>
-    public readonly System.Collections.Generic.List<modifier> Modifiers;
+    public readonly System.Collections.Generic.List<Modifier> Modifiers;
     /// <summary>
     /// 应用时触发的cue
     /// </summary>
@@ -116,11 +116,11 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// buff赋予的能力
     /// </summary>
-    public readonly System.Collections.Generic.List<grantedAbility> GrantedAbility;
+    public readonly System.Collections.Generic.List<GrantedAbility> GrantedAbility;
     /// <summary>
     /// 堆叠代码
     /// </summary>
-    public readonly stacking? Stacking;
+    public readonly Stacking? Stacking;
    
     public const int __ID__ = 1982447871;
     public override int GetTypeId() => __ID__;
@@ -132,26 +132,26 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "assetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
-        + "grantedTags:" + Luban.StringUtil.CollectionToString(GrantedTags) + ","
-        + "applicationRequiredTags:" + Luban.StringUtil.CollectionToString(ApplicationRequiredTags) + ","
-        + "ongoingRequiredTags:" + Luban.StringUtil.CollectionToString(OngoingRequiredTags) + ","
-        + "removeGameplayEffectsWithTags:" + Luban.StringUtil.CollectionToString(RemoveGameplayEffectsWithTags) + ","
-        + "immunityTags:" + Luban.StringUtil.CollectionToString(ImmunityTags) + ","
-        + "duration:" + Duration + ","
-        + "period:" + Period + ","
-        + "modifiers:" + Luban.StringUtil.CollectionToString(Modifiers) + ","
-        + "cueOnApply:" + Luban.StringUtil.CollectionToString(CueOnApply) + ","
-        + "cueOnTick:" + Luban.StringUtil.CollectionToString(CueOnTick) + ","
-        + "cueOnAdd:" + Luban.StringUtil.CollectionToString(CueOnAdd) + ","
-        + "cueOnRemove:" + Luban.StringUtil.CollectionToString(CueOnRemove) + ","
-        + "cueOnActivate:" + Luban.StringUtil.CollectionToString(CueOnActivate) + ","
-        + "cueOnDeactivate:" + Luban.StringUtil.CollectionToString(CueOnDeactivate) + ","
-        + "grantedAbility:" + Luban.StringUtil.CollectionToString(GrantedAbility) + ","
-        + "stacking:" + Stacking + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
+        + "AssetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
+        + "GrantedTags:" + Luban.StringUtil.CollectionToString(GrantedTags) + ","
+        + "ApplicationRequiredTags:" + Luban.StringUtil.CollectionToString(ApplicationRequiredTags) + ","
+        + "OngoingRequiredTags:" + Luban.StringUtil.CollectionToString(OngoingRequiredTags) + ","
+        + "RemoveGameplayEffectsWithTags:" + Luban.StringUtil.CollectionToString(RemoveGameplayEffectsWithTags) + ","
+        + "ImmunityTags:" + Luban.StringUtil.CollectionToString(ImmunityTags) + ","
+        + "Duration:" + Duration + ","
+        + "Period:" + Period + ","
+        + "Modifiers:" + Luban.StringUtil.CollectionToString(Modifiers) + ","
+        + "CueOnApply:" + Luban.StringUtil.CollectionToString(CueOnApply) + ","
+        + "CueOnTick:" + Luban.StringUtil.CollectionToString(CueOnTick) + ","
+        + "CueOnAdd:" + Luban.StringUtil.CollectionToString(CueOnAdd) + ","
+        + "CueOnRemove:" + Luban.StringUtil.CollectionToString(CueOnRemove) + ","
+        + "CueOnActivate:" + Luban.StringUtil.CollectionToString(CueOnActivate) + ","
+        + "CueOnDeactivate:" + Luban.StringUtil.CollectionToString(CueOnDeactivate) + ","
+        + "GrantedAbility:" + Luban.StringUtil.CollectionToString(GrantedAbility) + ","
+        + "Stacking:" + Stacking + ","
         + "}";
     }
 }

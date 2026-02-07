@@ -17,19 +17,19 @@ public sealed partial class ability : Luban.BeanBase
 {
     public ability(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { if(!_buf["cost"].IsNumber) { throw new SerializationException(); }  Cost = _buf["cost"]; }
-        { if(!_buf["cdEffect"].IsNumber) { throw new SerializationException(); }  CdEffect = _buf["cdEffect"]; }
-        { if(!_buf["cd"].IsNumber) { throw new SerializationException(); }  Cd = _buf["cd"]; }
-        { var __json0 = _buf["assetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
-        { var __json0 = _buf["cancelAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } CancelAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CancelAbilityWithTags.Add(__v0); }   }
-        { var __json0 = _buf["blockAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } BlockAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  BlockAbilityWithTags.Add(__v0); }   }
-        { var __json0 = _buf["activationOwnedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationOwnedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationOwnedTags.Add(__v0); }   }
-        { var __json0 = _buf["activationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationRequiredTags.Add(__v0); }   }
-        { var __json0 = _buf["activationBlockedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationBlockedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationBlockedTags.Add(__v0); }   }
-        { if(!_buf["abilityLogic"].IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogic.DeserializeAbilityLogic(_buf["abilityLogic"]);  }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
+        { if(!_buf["Cost"].IsNumber) { throw new SerializationException(); }  Cost = _buf["Cost"]; }
+        { if(!_buf["CdEffect"].IsNumber) { throw new SerializationException(); }  CdEffect = _buf["CdEffect"]; }
+        { if(!_buf["Cd"].IsNumber) { throw new SerializationException(); }  Cd = _buf["Cd"]; }
+        { var __json0 = _buf["AssetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
+        { var __json0 = _buf["CancelAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } CancelAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CancelAbilityWithTags.Add(__v0); }   }
+        { var __json0 = _buf["BlockAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } BlockAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  BlockAbilityWithTags.Add(__v0); }   }
+        { var __json0 = _buf["ActivationOwnedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationOwnedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationOwnedTags.Add(__v0); }   }
+        { var __json0 = _buf["ActivationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationRequiredTags.Add(__v0); }   }
+        { var __json0 = _buf["ActivationBlockedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationBlockedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationBlockedTags.Add(__v0); }   }
+        { if(!_buf["AbilityLogic"].IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogic.DeserializeAbilityLogic(_buf["AbilityLogic"]);  }
     }
 
     public static ability Deserializeability(JSONNode _buf)
@@ -40,7 +40,7 @@ public sealed partial class ability : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 名称
     /// </summary>
@@ -86,19 +86,19 @@ public sealed partial class ability : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "cost:" + Cost + ","
-        + "cdEffect:" + CdEffect + ","
-        + "cd:" + Cd + ","
-        + "assetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
-        + "cancelAbilityWithTags:" + Luban.StringUtil.CollectionToString(CancelAbilityWithTags) + ","
-        + "blockAbilityWithTags:" + Luban.StringUtil.CollectionToString(BlockAbilityWithTags) + ","
-        + "activationOwnedTags:" + Luban.StringUtil.CollectionToString(ActivationOwnedTags) + ","
-        + "activationRequiredTags:" + Luban.StringUtil.CollectionToString(ActivationRequiredTags) + ","
-        + "activationBlockedTags:" + Luban.StringUtil.CollectionToString(ActivationBlockedTags) + ","
-        + "abilityLogic:" + AbilityLogic + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
+        + "Cost:" + Cost + ","
+        + "CdEffect:" + CdEffect + ","
+        + "Cd:" + Cd + ","
+        + "AssetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
+        + "CancelAbilityWithTags:" + Luban.StringUtil.CollectionToString(CancelAbilityWithTags) + ","
+        + "BlockAbilityWithTags:" + Luban.StringUtil.CollectionToString(BlockAbilityWithTags) + ","
+        + "ActivationOwnedTags:" + Luban.StringUtil.CollectionToString(ActivationOwnedTags) + ","
+        + "ActivationRequiredTags:" + Luban.StringUtil.CollectionToString(ActivationRequiredTags) + ","
+        + "ActivationBlockedTags:" + Luban.StringUtil.CollectionToString(ActivationBlockedTags) + ","
+        + "AbilityLogic:" + AbilityLogic + ","
         + "}";
     }
 }

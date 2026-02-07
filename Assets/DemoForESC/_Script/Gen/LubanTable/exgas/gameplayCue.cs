@@ -17,12 +17,12 @@ public sealed partial class gameplayCue : Luban.BeanBase
 {
     public gameplayCue(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { var __json0 = _buf["required_tag"]; if(!__json0.IsArray) { throw new SerializationException(); } RequiredTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RequiredTag.Add(__v0); }   }
-        { var __json0 = _buf["immunity_tag"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTag.Add(__v0); }   }
-        { if(!_buf["cueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.CueLogic.DeserializeCueLogic(_buf["cueLogic"]);  }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
+        { var __json0 = _buf["RequiredTag"]; if(!__json0.IsArray) { throw new SerializationException(); } RequiredTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RequiredTag.Add(__v0); }   }
+        { var __json0 = _buf["ImmunityTag"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTag.Add(__v0); }   }
+        { if(!_buf["CueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.CueLogic.DeserializeCueLogic(_buf["CueLogic"]);  }
     }
 
     public static gameplayCue DeserializegameplayCue(JSONNode _buf)
@@ -33,7 +33,7 @@ public sealed partial class gameplayCue : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// cue名字
     /// </summary>
@@ -66,12 +66,12 @@ public sealed partial class gameplayCue : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "requiredTag:" + Luban.StringUtil.CollectionToString(RequiredTag) + ","
-        + "immunityTag:" + Luban.StringUtil.CollectionToString(ImmunityTag) + ","
-        + "cueLogic:" + CueLogic + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
+        + "RequiredTag:" + Luban.StringUtil.CollectionToString(RequiredTag) + ","
+        + "ImmunityTag:" + Luban.StringUtil.CollectionToString(ImmunityTag) + ","
+        + "CueLogic:" + CueLogic + ","
         + "}";
     }
 }

@@ -297,21 +297,27 @@ namespace GAS.General
             }
         }
 
-        /// <summary>
-        /// 针对你现在的具体需求：
-        /// GAS.Runtime.XLuban.Tables.TbgameplayTags.DataMap.Keys.ToList()
-        /// 且假设 DataMap 的键是 string。
-        /// </summary>
-        public static List<int> GetGameplayTagsKeysToList()
+
+        public static List<int> GetLubanTableKeysToList(string tableName)
         {
             return GetDictionaryKeysToList<int>(
                 "GAS.Runtime.XLuban",
                 "Tables",
-                "TbgameplayTags",
+                tableName,
                 "DataMap",
                 "Keys"
             );
         }
+        
+        public static List<int> GetGameplayTagsKeysToList() => GetLubanTableKeysToList("TbgameplayTags");
+        public static List<int> GetTimelineAbilityIDs() => GetLubanTableKeysToList("TbtimelineAbility");
+        public static List<int> GetAbilityIDs() => GetLubanTableKeysToList("Tbability");
+        public static List<int> GetGameplayCueIDs() => GetLubanTableKeysToList("TbgameplayCue");
+        public static List<int> GetGameplayEffectIDs() => GetLubanTableKeysToList("TbgameplayEffect");
+        public static List<int> GetAttributeIDs() => GetLubanTableKeysToList("Tbattribute");
+        public static List<int> GetAttributeSetIDs() => GetLubanTableKeysToList("TbattributeSet");
+        public static List<int> GetMmcIDs() => GetLubanTableKeysToList("Tbmmc");
+        
 
         public static string GetGameplayTagName(int id)
         {
@@ -322,5 +328,26 @@ namespace GAS.General
                 "GAS.Runtime.XLuban"
             );
         }
+        
+        public static string GetTimelineAbilityName(int id)
+        {
+            return ReflectionPathHelper.GetRawMemberById<string>(
+                "TbtimelineAbility",
+                id,
+                "Name",
+                "GAS.Runtime.XLuban"
+            );
+        }  
+        
+        public static string GetGameplayEffectName(int id)
+        {
+            return ReflectionPathHelper.GetRawMemberById<string>(
+                "TbgameplayEffect",
+                id,
+                "Name",
+                "GAS.Runtime.XLuban"
+            );
+        }
+        
     }
 }

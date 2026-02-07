@@ -13,18 +13,18 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct duration
+public partial struct Duration
 {
-    public duration(JSONNode _buf) 
+    public Duration(JSONNode _buf) 
     {
         { if(!_buf["TimeUnit"].IsNumber) { throw new SerializationException(); }  TimeUnit = _buf["TimeUnit"]; }
         { if(!_buf["Time"].IsNumber) { throw new SerializationException(); }  Time = _buf["Time"]; }
         { if(!_buf["ResetStartTimeWhenActivated"].IsBoolean) { throw new SerializationException(); }  ResetStartTimeWhenActivated = _buf["ResetStartTimeWhenActivated"]; }
     }
 
-    public static duration Deserializeduration(JSONNode _buf)
+    public static Duration DeserializeDuration(JSONNode _buf)
     {
-        return new duration(_buf);
+        return new Duration(_buf);
     }
 
     public readonly int TimeUnit;

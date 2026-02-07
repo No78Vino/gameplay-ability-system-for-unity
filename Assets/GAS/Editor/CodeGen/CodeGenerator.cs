@@ -227,10 +227,10 @@ namespace GAS.Editor
                             writer.WriteLine("{");
                             writer.Indent++;
                             writer.WriteLine("var a = attrSet.Attribute[i];");
-                            writer.WriteLine("settings[i] = new AttributeBaseSetting(a.Id, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);");
+                            writer.WriteLine("settings[i] = new AttributeBaseSetting(a.ID, a.InitValue, a.UseMinValue,a.UseMaxValue, a.MinValue, a.MaxValue);");
                             writer.Indent--;
                             writer.WriteLine("}");
-                            writer.WriteLine("_attributeSetMap.Add(attrSet.Id,new AttrSetConfig(attrSet.Id,settings));");
+                            writer.WriteLine("_attributeSetMap.Add(attrSet.ID,new AttrSetConfig(attrSet.ID,settings));");
                             writer.Indent--;
                             writer.WriteLine("}");
                         }

@@ -13,24 +13,24 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct attributeInSet
+public partial struct AttributeInSet
 {
-    public attributeInSet(JSONNode _buf) 
+    public AttributeInSet(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["initValue"].IsNumber) { throw new SerializationException(); }  InitValue = _buf["initValue"]; }
-        { if(!_buf["minValue"].IsNumber) { throw new SerializationException(); }  MinValue = _buf["minValue"]; }
-        { if(!_buf["maxValue"].IsNumber) { throw new SerializationException(); }  MaxValue = _buf["maxValue"]; }
-        { if(!_buf["useMinValue"].IsBoolean) { throw new SerializationException(); }  UseMinValue = _buf["useMinValue"]; }
-        { if(!_buf["useMaxValue"].IsBoolean) { throw new SerializationException(); }  UseMaxValue = _buf["useMaxValue"]; }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["InitValue"].IsNumber) { throw new SerializationException(); }  InitValue = _buf["InitValue"]; }
+        { if(!_buf["MinValue"].IsNumber) { throw new SerializationException(); }  MinValue = _buf["MinValue"]; }
+        { if(!_buf["MaxValue"].IsNumber) { throw new SerializationException(); }  MaxValue = _buf["MaxValue"]; }
+        { if(!_buf["UseMinValue"].IsBoolean) { throw new SerializationException(); }  UseMinValue = _buf["UseMinValue"]; }
+        { if(!_buf["UseMaxValue"].IsBoolean) { throw new SerializationException(); }  UseMaxValue = _buf["UseMaxValue"]; }
     }
 
-    public static attributeInSet DeserializeattributeInSet(JSONNode _buf)
+    public static AttributeInSet DeserializeAttributeInSet(JSONNode _buf)
     {
-        return new attributeInSet(_buf);
+        return new AttributeInSet(_buf);
     }
 
-    public readonly int Id;
+    public readonly int ID;
     public readonly float InitValue;
     public readonly float MinValue;
     public readonly float MaxValue;
@@ -45,12 +45,12 @@ public partial struct attributeInSet
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "initValue:" + InitValue + ","
-        + "minValue:" + MinValue + ","
-        + "maxValue:" + MaxValue + ","
-        + "useMinValue:" + UseMinValue + ","
-        + "useMaxValue:" + UseMaxValue + ","
+        + "ID:" + ID + ","
+        + "InitValue:" + InitValue + ","
+        + "MinValue:" + MinValue + ","
+        + "MaxValue:" + MaxValue + ","
+        + "UseMinValue:" + UseMinValue + ","
+        + "UseMaxValue:" + UseMaxValue + ","
         + "}";
     }
 }

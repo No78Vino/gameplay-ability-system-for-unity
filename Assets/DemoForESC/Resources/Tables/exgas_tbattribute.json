@@ -1,47 +1,47 @@
 [
   {
-    "id": 1,
-    "name": "Hp",
-    "desc": "血量"
+    "ID": 1,
+    "Name": "Hp",
+    "Desc": "血量"
   },
   {
-    "id": 2,
-    "name": "Mp",
-    "desc": "蓝量"
+    "ID": 2,
+    "Name": "Mp",
+    "Desc": "蓝量"
   },
   {
-    "id": 3,
-    "name": "Spd",
-    "desc": "速度"
+    "ID": 3,
+    "Name": "Spd",
+    "Desc": "速度"
   },
   {
-    "id": 4,
-    "name": "Atk",
-    "desc": "攻击力"
+    "ID": 4,
+    "Name": "Atk",
+    "Desc": "攻击力"
   },
   {
-    "id": 5,
-    "name": "Def",
-    "desc": "防御力"
+    "ID": 5,
+    "Name": "Def",
+    "Desc": "防御力"
   },
   {
-    "id": 6,
-    "name": "Sp",
-    "desc": "耐力"
+    "ID": 6,
+    "Name": "Sp",
+    "Desc": "耐力"
   },
   {
-    "id": 7,
-    "name": "HpMax",
-    "desc": "血上限"
+    "ID": 7,
+    "Name": "HpMax",
+    "Desc": "血上限"
   },
   {
-    "id": 8,
-    "name": "MpMax",
-    "desc": "魔力上限"
+    "ID": 8,
+    "Name": "MpMax",
+    "Desc": "魔力上限"
   },
   {
-    "id": 9,
-    "name": "SpMax",
-    "desc": "耐力上限"
+    "ID": 9,
+    "Name": "SpMax",
+    "Desc": "耐力上限"
   }
 ]

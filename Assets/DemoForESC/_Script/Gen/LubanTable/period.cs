@@ -13,18 +13,18 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct period
+public partial struct Period
 {
-    public period(JSONNode _buf) 
+    public Period(JSONNode _buf) 
     {
         { if(!_buf["Time"].IsNumber) { throw new SerializationException(); }  Time = _buf["Time"]; }
         { var __json0 = _buf["Effects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Effects = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Effects[__index0++] = __v0; }   }
         { if(!_buf["FirstTrigger"].IsBoolean) { throw new SerializationException(); }  FirstTrigger = _buf["FirstTrigger"]; }
     }
 
-    public static period Deserializeperiod(JSONNode _buf)
+    public static Period DeserializePeriod(JSONNode _buf)
     {
-        return new period(_buf);
+        return new Period(_buf);
     }
 
     public readonly int Time;

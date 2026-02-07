@@ -1,22 +1,22 @@
 [
   {
-    "id": 10001,
-    "name": "move",
-    "desc": "移动",
-    "cost": 0,
-    "cdEffect": 0,
-    "cd": 0,
-    "assetTags": [
+    "ID": 10001,
+    "Name": "move",
+    "Desc": "移动",
+    "Cost": 0,
+    "CdEffect": 0,
+    "Cd": 0,
+    "AssetTags": [
       2002
     ],
-    "cancelAbilityWithTags": [],
-    "blockAbilityWithTags": [],
-    "activationOwnedTags": [
+    "CancelAbilityWithTags": [],
+    "BlockAbilityWithTags": [],
+    "ActivationOwnedTags": [
       3001
     ],
-    "activationRequiredTags": [],
-    "activationBlockedTags": [],
-    "abilityLogic": {
+    "ActivationRequiredTags": [],
+    "ActivationBlockedTags": [],
+    "AbilityLogic": {
       "$type": "ALMove",
       "Param": {
         "Value": 0.5
@@ -24,21 +24,21 @@
     }
   },
   {
-    "id": 10002,
-    "name": "RunSpeedUp",
-    "desc": "加速",
-    "cost": 0,
-    "cdEffect": 0,
-    "cd": 0,
-    "assetTags": [],
-    "cancelAbilityWithTags": [],
-    "blockAbilityWithTags": [],
-    "activationOwnedTags": [],
-    "activationRequiredTags": [
+    "ID": 10002,
+    "Name": "RunSpeedUp",
+    "Desc": "加速",
+    "Cost": 0,
+    "CdEffect": 0,
+    "Cd": 0,
+    "AssetTags": [],
+    "CancelAbilityWithTags": [],
+    "BlockAbilityWithTags": [],
+    "ActivationOwnedTags": [],
+    "ActivationRequiredTags": [
       3001
     ],
-    "activationBlockedTags": [],
-    "abilityLogic": {
+    "ActivationBlockedTags": [],
+    "AbilityLogic": {
       "$type": "ALApplyEffect",
       "Param": {
         "IDs": [
@@ -49,19 +49,19 @@
     }
   },
   {
-    "id": 1003,
-    "name": "debug_ge_ability",
-    "desc": "调试GE",
-    "cost": 0,
-    "cdEffect": 0,
-    "cd": 0,
-    "assetTags": [],
-    "cancelAbilityWithTags": [],
-    "blockAbilityWithTags": [],
-    "activationOwnedTags": [],
-    "activationRequiredTags": [],
-    "activationBlockedTags": [],
-    "abilityLogic": {
+    "ID": 1003,
+    "Name": "debug_ge_ability",
+    "Desc": "调试GE",
+    "Cost": 0,
+    "CdEffect": 0,
+    "Cd": 0,
+    "AssetTags": [],
+    "CancelAbilityWithTags": [],
+    "BlockAbilityWithTags": [],
+    "ActivationOwnedTags": [],
+    "ActivationRequiredTags": [],
+    "ActivationBlockedTags": [],
+    "AbilityLogic": {
       "$type": "ALApplyEffect",
       "Param": {
         "IDs": [
@@ -71,19 +71,19 @@
     }
   },
   {
-    "id": 1005,
-    "name": "debug_ge_2",
-    "desc": "调试ge2",
-    "cost": 0,
-    "cdEffect": 0,
-    "cd": 0,
-    "assetTags": [],
-    "cancelAbilityWithTags": [],
-    "blockAbilityWithTags": [],
-    "activationOwnedTags": [],
-    "activationRequiredTags": [],
-    "activationBlockedTags": [],
-    "abilityLogic": {
+    "ID": 1005,
+    "Name": "debug_ge_2",
+    "Desc": "调试ge2",
+    "Cost": 0,
+    "CdEffect": 0,
+    "Cd": 0,
+    "AssetTags": [],
+    "CancelAbilityWithTags": [],
+    "BlockAbilityWithTags": [],
+    "ActivationOwnedTags": [],
+    "ActivationRequiredTags": [],
+    "ActivationBlockedTags": [],
+    "AbilityLogic": {
       "$type": "ALApplyEffect",
       "Param": {
         "IDs": [
@@ -93,23 +93,23 @@
     }
   },
   {
-    "id": 20001,
-    "name": "Attack",
-    "desc": "玩家普通攻击",
-    "cost": 0,
-    "cdEffect": 0,
-    "cd": 0,
-    "assetTags": [],
-    "cancelAbilityWithTags": [],
-    "blockAbilityWithTags": [],
-    "activationOwnedTags": [
+    "ID": 20001,
+    "Name": "Attack",
+    "Desc": "玩家普通攻击",
+    "Cost": 0,
+    "CdEffect": 0,
+    "Cd": 0,
+    "AssetTags": [],
+    "CancelAbilityWithTags": [],
+    "BlockAbilityWithTags": [],
+    "ActivationOwnedTags": [
       3003
     ],
-    "activationRequiredTags": [],
-    "activationBlockedTags": [
+    "ActivationRequiredTags": [],
+    "ActivationBlockedTags": [
       3003
     ],
-    "abilityLogic": {
+    "AbilityLogic": {
       "$type": "ALTimeline",
       "Param": {
         "ID": 101

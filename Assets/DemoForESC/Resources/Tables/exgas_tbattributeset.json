@@ -1,103 +1,103 @@
 [
   {
-    "id": 1,
-    "name": "FightUnit",
-    "desc": "战斗单位通用属性集",
-    "attribute": [
+    "ID": 1,
+    "Name": "FightUnit",
+    "Desc": "战斗单位通用属性集",
+    "Attribute": [
       {
-        "id": 1,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 1,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 2,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 2,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 3,
-        "initValue": 10,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 3,
+        "InitValue": 10,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 4,
-        "initValue": 10,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 4,
+        "InitValue": 10,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 5,
-        "initValue": 10,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 5,
+        "InitValue": 10,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 6,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 6,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 7,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 7,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 8,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 8,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 9,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 9,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       }
     ]
   },
   {
-    "id": 2,
-    "name": "Bullet",
-    "desc": "子弹飞行物用的属性集",
-    "attribute": [
+    "ID": 2,
+    "Name": "Bullet",
+    "Desc": "子弹飞行物用的属性集",
+    "Attribute": [
       {
-        "id": 3,
-        "initValue": 100,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 3,
+        "InitValue": 100,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       },
       {
-        "id": 4,
-        "initValue": 10,
-        "minValue": 0,
-        "maxValue": 999,
-        "useMinValue": true,
-        "useMaxValue": true
+        "ID": 4,
+        "InitValue": 10,
+        "MinValue": 0,
+        "MaxValue": 999,
+        "UseMinValue": true,
+        "UseMaxValue": true
       }
     ]
   }

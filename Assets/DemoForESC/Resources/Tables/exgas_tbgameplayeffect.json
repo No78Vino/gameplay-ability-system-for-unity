@@ -1,163 +1,163 @@
 [
   {
-    "id": 1001,
-    "name": "奔跑耐力消耗",
-    "desc": "耐力减少1点/5帧",
-    "assetTags": [],
-    "grantedTags": [
+    "ID": 1001,
+    "Name": "奔跑耐力消耗",
+    "Desc": "耐力减少1点/5帧",
+    "AssetTags": [],
+    "GrantedTags": [
       4001003
     ],
-    "applicationRequiredTags": [],
-    "ongoingRequiredTags": [],
-    "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "duration": {
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Duration": {
       "TimeUnit": 0,
       "Time": -1,
       "ResetStartTimeWhenActivated": false
     },
-    "period": {
+    "Period": {
       "Time": 5,
       "Effects": [
         9001
       ],
       "FirstTrigger": true
     },
-    "modifiers": [],
-    "cueOnApply": [],
-    "cueOnTick": [],
-    "cueOnAdd": [],
-    "cueOnRemove": [],
-    "cueOnActivate": [],
-    "cueOnDeactivate": [],
-    "grantedAbility": []
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
   },
   {
-    "id": 1002,
-    "name": "speed_up",
-    "desc": "加速buff",
-    "assetTags": [
+    "ID": 1002,
+    "Name": "speed_up",
+    "Desc": "加速buff",
+    "AssetTags": [
       3001
     ],
-    "grantedTags": [
+    "GrantedTags": [
       4001002
     ],
-    "applicationRequiredTags": [],
-    "ongoingRequiredTags": [],
-    "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "duration": {
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Duration": {
       "TimeUnit": 0,
       "Time": -1,
       "ResetStartTimeWhenActivated": false
     },
-    "modifiers": [
+    "Modifiers": [
       {
-        "attrSet": 1,
-        "attribute": 3,
-        "magnitude": 3,
-        "operation": 1,
-        "mmc": 1001
+        "AttrSet": 1,
+        "Attribute": 3,
+        "Magnitude": 3,
+        "Operation": 1,
+        "Mmc": 1001
       }
     ],
-    "cueOnApply": [],
-    "cueOnTick": [],
-    "cueOnAdd": [],
-    "cueOnRemove": [],
-    "cueOnActivate": [],
-    "cueOnDeactivate": [],
-    "grantedAbility": []
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
   },
   {
-    "id": 1003,
-    "name": "debug_effect1",
-    "desc": "调试用的测试ge",
-    "assetTags": [
+    "ID": 1003,
+    "Name": "debug_effect1",
+    "Desc": "调试用的测试ge",
+    "AssetTags": [
       3001
     ],
-    "grantedTags": [],
-    "applicationRequiredTags": [
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [
       400
     ],
-    "ongoingRequiredTags": [],
-    "removeGameplayEffectsWithTags": [
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [
       3001
     ],
-    "immunityTags": [
+    "ImmunityTags": [
       2004
     ],
-    "modifiers": [
+    "Modifiers": [
       {
-        "attrSet": 1,
-        "attribute": 2,
-        "magnitude": 10,
-        "operation": 3,
-        "mmc": 1002
+        "AttrSet": 1,
+        "Attribute": 2,
+        "Magnitude": 10,
+        "Operation": 3,
+        "Mmc": 1002
       }
     ],
-    "cueOnApply": [
+    "CueOnApply": [
       1001
     ],
-    "cueOnTick": [],
-    "cueOnAdd": [],
-    "cueOnRemove": [],
-    "cueOnActivate": [],
-    "cueOnDeactivate": [],
-    "grantedAbility": []
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
   },
   {
-    "id": 1005,
-    "name": "debug_effect2",
-    "desc": "调试用测试GE",
-    "assetTags": [],
-    "grantedTags": [
+    "ID": 1005,
+    "Name": "debug_effect2",
+    "Desc": "调试用测试GE",
+    "AssetTags": [],
+    "GrantedTags": [
       2006
     ],
-    "applicationRequiredTags": [],
-    "ongoingRequiredTags": [
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [
       200
     ],
-    "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "duration": {
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Duration": {
       "TimeUnit": 0,
       "Time": 600,
       "ResetStartTimeWhenActivated": false
     },
-    "period": {
+    "Period": {
       "Time": 60,
       "Effects": [
         1001
       ],
       "FirstTrigger": true
     },
-    "modifiers": [
+    "Modifiers": [
       {
-        "attrSet": 1,
-        "attribute": 1,
-        "magnitude": 1,
-        "operation": 3,
-        "mmc": 1001
+        "AttrSet": 1,
+        "Attribute": 1,
+        "Magnitude": 1,
+        "Operation": 3,
+        "Mmc": 1001
       }
     ],
-    "cueOnApply": [],
-    "cueOnTick": [
+    "CueOnApply": [],
+    "CueOnTick": [
       1001
     ],
-    "cueOnAdd": [
+    "CueOnAdd": [
       1001
     ],
-    "cueOnRemove": [
+    "CueOnRemove": [
       1001
     ],
-    "cueOnActivate": [
+    "CueOnActivate": [
       1001
     ],
-    "cueOnDeactivate": [
+    "CueOnDeactivate": [
       1001
     ],
-    "grantedAbility": [],
-    "stacking": {
+    "GrantedAbility": [],
+    "Stacking": {
       "StackingType": 1,
       "StackCode": 0,
       "LimitCount": 10,
@@ -172,88 +172,88 @@
     }
   },
   {
-    "id": 9001,
-    "name": "奔跑耐力消耗",
-    "desc": "耐力消耗1点",
-    "assetTags": [],
-    "grantedTags": [],
-    "applicationRequiredTags": [],
-    "ongoingRequiredTags": [],
-    "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "modifiers": [
+    "ID": 9001,
+    "Name": "奔跑耐力消耗",
+    "Desc": "耐力消耗1点",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Modifiers": [
       {
-        "attrSet": 1,
-        "attribute": 6,
-        "magnitude": 1,
-        "operation": 3,
-        "mmc": 1001
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 1,
+        "Operation": 3,
+        "Mmc": 1001
       }
     ],
-    "cueOnApply": [],
-    "cueOnTick": [],
-    "cueOnAdd": [],
-    "cueOnRemove": [],
-    "cueOnActivate": [],
-    "cueOnDeactivate": [],
-    "grantedAbility": []
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
   },
   {
-    "id": 1006,
-    "name": "自动恢复耐力",
-    "desc": "耐力恢复2点/60帧",
-    "assetTags": [],
-    "grantedTags": [],
-    "applicationRequiredTags": [],
-    "ongoingRequiredTags": [],
-    "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "modifiers": [
+    "ID": 1006,
+    "Name": "自动恢复耐力",
+    "Desc": "耐力恢复2点/60帧",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Modifiers": [
       {
-        "attrSet": 1,
-        "attribute": 6,
-        "magnitude": 2,
-        "operation": 0,
-        "mmc": 1001
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 2,
+        "Operation": 0,
+        "Mmc": 1001
       }
     ],
-    "cueOnApply": [],
-    "cueOnTick": [],
-    "cueOnAdd": [],
-    "cueOnRemove": [],
-    "cueOnActivate": [],
-    "cueOnDeactivate": [],
-    "grantedAbility": []
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
   },
   {
-    "id": 1007,
-    "name": "自动恢复耐力",
-    "desc": "自动恢复耐力",
-    "assetTags": [],
-    "grantedTags": [],
-    "applicationRequiredTags": [],
-    "ongoingRequiredTags": [],
-    "removeGameplayEffectsWithTags": [],
-    "immunityTags": [],
-    "duration": {
+    "ID": 1007,
+    "Name": "自动恢复耐力",
+    "Desc": "自动恢复耐力",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Duration": {
       "TimeUnit": 0,
       "Time": -1,
       "ResetStartTimeWhenActivated": false
     },
-    "period": {
+    "Period": {
       "Time": 60,
       "Effects": [
         1006
       ],
       "FirstTrigger": false
     },
-    "modifiers": [],
-    "cueOnApply": [],
-    "cueOnTick": [],
-    "cueOnAdd": [],
-    "cueOnRemove": [],
-    "cueOnActivate": [],
-    "cueOnDeactivate": [],
-    "grantedAbility": []
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
   }
 ]

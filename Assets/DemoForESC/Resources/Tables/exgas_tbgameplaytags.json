@@ -1,122 +1,122 @@
 [
   {
     "id": 1000000,
-    "name": "Faction",
-    "desc": "阵营描述标签"
+    "Name": "Faction",
+    "Desc": "阵营描述标签"
   },
   {
     "id": 1001,
-    "name": "Faction.Player",
-    "desc": "玩家阵营"
+    "Name": "Faction.Player",
+    "Desc": "玩家阵营"
   },
   {
     "id": 1002,
-    "name": "Faction.Enemy",
-    "desc": "敌人阵营"
+    "Name": "Faction.Enemy",
+    "Desc": "敌人阵营"
   },
   {
     "id": 200,
-    "name": "Ability",
-    "desc": "技能"
+    "Name": "Ability",
+    "Desc": "技能"
   },
   {
     "id": 2001,
-    "name": "Ability.Die",
-    "desc": "技能：死亡"
+    "Name": "Ability.Die",
+    "Desc": "技能：死亡"
   },
   {
     "id": 2002,
-    "name": "Ability.Move",
-    "desc": "技能：移动"
+    "Name": "Ability.Move",
+    "Desc": "技能：移动"
   },
   {
     "id": 2003,
-    "name": "Ability.Attack",
-    "desc": "技能：攻击"
+    "Name": "Ability.Attack",
+    "Desc": "技能：攻击"
   },
   {
     "id": 2004,
-    "name": "Ability.Defend",
-    "desc": "技能：防御"
+    "Name": "Ability.Defend",
+    "Desc": "技能：防御"
   },
   {
     "id": 2005,
-    "name": "Ability.Jump",
-    "desc": "技能：跳跃"
+    "Name": "Ability.Jump",
+    "Desc": "技能：跳跃"
   },
   {
     "id": 2006,
-    "name": "Ability.Dodge",
-    "desc": "技能：闪避"
+    "Name": "Ability.Dodge",
+    "Desc": "技能：闪避"
   },
   {
     "id": 300,
-    "name": "Event",
-    "desc": "事件"
+    "Name": "Event",
+    "Desc": "事件"
   },
   {
     "id": 3001,
-    "name": "Event.Moving",
-    "desc": "事件：正在移动"
+    "Name": "Event.Moving",
+    "Desc": "事件：正在移动"
   },
   {
     "id": 3002,
-    "name": "Event.Dodging",
-    "desc": "事件：正在闪避"
+    "Name": "Event.Dodging",
+    "Desc": "事件：正在闪避"
   },
   {
     "id": 3003,
-    "name": "Event.Attacking",
-    "desc": "事件：正在攻击"
+    "Name": "Event.Attacking",
+    "Desc": "事件：正在攻击"
   },
   {
     "id": 400,
-    "name": "State",
-    "desc": "状态"
+    "Name": "State",
+    "Desc": "状态"
   },
   {
     "id": 4001,
-    "name": "State.Buff",
-    "desc": "状态：正向增益"
+    "Name": "State.Buff",
+    "Desc": "状态：正向增益"
   },
   {
     "id": 4002,
-    "name": "State.Debuff",
-    "desc": "状态：负面增益"
+    "Name": "State.Debuff",
+    "Desc": "状态：负面增益"
   },
   {
     "id": 4001001,
-    "name": "State.Buff.BulkUp",
-    "desc": "霸体"
+    "Name": "State.Buff.BulkUp",
+    "Desc": "霸体"
   },
   {
     "id": 4001002,
-    "name": "State.Buff.SpeedUp",
-    "desc": "状态：移速增加"
+    "Name": "State.Buff.SpeedUp",
+    "Desc": "状态：移速增加"
   },
   {
     "id": 4001003,
-    "name": "State.Buff.SpCosting",
-    "desc": "状态：耐力消耗中"
+    "Name": "State.Buff.SpCosting",
+    "Desc": "状态：耐力消耗中"
   },
   {
     "id": 500,
-    "name": "Guide",
-    "desc": "新手引导"
+    "Name": "Guide",
+    "Desc": "新手引导"
   },
   {
     "id": 5001,
-    "name": "Guide.Type1",
-    "desc": "新手引导：类型1"
+    "Name": "Guide.Type1",
+    "Desc": "新手引导：类型1"
   },
   {
     "id": 5002,
-    "name": "Guide.Type2",
-    "desc": "新手引导：类型2"
+    "Name": "Guide.Type2",
+    "Desc": "新手引导：类型2"
   },
   {
     "id": 5003,
-    "name": "Guide.Type3",
-    "desc": "新手引导：类型3"
+    "Name": "Guide.Type3",
+    "Desc": "新手引导：类型3"
   }
 ]

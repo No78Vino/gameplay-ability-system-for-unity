@@ -17,13 +17,13 @@ public sealed partial class asc : Luban.BeanBase
 {
     public asc(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
-        { if(!_buf["desc"].IsString) { throw new SerializationException(); }  Desc = _buf["desc"]; }
-        { if(!_buf["level"].IsNumber) { throw new SerializationException(); }  Level = _buf["level"]; }
-        { var __json0 = _buf["tag"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Tag = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Tag[__index0++] = __v0; }   }
-        { var __json0 = _buf["attrSet"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; AttrSet = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AttrSet[__index0++] = __v0; }   }
-        { var __json0 = _buf["ability"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Ability = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Ability[__index0++] = __v0; }   }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
+        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
+        { if(!_buf["Level"].IsNumber) { throw new SerializationException(); }  Level = _buf["Level"]; }
+        { var __json0 = _buf["Tag"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Tag = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Tag[__index0++] = __v0; }   }
+        { var __json0 = _buf["AttrSet"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; AttrSet = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AttrSet[__index0++] = __v0; }   }
+        { var __json0 = _buf["Ability"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Ability = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Ability[__index0++] = __v0; }   }
     }
 
     public static asc Deserializeasc(JSONNode _buf)
@@ -34,7 +34,7 @@ public sealed partial class asc : Luban.BeanBase
     /// <summary>
     /// id
     /// </summary>
-    public readonly int Id;
+    public readonly int ID;
     /// <summary>
     /// 名字
     /// </summary>
@@ -70,13 +70,13 @@ public sealed partial class asc : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "name:" + Name + ","
-        + "desc:" + Desc + ","
-        + "level:" + Level + ","
-        + "tag:" + Luban.StringUtil.CollectionToString(Tag) + ","
-        + "attrSet:" + Luban.StringUtil.CollectionToString(AttrSet) + ","
-        + "ability:" + Luban.StringUtil.CollectionToString(Ability) + ","
+        + "ID:" + ID + ","
+        + "Name:" + Name + ","
+        + "Desc:" + Desc + ","
+        + "Level:" + Level + ","
+        + "Tag:" + Luban.StringUtil.CollectionToString(Tag) + ","
+        + "AttrSet:" + Luban.StringUtil.CollectionToString(AttrSet) + ","
+        + "Ability:" + Luban.StringUtil.CollectionToString(Ability) + ","
         + "}";
     }
 }

@@ -13,20 +13,20 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct modifier
+public partial struct Modifier
 {
-    public modifier(JSONNode _buf) 
+    public Modifier(JSONNode _buf) 
     {
-        { if(!_buf["attrSet"].IsNumber) { throw new SerializationException(); }  AttrSet = _buf["attrSet"]; }
-        { if(!_buf["attribute"].IsNumber) { throw new SerializationException(); }  Attribute = _buf["attribute"]; }
-        { if(!_buf["magnitude"].IsNumber) { throw new SerializationException(); }  Magnitude = _buf["magnitude"]; }
-        { if(!_buf["operation"].IsNumber) { throw new SerializationException(); }  Operation = _buf["operation"]; }
-        { if(!_buf["mmc"].IsNumber) { throw new SerializationException(); }  Mmc = _buf["mmc"]; }
+        { if(!_buf["AttrSet"].IsNumber) { throw new SerializationException(); }  AttrSet = _buf["AttrSet"]; }
+        { if(!_buf["Attribute"].IsNumber) { throw new SerializationException(); }  Attribute = _buf["Attribute"]; }
+        { if(!_buf["Magnitude"].IsNumber) { throw new SerializationException(); }  Magnitude = _buf["Magnitude"]; }
+        { if(!_buf["Operation"].IsNumber) { throw new SerializationException(); }  Operation = _buf["Operation"]; }
+        { if(!_buf["Mmc"].IsNumber) { throw new SerializationException(); }  Mmc = _buf["Mmc"]; }
     }
 
-    public static modifier Deserializemodifier(JSONNode _buf)
+    public static Modifier DeserializeModifier(JSONNode _buf)
     {
-        return new modifier(_buf);
+        return new Modifier(_buf);
     }
 
     public readonly int AttrSet;
@@ -43,11 +43,11 @@ public partial struct modifier
     public override string ToString()
     {
         return "{ "
-        + "attrSet:" + AttrSet + ","
-        + "attribute:" + Attribute + ","
-        + "magnitude:" + Magnitude + ","
-        + "operation:" + Operation + ","
-        + "mmc:" + Mmc + ","
+        + "AttrSet:" + AttrSet + ","
+        + "Attribute:" + Attribute + ","
+        + "Magnitude:" + Magnitude + ","
+        + "Operation:" + Operation + ","
+        + "Mmc:" + Mmc + ","
         + "}";
     }
 }

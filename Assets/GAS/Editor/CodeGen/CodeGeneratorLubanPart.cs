@@ -330,7 +330,7 @@ namespace GAS.Editor
                         writer.WriteLine("grantedAbilities[i] = new GrantedAbility()");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("AbilityConfig = GetAbilityConfig(info.Id),");
+                        writer.WriteLine("AbilityConfig = GetAbilityConfig(info.ID),");
                         writer.WriteLine("ActivationPolicy = (GrantedAbilityActivationPolicy)info.ActivationPolicy,");
                         writer.WriteLine(
                             "DeactivationPolicy = (GrantedAbilityDeactivationPolicy)info.DeactivationPolicy,");

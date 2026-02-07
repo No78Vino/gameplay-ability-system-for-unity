@@ -15,44 +15,44 @@
         <var name="w" type="float"/>
     </bean>
     
-    <bean name="attributeInSet" valueType="1" sep=",">
-        <var name="id" type="int"/>
-        <var name="initValue" type="float"/>
-        <var name="minValue" type="float"/>
-        <var name="maxValue" type="float"/>
-        <var name="useMinValue" type="bool"/>
-        <var name="useMaxValue" type="bool"/>
+    <bean name="AttributeInSet" valueType="1" sep=",">
+        <var name="ID" type="int"/>
+        <var name="InitValue" type="float"/>
+        <var name="MinValue" type="float"/>
+        <var name="MaxValue" type="float"/>
+        <var name="UseMinValue" type="bool"/>
+        <var name="UseMaxValue" type="bool"/>
     </bean>
     
-    <bean name="grantedAbility" valueType="1" sep=";">
-        <var name="id" type="int"/>
-        <var name="level" type="int"/>
-        <var name="activationPolicy" type="int"/>
-        <var name="deactivationPolicy" type="int"/>
-        <var name="removePolicy" type="int"/>
+    <bean name="GrantedAbility" valueType="1" sep=";">
+        <var name="ID" type="int"/>
+        <var name="Level" type="int"/>
+        <var name="ActivationPolicy" type="int"/>
+        <var name="DeactivationPolicy" type="int"/>
+        <var name="RemovePolicy" type="int"/>
     </bean>
 
-    <bean name="modifier" valueType="1" sep=";">
-        <var name="attrSet" type="int"/>
-        <var name="attribute" type="int"/>
-        <var name="magnitude" type="float"/>
-        <var name="operation" type="int"/>
-        <var name="mmc" type="int"/>
+    <bean name="Modifier" valueType="1" sep=";">
+        <var name="AttrSet" type="int"/>
+        <var name="Attribute" type="int"/>
+        <var name="Magnitude" type="float"/>
+        <var name="Operation" type="int"/>
+        <var name="Mmc" type="int"/>
     </bean>
 
-    <bean name="duration" valueType="1">
+    <bean name="Duration" valueType="1">
         <var name="TimeUnit" type="int"/>
         <var name="Time" type="int"/>
         <var name="ResetStartTimeWhenActivated" type="bool"/>
     </bean>
 
-    <bean name="period" valueType="1">
+    <bean name="Period" valueType="1">
         <var name="Time" type="int"/>
         <var name="Effects" type="(array#sep=;),int"/>
         <var name="FirstTrigger" type="bool"/>
     </bean>
 
-    <bean name="stacking" valueType="1">
+    <bean name="Stacking" valueType="1">
         <var name="StackingType" type="int"/>
         <var name="StackCode" type="int"/>
         <var name="LimitCount" type="int"/>

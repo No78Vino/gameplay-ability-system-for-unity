@@ -1,17 +1,17 @@
 [
   {
-    "id": 1001,
-    "name": "打印日志",
-    "desc": "用于打印日志",
-    "required_tag": [
+    "ID": 1001,
+    "Name": "打印日志",
+    "Desc": "用于打印日志",
+    "RequiredTag": [
       100,
       1001
     ],
-    "immunity_tag": [
+    "ImmunityTag": [
       200,
       2001
     ],
-    "cueLogic": {
+    "CueLogic": {
       "$type": "CueLogging",
       "Param": {
         "Value": "testMessageA",
@@ -20,17 +20,17 @@
     }
   },
   {
-    "id": 1002,
-    "name": "打印持续日志",
-    "desc": "用于打印持续日志",
-    "required_tag": [
+    "ID": 1002,
+    "Name": "打印持续日志",
+    "Desc": "用于打印持续日志",
+    "RequiredTag": [
       100,
       1002,
       2002,
       2005
     ],
-    "immunity_tag": [],
-    "cueLogic": {
+    "ImmunityTag": [],
+    "CueLogic": {
       "$type": "CueLogging",
       "Param": {
         "Value": "testValue2",
@@ -39,14 +39,14 @@
     }
   },
   {
-    "id": 1003,
-    "name": "测试3",
-    "desc": "看看拉屎都",
-    "required_tag": [
+    "ID": 1003,
+    "Name": "测试3",
+    "Desc": "看看拉屎都",
+    "RequiredTag": [
       200,
       2005
     ],
-    "immunity_tag": [
+    "ImmunityTag": [
       3002,
       2006,
       2003,
@@ -55,7 +55,7 @@
       100,
       1001
     ],
-    "cueLogic": {
+    "CueLogic": {
       "$type": "CueLogging",
       "Param": {
         "Value": "卧槽",

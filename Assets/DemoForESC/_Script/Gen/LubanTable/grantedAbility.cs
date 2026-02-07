@@ -13,23 +13,23 @@ using SimpleJSON;
 
 namespace cfg
 {
-public partial struct grantedAbility
+public partial struct GrantedAbility
 {
-    public grantedAbility(JSONNode _buf) 
+    public GrantedAbility(JSONNode _buf) 
     {
-        { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["level"].IsNumber) { throw new SerializationException(); }  Level = _buf["level"]; }
-        { if(!_buf["activationPolicy"].IsNumber) { throw new SerializationException(); }  ActivationPolicy = _buf["activationPolicy"]; }
-        { if(!_buf["deactivationPolicy"].IsNumber) { throw new SerializationException(); }  DeactivationPolicy = _buf["deactivationPolicy"]; }
-        { if(!_buf["removePolicy"].IsNumber) { throw new SerializationException(); }  RemovePolicy = _buf["removePolicy"]; }
+        { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["Level"].IsNumber) { throw new SerializationException(); }  Level = _buf["Level"]; }
+        { if(!_buf["ActivationPolicy"].IsNumber) { throw new SerializationException(); }  ActivationPolicy = _buf["ActivationPolicy"]; }
+        { if(!_buf["DeactivationPolicy"].IsNumber) { throw new SerializationException(); }  DeactivationPolicy = _buf["DeactivationPolicy"]; }
+        { if(!_buf["RemovePolicy"].IsNumber) { throw new SerializationException(); }  RemovePolicy = _buf["RemovePolicy"]; }
     }
 
-    public static grantedAbility DeserializegrantedAbility(JSONNode _buf)
+    public static GrantedAbility DeserializeGrantedAbility(JSONNode _buf)
     {
-        return new grantedAbility(_buf);
+        return new GrantedAbility(_buf);
     }
 
-    public readonly int Id;
+    public readonly int ID;
     public readonly int Level;
     public readonly int ActivationPolicy;
     public readonly int DeactivationPolicy;
@@ -43,11 +43,11 @@ public partial struct grantedAbility
     public override string ToString()
     {
         return "{ "
-        + "id:" + Id + ","
-        + "level:" + Level + ","
-        + "activationPolicy:" + ActivationPolicy + ","
-        + "deactivationPolicy:" + DeactivationPolicy + ","
-        + "removePolicy:" + RemovePolicy + ","
+        + "ID:" + ID + ","
+        + "Level:" + Level + ","
+        + "ActivationPolicy:" + ActivationPolicy + ","
+        + "DeactivationPolicy:" + DeactivationPolicy + ","
+        + "RemovePolicy:" + RemovePolicy + ","
         + "}";
     }
 }

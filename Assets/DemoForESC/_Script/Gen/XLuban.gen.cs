@@ -228,7 +228,7 @@ namespace GAS.Runtime
                     var info = data.GrantedAbility[i];
                     grantedAbilities[i] = new GrantedAbility()
                     {
-                        AbilityConfig = GetAbilityConfig(info.Id),
+                        AbilityConfig = GetAbilityConfig(info.ID),
                         ActivationPolicy = (GrantedAbilityActivationPolicy)info.ActivationPolicy,
                         DeactivationPolicy = (GrantedAbilityDeactivationPolicy)info.DeactivationPolicy,
                         Level = info.Level,

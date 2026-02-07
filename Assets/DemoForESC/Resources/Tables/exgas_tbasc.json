@@ -1,47 +1,46 @@
 [
   {
-    "id": 1001,
-    "name": "玩家",
-    "desc": "描述1",
-    "level": 0,
-    "tag": [
+    "ID": 1001,
+    "Name": "玩家",
+    "Desc": "描述1",
+    "Level": 0,
+    "Tag": [
       1001,
       400
     ],
-    "attrSet": [
+    "AttrSet": [
       1
     ],
-    "ability": [
+    "Ability": [
       10001,
       10002,
-      1003,
-      1005
+      20001
     ]
   },
   {
-    "id": 1002,
-    "name": "野怪1",
-    "desc": "描述2",
-    "level": 0,
-    "tag": [],
-    "attrSet": [],
-    "ability": []
+    "ID": 1002,
+    "Name": "野怪1",
+    "Desc": "描述2",
+    "Level": 0,
+    "Tag": [],
+    "AttrSet": [],
+    "Ability": []
   },
   {
-    "id": 1003,
-    "name": "boss1",
-    "desc": "描述3",
-    "level": 0,
-    "tag": [
+    "ID": 1003,
+    "Name": "boss1",
+    "Desc": "描述3",
+    "Level": 0,
+    "Tag": [
       1001,
       2002,
       2005,
       2006
     ],
-    "attrSet": [
+    "AttrSet": [
       1
     ],
-    "ability": [
+    "Ability": [
       10002
     ]
   }
