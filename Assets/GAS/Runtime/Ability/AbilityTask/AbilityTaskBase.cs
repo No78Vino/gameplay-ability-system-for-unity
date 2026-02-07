@@ -5,8 +5,8 @@ namespace GAS.Runtime
     public abstract class AbilityTaskBase
     {
         protected AbilityLogicBase _logic;
-        protected AbilitySpec _spec;
-        protected AbilitySystemCell _owner;
+        protected AbilitySpec _spec => _logic.Spec;
+        protected AbilitySystemCell _owner => _logic.Owner;
         protected TimeUnit _timeUnit = TimeUnit.Frame;
         protected int _startTime;
 
@@ -14,19 +14,13 @@ namespace GAS.Runtime
         {
         }
 
+        public virtual void Dispose()
+        {
+        }
+        
         public AbilityTaskBase(AbilityLogicBase logic)
         {
             _logic = logic;
-#if UNITY_EDITOR
-            if(Application.isPlaying)
-            {
-                _spec = _logic.Spec;
-                _owner = _logic.Owner;
-            }
-#else
-            _spec = _logic.Spec;
-            _owner = _logic.Owner;
-#endif
         }
 
         public abstract void InitParameters(XParam parameter);

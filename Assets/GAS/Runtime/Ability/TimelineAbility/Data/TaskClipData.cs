@@ -21,7 +21,9 @@ namespace GAS.Runtime
         
         public AbilityTaskBase InstantiateTask(AbilityLogicBase logic)
         {
-            return AbilityHelper.TryCreateAbilityTask(TaskType,logic);
+            var task = AbilityHelper.TryCreateAbilityTask(TaskType,logic);
+            task.InitParameters(Parameter);
+            return task;
         }
     }
 }

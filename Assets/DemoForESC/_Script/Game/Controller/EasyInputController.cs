@@ -145,11 +145,8 @@ namespace DemoForESC._Script.Controller
                     || GuideManager.I.GuideInfo.LearningKey == GuideLearningKey.MeleeAttack))
                 return;
             
-            // 调试GE1
             if (Input.GetKeyDown(KeyCode.E)) 
-                demoPlayer.StartDebugGE1();
-            else if (Input.GetKeyUp(KeyCode.E))
-                demoPlayer.StopDebugGE1();
+                demoPlayer.Attack();
         }
 
         private void HandleDodge()

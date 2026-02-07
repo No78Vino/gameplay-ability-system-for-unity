@@ -95,6 +95,14 @@ namespace GAS.Runtime
                         cueParam = cp;
                         break;
                     }
+                    case cfg.CuePlayAnimator cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamAnimator;
+                        cp?.SetAnimatorNodePath(cData.Param.AnimatorNodePath);
+                        cp?.SetAnimationName(cData.Param.AnimationName);
+                        cueParam = cp;
+                        break;
+                    }
                 }
             }
             return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), data.ImmunityTag.ToArray());
@@ -500,6 +508,14 @@ namespace GAS.Runtime
                     var cp = cueParam as GAS.Runtime.XParamLogging;
                     cp?.SetValue(cData.Param.Value);
                     cp?.SetDuration(cData.Param.Duration);
+                    cueParam = cp;
+                    break;
+                }
+                case cfg.CuePlayAnimator cData:
+                {
+                    var cp = cueParam as GAS.Runtime.XParamAnimator;
+                    cp?.SetAnimatorNodePath(cData.Param.AnimatorNodePath);
+                    cp?.SetAnimationName(cData.Param.AnimationName);
                     cueParam = cp;
                     break;
                 }

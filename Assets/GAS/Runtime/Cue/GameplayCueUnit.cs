@@ -81,7 +81,7 @@ namespace GAS.Runtime
                 return;
             }
             _cueEntity = EntityManager.CreateEntity();
-            EntityManager.SetName(_cueEntity,$"Cue_{_cueType.Name}_{_cueEntity.Version}_{_cueEntity.Index}");
+            EntityHelper.SetName(_cueEntity,$"Cue_{_cueType.Name}_{_cueEntity.Version}_{_cueEntity.Index}");
             
             var mcCue = new MCCue(CueHelper.TryCreateCue(_cueType, _xParam));
             mcCue.cue.SetCueEntity(_cueEntity);
@@ -113,8 +113,8 @@ namespace GAS.Runtime
                 return;
             }
 
-            EntityManager.SetComponentEnabled<ECKillCue>(_cueEntity,true);
-            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            EntityHelper.SetComponentEnabled<ECKillCue>(_cueEntity,true);
+            var mcCue = EntityHelper.GetManagedComponentData<MCCue>(_cueEntity);
             mcCue.cue.OnRemove(Time.time);
             _cueEntity = Entity.Null;
         }
@@ -148,7 +148,7 @@ namespace GAS.Runtime
                 if(ASCHelper.HasAnyTags(asc,_immunityTags)) return false;
             }
 
-            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            var mcCue = EntityHelper.GetManagedComponentData<MCCue>(_cueEntity);
             mcCue.cue.AddToTargetAsc(asc);
             
             _asc = GASManager.GetAscFromEntity(asc);
@@ -163,7 +163,7 @@ namespace GAS.Runtime
         {
             if (!CheckCueEntity()) return;
             
-            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            var mcCue = EntityHelper.GetManagedComponentData<MCCue>(_cueEntity);
             mcCue.cue.RemoveFromTargetAsc();
         }
         
@@ -173,7 +173,7 @@ namespace GAS.Runtime
         public void Play()
         {
             if (!CheckCueEntity()) return;
-            EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
+            EntityHelper.SetComponentEnabled<ECCuePlayable>(_cueEntity,true);
         }
         
         /// <summary>
@@ -182,7 +182,7 @@ namespace GAS.Runtime
         public void Stop()
         {
             if (!CheckCueEntity()) return;
-            EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
+            EntityHelper.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
         }
         
         /// <summary>
@@ -203,7 +203,7 @@ namespace GAS.Runtime
         public void SetSource(Entity source, CueSourceType sourceType)
         {
             if (!CheckCueEntity()) return;
-            var mcCue = EntityManager.GetComponentData<MCCue>(_cueEntity);
+            var mcCue = EntityHelper.GetManagedComponentData<MCCue>(_cueEntity);
             mcCue.cue.SetSourceEntity(source, sourceType);
             EntityHelper.SetManagedComponent(_cueEntity,mcCue);
         }

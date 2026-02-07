@@ -73,7 +73,7 @@ namespace DemoForESC._Script
         
         public virtual void Attack()
         {
-            //_abilitySystemCellMono.TryActivateAbility(GEN_AbilityCode.Attack);
+            AbilitySystemCellMono.Cell.TryActivateAbility(XAbility.ABILITY_Attack);
         }
 
         public bool IsMoving()

@@ -56,9 +56,9 @@ namespace GAS.Runtime
         
         public virtual void TryEndSelf()
         {
-            if (GASManager.EntityManager.Exists(_abilityEntity))
+            if (_entityManager.Exists(_abilityEntity))
             {
-                GASManager.EntityManager.AddComponent<CAbilityInTryEnd>(_abilityEntity);
+                EntityHelper.AddComponent<CAbilityInTryEnd>(_abilityEntity);
             }
         }
 
