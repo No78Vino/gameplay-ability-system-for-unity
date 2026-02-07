@@ -44,12 +44,12 @@ namespace GAS.Runtime
         
         public void SetRequiredTags(int[] requiredTags)
         {
-            RequiredTags = requiredTags.ToList();
+            RequiredTags = TagHelper.FilterInvalidTags(requiredTags.ToList());
         }
 
         public void SetImmunityTags(int[] immunityTags)
         {
-            ImmunityTags = immunityTags.ToList();
+            ImmunityTags = TagHelper.FilterInvalidTags(immunityTags.ToList());
         }
 
         public XParamCue()

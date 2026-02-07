@@ -77,24 +77,29 @@ namespace GAS.Runtime
 #endif
             return null;
         }
-
-        #region Runtime内用于编辑器的部分
-
-        private static List<ValueDropdownItem> _choices;
-
-        public static void LoadTagChoices()
+        
+        /// <summary>
+        /// 过滤掉无效的标签，在当前注册map里不存在的就认为是无效的标签。
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <param name="filterTag"></param>
+        /// <returns></returns>
+        public static int[] FilterInvalidTags(int[] tags)
         {
-            _choices = new List<ValueDropdownItem>();
-#if UNITY_EDITOR
-            
-#endif
+            var validTags = new List<int>();
+            foreach (var tag in tags)
+                if (_tagMap.ContainsKey(tag))
+                    validTags.Add(tag);
+            return validTags.ToArray();
         }
         
-        public static List<ValueDropdownItem> TagChoices()
+        public static List<int> FilterInvalidTags(List<int> tags)
         {
-            return _choices;
+            var validTags = new List<int>();
+            foreach (var tag in tags)
+                if (_tagMap.ContainsKey(tag))
+                    validTags.Add(tag);
+            return validTags;
         }
-
-        #endregion
     }
 }

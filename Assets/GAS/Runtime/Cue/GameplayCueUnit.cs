@@ -32,16 +32,16 @@ namespace GAS.Runtime
         {
             _cueType = cueType;
             _xParam = xParam;
-            _requiredTags = requiredTags;
-            _immunityTags = immunityTags;
+            _requiredTags = TagHelper.FilterInvalidTags(requiredTags);
+            _immunityTags = TagHelper.FilterInvalidTags(immunityTags);
         }
         
         public GameplayCueUnit(GameplayCueConfig config)
         {
             _cueType = config.CueType;
             _xParam = config.Param;
-            _requiredTags = config.RequiredTags;
-            _immunityTags = config.ImmunityTags;
+            _requiredTags = TagHelper.FilterInvalidTags(config.RequiredTags);
+            _immunityTags = TagHelper.FilterInvalidTags(config.ImmunityTags);
         }
 
         private bool CheckCueEntity()
@@ -55,6 +55,17 @@ namespace GAS.Runtime
             }
 
             return true;
+        }
+        
+        private int[] FilterInvalidTags(int[] tags)
+        {
+            if (tags == null || tags.Length == 0) return new int[0];
+            var result = new int[tags.Length];
+            for (int i = 0; i < tags.Length; i++)
+            {
+                result[i] = tags[i];
+            }
+            return result;
         }
 
         /// <summary>
