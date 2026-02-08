@@ -1,26 +1,162 @@
 {
     "FileVersion": "1.0.0",
     "PackageName": "MainPackage",
-    "PackageVersion": "2025-11-16-1054",
+    "PackageVersion": "2026-02-08-1255",
     "Wrappers": [
+        {
+            "BundleGUID": "ed56c7f2350aaeb3e2e1378235c5c772",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_attack.bundle"
+        },
+        {
+            "BundleGUID": "e71c2e00c281ecc913e6f994e6a9ee39",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_idle.bundle"
+        },
+        {
+            "BundleGUID": "d5ac3d049d285a297e37f098b57eff15",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_logo.bundle"
+        },
+        {
+            "BundleGUID": "f8a9ef2c4fb81ff1863ca2c19a794c7e",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_player.bundle"
+        },
+        {
+            "BundleGUID": "ca7521995ae134d31e0933a6f33aff6b",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle"
+        },
+        {
+            "BundleGUID": "412806f9f780376f58e240553b2e6a3e",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle"
+        },
+        {
+            "BundleGUID": "2297386283a5da21b319b36d3a78f8fa",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle"
+        },
+        {
+            "BundleGUID": "9c9be4ee4407a9567e328f5040db55d4",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle"
+        },
+        {
+            "BundleGUID": "60c75d69e85c66abbdb4a0fa2463e36a",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle"
+        },
+        {
+            "BundleGUID": "f6250aa65083d9b46e420ef37a0d5707",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle"
+        },
+        {
+            "BundleGUID": "1778c7100205dea7dbaea867f3a4513d",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle"
+        },
+        {
+            "BundleGUID": "badd883b220ea8ab80fdcfaadf8b141b",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle"
+        },
+        {
+            "BundleGUID": "92fd1c8d0374cb9ca3a78ff7d54dcc37",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle"
+        },
+        {
+            "BundleGUID": "7d905885181e3ad63913afd73f7a3cdf",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle"
+        },
+        {
+            "BundleGUID": "4a8909f128a2625fe0c740b2d5e9c159",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_maskwindow.bundle"
+        },
+        {
+            "BundleGUID": "70182d574f110f438c6ca332c1ba40e3",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle"
+        },
+        {
+            "BundleGUID": "8f181dd1b43ad045c5638f2a7ff402bf",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle"
+        },
+        {
+            "BundleGUID": "c2758bb6640aa22959e3f251db8b3bd0",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle"
+        },
+        {
+            "BundleGUID": "5562344392c5c6e31735e2846f835c2b",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbability.bundle"
+        },
+        {
+            "BundleGUID": "39f63136ffffd2bdd7b2a371ca6ce904",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbasc.bundle"
+        },
+        {
+            "BundleGUID": "d90efdf5ebcf4823832ed44b8d5db9e1",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattribute.bundle"
+        },
+        {
+            "BundleGUID": "95502c8b6f3ef20caac5810489469ada",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattributeset.bundle"
+        },
+        {
+            "BundleGUID": "902c7dbcf59a6b9dd2941e3166aed376",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaycue.bundle"
+        },
+        {
+            "BundleGUID": "a45e00e8dfedbec5c34d8e3723cb8b8a",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplayeffect.bundle"
+        },
+        {
+            "BundleGUID": "c02b53fd7d0f17bb7f0a4a0b5c3595ea",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaytags.bundle"
+        },
+        {
+            "BundleGUID": "6ea4c6853a1cc705d8e5a9fe68ceb5e6",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbmmc.bundle"
+        },
+        {
+            "BundleGUID": "ccd5f46a150821d81c1abd544648640d",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbtimelineability.bundle"
+        },
+        {
+            "BundleGUID": "b22c5d6f02241322369b9ddd1ad69bab",
+            "FileName": "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle"
+        },
+        {
+            "BundleGUID": "6d5748303ced23c98889cf5d2d96114b",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle"
+        },
+        {
+            "BundleGUID": "73aa56cb8152b667a83571f567a703bf",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_opening.bundle"
+        },
+        {
+            "BundleGUID": "eabddbaf757d104f790e2555ea483da1",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle"
+        },
+        {
+            "BundleGUID": "91929edc2c8eac0aaf71f372ecd6cde2",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle"
+        },
         {
             "BundleGUID": "0b4555ae90d23951911ef5c56a511ba7",
             "FileName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle"
         },
         {
-            "BundleGUID": "def787632249e4cf79831127e2b3693c",
+            "BundleGUID": "5a7d98b623ee41b2437f26ad74b753e1",
+            "FileName": "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle"
+        },
+        {
+            "BundleGUID": "e38d76f05ea1147aacec39d566e5c08f",
+            "FileName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+        },
+        {
+            "BundleGUID": "8b014cb99f735b6269f3750aedabf6b4",
             "FileName": "mainpackage_assets_demoforesc_scene.bundle"
         },
         {
-            "BundleGUID": "a5e0f9f2a10b5cca2d5360d3031578b0",
-            "FileName": "mainpackage_share_assets_demoforesc_resources_animation.bundle"
+            "BundleGUID": "38f839eebc8d4e49ba2b568664a19234",
+            "FileName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle"
         },
         {
-            "BundleGUID": "34583833b7e5f6df77730f700ac63826",
-            "FileName": "mainpackage_share_assets_demoforesc_resources_texture.bundle"
+            "BundleGUID": "8813372626a1a3ddda480ab33ae45c22",
+            "FileName": "mainpackage_share_assets_demoforesc_resources_materials.bundle"
         },
         {
-            "BundleGUID": "818fb07ee2b350713c710da1156d3f34",
+            "BundleGUID": "e138eda22d056ef05f8faf5a14dd6dce",
             "FileName": "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle"
         },
         {
@@ -28,7 +164,15 @@
             "FileName": "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle"
         },
         {
-            "BundleGUID": "1b048f930d5a352afdf3cf90ea9e3bf4",
+            "BundleGUID": "1b21733a71c8aa6fea6da0a5078ca705",
+            "FileName": "mainpackage_share_packages_com_unity_probuilder_content_icons_scripts.bundle"
+        },
+        {
+            "BundleGUID": "f43167bb1bb94c28bc8bee198a88d704",
+            "FileName": "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle"
+        },
+        {
+            "BundleGUID": "e149c37e1b407814ca87e506e6325384",
             "FileName": "mainpackage_unityshaders.bundle"
         }
     ]

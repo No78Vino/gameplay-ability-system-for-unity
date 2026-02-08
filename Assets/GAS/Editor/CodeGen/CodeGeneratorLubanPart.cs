@@ -36,8 +36,6 @@ namespace GAS.Editor
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
-                    writer.WriteLine(
-                        $"public const string GAME_CONF_DIR = \"{GASSettingAsset.Instance.TableOutpuPath}\";");
                     writer.WriteLine("private static Tables _tables;");
                     writer.WriteLine("public static Tables Tables");
                     writer.WriteLine("{");
@@ -46,8 +44,9 @@ namespace GAS.Editor
                         writer.WriteLine("get");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        writer.WriteLine("if (_tables == null) LoadTables();");
-                        writer.WriteLine("return _tables;");
+                        writer.WriteLine("if (_tables != null) return _tables;");
+                        writer.WriteLine("Debug.LogError(\"XLuban.Tables 未初始化!\");");
+                        writer.WriteLine("return null;");
                         writer.Indent--;
                         writer.WriteLine("}");
                     }
@@ -55,21 +54,21 @@ namespace GAS.Editor
                     writer.WriteLine("}");
                     writer.WriteLine("");
 
-                    writer.WriteLine("public static void LoadTables()");
+                    writer.WriteLine("public static void LoadTables(Func<string, JSONNode> loader)");
                     writer.WriteLine("{");
                     writer.Indent++;
                     writer.WriteLine("if (_tables != null) return;");
                     writer.WriteLine(
-                        "_tables = new Tables(file => JSON.Parse(File.ReadAllText($\"{GAME_CONF_DIR}/{file}.json\")));");
+                        "_tables = new Tables(loader);");
                     writer.Indent--;
                     writer.WriteLine("}");
 
                     writer.WriteLine("");
 
-                    writer.WriteLine("public static void Init()");
+                    writer.WriteLine("public static void Init(Func<string, JSONNode> loader)");
                     writer.WriteLine("{");
                     writer.Indent++;
-                    writer.WriteLine("LoadTables();");
+                    writer.WriteLine("LoadTables(loader);");
                     writer.WriteLine("GameplayEffectHelper.RegisterGetConfigByIDFunc(GetGameplayEffectConfig);");
                     writer.Indent--;
                     writer.WriteLine("}");

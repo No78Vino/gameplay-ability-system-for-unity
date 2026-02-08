@@ -3,6 +3,8 @@
 ////     Do not modify it.     ////
 ///////////////////////////////////
 
+using System;
+
 namespace GAS.Runtime
 {
     public static class XLauncher
@@ -12,9 +14,12 @@ namespace GAS.Runtime
             XAbility.LoadAbilityCode();
             XMmc.LoadMmcType();
             XCue.LoadCueType();
-            XLuban.Init();
         }
 
+        public static void InitConfigTables(Func<string, SimpleJSON.JSONNode> loader)
+        {
+            XLuban.Init(loader);
+        }
         public static void Launch()
         {
             InitCache();

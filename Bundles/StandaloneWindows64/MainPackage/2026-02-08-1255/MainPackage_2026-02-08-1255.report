@@ -1,0 +1,1828 @@
+{
+    "Summary": {
+        "YooVersion": "",
+        "UnityVersion": "2022.3.16f1",
+        "BuildDate": "2026/2/8 20:56:47",
+        "BuildSeconds": 48,
+        "BuildTarget": 19,
+        "BuildPipeline": "ScriptableBuildPipeline",
+        "BuildBundleType": 2,
+        "BuildPackageName": "MainPackage",
+        "BuildPackageVersion": "2026-02-08-1255",
+        "BuildPackageNote": "2026/2/8 20:55:57",
+        "UniqueBundleName": true,
+        "EnableAddressable": true,
+        "SupportExtensionless": true,
+        "LocationToLower": false,
+        "IncludeAssetGUID": true,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+        "ClearBuildCacheFiles": true,
+        "UseAssetDependencyDB": false,
+        "EnableSharePackRule": true,
+        "SingleReferencedPackAlone": true,
+        "EncryptionServicesClassName": "YooAsset.Editor.EncryptionNone",
+        "ManifestProcessServicesClassName": "YooAsset.Editor.ManifestProcessNone",
+        "ManifestRestoreServicesClassName": "YooAsset.Editor.ManifestRestoreNone",
+        "FileNameStyle": 1,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": true,
+        "ReplaceAssetPathWithAddress": false,
+        "WriteLinkXML": true,
+        "CacheServerHost": "",
+        "CacheServerPort": 0,
+        "BuiltinShadersBundleName": "mainpackage_unityshaders.bundle",
+        "MonoScriptsBundleName": "",
+        "AssetFileTotalCount": 56,
+        "MainAssetTotalCount": 40,
+        "AllBundleTotalCount": 43,
+        "AllBundleTotalSize": 2921741,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "Animation_attack",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/attack.anim",
+            "AssetGUID": "75193ab446532054da0becd31050207f",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+            "MainBundleSize": 6302,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Animation_idle",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/idle.anim",
+            "AssetGUID": "c49785f1406e2af42a647dc5cdaf8f42",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_animation_idle.bundle",
+            "MainBundleSize": 6215,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Animation_logo",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/logo.anim",
+            "AssetGUID": "63c5a7fccc0e14a4fa70642d8cf409bf",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
+            "MainBundleSize": 6655,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Animation_Player",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/Player.controller",
+            "AssetGUID": "5c17f4d0f627269448d3d4fc88bcec9b",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+            "MainBundleSize": 4877,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/attack.anim",
+                    "AssetGUID": "75193ab446532054da0becd31050207f"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/idle.anim",
+                    "AssetGUID": "c49785f1406e2af42a647dc5cdaf8f42"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_idle.bundle"
+            ]
+        },
+        {
+            "Address": "Guide_GuidePoints_Attack",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab",
+            "AssetGUID": "d401798aefbc31446bf41dc3722cf612",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+            "MainBundleSize": 4267,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Orange_Prototype.mat",
+                    "AssetGUID": "d78d6cd3137a8824699cde034b4270c0"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/ShaderGraphs/ScaleTilingShader.shadergraph",
+                    "AssetGUID": "74686ab863fe0dc4598560e65eb847eb"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Guide_GuidePoints_Move",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab",
+            "AssetGUID": "3cb9cee4246cba6448fdfdb5e6d1b113",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+            "MainBundleSize": 4318,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/blue_shine.mat",
+                    "AssetGUID": "12df1c8e5b79b4945801584a5115b69d"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/TransparencyFlickerShader.shader",
+                    "AssetGUID": "317595591d5940843bd19befcf56f13f"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Guide_GuidePoints_Run",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Run.prefab",
+            "AssetGUID": "b16e0f8cb8844d249a8d04c88e95dafe",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
+            "MainBundleSize": 4323,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/green_shine.mat",
+                    "AssetGUID": "fbd109392a7b82e40a5c6a49e1fa3767"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/TransparencyFlickerShader.shader",
+                    "AssetGUID": "317595591d5940843bd19befcf56f13f"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Monster_player",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/player.prefab",
+            "AssetGUID": "9eb0e1351bdbe6445ad5abe1794afefa",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+            "MainBundleSize": 5582,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Blue_Prototype.mat",
+                    "AssetGUID": "5a7ca585a9b2b3c4587125916713263d"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Mantis_Prototype.mat",
+                    "AssetGUID": "720ea100b5a5ea741a0e79cfb3ab65c6"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Orange_Prototype.mat",
+                    "AssetGUID": "d78d6cd3137a8824699cde034b4270c0"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/White_Prototype.mat",
+                    "AssetGUID": "81caf0b4f4d2ac74e847cad8de1aa792"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/ShaderGraphs/ScaleTilingShader.shadergraph",
+                    "AssetGUID": "74686ab863fe0dc4598560e65eb847eb"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Monster_Spider",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/Spider.prefab",
+            "AssetGUID": "d59493e6e44c27344a6e537171e6aecb",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+            "MainBundleSize": 11514,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Gray_Prototype.mat",
+                    "AssetGUID": "21ca8723c11d2d34abf1e9e595b0942a"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Orange_Prototype.mat",
+                    "AssetGUID": "d78d6cd3137a8824699cde034b4270c0"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/ShaderGraphs/ScaleTilingShader.shadergraph",
+                    "AssetGUID": "74686ab863fe0dc4598560e65eb847eb"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "UI_buff",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/buff.prefab",
+            "AssetGUID": "b2d3b3776b4553944afdee6e7451acf1",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+            "MainBundleSize": 4886,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ButtonA",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
+            "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+            "MainBundleSize": 5550,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_DeathWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/DeathWindow.prefab",
+            "AssetGUID": "958dd097c853b7a47b3b27239a5fb2bf",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+            "MainBundleSize": 7489,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
+                    "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_GuideWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/GuideWindow.prefab",
+            "AssetGUID": "496edcf82f54b5842a67d2ac5e998794",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+            "MainBundleSize": 6162,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_MainWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MainWindow.prefab",
+            "AssetGUID": "060a7bec86a39ab498488771ea210c69",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+            "MainBundleSize": 11764,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/buff.prefab",
+                    "AssetGUID": "b2d3b3776b4553944afdee6e7451acf1"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/progress_bar.prefab",
+                    "AssetGUID": "dc0f6678b807a434cbcee9b391118c9f"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/skill.prefab",
+                    "AssetGUID": "77ade1a0d84c6d44b80daa957ed6b7ab"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_MaskWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MaskWindow.prefab",
+            "AssetGUID": "49d0844cf90395f4fa281c8fdde769f8",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_maskwindow.bundle",
+            "MainBundleSize": 4942,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "UI_MenuWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow.prefab",
+            "AssetGUID": "2ba0f5cfbd5a3e848b72fb2c3242f903",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
+            "MainBundleSize": 8680,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
+                    "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_progress_bar",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/progress_bar.prefab",
+            "AssetGUID": "dc0f6678b807a434cbcee9b391118c9f",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+            "MainBundleSize": 4903,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ]
+        },
+        {
+            "Address": "UI_skill",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/skill.prefab",
+            "AssetGUID": "77ade1a0d84c6d44b80daa957ed6b7ab",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+            "MainBundleSize": 5127,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle"
+            ]
+        },
+        {
+            "Address": "Tables_exgas_tbability",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbability.json",
+            "AssetGUID": "7f0ab7c822c557f4380e5fe1ef119902",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbability.bundle",
+            "MainBundleSize": 1703,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbasc",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbasc.json",
+            "AssetGUID": "142c6dd35781acf418a2595051f4a5b2",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbasc.bundle",
+            "MainBundleSize": 1459,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbattribute",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattribute.json",
+            "AssetGUID": "a3dcd8da191ab79499b971f73e618fdb",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattribute.bundle",
+            "MainBundleSize": 1458,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbattributeset",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattributeset.json",
+            "AssetGUID": "a6cc655a571d9ef4f98b84193944bfcd",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattributeset.bundle",
+            "MainBundleSize": 1523,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbgameplaycue",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaycue.json",
+            "AssetGUID": "b9dd4b27b4a4ce44bacc57e3dc58999d",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaycue.bundle",
+            "MainBundleSize": 1602,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbgameplayeffect",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplayeffect.json",
+            "AssetGUID": "d14042b62cbbf98418ddfc78b704b02b",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplayeffect.bundle",
+            "MainBundleSize": 2233,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbgameplaytags",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaytags.json",
+            "AssetGUID": "ac1695dbfebf55449bfbaa4640208d87",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaytags.bundle",
+            "MainBundleSize": 1880,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbmmc",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbmmc.json",
+            "AssetGUID": "f0010d70d40472c4597c4b8fcabde76b",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbmmc.bundle",
+            "MainBundleSize": 1452,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Tables_exgas_tbtimelineability",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbtimelineability.json",
+            "AssetGUID": "dae0f11cdb3b32b49b9c564d46b17d3b",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbtimelineability.bundle",
+            "MainBundleSize": 1893,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Texture_ex_hard_studio_logo",
+            "AssetPath": "Assets/DemoForESC/Resources/Texture/ex_hard_studio_logo.png",
+            "AssetGUID": "9cc34e2e7dfc62645b359f4e79546d08",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
+            "MainBundleSize": 87941,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Timeline_anim_float",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
+            "AssetGUID": "741ee455797b320409a46850c1e97a82",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
+            "MainBundleSize": 6248,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Timeline_opening",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/opening.prefab",
+            "AssetGUID": "0865ebc6936baa24582b924288cdcd89",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_timeline_opening.bundle",
+            "MainBundleSize": 4850,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
+                    "AssetGUID": "741ee455797b320409a46850c1e97a82"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/TimelineOpening.playable",
+                    "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/Virtual Camera.controller",
+                    "AssetGUID": "a69fc2dfe912ab449ba0419f1a60f681"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
+                "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+                "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle"
+            ]
+        },
+        {
+            "Address": "Timeline_TimelineOpening",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/TimelineOpening.playable",
+            "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+            "MainBundleSize": 5447,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
+                    "AssetGUID": "741ee455797b320409a46850c1e97a82"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle"
+            ]
+        },
+        {
+            "Address": "Timeline_Virtual Camera",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/Virtual Camera.controller",
+            "AssetGUID": "a69fc2dfe912ab449ba0419f1a60f681",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle",
+            "MainBundleSize": 4725,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
+                    "AssetGUID": "741ee455797b320409a46850c1e97a82"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle"
+            ]
+        },
+        {
+            "Address": "logo",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/logo.png",
+            "AssetGUID": "23e2312f2a7b9ef4b8c66890dc2c3b4a",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle",
+            "MainBundleSize": 136419,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "white",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+            "AssetGUID": "1cabf48321ac5194992b83d083d9de0e",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+            "MainBundleSize": 4339,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "sanjililiang_jianti_cu",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+            "AssetGUID": "69267910aca4b2840947de018347b614",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+            "MainBundleSize": 2035314,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "DemoForECS",
+            "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
+            "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "MainBundleSize": 332889,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/attack.anim",
+                    "AssetGUID": "75193ab446532054da0becd31050207f"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/idle.anim",
+                    "AssetGUID": "c49785f1406e2af42a647dc5cdaf8f42"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/Player.controller",
+                    "AssetGUID": "5c17f4d0f627269448d3d4fc88bcec9b"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/player.prefab",
+                    "AssetGUID": "9eb0e1351bdbe6445ad5abe1794afefa"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
+                    "AssetGUID": "dce2b0846b69292479322eb21cb8c75c"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Blue_Prototype.mat",
+                    "AssetGUID": "5a7ca585a9b2b3c4587125916713263d"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Light_Sea_Green_Prototype.mat",
+                    "AssetGUID": "40598ecf603ac4d41b1f525da75d9d89"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Mantis_Prototype.mat",
+                    "AssetGUID": "720ea100b5a5ea741a0e79cfb3ab65c6"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Orange_Prototype.mat",
+                    "AssetGUID": "d78d6cd3137a8824699cde034b4270c0"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/White_Prototype.mat",
+                    "AssetGUID": "81caf0b4f4d2ac74e847cad8de1aa792"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Yellow_Prototype.mat",
+                    "AssetGUID": "f1e38594f14520c48bc546f3a41f4f56"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/ShaderGraphs/ScaleTilingShader.shadergraph",
+                    "AssetGUID": "74686ab863fe0dc4598560e65eb847eb"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.probuilder/Content/Icons/Scripts/MeshFilter Icon.asset",
+                    "AssetGUID": "432b3086cebdc438d9d33de3669fb063"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_idle.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+                "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_share_packages_com_unity_probuilder_content_icons_scripts.bundle",
+                "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "ReflectionProbe-0",
+            "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
+            "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+            "MainBundleSize": 82880,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "EditorUI",
+            "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
+            "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "MainBundleSize": 332889,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/buff.prefab",
+                    "AssetGUID": "b2d3b3776b4553944afdee6e7451acf1"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
+                    "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/DeathWindow.prefab",
+                    "AssetGUID": "958dd097c853b7a47b3b27239a5fb2bf"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/GuideWindow.prefab",
+                    "AssetGUID": "496edcf82f54b5842a67d2ac5e998794"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MainWindow.prefab",
+                    "AssetGUID": "060a7bec86a39ab498488771ea210c69"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow.prefab",
+                    "AssetGUID": "2ba0f5cfbd5a3e848b72fb2c3242f903"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/progress_bar.prefab",
+                    "AssetGUID": "dc0f6678b807a434cbcee9b391118c9f"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/skill.prefab",
+                    "AssetGUID": "77ade1a0d84c6d44b80daa957ed6b7ab"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Init",
+            "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
+            "AssetGUID": "edac8363a1c534b4799e555f89a24386",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "MainBundleSize": 332889,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/logo.anim",
+                    "AssetGUID": "63c5a7fccc0e14a4fa70642d8cf409bf"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Texture/ex_hard_studio_logo.png",
+                    "AssetGUID": "9cc34e2e7dfc62645b359f4e79546d08"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
+                "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "TrainRoom",
+            "AssetPath": "Assets/DemoForESC/Scene/TrainRoom.unity",
+            "AssetGUID": "b99fc8da31000a444ad6f7e0227bbc03",
+            "AssetTags": [],
+            "MainBundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "MainBundleSize": 332889,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/Spider.prefab",
+                    "AssetGUID": "d59493e6e44c27344a6e537171e6aecb"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Gray_Prototype.mat",
+                    "AssetGUID": "21ca8723c11d2d34abf1e9e595b0942a"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Light_Sea_Green_Prototype.mat",
+                    "AssetGUID": "40598ecf603ac4d41b1f525da75d9d89"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Orange_Prototype.mat",
+                    "AssetGUID": "d78d6cd3137a8824699cde034b4270c0"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/ShaderGraphs/ScaleTilingShader.shadergraph",
+                    "AssetGUID": "74686ab863fe0dc4598560e65eb847eb"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ]
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+            "FileHash": "ed56c7f2350aaeb3e2e1378235c5c772",
+            "FileCRC": 3594263025,
+            "FileSize": 6302,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/attack.anim",
+                    "AssetGUID": "75193ab446532054da0becd31050207f"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_idle.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_idle.bundle",
+            "FileHash": "e71c2e00c281ecc913e6f994e6a9ee39",
+            "FileCRC": 1713263413,
+            "FileSize": 6215,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/idle.anim",
+                    "AssetGUID": "c49785f1406e2af42a647dc5cdaf8f42"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
+            "FileHash": "d5ac3d049d285a297e37f098b57eff15",
+            "FileCRC": 3667087279,
+            "FileSize": 6655,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/logo.anim",
+                    "AssetGUID": "63c5a7fccc0e14a4fa70642d8cf409bf"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+            "FileHash": "f8a9ef2c4fb81ff1863ca2c19a794c7e",
+            "FileCRC": 4052425124,
+            "FileSize": 4877,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_idle.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Animation/Player.controller",
+                    "AssetGUID": "5c17f4d0f627269448d3d4fc88bcec9b"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+            "FileHash": "ca7521995ae134d31e0933a6f33aff6b",
+            "FileCRC": 2622433238,
+            "FileSize": 4267,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab",
+                    "AssetGUID": "d401798aefbc31446bf41dc3722cf612"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+            "FileHash": "412806f9f780376f58e240553b2e6a3e",
+            "FileCRC": 2882584174,
+            "FileSize": 4318,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab",
+                    "AssetGUID": "3cb9cee4246cba6448fdfdb5e6d1b113"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
+            "FileHash": "2297386283a5da21b319b36d3a78f8fa",
+            "FileCRC": 3271784197,
+            "FileSize": 4323,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Run.prefab",
+                    "AssetGUID": "b16e0f8cb8844d249a8d04c88e95dafe"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+            "FileHash": "9c9be4ee4407a9567e328f5040db55d4",
+            "FileCRC": 346443342,
+            "FileSize": 5582,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/player.prefab",
+                    "AssetGUID": "9eb0e1351bdbe6445ad5abe1794afefa"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+            "FileHash": "60c75d69e85c66abbdb4a0fa2463e36a",
+            "FileCRC": 4044220918,
+            "FileSize": 11514,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/Spider.prefab",
+                    "AssetGUID": "d59493e6e44c27344a6e537171e6aecb"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+            "FileHash": "f6250aa65083d9b46e420ef37a0d5707",
+            "FileCRC": 562146899,
+            "FileSize": 4886,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/buff.prefab",
+                    "AssetGUID": "b2d3b3776b4553944afdee6e7451acf1"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+            "FileHash": "1778c7100205dea7dbaea867f3a4513d",
+            "FileCRC": 3684386720,
+            "FileSize": 5550,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
+                    "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+            "FileHash": "badd883b220ea8ab80fdcfaadf8b141b",
+            "FileCRC": 635166111,
+            "FileSize": 7489,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/DeathWindow.prefab",
+                    "AssetGUID": "958dd097c853b7a47b3b27239a5fb2bf"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+            "FileHash": "92fd1c8d0374cb9ca3a78ff7d54dcc37",
+            "FileCRC": 1467366985,
+            "FileSize": 6162,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/GuideWindow.prefab",
+                    "AssetGUID": "496edcf82f54b5842a67d2ac5e998794"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+            "FileHash": "7d905885181e3ad63913afd73f7a3cdf",
+            "FileCRC": 3038406265,
+            "FileSize": 11764,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MainWindow.prefab",
+                    "AssetGUID": "060a7bec86a39ab498488771ea210c69"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_maskwindow.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_maskwindow.bundle",
+            "FileHash": "4a8909f128a2625fe0c740b2d5e9c159",
+            "FileCRC": 2360244050,
+            "FileSize": 4942,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MaskWindow.prefab",
+                    "AssetGUID": "49d0844cf90395f4fa281c8fdde769f8"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
+            "FileHash": "70182d574f110f438c6ca332c1ba40e3",
+            "FileCRC": 2472553883,
+            "FileSize": 8680,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow.prefab",
+                    "AssetGUID": "2ba0f5cfbd5a3e848b72fb2c3242f903"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+            "FileHash": "8f181dd1b43ad045c5638f2a7ff402bf",
+            "FileCRC": 323049606,
+            "FileSize": 4903,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/progress_bar.prefab",
+                    "AssetGUID": "dc0f6678b807a434cbcee9b391118c9f"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+            "FileHash": "c2758bb6640aa22959e3f251db8b3bd0",
+            "FileCRC": 2901382487,
+            "FileSize": 5127,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/skill.prefab",
+                    "AssetGUID": "77ade1a0d84c6d44b80daa957ed6b7ab"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbability.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbability.bundle",
+            "FileHash": "5562344392c5c6e31735e2846f835c2b",
+            "FileCRC": 771164914,
+            "FileSize": 1703,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbability.json",
+                    "AssetGUID": "7f0ab7c822c557f4380e5fe1ef119902"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbasc.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbasc.bundle",
+            "FileHash": "39f63136ffffd2bdd7b2a371ca6ce904",
+            "FileCRC": 4150177463,
+            "FileSize": 1459,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbasc.json",
+                    "AssetGUID": "142c6dd35781acf418a2595051f4a5b2"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattribute.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattribute.bundle",
+            "FileHash": "d90efdf5ebcf4823832ed44b8d5db9e1",
+            "FileCRC": 3845604471,
+            "FileSize": 1458,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattribute.json",
+                    "AssetGUID": "a3dcd8da191ab79499b971f73e618fdb"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattributeset.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattributeset.bundle",
+            "FileHash": "95502c8b6f3ef20caac5810489469ada",
+            "FileCRC": 478897371,
+            "FileSize": 1523,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattributeset.json",
+                    "AssetGUID": "a6cc655a571d9ef4f98b84193944bfcd"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaycue.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaycue.bundle",
+            "FileHash": "902c7dbcf59a6b9dd2941e3166aed376",
+            "FileCRC": 2325480779,
+            "FileSize": 1602,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaycue.json",
+                    "AssetGUID": "b9dd4b27b4a4ce44bacc57e3dc58999d"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplayeffect.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplayeffect.bundle",
+            "FileHash": "a45e00e8dfedbec5c34d8e3723cb8b8a",
+            "FileCRC": 3426189704,
+            "FileSize": 2233,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplayeffect.json",
+                    "AssetGUID": "d14042b62cbbf98418ddfc78b704b02b"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaytags.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaytags.bundle",
+            "FileHash": "c02b53fd7d0f17bb7f0a4a0b5c3595ea",
+            "FileCRC": 507019331,
+            "FileSize": 1880,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaytags.json",
+                    "AssetGUID": "ac1695dbfebf55449bfbaa4640208d87"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbmmc.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbmmc.bundle",
+            "FileHash": "6ea4c6853a1cc705d8e5a9fe68ceb5e6",
+            "FileCRC": 2040073973,
+            "FileSize": 1452,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbmmc.json",
+                    "AssetGUID": "f0010d70d40472c4597c4b8fcabde76b"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbtimelineability.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbtimelineability.bundle",
+            "FileHash": "ccd5f46a150821d81c1abd544648640d",
+            "FileCRC": 3900113163,
+            "FileSize": 1893,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbtimelineability.json",
+                    "AssetGUID": "dae0f11cdb3b32b49b9c564d46b17d3b"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
+            "FileHash": "b22c5d6f02241322369b9ddd1ad69bab",
+            "FileCRC": 2737644307,
+            "FileSize": 87941,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Texture/ex_hard_studio_logo.png",
+                    "AssetGUID": "9cc34e2e7dfc62645b359f4e79546d08"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
+            "FileHash": "6d5748303ced23c98889cf5d2d96114b",
+            "FileCRC": 1234040255,
+            "FileSize": 6248,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_opening.bundle",
+                "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+                "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
+                    "AssetGUID": "741ee455797b320409a46850c1e97a82"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_opening.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_opening.bundle",
+            "FileHash": "73aa56cb8152b667a83571f567a703bf",
+            "FileCRC": 1686561037,
+            "FileSize": 4850,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
+                "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+                "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/opening.prefab",
+                    "AssetGUID": "0865ebc6936baa24582b924288cdcd89"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+            "FileHash": "eabddbaf757d104f790e2555ea483da1",
+            "FileCRC": 1707310249,
+            "FileSize": 5447,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_opening.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/TimelineOpening.playable",
+                    "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle",
+            "FileHash": "91929edc2c8eac0aaf71f372ecd6cde2",
+            "FileCRC": 388247161,
+            "FileSize": 4725,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_timeline_opening.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Timeline/Virtual Camera.controller",
+                    "AssetGUID": "a69fc2dfe912ab449ba0419f1a60f681"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle",
+            "FileHash": "0b4555ae90d23951911ef5c56a511ba7",
+            "FileCRC": 2980683807,
+            "FileSize": 136419,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/logo.png",
+                    "AssetGUID": "23e2312f2a7b9ef4b8c66890dc2c3b4a"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+            "FileHash": "5a7d98b623ee41b2437f26ad74b753e1",
+            "FileCRC": 1069744600,
+            "FileSize": 4339,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+                    "AssetGUID": "1cabf48321ac5194992b83d083d9de0e"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+            "FileName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+            "FileHash": "e38d76f05ea1147aacec39d566e5c08f",
+            "FileCRC": 2398591760,
+            "FileSize": 2035314,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+                    "AssetGUID": "69267910aca4b2840947de018347b614"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "FileName": "mainpackage_assets_demoforesc_scene.bundle",
+            "FileHash": "8b014cb99f735b6269f3750aedabf6b4",
+            "FileCRC": 619675560,
+            "FileSize": 332889,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_idle.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
+                "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+                "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+                "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+                "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
+                    "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
+                    "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
+                    "AssetGUID": "edac8363a1c534b4799e555f89a24386"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Scene/TrainRoom.unity",
+                    "AssetGUID": "b99fc8da31000a444ad6f7e0227bbc03"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+            "FileName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+            "FileHash": "38f839eebc8d4e49ba2b568664a19234",
+            "FileCRC": 1803267426,
+            "FileSize": 82880,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
+                    "AssetGUID": "dce2b0846b69292479322eb21cb8c75c"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+            "FileName": "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+            "FileHash": "8813372626a1a3ddda480ab33ae45c22",
+            "FileCRC": 2236161187,
+            "FileSize": 3267,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/blue_shine.mat",
+                    "AssetGUID": "12df1c8e5b79b4945801584a5115b69d"
+                },
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/green_shine.mat",
+                    "AssetGUID": "fbd109392a7b82e40a5c6a49e1fa3767"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+            "FileName": "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+            "FileHash": "e138eda22d056ef05f8faf5a14dd6dce",
+            "FileCRC": 3423706022,
+            "FileSize": 3839,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Blue_Prototype.mat",
+                    "AssetGUID": "5a7ca585a9b2b3c4587125916713263d"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Gray_Prototype.mat",
+                    "AssetGUID": "21ca8723c11d2d34abf1e9e595b0942a"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Light_Sea_Green_Prototype.mat",
+                    "AssetGUID": "40598ecf603ac4d41b1f525da75d9d89"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Mantis_Prototype.mat",
+                    "AssetGUID": "720ea100b5a5ea741a0e79cfb3ab65c6"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Orange_Prototype.mat",
+                    "AssetGUID": "d78d6cd3137a8824699cde034b4270c0"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/White_Prototype.mat",
+                    "AssetGUID": "81caf0b4f4d2ac74e847cad8de1aa792"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Materials/Yellow_Prototype.mat",
+                    "AssetGUID": "f1e38594f14520c48bc546f3a41f4f56"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+            "FileName": "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+            "FileHash": "25271fefa15ecf2a607c2111f2104c89",
+            "FileCRC": 1089470050,
+            "FileSize": 10000,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle",
+                "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/1x1_grid_quarter_lines_numbered.png",
+                    "AssetGUID": "f3fda86b5946f734a9a3ff491f163a96"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/Textures/prototype_normal.png",
+                    "AssetGUID": "b7e7faca7fd58d147ad4889d2c521c2c"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_packages_com_unity_probuilder_content_icons_scripts.bundle",
+            "FileName": "mainpackage_share_packages_com_unity_probuilder_content_icons_scripts.bundle",
+            "FileHash": "1b21733a71c8aa6fea6da0a5078ca705",
+            "FileCRC": 692669535,
+            "FileSize": 2492,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Packages/com.unity.probuilder/Content/Icons/Scripts/MeshFilter Icon.asset",
+                    "AssetGUID": "432b3086cebdc438d9d33de3669fb063"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+            "FileName": "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+            "FileHash": "f43167bb1bb94c28bc8bee198a88d704",
+            "FileCRC": 2094513785,
+            "FileSize": 3002,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+                "mainpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_scene.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                }
+            ]
+        },
+        {
+            "BundleName": "mainpackage_unityshaders.bundle",
+            "FileName": "mainpackage_unityshaders.bundle",
+            "FileHash": "e149c37e1b407814ca87e506e6325384",
+            "FileCRC": 3436409184,
+            "FileSize": 69330,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle"
+            ],
+            "ReferenceBundles": [
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+                "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+                "mainpackage_assets_demoforesc_scene.bundle",
+                "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+                "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+                "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/DemoForESC/Resources/Materials/TransparencyFlickerShader.shader",
+                    "AssetGUID": "317595591d5940843bd19befcf56f13f"
+                },
+                {
+                    "AssetPath": "Assets/Scalable Grid Prototype Materials/ShaderGraphs/ScaleTilingShader.shadergraph",
+                    "AssetGUID": "74686ab863fe0dc4598560e65eb847eb"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ]
+        }
+    ],
+    "IndependAssets": []
+}

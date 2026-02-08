@@ -1,0 +1,933 @@
+{
+    "FileVersion": "2025.9.30",
+    "EnableAddressable": true,
+    "SupportExtensionless": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": true,
+    "ReplaceAssetPathWithAddress": false,
+    "OutputNameStyle": 1,
+    "BuildBundleType": 2,
+    "BuildPipeline": "ScriptableBuildPipeline",
+    "PackageName": "MainPackage",
+    "PackageVersion": "2026-02-08-1255",
+    "PackageNote": "2026/2/8 20:55:57",
+    "AssetList": [
+        {
+            "Address": "Animation_attack",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/attack.anim",
+            "AssetGUID": "75193ab446532054da0becd31050207f",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Animation_idle",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/idle.anim",
+            "AssetGUID": "c49785f1406e2af42a647dc5cdaf8f42",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Animation_logo",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/logo.anim",
+            "AssetGUID": "63c5a7fccc0e14a4fa70642d8cf409bf",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Animation_Player",
+            "AssetPath": "Assets/DemoForESC/Resources/Animation/Player.controller",
+            "AssetGUID": "5c17f4d0f627269448d3d4fc88bcec9b",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": [
+                0,
+                1
+            ]
+        },
+        {
+            "Address": "Guide_GuidePoints_Attack",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab",
+            "AssetGUID": "d401798aefbc31446bf41dc3722cf612",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": [
+                38,
+                39,
+                42
+            ]
+        },
+        {
+            "Address": "Guide_GuidePoints_Move",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab",
+            "AssetGUID": "3cb9cee4246cba6448fdfdb5e6d1b113",
+            "AssetTags": [],
+            "BundleID": 5,
+            "DependBundleIDs": [
+                37,
+                39,
+                42
+            ]
+        },
+        {
+            "Address": "Guide_GuidePoints_Run",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Run.prefab",
+            "AssetGUID": "b16e0f8cb8844d249a8d04c88e95dafe",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                37,
+                39,
+                42
+            ]
+        },
+        {
+            "Address": "Monster_player",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/player.prefab",
+            "AssetGUID": "9eb0e1351bdbe6445ad5abe1794afefa",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": [
+                38,
+                39,
+                42
+            ]
+        },
+        {
+            "Address": "Monster_Spider",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/Monster/Spider.prefab",
+            "AssetGUID": "d59493e6e44c27344a6e537171e6aecb",
+            "AssetTags": [],
+            "BundleID": 8,
+            "DependBundleIDs": [
+                38,
+                39,
+                42
+            ]
+        },
+        {
+            "Address": "UI_buff",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/buff.prefab",
+            "AssetGUID": "b2d3b3776b4553944afdee6e7451acf1",
+            "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "Address": "UI_ButtonA",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/ButtonA.prefab",
+            "AssetGUID": "80c7f4eaa09c3764da30e2348ca89445",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": [
+                34
+            ]
+        },
+        {
+            "Address": "UI_DeathWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/DeathWindow.prefab",
+            "AssetGUID": "958dd097c853b7a47b3b27239a5fb2bf",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": [
+                10,
+                33,
+                34
+            ]
+        },
+        {
+            "Address": "UI_GuideWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/GuideWindow.prefab",
+            "AssetGUID": "496edcf82f54b5842a67d2ac5e998794",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "Address": "UI_MainWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MainWindow.prefab",
+            "AssetGUID": "060a7bec86a39ab498488771ea210c69",
+            "AssetTags": [],
+            "BundleID": 13,
+            "DependBundleIDs": [
+                9,
+                16,
+                17,
+                33,
+                34
+            ]
+        },
+        {
+            "Address": "UI_MaskWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MaskWindow.prefab",
+            "AssetGUID": "49d0844cf90395f4fa281c8fdde769f8",
+            "AssetTags": [],
+            "BundleID": 14,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_MenuWindow",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/MenuWindow.prefab",
+            "AssetGUID": "2ba0f5cfbd5a3e848b72fb2c3242f903",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": [
+                10,
+                34
+            ]
+        },
+        {
+            "Address": "UI_progress_bar",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/progress_bar.prefab",
+            "AssetGUID": "dc0f6678b807a434cbcee9b391118c9f",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "Address": "UI_skill",
+            "AssetPath": "Assets/DemoForESC/Resources/Prefabs/UI/skill.prefab",
+            "AssetGUID": "77ade1a0d84c6d44b80daa957ed6b7ab",
+            "AssetTags": [],
+            "BundleID": 17,
+            "DependBundleIDs": [
+                33
+            ]
+        },
+        {
+            "Address": "Tables_exgas_tbability",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbability.json",
+            "AssetGUID": "7f0ab7c822c557f4380e5fe1ef119902",
+            "AssetTags": [],
+            "BundleID": 18,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbasc",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbasc.json",
+            "AssetGUID": "142c6dd35781acf418a2595051f4a5b2",
+            "AssetTags": [],
+            "BundleID": 19,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbattribute",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattribute.json",
+            "AssetGUID": "a3dcd8da191ab79499b971f73e618fdb",
+            "AssetTags": [],
+            "BundleID": 20,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbattributeset",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbattributeset.json",
+            "AssetGUID": "a6cc655a571d9ef4f98b84193944bfcd",
+            "AssetTags": [],
+            "BundleID": 21,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbgameplaycue",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaycue.json",
+            "AssetGUID": "b9dd4b27b4a4ce44bacc57e3dc58999d",
+            "AssetTags": [],
+            "BundleID": 22,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbgameplayeffect",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplayeffect.json",
+            "AssetGUID": "d14042b62cbbf98418ddfc78b704b02b",
+            "AssetTags": [],
+            "BundleID": 23,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbgameplaytags",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbgameplaytags.json",
+            "AssetGUID": "ac1695dbfebf55449bfbaa4640208d87",
+            "AssetTags": [],
+            "BundleID": 24,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbmmc",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbmmc.json",
+            "AssetGUID": "f0010d70d40472c4597c4b8fcabde76b",
+            "AssetTags": [],
+            "BundleID": 25,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Tables_exgas_tbtimelineability",
+            "AssetPath": "Assets/DemoForESC/Resources/Tables/exgas_tbtimelineability.json",
+            "AssetGUID": "dae0f11cdb3b32b49b9c564d46b17d3b",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Texture_ex_hard_studio_logo",
+            "AssetPath": "Assets/DemoForESC/Resources/Texture/ex_hard_studio_logo.png",
+            "AssetGUID": "9cc34e2e7dfc62645b359f4e79546d08",
+            "AssetTags": [],
+            "BundleID": 27,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Timeline_anim_float",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/anim_float.anim",
+            "AssetGUID": "741ee455797b320409a46850c1e97a82",
+            "AssetTags": [],
+            "BundleID": 28,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Timeline_opening",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/opening.prefab",
+            "AssetGUID": "0865ebc6936baa24582b924288cdcd89",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": [
+                28,
+                30,
+                31
+            ]
+        },
+        {
+            "Address": "Timeline_TimelineOpening",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/TimelineOpening.playable",
+            "AssetGUID": "4746ba3176716984cb0e19eaeb684dbb",
+            "AssetTags": [],
+            "BundleID": 30,
+            "DependBundleIDs": [
+                28
+            ]
+        },
+        {
+            "Address": "Timeline_Virtual Camera",
+            "AssetPath": "Assets/DemoForESC/Resources/Timeline/Virtual Camera.controller",
+            "AssetGUID": "a69fc2dfe912ab449ba0419f1a60f681",
+            "AssetTags": [],
+            "BundleID": 31,
+            "DependBundleIDs": [
+                28
+            ]
+        },
+        {
+            "Address": "logo",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/logo.png",
+            "AssetGUID": "23e2312f2a7b9ef4b8c66890dc2c3b4a",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "white",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/Atlas/white.png",
+            "AssetGUID": "1cabf48321ac5194992b83d083d9de0e",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "sanjililiang_jianti_cu",
+            "AssetPath": "Assets/DemoForESC/Resources/UI/sanjililiang_jianti_cu.ttf",
+            "AssetGUID": "69267910aca4b2840947de018347b614",
+            "AssetTags": [],
+            "BundleID": 34,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "DemoForECS",
+            "AssetPath": "Assets/DemoForESC/Scene/DemoForECS.unity",
+            "AssetGUID": "e2c5d7f094ea4b446ac86fd3ec87024c",
+            "AssetTags": [],
+            "BundleID": 35,
+            "DependBundleIDs": [
+                0,
+                1,
+                3,
+                7,
+                36,
+                38,
+                39,
+                40,
+                41,
+                42
+            ]
+        },
+        {
+            "Address": "ReflectionProbe-0",
+            "AssetPath": "Assets/DemoForESC/Scene/DemoForECS/ReflectionProbe-0.exr",
+            "AssetGUID": "dce2b0846b69292479322eb21cb8c75c",
+            "AssetTags": [],
+            "BundleID": 36,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "EditorUI",
+            "AssetPath": "Assets/DemoForESC/Scene/EditorUI.unity",
+            "AssetGUID": "d3be949fe5d454c429b55883f96d5ad6",
+            "AssetTags": [],
+            "BundleID": 35,
+            "DependBundleIDs": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                15,
+                16,
+                17,
+                33,
+                34,
+                42
+            ]
+        },
+        {
+            "Address": "Init",
+            "AssetPath": "Assets/DemoForESC/Scene/Init.unity",
+            "AssetGUID": "edac8363a1c534b4799e555f89a24386",
+            "AssetTags": [],
+            "BundleID": 35,
+            "DependBundleIDs": [
+                2,
+                27,
+                42
+            ]
+        },
+        {
+            "Address": "TrainRoom",
+            "AssetPath": "Assets/DemoForESC/Scene/TrainRoom.unity",
+            "AssetGUID": "b99fc8da31000a444ad6f7e0227bbc03",
+            "AssetTags": [],
+            "BundleID": 35,
+            "DependBundleIDs": [
+                8,
+                38,
+                39,
+                42
+            ]
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_attack.bundle",
+            "UnityCRC": 4177397268,
+            "FileHash": "ed56c7f2350aaeb3e2e1378235c5c772",
+            "FileCRC": 3594263025,
+            "FileSize": 6302,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_idle.bundle",
+            "UnityCRC": 3070926122,
+            "FileHash": "e71c2e00c281ecc913e6f994e6a9ee39",
+            "FileCRC": 1713263413,
+            "FileSize": 6215,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_logo.bundle",
+            "UnityCRC": 3376360378,
+            "FileHash": "d5ac3d049d285a297e37f098b57eff15",
+            "FileCRC": 3667087279,
+            "FileSize": 6655,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_animation_player.bundle",
+            "UnityCRC": 1834133133,
+            "FileHash": "f8a9ef2c4fb81ff1863ca2c19a794c7e",
+            "FileCRC": 4052425124,
+            "FileSize": 4877,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                0,
+                1
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_attack.bundle",
+            "UnityCRC": 419423566,
+            "FileHash": "ca7521995ae134d31e0933a6f33aff6b",
+            "FileCRC": 2622433238,
+            "FileSize": 4267,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                38,
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_move.bundle",
+            "UnityCRC": 188293665,
+            "FileHash": "412806f9f780376f58e240553b2e6a3e",
+            "FileCRC": 2882584174,
+            "FileSize": 4318,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                37,
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_guide_guidepoints_run.bundle",
+            "UnityCRC": 50551048,
+            "FileHash": "2297386283a5da21b319b36d3a78f8fa",
+            "FileCRC": 3271784197,
+            "FileSize": 4323,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                37,
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_player.bundle",
+            "UnityCRC": 2399345520,
+            "FileHash": "9c9be4ee4407a9567e328f5040db55d4",
+            "FileCRC": 346443342,
+            "FileSize": 5582,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                38,
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_monster_spider.bundle",
+            "UnityCRC": 2066435522,
+            "FileHash": "60c75d69e85c66abbdb4a0fa2463e36a",
+            "FileCRC": 4044220918,
+            "FileSize": 11514,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                38,
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buff.bundle",
+            "UnityCRC": 3374854141,
+            "FileHash": "f6250aa65083d9b46e420ef37a0d5707",
+            "FileCRC": 562146899,
+            "FileSize": 4886,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_buttona.bundle",
+            "UnityCRC": 3981672285,
+            "FileHash": "1778c7100205dea7dbaea867f3a4513d",
+            "FileCRC": 3684386720,
+            "FileSize": 5550,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_deathwindow.bundle",
+            "UnityCRC": 2864372458,
+            "FileHash": "badd883b220ea8ab80fdcfaadf8b141b",
+            "FileCRC": 635166111,
+            "FileSize": 7489,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_guidewindow.bundle",
+            "UnityCRC": 2785564987,
+            "FileHash": "92fd1c8d0374cb9ca3a78ff7d54dcc37",
+            "FileCRC": 1467366985,
+            "FileSize": 6162,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_mainwindow.bundle",
+            "UnityCRC": 3125499323,
+            "FileHash": "7d905885181e3ad63913afd73f7a3cdf",
+            "FileCRC": 3038406265,
+            "FileSize": 11764,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_maskwindow.bundle",
+            "UnityCRC": 1361237583,
+            "FileHash": "4a8909f128a2625fe0c740b2d5e9c159",
+            "FileCRC": 2360244050,
+            "FileSize": 4942,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_menuwindow.bundle",
+            "UnityCRC": 861962546,
+            "FileHash": "70182d574f110f438c6ca332c1ba40e3",
+            "FileCRC": 2472553883,
+            "FileSize": 8680,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_progress_bar.bundle",
+            "UnityCRC": 2930836127,
+            "FileHash": "8f181dd1b43ad045c5638f2a7ff402bf",
+            "FileCRC": 323049606,
+            "FileSize": 4903,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                33,
+                34
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_prefabs_ui_skill.bundle",
+            "UnityCRC": 3507779016,
+            "FileHash": "c2758bb6640aa22959e3f251db8b3bd0",
+            "FileCRC": 2901382487,
+            "FileSize": 5127,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                33
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbability.bundle",
+            "UnityCRC": 1907503662,
+            "FileHash": "5562344392c5c6e31735e2846f835c2b",
+            "FileCRC": 771164914,
+            "FileSize": 1703,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbasc.bundle",
+            "UnityCRC": 828716729,
+            "FileHash": "39f63136ffffd2bdd7b2a371ca6ce904",
+            "FileCRC": 4150177463,
+            "FileSize": 1459,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattribute.bundle",
+            "UnityCRC": 1258580133,
+            "FileHash": "d90efdf5ebcf4823832ed44b8d5db9e1",
+            "FileCRC": 3845604471,
+            "FileSize": 1458,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbattributeset.bundle",
+            "UnityCRC": 2879082070,
+            "FileHash": "95502c8b6f3ef20caac5810489469ada",
+            "FileCRC": 478897371,
+            "FileSize": 1523,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaycue.bundle",
+            "UnityCRC": 2790894732,
+            "FileHash": "902c7dbcf59a6b9dd2941e3166aed376",
+            "FileCRC": 2325480779,
+            "FileSize": 1602,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplayeffect.bundle",
+            "UnityCRC": 1229469948,
+            "FileHash": "a45e00e8dfedbec5c34d8e3723cb8b8a",
+            "FileCRC": 3426189704,
+            "FileSize": 2233,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbgameplaytags.bundle",
+            "UnityCRC": 4191179254,
+            "FileHash": "c02b53fd7d0f17bb7f0a4a0b5c3595ea",
+            "FileCRC": 507019331,
+            "FileSize": 1880,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbmmc.bundle",
+            "UnityCRC": 3364293122,
+            "FileHash": "6ea4c6853a1cc705d8e5a9fe68ceb5e6",
+            "FileCRC": 2040073973,
+            "FileSize": 1452,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_tables_exgas_tbtimelineability.bundle",
+            "UnityCRC": 3356366824,
+            "FileHash": "ccd5f46a150821d81c1abd544648640d",
+            "FileCRC": 3900113163,
+            "FileSize": 1893,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_texture_ex_hard_studio_logo.bundle",
+            "UnityCRC": 2062249616,
+            "FileHash": "b22c5d6f02241322369b9ddd1ad69bab",
+            "FileCRC": 2737644307,
+            "FileSize": 87941,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_anim_float.bundle",
+            "UnityCRC": 2803601536,
+            "FileHash": "6d5748303ced23c98889cf5d2d96114b",
+            "FileCRC": 1234040255,
+            "FileSize": 6248,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_opening.bundle",
+            "UnityCRC": 54822929,
+            "FileHash": "73aa56cb8152b667a83571f567a703bf",
+            "FileCRC": 1686561037,
+            "FileSize": 4850,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                28,
+                30,
+                31
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_timelineopening.bundle",
+            "UnityCRC": 3160260384,
+            "FileHash": "eabddbaf757d104f790e2555ea483da1",
+            "FileCRC": 1707310249,
+            "FileSize": 5447,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                28
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_timeline_virtual_camera.bundle",
+            "UnityCRC": 826006815,
+            "FileHash": "91929edc2c8eac0aaf71f372ecd6cde2",
+            "FileCRC": 388247161,
+            "FileSize": 4725,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                28
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_logo.bundle",
+            "UnityCRC": 459259273,
+            "FileHash": "0b4555ae90d23951911ef5c56a511ba7",
+            "FileCRC": 2980683807,
+            "FileSize": 136419,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_atlas_white.bundle",
+            "UnityCRC": 2294400282,
+            "FileHash": "5a7d98b623ee41b2437f26ad74b753e1",
+            "FileCRC": 1069744600,
+            "FileSize": 4339,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_resources_ui_sanjililiang_jianti_cu.bundle",
+            "UnityCRC": 2767696635,
+            "FileHash": "e38d76f05ea1147aacec39d566e5c08f",
+            "FileCRC": 2398591760,
+            "FileSize": 2035314,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_scene.bundle",
+            "UnityCRC": 1724755086,
+            "FileHash": "8b014cb99f735b6269f3750aedabf6b4",
+            "FileCRC": 619675560,
+            "FileSize": 332889,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                0,
+                1,
+                2,
+                3,
+                27,
+                33,
+                34,
+                36,
+                38,
+                39,
+                41,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_assets_demoforesc_scene_demoforecs.bundle",
+            "UnityCRC": 1142011979,
+            "FileHash": "38f839eebc8d4e49ba2b568664a19234",
+            "FileCRC": 1803267426,
+            "FileSize": 82880,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_share_assets_demoforesc_resources_materials.bundle",
+            "UnityCRC": 2225004617,
+            "FileHash": "8813372626a1a3ddda480ab33ae45c22",
+            "FileCRC": 2236161187,
+            "FileSize": 3267,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_assets_scalable_grid_prototype_materials_materials.bundle",
+            "UnityCRC": 2659737621,
+            "FileHash": "e138eda22d056ef05f8faf5a14dd6dce",
+            "FileCRC": 3423706022,
+            "FileSize": 3839,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_share_assets_scalable_grid_prototype_materials_textures.bundle",
+            "UnityCRC": 2129141538,
+            "FileHash": "25271fefa15ecf2a607c2111f2104c89",
+            "FileCRC": 1089470050,
+            "FileSize": 10000,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_share_packages_com_unity_probuilder_content_icons_scripts.bundle",
+            "UnityCRC": 4160162864,
+            "FileHash": "1b21733a71c8aa6fea6da0a5078ca705",
+            "FileCRC": 692669535,
+            "FileSize": 2492,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "mainpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+            "UnityCRC": 2683856946,
+            "FileHash": "f43167bb1bb94c28bc8bee198a88d704",
+            "FileCRC": 2094513785,
+            "FileSize": 3002,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                39,
+                42
+            ]
+        },
+        {
+            "BundleName": "mainpackage_unityshaders.bundle",
+            "UnityCRC": 3947692811,
+            "FileHash": "e149c37e1b407814ca87e506e6325384",
+            "FileCRC": 3436409184,
+            "FileSize": 69330,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                39
+            ]
+        }
+    ]
+}

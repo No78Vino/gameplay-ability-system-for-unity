@@ -1,14 +1,36 @@
-﻿2025-11-18 23:39:54.830 [INFO] Begin to build package : MainPackage by ScriptableBuildPipeline
-2025-11-18 23:39:54.830 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
-2025-11-18 23:39:54.854 [INFO] Delete package root directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage
-2025-11-18 23:39:54.855 [INFO] Create pipeline output directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/OutputCache
-2025-11-18 23:39:54.856 [INFO] TaskPrepare It takes 0 seconds in total
-2025-11-18 23:39:54.856 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
-2025-11-18 23:39:57.196 [INFO] TaskGetBuildMap It takes 2 seconds in total
-2025-11-18 23:39:57.196 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
-2025-11-18 23:40:05.657 [INFO] Total build process time: 2 seconds
-2025-11-18 23:40:05.657 [ERROR] ScriptableBuildPipeline build failed !
-2025-11-18 23:40:05.657 [ERROR] An error occurred in build task TaskBuilding_SBP
-2025-11-18 23:40:05.658 [ERROR] System.Exception: [ErrorCode300] UnityEngine build failed ! ReturnCode : Exception
-  at YooAsset.Editor.TaskBuilding_SBP.YooAsset.Editor.IBuildTask.Run (YooAsset.Editor.BuildContext context) [0x00090] in F:\MyRepo\gameplay-ability-system-for-unity\Assets\Plugins\YooAsset\Editor\AssetBundleBuilder\BuildPipeline\ScriptableBuildPipeline\BuildTasks\TaskBuilding_SBP.cs:40 
-  at YooAsset.Editor.BuildRunner.Run (System.Collections.Generic.List`1[T] pipeline, YooAsset.Editor.BuildContext context) [0x00085] in F:\MyRepo\gameplay-ability-system-for-unity\Assets\Plugins\YooAsset\Editor\AssetBundleBuilder\BuildSystem\BuildRunner.cs:41 
+﻿2026-02-08 20:55:57.372 [INFO] Begin to build package : MainPackage by ScriptableBuildPipeline
+2026-02-08 20:55:57.373 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
+2026-02-08 20:55:57.460 [INFO] Delete package root directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage
+2026-02-08 20:55:57.462 [INFO] Create pipeline output directory: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/OutputCache
+2026-02-08 20:55:57.462 [INFO] TaskPrepare It takes 0 seconds in total
+2026-02-08 20:55:57.462 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
+2026-02-08 20:56:29.864 [INFO] TaskGetBuildMap It takes 32 seconds in total
+2026-02-08 20:56:29.864 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
+2026-02-08 20:56:46.608 [INFO] UnityEngine build success!
+2026-02-08 20:56:46.608 [INFO] TaskBuilding It takes 16 seconds in total
+2026-02-08 20:56:46.609 [INFO] --------------------------------------------->TaskVerifyBuildResult<--------------------------------------------
+2026-02-08 20:56:46.614 [INFO] Build results verify success!
+2026-02-08 20:56:46.614 [INFO] TaskVerifyBuildResult It takes 0 seconds in total
+2026-02-08 20:56:46.614 [INFO] --------------------------------------------->TaskEncryption<--------------------------------------------
+2026-02-08 20:56:46.615 [INFO] TaskEncryption It takes 0 seconds in total
+2026-02-08 20:56:46.616 [INFO] --------------------------------------------->TaskUpdateBundleInfo<--------------------------------------------
+2026-02-08 20:56:46.947 [INFO] TaskUpdateBundleInfo It takes 0 seconds in total
+2026-02-08 20:56:46.947 [INFO] --------------------------------------------->TaskCreateManifest<--------------------------------------------
+2026-02-08 20:56:46.964 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2026-02-08-1255/MainPackage_2026-02-08-1255.json
+2026-02-08 20:56:46.998 [INFO] Create package manifest file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2026-02-08-1255/MainPackage_2026-02-08-1255.bytes
+2026-02-08 20:56:47.008 [INFO] Create package manifest hash file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2026-02-08-1255/MainPackage_2026-02-08-1255.hash
+2026-02-08 20:56:47.015 [INFO] Create package manifest version file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2026-02-08-1255/MainPackage.version
+2026-02-08 20:56:47.053 [INFO] TaskCreateManifest It takes 0 seconds in total
+2026-02-08 20:56:47.053 [INFO] --------------------------------------------->TaskCreateReport<--------------------------------------------
+2026-02-08 20:56:47.063 [INFO] Create build report file: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2026-02-08-1255/MainPackage_2026-02-08-1255.report
+2026-02-08 20:56:47.063 [INFO] TaskCreateReport It takes 0 seconds in total
+2026-02-08 20:56:47.063 [INFO] --------------------------------------------->TaskCreatePackage<--------------------------------------------
+2026-02-08 20:56:47.064 [INFO] Start making patch package: F:/MyRepo/gameplay-ability-system-for-unity/Bundles/StandaloneWindows64/MainPackage/2026-02-08-1255
+2026-02-08 20:56:47.095 [INFO] TaskCreatePackage It takes 0 seconds in total
+2026-02-08 20:56:47.095 [INFO] --------------------------------------------->TaskCopyBuildinFiles<--------------------------------------------
+2026-02-08 20:56:48.484 [INFO] Buildin files copy complete: F:/MyRepo/gameplay-ability-system-for-unity/Assets/StreamingAssets/yoo/MainPackage
+2026-02-08 20:56:48.484 [INFO] TaskCopyBuildinFiles It takes 1 seconds in total
+2026-02-08 20:56:48.484 [INFO] --------------------------------------------->TaskCreateCatalog<--------------------------------------------
+2026-02-08 20:56:49.008 [INFO] TaskCreateCatalog It takes 0 seconds in total
+2026-02-08 20:56:49.008 [INFO] Total build process time: 49 seconds
+2026-02-08 20:56:49.008 [INFO] Resource pipeline build success

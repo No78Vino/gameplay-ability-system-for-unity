@@ -411,6 +411,8 @@ namespace GAS.Editor
             writer.WriteLine("////     Do not modify it.     ////");
             writer.WriteLine("///////////////////////////////////");
             writer.WriteLine("");
+            writer.WriteLine("using System;");
+            writer.WriteLine("");
             writer.WriteLine("namespace GAS.Runtime");
             writer.WriteLine("{");
             writer.Indent++;
@@ -426,11 +428,20 @@ namespace GAS.Editor
                         writer.WriteLine("XAbility.LoadAbilityCode();");
                         writer.WriteLine("XMmc.LoadMmcType();");
                         writer.WriteLine("XCue.LoadCueType();");
-                        writer.WriteLine("XLuban.Init();");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
                     writer.WriteLine("");
+                    
+                    writer.WriteLine("public static void InitConfigTables(Func<string, SimpleJSON.JSONNode> loader)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("XLuban.Init(loader);");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    
                     writer.WriteLine("public static void Launch()");
                     writer.WriteLine("{");
                     writer.Indent++;

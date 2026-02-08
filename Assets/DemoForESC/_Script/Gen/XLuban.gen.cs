@@ -14,26 +14,26 @@ namespace GAS.Runtime
 {
     public static class XLuban
     {
-        public const string GAME_CONF_DIR = "Assets/DemoForESC/Resources/Tables";
         private static Tables _tables;
         public static Tables Tables
         {
             get
             {
-                if (_tables == null) LoadTables();
-                return _tables;
+                if (_tables != null) return _tables;
+                Debug.LogError("XLuban.Tables 未初始化!");
+                return null;
             }
         }
 
-        public static void LoadTables()
+        public static void LoadTables(Func<string, JSONNode> loader)
         {
             if (_tables != null) return;
-            _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
+            _tables = new Tables(loader);
         }
 
-        public static void Init()
+        public static void Init(Func<string, JSONNode> loader)
         {
-            LoadTables();
+            LoadTables(loader);
             GameplayEffectHelper.RegisterGetConfigByIDFunc(GetGameplayEffectConfig);
         }
 
