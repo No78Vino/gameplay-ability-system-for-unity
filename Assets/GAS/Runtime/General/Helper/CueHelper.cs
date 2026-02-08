@@ -50,10 +50,12 @@ namespace GAS.Runtime
         {
             var cueParamConfigType = GetCueLogicParamType(type);
             var cueParamEditor = (XParam)Activator.CreateInstance(cueParamConfigType);
+#if UNITY_EDITOR
             if (paramData != null) cueParamEditor.DecodeExcelData(paramData);
+#endif
             return cueParamEditor;
         }
-        
+
         public static Type GetCueLogicParamType(string cueType)
         {
             return CueType2CueParamTypeMap.TryGetValue(cueType,out var cueParam) ? CueParamTypeMap[cueParam] : null;

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/DemoForESC/Scene/Init.unity
+    guid: edac8363a1c534b4799e555f89a24386
+  - enabled: 0
     path: Assets/DemoForESC/Scene/DemoForECS.unity
     guid: e2c5d7f094ea4b446ac86fd3ec87024c
   m_configObjects: {}

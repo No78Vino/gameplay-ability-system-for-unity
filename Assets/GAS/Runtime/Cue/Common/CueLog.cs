@@ -9,7 +9,7 @@ namespace GAS.Runtime
             base.OnActivate(time);
             Debug.Log(
                 $"[{time}]SourceType:{_sourceType.ToString()}, Entity:{_sourceEntity} ,Msg:{Parameter.Value}");
-            
+
             StopImmediate();
             RemoveFromTargetAsc();
         }
@@ -21,13 +21,14 @@ namespace GAS.Runtime
 
         public override void Reset()
         {
-            
-        }
 
-        public override void OnPreview(GameObject target,int frame, int startFrame, int endFrame)
+        }
+#if UNITY_EDITOR
+        public override void OnPreview(GameObject target, int frame, int startFrame, int endFrame)
         {
-            base.OnPreview(target,frame, startFrame, endFrame);
+            base.OnPreview(target, frame, startFrame, endFrame);
             Debug.Log($"[Preview Frame {frame}]Msg:{Parameter.Value}");
         }
+#endif
     }
 }

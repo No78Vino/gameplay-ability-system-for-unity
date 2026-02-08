@@ -80,10 +80,12 @@ namespace GAS.Runtime
 
         private void OnTypeChange()
         {
+#if UNITY_EDITOR
             Param = CueHelper.CreateCueParameter(CueType);
+#endif
         }
 
-        
+
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

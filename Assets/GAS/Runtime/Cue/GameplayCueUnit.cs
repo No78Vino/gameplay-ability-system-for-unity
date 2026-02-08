@@ -211,6 +211,8 @@ namespace GAS.Runtime
 #if UNITY_EDITOR
         /// <summary>
         ///     编辑器预览Cue效果
+        ///     注意：该方法只在编辑器下有效，运行时无效。
+        ///     请使用 UNITY_EDITOR 宏来包裹该方法，否则在运行时会导致编译错误。
         /// </summary>
         /// <param name="target"></param>
         /// <param name="frame"></param>

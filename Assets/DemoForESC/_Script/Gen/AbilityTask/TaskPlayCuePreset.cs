@@ -2,10 +2,10 @@
 
 namespace GAS.Runtime
 {
-    public class TaskPlayCuePreset: AbilityTaskBase<XParamCueList>
+    public class TaskPlayCuePreset : AbilityTaskBase<XParamCueList>
     {
         private GameplayCueUnit[] _cueUnits;
-        
+
         public TaskPlayCuePreset(AbilityLogicBase logic) : base(logic)
         {
         }
@@ -47,14 +47,15 @@ namespace GAS.Runtime
         {
             base.OnTick(frameIndex);
         }
-
-        public override void OnEditorPreview(GameObject target,int frame, int startFrame, int endFrame)
+#if UNITY_EDITOR
+        public override void OnEditorPreview(GameObject target, int frame, int startFrame, int endFrame)
         {
-            base.OnEditorPreview(target,frame, startFrame, endFrame);
+            base.OnEditorPreview(target, frame, startFrame, endFrame);
             foreach (var cueUnit in _cueUnits)
             {
-                cueUnit.OnPreview(target,frame, startFrame, endFrame);
+                cueUnit.OnPreview(target, frame, startFrame, endFrame);
             }
         }
+#endif
     }
 }
