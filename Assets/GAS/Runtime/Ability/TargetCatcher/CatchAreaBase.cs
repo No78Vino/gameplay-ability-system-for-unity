@@ -4,7 +4,7 @@ using UnityEngine;
 namespace GAS.Runtime
 {
     [Serializable]
-    public abstract class NewCatchAreaBase : NewTargetCatcherBase
+    public abstract class CatchAreaBase : TargetCatcherBase
     {
         public LayerMask checkLayer;
 

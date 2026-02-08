@@ -25,7 +25,7 @@ namespace GAS.Runtime
 
         protected override void OnBegin(int startFrame)
         {
-            _cueUnit.AddToAsc(_owner);
+            _cueUnit.AddToAsc(Owner);
             _cueUnit.Play();
         }
 

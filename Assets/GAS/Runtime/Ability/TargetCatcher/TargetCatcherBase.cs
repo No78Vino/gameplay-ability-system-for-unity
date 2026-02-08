@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public abstract class NewTargetCatcherBase
+    public abstract class TargetCatcherBase
     {
         public AbilitySystemCellMono Owner;
 
-        protected NewTargetCatcherBase()
+        protected TargetCatcherBase()
         {
         }
 

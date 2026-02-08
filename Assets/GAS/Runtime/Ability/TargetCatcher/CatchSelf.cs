@@ -2,7 +2,7 @@
 
 namespace GAS.Runtime
 {
-    public sealed class NewCatchSelf : NewTargetCatcherBase
+    public sealed class CatchSelf : TargetCatcherBase
     {
         protected override void CatchTargetsNonAlloc(AbilitySystemCellMono mainTarget, List<AbilitySystemCellMono> results)
         {

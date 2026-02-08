@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GAS.Runtime
 {
     [Serializable]
-    public sealed class NewCatchAreaBox2D : NewCatchAreaBase
+    public sealed class CatchAreaBox2D : CatchAreaBase
     {
         public Vector2 offset;
         public float rotation;

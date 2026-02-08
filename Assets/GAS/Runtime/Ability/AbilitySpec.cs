@@ -12,6 +12,9 @@ namespace GAS.Runtime
         private Entity _ascEntity;
         
         protected static EntityManager _entityManager => GASManager.EntityManager;
+        
+        public Entity AbilityEntity => _abilityEntity;
+        
         public AbilitySpec(Entity abilityEntity)
         {
             _abilityEntity = abilityEntity;

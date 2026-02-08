@@ -28,7 +28,7 @@ namespace GAS.Runtime
             foreach (var cueUnit in _cueUnits)
             {
                 cueUnit.Create();
-                cueUnit.AddToAsc(_owner);
+                cueUnit.AddToAsc(Owner);
                 cueUnit.Play();
             }
         }

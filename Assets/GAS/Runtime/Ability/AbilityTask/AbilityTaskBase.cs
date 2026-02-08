@@ -5,8 +5,8 @@ namespace GAS.Runtime
     public abstract class AbilityTaskBase
     {
         protected AbilityLogicBase _logic;
-        protected AbilitySpec _spec => _logic.Spec;
-        protected AbilitySystemCell _owner => _logic.Owner;
+        protected AbilitySpec Spec => _logic.Spec;
+        protected AbilitySystemCell Owner => _logic.Owner;
         protected TimeUnit _timeUnit = TimeUnit.Frame;
         protected int _startTime;
 

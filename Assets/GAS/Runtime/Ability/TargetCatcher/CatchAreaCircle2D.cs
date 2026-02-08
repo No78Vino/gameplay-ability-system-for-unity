@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public sealed class NewCatchAreaCircle2D : NewCatchAreaBase
+    public sealed class CatchAreaCircle2D : CatchAreaBase
     {
         public float radius;
         public Vector2 offset;
