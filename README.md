@@ -1,4 +1,4 @@
-# EX Gameplay Ability System For Unity
+# EX Gameplay Ability System For Unity 2.0
 ## 前言
 该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。
 
@@ -20,11 +20,8 @@ __*Odin Inspector插件请使用3.2+版本*__
 
 [//]: # (## 参考案例 [Demo]&#40;Assets/Demo&#41;)
 ## 入门教学案例系列文章
-俯视角2D弹幕射击游戏
-- PART.1 准备工作：https://zhuanlan.zhihu.com/p/688111182
-- PART.2 基础逻辑：https://zhuanlan.zhihu.com/p/689241379
-- PART.3 使用EX-GAS完成交互逻辑：https://zhuanlan.zhihu.com/p/689386644
-- PART.4 使用EX-GAS进行润色：https://zhuanlan.zhihu.com/p/689660650
+
+W.I.P 施工中...
 
 ## 目录
 - 1.[快速开始](#快速开始)
@@ -53,11 +50,12 @@ __*Odin Inspector插件请使用3.2+版本*__
 ## 1.快速开始
 ### 安装
 1. 导入Odin Inspector插件(付费),Odin Inspector来源请自行解决。建议使用3.2+版本。
-2. 导入本插件，建议以下两种方式：
+2. 导入本插件，建议以下3种方式：
 - 使用Unity Package Manager安装
 在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS
 >【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
 - 使用git clone本仓库[镜像同上]，然后将Assets/GAS文件夹拷贝到你的项目中即可
+- 
 
 ### 使用
 GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移植，所以实现逻辑基本一致。建议先粗略了解一下UE版本的GAS整体逻辑，参考项目文档：https://github.com/BillEliot/GASDocumentation_Chinese
