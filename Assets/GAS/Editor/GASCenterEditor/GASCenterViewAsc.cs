@@ -140,17 +140,17 @@ namespace GAS.Editor
                 // 写入当前cue数据到Excel
                 var row = _idToRowMap.TryGetValue(SelectedId, out var existingRow) ? existingRow : MaxRowForNewID();
                 worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
-                worksheet.Cells[row, _headerMap["name"]].Value = name;
-                worksheet.Cells[row, _headerMap["desc"]].Value = description;
-                worksheet.Cells[row, _headerMap["level"]].Value = level;
+                worksheet.Cells[row, _headerMap["Name"]].Value = name;
+                worksheet.Cells[row, _headerMap["Desc"]].Value = description;
+                worksheet.Cells[row, _headerMap["Level"]].Value = level;
                 
-                worksheet.Cells[row, _headerMap["tag"]].Value = tags.Count > 0
+                worksheet.Cells[row, _headerMap["Tag"]].Value = tags.Count > 0
                     ? string.Join(";", tags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["attrSet"]].Value = attrSets.Count > 0
+                worksheet.Cells[row, _headerMap["AttrSet"]].Value = attrSets.Count > 0
                     ? string.Join(";", attrSets)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["ability"]].Value = abilities.Count > 0
+                worksheet.Cells[row, _headerMap["Ability"]].Value = abilities.Count > 0
                     ? string.Join(";", abilities)
                     : string.Empty;
                 
@@ -186,25 +186,25 @@ namespace GAS.Editor
         {
             var selectInfo = _data[SelectedId];
 
-            name = selectInfo.ContainsKey(_headerMap["name"])
-                ? selectInfo[_headerMap["name"]]?.ToString()
+            name = selectInfo.ContainsKey(_headerMap["Name"])
+                ? selectInfo[_headerMap["Name"]]?.ToString()
                 : string.Empty;
 
-            description = selectInfo.ContainsKey(_headerMap["desc"])
-                ? selectInfo[_headerMap["desc"]]?.ToString()
+            description = selectInfo.ContainsKey(_headerMap["Desc"])
+                ? selectInfo[_headerMap["Desc"]]?.ToString()
                 : string.Empty;
-            level = selectInfo.ContainsKey(_headerMap["level"])
-                ? int.Parse(selectInfo[_headerMap["level"]]?.ToString() ?? "0")
+            level = selectInfo.ContainsKey(_headerMap["Level"])
+                ? int.Parse(selectInfo[_headerMap["Level"]]?.ToString() ?? "0")
                 : 0;
             
-            tags = selectInfo.ContainsKey(_headerMap["tag"])
-                ? ListIntFromString(selectInfo[_headerMap["tag"]]?.ToString())
+            tags = selectInfo.ContainsKey(_headerMap["Tag"])
+                ? ListIntFromString(selectInfo[_headerMap["Tag"]]?.ToString())
                 : new List<int>();
-            attrSets = selectInfo.ContainsKey(_headerMap["attrSet"])
-                ? ListIntFromString(selectInfo[_headerMap["attrSet"]]?.ToString())
+            attrSets = selectInfo.ContainsKey(_headerMap["AttrSet"])
+                ? ListIntFromString(selectInfo[_headerMap["AttrSet"]]?.ToString())
                 : new List<int>();
-            abilities = selectInfo.ContainsKey(_headerMap["ability"])
-                ? ListIntFromString(selectInfo[_headerMap["ability"]]?.ToString())
+            abilities = selectInfo.ContainsKey(_headerMap["Ability"])
+                ? ListIntFromString(selectInfo[_headerMap["Ability"]]?.ToString())
                 : new List<int>();
         }
 

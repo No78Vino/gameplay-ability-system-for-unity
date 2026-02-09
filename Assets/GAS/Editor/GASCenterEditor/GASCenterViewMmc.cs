@@ -123,7 +123,7 @@ namespace GAS.Editor
                     foreach (var colIndex in _headerMap.Values)
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
-                    var parameterCol = _headerMap["mmcLogic"];
+                    var parameterCol = _headerMap["MmcLogic"];
                     var mmcParams = new List<object>();
                     for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
                     {
@@ -150,16 +150,16 @@ namespace GAS.Editor
 
                 // 写入当前cue数据到Excel
                 var row = _idToRowMap.TryGetValue(SelectedId, out var existingRow) ? existingRow : MaxRowForNewID();
-                worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
-                worksheet.Cells[row, _headerMap["name"]].Value = name;
-                worksheet.Cells[row, _headerMap["desc"]].Value = description;
+                worksheet.Cells[row, _headerMap["ID"]].Value = SelectedId;
+                worksheet.Cells[row, _headerMap["Name"]].Value = name;
+                worksheet.Cells[row, _headerMap["Desc"]].Value = description;
                 
                 // mmc_logic需要特殊处理
-                worksheet.Cells[row, _headerMap["mmcLogic"]].Value = type;
+                worksheet.Cells[row, _headerMap["MmcLogic"]].Value = type;
                 var mmcParams = mmcParam.EncodeExcelData();
                 for (var i = 0; i < mmcParams.Count; i++)
                 {
-                    var colIndex = _headerMap["mmcLogic"] + 1 + i;
+                    var colIndex = _headerMap["MmcLogic"] + 1 + i;
                     if (colIndex > worksheet.Dimension.End.Column) break; // 防止超出列数
                     worksheet.Cells[row, colIndex].Value = mmcParams[i];
                 }
@@ -201,17 +201,17 @@ namespace GAS.Editor
         {
             var selectInfo = _data[SelectedId];
 
-            name = selectInfo.ContainsKey(_headerMap["name"])
-                ? selectInfo[_headerMap["name"]]?.ToString()
+            name = selectInfo.ContainsKey(_headerMap["Name"])
+                ? selectInfo[_headerMap["Name"]]?.ToString()
                 : string.Empty;
 
-            description = selectInfo.ContainsKey(_headerMap["desc"])
-                ? selectInfo[_headerMap["desc"]]?.ToString()
+            description = selectInfo.ContainsKey(_headerMap["Desc"])
+                ? selectInfo[_headerMap["Desc"]]?.ToString()
                 : string.Empty;
 
             // 加载Mmc逻辑
-            type = selectInfo.ContainsKey(_headerMap["mmcLogic"])
-                ? selectInfo[_headerMap["mmcLogic"]]?.ToString()
+            type = selectInfo.ContainsKey(_headerMap["MmcLogic"])
+                ? selectInfo[_headerMap["MmcLogic"]]?.ToString()
                 : string.Empty;
 
             mmcParam = _mmcParameter.TryGetValue(SelectedId, out var mmcParams) ? EditorMmcHelper.CreateMmcParameter(type, mmcParams) : null;

@@ -108,8 +108,8 @@ namespace GAS.Editor
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
                     // duration特殊处理
-                    rowData.Add(_headerMap["duration"] + 1, worksheet.Cells[row, _headerMap["duration"] + 1].Value);
-                    rowData.Add(_headerMap["duration"] + 2, worksheet.Cells[row, _headerMap["duration"] + 2].Value);
+                    rowData.Add(_headerMap["Duration"] + 1, worksheet.Cells[row, _headerMap["Duration"] + 1].Value);
+                    rowData.Add(_headerMap["Duration"] + 2, worksheet.Cells[row, _headerMap["Duration"] + 2].Value);
                     // period特殊处理
                     rowData.Add(_headerMap["period"] + 1, worksheet.Cells[row, _headerMap["period"] + 1].Value);
                     rowData.Add(_headerMap["period"] + 2, worksheet.Cells[row, _headerMap["period"] + 2].Value);
@@ -197,15 +197,15 @@ namespace GAS.Editor
 
                 if (ComponentTypes.Contains(EffectEditComponent.Duration))
                 {
-                    worksheet.Cells[row, _headerMap["duration"]].Value = (int)Duration.Unit;
-                    worksheet.Cells[row, _headerMap["duration"] + 1].Value = Duration.time;
-                    worksheet.Cells[row, _headerMap["duration"] + 2].Value = Duration.ResetStartTimeWhenActivated;
+                    worksheet.Cells[row, _headerMap["Duration"]].Value = (int)Duration.Unit;
+                    worksheet.Cells[row, _headerMap["Duration"] + 1].Value = Duration.time;
+                    worksheet.Cells[row, _headerMap["Duration"] + 2].Value = Duration.ResetStartTimeWhenActivated;
                 }
                 else
                 {
-                    worksheet.Cells[row, _headerMap["duration"]].Value = null;
-                    worksheet.Cells[row, _headerMap["duration"] + 1].Value = null;
-                    worksheet.Cells[row, _headerMap["duration"] + 2].Value = null;
+                    worksheet.Cells[row, _headerMap["Duration"]].Value = null;
+                    worksheet.Cells[row, _headerMap["Duration"] + 1].Value = null;
+                    worksheet.Cells[row, _headerMap["Duration"] + 2].Value = null;
                 }
 
                 if (ComponentTypes.Contains(EffectEditComponent.Period))
@@ -394,15 +394,15 @@ namespace GAS.Editor
                 : new List<int>();
 
 
-            if (selectInfo[_headerMap["duration"]] != null 
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["duration"]].ToString()))
+            if (selectInfo[_headerMap["Duration"]] != null 
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["Duration"]].ToString()))
                 Duration = new GEEditDurarion
                 {
-                    Unit = (TimeUnit)int.Parse(selectInfo[_headerMap["duration"]].ToString()),
-                    time = selectInfo[_headerMap["duration"] + 1] != null
-                        ? int.Parse(selectInfo[_headerMap["duration"] + 1].ToString())
+                    Unit = (TimeUnit)int.Parse(selectInfo[_headerMap["Duration"]].ToString()),
+                    time = selectInfo[_headerMap["Duration"] + 1] != null
+                        ? int.Parse(selectInfo[_headerMap["Duration"] + 1].ToString())
                         : 0,
-                    ResetStartTimeWhenActivated = selectInfo[_headerMap["duration"] + 2] != null && bool.Parse(selectInfo[_headerMap["duration"] + 2].ToString()),
+                    ResetStartTimeWhenActivated = selectInfo[_headerMap["Duration"] + 2] != null && bool.Parse(selectInfo[_headerMap["Duration"] + 2].ToString()),
                 };
             else
                 Duration = new GEEditDurarion();

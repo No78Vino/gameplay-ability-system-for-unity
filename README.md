@@ -73,7 +73,7 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 #### *使用流程*
 1. 基础设置
 
-在ProjectSetting中（或者Edit Menu栏入口：EX-GAS -> Setting），找到EX Gameplay Ability System的基本设置界面：
+在Edit Menu栏入口：EXTool -> EX-GAS -> GAS中心管理器 ，找到EX-GAS的总览管理器：
 
 ![S0X2@(E97LP_SWIJY2SJ@F3.png](Wiki%2FS0X2%40%28E97LP_SWIJY2SJ%40F3.png)
 
@@ -98,12 +98,6 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 7. 设计Ability:  详见 [Ability](#28-ability)
 
 8. 设计ASC预设（可选）:  详见 [AbilitySystemComponent](#29-abilitysystemcomponent)
-
-#### GAS的预缓存
-- 为了解决EX-GAS框架中关于Type.Name造成的GC问题。
-  _**可以在游戏内合适的地方（一般是游戏初始化阶段）调用GasCache.CacheAttributeSetName(GAttrSetLib.TypeToName)
-  这行代码。他会将GAttrSetLib.TypeToName中的所有Key-Value对缓存起来，避开Type.Name的使用。**_
-  如果你不调用这个方法，也不会对运行逻辑造成影响，不过会有额外的GC。
 
 ---
 ## 2.EX-GAS系统介绍

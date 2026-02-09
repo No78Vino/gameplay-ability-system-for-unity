@@ -124,7 +124,7 @@ namespace GAS.Editor
                     foreach (var colIndex in _headerMap.Values)
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
-                    var parameterCol = _headerMap["cueLogic"];
+                    var parameterCol = _headerMap["CueLogic"];
                     var cueParams = new List<object>();
                     for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
                     {
@@ -151,21 +151,21 @@ namespace GAS.Editor
 
                 // 写入当前cue数据到Excel
                 var row = _idToRowMap.TryGetValue(SelectedId, out var existingRow) ? existingRow : MaxRowForNewID();
-                worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
-                worksheet.Cells[row, _headerMap["name"]].Value = name;
-                worksheet.Cells[row, _headerMap["desc"]].Value = description;
-                worksheet.Cells[row, _headerMap["required_tag"]].Value = requiredTags.Count > 0
+                worksheet.Cells[row, _headerMap["ID"]].Value = SelectedId;
+                worksheet.Cells[row, _headerMap["Name"]].Value = name;
+                worksheet.Cells[row, _headerMap["Desc"]].Value = description;
+                worksheet.Cells[row, _headerMap["RequiredTag"]].Value = requiredTags.Count > 0
                     ? string.Join(";", requiredTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["immunity_tag"]].Value = immunityTags.Count > 0
+                worksheet.Cells[row, _headerMap["ImmunityTag"]].Value = immunityTags.Count > 0
                     ? string.Join(";", immunityTags)
                     : string.Empty;
                 // cue_logic需要特殊处理
-                worksheet.Cells[row, _headerMap["cueLogic"]].Value = type;
+                worksheet.Cells[row, _headerMap["CueLogic"]].Value = type;
                 var cueParams = Param.EncodeExcelData();
                 for (var i = 0; i < cueParams.Count; i++)
                 {
-                    var colIndex = _headerMap["cueLogic"] + 1 + i;
+                    var colIndex = _headerMap["CueLogic"] + 1 + i;
                     if (colIndex > worksheet.Dimension.End.Column) break; // 防止超出列数
                     worksheet.Cells[row, colIndex].Value = cueParams[i];
                 }
@@ -207,25 +207,25 @@ namespace GAS.Editor
         {
             var selectInfo = _data[SelectedId];
 
-            name = selectInfo.ContainsKey(_headerMap["name"])
-                ? selectInfo[_headerMap["name"]]?.ToString()
+            name = selectInfo.ContainsKey(_headerMap["Name"])
+                ? selectInfo[_headerMap["Name"]]?.ToString()
                 : string.Empty;
 
-            description = selectInfo.ContainsKey(_headerMap["desc"])
-                ? selectInfo[_headerMap["desc"]]?.ToString()
+            description = selectInfo.ContainsKey(_headerMap["Desc"])
+                ? selectInfo[_headerMap["Desc"]]?.ToString()
                 : string.Empty;
 
-            requiredTags = selectInfo.TryGetValue(_headerMap["required_tag"], out var requiredTagValue)
+            requiredTags = selectInfo.TryGetValue(_headerMap["RequiredTag"], out var requiredTagValue)
                 ? ListIntFromString(requiredTagValue.ToString())
                 : new List<int>();
 
-            immunityTags = selectInfo.TryGetValue(_headerMap["immunity_tag"], out var immunityTagValue)
+            immunityTags = selectInfo.TryGetValue(_headerMap["ImmunityTag"], out var immunityTagValue)
                 ? ListIntFromString(immunityTagValue.ToString())
                 : new List<int>();
 
             // 加载Cue逻辑
-            type = selectInfo.ContainsKey(_headerMap["cueLogic"])
-                ? selectInfo[_headerMap["cueLogic"]]?.ToString()
+            type = selectInfo.ContainsKey(_headerMap["CueLogic"])
+                ? selectInfo[_headerMap["CueLogic"]]?.ToString()
                 : string.Empty;
 
             Param = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;
