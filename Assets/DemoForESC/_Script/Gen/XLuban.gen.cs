@@ -31,7 +31,7 @@ namespace GAS.Runtime
             if (_tables != null) return;
             _tables = new Tables(loader);
         }
-        
+
         public static void LoadTablesForEditor()
         {
             if (_tables != null) return;

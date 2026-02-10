@@ -66,12 +66,16 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     writer.WriteLine("");
+                    
+                    writer.WriteLine("public static void LoadTablesForEditor()");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine("if (_tables != null) return;");
+                    writer.WriteLine("_tables = new Tables(file => JSON.Parse(File.ReadAllText($\"{GAME_CONF_DIR}/{file}.json\")));");
+                    writer.Indent--;
+                    writer.WriteLine("}");
 
-                    // public static void LoadTablesForEditor()
-                    // {
-                    //     if (_tables != null) return;
-                    //     _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
-                    // }
+                    writer.WriteLine("");
                     
                     writer.WriteLine("public static void Init(Func<string, JSONNode> loader)");
                     writer.WriteLine("{");
