@@ -58,9 +58,9 @@ W.I.P 施工中...
 
 ## 1.快速开始
 ### 安装
-1. 导入Odin Inspector插件(付费),Odin Inspector来源请自行解决。建议使用3.2+版本。
-2. 导入Luban
-3. 导入本插件，建议以下3种方式：
+1. （如果你要使用我提供的配置方案工作流）导入Odin Inspector插件(付费),Odin Inspector来源请自行解决。建议使用3.2+版本。
+2. （如果你要使用我提供的配置方案工作流）导入Luban的Unity版本插件
+3. 导入EX-GAS，建议以下3种方式：
 - 使用Unity Package Manager安装
 在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS
 >【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
@@ -79,10 +79,14 @@ GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移
 EX-GAS2.0还优化了分层，将数据层和逻辑层做了强分离。我提供的以编辑器和excel为工作流的方案是数据层的，你完全可以使用自己的数据方案来代替。
 
 #### *建议使用流程【Luban->Excel->json 配置工作流】*
-0. 准备好luban框架的配置目录。
+0. 准备好luban框架的配置目录。 
+- 首次导入，可以直接在Edit Menu栏找到【EXTool -> EX-GAS -> 导入模板Luban配置目录】，
+  点击后会自动运行脚本从云端（其实就是我github公共仓库）拷贝模板Luban配置目录到本地项目中。
+- 如果你已经熟悉了luban + EX-GAS的配置流程，也可以自己创建目录。
+
 1. 基础设置
 
-在Edit Menu栏入口：EXTool -> EX-GAS -> GAS中心管理器 ，找到EX-GAS的总览管理器：
+在Edit Menu栏入口：EXTool -> EX-GAS -> GAS中心管理器 ，打开EX-GAS的总览管理器：
 
 ![gas_center_window.png](Wiki%2Fgas_center_window.png)
 
