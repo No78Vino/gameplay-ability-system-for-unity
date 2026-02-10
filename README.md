@@ -8,9 +8,10 @@
 >该项目完全开源，欢迎大家一起参与开发，提出建议，共同完善。可以基于该项目进行二次开发。
 
 ## 使用事项 【使用EX-GAS前，请务必确认】
-1. 该插件依赖第三方插件 : Odin Inspector 3.2+版本 【付费】
-2. 该插件要求Unity版本 : 2022.3+
-3. 该插件要求使用Unity的官方包 : Entities 1.2.3版本（前后版本不要差距太多）
+1. 该插件要求Unity版本 : 2022.3+
+2. 该插件要求使用Unity的官方包 : Entities 1.2.3版本（前后版本不要差距太多）
+3. （如果你要使用我提供的配置方案工作流）需要第三方插件 : Odin Inspector 3.2+版本 【付费】
+4. （如果你要使用我提供的配置方案工作流）需要第三方配置工作流框架Luban【https://www.datable.cn/docs/intro】
 
 > 关于Entities的版本问题：因为Unity官方对DOTS的维护非常糟糕，一直在频繁变动一些关键API。我开始2.0的开发，选用了2024当时较为稳定的1.2.3版本。
 > 但我也并不能完全保证Entities（或者说Unity DOTS）后续的版本兼容性。至少在 Unity6 版本之前，应该所有常用API都是稳定兼容的。
@@ -58,7 +59,8 @@ W.I.P 施工中...
 ## 1.快速开始
 ### 安装
 1. 导入Odin Inspector插件(付费),Odin Inspector来源请自行解决。建议使用3.2+版本。
-2. 导入本插件，建议以下3种方式：
+2. 导入Luban
+3. 导入本插件，建议以下3种方式：
 - 使用Unity Package Manager安装
 在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS
 >【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
@@ -70,12 +72,19 @@ W.I.P 施工中...
 ### 使用
 GAS十分复杂，使用门槛较高。因为本项目是对UE的GAS的模仿移植，所以实现逻辑基本一致。建议先粗略了解一下UE版本的GAS整体逻辑，参考项目文档：https://github.com/BillEliot/GASDocumentation_Chinese
 
-#### *使用流程*
+#### *关于配置需求*
+如果你正在开发的项目，已经有一套自己完备的配置系统，无法改为luban的结构，又或者你有自己的需求，不希望使用excel转json的配置工作流，
+想要使用Unity的ScriptableObject来配置，
+那么你可以跳过【建议使用流程】，完全忽略编辑器相关的内容。因为GAS可视化编辑器整个是和配置表强绑定的。
+EX-GAS2.0还优化了分层，将数据层和逻辑层做了强分离。我提供的以编辑器和excel为工作流的方案是数据层的，你完全可以使用自己的数据方案来代替。
+
+#### *建议使用流程【Luban->Excel->json 配置工作流】*
+0. 准备好luban框架的配置目录。
 1. 基础设置
 
 在Edit Menu栏入口：EXTool -> EX-GAS -> GAS中心管理器 ，找到EX-GAS的总览管理器：
 
-![S0X2@(E97LP_SWIJY2SJ@F3.png](Wiki%2FS0X2%40%28E97LP_SWIJY2SJ%40F3.png)
+![gas_center_window.png](Wiki%2Fgas_center_window.png)
 
 设置好以下两个路径
 - 配置文件Asset路径: 这是该项目有关GAS的配置的路径，包括MMC,Cue,GameplayEffect,Ability,ASCPreset。
