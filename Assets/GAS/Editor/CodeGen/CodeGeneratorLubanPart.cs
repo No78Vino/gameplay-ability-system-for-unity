@@ -36,6 +36,8 @@ namespace GAS.Editor
                 writer.WriteLine("{");
                 writer.Indent++;
                 {
+                    writer.WriteLine(
+                        $"public const string GAME_CONF_DIR = \"{GASSettingAsset.Instance.TableOutpuPath}\";");
                     writer.WriteLine("private static Tables _tables;");
                     writer.WriteLine("public static Tables Tables");
                     writer.WriteLine("{");
@@ -65,6 +67,12 @@ namespace GAS.Editor
 
                     writer.WriteLine("");
 
+                    // public static void LoadTablesForEditor()
+                    // {
+                    //     if (_tables != null) return;
+                    //     _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
+                    // }
+                    
                     writer.WriteLine("public static void Init(Func<string, JSONNode> loader)");
                     writer.WriteLine("{");
                     writer.Indent++;

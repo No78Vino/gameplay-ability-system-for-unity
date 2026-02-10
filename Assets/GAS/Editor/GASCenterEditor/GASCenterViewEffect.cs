@@ -111,17 +111,17 @@ namespace GAS.Editor
                     rowData.Add(_headerMap["Duration"] + 1, worksheet.Cells[row, _headerMap["Duration"] + 1].Value);
                     rowData.Add(_headerMap["Duration"] + 2, worksheet.Cells[row, _headerMap["Duration"] + 2].Value);
                     // period特殊处理
-                    rowData.Add(_headerMap["period"] + 1, worksheet.Cells[row, _headerMap["period"] + 1].Value);
-                    rowData.Add(_headerMap["period"] + 2, worksheet.Cells[row, _headerMap["period"] + 2].Value);
+                    rowData.Add(_headerMap["Period"] + 1, worksheet.Cells[row, _headerMap["Period"] + 1].Value);
+                    rowData.Add(_headerMap["Period"] + 2, worksheet.Cells[row, _headerMap["Period"] + 2].Value);
                     // stacking特殊处理
-                    rowData.Add(_headerMap["stacking"] + 1, worksheet.Cells[row, _headerMap["stacking"] + 1].Value);
-                    rowData.Add(_headerMap["stacking"] + 2, worksheet.Cells[row, _headerMap["stacking"] + 2].Value);
-                    rowData.Add(_headerMap["stacking"] + 3, worksheet.Cells[row, _headerMap["stacking"] + 3].Value);
-                    rowData.Add(_headerMap["stacking"] + 4, worksheet.Cells[row, _headerMap["stacking"] + 4].Value);
-                    rowData.Add(_headerMap["stacking"] + 5, worksheet.Cells[row, _headerMap["stacking"] + 5].Value);
-                    rowData.Add(_headerMap["stacking"] + 6, worksheet.Cells[row, _headerMap["stacking"] + 6].Value);
-                    rowData.Add(_headerMap["stacking"] + 7, worksheet.Cells[row, _headerMap["stacking"] + 7].Value);
-                    rowData.Add(_headerMap["stacking"] + 8, worksheet.Cells[row, _headerMap["stacking"] + 8].Value);
+                    rowData.Add(_headerMap["Stacking"] + 1, worksheet.Cells[row, _headerMap["Stacking"] + 1].Value);
+                    rowData.Add(_headerMap["Stacking"] + 2, worksheet.Cells[row, _headerMap["Stacking"] + 2].Value);
+                    rowData.Add(_headerMap["Stacking"] + 3, worksheet.Cells[row, _headerMap["Stacking"] + 3].Value);
+                    rowData.Add(_headerMap["Stacking"] + 4, worksheet.Cells[row, _headerMap["Stacking"] + 4].Value);
+                    rowData.Add(_headerMap["Stacking"] + 5, worksheet.Cells[row, _headerMap["Stacking"] + 5].Value);
+                    rowData.Add(_headerMap["Stacking"] + 6, worksheet.Cells[row, _headerMap["Stacking"] + 6].Value);
+                    rowData.Add(_headerMap["Stacking"] + 7, worksheet.Cells[row, _headerMap["Stacking"] + 7].Value);
+                    rowData.Add(_headerMap["Stacking"] + 8, worksheet.Cells[row, _headerMap["Stacking"] + 8].Value);
 
                     _data.Add(id, rowData);
                     _idToRowMap.Add(id, row);
@@ -140,57 +140,57 @@ namespace GAS.Editor
 
                 // 写入当前cue数据到Excel
                 var row = _idToRowMap.TryGetValue(SelectedId, out var existingRow) ? existingRow : MaxRowForNewID();
-                worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
-                worksheet.Cells[row, _headerMap["name"]].Value = name;
-                worksheet.Cells[row, _headerMap["desc"]].Value = description;
+                worksheet.Cells[row, _headerMap["ID"]].Value = SelectedId;
+                worksheet.Cells[row, _headerMap["Name"]].Value = name;
+                worksheet.Cells[row, _headerMap["Desc"]].Value = description;
 
-                worksheet.Cells[row, _headerMap["assetTags"]].Value =
+                worksheet.Cells[row, _headerMap["AssetTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.AssetTags) && AssetTags.Count > 0
                         ? string.Join(";", AssetTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["grantedTags"]].Value =
+                worksheet.Cells[row, _headerMap["GrantedTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.GrantedTags) && GrantedTags.Count > 0
                         ? string.Join(";", GrantedTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["applicationRequiredTags"]].Value =
+                worksheet.Cells[row, _headerMap["ApplicationRequiredTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.ApplicationRequiredTags) &&
                     ApplicationRequiredTags.Count > 0
                         ? string.Join(";", ApplicationRequiredTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["ongoingRequiredTags"]].Value =
+                worksheet.Cells[row, _headerMap["OngoingRequiredTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.OngoingRequiredTags) && OngoingRequiredTags.Count > 0
                         ? string.Join(";", OngoingRequiredTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["removeGameplayEffectsWithTags"]].Value =
+                worksheet.Cells[row, _headerMap["RemoveGameplayEffectsWithTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.RemoveGameplayEffectsWithTags) &&
                     RemoveGameplayEffectsWithTags.Count > 0
                         ? string.Join(";", RemoveGameplayEffectsWithTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["immunityTags"]].Value =
+                worksheet.Cells[row, _headerMap["ImmunityTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.ImmunityTags) && ImmunityTags.Count > 0
                         ? string.Join(";", ImmunityTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["cueOnApply"]].Value =
+                worksheet.Cells[row, _headerMap["CueOnApply"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnApply) && CueOnApply.Count > 0
                         ? string.Join(";", CueOnApply)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["cueOnTick"]].Value =
+                worksheet.Cells[row, _headerMap["CueOnTick"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnTick) && CueOnTick.Count > 0
                         ? string.Join(";", CueOnTick)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["cueOnAdd"]].Value =
+                worksheet.Cells[row, _headerMap["CueOnAdd"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnAdd) && CueOnAdd.Count > 0
                         ? string.Join(";", CueOnAdd)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["cueOnRemove"]].Value =
+                worksheet.Cells[row, _headerMap["CueOnRemove"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnRemove) && CueOnRemove.Count > 0
                         ? string.Join(";", CueOnRemove)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["cueOnActivate"]].Value =
+                worksheet.Cells[row, _headerMap["CueOnActivate"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnActivate) && CueOnActivate.Count > 0
                         ? string.Join(";", CueOnActivate)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap["cueOnDeactivate"]].Value =
+                worksheet.Cells[row, _headerMap["CueOnDeactivate"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnDeactivate) && CueOnDeactivate.Count > 0
                         ? string.Join(";", CueOnDeactivate)
                         : string.Empty;
@@ -210,16 +210,16 @@ namespace GAS.Editor
 
                 if (ComponentTypes.Contains(EffectEditComponent.Period))
                 {
-                    worksheet.Cells[row, _headerMap["period"]].Value = Period.time;
-                    worksheet.Cells[row, _headerMap["period"] + 1].Value =
+                    worksheet.Cells[row, _headerMap["Period"]].Value = Period.time;
+                    worksheet.Cells[row, _headerMap["Period"] + 1].Value =
                         Period.effects.Count > 0 ? string.Join(";", Period.effects) : string.Empty;
-                    worksheet.Cells[row, _headerMap["period"] + 2].Value = Period.firstTrigger.ToString();
+                    worksheet.Cells[row, _headerMap["Period"] + 2].Value = Period.firstTrigger.ToString();
                 }
                 else
                 {
-                    worksheet.Cells[row, _headerMap["period"]].Value = null;
-                    worksheet.Cells[row, _headerMap["period"] + 1].Value = null;
-                    worksheet.Cells[row, _headerMap["period"] + 2].Value = null;
+                    worksheet.Cells[row, _headerMap["Period"]].Value = null;
+                    worksheet.Cells[row, _headerMap["Period"] + 1].Value = null;
+                    worksheet.Cells[row, _headerMap["Period"] + 2].Value = null;
                 }
 
 
@@ -227,11 +227,11 @@ namespace GAS.Editor
                 {
                     var modifiers = Modifiers.Select(mod =>
                         $"{mod.AttrSet};{mod.Attribute};{mod.Magnitude};{(int)mod.Operation};{mod.MMC}").ToList();
-                    worksheet.Cells[row, _headerMap["modifiers"]].Value = string.Join("|", modifiers);
+                    worksheet.Cells[row, _headerMap["Modifiers"]].Value = string.Join("|", modifiers);
                 }
                 else
                 {
-                    worksheet.Cells[row, _headerMap["modifiers"]].Value = null;
+                    worksheet.Cells[row, _headerMap["Modifiers"]].Value = null;
                 }
 
                 if (ComponentTypes.Contains(EffectEditComponent.GrantedAbility) && GrantedAbility.Count > 0)
@@ -239,38 +239,38 @@ namespace GAS.Editor
                     var grantedAbilities = GrantedAbility.Select(a =>
                             $"{a.abilityID};{a.level};{(int)a.ActivationPolicy};{(int)a.DeactivationPolicy};{(int)a.RemovePolicy}")
                         .ToList();
-                    worksheet.Cells[row, _headerMap["grantedAbility"]].Value = string.Join("|", grantedAbilities);
+                    worksheet.Cells[row, _headerMap["GrantedAbility"]].Value = string.Join("|", grantedAbilities);
                 }
                 else
                 {
-                    worksheet.Cells[row, _headerMap["grantedAbility"]].Value = null;
+                    worksheet.Cells[row, _headerMap["GrantedAbility"]].Value = null;
                 }
 
                 if (ComponentTypes.Contains(EffectEditComponent.Stacking))
                 {
-                    worksheet.Cells[row, _headerMap["stacking"]].Value = Stacking.code;
-                    worksheet.Cells[row, _headerMap["stacking"] + 1].Value = (int)Stacking.stackingType;
-                    worksheet.Cells[row, _headerMap["stacking"] + 2].Value = Stacking.limitCount;
-                    worksheet.Cells[row, _headerMap["stacking"] + 3].Value = (int)Stacking.durationRefreshPolicy;
-                    worksheet.Cells[row, _headerMap["stacking"] + 4].Value = (int)Stacking.periodResetPolicy;
-                    worksheet.Cells[row, _headerMap["stacking"] + 5].Value = (int)Stacking.stackingExpirationPolicy;
-                    worksheet.Cells[row, _headerMap["stacking"] + 6].Value =
+                    worksheet.Cells[row, _headerMap["Stacking"]].Value = Stacking.code;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 1].Value = (int)Stacking.stackingType;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 2].Value = Stacking.limitCount;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 3].Value = (int)Stacking.durationRefreshPolicy;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 4].Value = (int)Stacking.periodResetPolicy;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 5].Value = (int)Stacking.stackingExpirationPolicy;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 6].Value =
                         Stacking.DenyOverflowApplication.ToString();
-                    worksheet.Cells[row, _headerMap["stacking"] + 7].Value = Stacking.clearStackOnOverflow.ToString();
-                    worksheet.Cells[row, _headerMap["stacking"] + 8].Value =
+                    worksheet.Cells[row, _headerMap["Stacking"] + 7].Value = Stacking.clearStackOnOverflow.ToString();
+                    worksheet.Cells[row, _headerMap["Stacking"] + 8].Value =
                         Stacking.overflowEffects.Count > 0 ? string.Join(";", Stacking.overflowEffects) : string.Empty;
                 }
                 else
                 {
-                    worksheet.Cells[row, _headerMap["stacking"]].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 1].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 2].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 3].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 4].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 5].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 6].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 7].Value = null;
-                    worksheet.Cells[row, _headerMap["stacking"] + 8].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"]].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 1].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 2].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 3].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 4].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 5].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 6].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 7].Value = null;
+                    worksheet.Cells[row, _headerMap["Stacking"] + 8].Value = null;
                 }
 
                 package.Save();
@@ -300,97 +300,97 @@ namespace GAS.Editor
             
             var selectInfo = _data[SelectedId];
 
-            name = selectInfo.ContainsKey(_headerMap["name"])
-                ? selectInfo[_headerMap["name"]]?.ToString()
+            name = selectInfo.ContainsKey(_headerMap["Name"])
+                ? selectInfo[_headerMap["Name"]]?.ToString()
                 : string.Empty;
 
-            description = selectInfo.ContainsKey(_headerMap["desc"])
-                ? selectInfo[_headerMap["desc"]]?.ToString()
+            description = selectInfo.ContainsKey(_headerMap["Desc"])
+                ? selectInfo[_headerMap["Desc"]]?.ToString()
                 : string.Empty;
 
             AssetTags = 
-                selectInfo.ContainsKey(_headerMap["assetTags"]) 
-                && selectInfo[_headerMap["assetTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["assetTags"]].ToString())
-                ? selectInfo[_headerMap["assetTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["AssetTags"]) 
+                && selectInfo[_headerMap["AssetTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["AssetTags"]].ToString())
+                ? selectInfo[_headerMap["AssetTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             GrantedTags = 
-                selectInfo.ContainsKey(_headerMap["grantedTags"]) 
-                && selectInfo[_headerMap["grantedTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["grantedTags"]].ToString())
-                ? selectInfo[_headerMap["grantedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["GrantedTags"]) 
+                && selectInfo[_headerMap["GrantedTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["GrantedTags"]].ToString())
+                ? selectInfo[_headerMap["GrantedTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             ApplicationRequiredTags = 
-                selectInfo.ContainsKey(_headerMap["applicationRequiredTags"]) 
-                && selectInfo[_headerMap["applicationRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["applicationRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["applicationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["ApplicationRequiredTags"]) 
+                && selectInfo[_headerMap["ApplicationRequiredTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["ApplicationRequiredTags"]].ToString())
+                ? selectInfo[_headerMap["ApplicationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             OngoingRequiredTags = 
-                selectInfo.ContainsKey(_headerMap["ongoingRequiredTags"]) 
-                && selectInfo[_headerMap["ongoingRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["ongoingRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["ongoingRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["OngoingRequiredTags"]) 
+                && selectInfo[_headerMap["OngoingRequiredTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["OngoingRequiredTags"]].ToString())
+                ? selectInfo[_headerMap["OngoingRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             RemoveGameplayEffectsWithTags =
-                selectInfo.ContainsKey(_headerMap["removeGameplayEffectsWithTags"]) 
-                && selectInfo[_headerMap["removeGameplayEffectsWithTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["removeGameplayEffectsWithTags"]].ToString())
-                    ? selectInfo[_headerMap["removeGameplayEffectsWithTags"]].ToString().Split(';').Select(int.Parse)
+                selectInfo.ContainsKey(_headerMap["RemoveGameplayEffectsWithTags"]) 
+                && selectInfo[_headerMap["RemoveGameplayEffectsWithTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["RemoveGameplayEffectsWithTags"]].ToString())
+                    ? selectInfo[_headerMap["RemoveGameplayEffectsWithTags"]].ToString().Split(';').Select(int.Parse)
                         .ToList()
                     : new List<int>();
 
             ImmunityTags = 
-                selectInfo.ContainsKey(_headerMap["immunityTags"]) 
-                && selectInfo[_headerMap["immunityTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["immunityTags"]].ToString())
-                ? selectInfo[_headerMap["immunityTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["ImmunityTags"]) 
+                && selectInfo[_headerMap["ImmunityTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["ImmunityTags"]].ToString())
+                ? selectInfo[_headerMap["ImmunityTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             CueOnApply = 
-                selectInfo.ContainsKey(_headerMap["cueOnApply"]) 
-                && selectInfo[_headerMap["cueOnApply"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnApply"]].ToString())
-                ? selectInfo[_headerMap["cueOnApply"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CueOnApply"]) 
+                && selectInfo[_headerMap["CueOnApply"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnApply"]].ToString())
+                ? selectInfo[_headerMap["CueOnApply"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             CueOnTick = 
-                selectInfo.ContainsKey(_headerMap["cueOnTick"]) 
-                && selectInfo[_headerMap["cueOnTick"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnTick"]].ToString())
-                ? selectInfo[_headerMap["cueOnTick"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CueOnTick"]) 
+                && selectInfo[_headerMap["CueOnTick"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnTick"]].ToString())
+                ? selectInfo[_headerMap["CueOnTick"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             CueOnAdd = 
-                selectInfo.ContainsKey(_headerMap["cueOnAdd"]) 
-                && selectInfo[_headerMap["cueOnAdd"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnAdd"]].ToString())
-                ? ((string)selectInfo[_headerMap["cueOnAdd"]]).Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CueOnAdd"]) 
+                && selectInfo[_headerMap["CueOnAdd"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnAdd"]].ToString())
+                ? ((string)selectInfo[_headerMap["CueOnAdd"]]).Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             CueOnRemove = 
-                selectInfo.ContainsKey(_headerMap["cueOnRemove"]) 
-                && selectInfo[_headerMap["cueOnRemove"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnRemove"]].ToString())
-                ? selectInfo[_headerMap["cueOnRemove"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CueOnRemove"]) 
+                && selectInfo[_headerMap["CueOnRemove"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnRemove"]].ToString())
+                ? selectInfo[_headerMap["CueOnRemove"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             CueOnActivate = 
-                selectInfo.ContainsKey(_headerMap["cueOnActivate"]) 
-                && selectInfo[_headerMap["cueOnActivate"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnActivate"]].ToString())
-                ? selectInfo[_headerMap["cueOnActivate"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CueOnActivate"]) 
+                && selectInfo[_headerMap["CueOnActivate"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnActivate"]].ToString())
+                ? selectInfo[_headerMap["CueOnActivate"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
             CueOnDeactivate = 
-                selectInfo.ContainsKey(_headerMap["cueOnDeactivate"]) 
-                && selectInfo[_headerMap["cueOnDeactivate"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cueOnDeactivate"]].ToString())
-                ? selectInfo[_headerMap["cueOnDeactivate"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CueOnDeactivate"]) 
+                && selectInfo[_headerMap["CueOnDeactivate"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnDeactivate"]].ToString())
+                ? selectInfo[_headerMap["CueOnDeactivate"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
 
@@ -407,51 +407,51 @@ namespace GAS.Editor
             else
                 Duration = new GEEditDurarion();
 
-            if (selectInfo[_headerMap["period"]] != null 
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["period"]].ToString()))
+            if (selectInfo[_headerMap["Period"]] != null 
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["Period"]].ToString()))
                 Period = new GEEditPeriod
                 {
-                    time = selectInfo[_headerMap["period"]] != null
-                        ? int.Parse(selectInfo[_headerMap["period"]].ToString())
+                    time = selectInfo[_headerMap["Period"]] != null
+                        ? int.Parse(selectInfo[_headerMap["Period"]].ToString())
                         : 0,
-                    effects = selectInfo[_headerMap["period"] + 1] != null
-                        ? ((string)selectInfo[_headerMap["period"] + 1]).Split(';').Select(int.Parse).ToList()
+                    effects = selectInfo[_headerMap["Period"] + 1] != null
+                        ? ((string)selectInfo[_headerMap["Period"] + 1]).Split(';').Select(int.Parse).ToList()
                         : new List<int>(),
-                    firstTrigger = selectInfo[_headerMap["period"] + 2] != null &&
-                                   bool.Parse(selectInfo[_headerMap["period"] + 2].ToString())
+                    firstTrigger = selectInfo[_headerMap["Period"] + 2] != null &&
+                                   bool.Parse(selectInfo[_headerMap["Period"] + 2].ToString())
                 };
             else
                 Period = new GEEditPeriod();
 
-            if (selectInfo.ContainsKey(_headerMap["stacking"]) 
-                && selectInfo[_headerMap["stacking"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["stacking"]].ToString()))
+            if (selectInfo.ContainsKey(_headerMap["Stacking"]) 
+                && selectInfo[_headerMap["Stacking"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["Stacking"]].ToString()))
                 Stacking = new GEEditStacking
                 {
-                    code = selectInfo[_headerMap["stacking"]] != null
-                        ? int.Parse(selectInfo[_headerMap["stacking"]].ToString())
+                    code = selectInfo[_headerMap["Stacking"]] != null
+                        ? int.Parse(selectInfo[_headerMap["Stacking"]].ToString())
                         : 0,
-                    stackingType = selectInfo[_headerMap["stacking"] + 1] != null
-                        ? (StackingType)int.Parse(selectInfo[_headerMap["stacking"] + 1].ToString())
+                    stackingType = selectInfo[_headerMap["Stacking"] + 1] != null
+                        ? (StackingType)int.Parse(selectInfo[_headerMap["Stacking"] + 1].ToString())
                         : 0,
-                    limitCount = selectInfo[_headerMap["stacking"] + 2] != null
-                        ? int.Parse(selectInfo[_headerMap["stacking"] + 2].ToString())
+                    limitCount = selectInfo[_headerMap["Stacking"] + 2] != null
+                        ? int.Parse(selectInfo[_headerMap["Stacking"] + 2].ToString())
                         : 0,
-                    durationRefreshPolicy = selectInfo[_headerMap["stacking"] + 3] != null
-                        ? (DurationRefreshPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 3].ToString())
+                    durationRefreshPolicy = selectInfo[_headerMap["Stacking"] + 3] != null
+                        ? (DurationRefreshPolicy)int.Parse(selectInfo[_headerMap["Stacking"] + 3].ToString())
                         : DurationRefreshPolicy.NeverRefresh,
-                    periodResetPolicy = selectInfo[_headerMap["stacking"] + 4] != null
-                        ? (PeriodResetPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 4].ToString())
+                    periodResetPolicy = selectInfo[_headerMap["Stacking"] + 4] != null
+                        ? (PeriodResetPolicy)int.Parse(selectInfo[_headerMap["Stacking"] + 4].ToString())
                         : PeriodResetPolicy.NeverRefresh,
-                    stackingExpirationPolicy = selectInfo[_headerMap["stacking"] + 5] != null
-                        ? (StackingExpirationPolicy)int.Parse(selectInfo[_headerMap["stacking"] + 5].ToString())
+                    stackingExpirationPolicy = selectInfo[_headerMap["Stacking"] + 5] != null
+                        ? (StackingExpirationPolicy)int.Parse(selectInfo[_headerMap["Stacking"] + 5].ToString())
                         : StackingExpirationPolicy.ClearEntireStack,
-                    DenyOverflowApplication = selectInfo[_headerMap["stacking"] + 6] != null &&
-                                              bool.Parse(selectInfo[_headerMap["stacking"] + 6].ToString()),
-                    clearStackOnOverflow = selectInfo[_headerMap["stacking"] + 7] != null &&
-                                           bool.Parse(selectInfo[_headerMap["stacking"] + 7].ToString()),
-                    overflowEffects = selectInfo[_headerMap["stacking"] + 8] != null
-                        ? selectInfo[_headerMap["stacking"] + 8].ToString().Split(';').Select(int.Parse).ToList()
+                    DenyOverflowApplication = selectInfo[_headerMap["Stacking"] + 6] != null &&
+                                              bool.Parse(selectInfo[_headerMap["Stacking"] + 6].ToString()),
+                    clearStackOnOverflow = selectInfo[_headerMap["Stacking"] + 7] != null &&
+                                           bool.Parse(selectInfo[_headerMap["Stacking"] + 7].ToString()),
+                    overflowEffects = selectInfo[_headerMap["Stacking"] + 8] != null
+                        ? selectInfo[_headerMap["Stacking"] + 8].ToString().Split(';').Select(int.Parse).ToList()
                         : new List<int>()
                 };
             else
@@ -459,11 +459,11 @@ namespace GAS.Editor
 
             //	modifiers
             Modifiers = new List<GEEditPeriodModifier>();
-            if (selectInfo.ContainsKey(_headerMap["modifiers"]) 
-                && selectInfo[_headerMap["modifiers"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["modifiers"]].ToString()))
+            if (selectInfo.ContainsKey(_headerMap["Modifiers"]) 
+                && selectInfo[_headerMap["Modifiers"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["Modifiers"]].ToString()))
             {
-                var mods = selectInfo[_headerMap["modifiers"]].ToString().Split('|').ToList();
+                var mods = selectInfo[_headerMap["Modifiers"]].ToString().Split('|').ToList();
                 foreach (var v in mods)
                 {
                     var cfg = v.Split(';').ToList();
@@ -479,11 +479,11 @@ namespace GAS.Editor
 
             // grantedAbility	
             GrantedAbility = new List<GEEditGrantedAbility>();
-            if (selectInfo.ContainsKey(_headerMap["grantedAbility"]) 
-                && selectInfo[_headerMap["grantedAbility"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["grantedAbility"]].ToString()))
+            if (selectInfo.ContainsKey(_headerMap["GrantedAbility"]) 
+                && selectInfo[_headerMap["GrantedAbility"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["GrantedAbility"]].ToString()))
             {
-                var abilities = selectInfo[_headerMap["grantedAbility"]].ToString().Split('|').ToList();
+                var abilities = selectInfo[_headerMap["GrantedAbility"]].ToString().Split('|').ToList();
                 foreach (var v in abilities)
                 {
                     var cfg = v.Split(';').Select(int.Parse).ToList();

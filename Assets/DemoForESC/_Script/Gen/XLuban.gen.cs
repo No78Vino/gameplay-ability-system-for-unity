@@ -14,6 +14,7 @@ namespace GAS.Runtime
 {
     public static class XLuban
     {
+        public const string GAME_CONF_DIR = "Assets/DemoForESC/Resources/Tables";
         private static Tables _tables;
         public static Tables Tables
         {
@@ -29,6 +30,12 @@ namespace GAS.Runtime
         {
             if (_tables != null) return;
             _tables = new Tables(loader);
+        }
+        
+        public static void LoadTablesForEditor()
+        {
+            if (_tables != null) return;
+            _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
         }
 
         public static void Init(Func<string, JSONNode> loader)

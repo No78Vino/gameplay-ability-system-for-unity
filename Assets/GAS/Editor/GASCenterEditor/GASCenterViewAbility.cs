@@ -109,7 +109,7 @@ namespace GAS.Editor
                     foreach (var colIndex in _headerMap.Values)
                         rowData.Add(colIndex, worksheet.Cells[row, colIndex].Value);
 
-                    var parameterCol = _headerMap["abilityLogic"];
+                    var parameterCol = _headerMap["AbilityLogic"];
                     var abilityParams = new List<object>();
                     for (var i = parameterCol + 1; i < 51 + parameterCol; i++)
                     {
@@ -136,48 +136,48 @@ namespace GAS.Editor
 
                 // 写入当前ability数据到Excel
                 var row = _idToRowMap.TryGetValue(SelectedId, out var existingRow) ? existingRow : MaxRowForNewID();
-                worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
-                worksheet.Cells[row, _headerMap["name"]].Value = name;
-                worksheet.Cells[row, _headerMap["desc"]].Value = description;
-                worksheet.Cells[row, _headerMap["cost"]].Value =
+                worksheet.Cells[row, _headerMap["ID"]].Value = SelectedId;
+                worksheet.Cells[row, _headerMap["Name"]].Value = name;
+                worksheet.Cells[row, _headerMap["Desc"]].Value = description;
+                worksheet.Cells[row, _headerMap["Cost"]].Value =
                     ComponentTypes.Contains(AbilityEditComponent.Cost) ? Cost : string.Empty;
                 
-                worksheet.Cells[row, _headerMap["cdEffect"]].Value =
+                worksheet.Cells[row, _headerMap["CdEffect"]].Value =
                     ComponentTypes.Contains(AbilityEditComponent.Cooldown) ? CDEffect : string.Empty;
-                worksheet.Cells[row, _headerMap["cd"]].Value = 
+                worksheet.Cells[row, _headerMap["Cd"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.Cooldown) ? CD : string.Empty;
 			
-                worksheet.Cells[row, _headerMap["assetTags"]].Value = 
+                worksheet.Cells[row, _headerMap["AssetTags"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.AssetTags) && assetTags.Count > 0
                     ? string.Join(";", assetTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["cancelAbilityWithTags"]].Value = 
+                worksheet.Cells[row, _headerMap["CancelAbilityWithTags"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.CancelAbilityWithTags) && cancelAbilityWithTags.Count > 0
                     ? string.Join(";", cancelAbilityWithTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["blockAbilityWithTags"]].Value = 
+                worksheet.Cells[row, _headerMap["BlockAbilityWithTags"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.BlockAbilityWithTags) && blockAbilityWithTags.Count > 0
                     ? string.Join(";", blockAbilityWithTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["activationOwnedTags"]].Value = 
+                worksheet.Cells[row, _headerMap["ActivationOwnedTags"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.ActivationOwnedTags) && activationOwnedTags.Count > 0
                     ? string.Join(";", activationOwnedTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["activationRequiredTags"]].Value = 
+                worksheet.Cells[row, _headerMap["ActivationRequiredTags"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.ActivationRequiredTags) && activationRequiredTags.Count > 0
                     ? string.Join(";", activationRequiredTags)
                     : string.Empty;
-                worksheet.Cells[row, _headerMap["activationBlockedTags"]].Value = 
+                worksheet.Cells[row, _headerMap["ActivationBlockedTags"]].Value = 
                     ComponentTypes.Contains(AbilityEditComponent.ActivationBlockedTags) && activationBlockedTags.Count > 0
                     ? string.Join(";", activationBlockedTags)
                     : string.Empty;
                 
                 // abilityLogic需要特殊处理
-                worksheet.Cells[row, _headerMap["abilityLogic"]].Value = type;
+                worksheet.Cells[row, _headerMap["AbilityLogic"]].Value = type;
                 var abilityParams = XParam.EncodeExcelData();
                 for (var i = 0; i < abilityParams.Count; i++)
                 {
-                    var colIndex = _headerMap["abilityLogic"] + 1 + i;
+                    var colIndex = _headerMap["AbilityLogic"] + 1 + i;
                     if (colIndex > worksheet.Dimension.End.Column) break; // 防止超出列数
                     worksheet.Cells[row, colIndex].Value = abilityParams[i];
                 }
@@ -215,77 +215,77 @@ namespace GAS.Editor
             
             var selectInfo = _data[SelectedId];
 
-            name = selectInfo.ContainsKey(_headerMap["name"])
-                ? selectInfo[_headerMap["name"]]?.ToString()
+            name = selectInfo.ContainsKey(_headerMap["Name"])
+                ? selectInfo[_headerMap["Name"]]?.ToString()
                 : string.Empty;
 
-            description = selectInfo.ContainsKey(_headerMap["desc"])
-                ? selectInfo[_headerMap["desc"]]?.ToString()
+            description = selectInfo.ContainsKey(_headerMap["Desc"])
+                ? selectInfo[_headerMap["Desc"]]?.ToString()
                 : string.Empty;
 
 											
-            Cost = selectInfo.ContainsKey(_headerMap["cost"]) 
-                && selectInfo[_headerMap["cost"]] != null 
-                && int.TryParse(selectInfo[_headerMap["cost"]].ToString(), out var cost) 
+            Cost = selectInfo.ContainsKey(_headerMap["Cost"]) 
+                && selectInfo[_headerMap["Cost"]] != null 
+                && int.TryParse(selectInfo[_headerMap["Cost"]].ToString(), out var cost) 
                 ? cost 
                 : 0;
          
-            CDEffect = selectInfo.ContainsKey(_headerMap["cdEffect"]) 
-                && selectInfo[_headerMap["cdEffect"]] != null 
-                && int.TryParse(selectInfo[_headerMap["cdEffect"]].ToString(), out var cdEffect) 
+            CDEffect = selectInfo.ContainsKey(_headerMap["CdEffect"]) 
+                && selectInfo[_headerMap["CdEffect"]] != null 
+                && int.TryParse(selectInfo[_headerMap["CdEffect"]].ToString(), out var cdEffect) 
                 ? cdEffect 
                 : 0;
-            CD = selectInfo.ContainsKey(_headerMap["cd"]) 
-                && selectInfo[_headerMap["cd"]] != null 
-                && int.TryParse(selectInfo[_headerMap["cd"]].ToString(), out var cd) 
+            CD = selectInfo.ContainsKey(_headerMap["Cd"]) 
+                && selectInfo[_headerMap["Cd"]] != null 
+                && int.TryParse(selectInfo[_headerMap["Cd"]].ToString(), out var cd) 
                 ? cd 
                 : 0;
             
             assetTags = 
-                selectInfo.ContainsKey(_headerMap["assetTags"]) 
-                && selectInfo[_headerMap["assetTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["assetTags"]].ToString())
-                ? selectInfo[_headerMap["assetTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["AssetTags"]) 
+                && selectInfo[_headerMap["AssetTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["AssetTags"]].ToString())
+                ? selectInfo[_headerMap["AssetTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
             
             cancelAbilityWithTags = 
-                selectInfo.ContainsKey(_headerMap["cancelAbilityWithTags"]) 
-                && selectInfo[_headerMap["cancelAbilityWithTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["cancelAbilityWithTags"]].ToString())
-                ? selectInfo[_headerMap["cancelAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["CancelAbilityWithTags"]) 
+                && selectInfo[_headerMap["CancelAbilityWithTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["CancelAbilityWithTags"]].ToString())
+                ? selectInfo[_headerMap["CancelAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
             
             blockAbilityWithTags = 
-                selectInfo.ContainsKey(_headerMap["blockAbilityWithTags"]) 
-                && selectInfo[_headerMap["blockAbilityWithTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["blockAbilityWithTags"]].ToString())
-                ? selectInfo[_headerMap["blockAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["BlockAbilityWithTags"]) 
+                && selectInfo[_headerMap["BlockAbilityWithTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["BlockAbilityWithTags"]].ToString())
+                ? selectInfo[_headerMap["BlockAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
             
             activationOwnedTags =
-                selectInfo.ContainsKey(_headerMap["activationOwnedTags"]) 
-                && selectInfo[_headerMap["activationOwnedTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["activationOwnedTags"]].ToString())
-                ? selectInfo[_headerMap["activationOwnedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["ActivationOwnedTags"]) 
+                && selectInfo[_headerMap["ActivationOwnedTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["ActivationOwnedTags"]].ToString())
+                ? selectInfo[_headerMap["ActivationOwnedTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
             
             activationRequiredTags =
-                selectInfo.ContainsKey(_headerMap["activationRequiredTags"]) 
-                && selectInfo[_headerMap["activationRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["activationRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["activationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["ActivationRequiredTags"]) 
+                && selectInfo[_headerMap["ActivationRequiredTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["ActivationRequiredTags"]].ToString())
+                ? selectInfo[_headerMap["ActivationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
             
             activationBlockedTags =
-                selectInfo.ContainsKey(_headerMap["activationBlockedTags"]) 
-                && selectInfo[_headerMap["activationBlockedTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["activationBlockedTags"]].ToString())
-                ? selectInfo[_headerMap["activationBlockedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                selectInfo.ContainsKey(_headerMap["ActivationBlockedTags"]) 
+                && selectInfo[_headerMap["ActivationBlockedTags"]] != null
+                && !string.IsNullOrEmpty(selectInfo[_headerMap["ActivationBlockedTags"]].ToString())
+                ? selectInfo[_headerMap["ActivationBlockedTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
             
             // abilityLogic	
-            type = selectInfo.ContainsKey(_headerMap["abilityLogic"])
-                ? selectInfo[_headerMap["abilityLogic"]]?.ToString()
+            type = selectInfo.ContainsKey(_headerMap["AbilityLogic"])
+                ? selectInfo[_headerMap["AbilityLogic"]]?.ToString()
                 : string.Empty;
             XParam = _abilityLogicParameter.TryGetValue(SelectedId, out var abilityParams) ? EditorAbilityHelper.CreateAbilityParameter(type, abilityParams) : null;
             
