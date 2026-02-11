@@ -15,4 +15,4 @@ MonoBehaviour:
   CodeGeneratePath: Assets/DemoForESC/_Script/Gen
   TableOutpuPath: Assets/DemoForESC/Resources/Tables
   TableClassCodeOutpuPath: Assets/DemoForESC/_Script/Gen/LubanTable
-  ConfigProjectPath: ProjectConfigTable/exgas_config
+  ConfigProjectPath: EX_GAS_Config/ProjectConfigTable/exgas_config

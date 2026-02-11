@@ -14,7 +14,7 @@ namespace GAS.Editor
         private const string GithubOwner = "No78Vino";
         private const string GithubRepo = "No78Vino.github.io";
         private const string RemoteZipPath = "ProjectConfigTable.zip"; // 仓库里zip的路径
-        private string _localTargetDirectory = "ProjectConfigTable"; // 解压目标路径
+        private string _localTargetDirectory = "EX_GAS_Config"; // 解压目标路径
         private string _personalAccessToken = ""; // 私有仓库必填
 
         private bool isProcessing;
