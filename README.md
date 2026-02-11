@@ -84,7 +84,31 @@ EX-GAS2.0还优化了分层，将数据层和逻辑层做了强分离。我提�
   点击【一键部署】后会自动从云端（其实就是我github公共仓库）拷贝模板Luban配置目录到本地项目中。
 - 如果你已经熟悉了luban + EX-GAS的配置流程，也可以自己创建目录。
 
-> 配置工程目录结构：
+```text
+配置工程目录结构规范：
+- 根目录
+   └── exgas_config/
+       └── Datas/
+               ├── #exgas.ability.xlsx           \\ 技能配置表
+                ├── #exgas.asc.xlsx               \\ ASC预设配置表
+                ├── #exgas.attribute.xlsx         \\ 属性配置表
+                ├── #exgas.attributeSet.xlsx      \\ 属性集配置表
+                ├── #exgas.gameplayCue.xlsx       \\ Cue（演出效果）配置表
+                ├── #exgas.gameplayEffect.xlsx    \\ buff效果配置表
+                ├── #exgas.gameplayTags.xlsx      \\ 标签配置表
+                ├── #exgas.mmc.xlsx               \\ MMC配置表
+                ├── #exgas.timelineAbility.xlsx   \\ 时间轴技能数据配置表
+                ├── __beans__.xlsx                \\ 自定义数据结构配置表
+                ├── __enums__.xlsx                \\ 枚举表
+                └── __tables__.xlsx               \\ table导出配置表
+        ├── Defines/
+                └── builtin.xml                    \\ luban的xml格式数据结构定义文件
+        ├── gen.bat     \\ 批量导出json的bat工具文件
+        ├── gen.sh     \\ EX-GAS调用的power shell命令文件
+        └── luban.conf     \\ luban配置文件
+   └── Tools/    
+        └── ... (luban导表/生成C#类脚本，用到的一系列工具库和类)
+```
 
 
 1. 基础设置
@@ -98,8 +122,6 @@ EX-GAS2.0还优化了分层，将数据层和逻辑层做了强分离。我提�
 - 脚本生成路径: GAS的基础配置（Tag，Attribute，AttributeSet）都会有对应的脚本生成。
 
 首次设置完路径后,点击检查子目录文件夹，确保必要的子文件夹都已生成。
->【生成AbilitySystemComponentExtension类脚本】这个按钮，请在生成了Attribute，AttributeSet，Ability的Lib集合类之后再点击。特别提醒，AbilitySystemComponentExtension是工具类，理论上只生成一次即可。
-
 
 2. 配置Tag:  Tag是GAS核心逻辑运作的依赖,非常重要。关于Tag的使用及运作逻辑详见章节([GameplayTag](#22-gameplaytag))
 
