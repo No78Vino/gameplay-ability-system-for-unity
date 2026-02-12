@@ -561,6 +561,7 @@ _**GAS的使用者必须至少有一名程序开发人员，因为GAS的使用�
 Ability，Cue，MMC等都是必须根据游戏类型和内容玩法而定的。
 非程序开发人员则需要完全理解EX-GAS的运作逻辑，才能更好的配合程序开发人员快速配置出各种各样的技能，完善玩法表现。**_
 
+---
 ### 2.2 GameplayTag
 >Gameplay Tag,标签,它用于分类和描述对象的状态，非常有用于控制游戏逻辑。
 
@@ -630,7 +631,7 @@ Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表*
 - **预览作用**: 窗口仅用于查看标签树形结构和验证配置
 - **必须步骤**: 编辑后必须依次执行 "导出 Json 表" → "生成 Tag 脚本"
 
-
+---
 ### 2.3 Attribute
 >Attribute，属性，是GAS中的核心数据单位，用于描述角色的各种属性，如生命值，攻击力，防御力等。
 
@@ -672,7 +673,7 @@ Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表*
 - 生成的代码包含所有属性的常量定义 (如 `public const int Health = 1001;`)。
 - Attribute 名称会直接作为常量名,建议使用 PascalCase 命名 (如 MaxHealth)
 
-
+---
 ### 2.4 AttributeSet
 >AttributeSet，属性集，是GAS中的核心数据单位集合，用于描述角色的某一类别的属性集合。
 
@@ -721,7 +722,7 @@ Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表*
 - `AttributeSet` 名称会生成`AS_`前缀的类名,如 `Fight` 生成 `AS_Fight` 类
 - 生成的 AttributeSet 类会包含该集合内所有属性的常量定义,方便代码中引用
 
-
+---
 ### 2.5 ModifierMagnitudeCalculation
 >ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。
 
@@ -927,63 +928,303 @@ MMC 在 GameplayEffect 的 Modifier 中引用,完整的数值修改流程如下:
 
 **结果**: `最终伤害 = 100 × 1.5 + 20 = 170`
 
-
+---
 ### 2.6 GameplayCue
->目前EX-GAS的GameplayCue功能还未完善。功能相对简陋。
-- 【GameplayCue的作用】：GameplayCue是一个用于播放游戏提示的类，它的作用是在游戏运行时播放游戏效果，比如播放一个特效、播放一个音效等。
-- 【GameplayCue的原则】： Cue是游戏提示，他必须遵守以下原则：
-  - _**Cue不应该对游戏的数值体系产生影响，比如不应该对游戏的属性进行修改，不应该对游戏的Buff进行修改等。**_
-  - _**Cue不应该对游戏玩法产生实际影响，比如即时战斗类的游戏，Cue不应该影响角色的位移、攻击等。**_
+#### 2.6.1 什么是 GameplayCue?
 
->第一条原则是所有类型游戏必须遵守的。
->
->而第二条原则就见仁见智了，因为游戏类型和玩法决定了cue的影响范围。
-比如即时战斗类游戏，cue对角色位移有操作显然就是干涉了战斗，但如果是回合制游戏，cue对角色位移的操作就可以被当成是动画表现。
-（甚至，即便是即时战斗类游戏，cue对角色位移的操作也可以被当成是动画表现，只要游戏开发人员认为cue的位移操作不影响游戏的战斗结果即可。）
-- 【GameplayCue的类型】 GameplayCue的类型分两大类：
-  - GameplayCueInstant：瞬时性的Cue，比如播放动画，伤害UI提示等
-  - GameplayCueDurational：持续性的Cue，比如持续性的特效、持续性的音效等
->GameplayCueInstant和GameplayCueDurational都是抽象类，它们的子类才是真正的可使用Cue类。
-Cue是需要程序开发人员大量实现的，毕竟游戏不同导致游戏提示千变万化。
+GameplayCue (简称 Cue) 是 EX-GAS 的**表现层系统**,专门负责游戏中的视觉和音效反馈。它是连接游戏逻辑与玩家感知的桥梁,将抽象的数值变化转化为直观的视听体验。
 
-- 【关于Cue的子类实现】： Cue的完整组成为GameplayCue和GameplayCueSpec：
-  - GameplayCue< T >（抽象基类,T为对应的Spec类）：Cue的数据实类，是一个可编辑类，开发人员可以在编辑器中设置Cue的各种参数。该类只可以被视作数据类。
-    - 必须实现CreateSpec方法：用于创建对应的Spec类
-  - GameplayCueSpec（抽象基类）：Cue的规格类，是Runtime下Cue的真正实例，Cue的具体逻辑在该类中实现。
-    - | Spec类|需要实现的方法| 方法触发时机   |
-      |---|---|----------|
-      |GameplayCueInstantSpec<br/>瞬时性Cue的规格类|Trigger()| 执行时触发|
-      |GameplayCueDurationalSpec<br/>持续性Cue的规格类|OnAdd()| Cue被添加时触发|
-      |GameplayCueDurationalSpec|OnRemove()| Cue被移除时触发|
-      |GameplayCueDurationalSpec|OnGameplayEffectActivated()| Cue所属的GameplayEffect被激活时触发|
-      |GameplayCueDurationalSpec|OnGameplayEffectDeactivated()| Cue所属的GameplayEffect被移除时触发|
-      |GameplayCueDurationalSpec|OnTick()| Cue的每帧更新逻辑|
+**典型应用场景**:
+- 受击特效与音效
+- 技能释放的粒子效果
+- Buff/Debuff 的持续视觉提示
+- 伤害数字飘字
+- 角色状态动画切换
+- UI 提示与反馈
 
-- 【关于Cue的参数传递】： 目前EX-GAS的Cue参数传递非常简陋，依赖于结构体GameplayCueParameters，成员如下：
-  - GameplayEffectSpec sourceGameplayEffectSpec：Cue所属的GameplayEffect实例（如果是GE触发）
-  - AbilitySpec sourceAbilitySpec：Cue所属的Ability实例（如果是Ability触发）
-  - object[] customArguments：自定义参数，不同于GameplayCue中的数据。
-    customArguments是供程序开发人员在业务逻辑内自由传递参数的载体。
->注意：customArguments是一个object数组，开发人员需要自己保证传递的参数类型正确，否则会导致运行时错误。
-customArguments是最暴力的设计，往后EX-GAS的Cue参数传递设计还会进行优化。
-- 【GameplayCue的使用】：
-GameplayCue的使用手段很多，最基础的是在GameplayEffect中使用，Cue最开始的设计基础也是依附于GameplayEffect。Ability也可以对Cue进行操作。
-除此之外，Cue的使用不限制于EX-GAS的体系内。开发者可以在任何地方使用Cue，只要能获取到GameplayCue的资源实例并且遵守Cue的原则即可。
-  - 在GameplayEffect中使用Cue 
-    - GameplayEffect中使用Cue会根据GameplayEffect执行策略产生变化。
-      - | GameplayEffect类型 |Cue名称|Cue类别| 执行时机                    |
-        |------------------|---|---|-------------------------|
-        | Instant          |CueOnExecute|Instant| GameplayEffect执行时触发     |
-        | Durational       |CueDurational|Durational| 生命周期完全和GameplayEffect同步 |
-        | Durational       |CueOnAdd|Instant| GameplayEffect添加时触发     |
-        | Durational       |CueOnRemove|Instant| GameplayEffect移除时触发     |
-        | Durational       |CueOnActivate|Instant| GameplayEffect激活时触发     |
-        | Durational       |CueOnDeactivate|Instant| GameplayEffect失活时触发     |
+#### 2.6.2 核心设计原则
 
-  - 在Ability中使用Cue
-    - Ability种Cue的使用完全依赖于Ability自身的业务逻辑，因此程序开发者在AbilitySpec中实现Cue逻辑时一定要保证合理性。
-      特别是对于Durational类型的Cue，一定要保证Cue生命周期的合理性，切记不要出现遗漏销毁Cue的情况。
-    
+##### 1. 表现与逻辑分离
+
+Cue 遵循严格的**单一职责原则**,只负责表现,不参与游戏逻辑:
+
+- ✅ **允许**: 播放特效、音效、动画,显示 UI 提示
+- ❌ **禁止**: 修改 Attribute 数值、添加/移除 GameplayEffect、影响战斗判定
+
+**为什么这样设计?**
+- **可维护性**: 美术和程序可以并行工作,互不干扰
+- **可调试性**: 移除所有 Cue 不影响游戏逻辑,便于定位问题
+- **可扩展性**: 更换表现方案无需修改核心逻辑
+
+##### 2. 灵活的边界定义
+
+第二条原则"Cue 不应影响玩法"在不同游戏类型中有不同解释: 
+
+- **即时战斗游戏**: Cue 控制角色位移可能影响战斗结果,应避免
+- **回合制游戏**: Cue 控制角色位移可视为动画表现,可以接受
+- **最终判断**: 由开发者根据游戏类型自行决定边界
+
+> Cue是需要程序开发人员大量实现的，毕竟游戏不同导致游戏提示千变万化。
+
+##### 系统架构特性
+
+##### ECS + OOP 混合架构
+
+EX-GAS 2.0 的 Cue 系统采用创新的混合架构:
+
+**ECS 层 (高性能运行时)**:
+- 使用 Unity DOTS Entity 存储 Cue 状态
+- 通过 Enable Component 控制播放/停止,避免频繁创建销毁
+- 系统化更新,支持大量 Cue 并发
+
+**OOP 层 (开发者友好)**:
+- `GameplayCueUnit`: 封装 ECS 操作的控制单元
+- `GameplayCueBase<T>`: 继承实现自定义逻辑的基类
+- 熟悉的面向对象编程模式,降低学习成本
+
+##### 独立性设计
+Cue 系统设计为**可独立使用**的模块:
+- 可在 GameplayEffect 中自动触发
+- 可在 Ability 中手动控制
+- 可在 GAS 体系外独立调用
+- 只需遵守核心原则,使用场景不受限制
+
+#### 2.6.3 核心功能特性
+
+##### 1. 标签过滤系统
+Cue 支持基于 GameplayTag 的条件播放:
+- **RequiredTags**: ASC 必须拥有**所有**这些标签才播放
+- **ImmunityTags**: ASC 拥有**任意**这些标签则不播放
+
+**应用场景**:
+- 隐身单位不播放受击特效
+- 只对玩家控制单位显示 UI 提示
+- 根据图形设置标签控制特效质量
+
+##### 2. 生命周期管理
+Cue 提供完整的生命周期回调,精确控制表现时机:
+
+| 回调 | 触发时机 | 典型用途 |  
+|------|---------|---------|  
+| `OnAdd` | Cue 添加到 ASC | 缓存组件引用 |  
+| `OnActivate` | Cue 激活 | 播放特效/音效 |  
+| `OnTick` | 每帧更新 | 更新粒子/动画 |  
+| `OnDeactivate` | Cue 失活 | 暂停效果 |  
+| `OnRemove` | Cue 移除 | 清理资源 |  
+| `OnDestroy` | 实体销毁 | 最终清理 |  
+
+##### 3. 与 GameplayEffect 深度集成
+
+GameplayEffect 可在不同生命周期阶段自动触发 Cue:
+
+| Effect 类型 | Cue 字段 | 触发时机 |  
+|------------|---------|---------|  
+| Instant | `CueOnApply` | Effect 执行时 |  
+| Duration/Infinite | `CueOnAdd` | Effect 添加时 |  
+| Duration/Infinite | `CueOnRemove` | Effect 移除时 |  
+| Duration/Infinite | `CueOnActivate` | Effect 激活时 |  
+| Duration/Infinite | `CueOnDeactivate` | Effect 失活时 |  
+| Duration/Infinite | `CueOnTick` | 每帧更新 |  
+
+
+##### 4. 编辑器预览支持
+Cue 支持在 Timeline 编辑器中实时预览,无需进入播放模式:
+- 可视化编辑技能表现
+- 快速迭代调整
+- 美术人员友好
+
+#### 2.6.4 性能优化特性
+
+##### Enable Component 模式
+
+使用 Unity ECS 的 Enable Component 实现高效状态切换: 
+
+- `ECCuePlayable`: 标记 Cue 可播放
+- `ECCuePlaying`: 标记 Cue 正在播放
+- Enable/Disable 比创建/销毁 Entity 快得多
+- 系统只处理 Enabled 的组件,减少无效遍历
+
+##### 组件缓存策略
+
+推荐在 `OnAdd()` 中缓存 Unity 组件引用,避免每帧查找:
+
+```csharp  
+private Animator _animator;  
+  
+public override void OnAdd(float time)  
+{  
+    // 一次性查找并缓存  
+    _animator = _abilitySystemCell.GameObject  
+        .GetComponentInChildren<Animator>();  
+}  
+  
+public override void OnActivate(float time)  
+{  
+    // 直接使用缓存,无需查找  
+    _animator?.Play(Parameter.AnimationName);  
+}  
+```  
+
+#### 2.6.5 开发友好特性
+
+##### 1. 类型安全的参数系统
+
+每个 Cue 类型对应一个强类型参数类,避免类型转换错误:
+
+```csharp  
+public class CuePlayAnimator : GameplayCueBase<XParamAnimator>  
+{  
+    // Parameter 自动推断为 XParamAnimator 类型  
+    public override void OnActivate(float time)  
+    {  
+        _animator?.Play(Parameter.AnimationName);  
+    }  
+}  
+```  
+
+##### 2. 代码生成与注册
+
+系统自动生成 Cue 类型注册代码,无需手动维护映射:
+
+- 编译时扫描所有 Cue 类型
+- 生成 `XCue.gen.cs` 注册脚本
+- 运行时通过字符串名称创建实例
+
+##### 3. 调试支持
+
+提供多种调试手段:
+- Entity 命名: `Cue_{类型名}_{Version}_{Index}`
+- 生命周期日志: 可在回调中输出调试信息
+- 标签过滤验证: 检查 RequiredTags/ImmunityTags 是否生效
+
+#### 2.6.a GameplayCue 编辑器使用说明
+![cue_editor.png](Wiki%2Fcue_editor.png)
+
+GameplayCue 编辑器是 GAS 中心管理器的一部分,提供了可视化的 Cue 配置界面。与 Tag/Attribute 不同,Cue 编辑器支持**直接在窗口内编辑**,修改会实时保存到 Excel 文件。 
+
+##### 打开编辑器
+在 GAS 中心管理器左侧菜单选择 **GameplayCue 演出提示**。
+##### 界面布局
+
+编辑器界面分为三个区域:
+
+###### 1. 顶部工具栏
+- **打开 Excel 文件所在文件夹**: 快速定位到 `#exgas.gameplayCue.xlsx` 文件
+- **打开 Json 文件所在文件夹**: 查看导出的 `exgas_tbgameplaycue.json`
+- **导出更新 Json 表**: 调用 Luban 将 Excel 转换为 JSON
+- **刷新**: 重新从 Excel 加载数据
+- **保存**: 将当前编辑内容写入 Excel
+
+###### 2. Cue 选择区域
+- **当前编辑 Cue 下拉框**: 选择要编辑的 Cue ID
+- **添加按钮 (+)**: 创建新 Cue,需输入唯一 ID
+- **删除按钮 (垃圾桶)**: 删除当前选中的 Cue (需二次确认)
+
+###### 3. 配置编辑区域
+**基础信息**:
+- **名字**: Cue 的显示名称,用于在 GameplayEffect/Ability 编辑器中识别
+- **描述**: Cue 的功能说明
+
+**标签过滤**:
+- **播放时需求的 tag**: ASC 必须拥有**所有**这些标签才播放 Cue
+- **播放时免疫的 tag**: ASC 拥有**任意**这些标签则不播放 Cue
+
+**Cue 逻辑**:
+- **Cue 类型**: 从下拉框选择 Cue 实现类 (如 `CueLog`, `CuePlayAnimator`)
+- **自定义参数**: 根据选择的 Cue 类型,动态显示对应的参数编辑器
+
+##### 完整编辑流程
+
+###### 创建新 Cue
+1. 点击 **添加** 按钮
+2. 在弹窗中输入唯一的 Cue ID (整数)
+3. 系统验证 ID 不重复后创建空配置
+4. 自动切换到新创建的 Cue
+###### 编辑 Cue 配置
+1. 从下拉框选择要编辑的 Cue ID
+2. 系统自动加载该 Cue 的配置数据 
+3. 编辑各项参数:
+    - 填写名称和描述
+    - 配置标签过滤 (可选)
+    - 选择 Cue 类型
+    - 配置 Cue 类型的自定义参数
+
+**Cue 类型切换**: 当切换 Cue 类型时,系统会自动创建对应的参数实例
+###### 保存配置
+点击 **保存** 按钮,系统会:
+1. 将当前编辑的数据写入 Excel 文件 
+2. 自动调用刷新,重新加载数据
+
+**保存逻辑**:
+- 如果是已存在的 Cue,覆写对应行
+- 如果是新创建的 Cue,追加到表格末尾
+- Cue 逻辑参数通过 `XParam.EncodeExcelData()` 序列化为 Excel 列
+
+###### 导出运行时数据
+1. 点击 **导出更新 Json 表** 按钮
+2. 系统调用 Luban 的 `gen.bat` 生成 JSON 文件
+3. 运行时通过 `XLuban.GetGameplayCueConfig(id)` 加载配置 
+###### 删除 Cue
+1. 选择要删除的 Cue
+2. 点击 **删除** 按钮
+3. 在确认对话框中点击"是"
+4. 系统从内存中移除该 Cue 数据
+5. 点击保存后,Excel 中对应行会被清空 
+##### 数据存储机制
+
+编辑器使用 EPPlus 库直接读写 Excel 文件:
+
+**加载流程** :
+1. 读取第 1 行表头,构建列名到列索引的映射 (`_headerMap`)
+2. 从第 4 行开始读取数据行 (第 2-3 行是 Luban 类型定义)
+3. 将每行数据存储到 `_data` 字典 (键为 Cue ID)
+4. 提取 Cue 逻辑参数 (从 `CueLogic` 列后的 50 列)
+
+**保存流程** :
+1. 确定写入行号 (已存在则覆写,新建则追加)
+2. 写入基础字段 (ID, Name, Desc)
+3. 写入标签列表 (分号分隔)
+4. 写入 Cue 类型名称
+5. 调用 `XParam.EncodeExcelData()` 序列化自定义参数
+
+##### 流式配置说明
+
+Cue 的自定义参数采用**流式配置**,占用 `CueLogic` 列后的连续 50 列。
+**关键点**:
+- 每个 Cue 类型对应一个 `XParam` 子类
+- 参数的序列化/反序列化由 `XParam` 实现
+- 空值必须用占位符 (如 `0`, `""`) 代替,不能留空
+
+##### 使用示例
+
+###### 示例 1: 创建日志 Cue
+1. 点击添加,输入 ID: `5001`
+2. 名称: "测试日志"
+3. Cue 类型: 选择 `CueLog`
+4. 配置参数: 输入日志内容
+5. 点击保存
+6. 点击导出 Json 表
+
+###### 示例 2: 创建动画 Cue
+1. 点击添加,输入 ID: `5002`
+2. 名称: "受击动画"
+3. 播放时需求的 tag: 选择 `State.Alive` (只对存活单位播放)
+4. Cue 类型: 选择 `CuePlayAnimator`
+5. 配置参数:
+    - AnimatorNodePath: `Model/Character`
+    - AnimationName: `Hit`
+6. 点击保存并导出
+
+##### 注意事项
+- **ID 唯一性**: Cue ID 必须唯一,系统会在创建时验证
+- **保存时机**: 编辑后必须点击保存,否则数据不会写入 Excel
+- **导出顺序**: 先保存到 Excel,再导出 Json 表
+- **刷新操作**: 如果外部修改了 Excel,使用刷新按钮重新加载
+
+
+
+
+---
 ### 2.7 GameplayEffect
 >GameplayEffect是EX-GAS的核心之一，一切的游戏数值体系交互基于GameplayEffect。
 
