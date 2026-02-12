@@ -2185,10 +2185,8 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 
 ## 7.后续计划
 - 修复bug ，性能优化
-- 将GAS采用ECS结构来运行
 - 补全遗漏的功能 
-- 优化Ability的编辑
-- 支持RPC的GE复制广播，网络同步 
+- 3.0版本：支持RPC的GE复制广播，网络同步 
 
 ## 8.特别感谢
 本插件全面参考了[UE的GAS解析](https://github.com/tranek/GASDocumentation)，来自github --[@tranek](https://github.com/tranek)
@@ -2203,6 +2201,9 @@ __*注意！由于该监视器的监视刷新逻辑过于暴力，因此存在�
 
 感谢参与EX-GAS开发的朋友们:
 - [BCC](https://github.com/kenkinky) :优化了很多编辑器的体验以及bug，还提出了很多问题和反馈。
+- [RERoger](https://github.com/RERoger) :都是哥们
+- [Smilelifer](https://github.com/Smilelifer) :都是哥们
+- [Alex](https://github.com/Alex-Rachel) :这是大佬！ TEngine作者
 
 ## 9.插件反馈渠道
 QQ群号:616570103
