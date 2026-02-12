@@ -110,32 +110,429 @@ EX-GAS2.0还优化了分层，将数据层和逻辑层做了强分离。我提�
         └── ... (luban导表/生成C#类脚本，用到的一系列工具库和类)
 ```
 
+---
+## 【选读】A. Excel 配置表说明
 
-1. 基础设置
+### 配置表概述
 
-在Edit Menu栏入口：EXTool -> EX-GAS -> GAS中心管理器 ，打开EX-GAS的总览管理器：
+EX-GAS 2.0 采用 **Excel → Luban → JSON** 的配置工作流,所有配置表位于 `配置工程目录/Datas/` 文件夹下。
+
+### 配置表文件列表
+
+| 配置表文件 | JSON 输出 | 用途 |  
+|-----------|----------|------|  
+| `#exgas.gameplayTags.xlsx` | `exgas_tbgameplaytags.json` | 游戏标签层级结构定义 |  
+| `#exgas.attribute.xlsx` | `exgas_tbattribute.json` | 属性定义(生命值、攻击力等) |  
+| `#exgas.attributeSet.xlsx` | `exgas_tbattributeset.json` | 属性集合定义 |  
+| `#exgas.gameplayEffect.xlsx` | `exgas_tbgameplayeffect.json` | Buff/Debuff 效果配置 |  
+| `#exgas.ability.xlsx` | `exgas_tbability.json` | 技能/能力配置 |  
+| `#exgas.gameplayCue.xlsx` | `exgas_tbgameplaycue.json` | 视觉/音效表现配置 |  
+| `#exgas.mmc.xlsx` | `exgas_tbmmc.json` | 数值计算公式配置 |  
+| `#exgas.asc.xlsx` | `exgas_tbasc.json` | ASC 预设模板配置 |  
+| `#exgas.timelineAbility.xlsx` | `exgas_tbtimelineability.json` | 时间轴技能配置 | [0-cite-1](#0-cite-1)   
+
+### 通用表格式规范
+
+所有配置表遵循统一的格式规范:
+
+- **第 1 行**: 列名(字段名)
+- **第 2-3 行**: Luban 框架的类型定义和注释(由 Luban 使用)
+- **第 4 行起【视情况可能从第5行】**: 实际数据行
+- **第 2 列**: 必须为 `ID` 字段,作为唯一标识符
+- **列名格式**: 支持 `#` 后缀标注 Luban 类型,如 `AssetTags#sep=;`
+
+### 1. GameplayTag 配置表 (`#exgas.gameplayTags.xlsx`)
+
+**用途**: 定义层级化的游戏标签,用于状态判断和逻辑控制。
+
+**字段说明**:
+- `ID`: 标签唯一 ID
+- `Name`: 标签名称,使用点分隔表示层级(如 `State.Debuff.Stun`)
+- `Desc`: 标签描述
+
+**实现功能**: 标签系统支持父子关系查询,用于 GameplayEffect 和 Ability 的条件判断。
+
+### 2. Attribute 配置表 (`#exgas.attribute.xlsx`)
+
+**用途**: 定义游戏中的数值属性。
+
+**字段说明**:
+- `ID`: 属性唯一 ID
+- `Name`: 属性名称(如 `Health`, `Attack`)
+- `Desc`: 属性描述
+
+**实现功能**: 属性是 GAS 数值管理的基础单位,所有数值修改都通过 GameplayEffect 作用于属性。
+
+### 3. AttributeSet 配置表 (`#exgas.attributeSet.xlsx`)
+
+**用途**: 将多个属性组合成集合,便于批量管理。
+
+**字段说明**:
+- `ID`: 属性集 ID
+- `Name`: 属性集名称
+- `Attributes`: 包含的属性 ID 列表(分号分隔)
+
+**实现功能**: 生成对应的 C# AttributeSet 类,用于 ASC 初始化。
+
+### 4. GameplayEffect 配置表 (`#exgas.gameplayEffect.xlsx`)
+
+**用途**: 配置 Buff/Debuff 效果,是属性修改的唯一途径。
+
+**核心字段**: 
+
+- `ID`: 效果唯一 ID
+- `Name`: 效果名称
+- `Desc`: 效果描述
+- `AssetTags`: 描述性标签(分号分隔)
+- `GrantedTags`: 激活时授予的标签
+- `ApplicationRequiredTags`: 施加时目标需拥有的标签
+- `OngoingRequiredTags`: 持续生效需要的标签
+- `RemoveGameplayEffectsWithTags`: 移除带有指定标签的效果
+- `ImmunityTags`: 免疫标签
+- `Duration`: 持续时间配置(包含时间单位、时长、是否重置)
+- `Period`: 周期触发配置(周期时长、触发的效果 ID 列表)
+- `Stacking`: 叠加配置(最大层数、刷新策略、溢出处理等)
+- `Modifiers`: 属性修改器列表
+- `CueOnApply/Add/Remove/Activate/Deactivate/Tick`: 各阶段触发的 Cue ID
+
+**实现功能**: 通过组件化设计,支持复杂的 Buff 逻辑,包括持续时间、周期触发、层数叠加、条件激活等。
+
+### 5. Ability 配置表 (`#exgas.ability.xlsx`)
+
+**用途**: 配置技能/能力的基础参数。
+
+**核心字段**:
+
+- `ID`: 技能 ID
+- `Name`: 技能名称
+- `Desc`: 技能描述
+- `Cost`: 消耗的 GameplayEffect ID
+- `CdEffect`: 冷却 GameplayEffect ID
+- `Cd`: 冷却时间(覆盖 CdEffect 的持续时间)
+- `AssetTags`: 技能描述性标签
+- `CancelAbilityWithTags`: 激活时取消带有这些标签的技能
+- `BlockAbilityWithTags`: 激活时阻塞带有这些标签的技能
+- `ActivationOwnedTags`: 激活时获得的标签
+- `ActivationRequiredTags`: 激活所需的标签(必须全部拥有)
+- `ActivationBlockedTags`: 阻止激活的标签(拥有任意一个即阻止)
+- `AbilityLogic`: 技能逻辑类型名称
+- **后续 50 列**: 技能逻辑自定义参数(流式配置)
+
+**实现功能**: 配置技能的 GAS 系统参数,自定义逻辑参数由程序员在对应的 AbilitySpec 类中实现。
+
+### 6. GameplayCue 配置表 (`#exgas.gameplayCue.xlsx`)
+
+**用途**: 配置视觉和音效表现。
+
+**核心字段**:
+
+- `ID`: Cue ID
+- `Name`: Cue 名称
+- `Desc`: Cue 描述
+- `CueLogic`: Cue 逻辑类型名称
+- **后续 50 列**: Cue 逻辑自定义参数(流式配置)
+
+**实现功能**: 解耦表现和逻辑,由程序员实现具体的 Cue 逻辑类。
+
+### 7. MMC 配置表 (`#exgas.mmc.xlsx`)
+
+**用途**: 配置复杂的数值计算公式。
+
+**核心字段**:
+
+- `ID`: MMC ID
+- `Name`: MMC 名称
+- `Desc`: MMC 描述
+- `MmcLogic`: MMC 逻辑类型名称
+- **后续 50 列**: MMC 逻辑自定义参数(流式配置)
+
+**实现功能**: 用于 GameplayEffect 的 Modifier 中,支持基于多属性的复杂计算。
+
+### 8. ASC 配置表 (`#exgas.asc.xlsx`)
+
+**用途**: 配置 AbilitySystemComponent 预设模板。
+
+**核心字段**:
+
+- `id`: 预设 ID
+- `Name`: 预设名称
+- `Desc`: 预设描述
+- `Level`: 等级
+- `Tag`: 初始标签列表(分号分隔)
+- `AttrSet`: 属性集 ID 列表(分号分隔)
+- `Ability`: 初始技能 ID 列表(分号分隔)
+
+**实现功能**: 快速创建预配置的 ASC 实例,用于角色/怪物模板。
+
+### 9. TimelineAbility 配置表 (`#exgas.timelineAbility.xlsx`)
+
+**用途**: 配置基于时间轴的通用技能。
+
+**核心字段**:
+
+- `ID`: 技能 ID
+- `Name`: 技能名称
+- `LifeTime`: 技能总时长
+- `ManualEnd`: 是否支持手动结束
+- `TrackName`: 轨道名称
+- `StartTime`: 任务开始时间
+- `EndTime`: 任务结束时间
+- `TaskName`: 任务名称
+- `TaskType`: 任务类型
+
+**实现功能**: 支持多轨道、多任务的时序技能配置,无需编写代码即可实现复杂技能。
+
+### 流式配置说明
+Ability、Cue、MMC 三种配置表采用**流式配置**,即自定义参数占用连续的 50 列。
+
+**注意事项**:
+- 必须在 `XParam` 实现类中正确处理 `DecodeExcelData()` 和 `EncodeExcelData()` 方法
+- 空值必须用默认占位数据代替(如 `0`、`""`、`0f`、`false`)
+- 参数顺序必须与代码中的解析顺序一致
+
+### 配置表导出流程
+1. 在 GAS 中心管理器设置配置工程路径 
+2. 编辑 Excel 配置表
+3. 点击"导出更新 Json 表"按钮,调用 Luban 的 `gen.bat` 生成
+
+
+---
+## 【选读】B. EX-GAS中心管理器 (GASCenterWindow) 使用说明
+
+GAS 中心管理器是 EX-GAS 2.0 的核心可视化编辑工具,提供了统一的配置管理界面
 
 ![gas_center_window.png](Wiki%2Fgas_center_window.png)
+### 打开方式
 
-设置好以下两个路径
-- 配置文件Asset路径: 这是该项目有关GAS的配置的路径，包括MMC,Cue,GameplayEffect,Ability,ASCPreset。
-- 脚本生成路径: GAS的基础配置（Tag，Attribute，AttributeSet）都会有对应的脚本生成。
+通过 Unity 菜单栏: **EXTool → EX-GAS → GAS中心管理器**
 
-首次设置完路径后,点击检查子目录文件夹，确保必要的子文件夹都已生成。
+窗口会以 1200x600 的尺寸居中显示,并自动加载所有配置数据。
 
-2. 配置Tag:  Tag是GAS核心逻辑运作的依赖,非常重要。关于Tag的使用及运作逻辑详见章节([GameplayTag](#22-gameplaytag))
+### UI 布局
 
-3. 配置Attribute:  Attribute是GAS运行时数据单位。关于Attribute的使用及运作逻辑详见章节([Attribute](#23-attribute))
+GAS 中心管理器采用左右分栏布局:
 
-4. 配置AttributeSet:  AttributeSet是GAS运行时数据单位集合，合理的AttributeSet设计能够帮助程序解耦，提高开发效率。关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#24-attributeset))
+**左侧菜单栏** (配置类型导航):
+- Setting 基本设置
+- GameplayTag 标签
+- Attribute 属性
+- Attribute Set 属性集
+- GameplayCue 演出提示
+- MMC 修改器
+- GameplayEffect 效果buff
+- GameplayAbility 技能
+- ASC 预设
 
-5. 设计MMC,Cue:  详见[MMC](#25-modifiermagnitudecalculation), [GameplayCue](#26-gameplaycue)
+**右侧编辑区域**: 根据左侧选择的配置类型,显示对应的编辑界面。
 
-6. 设计Gameplay Effect:  详见 [Gameplay Effect](#27-gameplayeffect)
+### 各配置页面功能
 
-7. 设计Ability:  详见 [Ability](#28-ability)
+#### 1. Setting 基本设置
 
-8. 设计ASC预设（可选）:  详见 [AbilitySystemComponent](#29-abilitysystemcomponent)
+配置 EX-GAS 的核心路径参数:
+
+- **配置表工程路径**: Luban 配置工程的根目录
+- **脚本生成路径**: 生成的 C# 代码输出目录
+- **导出 Json 表**: 一键调用 Luban 导出所有配置表
+
+#### 2. GameplayTag 标签页
+
+以树形结构展示所有标签,支持层级查看。
+
+**功能按钮**:
+- 打开 Tag Excel 文件所在文件夹
+- 打开 Tag Json 文件所在文件夹
+- 导出更新 Json 表
+- 刷新
+
+#### 3. Attribute 属性页
+
+以表格形式展示所有属性配置。
+
+**功能按钮**:
+- 打开属性 Excel 文件所在文件夹
+- 打开属性 Json 文件所在文件夹
+- 导出更新 Json 表
+- 刷新
+
+#### 4. Attribute Set 属性集页
+
+展示属性集配置,每个属性集包含的属性列表。
+
+**功能按钮**: 与 Attribute 页面相同。
+
+#### 5. GameplayCue 演出提示页
+
+编辑 Cue 配置,包括视觉和音效表现。
+
+**编辑界面**:
+- 顶部工具栏: 打开文件夹、导出 Json、刷新按钮
+- Cue 选择下拉框: 选择要编辑的 Cue (支持添加/删除)
+- 基础信息: 名称、描述
+- 标签配置: RequiredTags、ImmunityTags
+- Cue 逻辑: 选择 Cue 类型及其自定义参数
+
+#### 6. MMC 修改器页
+
+编辑 MMC (Modifier Magnitude Calculation) 配置。
+
+**编辑界面**: 与 Cue 页面类似,包含 MMC 逻辑类型选择和自定义参数编辑。
+
+#### 7. GameplayEffect 效果buff页
+
+编辑 GameplayEffect 配置,这是最复杂的配置页面。
+
+**编辑界面**:
+- 顶部工具栏: 打开文件夹、导出 Json 按钮
+- Effect 选择下拉框: 选择要编辑的 Effect (支持添加/删除)
+- 基础信息: 名称、描述
+- **组件列表**: 勾选需要的 Effect 组件
+- **详情页签**: 根据勾选的组件显示对应配置项
+
+**支持的组件类型**:
+- AssetTags: 描述性标签
+- GrantedTags: 授予的标签
+- ApplicationRequiredTags: 施加条件标签
+- OngoingRequiredTags: 持续条件标签
+- RemoveGameplayEffectsWithTags: 移除效果标签
+- ImmunityTags: 免疫标签
+- Duration: 持续时间
+- Period: 周期触发
+- Stacking: 层数叠加
+- Modifiers: 属性修改器
+- GrantedAbility: 授予的技能
+- CueOnApply/Tick/Add/Remove/Activate/Deactivate: 各阶段触发的 Cue
+
+#### 8. GameplayAbility 技能页
+
+编辑 Ability 配置。 [1-cite-21](#1-cite-21)
+
+**编辑界面**:
+- 顶部工具栏: 打开文件夹、导出 Json 按钮
+- Ability 选择下拉框: 选择要编辑的 Ability (支持添加/删除)
+- 基础信息: 名称、描述
+- **Ability 逻辑类型**: 选择技能逻辑类型
+- **自定义参数**: 根据逻辑类型显示对应参数编辑器
+- **组件列表**: 勾选需要的 Ability 组件 (Cost、Cooldown、Tags 等)
+
+#### 9. ASC 预设页
+
+编辑 AbilitySystemComponent 预设配置。
+
+**编辑界面**:
+- 顶部工具栏: 打开文件夹、导出 Json、刷新按钮
+- ASC 选择下拉框: 选择要编辑的 ASC 预设
+- 基础信息: 名称、描述、等级
+- 初始配置: 初始标签、属性集、技能列表
+
+### 通用操作流程
+
+所有配置页面遵循统一的操作流程:
+
+1. **选择配置项**: 从下拉框选择要编辑的配置
+2. **编辑参数**: 在右侧编辑区修改配置参数
+3. **保存**: 修改会自动保存到 Excel 文件
+4. **导出**: 点击"导出更新 Json 表"生成运行时数据
+
+
+### 完整使用流程
+
+#### 第一步:初始化配置路径
+
+1. 打开 GAS 中心管理器: **EXTool → EX-GAS → GAS中心管理器** 
+
+2. 在左侧菜单选择 **Setting 基本设置** 
+
+3. 配置以下路径: [2-cite-3](#2-cite-3)
+    - **配置表工程路径**: Luban 配置工程根目录(包含 `Datas/` 文件夹和 `gen.bat`)
+    - **脚本生成路径**: 生成的 C# 代码输出目录
+    - **表导出路径**: JSON 表输出目录
+    - **表 class 生成路径**: Luban 生成的表类输出目录
+
+4. 点击 **导出 Json 表** 按钮,验证 Luban 工具链是否正常工作 [2-cite-4](#2-cite-4)
+
+#### 第二步:配置基础数据
+
+按以下顺序配置基础数据,因为后续配置依赖这些基础数据:
+
+**2.1 配置 GameplayTag**
+- 在左侧菜单选择 **GameplayTag 标签**
+- 点击 **打开 Tag Excel 文件所在文件夹**,在 Excel 中编辑标签
+- 编辑完成后,点击 **导出更新 Json 表**
+- 点击 **刷新** 查看更新后的标签树
+- 关于Tag的使用及运作逻辑详见章节([GameplayTag](#22-gameplaytag))
+
+**2.2 配置 Attribute**
+- 在左侧菜单选择 **Attribute 属性**
+- 点击 **打开属性 Excel 文件所在文件夹**,编辑属性定义 
+- 导出 Json 表并刷新
+- 关于Attribute的使用及运作逻辑详见章节([Attribute](#23-attribute))
+
+**2.3 配置 AttributeSet**
+- 在左侧菜单选择 **Attribute Set 属性集**
+- 编辑属性集配置,组合已定义的属性
+- 导出 Json 表并刷新
+- 关于AttributeSet的使用及运作逻辑详见章节([AttributeSet](#24-attributeset))
+
+#### 第三步:配置游戏逻辑
+
+基础数据配置完成后,可以配置游戏逻辑相关的配置:
+
+**3.1 配置 GameplayCue**
+- 在左侧菜单选择 **GameplayCue 演出提示**
+- 使用窗口内的编辑器直接编辑 Cue 配置
+- 点击 **保存** 按钮保存到 Excel
+- 导出 Json 表
+- 详见[GameplayCue](#26-gameplaycue)
+
+**3.2 配置 MMC**
+- 在左侧菜单选择 **MMC 修改器**
+- 编辑 MMC 配置
+- 保存并导出
+- 详见[MMC](#25-modifiermagnitudecalculation)
+
+**3.3 配置 GameplayEffect**
+- 在左侧菜单选择 **GameplayEffect 效果buff**
+- 从下拉框选择要编辑的 Effect,或点击 **添加** 创建新 Effect
+- 在 **组件列表** 标签页勾选需要的组件
+- 在 **详情** 标签页配置各组件参数
+- 点击 **保存** 按钮
+- 导出 Json 表
+- 详见 [Gameplay Effect](#27-gameplayeffect)
+
+**3.4 配置 GameplayAbility**
+- 在左侧菜单选择 **GameplayAbility 技能**
+- 选择或创建 Ability 
+- 选择 **Ability 逻辑类型**
+- 配置自定义参数和组件
+- 保存并导出
+-  详见 [Ability](#28-ability)
+
+**3.5 配置 ASC 预设(可选)**
+- 在左侧菜单选择 **ASC 预设**
+- 配置预设的初始标签、属性集和技能
+- 保存并导出
+- 详见 [AbilitySystemComponent](#29-abilitysystemcomponent)
+
+#### 第四步:生成运行时代码
+配置完成后,需要生成 C# 代码供运行时使用:
+1. 返回 **Setting 基本设置** 页面
+2. 点击 **一键生成所有** 按钮,生成所有必要的 C# 代码
+    - 或者根据需要点击单独的生成按钮(Tag 脚本、属性脚本等)
+
+### 日常编辑流程
+配置完成后,日常编辑流程简化为:
+1. 打开 GAS 中心管理器
+2. 选择要编辑的配置类型
+3. 编辑配置(直接在窗口内编辑或打开 Excel 编辑)
+4. 点击 **保存** 按钮(如果在窗口内编辑)
+5. 点击 **导出更新 Json 表** 按钮
+6. 如果修改了基础配置(Tag/Attribute/AttributeSet),需要重新生成对应的 C# 代码
+
+### 重要提示
+- **Excel 和窗口编辑器同步**: 窗口内的编辑器直接读写 Excel 文件,两者始终保持同步
+- **导出顺序**: 必须先导出 Json 表,再生成 C# 代码
+- **刷新按钮**: 如果在外部修改了 Excel 或 Json 文件,使用刷新按钮重新加载数据
 
 ---
 ## 2.EX-GAS系统介绍
