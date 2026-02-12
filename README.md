@@ -643,11 +643,36 @@ Attribute和AttributeSet（属性集）需要结合起来才能作为唯一标�
 > 
 > 而这两组AttributeSet中的生命值，攻击力，防御力，都是不同的属性，他们的意义和作用不同。但他们可以属于同一个单位。
 #### 2.3.a Attribute Manager
-![QQ20240313115953.png](Wiki%2FQQ20240313115953.png)
-Attribute Manager的作用很简单，提供属性名字的管理。然后作为AttributeSet的选项使用。
 
-**【注意!!!】  每次编辑完Attribute后，一定要点击【生成AttrLib】按钮。
-只有AttrLib生成后，AttributeSet的Attribute选项才会发生改变。**
+![attribute_editor.png](Wiki%2Fattribute_editor.png)
+
+Attribute 编辑流程
+
+##### 1. 打开 Excel 文件进行编辑
+
+在 GAS 中心管理器左侧选择 **Attribute 属性** 页面,点击 **打开属性 Excel 文件所在文件夹** 按钮。
+
+在 Excel 中编辑 `#exgas.attribute.xlsx` 文件:
+- **ID 列**: 属性的唯一 ID (整数)
+- **Name 列**: 属性名称 (如 `Health`, `Attack`, `Defense`)
+- **Desc 列**: 属性描述
+
+##### 2. 导出 JSON 配置表
+
+Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表** 按钮。 
+
+这会调用 Luban 工具将 Excel 转换为 `exgas_tbattribute.json` 文件。
+
+##### 3. 刷新预览
+点击 **刷新** 按钮,窗口会重新读取 JSON 文件并以表格形式展示所有属性。
+
+##### 4. 生成 C# 代码
+返回 **Setting 基本设置** 页面,点击 **属性脚本** 按钮生成 `XAttribute.gen.cs` 文件。
+
+- 生成的代码包含所有属性的常量定义 (如 `public const int Health = 1001;`)。
+- Attribute 名称会直接作为常量名,建议使用 PascalCase 命名 (如 MaxHealth)
+
+
 
 ### 2.4 AttributeSet
 >AttributeSet，属性集，是GAS中的核心数据单位集合，用于描述角色的某一类别的属性集合。
@@ -662,12 +687,44 @@ Attribute Manager的作用很简单，提供属性名字的管理。然后作为
 - AttributeSet内的Attribute禁止重复。
 
 #### 2.4.a AttributeSet Manager
-![QQ20240313121300.png](Wiki%2FQQ20240313121300.png)
+
+![attributeset_editor.png](Wiki%2Fattributeset_editor.png)
+
 AttributeSet Manager统筹属性集的命名和属性管理。
 
-**【注意!!!】  每次编辑完后，一定要点击【生成AttrSetLib】按钮。AttrSetLib会在AbilitySystemComponent的预设配置中用到。
-AttrSetLib.gen.cs脚本中会包含所有的AttributeSet类（详见下文API章节），AttributeSet对应的类名是：“AS_名字”。
-比如AttributeSet名字是Fight，那它对应的类名是AS_Fight。**
+### AttributeSet 编辑流程
+
+##### 1. 打开 Excel 文件进行编辑
+
+在 GAS 中心管理器左侧选择 **Attribute Set 属性集** 页面,点击 **打开属性集 Excel 文件所在文件夹** 按钮。 
+
+在 Excel 中编辑 `#exgas.attributeSet.xlsx` 文件:
+- **ID 列**: 属性集的唯一 ID (整数)
+- **Name 列**: 属性集名称 (如 `Fight`, `Weapon`)
+- **Attribute 列**: 包含的属性 ID 列表 (分号分隔,如 `1001;1002;1003`)
+
+##### 2. 导出 JSON 配置表
+
+Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表** 按钮。 
+
+这会调用 Luban 工具将 Excel 转换为 `exgas_tbattributeset.json` 文件。 
+
+##### 3. 刷新预览
+
+点击 **刷新** 按钮,窗口会重新读取 JSON 文件并以列表形式展示所有属性集及其包含的属性。
+
+##### 4. 生成 C# 代码
+
+返回 **Setting 基本设置** 页面,点击 **属性集脚本** 按钮生成 `XAttrSet.gen.cs` 文件。
+
+生成的代码包含:
+- 属性集 ID 常量 (如 `public const int Fight = 2001;`)
+- 属性集类定义 (如 `AS_Fight` 类,包含该属性集的所有属性常量)
+- 属性集配置映射字典
+- `AttributeSet` 名称会生成`AS_`前缀的类名,如 `Fight` 生成 `AS_Fight` 类
+- 生成的 AttributeSet 类会包含该集合内所有属性的常量定义,方便代码中引用
+
+
 
 ### 2.5 ModifierMagnitudeCalculation
 >ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。
