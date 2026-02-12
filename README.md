@@ -673,7 +673,6 @@ Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表*
 - Attribute 名称会直接作为常量名,建议使用 PascalCase 命名 (如 MaxHealth)
 
 
-
 ### 2.4 AttributeSet
 >AttributeSet，属性集，是GAS中的核心数据单位集合，用于描述角色的某一类别的属性集合。
 
@@ -691,8 +690,6 @@ Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表*
 ![attributeset_editor.png](Wiki%2Fattributeset_editor.png)
 
 AttributeSet Manager统筹属性集的命名和属性管理。
-
-### AttributeSet 编辑流程
 
 ##### 1. 打开 Excel 文件进行编辑
 
@@ -725,54 +722,211 @@ Excel 编辑完成后,返回 GAS 中心管理器,点击 **导出更新 Json 表*
 - 生成的 AttributeSet 类会包含该集合内所有属性的常量定义,方便代码中引用
 
 
-
 ### 2.5 ModifierMagnitudeCalculation
 >ModifierMagnitudeCalculation，修改器，负责GAS中Attribute的数值计算逻辑。
 
-MMC(下文开始会使用缩写指代ModifierMagnitudeCalculation)唯一的使用场景是在GameplayEffect中。
-GAS中，体系内运作的情况下，只有GameplayEffect才能修改Attribute的数值。而GameplayEffect就是通过MMC修改Attribute的数值。
+#### 核心概念
+MMC 是 GameplayEffect 中属性修改的计算单元,负责将基础模值 (Magnitude) 转换为最终修改值。
 
-MMC具有以下特点：
-- 【与Attribute集成】： MMC 与 GAS 中的Attribute系统一起使用。这意味着计算效果幅度时可以考虑角色的属性，使得效果的强度与角色的属性值相关联。
-- 【实时性】： MMC 用于在运行时动态计算 Attribute 的修改幅度。这样可以根据角色的状态、属性或其他因素，实时地调整效果的强度。
-- 【自定义】： 通过继承 MMC的基类，开发者可以实现自定义的计算逻辑。这允许在计算效果幅度时考虑复杂的游戏逻辑、属性关系或其他条件。
-- 【复用性】： 由于 MMC 是一个独立的类(Scriptable Object)，开发者可以在多个 GameplayEffect 中重复使用相同的计算逻辑。这样可以确保在整个游戏中保持一致的效果计算。
-- 【灵活性】： 使用 MMC 提高了系统的灵活性，使得效果的强度不再是固定的数值，而可以根据需要在运行时进行调整，适应不同的游戏情境和需求。
+**核心作用**: 在 GAS 体系内,只有 GameplayEffect 能修改 Attribute 数值,而 GameplayEffect 正是通过 MMC 来实现数值计算的。
 
-MMC在GameplayEffect中的运作逻辑，结合GameplayEffect配置中MMC界面来解释。如下图：
+**关键特性**:
+- **与 Attribute 集成**: 计算时可读取角色属性值,实现基于属性的动态计算(如伤害随攻击力提升)
+- **运行时动态计算**: 根据游戏状态实时调整效果强度,而非固定数值
+- **高度复用**: 同一 MMC 可被多个 GameplayEffect 引用,确保计算逻辑一致性
+- **自定义扩展**: 支持继承基类实现复杂计算逻辑,满足各种游戏需求
+- **灵活性**: 效果强度可根据不同游戏情境动态调整 [6-cite-3](#6-cite-3)
 
-![QQ20240313145154.png](Wiki%2FQQ20240313145154.png)
+#### MMC 在 GameplayEffect 中的位置
 
-MMC被存储在Modifier中，Modifier是GameplayEffect的一部分。
-Modifier包含了修改的属性，幅值（Magnitude），操作类型和MMC。
-- 修改的属性：指的是GameplayEffect作用对象被修改的属性。可以看到属性名是“AS_Fight.POSTURE”，这对应了上文的提到的属性识别是AttrSet和Attr组合而成的。
-- 幅值Magnitude：修改器的基础数值。这个数值如何使用由MMC的运行逻辑决定。
-- 操作类型：是对属性的操作类型，有3种：
-  - Add ： 加法（取值为负便是减法）
-  - Multiply： 乘法（除法取倒数即可）
-  - Override：覆写属性值
-- MMC：计算单位，Modifier的核心，是一个ScriptableObject。MMC的类别如下：
-  - ScalableFloatModCalculation：可缩放浮点数计算
-    - 该类型是根据Magnitude计算Modifier模值的，计算公式为：`ModifierMagnitude * k + b`
-      实际上就是一个线性函数，k和b为可编辑参数，可以在编辑器中设置。
-  - AttributeBasedModCalculation：基于属性的计算
-    - 该类型是根据属性值计算Modifier模值的，计算公式为：`AttributeValue * k + b`
-      计算逻辑与ScalableFloatModCalculation一致。
-    - 重点在于属性值的来源，确定属性值来源的参数有3个：
-      - attributeFromType：属性值从谁身上取？是从游戏效果的来源（创建者），还是目标（拥有者）。
-      - attributeName：属性值的名称，比如战斗属性集里的生命值：AS_Fight.Health
-      - captureType：属性值的捕获类型
-        - Track: 追踪,在Modifier被执行时，当场去取属性值
-        - SnapShot: 快照,在游戏效果被创建时会对来源和目标的属性进行快照。在Modifier被执行时，去取快照的属性值。
-  - SetByCallerModCalculation：由调用者设置的计算
-    - 不使用任何值计算模值，而是在执行时由调用者给出Modifier模值。
-    - 通过对GameplayEffectSpec注册数值来实现设置值。
-    - 设置数值映射有2种：
-      - 自定义键值：通过GameplayEffectSpec的RegisterValue(string key, float value)
-      - GameplayTag：通过GameplayEffectSpec的RegisterValue(GameplayTag tag, float value)
-  - CustomCalculation：自定义计算（必须继承自抽象基类ModifierMagnitudeCalculation）
-    - 上述3种类型显然不够方便且全面的满足游戏开发者的所有需求，所以提供了自定义计算类的功能。
-    - 允许开发者自由发挥给出各种各样的计算逻辑。
+MMC 被存储在 Modifier 中,Modifier 是 GameplayEffect 的组成部分。每个 Modifier 包含:
+- **目标属性**: 要修改的属性(如 `AS_Fight.Health`)
+- **基础模值 (Magnitude)**: 修改器的基础数值,作为 MMC 计算的输入
+- **操作类型**:
+    - `Add`: 加法(负值即减法)
+    - `Multiply`: 乘法(倒数即除法)
+    - `Override`: 直接覆写属性值
+- **MMC**: 计算单位,决定如何将 Magnitude 转换为最终修改值 [6-cite-4](#6-cite-4)
+
+#### 内置 MMC 类型详解
+
+##### 1. MMCScalableFloat - 线性缩放计算
+
+**计算公式**: `最终值 = Magnitude × k + b`
+
+这是一个简单的线性函数,适用于大多数基础数值缩放场景。
+
+**参数**:
+- `k`: 缩放系数(默认 1.0)
+- `b`: 偏移量(默认 0)
+
+**应用场景**:
+- 技能伤害随等级提升: `伤害 = 基础伤害 × 等级系数 + 固定加成`
+- 治疗量缩放: `治疗量 = 基础治疗 × 1.5 + 10`
+- 护盾值计算: `护盾 = 基础护盾 × 2.0 + 0`
+
+**示例**:
+```  
+配置: k = 1.5, b = 20  
+Magnitude = 100  
+最终值 = 100 × 1.5 + 20 = 170  
+```
+
+##### 2. MMCNone - 直接使用模值
+
+**计算公式**: `最终值 = Magnitude`
+
+不进行任何计算,直接使用 Modifier 的基础模值。
+
+**应用场景**:
+- 固定数值的伤害/治疗
+- 不需要动态计算的简单效果
+- 快速原型开发 
+
+##### 3. AttributeBasedModCalculation - 基于属性的计算(W.I.P)
+
+**计算公式**: `最终值 = AttributeValue × k + b`
+
+与 MMCScalableFloat 类似,但输入值来自角色属性而非 Magnitude。
+
+**核心参数**:
+- **attributeFromType**: 属性来源
+    - `Source`: 从效果创建者(施法者)获取
+    - `Target`: 从效果目标(受击者)获取
+- **attributeName**: 属性名称(如 `AS_Fight.Attack`)
+- **captureType**: 捕获方式
+    - `Track`: 实时追踪,执行时读取当前属性值
+    - `SnapShot`: 快照模式,效果创建时记录属性值,后续使用快照值
+
+**应用场景**:
+- 伤害基于攻击力: `伤害 = 攻击力 × 1.5 + 10`
+- 治疗基于最大生命值: `治疗量 = 最大生命 × 0.1 + 0`
+- 护盾基于防御力: `护盾 = 防御 × 2.0 + 50`
+
+**Track vs SnapShot 的区别**:
+- **Track**: 适用于需要实时响应属性变化的场景(如推导属性)
+- **SnapShot**: 适用于效果创建时确定数值的场景(如技能伤害快照) 
+
+##### 4. SetByCallerModCalculation - 调用者设置(W.I.P)
+
+**特点**: 不使用任何预设值,而是在运行时由调用者动态设置。
+
+**设置方式**:
+- 通过字符串键值: `spec.RegisterValue("DamageKey", 150.0f)`
+- 通过 GameplayTag: `spec.RegisterValue(damageTag, 150.0f)`
+
+**应用场景**:
+- 技能伤害需要根据蓄力时间动态计算
+- 效果强度依赖复杂的外部逻辑
+- 需要在运行时传递参数的场景
+
+##### 5. CustomCalculation - 自定义计算
+
+**用途**: 当内置 MMC 类型无法满足需求时,继承 `ModMagnitudeCalculationBase<TParam>` 实现自定义逻辑。
+
+**实现示例**:
+```csharp  
+public class MMCCriticalDamage : ModMagnitudeCalculationBase<MmcParamCritical>  
+{  
+    public override float CalculateMagnitude(Entity geEntity, float magnitude)  
+    {  
+        // 获取暴击率和暴击伤害  
+        var critRate = Parameter.CritRate;  
+        var critDamage = Parameter.CritDamage;  
+          
+        // 随机判定是否暴击  
+        if (Random.value < critRate)  
+            return magnitude * critDamage;  
+        return magnitude;  
+    }  
+}  
+```  
+
+**应用场景**:
+- 暴击系统
+- 多属性联合计算(如物理+魔法混合伤害)
+- 复杂的游戏逻辑(如连击加成、距离衰减等) 
+
+#### 2.5.a MMC编辑器使用流程
+
+![mmc_editor.png](Wiki%2Fmmc_editor.png)
+##### 1. 打开 MMC 编辑页面
+
+在 GAS 中心管理器左侧选择 **MMC 修改器**。
+
+##### 2. 创建或选择 MMC
+
+- 从下拉框选择现有 MMC,或点击 **添加** 按钮创建新 MMC
+- 输入唯一 ID (整数)
+
+##### 3. 配置 MMC 参数
+**基础信息**:
+- `Name`: MMC 名称 (如 "伤害x1.5加成")
+- `Desc`: 描述信息(如 "技能伤害提升 50%")
+- `MmcLogic`: 选择 MMC 类型 (如 `MMCScalableFloat`)
+
+**自定义参数**: 根据选择的 MMC 类型,配置对应参数
+- 对于 `MMCScalableFloat`: 设置 k 和 b 值
+- 对于自定义 MMC: 配置自定义参数结构
+
+##### 4. 保存并导出
+- 点击 **保存** 按钮写入 Excel
+- 点击 **导出更新 Json 表** 生成运行时配置 
+
+#### 2.5.b 在 GameplayEffect 中使用 MMC
+
+MMC 在 GameplayEffect 的 Modifier 中引用,完整的数值修改流程如下:
+
+**配置结构**:
+- **目标属性**: 要修改的属性 (如 `AS_Fight.Health`)
+- **基础模值**: Modifier 的基础数值(如 100)
+- **操作类型**: Add / Multiply / Override
+- **MMC**: 选择已配置的 MMC ID
+
+**运行时执行流程**:
+```  
+1. GameplayEffect 被应用到目标 ASC  
+2. 系统遍历 Effect 的所有 Modifier  
+3. 对每个 Modifier:  
+   a. 从配置加载 MMC 实例  
+   b. 调用 MMC.CalculateMagnitude(geEntity, magnitude)  
+   c. 获得计算后的最终值  
+   d. 根据操作类型应用到目标属性  
+4. 触发属性变化事件  
+```
+
+#### 2.5.c 运行时加载机制
+配置表通过 Luban 转换为 JSON,运行时加载流程:
+1. **读取配置**: `XLuban.GetMmcConfig(mmcId)` 从 JSON 表读取 MMC 数据
+2. **类型解析**: 根据 `MmcLogic` 字段获取对应的 C# 类型
+3. **参数填充**: 创建 MMC 参数实例并填充配置数据
+4. **实例化**: 返回 `MMCConfig` 对象,包含 MMC 类型和参数
+5. **创建 MMC**: 调用 `CreateMmc()` 生成实际的 MMC 实例 
+
+#### 2.5.d 实际应用示例
+
+##### 示例 1: 固定伤害技能
+**需求**: 造成 100 点固定伤害
+
+**配置**:
+- MMC: `MMCNone`
+- Magnitude: 100
+- 操作类型: Add
+- 目标属性: `AS_Fight.Health`
+
+**结果**: `最终伤害 = 100`
+
+##### 示例 2: 伤害提升技能
+**需求**: 造成基础伤害的 150% 并额外增加 20 点
+
+**配置**:
+- MMC: `MMCScalableFloat` (k=1.5, b=20)
+- Magnitude: 100
+- 操作类型: Add
+- 目标属性: `AS_Fight.Health`
+
+**结果**: `最终伤害 = 100 × 1.5 + 20 = 170`
+
 
 ### 2.6 GameplayCue
 >目前EX-GAS的GameplayCue功能还未完善。功能相对简陋。
