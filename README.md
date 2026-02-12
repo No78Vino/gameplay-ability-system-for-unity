@@ -1225,6 +1225,9 @@ Cue 的自定义参数采用**流式配置**,占用 `CueLogic` 列后的连续 5
 
 
 ---
+
+
+
 ### 2.7 GameplayEffect
 >GameplayEffect是EX-GAS的核心之一，一切的游戏数值体系交互基于GameplayEffect。
 
@@ -1234,7 +1237,16 @@ GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它
 
 另外GameplayEffect还可以触发Cue（游戏提示）完成游戏效果的表现，以及控制获取额外的能力等。
 
-- GameplayEffect的使用
+#### 核心职责
+
+- 属性修改: 通过 Modifier 修改目标 ASC 的 Attribute
+- 标签管理: 授予/移除 GameplayTag,控制游戏状态
+- 能力授予: 临时授予 Ability 给目标单位
+- 表现触发: 在不同生命周期阶段触发 GameplayCue
+- 效果联动: 移除/触发其他 GameplayEffect
+
+GameplayEffect的使用
+
 ![QQ20240313152015.png](Wiki%2FQQ20240313152015.png)
 
 GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义。
