@@ -1237,7 +1237,7 @@ GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它
 
 另外GameplayEffect还可以触发Cue（游戏提示）完成游戏效果的表现，以及控制获取额外的能力等。
 
-#### 核心职责
+#### 2.7.1 核心职责
 
 - 属性修改: 通过 Modifier 修改目标 ASC 的 Attribute
 - 标签管理: 授予/移除 GameplayTag,控制游戏状态
@@ -1245,94 +1245,147 @@ GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它
 - 表现触发: 在不同生命周期阶段触发 GameplayCue
 - 效果联动: 移除/触发其他 GameplayEffect
 
-GameplayEffect的使用
+> GameplayEffect的施加（Apply）和激活（Activate）
+>   - GameplayEffect的施加（Apply）和激活（Activate）是两个概念，施加是指GameplayEffect被添加到目标身上，激活是指GameplayEffect实际生效。
+      >      - 为什么做区分？
+>      - 举个例子：固有被动技能（Ability）是持续回血，被动技能的逻辑显然是永久激活的状态，而持续回血的效果（GameplayEffect）
+         >        来源于被动技能，那如果单位受到了外部的debuff禁止所有的回血效果，那么是不是被动技能被禁止？显然不是，被动技能还是会持续激活的。
+         >        那应该是移除回血效果吗？显然也不是，被动技能整个过程是不做任何变化，如果移除回血效果，那debuff一旦消失，谁再把回血效果加回来？
+         >        所以，这里需要区分施加和激活，被动技能的持续回血效果被施加到单位身上，而debuff做的是让回血效果失活，而不是移除回血效果，一旦debuff结束，
+         >        回血效果又被激活，而这个激活的操作可以理解为回血效果自己激活的（依赖于Tag系统）。
 
-![QQ20240313152015.png](Wiki%2FQQ20240313152015.png)
+#### 2.7.2 GameplayEffect 组件一览
 
-GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义。
-  - Name
-    - GameplayEffect的名称，纯粹用于显示，不会影响游戏逻辑。方便编辑者区分GameplayEffect。
-  - Description
-    - GameplayEffect的描述，纯粹用于显示，不会影响游戏逻辑。方便编辑者阅读理解GameplayEffect。
-  - DurationPolicy：GameplayEffect的执行策略，有以下几种：
-    - | 策略类型 | 执行逻辑                                                                                                | 
-        |---|-----------------------------------------------------------------------------------------------------|
-        | Instant | 即时执行，GameplayEffect被添加时立即执行，执行完毕后销毁自身。                                                              |
-        | Duration | 持续执行，GameplayEffect被添加时立即执行，持续时间结束后移除自身。                                                            |
-        | Infinite | 无限执行，GameplayEffect被添加时立即执行，执行完毕后不会移除，需要手动移除。                                                       |
-  - Duration
-    - 持续时间，只有DurationPolicy为Duration时有效。
-  - Every(Period)
-    - 周期，只有DurationPolicy为Duration或者Infinite时有效。每隔Period时间执行一次PeriodExecution。
-  - PeriodExecution
-    - 周期执行的GameplayEffect，只有DurationPolicy为Duration或者Infinite，且Period>0时有效。每隔Period时间执行一次PeriodExecution。
-      _**PeriodExecution禁止为空!!**_PeriodExecution原则上只允许是Instant类型的GameplayEffect。但如果根据开发者需求，也可以使用其他类型的GameplayEffect。
-  - GrantedAbilities
-    - 授予的能力，只有DurationPolicy为Duration或者Infinite时有效。在GameplayEffect生命周期内，GameplayEffect的持有者会被授予这些能力。
-        GameplayEffect被移除时，这些能力也会被移除。具体详见[GrantedAbility](#28c-granted-ability-from-gameplayeffect-来自游戏效果授予的能力)
-  - Modifiers: 属性修改器。详见[MMC](#25-modifiermagnitudecalculation)
-- Tags：标签。Tag具有非常重要的作用，合适的tag可以处理GameplayEffect之间复杂的关系。
-  - | Tag类型 | 作用                                                                                   |
-    |---|----------------------------------------------------------------------------------------|
-    | AssetTags | 描述性质的标签，用来描述GameplayEffect的特性表现，比如伤害、治疗、控制等。 |
-    | GrantedTags | GameplayEffect的持有者会获得这些标签，GameplayEffect被移除时，这些标签也会被移除。Instant类型的GameplayEffect的GrantedTags是无效的。 |
-    | ApplicationRequiredTags | GameplayEffect的目标单位必须拥有【所有】这些标签，否则GameplayEffect无法被施加到目标身上。 |
-    | OngoingRequiredTags | GameplayEffect的目标单位必须拥有【所有】这些标签，否则GameplayEffect不会被激活。 （施加和激活是两个概念，如果已经被施加的GameplayEffect持续过程中，目标的tag变化了，不满足，效果就会失活；满足了，就会被激活）。Instant类型的GameplayEffect的OngoingRequiredTags是无效的。|
-    | RemoveGameplayEffectsWithTags | GameplayEffect的目标单位当前持有的所有GameplayEffect中，拥有【任意】这些标签的GameplayEffect会被移除。 |
-    | Application Immunity Tags | GameplayEffect的目标单位拥有【任意】这些标签，就对该GameplayEffect免疫。 |
-  - DurationPolicy为Instant时
-    - CueOnExecute（Instant）：GameplayEffect执行时触发。
-  - DurationPolicy为Duration或者Infinite时
-    - CueDurational（Durational）：生命周期完全和GameplayEffect同步
-    - CueOnAdd（Instant）：GameplayEffect添加时触发
-    - CueOnRemove（Instant）：GameplayEffect移除时触发
-    - CueOnActivate（Instant）：GameplayEffect激活时触发。
-    - CueOnDeactivate（Instant）：GameplayEffect失活时触发。
-- Stacking:堆叠。该系列参数是为了处理常见的叠层类型Buff。比如《黑帝斯》中酒神，爱神，冬神的叠攻buff。stacking的参数基本囊括了绝大多数的叠层型buff的设计。
-  - 生效的GE类型：只有非Instant类型（持续型）的GameplayEffect，可以产生叠加（stacking）。
-  - stackingCodeName: 堆叠GE的唯一标识码，用于可堆叠GE的识别。
+| 组件名称 | 参数列表 | 参数说明 | 适用 GE 类型 | 使用场景 |  
+|---------|---------|---------|---------|---------|  
+| **AssetTags** | `List<int> AssetTags` | 标签 ID 列表 | 全部 | 描述 GE 特性(伤害/治疗/控制);<br/>配合 RemoveGameplayEffectsWithTags 批量移除;<br/>游戏逻辑判断和分类 |
+| **GrantedTags** | `List<int> GrantedTags` | 授予的标签 ID 列表 | Duration/Infinite | GE 生效时添加到目标 ASC;<br/>GE 移除时自动移除;<br/>状态标记(如"正在奔跑") |
+| **ApplicationRequiredTags** | `List<int> ApplicationRequiredTags` | 必需标签 ID 列表 | 全部 | 目标必须拥有**所有**这些标签才能被施加;<br/>实现条件性 Buff(如"只对眩晕目标生效") |
+| **OngoingRequiredTags** | `List<int> OngoingRequiredTags` | 激活条件标签列表 | Duration/Infinite | 目标必须拥有**所有**这些标签才会激活;<br/>控制 GE 激活/失活状态;<br/>标签条件满足时自动重新激活 |
+| **RemoveGameplayEffectsWithTags** | `List<int> RemoveGameplayEffectsWithTags` | 要移除的 GE 标签列表 | 全部 | 目标身上拥有**任一**这些标签的 GE 会被移除;<br/>驱散特定类型 Buff/Debuff;<br/>实现互斥效果 | 
+| **ImmunityTags** | `List<int> ImmunityTags` | 免疫标签 ID 列表 | 全部 | 目标拥有**任一**这些标签时 GE 无法施加;<br/>实现免疫机制(如"霸体免疫控制") |
+| **Duration** | `TimeUnit` (Frame/Turn)<br/>`Time` (int)<br/>`ResetStartTimeWhenActivated` (bool) | 时间单位;<br/>持续时长(-1 表示无限);<br/>激活时是否重置计时 | Duration/Infinite | Duration 类型 GE 必需;<br/>Infinite 类型设置 Time=-1;<br/>控制 Buff/Debuff 持续时间 | 
+| **Period** | `Time` (int)<br/>`Effects` (List\<int\>)<br/>`FirstTrigger` (bool) | 周期间隔;<br/>周期执行的 GE ID 列表;<br/>是否首次立即触发 | Duration/Infinite<br/>(需要 Duration 组件) | 持续伤害/治疗(DoT/HoT);<br/>周期性触发效果;<br/>子 GE 通常为 Instant 类型 | 
+| **Modifiers** | `AttrSet` (int)<br/>`Attribute` (int)<br/>`Magnitude` (float)<br/>`Operation` (int)<br/>`Mmc` (int) | 属性集 ID;<br/>属性 ID;<br/>基础数值;<br/>操作类型(0=Add, 1=Multiply, 3=Override);<br/>MMC 计算逻辑 ID | 全部 | 修改目标属性值;<br/>支持加法/乘法/覆写;<br/>通过 MMC 实现复杂计算 |
+| **CueOnApply** | `List<int> CueOnApply` | Cue ID 列表 | Instant | Instant 类型 GE 执行时触发;<br/>播放音效/特效/UI 提示;<br/>瞬时反馈 |
+| **CueOnTick** | `List<int> CueOnTick` | Cue ID 列表 | Duration/Infinite | 持续性特效/音效;<br/>生命周期与 GE 完全同步 |
+| **CueOnAdd** | `List<int> CueOnAdd` | Cue ID 列表 | Duration/Infinite | GE 被添加到目标时触发;<br/>播放 Buff 获得提示 |
+| **CueOnRemove** | `List<int> CueOnRemove` | Cue ID 列表 | Duration/Infinite | GE 被移除时触发;<br/>播放 Buff 消失提示 |
+| **CueOnActivate** | `List<int> CueOnActivate` | Cue ID 列表 | Duration/Infinite | GE 激活时触发;<br/>配合 OngoingRequiredTags 使用 | 
+| **CueOnDeactivate** | `List<int> CueOnDeactivate` | Cue ID 列表 | Duration/Infinite | GE 失活时触发;<br/>配合 OngoingRequiredTags 使用 |
+| **GrantedAbility** | `Ability` (int)<br/>`AbilityLevel` (int)<br/>`ActivationPolicy` (enum)<br/>`DeactivationPolicy` (enum)<br/>`RemovePolicy` (enum) | 授予的能力 ID;<br/>能力等级;<br/>激活策略(None/WhenAdded/SyncWithEffect);<br/>取消激活策略(None/SyncWithEffect);<br/>移除策略(None/SyncWithEffect/WhenEnd/WhenCancel/WhenCancelOrEnd) | Duration/Infinite | GE 生效期间授予临时能力;<br/>GE 移除时根据策略处理能力 | 
+| **Stacking** | `StackingCode` (int)<br/>`StackType` (enum)<br/>`LimitCount` (int)<br/>`DurationRefreshPolicy` (enum)<br/>`PeriodResetPolicy` (enum)<br/>`ExpirationPolicy` (enum)<br/>`denyOverflowApplication` (bool)<br/>`clearStackOnOverflow` (bool)<br/>`overflowEffects` (List\<int\>) | 堆叠唯一标识码;<br/>堆叠类型(None/AggregateBySource/AggregateByTarget);<br/>叠加上限;<br/>持续时间刷新策略(NeverRefresh/RefreshOnSuccessfulApplication);<br/>周期重置策略(NeverReset/ResetOnSuccessfulApplication);<br/>过期策略(ClearEntireStack/RemoveSingleStackAndRefreshDuration/RefreshDuration);<br/>是否拒绝溢出应用;<br/>溢出时是否清空层数;<br/>溢出时施加的 GE ID 列表 | Duration/Infinite | 叠层 Buff 设计(如《黑帝斯》叠攻 buff);<br/>按来源/目标分别计数;<br/>溢出触发额外效果 |   
+
+#### 2.7.3 组件注意事项说明
+
+- **组件化设计**: 每个组件对应一个独立的 `GameplayEffectComponentConfig` 子类
+- **类型限制**: 部分组件(如 GrantedTags、OngoingRequiredTags、所有 Cue 组件)仅对特定类型的 GE 有效
+- **标签逻辑**: ApplicationRequiredTags 和 OngoingRequiredTags 要求**所有**标签,而 RemoveGameplayEffectsWithTags 和 ImmunityTags 只需**任一**标签
+- **Period 前置条件**: Period 组件必须配合 Duration 组件使用
+
+#### 2.7.4 GE主要数据来源【选读】
+所有组件参数定义在 Luban 生成的表结构中,运行时通过 `XLuban.GetGameplayEffectConfig(int id)` 加载配置。
+
+#### 2.7.5 GE组件详解
+
+##### 2.7.5.a Tag类组件
+
+| 组件名称 | 数据类型 | 匹配逻辑 | 检查时机 | 作用对象 | 核心功能 | 实现位置 |
+|---------|---------|---------|---------|---------|---------|---------|
+| **AssetTags** | `List<int>` | 任一匹配 | 被其他 GE 检查时 | GE 自身 | 描述 GE 特性(伤害/治疗/控制等);<br/>被 RemoveGameplayEffectsWithTags 用于识别;<br/>被 CheckEffectHasAnyTags 检查 | [4-cite-1](#4-cite-1)  |
+| **GrantedTags** | `List<int>` | - | GE Apply/Remove 时 | 目标 ASC | GE 生效时添加到目标 ASC;<br/>GE 移除时从目标移除;<br/>Instant 类型无效 | [4-cite-2](#4-cite-2)  |
+| **ApplicationRequiredTags** | `List<int>` | 全部匹配 | GE Apply 前 | 目标 ASC | 目标必须拥有**所有**这些标签;<br/>否则 GE 无法施加;<br/>Apply 阶段校验 | [4-cite-3](#4-cite-3)  |
+| **OngoingRequiredTags** | `List<int>` | 全部匹配 | GE Activate 时 | 目标 ASC | 目标必须拥有**所有**这些标签;<br/>控制 GE 激活/失活状态;<br/>Instant 类型无效 | [4-cite-4](#4-cite-4)  |
+| **RemoveGameplayEffectsWithTags** | `List<int>` | 任一匹配 | GE Apply 时 | 目标身上的其他 GE | 移除目标身上拥有**任一**这些标签的 GE;<br/>检查其他 GE 的 AssetTags 和 GrantedTags | [4-cite-5](#4-cite-5)  |
+| **ImmunityTags** | `List<int>` | 任一匹配 | GE Apply 前 | 目标 ASC | 目标拥有**任一**这些标签时免疫此 GE;<br/>Apply 阶段校验 | [4-cite-6](#4-cite-6)  |
+
+###### 1. 匹配逻辑差异
+Tag 组件分为两种匹配逻辑:
+- **全部匹配 (All Tags)**: ApplicationRequiredTags、OngoingRequiredTags
+    - 目标必须拥有列表中的**所有**标签才满足条件
+    - 实现通过 `ASCHelper.HasAllTags()` 检查 [4-cite-7](#4-cite-7)
+
+- **任一匹配 (Any Tag)**: AssetTags、GrantedTags、RemoveGameplayEffectsWithTags、ImmunityTags
+    - 只要拥有列表中的**任意一个**标签即满足条件
+    - 实现通过 `ASCHelper.HasAnyTags()` 或 `TagHelper.HasTag()` 检查 [4-cite-8](#4-cite-8)
+
+###### 2. 生命周期阶段
+Tag 组件在 GE 不同生命周期阶段发挥作用:
+
+```mermaid
+graph TB
+    Start["GE 创建"] --> Apply["Apply 阶段"]
+    Apply --> Check1["检查 ApplicationRequiredTags"]
+    Check1 --> Check2["检查 ImmunityTags"]
+    Check2 --> Remove["执行 RemoveGameplayEffectsWithTags"]
+    Remove --> Grant["添加 GrantedTags 到目标"]
+    Grant --> Activate["Activate 阶段"]
+    Activate --> Check3["检查 OngoingRequiredTags"]
+    Check3 --> Active["GE 激活"]
+    Active --> Deactivate["失活时移除 GrantedTags"]
+```
+
+###### 3. Apply vs Activate 分离
+
+OngoingRequiredTags 实现了施加(Apply)和激活(Activate)的分离:
+- **Apply**: GE 被添加到目标,但可能未激活
+- **Activate**: GE 实际生效,修改属性
+
+这种设计允许 GE 在目标 Tag 变化时自动激活/失活,无需手动管理。
+
+##### 2.7.5.b Cue类组件
+
+##### 2.7.5.c 时间类组件
+
+##### 2.7.5.d Modifiers属性修改器
+详见[MMC](#25-modifiermagnitudecalculation)
+
+##### 2.7.5.e Stacking 堆叠Buff
+
+Stacking:堆叠。该组件是为了处理常见的叠层类型Buff。比如《黑帝斯》中酒神，爱神，冬神的叠攻buff。stacking的参数基本囊括了绝大多数的叠层型buff的设计。
+- 生效的GE类型：只有非Instant类型（持续型）的GameplayEffect，可以产生叠加（stacking）。
+- stackingCodeName: 堆叠GE的唯一标识码，用于可堆叠GE的识别。
     - 本身是字符串，但是runtime实际使用的是其对应的HashCode。如果为空，则视为不可堆叠
     - stackingCodeName除了基础的堆叠类GE识别功能外，另一个作用是用于支持不同GE的共同堆叠。举个例子：有一个团队性质的增伤buff【元素增伤】，团队所有成员对同一个目标都可以叠加【元素增伤】，至多10层，增伤
       随层数增加而增加。但是增伤是指定第一个施加buff成员的元素，比如第一层打的是【火增伤】，那么之后不管是【水增伤】，【雷增伤】，都是【火增伤】buff往上叠加。遇到这种特殊情况，就可以把【水增伤】，【雷增伤】，【火增伤】
       的stackingCodeName设置为同一个值，这样就可以实现【元素增伤】的共同堆叠。
-  - stackingType：GameplayEffect的叠加类型，有三种：
+- stackingType：GameplayEffect的叠加类型，有三种：
     -  | stacking类型 | 作用                                                                                                                                                               |
-       |---|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+              |---|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
        | None | 不叠加                                                                                                                                                              |
        | AggregateBySource | 基于GE来源（ASC）的叠加计数，所有释放单位各自管理一个叠加计数的GE。 举例：BUFF【聚能】效果是单位被叠加三次该buff（来自同一单位）后触发爆炸。 小怪被A玩家叠了2次【聚能】，然后B玩家又对小怪施加了1次【聚能】，但是不会触发爆炸。因为叠加计数是按来源单位各自计数，需要A再叠1次或者B叠2次，小怪才会爆炸。 |
        | AggregateByTarget | 基于GE目标（ASC）的叠加计数，所有释放单位共享一个叠加计数的GE。举例：BUFF【诅咒】效果是单位被叠加3次该buff（无关来源单位）后触发即死效果。经典魂游的咒蛙攻击buff。玩家被数只咒蛙围攻，只要被咒蛙打到3次就死亡。在场所有咒蛙的【诅咒】都会叠加在玩家身上一个计数器上。                    |
-  - limitCount：叠加上限。
+- limitCount：叠加上限。
     - 需要注意一点，叠加溢出的效果触发是在叠加计数【大于】limitCount时触发。举个例子，如果某个buff叠加3层后触发爆炸伤害，那limitCount应该是2。
-  - DurationRefreshPolicy：持续时间刷新策略。GE叠加成功后，GE的持续时间的刷新策略。
+- DurationRefreshPolicy：持续时间刷新策略。GE叠加成功后，GE的持续时间的刷新策略。
     - | DurationRefreshPolicy | 作用                                    |
-      |-----------------------|---------------------------------------|
+            |-----------------------|---------------------------------------|
       | NeverRefresh                  | 从不刷新持续时间。即叠加的BUFF持续时间从第一层生效后计时就不再受影响。 |
       | RefreshOnSuccessfulApplication | 每次Effect叠加apply成功后刷新Effect的持续时间。      |
-  - PeriodResetPolicy：周期重置策略。GE叠加成功后，GE的周期（Period）的刷新策略。
+- PeriodResetPolicy：周期重置策略。GE叠加成功后，GE的周期（Period）的刷新策略。
     -  | PeriodResetPolicy | 作用                       |
-       |-----------------------|--------------------------|
+              |-----------------------|--------------------------|
        | NeverReset                  | 从不重置周期。                  |
        | ResetOnSuccessfulApplication | 每次apply成功后重置Effect的周期计时。 |
-  - ExpirationPolicy：过期策略（持续时间结束时逻辑处理）。GE叠加成功后，GE的过期时间（Expiration）的刷新策略。
+- ExpirationPolicy：过期策略（持续时间结束时逻辑处理）。GE叠加成功后，GE的过期时间（Expiration）的刷新策略。
     - | ExpirationPolicy | 作用                                      |
-      |-----------------------|-----------------------------------------|
+            |-----------------------|-----------------------------------------|
       | ClearEntireStack                  | 持续时间结束时,清楚所有层数                          |
       | RemoveSingleStackAndRefreshDuration | 持续时间结束时减少一层，然后重新经历一个Duration，一直持续到层数减为0 | 
       | RefreshDuration | 持续时间结束时,再次刷新Duration，这相当于无限Duration。    | 
-  - denyOverflowApplication：布尔类型。是否允许溢出的GE叠加生效。
+- denyOverflowApplication：布尔类型。是否允许溢出的GE叠加生效。
     - 对应于DurationRefreshPolicy = RefreshOnSuccessfulApplication时，如果为true则多余的Apply不会刷新Duration
-  - clearStackOnOverflow: 布尔类型。是否溢出时清空所有层数，移除GE。
+- clearStackOnOverflow: 布尔类型。是否溢出时清空所有层数，移除GE。
     - 当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数，移除GE。
-  - overflowEffects:GameplayEffect的数组，溢出时施加的游戏效果。当Stack计数溢出时，对生效单位执行这些GE。
+- overflowEffects:GameplayEffect的数组，溢出时施加的游戏效果。当Stack计数溢出时，对生效单位执行这些GE。
 
-> GameplayEffect的施加（Apply）和激活（Activate）
->   - GameplayEffect的施加（Apply）和激活（Activate）是两个概念，施加是指GameplayEffect被添加到目标身上，激活是指GameplayEffect实际生效。
->      - 为什么做区分？
->      - 举个例子：固有被动技能（Ability）是持续回血，被动技能的逻辑显然是永久激活的状态，而持续回血的效果（GameplayEffect）
->        来源于被动技能，那如果单位受到了外部的debuff禁止所有的回血效果，那么是不是被动技能被禁止？显然不是，被动技能还是会持续激活的。
->        那应该是移除回血效果吗？显然也不是，被动技能整个过程是不做任何变化，如果移除回血效果，那debuff一旦消失，谁再把回血效果加回来？
->        所以，这里需要区分施加和激活，被动技能的持续回血效果被施加到单位身上，而debuff做的是让回血效果失活，而不是移除回血效果，一旦debuff结束，
->        回血效果又被激活，而这个激活的操作可以理解为回血效果自己激活的（依赖于Tag系统）。
+##### 2.7.5.f Granted Ability
+授予的能力，只有DurationPolicy为Duration或者Infinite时有效。在GameplayEffect生命周期内，GameplayEffect的持有者会被授予这些能力。
+
+GameplayEffect被移除时，这些能力也会被移除。具体详见[GrantedAbility](#28c-granted-ability-from-gameplayeffect-来自游戏效果授予的能力)
+
+
+---
 
 ### 2.8 Ability
 > Ability是EX-GAS的核心类之一，它是游戏中的所有能力基础。
@@ -1556,10 +1609,12 @@ GrantedAbility有5个参数：
 Granted Ability只是EX-GAS给出的一个现成设计方案，依然可以通过各个事件监听/回调，来实现同样的效果。
 
 ---
-### 2.9 AbilitySystemComponent
+### 2.9 AbilitySystemCell
 > AbilitySystemComponent是EX-GAS的核心之一，它是GAS的基本运行单位。
+> 1.0版本中，AbilitySystemComponent是运行单位。2.0版本替换为了AbilitySystemCell，原本的AbilitySystemComponent实则变为了AbilitySystemCellMono。
+> 在2.0版本中，AbilitySystemCell是运行时的数据基础，而AbilitySystemCellMono是运行依托的实例，类似于View和Model的关系。
 
-ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，AttributeSet，GameplayEffect等数据。
+ASC(之后都使用缩写指代AbilitySystemCell),持有Tag，Ability，AttributeSet，GameplayEffect等数据。
 其主要职责如下：
 - 管理能力（Abilities）： ASC 负责管理角色的所有能力。它允许角色获得、激活、取消和执行各种不同类型的能力，如攻击、防御、技能等。
 - 处理效果（GameplayEffects）： ASC 负责处理与能力相关的效果，包括伤害、治疗、状态效果等。它能够跟踪和应用这些效果，并在需要时触发相应的回调或事件。
@@ -1567,24 +1622,6 @@ ASC(之后都使用缩写指代AbilitySystemComponent),持有Tag，Ability，Att
 - 处理属性（Attributes）： ASC 负责管理角色的属性。属性通常表示角色的状态，如生命值、能量值等。ASC 能够增减、修改和监听这些属性的变化。
 
 整个GAS的运作都是围绕着ASC的，所有的Tag，GameplayEffect的作用对象最后都是ASC。而Ability也必须依赖ASC来执行。
-为了直观的理解ASC，接下来参考GAS Watcher的监视器界面：
-![QQ20240313180923.png](Wiki%2FQQ20240313180923.png)
-
-- ID Mark:这部分可以忽略，只是Unity运行时的Gameobject的标识符相关
-- Ability： 图中显示了这个单位有6个Ability。Ability表示了单位的持有能力，但不代表所有的单位能力都要由Ability来做。
-    虽然我把Move作为Ability了，但是在FPS,MOBA等类型的游戏中，像Move移动这种强Input关联的行为是不建议用Ability来做的。
-- Attribute：单位持有的属性。
-  ASC的属性是以AttributeSet为集合，通常ASC的属性集，只加不减。
-  因为删除属性集存在很大的隐患，在GAS体系运作时，属性相当于串联GAS运行的线，线上挂着许多GameplayEffect，贸然删除属性集可能会导致线断裂，GameplayEffect运行逻辑失效甚至崩溃。
-- GameplayEffects：单位当前持有的GameplayEffect。这里可以直接将GameplayEffect理解为Buff。
-  GAS体系内，ASC之间是通过GameplayEffect来交互。
-   比如A单位对B单位施法，那么A单位会通过施法（Ability）对B施加一个效果（GameplayEffect），效果如果是持续性的就会被留在B身上（Buff）。
-    当然，GAS体系外时，可以通过接口对ASC单位添加/移除GameplayEffect。通常这种情况下，Effect的来源和目标都是指定的那个ASC。
-- Tags：单位当前持有的Tag。标签的价值只有在被挂载到ASC时才会体现出来。所有Tag的比较逻辑都直接或间接依赖于ASC。
-  - Fixed Tag：固有标签，这些标签是ASC固有的。GAS体系内是不会对FixedTag做任何增减的。
-    只有GAS体系外的才会对FixedTag有影响。FixedTag通常是在ASC初始化的时候设置好，之后就尽可能不动。
-  - Dynamic Tag：动态标签，这些标签是ASC动态增减的。GAS体系只会对DynamicTag做增减，且只有GAS体系可以管理。
-    GAS体系外只能通过GameplayEffect的一些指定接口，间接对DynamicTag进行操作。
 
 ASC是GAS中最复杂，且操作空间最多的组件。对ASC的良好管理和操作就是程序开发人员的重任了。
 GAS本身是被动的，而让推动和改变GAS的是ASC。换言之，Runtime下开发者其实是在操作ASC，而不是GAS。
