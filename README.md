@@ -1335,7 +1335,182 @@ OngoingRequiredTags 实现了施加(Apply)和激活(Activate)的分离:
 
 ##### 2.7.5.b Cue类组件
 
+| 组件名称 | 数据类型 | 适用 GE 类型 | 触发时机 | 生命周期 | 核心功能 |
+|---------|---------|-------------|---------|---------|---------|
+| **CueOnApply** | `List<int>` | Instant | GE 执行时 | 瞬时 | Instant 类型 GE 执行时触发;<br/>播放瞬时音效/特效/UI 提示 |
+| **CueOnTick** | `List<int>` | Duration/Infinite | 每帧更新 | 持续 | 持续性特效/音效;<br/>生命周期与 GE 完全同步;<br/>每帧调用 OnTick() | 
+| **CueOnAdd** | `List<int>` | Duration/Infinite | GE 添加时 | 瞬时 | GE 被添加到目标时触发;<br/>播放 Buff 获得提示 |
+| **CueOnRemove** | `List<int>` | Duration/Infinite | GE 移除时 | 瞬时 | GE 被移除时触发;<br/>播放 Buff 消失提示 |
+| **CueOnActivate** | `List<int>` | Duration/Infinite | GE 激活时 | 瞬时 | GE 激活时触发;<br/>配合 OngoingRequiredTags 使用;<br/>Apply 后首次激活或失活后重新激活 |
+| **CueOnDeactivate** | `List<int>` | Duration/Infinite | GE 失活时 | 瞬时 | GE 失活时触发;<br/>配合 OngoingRequiredTags 使用;<br/>Tag 条件不满足时失活 |
+
+GE的Cue 分为两大类:
+
+- **GameplayCueInstant (瞬时 Cue)**:
+    - 触发后立即执行,不持续存在
+    - 实现 `Trigger()` 方法
+    - 用于 CueOnApply、CueOnAdd、CueOnRemove、CueOnActivate、CueOnDeactivate
+
+- **GameplayCueDurational (持续 Cue)**:
+    - 生命周期与 GE 同步
+    - 实现 `OnAdd()`、`OnRemove()`、`OnGameplayEffectActivate()`、`OnGameplayEffectDeactivate()`、`OnTick()` 方法
+    - 用于 CueOnTick
+
+###### GE的Cue触发流程
+
+Instant 类型 GE
+1. GE Apply → 触发 **CueOnApply**
+2. GE 执行完毕 → 销毁
+
+Duration/Infinite 类型 GE
+1. GE Apply → 触发 **CueOnAdd**
+2. 检查 OngoingRequiredTags → 满足则激活 → 触发 **CueOnActivate**
+3. GE 激活期间 → 每帧触发 **CueOnTick**
+4. Tag 条件不满足 → GE 失活 → 触发 **CueOnDeactivate**
+5. Tag 条件重新满足 → GE 重新激活 → 再次触发 **CueOnActivate**
+6. GE 移除 → 触发 **CueOnRemove**
+
+
+###### 运行时GE的Cue实现机制
+
+**1. CueOnApply 触发**
+
+在 Instant 类型 GE 执行时触发:
+
+```
+1. 检查目标 ASC 是否满足 Cue 的 RequiredTags
+2. 检查目标 ASC 是否拥有 Cue 的 ImmunityTags
+3. 重置 Cue 逻辑单元
+4. 调用 cue.AddToTargetAsc(targetAsc)
+5. 调用 cue.Play(true) 激活播放
+```
+
+**2. CueOnAdd 触发**
+
+在 Duration/Infinite 类型 GE 被添加时触发:
+
+通过 `GameplayEffectHelper.GetTriggerCues()` 创建运行时 Cue 实例并存储到 `runtimeCues` 数组中。
+
+**3. CueOnActivate 触发**
+
+在 GE 激活时触发:
+```
+1. 检查 GE 是否有 CCueOnActivate 组件
+2. 调用 GetTriggerCues() 创建 Cue 实例
+3. 更新 runtimeCues 数组
+```
+
+**4. CueOnDeactivate 触发**
+
+在 GE 失活时触发: 
+
+逻辑与 CueOnActivate 类似,但在 GE 失活时执行。
+
+**5. CueOnRemove 触发**
+
+在 GE 被移除时触发,由系统 `SPlayCueOnRemove` 处理
+
+###### Cue基类的实现思路
+
+所有 Cue 逻辑类继承自 `GameplayCueBase`,提供以下核心方法:
+
+| 方法 | 功能 | 调用时机 |
+|-----|------|---------|
+| `AddToTargetAsc(Entity e)` | 将 Cue 添加到目标 ASC | Cue 创建时 |
+| `RemoveFromTargetAsc()` | 从目标 ASC 移除 Cue | Cue 销毁时 |
+| `Play(bool replay)` | 播放 Cue | 触发时 |
+| `Stop(bool immediate)` | 停止 Cue | 需要停止时 |
+| `OnAdd(float time)` | Cue 添加回调 | 添加到 ASC 时 |
+| `OnRemove(float time)` | Cue 移除回调 | 从 ASC 移除时 |
+| `OnActivate(float time)` | Cue 激活回调 | GE 激活时 |
+| `OnDeactivate(float time)` | Cue 失活回调 | GE 失活时 |
+| `OnTick(float time)` | Cue 每帧更新 | 每帧调用 |
+
 ##### 2.7.5.c 时间类组件
+| 组件名称 | 适用 GE 类型 | 核心功能 |
+|---------|-------------|---------|
+| **Duration** | Duration/Infinite | 控制 GE 持续时间;<br/>管理激活/失活状态;<br/>支持 Frame/Turn 两种时间单位 | 
+| **Period** | Duration/Infinite<br/>(需要 Duration 组件) | 周期性执行子 GE;<br/>支持首次立即触发;<br/>失活时可重置计时 |
+###### **Duration 组件详解**
+
+| 参数名称 | 类型 | 说明 | 配置示例 |
+|---------|------|------|---------|
+| `duration` | `int` | 持续时间,≤0 表示无限 | `600` (600 帧或回合) |
+| `timeUnit` | `TimeUnit` | 计时单位(Frame/Turn) | `TimeUnit.Frame` |
+| `ResetStartTimeWhenActivated` | `bool` | 激活时是否重置计时起始时间 | `false` |
+| `StopTickWhenDeactivated` | `bool` | 失活时是否停止计时 | `false` |
+| `activeTime` | `int` | (运行时)开始计时的时间点 | - |
+| `active` | `bool` | (运行时)是否激活生效中 | - |
+| `lastActiveTime` | `int` | (运行时)上次开始计时时间 | - |
+| `remianTime` | `int` | (运行时)剩余持续时间 | - |
+
+> 时间单位说明:
+> 
+> GAS 的所有计时单位只有 **Frame(逻辑帧)** 和 **Turn(回合)** 两种:
+> - **Frame**: 逻辑帧,适用于实时游戏
+> - **Turn**: 回合,适用于回合制游戏
+> - 编辑器可能显示单位"秒",但实际存储时会换算为 Frame
+
+> 激活机制:
+>
+> Duration 组件控制 GE 的激活/失活状态。激活时会记录当前时间:
+> ```
+> 1. 检查是否已激活,避免重复激活
+> 2. 设置 active = true
+> 3. 根据 timeUnit 获取当前 Frame 或 Turn
+> 4. 如果 ResetStartTimeWhenActivated=true 或首次激活,重置 activeTime
+> 5. 更新 lastActiveTime
+> ```
+
+###### **Period  组件详解**
+| 参数名称 | 类型 | 说明 | 配置示例 |
+|---------|------|------|---------|
+| `Period` | `int` | 周期间隔(帧或回合) | `5` (每 5 帧执行一次) |
+| `ResetTimeCountWhenDeactivated` | `bool` | 失活时是否重置计时 | `true` |
+| `GameplayEffects` | `NativeArray<Entity>` | 周期执行的子 GE Entity 数组 | - |
+| `StartTime` | `int` | (运行时)开始计时的时间点 | - |
+
+> 前置条件:
+> 
+> **重要**: Period 组件必须配合 Duration 组件使用,否则不会生效。
+
+**执行流程**:
+```
+1. 过滤未激活的 GE (duration.active == false)
+2. 获取当前时间(Frame 或 Turn)
+3. 如果 StartTime == 0,初始化为当前时间
+4. 检查是否到达周期间隔: (当前时间 - StartTime) >= Period
+5. 到达间隔时:
+   - 重置 StartTime 为当前时间
+   - 遍历 GameplayEffects 数组
+   - 实例化每个子 GE
+   - 设置子 GE 的 Source、Target、Level
+   - 添加到 EntityCommandBuffer 等待应用
+```
+
+###### Duration 与 Stacking 的交互
+在堆叠系统中,Duration 和 Period 都有对应的刷新策略: 
+
+- DurationRefreshPolicy : 当 GE 堆叠成功时,可以选择是否刷新持续时间
+  - **NeverRefresh**: 从不刷新,持续时间从第一层生效后就不再受影响
+  - **RefreshOnSuccessfulApplication**: 每次堆叠成功后刷新持续时间
+- PeriodResetPolicy:当 GE 堆叠成功时,可以选择是否重置周期计时: 
+  - **NeverReset**: 从不重置周期 
+  - **ResetOnSuccessfulApplication**: 每次堆叠成功后重置周期计时
+
+###### 激活/失活与时间组件
+Duration 组件与 OngoingRequiredTags 配合实现激活/失活机制: 
+
+**激活时**:
+1. 检查 OngoingRequiredTags
+2. 设置 duration.active = true
+3. 根据 timeUnit 记录 activeTime
+4. 添加 GrantedTags 到目标
+5. 触发 CueOnActivate
+
+**失活时**:
+- Period 组件会停止执行(因为过滤了 `duration.active == false`)
+- 如果 `StopTickWhenDeactivated = true`,会暂停计时并记录剩余时间
 
 ##### 2.7.5.d Modifiers属性修改器
 详见[MMC](#25-modifiermagnitudecalculation)
