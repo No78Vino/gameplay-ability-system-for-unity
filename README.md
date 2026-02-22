@@ -1574,19 +1574,10 @@ Ability的业务逻辑取决于游戏类型和玩法。所以不存在一个通�
 Ability的逻辑并非自由，如果胡乱的实现Ability逻辑，可能会导致游戏逻辑混乱，所以需要遵循一些规则。
 
 Ability的具体实现需要策划和程序配合。
-这并不是废话，而是在EX-GAS的Ability制作流程中，确确实实的把策划和程序的工作分开了：
-- 策划的工作：配置AbilityAsset
-- 程序的工作：编写Ability（AbilityAsset,Ability,AbilitySpec）类
-- | 类                        | 功能                                                                                |
-  |--------------------------|-----------------------------------------------------------------------------------|
-  | AbilityAsset  | Ability的配置文件，同一类的Ability可以通过配置不同的AbilityAsset参数，实现复数Ability，比如跳跃段数不同，可以实现普通跳，二段跳。 |
-  | Ability  | Ability的Runtime数据类，通常数据还是依赖AbilityAsset。同时也允许运行时不依赖AbilityAsset生成Ability          |
-  | AbilitySpec   | Ability的运行实例，Ability的游戏内的表现逻辑，就在该类中实现。                                            |
->建议 AbilitySpec和Ability在同一个脚本中编辑，因为二者本身就是成对出现。AbilityAsset单独一个脚本，因为它是Scriptable Object，应该遵从脚本名和类一致的原则。
 
 Ability运作逻辑的组成可以拆成两部分：
-- GAS系统内的运作逻辑：所有Ability通用的数据字段，被保存在AbstractAbility这个抽象基类中。所有的Ability都是继承自AbstractAbility。
-- 具体游戏内的表现逻辑：每个Ability都有自己的表现逻辑，这部分逻辑是由程序开发人员自行实现的。
+- GAS系统内的运作逻辑：所有Ability通用的数据字段，如各功能性的Tag。
+- 具体游戏内的表现逻辑：每个Ability都有自己的表现逻辑（AbilityLogic），这部分逻辑是由程序开发人员自行实现的。
 
 接下来结合Ability的配置界面来解释Ability的数据和运作逻辑。
 #### 2.8.a Ability编辑界面
@@ -1625,118 +1616,12 @@ Ability运作逻辑的组成可以拆成两部分：
   - Ability汇总界面入口：在菜单栏EX-GAS -> Asset Aggregator -> 左侧菜单列点击 C-Ability
 ![QQ20240313175247.png](Wiki%2FQQ20240313175247.png)
   
-#### 2.8.b TimelineAbility 通用性Ability（W.I.P TimelineAbility还在完善中）
+#### 2.8.b TimelineAbility 通用性顺序时间轴技能
 在实际的开发过程中，我发现，许多的Ability都有顺序和时限两个特点。
 每次都新写一个Ability类来实现某个指定技能让我十分烦躁，于是我制作了TimelineAbility，一个极具通用性的顺序，时限Ability。
-![TimelineAbilityAsset.png](Wiki%2FTimelineAbilityAsset.png)
->这是TimelineAbilityAsset的面板。
+--- TODO
 
-TimelineAbilityAsset的大多数表现逻辑参数在AbilityAsset面板都是隐藏的（HideInInspector）。
-转而都是在TimelineAbilityEditor面板中可视化编辑。
-唯一在AbilityAsset面板中可见的参数是【手动结束能力】的bool值选项。这个选项决定Ability是手动结束还是播放完成后自动结束。
 
-通过点击【查看/编辑能力时间轴】按钮，可以打开TimelineAbilityEditor面板。
-![TimelineAbilityEditor.png](Wiki%2FTimelineAbilityEditor.png)
->这是TimelineAbilityEditor的面板。
-
-接下来详细介绍TimelineAbilityEditor的面板参数含义及操作逻辑。
-- 顶部菜单栏
-    ![QQ20240315133711.png](Wiki%2FQQ20240315133711.png)
-    - Ability配置 ： 当前编辑的TimelineAbilityAsset
-    - 查看能力基本信息：点击按钮后，右侧的子Inspector会显示TimelineAbilityAsset的面板信息，和Asset Aggregator中的AbilityAsset面板一致。
-    - 预览实例：场景内的GameObject. 选取后，TimelineAbility会以该GameObject为参照物，预览TimelineAbility的表现逻辑。
-      用到的常见预览有Animation，特效，物体挂载，伤害碰撞盒等等。
-    - 预览场景：点击该按钮后会，进入空场景。目前还没有自定义LookDev场景，所以只是一个临时创建空场景。
-    - 返回旧场景：点击该按钮后会，返回到原来的场景。
-    - 显示子Inspector：点击该按钮后会，刷新显示右侧的子Inspector的布局。
-- 时间轴编辑部分
-  - 左侧播放栏
-    ![QQ20240315143604.png](Wiki%2FQQ20240315143604.png)
-    - 【<】:上一帧，只有当预览实例不为空时，才会生效。
-    - 【>】:下一帧，只有当预览实例不为空时，才会生效。
-    - 【▶】：播放/暂停 ，只有当预览实例不为空时，才会生效。
-    - 左侧帧数：当前预览帧数，只有当预览实例不为空时，才会生效。
-    - 右侧帧数：Ability执行总帧数
-  - 左侧轨道菜单栏
-    - ![QQ20240315144012.png](Wiki%2FQQ20240315144012.png)
-    - TimelineAbility基础轨道有6种。【添加轨道只需点击右侧的‘+’，删除轨道只需右键对应轨道选择Delete Track即可】
-      1. Instant Cue 【即时Cue轨道】
-         - 轨道Item类型：Mark ![QQ20240315151141.png](Wiki%2FQQ20240315151141.png)
-         - 一个Mark可以挂多个Cue。理论上，一个TimelineAbility只需要一条Instant Cue轨道。
-         ![QQ20240315152528.png](Wiki%2FQQ20240315152528.png)
-         - 扩展：详见上文中提到的Instant Cue自定义实现
-      2. Release Effect【GameplayEffect释放轨道】
-         - 轨道Item类型：Mark
-         - 一个Mark持有一个TargetCatcher和数个GameplayEffectAsset
-           ![QQ20240315153247.png](Wiki%2FQQ20240315153247.png)
-           -  TargetCatcher：GameplayEffect释放需要对象，而TargetCatcher的作用就是找到这些对象。
-              TargetCatcher固有初始化会获取Owner（ASC），核心是方法CatchTargets()。 基类如下：
-           ```
-             public abstract class TargetCatcherBase
-             {
-                public AbilitySystemComponent Owner;
-                public TargetCatcherBase()
-                {
-                }
-                public virtual void Init(AbilitySystemComponent owner)
-                {
-                    Owner = owner;
-                }
-                // mainTarget为TimelineAbility的指向性目标单位，为可选参数。具体在API中会介绍。
-                public abstract List<AbilitySystemComponent> CatchTargets(AbilitySystemComponent mainTarget);
-             }
-           ```
-             我提供了几个基础TargetCatcher（后续会陆续添加常用的Catcher）
-         
-           - 
-            | Catcher名          | 作用                 |
-            |-------------------|--------------------|
-            | CatchSelf         | 捕捉自己               |
-            | CatchTarget       | 捕捉指向性目标            |
-            | CatchAreaBox2D    | 捕捉2d矩形内的目标（适用2D游戏） |
-            | CatchAreaCircle2D | 捕捉2d圆形内的目标（适用2D游戏） |
-           - TargetCatcher的UI面板绘制：
-            自定义TargetCatcher的UI面板需要继承自TargetCatcherInspector<T> T为TargetCatcher类
-            **（必须直接继承，不可以多级继承，因为Inspector的Type查找规则依赖第一泛型类做匹配）**
-         - Release Effect的执行逻辑：先调用TargetCatcher的CatchTargets()方法，然后对捕获的目标单位施加所有指定GameplayEffect。
-      3. Instant Task 【即时Task轨道】
-         - 轨道Item类型：Mark
-         - 一个Mark可以挂载复数的Instant Task。 关于Ability Task的详细介绍见[下文](#375-abilitytaskwip)。
-           ![QQ20240315170234.png](Wiki%2FQQ20240315170234.png)
-         - Task是自定义事件，可以是任何游戏逻辑，纯粹由开发者决定。
-         - Instant Task的面板绘制：自定义Task的UI面板需要继承自InstantTaskInspector<T> T为InstantAbilityTask类
-           **（必须直接继承，不可以多级继承，因为Inspector的Type查找规则依赖第一泛型类做匹配）**
-      4. Durational Cue【持续GameplayCue轨道】
-         - 轨道Item类型：Clip ![QQ20240315164448.png](Wiki%2FQQ20240315164448.png)
-         - 每段Clip只含一个Duration Cue ![QQ20240315164632.png](Wiki%2FQQ20240315164632.png)
-         - **注意！！ TimelineAbility下的持续性Cue，
-           只会执行OnAdd（Cue播放的第一帧），OnRemove（Cue播放的最后一帧），OnTick，和GameplayEffect相关的方法不会被执行**
-      5. Buff【Buff轨道】
-         - 轨道Item类型：Clip
-         - 每段Clip只含一个Buff（GameplayEffect），且Buff的作用对象只会是Ability的持有者自己。
-           ![QQ20240315165106.png](Wiki%2FQQ20240315165106.png)
-         - **【注意！！】请确保设置的GameplayEffect类型为Durational或Infinite。
-            非持续类型的GameplayEffect不会生效。且GameplayEffect执行时会设置为Infinite执行策略，
-            生命周期由Clip长度（Duration）决定。**
-      6. Ongoing Task【持续Task轨道】
-         - 轨道Item类型：Clip
-         - 每段Clip只含一个Ongoing Task。 关于Ability Task的详细介绍见[下文](#)。
-           ![QQ20240315170648.png](Wiki%2FQQ20240315170648.png)
-         - Ongoing Task的面板绘制：自定义Task的UI面板需要继承自OngoingTaskInspector<T> T为OngoingAbilityTask类
-           **（必须直接继承，不可以多级继承，因为Inspector的Type查找规则依赖第一泛型类做匹配）**
-      
-  - 右侧Inspector
-    - 所有Track，TrackItem参数在点击后都会显示在Inspector上
-
-TimelineAbility的执行逻辑很直观，就是沿着时间轴从左往右执行，每个轨道的Item都会在对应的时间点执行。
-所有事件的执行，都遵照时间轴的顺序，以及Mark内参数排列顺序。如果存在前后逻辑关系，那么配置的时候请务必注意顺序。
-最大帧数决定了Ability的执行时间，如果【手动结束能力】设置为false，那么在播放完TimelineAbility后，会自动调用TryEndAbility()，
-反之，需要开发人员在代码中决定调用TryEndAbility()的时机。
-
-TimelineAbility的配置可能还满足不了一些设计时，程序开发人员可以对TimelineAbility进行继承，拓展功能需求。
-> 特别是在TargetCatcher，AbilityTask的自定义上，还是很可能遇到这个问题。
-> 因为TargetCatcher和AbilityTask的持续化存储是以JsonData的格式，ScriptableObject类型参数的Json存储是存在GUID不匹配问题的。
-> 所以，TargetCatcher和AbilityTask的参数中，不建议出现ScriptableObject类型的参数。
 
 #### 2.8.c Granted Ability From GameplayEffect 来自游戏效果授予的能力
 能力不仅仅可以由AbilitySystemComponent直接授予，还可以通过GE来授予,甚至是GE来全权控制。
