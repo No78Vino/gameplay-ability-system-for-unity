@@ -1579,48 +1579,348 @@ Ability运作逻辑的组成可以拆成两部分：
 - GAS系统内的运作逻辑：所有Ability通用的数据字段，如各功能性的Tag。
 - 具体游戏内的表现逻辑：每个Ability都有自己的表现逻辑（AbilityLogic），这部分逻辑是由程序开发人员自行实现的。
 
-接下来结合Ability的配置界面来解释Ability的数据和运作逻辑。
+#### 2.8.1 Ability各组件介绍
+| 字段名 | 类别 | 必填 | 数据类型 | 功能说明  | 典型应用场景 |
+|-------|------|------|---------|---------|-----------|
+| **ID** | 基础 | ✓ | 整数 | Ability 的全局唯一标识符,用于代码中引用、配置表查询和运行时加载。生成的常量会以 `ABILITY_{Name}` 形式存在于 `XAbility.gen.cs` 中 | 所有 Ability 必须配置。通过 `ASC.GrantAbility(10001)` 授予技能,通过 `XLuban.GetAbilityConfig(10001)` 加载配置 |
+| **Name** | 基础 | ✓ | 字符串 | Ability 的英文名称,用于编辑器显示、调试日志和代码常量生成。必须唯一且符合 C# 命名规范(不含空格和特殊字符) | 编辑器中快速识别 Ability,生成常量 `ABILITY_move = 10001` 供代码引用,调试时输出可读的技能名称 |
+| **Desc** | 基础 | - | 字符串 | Ability 的中文描述或详细说明,纯文档用途,不影响任何运行时逻辑 | 帮助策划理解技能用途,在编辑器中提供额外的上下文信息,便于团队协作 |
+| **Cost** | 资源 | - | 整数(GE ID) | 激活时消耗的资源,通过引用 GameplayEffect ID 实现。该 GE 会在激活检查通过后、`ActivateAbility()` 执行前应用到 Owner 身上。为 `0` 表示无消耗 | 技能消耗魔法值(GE 修改 Mana 属性),攻击消耗耐力(GE 修改 Stamina 属性),使用道具消耗数量(GE 修改 ItemCount 属性) |
+| **CdEffect** | 资源 | - | 整数(GE ID) | 冷却效果的 GameplayEffect ID,该 GE 会在激活成功后立即应用,通常包含一个 Duration 和授予冷却 Tag 的逻辑。与 `Cd` 字段配合使用| 定义技能冷却的 GameplayEffect,该 GE 会授予 `Cooldown.Skill` 等 Tag,阻止技能在冷却期间再次激活 |
+| **Cd** | 资源 | - | 整数(毫秒) | 冷却时长,会覆盖 `CdEffect` 引用的 GameplayEffect 的 Duration 字段。允许同一个冷却 GE 模板配置不同的冷却时长| 为不同等级的技能配置不同冷却时间,例如 1 级技能 10 秒 CD,2 级技能 8 秒 CD,但都使用同一个 CdEffect 模板 |
+| **AssetTags** | Tag | - | 整数数组 | 描述 Ability 特性的标签,纯描述性质,不影响激活逻辑。用于分类、查询和 UI 显示 | 标记技能类型(如 `Ability.Attack`、`Ability.Heal`),在 UI 中显示技能图标分类,通过 Tag 查询所有伤害类技能 |
+| **CancelAbilityWithTags** | Tag | - | 整数数组 | 激活时,取消 Owner 当前所有拥有**任意**这些 Tag 的 Ability。用于实现技能之间的互斥关系 | 攻击技能激活时取消移动技能,受击技能激活时取消施法技能,死亡技能激活时取消所有主动行为 |
+| **BlockAbilityWithTags** | Tag | - | 整数数组 | 激活时,阻止 Owner 激活所有拥有**任意**这些 Tag 的 Ability。已激活的不受影响,只阻止新的激活 | 冲刺技能激活时阻止普通移动激活,施法技能激活时阻止攻击激活,眩晕状态阻止所有主动技能激活 |
+| **ActivationOwnedTags** | Tag | - | 整数数组 | 激活时 Owner 获得这些 Tag,失活时自动移除。用于标识 Ability 的激活状态 | 移动技能授予 `State.Moving`,攻击技能授予 `State.Attacking`,防御技能授予 `State.Blocking`,用于其他系统判断当前状态 |
+| **ActivationRequiredTags** | Tag | - | 整数数组 | Owner 必须拥有**所有**这些 Tag 才能激活。用于定义激活的前置条件 | 跳跃需要 `State.Grounded`(在地面上),冲刺需要 `State.Moving`(正在移动),施法需要 `State.Alive`(存活状态) |
+| **ActivationBlockedTags** | Tag | - | 整数数组 | Owner 拥有**任意**这些 Tag 时无法激活。用于定义激活的禁止条件 | 攻击时阻止 `State.Attacking`(防止重复攻击),眩晕时阻止 `State.Stunned`(无法行动),沉默时阻止 `State.Silenced`(无法施法) |
+| **AbilityLogic** | 逻辑 | ✓ | 多态对象 | 定义 Ability 的具体执行逻辑和参数。包含 `$type`(逻辑类型名)和 `Param`(逻辑参数对象)两个字段。不同的逻辑类型对应不同的参数结构 | `ALMove` 实现移动控制,`ALApplyEffect` 施加 GameplayEffect,`ALTimeline` 执行基于时间轴的复杂技能序列,`ALDebugLog` 输出调试信息 |
+
+#### 2.8.2 【选读】Ability配置工作流程
+
+| 阶段 | 工具 | 操作内容 | 输出结果 | 注意事项 |
+|------|------|---------|---------|---------|
+| **1. 策划配置** | Excel 编辑器 | 在 `#exgas.ability.xlsx` 中按字段顺序填写数据 | Excel 文件 | 确保 ID 唯一,Name 符合命名规范 |
+| **2. 导出数据** | Luban 工具 | 运行 `gen.bat` 将 Excel 转换为 JSON | `exgas_tbability.json`   | 检查 JSON 格式是否正确,Tag 数组是否为空 |
+| **3. 生成代码** | Unity 编辑器 | 在 GAS 中心管理器点击"生成 Ability 脚本" | `XAbility.gen.cs`(常量和注册代码) | 确保所有 AbilityLogic 类型已实现并编译通过 |
+| **4. 运行时加载** | 游戏启动 | `XLauncher.Launch()` 初始化,`XLuban.GetAbilityConfig(id)` 加载 | 运行时 `AbilityConfig` 对象 | 确保 JSON 文件已打包到资源中 |
+
+**配置路径设置**: 在 GAS 设置资产中配置 Excel、JSON 和代码生成路径
+> 注意事项：
+> - 所有 Tag 字段(AssetTags、CancelAbilityWithTags 等)都支持空数组 `[]`,表示不使用该功能
+> - `Cost` 和 `CdEffect` 为 `0` 时表示不配置该组件,Ability 无消耗或无冷却
+> - `AbilityLogic` 的 `Param` 结构由 `$type` 决定,需查看对应的 `XParam` 子类定义
+> - 编辑器界面会根据配置的组件类型动态显示/隐藏相关字段
+> - Tag 字段在 Excel 中使用分号 `;` 分隔多个 Tag ID,在 JSON 中自动转换为数组格式
+
 #### 2.8.a Ability编辑界面
-![QQ20240313162642.png](Wiki%2FQQ20240313162642.png)
->图中A的部分就是GAS系统内的运作逻辑的参数，B的部分就是具体游戏内的表现逻辑的参数。
 
-注意到最上方显示了Ability Class，这是Ability的类名，与之成对的AbilitySpec决定了Ability游戏内的表现逻辑。
-- GAS系统内的运作逻辑参数
-  - U-Name: Ability的名称，唯一标识符，禁止重复或空。U-Name会用于AbilityLib的Ability生成和查找。
-  - Description: Ability的描述，纯粹用于显示，不会影响游戏逻辑。方便编辑者区分Ability。
-  - 消耗Cost：Ability的消耗GameplayEffect
-  - 冷却CD：Ability的冷却GameplayEffect
-  - CD时间：冷却时间，它会覆盖冷却GameplayEffect的持续时间。
-  - Tags: Ability的标签,与GameplayEffect的Tag些许类似。具体Tag功能如下
+![ability_editor.png](Wiki%2Fability_editor.png)
 
-| Tag                      | 功能                                                                |
-|--------------------------|-------------------------------------------------------------------|
-| Asset Tag                | 描述性质的标签，用来描述Ability的特性表现，比如伤害、治疗、控制等                              |
-| CancelAbility With Tags  | Ability激活时，Ability持有者当前持有的所有Ability中，拥有**【任意】**这些标签的Ability会被取消   |
-| BlockAbility With Tags       | Ability激活时，Ability持有者当前持有的所有Ability中，拥有**【任意】**这些标签的Ability会被阻塞激活 |
-| Activation Owned Tags    | Ability激活时，持有者会获得这些标签，Ability被失活时，这些标签也会被移除                       |
-| Activation Required Tags | Ability只有在其拥有者拥有**【所有】**这些标签时才可激活                                 |
-| Activation Blocked Tags  | Ability在其拥有者拥有**【任意】**这些标签时不能被激活                                       |
-   
-- 具体游戏内的表现逻辑参数
-  - 这部分的参数面板是由程序开发人员自行实现的，这部分参数的含义和作用不固定。
-  - 建议使用Odin的特性编辑，一是为了规范，二是美观。 
-  - 不同类的Ability，这部分的面板显示和含义不同。如下图：
-  ![QQ20240313165819.png](Wiki%2FQQ20240313165819.png)
+##### 编辑器入口
+**打开方式**: 在 Unity 菜单栏选择 **EXTool → EX-GAS → GAS中心管理器**,然后在左侧菜单树中选择 **"GameplayAbility技能"**
+
+##### 顶部工具栏
+编辑器顶部提供了一组快捷操作按钮:
+
+| 按钮名称 | 功能说明 | 实现方法          |
+|---------|---------|---------------|
+| **打开Excel文件所在文件夹** | 在文件浏览器中定位到 `#exgas.ability.xlsx` 文件 | `OpenExcelFileExplore()`|
+| **打开Json文件所在文件夹** | 在文件浏览器中定位到 `exgas_tbability.json` 文件 | `OpenJsonFileExplore()`|
+| **导出更新Json表** | 触发 Luban 工具,将 Excel 数据导出为 JSON 并生成代码 | `ExportJson()`|
+| **刷新** | 重新从 Excel 加载数据到编辑器 | `RefreshAll()` |
+| **保存** (绿色) | 将当前编辑的数据写回 Excel 文件 | `SaveConfig()` |
+
+##### Ability 选择与管理
+- **字段**: `SelectedId`
+- **功能**:
+  - 下拉框显示所有已配置的 Ability ID
+  - 选择不同 ID 时,自动加载对应的配置数据
+- **操作按钮**:
+  - **添加** (`+`): 创建新的 Ability,弹出对话框输入新 ID
+  - **删除** (垃圾桶图标): 删除当前选中的 Ability,需二次确认
+
+##### Ability组件列表选择
+> Ability的编辑逻辑与GameplayEffect类似,通过勾选需要的组件（组装功能）来显示对应的配置字段。
+- **字段**: `ComponentTypes`
+- **功能**: 多选下拉框,勾选需要配置的组件类型
+- **可选组件**:
+  - `Cost` - 消耗[GE]
+  - `Cooldown` - 冷却[GE]
+  - `AssetTags` - 描述标签
+  - `CancelAbilityWithTags` - 拥有【任意】Tag的Ability会被取消
+  - `BlockAbilityWithTags` - 拥有【任意】Tag的Ability会被阻止
+  - `ActivationOwnedTags` - 激活后获得的Tag
+  - `ActivationRequiredTags` - 激活需要的Tag
+  - `ActivationBlockedTags` - 阻止激活的Tag
+
+##### 组件详情面板
+编辑器使用 `[ShowIf]` 特性实现条件显示,只有在 `ComponentTypes` 中勾选了对应组件,才会显示其配置字段。
+
+##### 配置数据存储
+- 加载流程 : 当选择不同的 Ability ID 时,触发 `OnSelectedIdChanged()` 方法
+  1. 从 `_data` 字典中读取对应 ID 的行数据
+  2. 解析各个字段值(Name, Desc, Cost, CD 等)
+  3. 解析 Tag 数组(使用分号 `;` 分隔的字符串转为整数列表)
+  4. 解析 AbilityLogic 类型和参数
+  5. 根据已配置的字段自动勾选 `ComponentTypes`
+- 保存流程 : 点击"保存"按钮时,触发 `SaveFile()` 方法 :
+  1. 使用 EPPlus 库打开 Excel 文件
+  2. 根据 `_idToRowMap` 确定写入的行号
+  3. 写入基础字段(ID, Name, Desc)
+  4. 根据 `ComponentTypes` 条件写入各组件字段
+  5. 写入Excel 文件并保存
 
 
-- **【！！注意！！】**
-  - **当创建或修改AbilityAsset的U-Name后，一定要去Ability汇总界面点击【生成AbilityLib】按钮。
-  AbilityLib.gen.cs脚本中会包含所有的Ability信息。
-  游戏运行时生成Ability依赖于AbilityLib，如果没有保持同步，会导致游戏运行时找不到Ability。**
-  - Ability汇总界面入口：在菜单栏EX-GAS -> Asset Aggregator -> 左侧菜单列点击 C-Ability
-![QQ20240313175247.png](Wiki%2FQQ20240313175247.png)
-  
 #### 2.8.b TimelineAbility 通用性顺序时间轴技能
-在实际的开发过程中，我发现，许多的Ability都有顺序和时限两个特点。
-每次都新写一个Ability类来实现某个指定技能让我十分烦躁，于是我制作了TimelineAbility，一个极具通用性的顺序，时限Ability。
---- TODO
+> 在实际的开发过程中，我发现，许多的Ability都有顺序和时限两个特点。
+> 
+> 每次都新写一个Ability类来实现某个指定技能让我十分烦躁，于是我制作了TimelineAbility，一个极具通用性的顺序，时限Ability。
 
+**TimelineAbility 实现流程**
+
+新版 TimelineAbility 基于**帧驱动**的播放机制,通过 `ALTimeline` 和 `ALTimelinePlayer` 协同工作:
+
+```mermaid
+sequenceDiagram
+    participant ASC as AbilitySystemComponent
+    participant ALTimeline
+    participant Player as ALTimelinePlayer
+    participant Task as AbilityTaskBase
+    
+    ASC->>ALTimeline: ActivateAbility()
+    ALTimeline->>Player: Play()
+    Player->>Player: _currentFrame = -1<br/>IsPlaying = true
+    
+    loop 每帧 Tick
+        ASC->>ALTimeline: AbilityTick()
+        ALTimeline->>Player: Tick()
+        Player->>Player: 计算 targetFrame
+        
+        loop 追帧 (_currentFrame < targetFrame)
+            Player->>Player: _currentFrame++
+            Player->>Player: TickFrame(_currentFrame)
+            
+            alt frame == startFrame
+                Player->>Task: Begin(startFrame)
+            end
+            
+            alt startFrame < frame < endFrame
+                Player->>Task: Tick(frame)
+            end
+            
+            alt frame == endFrame
+                Player->>Task: Finish(endFrame)
+            end
+        end
+        
+        alt _currentFrame >= LifeTime
+            Player->>Player: OnPlayEnd()
+            alt ManualEndAbility == false
+                Player->>ALTimeline: TryEndSelf()
+            end
+        end
+    end
+```
+---
+TimelineAbility 的运行时结构采用**三层嵌套**的数据组织方式:
+
+```mermaid
+graph TB
+    XParamTimeline["XParamTimeline<br/>时间轴配置根对象"]
+    Track1["Track<br/>轨道 1"]
+    Track2["Track<br/>轨道 2"]
+    Track3["Track<br/>轨道 N"]
+    
+    Clip1["TaskClipData<br/>任务片段 1"]
+    Clip2["TaskClipData<br/>任务片段 2"]
+    Clip3["TaskClipData<br/>任务片段 3"]
+    
+    XParamTimeline -->|List&lt;Track&gt; Tracks| Track1
+    XParamTimeline --> Track2
+    XParamTimeline --> Track3
+    
+    Track1 -->|List&lt;TaskClipData&gt; TaskClips| Clip1
+    Track1 --> Clip2
+    Track2 --> Clip3
+    
+    style XParamTimeline fill:#4caf50
+    style Track1 fill:#2196f3
+    style Clip1 fill:#ff9800
+```
+
+- 1. XParamTimeline - 时间轴根配置  
+  - **定义**:
+  
+      | 字段 | 类型 | 功能说明 |
+      |------|------|---------|
+      | `ID` | `int` | 时间轴技能的唯一标识符 |
+      | `Name` | `string` | 时间轴技能名称,用于编辑器显示 |
+      | `LifeTime` | `int` | 技能总帧数,决定时间轴长度 |
+      | `ManualEndAbility` | `bool` | 是否需要手动结束技能(false 则播放完自动结束) |
+      | `Tracks` | `List<Track>` | 包含的所有轨道列表 |
+  - **用途**: 作为整个 Timeline 的配置容器,在 `ALTimeline.SetParam()` 时被加载 
+- 2. Track - 轨道容器
+  - **定义**:
+    ```csharp
+    public class Track
+    {
+        public string Name { get; set; }
+        public List<TaskClipData> TaskClips = new List<TaskClipData>();
+    }
+    ```
+    | 字段 | 类型 | 功能说明 |
+    |------|------|---------|
+    | `Name` | `string` | 轨道名称,用于编辑器中组织和识别(如"动画轨道"、"音效轨道") |
+    | `TaskClips` | `List<TaskClipData>` | 该轨道包含的所有任务片段 |
+  - **设计理念**: Track 是**纯粹的容器**,不包含任何执行逻辑,仅用于组织和分类 TaskClip。多个 Track 可以并行执行,互不干扰。
+- 3. TaskClipData - 任务片段配置
+  - **定义**: 
+    ```csharp
+    public class TaskClipData
+    {
+        public string Name;           // 任务显示名称
+        public int StartTime;         // 起始帧
+        public int EndTime;           // 结束帧
+        public string TaskType;       // 任务类型名(如 "TaskPlayCue")
+        public XParam Parameter;      // 任务参数
+        
+        public int Duration => EndTime - StartTime;  // 持续帧数
+    }
+    ```
+    | 字段 | 类型 | 功能说明 |
+    |------|------|---------|
+    | `Name` | `string` | 任务片段的显示名称,用于编辑器识别 |
+    | `StartTime` | `int` | 任务开始执行的帧索引 |
+    | `EndTime` | `int` | 任务结束执行的帧索引 |
+    | `TaskType` | `string` | 任务类型的类名(如 `TaskPlayCue`、`TaskDebug`) |
+    | `Parameter` | `XParam` | 任务的配置参数,类型由 `TaskType` 决定 |
+    | `Duration` | `int` (只读) | 计算属性,返回 `EndTime - StartTime` |
+
+  - **实例化方法**:
+    ```csharp
+    public AbilityTaskBase InstantiateTask(AbilityLogicBase logic)
+    {
+        var task = AbilityHelper.TryCreateAbilityTask(TaskType, logic);
+        task.InitParameters(Parameter);
+        return task;
+    }
+    ```
+
+- 4. 配置数据 → 运行时实例
+  - 在 `ALTimelinePlayer.InitData()` 中,配置数据被转换为运行时结构:
+    ```mermaid
+    graph LR
+        subgraph "配置层 (XParamTimeline)"
+            Track["Track<br/>Name: '动画轨道'"]
+            TaskClipData["TaskClipData<br/>StartTime: 2<br/>EndTime: 24<br/>TaskType: 'TaskPlayCue'"]
+        end
+        
+        subgraph "运行时层 (ALTimelinePlayer)"
+            RuntimeTaskClip["RuntimeTaskClip<br/>startFrame: 2<br/>endFrame: 24<br/>task: TaskPlayCue实例"]
+        end
+        
+        Track --> TaskClipData
+        TaskClipData -->|InstantiateTask()| RuntimeTaskClip
+    ```
+    **转换代码**:
+    ```csharp
+    public void InitData()
+    {
+        _cacheTaskTrack.Clear();
+        foreach (var track in Param.Tracks)           // 遍历所有轨道
+        foreach (var clip in track.TaskClips)         // 遍历轨道中的所有片段
+        {
+            var runtimeTaskClip = new RuntimeTaskClip
+            {
+                startFrame = clip.StartTime,
+                endFrame = clip.EndTime,
+                task = clip.InstantiateTask(_alTimeline)  // 实例化 Task
+            };
+            _cacheTaskTrack.Add(runtimeTaskClip);
+        }
+    }
+    ```
+  - **关键点**:
+    - 所有 Track 的 TaskClip 被**扁平化**到 `_cacheTaskTrack` 列表中
+    - Track 的层级结构在运行时被**忽略**,仅用于编辑器组织
+    - 每个 `TaskClipData` 生成一个 `RuntimeTaskClip` 实例
+
+- 5. RuntimeTaskClip - 运行时任务片段
+  - **定义**:
+    ```csharp
+    internal class RuntimeTaskClip : RuntimeClipInfo
+    {
+        public AbilityTaskBase task;  // 实例化的任务对象
+    }
+    
+    internal abstract class RuntimeClipInfo
+    {
+        public int endFrame;
+        public int startFrame;
+    }
+    ```
+    | 字段 | 类型 | 功能说明 |
+    |------|------|---------|
+    | `startFrame` | `int` | 任务开始帧(继承自 `RuntimeClipInfo`) |
+    | `endFrame` | `int` | 任务结束帧(继承自 `RuntimeClipInfo`) |
+    | `task` | `AbilityTaskBase` | 实例化的任务对象,包含执行逻辑 |
+
+---
+- 6. 执行时的帧驱动逻辑
+  - 帧遍历与 Task 调度:
+    在 `ALTimelinePlayer.TickFrame()` 中,遍历所有 `RuntimeTaskClip` 并根据当前帧调度: 
+    ```csharp
+    private void TickFrame(int frame)
+    {
+        foreach (var taskClip in _cacheTaskTrack)
+        {
+            if (frame == taskClip.startFrame)
+                taskClip.task.Begin(frame);
+            
+            if (frame >= taskClip.startFrame && frame <= taskClip.endFrame)
+                taskClip.task.Tick(frame);
+            
+            if (frame == taskClip.endFrame)
+                taskClip.task.Finish(frame);
+        }
+    }
+    ```
+    **执行规则表**:
+    
+    | 帧条件 | 调用方法 | 说明 |
+    |--------|---------|------|
+    | `frame == startFrame` | `task.Begin(frame)` | 任务开始,仅调用一次 |
+    | `startFrame ≤ frame ≤ endFrame` | `task.Tick(frame)` | 任务持续执行,每帧调用 |
+    | `frame == endFrame` | `task.Finish(frame)` | 任务结束,仅调用一次 |
+
+    > **示例时间线**:
+    > ```
+    > Frame:  0  1  2  3  4  5  6  7  8  9  10
+    > Task A: -  -  B  T  T  T  F  -  -  -  -   (StartTime=2, EndTime=6)
+    > Task B: -  -  -  -  -  B  T  T  F  -  -   (StartTime=5, EndTime=8)
+    >
+    > B = Begin(), T = Tick(), F = Finish()
+    > ```
+
+  - Track 的并行性:
+    由于所有 `RuntimeTaskClip` 被扁平化到同一个列表,**不同 Track 的 Task 会在同一帧内并行执行**:
+    ```
+    Frame 5:
+      - Track "动画轨道" 的 Task A: Tick()
+      - Track "音效轨道" 的 Task B: Begin()
+      - Track "特效轨道" 的 Task C: Tick()
+    ```
+    **执行顺序**: 按照 `_cacheTaskTrack` 列表的顺序,即**配置表中 Track 和 TaskClip 的声明顺序**。
+
+---
+
+#### 2.8.b.1 AbilityTask
+
+
+#### 2.8.b.3 TimelineAbility 编辑器
+
+![timeline_ability_editor.png](Wiki%2Ftimeline_ability_editor.png)
 
 
 #### 2.8.c Granted Ability From GameplayEffect 来自游戏效果授予的能力
