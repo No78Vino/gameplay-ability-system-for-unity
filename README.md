@@ -2364,7 +2364,6 @@ EX-GAS 2.0 采用分层的系统组架构,所有游戏逻辑在 `FixedStepSimula
 > 新架构下,所有 ASC、Ability、GameplayEffect 等都以 ECS Entity 的形式存在,通过对应的 Component 和 Buffer 存储数据,由各个 System 处理逻辑。 
 > 这与 1.x 版本的 OOP 实现有本质区别。
 
-
 ### 3.2 AbilitySystemComponent
 #### 3.2.1 AbilitySystemCell
 AbilitySystemCell是EX-GAS 2.0的基本运行单位，它是GAS的核心类。
@@ -2838,8 +2837,8 @@ AbilitySystemCell提供了GE的便捷操作接口：
 > 3. **系统驱动**：GE的应用、激活、失活等操作由ECS系统`SApplyGameplayEffect`驱动
 > 4. **OOP包装**：通过`GameplayEffectSpec`和`GameplayEffectController`提供OOP风格的接口，隐藏ECS细节
 
-### 3.7 Ability
-#### 3.7.1 AbilitySpec
+### 3.6 Ability
+#### 3.6.1 AbilitySpec
 AbilitySpec是Ability的OOP包装类，用于管理Ability Entity实例。
 - `Entity AbilityEntity { get; }`
     - Ability对应的ECS Entity实例 
@@ -2850,7 +2849,7 @@ AbilitySpec是Ability的OOP包装类，用于管理Ability Entity实例。
     - 通过Ability Entity创建Spec包装
     - abilityEntity：Ability的Entity实例
 
-#### 3.7.2 AbilityController
+#### 3.6.2 AbilityController
 AbilityController是Ability的控制器类，负责ASC对Ability的所有操作。
 - `DynamicBuffer<BAbility> CurrentAbilities`
     - 获取当前ASC的所有Ability Buffer 
@@ -2889,7 +2888,7 @@ AbilityController是Ability的控制器类，负责ASC对Ability的所有操作�
     - 取消Ability
     - abilityCode：Ability的配置ID
 
-#### 3.7.3 AbilityHelper
+#### 3.6.3 AbilityHelper
 AbilityHelper是Ability的辅助工具类，提供Ability逻辑和任务的注册与创建功能。
 **AbilityLogic相关**：
 - `static void RegisterAbilityLogic(string sType, Type logicType, Type abilityParamType)`
@@ -2915,12 +2914,12 @@ AbilityHelper是Ability的辅助工具类，提供Ability逻辑和任务的注�
     - abilityLogic：关联的Ability逻辑
     - 返回值：AbilityTaskBase实例
 
-#### 3.7.4 BAbility
+#### 3.6.4 BAbility
 BAbility是ASC的Ability Buffer组件，用于存储ASC持有的所有Ability引用。
 - `Entity Ability`
     - Ability的Entity引用
 
-#### 3.7.5 XAbility（Script-Generated Code）
+#### 3.6.5 XAbility（Script-Generated Code）
 XAbility是Ability的常量库和注册代码，它是自动生成的代码。
 - `public const int ABILITY_XXX = ID;`
     - 生成所有Ability的ID常量
@@ -2942,7 +2941,7 @@ XAbility是Ability的常量库和注册代码，它是自动生成的代码。
 - `TaskDoNothing`：空任务
 - `TaskPlayCue`：播放Cue
 
-#### 3.7.6 AbilitySystemCell中的Ability操作
+#### 3.6.6 AbilitySystemCell中的Ability操作
 AbilitySystemCell提供了Ability的便捷操作接口：
 - `void TryActivateAbility(int abilityCode, XParam param = null)`
     - 尝试激活Ability
@@ -2980,7 +2979,7 @@ if(AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_move))
 AbilitySystemComponent.Cell.TryActivateAbility(XAbility.ABILITY_Attack);
 ```
 
-#### 3.7.7 Ability激活流程
+#### 3.6.7 Ability激活流程
 Ability的激活、取消和结束由三个ECS系统协同处理，它们在`SGAbility`系统组中按顺序执行。
 
 **激活流程（STryActivateAbility）**：
@@ -3047,7 +3046,7 @@ sequenceDiagram
     System->>System: 移除 CAbilityInTryActivate
 ```
 
-#### 3.7.8 AbilityLogicBase
+#### 3.6.8 AbilityLogicBase
 AbilityLogicBase是所有Ability逻辑的抽象基类，定义了Ability的生命周期方法。
 - `AbilitySpec Spec { get; }`
     - 获取Ability的Spec包装实例
@@ -3074,7 +3073,7 @@ AbilityLogicBase是所有Ability逻辑的抽象基类，定义了Ability的生�
 - 激活时：遍历配置的Effect ID列表，创建并施加到Owner
 - 结束时：移除所有由该Ability创建的GameplayEffect
 
-#### 3.7.9 Ability Tick更新
+#### 3.6.9 Ability Tick更新
 所有激活的Ability每帧都会调用`AbilityTick()`方法，由`SAbilityTick`系统驱动。
 
 **使用场景**：
@@ -3104,94 +3103,179 @@ public override void Move(Vector3 direction)
 
 > 所有Ability相关的操作都应该使用生成的`XAbility`常量，例如`XAbility.ABILITY_move`，配合`AbilitySystemComponent`或`AbilitySystemCell`的API进行调用。
 
+### 3.7 GameplayCue
+#### 3.7.1 GameplayCueBase
+GameplayCueBase是GAS的游戏提示基类，用于实现对游戏效果的提示。
+所有的GameplayCue都必须继承自他。
+- `Entity _cueEntity`
+    - Cue对应的ECS Entity实例
+- `Entity _sourceEntity`
+    - Cue来源的Entity（可能是GE或Ability）
+- `CueSourceType _sourceType`
+    - Cue来源类型
+- `Entity _targetAscEntity`
+    - Cue目标ASC的Entity
+- `AbilitySystemCell _abilitySystemCell`
+    - Cue目标ASC的实例引用
+- `abstract void InitParameters(XParam xParam)`
+    - 初始化Cue参数 
+    - xParam：Cue的自定义参数
+- `void AddToTargetAsc(Entity e)`
+    - 将Cue添加到目标ASC 
+    - e：目标ASC的Entity
+    - 该方法会调用`OnAdd()`回调
+- `void RemoveFromTargetAsc()`
+    - 从目标ASC移除Cue
+    - 该方法会调用`OnRemove()`回调
+- `void Play(bool replay = false)`
+    - 播放Cue
+    - replay：是否从头播放
+    - 该方法会启用`ECCuePlayable`组件
+- `void Stop(bool immediate = false)`
+    - 停止Cue
+    - immediate：是否立即停止
+    - 该方法会禁用`ECCuePlayable`组件
 
-### 3.8 GameplayCue
-#### 3.8.1 GameplayCue
-GameplayCue是GAS的游戏提示配置类，用于实现对游戏效果的提示。他本身是一个抽象基类，所有的GameplayCue都必须继承自他。
-- `GameplayTag[] RequiredTags;` :GameplayCue的要求标签,持有【所有】RequiredTags才可触发
-- `GameplayTag[] ImmunityTags;` :GameplayCue的免疫标签,持有【任意】ImmunityTags不可触发
-##### 3.8.1.a public abstract class GameplayCue<T> : GameplayCue where T : GameplayCueSpec
-这个泛型类是为了方便对应的GameplayCueSpec和GameplayCue一一匹配，方便使用。
-#### 3.8.2 GameplayCueSpec
-GameplayCueSpec是GAS的游戏提示规格类，用于实现对GameplayCue的实例化。本身是一个抽象基类，所有的GameplayCueSpec都必须继承自他。
-GameplayCueSpec内实现GameplayCue游戏内实际的表现逻辑。
+**生命周期回调**：
+- `virtual void OnAdd(float time)`
+    - Cue添加到ASC时调用
+    - 建议在此缓存组件引用
+- `virtual void OnRemove(float time)`
+    - Cue从ASC移除时调用
+    - 建议在此清理资源
+- `virtual void OnActivate(float time)`
+    - Cue激活时调用
+    - 建议在此播放特效/音效
+- `virtual void OnDeactivate(float time)`
+    - Cue失活时调用
+    - 建议在此暂停效果
+- `virtual void OnTick(float time)`
+    - Cue每帧更新时调用
+    - 建议在此更新持续性效果
+- `virtual void OnDestroy()`
+    - Cue实体销毁时调用
+    - 建议在此进行最终清理
 
--  
-```
-        public virtual bool Triggerable()
-        {
-            return _cue.Triggerable(Owner);
-        }
-``` 
-- Triggerable()：检查是否可以触发游戏提示的方法。
+#### 3.7.2 GameplayCueUnit
+GameplayCueUnit是面向开发者的GameplayCue控制单位，可以理解为Cue面向对象开发的伪装类。
+GameplayCue设计上允许作为一个独立系统被使用。
 
-#### 3.8.3 GameplayCueParameters
-GameplayCueParameters是GAS的游戏提示参数结构体，用于实现对GameplayCue的参数化。
-目前逻辑简单粗暴，存在拆装箱过程。
-```
-    public struct GameplayCueParameters
-    {
-        public GameplayEffectSpec sourceGameplayEffectSpec; 
-        public AbilitySpec sourceAbilitySpec;
-        public object[] customArguments;
-    }
-```
-#### 3.8.4 GameplayCueInstant
-GameplayCueInstant是GAS的GameplayCue中的一大类,属于OneShot类型的Cue。
-##### 3.8.4.a GameplayCueInstant
-- `InstantCueApplyTarget applyTarget`：立即提示应用目标，指示立即提示的应用目标类型。
-- `virtual void ApplyFrom(GameplayEffectSpec gameplayEffectSpec)`：从GameplayEffectSpec应用InstantCue。
-  - `gameplayEffectSpec`：游戏效果规格，触发立即提示的游戏效果规格实例。
-- `virtual void ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)`：从AbilitySpec应用InstantCue。
-  - `abilitySpec`：能力规格，触发立即提示的能力规格实例。
-  - `customArguments`：自定义参数，自定义参数数组。
+- `Type CueType { get; }`
+    - Cue的类型
+- `XParam Param { get; }`
+    - Cue的参数
+- `GameplayCueUnit(Type cueType, XParam xParam, int[] requiredTags = null, int[] immunityTags = null)`
+    - 构造函数
+    - cueType：Cue类型
+    - xParam：Cue对应的自定义参数
+    - requiredTags：可选，添加到ASC时，ASC播放需求的tag
+    - immunityTags：可选，添加到ASC时，ASC播放免疫的tag
+- `GameplayCueUnit(GameplayCueConfig config)`
+    - 通过配置对象构造
+    - config：Cue配置对象
+- `void Create()`
+    - 创建GameplayCue运行用的实例
+    - 该方法会创建ECS Entity并初始化相关组件
+- `void AddToAsc(AbilitySystemCell asc)`
+    - 将Cue添加到指定ASC
+    - asc：目标ASC实例
+    - 该方法会检查RequiredTags和ImmunityTags
+- `void RemoveFromAsc()`
+    - 从ASC移除GameplayCue
+- `void Play()`
+    - 播放GameplayCue
+- `void Stop()`
+    - 停止GameplayCue
 
-##### 3.8.4.b GameplayCueInstantSpec
-GameplayCueInstantSpec必须覆写Trigger()方法，用于实现对GameplayCueInstant触发。
-```
-public abstract class GameplayCueInstantSpec : GameplayCueSpec
-    {
-        public GameplayCueInstantSpec(GameplayCueInstant cue, GameplayCueParameters parameters) : base(cue,
-            parameters)
-        {
-        }
-        
-        public abstract void Trigger();
-    }
-```
-#### 3.8.5 GameplayCueDuration
-GameplayCueDuration是GAS的GameplayCue中的一大类,属于持续类型的Cue。
-##### 3.8.5.a GameplayCueDurational
-- `public GameplayCueDurationalSpec ApplyFrom(GameplayEffectSpec gameplayEffectSpec)`: 从GameplayEffectSpec应用DurationalCue。
-  - `gameplayEffectSpec`：游戏效果规格，触发持续提示的游戏效果规格实例。
-- `public GameplayCueDurationalSpec ApplyFrom(AbilitySpec abilitySpec, params object[] customArguments)`: 从AbilitySpec应用DurationalCue。
-  - `abilitySpec`：能力规格，触发持续提示的能力规格实例。
-  - `customArguments`：自定义参数，自定义参数数组。 
-##### 3.8.5.b GameplayCueDurationalSpec
-GameplayCueDurationalSpec必须覆写
-OnAdd()，
-OnRemove()，
-OnGameplayEffectActivate()，
-OnGameplayEffectDeactivate()，
-OnTick()方法，
-用于实现对GameplayCueDurational触发和运作。
-```
-    public abstract class GameplayCueDurationalSpec : GameplayCueSpec
-    {
-        protected GameplayCueDurationalSpec(GameplayCueDurational cue, GameplayCueParameters parameters) : 
-            base(cue, parameters)
-        {
-        }
+#### 3.7.3 GameplayCueConfig
+GameplayCueConfig是Cue的配置类，用于存储Cue的类型和参数。
+- `Type CueType { get; set; }`
+    - Cue的类型
+- `XParam Param { get; set; }`
+    - Cue的参数
+- `int[] RequiredTags { get; set; }`
+    - 播放需求的Tag ID数组
+- `int[] ImmunityTags { get; set; }`
+    - 播放免疫的Tag ID数组
+- `GameplayCueBase CreateCue()`
+    - 创建Cue实例 
+    - 返回值：创建的Cue实例
 
-        public abstract void OnAdd();
-        public abstract void OnRemove();
-        public abstract void OnGameplayEffectActivate();
-        public abstract void OnGameplayEffectDeactivate();
-        public abstract void OnTick();
-    }
-```
+#### 3.7.4 CueHelper
+CueHelper是Cue的辅助工具类，提供Cue的创建和注册功能。
+- `static GameplayCueBase TryCreateCue(GameplayCueConfig param)`
+    - 通过配置创建Cue 
+    - param：Cue配置
+    - 返回值：创建的Cue实例
+- `static GameplayCueBase TryCreateCue(string cueType, XParam param)`
+    - 通过类型名称和参数创建Cue
+    - cueType：Cue类型名称
+    - param：Cue参数
+    - 返回值：创建的Cue实例
+- `static XParam CreateCueParameter(string type, List<object> paramData = null)`
+    - 创建Cue参数实例 
+    - type：Cue类型名称
+    - paramData：参数数据（用于从Excel解码）
+    - 返回值：创建的参数实例
+- `static void RegisterCue(string sType, Type logicType, Type cueParamType)`
+    - 注册Cue类型
+    - sType：Cue类型名称
+    - logicType：Cue逻辑类的Type
+    - cueParamType：Cue参数类的Type
 
----
+#### 3.7.5 XParamCue
+XParamCue是Cue的参数类，用于配置Cue的类型和参数。
+- `List<int> RequiredTags`
+    - 需求标签列表
+- `List<int> ImmunityTags`
+    - 免疫标签列表
+- `string CueType { get; private set; }`
+    - Cue类型名称
+- `XParam Param { get; set; }`
+    - Cue的自定义参数
+- `GameplayCueConfig GetCueConfig()`
+    - 获取Cue配置对象
+    - 返回值：Cue配置对象
+
+#### 3.7.6 XCue（Script-Generated Code）
+XCue是Cue的常量库和注册代码，它是自动生成的代码。
+- `public const string CUE_XXX = "XXX";`
+    - 生成所有Cue的类型名称常量
+    - 例如：`public const string CUE_CueLog = "CueLog";`
+- `static void LoadCueType()`
+    - 加载并注册所有Cue类型
+    - 该方法会调用`CueHelper.RegisterCue()`注册所有Cue类型和参数类型
+
+**代码生成流程**：
+1. 通过反射扫描所有继承自`GameplayCueBase`的类
+2. 生成Cue类型名称常量
+3. 生成注册代码，映射Cue类型到参数类型
+4. 输出到指定的代码生成路径
+
+#### 3.7.7 Cue系统架构
+Cue系统由四个ECS系统驱动，它们在`SysGrpDisplay`系统组中按顺序执行。
+
+**系统执行顺序**：
+1. `SCueStart`：处理Cue的启动
+2. `SCueTick`：处理Cue的每帧更新
+3. `SCueEnd`：处理Cue的结束
+4. `SCueDestroy`：处理Cue的销毁
+
+**Enable Component模式**：
+- `ECCuePlayable`：标记Cue可播放
+- `ECCuePlaying`：标记Cue正在播放
+- `ECKillCue`：标记Cue需要销毁
+
+> EX-GAS 2.0的GameplayCue系统与1.x版本的主要区别：
+> 1. **ECS架构**：Cue现在是ECS Entity，通过Enable Component控制状态，而非OOP的类实例
+> 2. **混合设计**：底层使用ECS存储和更新，上层通过`GameplayCueUnit`和`GameplayCueBase`提供OOP接口
+> 3. **独立系统**：Cue系统可以独立于GAS使用，不强制依赖GameplayEffect或Ability
+> 4. **标签过滤**：通过RequiredTags和ImmunityTags实现条件播放 
+> 5. **生命周期回调**：提供完整的生命周期方法（OnAdd、OnActivate、OnTick、OnDeactivate、OnRemove、OnDestroy）
+
+> 所有Cue相关的操作都应该使用生成的`XCue`常量，例如`XCue.CUE_CueLog`，配合`GameplayCueUnit`或`CueHelper`进行创建和管理。
+
+
 ## 4.调试工具 监测台GASWatcher
 ![gas_watcher.png](Wiki%2Fgas_watcher.png)
 
