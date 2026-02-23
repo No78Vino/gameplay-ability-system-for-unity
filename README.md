@@ -1916,7 +1916,7 @@ graph TB
 ---
 
 #### 2.8.b.1 AbilityTask
-AbilityTask 是**可复用的行为单元**,用于实现技能的具体逻辑。每个 Task 占据时间轴上的一个时间段(StartTime 到 EndTime),并在播放过程中接收生命周期回调。
+AbilityTask 是**可复用的行为单元**,用于实现技能的具体逻辑。每个 Task 占据一个时间段(StartTime 到 EndTime),并在播放过程中接收生命周期回调。
 
 > AbilityTask在TimelineAbility 中应用最广泛，整个TimelineAbility的实现都是基于它。
 
