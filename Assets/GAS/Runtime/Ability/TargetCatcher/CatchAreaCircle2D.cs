@@ -10,7 +10,7 @@ namespace GAS.Runtime
         public Vector2 offset;
         public EffectCenterType centerType;
 
-        public void Init(AbilitySystemCellMono owner, LayerMask tCheckLayer, Vector2 offset, float radius)
+        public void Init(AbilitySystemComponent owner, LayerMask tCheckLayer, Vector2 offset, float radius)
         {
             base.Init(owner, tCheckLayer);
             this.offset = offset;
@@ -18,7 +18,7 @@ namespace GAS.Runtime
         }
 
         private static readonly Collider2D[] Collider2Ds = new Collider2D[32];
-        protected override void CatchTargetsNonAlloc(AbilitySystemCellMono mainTarget, List<AbilitySystemCellMono> results)
+        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
         {
             int count = centerType switch
             {
@@ -31,7 +31,7 @@ namespace GAS.Runtime
 
             for (var i = 0; i < count; ++i)
             {
-                var targetUnit = Collider2Ds[i].GetComponent<AbilitySystemCellMono>();
+                var targetUnit = Collider2Ds[i].GetComponent<AbilitySystemComponent>();
                 if (targetUnit != null)
                 {
                     results.Add(targetUnit);

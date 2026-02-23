@@ -15,7 +15,7 @@ namespace DemoForESC._Script
     {
         protected XParamMove _cacheParamMove = new XParamMove();
 
-        public AbilitySystemCellMono AbilitySystemCellMono { get; private set; }
+        public AbilitySystemComponent AbilitySystemComponent { get; private set; }
 
         [ShowInInspector]
         [LabelText("ASC预设")]
@@ -24,9 +24,9 @@ namespace DemoForESC._Script
         
         protected virtual void Awake()
         {
-            AbilitySystemCellMono = transform.GetOrAddComponent<AbilitySystemCellMono>();
-            AbilitySystemCellMono.Init(XLuban.GetAscConfig(_ascPresetId));
-            var abilityLogic = AbilitySystemCellMono.Cell.GetAbilityLogic(XAbility.ABILITY_move);
+            AbilitySystemComponent = transform.GetOrAddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.Init(XLuban.GetAscConfig(_ascPresetId));
+            var abilityLogic = AbilitySystemComponent.Cell.GetAbilityLogic(XAbility.ABILITY_move);
             ((ALMove)abilityLogic.Logic).SetUnit(this);
         }
         
@@ -34,36 +34,36 @@ namespace DemoForESC._Script
         {
             GravityForCharacterController.Instance.Register(GetComponent<CharacterController>());
             // 血量，蓝量，耐力最大值钳制回调
-            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Hp,OnHpChangeBefore);
-            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Mp,OnMpChangeBefore);
-            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeBefore);
-            GASEventCenter.RegisterOnAttrCurrentValueChangeAfter(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeAfter);
+            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Hp,OnHpChangeBefore);
+            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Mp,OnMpChangeBefore);
+            GASEventCenter.SetOnAttrBaseValueChangeBefore(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeBefore);
+            GASEventCenter.RegisterOnAttrCurrentValueChangeAfter(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeAfter);
         }
         
         protected virtual void OnDisable()
         {
             GravityForCharacterController.Instance.Unregister(GetComponent<CharacterController>());
             // 血量，蓝量，耐力最大值钳制回调
-            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Hp);
-            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Mp);
-            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp);
-            GASEventCenter.UnRegisterOnAttrCurrentValueChangeAfter(AbilitySystemCellMono.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeAfter);
+            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Hp);
+            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Mp);
+            GASEventCenter.ClearOnAttrBaseValueChangeBefore(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Sp);
+            GASEventCenter.UnRegisterOnAttrCurrentValueChangeAfter(AbilitySystemComponent.Cell,XAttrSet.FightUnit,XAttribute.Sp,OnSpChangeAfter);
         }
         
         public virtual void Move(Vector3 direction)
         {
-            if(!AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_move))
-                AbilitySystemCellMono.TryActivateAbility(XAbility.ABILITY_move,_cacheParamMove);
+            if(!AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_move))
+                AbilitySystemComponent.TryActivateAbility(XAbility.ABILITY_move,_cacheParamMove);
             
             var viewPointForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
             _cacheParamMove.SetDirection(direction,viewPointForward);
-            AbilitySystemCellMono.Cell.SetAbilityParam(XAbility.ABILITY_move,_cacheParamMove);
+            AbilitySystemComponent.Cell.SetAbilityParam(XAbility.ABILITY_move,_cacheParamMove);
         }
         
         public virtual void StopMove()
         {
-            if(AbilitySystemCellMono.Cell.IsAbilityActive(XAbility.ABILITY_move)) 
-                AbilitySystemCellMono.TryEndAbility(XAbility.ABILITY_move);
+            if(AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_move)) 
+                AbilitySystemComponent.TryEndAbility(XAbility.ABILITY_move);
         }
         
         public virtual void Jump()
@@ -73,35 +73,35 @@ namespace DemoForESC._Script
         
         public virtual void Attack()
         {
-            AbilitySystemCellMono.Cell.TryActivateAbility(XAbility.ABILITY_Attack);
+            AbilitySystemComponent.Cell.TryActivateAbility(XAbility.ABILITY_Attack);
         }
 
         public bool IsMoving()
         {
             var tagMoving = 1; //GTagLib.Event_Moving.HashCode
-            return AbilitySystemCellMono.Cell.HasTag(tagMoving);
+            return AbilitySystemComponent.Cell.HasTag(tagMoving);
         }
 
         #region Attributes
 
         public float GetSpeed()
         {
-            return AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit ,XAttribute.Spd);
+            return AbilitySystemComponent.GetAttrCurrentValue(XAttrSet.FightUnit ,XAttribute.Spd);
         }
 
         private float OnHpChangeBefore(float newHp)
         {
-            var hpMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.HpMax);
+            var hpMax = AbilitySystemComponent.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.HpMax);
             return math.min(newHp, hpMax);
         }
         private float OnMpChangeBefore(float newMp)
         {
-            var mpMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.MpMax);
+            var mpMax = AbilitySystemComponent.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.MpMax);
             return math.min(newMp, mpMax);
         }
         private float OnSpChangeBefore(float newSp)
         {
-            var spMax = AbilitySystemCellMono.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.SpMax);
+            var spMax = AbilitySystemComponent.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.SpMax);
             return math.min(newSp, spMax);
         }
         

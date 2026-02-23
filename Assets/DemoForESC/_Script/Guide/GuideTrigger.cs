@@ -18,7 +18,7 @@ public class GuideTrigger : MonoBehaviour
                 EventCenter.Trigger(EventName);
                 break;
             case "GuideRun":
-                if (DemoPlayer.Player().AbilitySystemCellMono.HasTag(XTag.State_Buff_SpeedUp))
+                if (DemoPlayer.Player().AbilitySystemComponent.HasTag(XTag.State_Buff_SpeedUp))
                 {
                     EventCenter.Trigger(EventName);
                 }

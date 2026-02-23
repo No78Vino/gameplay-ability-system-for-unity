@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class AbilitySystemCellMono : MonoBehaviour
+    public class AbilitySystemComponent : MonoBehaviour
     {
         private AbilitySystemCell _abilitySystemCell;
 

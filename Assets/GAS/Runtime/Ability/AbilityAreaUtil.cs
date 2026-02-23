@@ -13,7 +13,7 @@ namespace GAS.Runtime
     public static class AbilityAreaUtil
     {
         [Obsolete("请使用OverlapBox2DNonAlloc方法来避免产生垃圾收集（GC）。")]
-        public static Collider2D[] OverlapBox2D(this AbilitySystemCellMono asc, Vector2 offset, Vector2 size,
+        public static Collider2D[] OverlapBox2D(this AbilitySystemComponent asc, Vector2 offset, Vector2 size,
             float angle, int layerMask, Transform relativeTransform = null)
         {
             relativeTransform ??= asc.transform;
@@ -25,7 +25,7 @@ namespace GAS.Runtime
             return Physics2D.OverlapBoxAll(center, size, angle, layerMask);
         }
 
-        public static int OverlapBox2DNonAlloc(this AbilitySystemCellMono asc, Vector2 offset, Vector2 size,
+        public static int OverlapBox2DNonAlloc(this AbilitySystemComponent asc, Vector2 offset, Vector2 size,
             float angle, Collider2D[] results, int layerMask, Transform relativeTransform = null)
         {
             relativeTransform ??= asc.transform;
@@ -52,7 +52,7 @@ namespace GAS.Runtime
         // }
 
         [Obsolete("请使用OverlapCircle2DNonAlloc方法来避免产生垃圾收集（GC）。")]
-        public static Collider2D[] OverlapCircle2D(this AbilitySystemCellMono asc, Vector2 offset, float radius,
+        public static Collider2D[] OverlapCircle2D(this AbilitySystemComponent asc, Vector2 offset, float radius,
             int layerMask, Transform relativeTransform = null)
         {
             relativeTransform ??= asc.transform;
@@ -63,7 +63,7 @@ namespace GAS.Runtime
             return Physics2D.OverlapCircleAll(center, radius, layerMask);
         }
 
-        public static int OverlapCircle2DNonAlloc(this AbilitySystemCellMono asc, Vector2 offset, float radius,
+        public static int OverlapCircle2DNonAlloc(this AbilitySystemComponent asc, Vector2 offset, float radius,
             Collider2D[] results, int layerMask, Transform relativeTransform = null)
         {
             relativeTransform ??= asc.transform;

@@ -14,12 +14,12 @@ namespace DemoForESC._Script.UI.ViewModel
         public ObservableVariable<float> Mp = new();
         public ObservableVariable<float> Sp = new();
 
-        private AbilitySystemCellMono PlayerAsc
+        private AbilitySystemComponent PlayerAsc
         {
             get
             {
                 var player = DemoPlayer.Player();
-                var asc = player.AbilitySystemCellMono;
+                var asc = player.AbilitySystemComponent;
                 return asc;
             }
         }

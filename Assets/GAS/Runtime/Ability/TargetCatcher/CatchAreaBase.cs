@@ -8,7 +8,7 @@ namespace GAS.Runtime
     {
         public LayerMask checkLayer;
 
-        public void Init(AbilitySystemCellMono owner, LayerMask checkLayer) 
+        public void Init(AbilitySystemComponent owner, LayerMask checkLayer) 
         {
             base.Init(owner);
             this.checkLayer = checkLayer;
