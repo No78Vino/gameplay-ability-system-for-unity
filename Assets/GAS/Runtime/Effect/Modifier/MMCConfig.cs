@@ -5,7 +5,7 @@ namespace GAS.Runtime
     public class MMCConfig
     {
         public Type MmcType;
-        public IMmcParameter MmcParameter;
+        public XParam MmcParameter;
         
         public ModMagnitudeCalculationBase CreateMmc()
         {

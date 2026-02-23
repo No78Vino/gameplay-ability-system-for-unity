@@ -3276,6 +3276,181 @@ Cue系统由四个ECS系统驱动，它们在`SysGrpDisplay`系统组中按顺�
 > 所有Cue相关的操作都应该使用生成的`XCue`常量，例如`XCue.CUE_CueLog`，配合`GameplayCueUnit`或`CueHelper`进行创建和管理。
 
 
+
+### 3.9 外围Helper 工具类
+#### 3.9.1 EntityHelper
+EntityHelper是ECS Entity的辅助操作类，提供Entity和Component的便捷操作接口。
+- `static EntityCommandBuffer RegisterEntityCommandBuffer(Allocator allocator = Allocator.Temp)`
+    - 注册EntityCommandBuffer
+    - allocator：内存分配器类型（默认为Temp）
+    - 返回值：注册的ECB实例
+    - 该方法会设置内部标志`_usingEcb = true`
+- `static void UnregisterEntityCommandBuffer()`
+    - 注销EntityCommandBuffer
+    - 清空ECB引用并重置使用标志
+- `static T GetComponentData<T>(Entity entity) where T : unmanaged, IComponentData`
+    - 获取非托管组件 
+    - entity：目标Entity
+    - 返回值：组件数据
+- `static T GetManagedComponentData<T>(Entity entity) where T : class, IComponentData, new()`
+    - 获取托管组件
+    - entity：目标Entity
+    - 返回值：托管组件数据
+- `static DynamicBuffer<T> GetBuffer<T>(Entity entity) where T : unmanaged, IBufferElementData`
+    - 获取Buffer组件
+    - entity：目标Entity
+    - 返回值：Buffer实例
+- `static void AddBuffer<T>(Entity entity) where T : unmanaged, IBufferElementData`
+    - 添加Buffer组件
+    - entity：目标Entity
+- `static bool HasComponent<T>(Entity entity) where T : unmanaged, IComponentData`
+    - 检查是否有非托管组件
+    - entity：目标Entity
+    - 返回值：是否存在该组件
+- `static void AddComponent<T>(Entity entity) where T : unmanaged, IComponentData`
+    - 添加非托管组件
+    - entity：目标Entity
+    - 如果正在使用ECB，则通过ECB添加；否则直接通过EntityManager添加
+- `static void AddManagedComponent<T>(Entity entity) where T : class, IComponentData`
+    - 添加托管组件
+    - entity：目标Entity
+    - 如果正在使用ECB，则通过ECB添加；否则直接通过EntityManager添加
+
+#### 3.9.2 ASCHelper
+ASCHelper是AbilitySystemCell的辅助工具类，提供Tag查询和动态Tag管理功能。
+
+- `static bool HasAllTags(Entity asc, NativeArray<int> tags)`
+    - 判断ASC是否持有所有指定Tag
+    - asc：ASC的Entity
+    - tags：Tag ID数组
+    - 返回值：是否持有所有Tag
+- `static bool HasAnyTags(Entity asc, NativeArray<int> tags)`
+    - 判断ASC是否持有任意指定Tag
+    - asc：ASC的Entity
+    - tags：Tag ID数组
+    - 返回值：是否持有任意Tag
+- `static void TryAddDynamicAddedTags(Entity asc, Entity source, int[] tags)`
+    - 向ASC添加动态Tag
+    - asc：目标ASC的Entity
+    - source：Tag来源Entity
+    - tags：Tag ID数组
+- `static void RestoreDynamicTags(Entity ability)`
+    - 恢复Ability的动态Tag
+    - ability：Ability的Entity
+    - 该方法会移除由该Ability添加的所有临时Tag
+
+### 3.10 事件系统
+
+#### 3.10.1 GASEventCenter
+GASEventCenter是GAS的事件中心，提供属性变化、GE容器变化等事件的注册和触发功能。
+
+**属性事件：**
+
+- `static void SetOnAttrBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode, Func<float, float> action)`
+    - 设置属性基础值变化前的回调
+    - entity：ASC的Entity
+    - attrSetCode：AttributeSet的配置ID
+    - attrCode：Attribute的配置ID
+    - action：回调函数，接收旧值返回新值
+- `static void ClearOnAttrBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode)`
+    - 清除属性基础值变化前的回调 
+    - entity：ASC的Entity
+    - attrSetCode：AttributeSet的配置ID
+    - attrCode：Attribute的配置ID
+- `static float InvokeOnBaseValueChangeBefore(Entity entity, int attrSetCode, int attrCode, float value)`
+    - 触发属性基础值变化前的回调 
+    - entity：ASC的Entity
+    - attrSetCode：AttributeSet的配置ID
+    - attrCode：Attribute的配置ID
+    - value：原始值
+    - 返回值：回调处理后的值
+- `static void RegisterOnBaseValueChangeAfter(Entity entity, int attrSetCode, int attrCode, Action<float, float> action)`
+    - 注册属性基础值变化后的回调
+    - entity：ASC的Entity
+    - attrSetCode：AttributeSet的配置ID
+    - attrCode：Attribute的配置ID
+    - action：回调函数，接收旧值和新值
+- `static void UnRegisterOnBaseValueChangeAfter(Entity entity, int attrSetCode, int attrCode, Action<float, float> action)`
+    - 注销属性基础值变化后的回调
+    - entity：ASC的Entity
+    - attrSetCode：AttributeSet的配置ID
+    - attrCode：Attribute的配置ID
+    - action：要移除的回调函数
+
+### 3.11 XParam 参数系统
+XParam是所有参数类的抽象基类，用于在Ability、GameplayEffect、Cue等模块间传递配置数据。
+
+#### 3.11.1 XParam基类
+- `abstract List<object> EncodeExcelData()`
+    - 将参数编码为Excel数据
+    - 返回值：对象列表，用于写入Excel
+- `abstract void DecodeExcelData(List<object> data)`
+    - 从Excel数据解码参数
+    - data：从Excel读取的对象列表
+
+#### 3.11.2 常用XParam子类
+**XParamTimeline**：Timeline Ability的参数类
+- 用途：存储Timeline的ID，用于加载完整的Timeline配置
+- 主要属性：`int TimelineID`
+
+**XParamCue**：GameplayCue的参数类
+- 用途：存储Cue的类型、参数、Tag过滤配置
+- 主要属性：`string CueType`、`XParam Param`、`List<int> RequiredTags`、`List<int> ImmunityTags`
+
+**XParamEffectIDs**：Effect ID列表参数类
+- 用途：存储多个GameplayEffect的ID
+- 主要属性：`List<int> IDs`
+
+**XParamString**：字符串参数类
+- 用途：存储简单的字符串数据
+- 主要属性：`string Value`
+
+**XParamNone**：空参数类
+- 用途：用于不需要参数的Ability或Task
+
+### 3.12 Timeline Ability 系统
+Timeline Ability系统是EX-GAS 2.0中用于实现复杂时序技能的核心模块。详细内容请参考Wiki页面。
+
+**核心类：**
+- `ALTimeline`：Timeline Ability的逻辑类 
+    - 继承自`AbilityLogicBase<XParamALTimelineID>`
+    - 持有`ALTimelinePlayer`实例
+    - 提供`SetAbilityTarget(Entity mainTarget)`方法设置目标
+- `ALTimelinePlayer`：Timeline播放器
+    - 负责帧驱动的Timeline播放
+    - 管理Track和TaskClip的执行
+- `AbilityTaskBase`：Ability Task的基类
+    - 提供`Begin()`、`Tick()`、`Finish()`生命周期方法
+    - 所有Timeline中的Task都继承自此类
+
+**内置Task类型：**
+- `TaskPlayCuePreset`：播放多个Cue
+- `TaskDebug`：调试日志
+- `TaskDoCost`：执行消耗
+- `TaskDoNothing`：空任务
+- `TaskPlayCue`：播放单个Cue
+
+### 3.13 全局管理
+#### 3.13.1 GlobalTimer
+GlobalTimer是全局逻辑帧计时器，提供统一的逻辑帧时间。
+- `int Frame`
+    - 当前逻辑帧数
+- `int Turn`
+    - 当前回合数（用于回合制游戏）
+- `float Time`
+    - 当前逻辑时间（秒）
+
+**使用方式：**
+```csharp
+var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
+int currentFrame = globalTimer.ValueRO.Frame;
+```
+
+#### 3.13.2 TurnController
+TurnController是回合控制器，用于管理回合制逻辑。
+- 用途：在回合制游戏中管理回合流转
+- 访问方式：`GASManager.TurnController`
+
 ## 4.调试工具 监测台GASWatcher
 ![gas_watcher.png](Wiki%2Fgas_watcher.png)
 

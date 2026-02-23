@@ -393,7 +393,7 @@ namespace GAS.Runtime
             var mmcLogic = data.MmcLogic;
             var mmcLogicName = data.MmcLogic.GetType().Name;
             var mmcLogicParamType = MmcHelper.GetMmcParamTypeByMmcType(mmcLogicName);
-            IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;
+            XParam mmcParam = Activator.CreateInstance(mmcLogicParamType) as XParam;
             if (mmcParam != null)
             {
                 switch (mmcLogic)

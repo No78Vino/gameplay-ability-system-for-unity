@@ -285,7 +285,7 @@ namespace GAS.Editor
         public string type;
 
         [BoxGroup("编辑配置/Mmc逻辑")] [HideLabel] [ShowInInspector] [HideReferenceObjectPicker]
-        public IMmcParameter mmcParam;
+        public XParam mmcParam;
 
         #endregion
     }

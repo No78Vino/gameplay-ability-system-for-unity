@@ -44,15 +44,15 @@ namespace GAS.Runtime
 
         public abstract float CalculateMagnitude(Entity geEntity, float magnitude);
 
-        public abstract void InitParameters(IMmcParameter parameter);
+        public abstract void InitParameters(XParam parameter);
     }
     
     public abstract class ModMagnitudeCalculationBase<T> : ModMagnitudeCalculationBase
-        where T : IMmcParameter
+        where T : XParam
     {
         public T Parameter { get; private set; }
         
-        public override void InitParameters(IMmcParameter parameter)
+        public override void InitParameters(XParam parameter)
         {
             if (parameter is T t)
                 Parameter = t;

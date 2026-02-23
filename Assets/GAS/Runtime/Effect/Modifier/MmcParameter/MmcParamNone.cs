@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GAS.Runtime
 {
-    public class MmcParamNone : IMmcParameter
+    public class MmcParamNone : XParam
     {
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)

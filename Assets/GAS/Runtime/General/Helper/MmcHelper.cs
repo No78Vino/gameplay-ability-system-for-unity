@@ -7,13 +7,13 @@ namespace GAS.Runtime
 {
     public static class MmcHelper
     {
-        public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, IMmcParameter param)
+        public static ModMagnitudeCalculationBase TryCreateMmc(string mmcType, XParam param)
         {
             var type = GetMmcType(mmcType);
             return type != null ? TryCreateMmc(type, param) : null;
         }
 
-        public static ModMagnitudeCalculationBase TryCreateMmc(Type type, IMmcParameter param)
+        public static ModMagnitudeCalculationBase TryCreateMmc(Type type, XParam param)
         {
             try
             {

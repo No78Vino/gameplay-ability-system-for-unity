@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GAS.Runtime
 {
     [Serializable]
-    public class MmcParaFloatScale : IMmcParameter
+    public class MmcParaFloatScale : XParam
     {
         public float k;
         public float b;

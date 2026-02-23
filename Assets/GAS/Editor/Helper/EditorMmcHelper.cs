@@ -60,12 +60,12 @@ namespace GAS.Editor
             return _cachedMmcToParamTypeMap;
         }
         
-        public static IMmcParameter CreateMmcParameter(string type, List<object> paramData = null)
+        public static XParam CreateMmcParameter(string type, List<object> paramData = null)
         {
             var map = MmcToMmcParamTypeMap();
             if (!map.TryGetValue(type, out var mmcParamConfigType))
-                throw new KeyNotFoundException($"未找到类型为 {type} 的 IMmcParameter 类型。");
-            var mmcParamEditor = (IMmcParameter)Activator.CreateInstance(mmcParamConfigType);
+                throw new KeyNotFoundException($"未找到类型为 {type} 的 XParam 类型。");
+            var mmcParamEditor = (XParam)Activator.CreateInstance(mmcParamConfigType);
             if (paramData != null) mmcParamEditor.DecodeExcelData(paramData);
             return mmcParamEditor;
         }
