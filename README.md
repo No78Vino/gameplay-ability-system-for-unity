@@ -2062,6 +2062,71 @@ public override void InitParameters(XParam parameter)
 
 ![timeline_ability_editor.png](Wiki%2Ftimeline_ability_editor.png)
 
+**打开方式**: Unity 菜单栏 → **EXTool → EX-GAS → 时间轴技能编辑器** 
+
+编辑器采用 UIToolkit 实现 ,主要分为以下区域:
+```mermaid
+graph TB
+    Window[TimelineAbility 编辑器]
+    
+    Window --> AssetBar[顶部资产栏<br/>Ability 选择/保存]
+    Window --> TopBar[工具栏<br/>预览对象/场景切换]
+    Window --> LeftPanel[左侧控制面板<br/>播放控制/轨道菜单]
+    Window --> RightPanel[右侧时间轴区域<br/>帧标尺/轨道列表]
+    
+    LeftPanel --> Controller[播放控制器<br/>▶ < > 按钮]
+    LeftPanel --> TrackMenu[轨道菜单<br/>添加/删除轨道]
+    
+    RightPanel --> TimerShaft[帧标尺<br/>时间刻度显示]
+    RightPanel --> TrackView[轨道视图<br/>Track + TaskClip]
+```
+- 1.顶部资产栏
+
+    | 控件 | 功能 |
+    |------|------|
+    | **保存按钮** | 保存当前编辑的 Timeline 到 Excel |
+    | **当前ID下拉框** | 选择要编辑的 TimelineAbility |
+    | **技能名输入框** | 编辑 Ability 名称 |
+    | **需要手动结束** | 控制技能是否自动结束  |
+- 2.工具栏
+
+  | 按钮 | 功能 |
+  |------|------|
+  | **预览实例** | 拖入场景 GameObject 用于预览技能效果|
+  | **预览场景** | 创建临时空场景用于预览|
+  | **返回原场景** | 返回编辑前的场景  |
+  | **子面板** | 显示右侧 Inspector 面板|
+- 3.播放控制器
+
+    | 控件 | 功能 |
+    |------|------|
+    | **< 按钮** | 上一帧 |
+    | **▶ 按钮** | 播放/暂停预览|
+    | **> 按钮** | 下一帧 |
+    | **当前帧/最大帧** | 显示和编辑帧数 |
+
+    **播放逻辑**: 基于 `DateTime` 计算帧索引,支持实时预览 
+- 4.轨道管理 
+  - **添加轨道**: 右键轨道菜单区域 → "添加轨道" 
+  - **删除轨道**: 右键轨道 → "删除轨道" 
+  - **轨道属性**: 点击轨道显示在 Inspector 中编辑名称
+- 5.任务片段编辑
+  - **添加任务**: 右键轨道内容区 → "添加任务"
+  - **编辑任务**: 点击任务片段,在 Inspector 中编辑 :
+    - 任务名称
+    - 起始帧/结束帧
+    - Task 类型(下拉选择)
+    - Task 参数(动态显示)
+  - **拖拽调整**:
+    - 拖动片段主体移动位置
+    - 拖动左/右边缘调整起止帧
+
+- 6.帧标尺
+  - 显示帧刻度和帧号 
+  - 鼠标滚轮缩放时间轴 
+  - 显示当前播放帧的选择线
+  - 显示拖拽预览的虚线
+
 
 #### 2.8.c Granted Ability From GameplayEffect 来自游戏效果授予的能力
 能力不仅仅可以由AbilitySystemComponent直接授予，还可以通过GE来授予,甚至是GE来全权控制。
