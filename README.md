@@ -2181,10 +2181,10 @@ GrantedAbility有5个参数：
 Granted Ability只是EX-GAS给出的一个现成设计方案，依然可以通过各个事件监听/回调，来实现同样的效果。
 
 ---
-### 2.9 AbilitySystemCell
+### 2.9 AbilitySystemComponent/AbilitySystemCell
 > AbilitySystemComponent是EX-GAS的核心之一，它是GAS的基本运行单位。
-> 1.0版本中，AbilitySystemComponent是运行单位。2.0版本替换为了AbilitySystemCell，原本的AbilitySystemComponent实则变为了AbilitySystemCellMono。
-> 在2.0版本中，AbilitySystemCell是运行时的数据基础，而AbilitySystemCellMono是运行依托的实例，类似于View和Model的关系。
+> 1.0版本中，AbilitySystemComponent是运行单位。2.0版本替换为了AbilitySystemCell。
+> 在2.0版本中，AbilitySystemCell是运行时的数据基础，而AbilitySystemComponent是运行依托的实例，类似于View和Model的关系。
 
 ASC(之后都使用缩写指代AbilitySystemCell),持有Tag，Ability，AttributeSet，GameplayEffect等数据。
 其主要职责如下：
@@ -2200,9 +2200,100 @@ GAS本身是被动的，而让推动和改变GAS的是ASC。换言之，Runtime�
 增删管理ASC，调用ASC的Ability执行，以及ASC的体系外Tag，Effect管理才是Runtime下开发者的主要工作。
 这之外的GAS配置和拓展，应该由策划承担大部分工作。（但实际上对于中小型团队，程序开发人员还是在做GAS配置的维护工作。）
 
+#### 2.9.1 ASC 预设数据结构
+ASC 预设包含以下核心配置字段:
+
+| 字段名 | 类型 | 功能说明 |
+|-------|------|---------|
+| `ID` | `int` | ASC 预设的唯一标识符 |
+| `Name` | `string` | 预设名称,用于编辑器显示 |
+| `Desc` | `string` | 预设描述信息 |
+| `Level` | `int` | 初始等级 |
+| `Tag` | `int[]` | 初始固有标签列表 |
+| `AttrSet` | `int[]` | 初始属性集 ID 列表 |
+| `Ability` | `int[]` | 初始技能 ID 列表 |
+
+#### 2.9.2 初始化流程
+- 配置加载阶段。ASC 预设的初始化从配置加载开始,通过 `XLuban.GetAscConfig(int id)` 方法实现 :
+    ```mermaid
+    sequenceDiagram
+        participant Game as 游戏代码
+        participant XLuban as XLuban.GetAscConfig()
+        participant Tables as cfg.Tables.Tbasc
+        participant XAttrSet as XAttrSet.AttributeSetMap
+        participant AbilityConfig as XLuban.GetAbilityConfig()
+        
+        Game->>XLuban: GetAscConfig(id)
+        XLuban->>Tables: Get(id)
+        Tables-->>XLuban: cfg.exgas.asc 数据
+        
+        alt 数据不存在
+            XLuban-->>Game: 返回空配置
+        end
+        
+        loop 遍历 Ability IDs
+            XLuban->>AbilityConfig: GetAbilityConfig(abilityId)
+            AbilityConfig-->>XLuban: AbilityConfig 对象
+        end
+        
+        loop 遍历 AttrSet IDs
+            XLuban->>XAttrSet: AttributeSetMap[attrSetId]
+            XAttrSet-->>XLuban: AttrSetConfig 对象
+        end
+        
+        XLuban->>XLuban: 构造 AbilitySystemCellConfig
+        XLuban-->>Game: 返回完整配置对象
+    ```
+    **关键步骤**:
+     1. **查询配置表**: 从 `Tables.Tbasc.Get(id)` 获取原始配置数据
+     2. **错误处理**: 如果 ID 不存在,返回空配置并输出错误日志
+     3. **加载 Ability 配置**: 遍历 `data.Ability` 数组,递归调用 `GetAbilityConfig()` 加载每个技能的完整配置
+     4. **加载 AttributeSet 配置**: 从 `XAttrSet.AttributeSetMap` 中查找对应的属性集配置
+     5. **构造配置对象**: 创建 `AbilitySystemCellConfig` 对象,包含 Tag 数组、属性集数组、技能数组和等级
+
+- 运行时应用阶段。加载配置后,需要将其应用到 ASC 实例。
+    ```csharp
+    var ascConfig = XLuban.GetAscConfig(presetId);
+    asc.Init(
+        ascConfig.Tags,           // 固有 Tag
+        ascConfig.AttributeSets,  // 属性集
+        ascConfig.Abilities,      // 初始技能
+        ascConfig.Level           // 等级
+    );
+    ```
+#### 2.9.3 ASC预设 完整工作流
+```mermaid
+flowchart TB
+    subgraph 配置阶段
+        Excel["编辑 #exgas.asc.xlsx"]
+        Luban["运行 Luban 导出"]
+        JSON["生成 exgas_tbasc.json"]
+    end
+    
+    subgraph 运行时阶段
+        Init["游戏启动<br/>XLauncher.Launch()"]
+        LoadTables["XLuban.Init()<br/>加载所有配置表"]
+        GetConfig["调用 GetAscConfig(id)"]
+        ApplyConfig["应用配置到 ASC 实例"]
+    end
+    
+    Excel --> Luban
+    Luban --> JSON
+    JSON --> Init
+    Init --> LoadTables
+    LoadTables --> GetConfig
+    GetConfig --> ApplyConfig
+```
+> 注意事项：
+> - ASC 预设的配置数据存储在 `#exgas.asc.xlsx` 中,通过 Luban 导出为 `exgas_tbasc.json`
+> - `GetAscConfig()` 方法会递归加载所有关联的 Ability 和 AttributeSet 配置,确保数据完整性
+> - Tag、AttrSet、Ability 字段在 Excel 中使用分号 `;` 分隔多个 ID
+
 #### 2.9.a AbilitySystemComponent Preset
 AbilitySystemComponent Preset是ASC的预设，用于方便初始化ASC的数据。
-![QQ20240315172608.png](Wiki%2FQQ20240315172608.png)
+
+![asc_editor.png](Wiki%2Fasc_editor.png)
+
 ASC预设是为了可视化角色（单位）的参数。
 - 基本信息：ASC的基本信息，仅用于显示，方便配置人员阅读，Runtime不会用到这些参数。
 - 属性集：上文提到过，ASC的属性集设计建议只有一个属性集。不建议多个。
