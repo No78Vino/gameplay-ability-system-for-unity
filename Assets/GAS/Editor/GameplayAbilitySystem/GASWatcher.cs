@@ -31,7 +31,7 @@ namespace GAS.Editor
         [ShowInInspector]
         [HideLabel]
         public string Tip =
-            "<b><color=#ff6988>EX-GAS检测器仅在游戏运行时生效。</color></b>";
+            "<b><color=#ff6988>EX-GAS监测台仅在游戏运行时生效。</color></b>";
 
         [VerticalGroup("ASC")]
         [HorizontalGroup("ASC/Top")]
