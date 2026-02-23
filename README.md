@@ -3275,7 +3275,168 @@ Cue系统由四个ECS系统驱动，它们在`SysGrpDisplay`系统组中按顺�
 
 > 所有Cue相关的操作都应该使用生成的`XCue`常量，例如`XCue.CUE_CueLog`，配合`GameplayCueUnit`或`CueHelper`进行创建和管理。
 
+### 3.8 ModifierMagnitudeCalculation (MMC)
+#### 3.8.1 核心概念
+MMC是GameplayEffect中属性修改的计算单元，负责将基础模值（Magnitude）转换为最终修改值。
+- **核心作用**：在GAS体系内，只有GameplayEffect能修改Attribute数值，而GameplayEffect正是通过MMC来实现数值计算的。
+- **关键特性**：
+  - **与Attribute集成**：计算时可读取角色属性值，实现基于属性的动态计算
+  - **运行时动态计算**：根据游戏状态实时调整效果强度
+  - **高度复用**：同一MMC可被多个GameplayEffect引用
+  - **自定义扩展**：支持继承基类实现复杂计算逻辑
 
+#### 3.8.2 ModMagnitudeCalculationBase
+ModMagnitudeCalculationBase是所有MMC的抽象基类。
+- `abstract float CalculateMagnitude(Entity geEntity, float magnitude)`
+    - 计算修改器的幅度值方法，这是MMC的核心 
+    - geEntity：GameplayEffect的Entity
+    - magnitude：基础模值
+    - 返回值：计算后的最终值
+- `abstract void InitParameters(IMmcParameter parameter)`
+    - 初始化MMC参数 
+    - parameter：MMC参数实例
+
+**泛型基类**：
+```csharp
+public abstract class ModMagnitudeCalculationBase<T> : ModMagnitudeCalculationBase
+    where T : IMmcParameter
+{
+    public T Parameter { get; private set; }
+}
+```
+
+#### 3.8.3 内置MMC类型（W.I.P）
+
+##### 3.8.3.1 MMCScalableFloat
+线性缩放计算MMC，计算公式：`最终值 = Magnitude × k + b`
+- `float k`
+    - 缩放系数（默认1.0）
+- `float b`
+    - 偏移量（默认0）
+- `float CalculateMagnitude(Entity specEntity, float magnitude)`
+    - 计算公式：`magnitude * k + b` 
+
+**参数类型**：`MmcParaFloatScale`
+- `float k`：缩放系数
+- `float b`：偏移量
+- `void SetK(float k)`：设置k值
+- `void SetB(float b)`：设置b值
+
+**应用场景**：
+- 技能伤害随等级提升：`伤害 = 基础伤害 × 等级系数 + 固定加成`
+- 治疗量缩放：`治疗量 = 基础治疗 × 1.5 + 10`
+- 护盾值计算：`护盾 = 基础护盾 × 2.0 + 0`
+
+##### 3.8.3.2 MMCNone
+直接使用模值，不进行任何计算。
+- `float CalculateMagnitude(Entity geEntity, float magnitude)`
+    - 直接返回magnitude 
+
+**参数类型**：`MmcParamNone`
+- 无参数
+
+**应用场景**：
+- 固定数值的伤害/治疗
+- 不需要动态计算的简单效果
+
+#### 3.8.4 MMCConfig
+MMCConfig是MMC的配置类，用于存储MMC类型和参数。
+- `Type MmcType`
+    - MMC的类型
+- `IMmcParameter MmcParameter`
+    - MMC的参数实例
+- `ModMagnitudeCalculationBase CreateMmc()`
+    - 创建MMC实例 
+    - 返回值：MMC实例
+    - 该方法调用`MmcHelper.TryCreateMmc()`创建实例
+
+#### 3.8.5 MmcHelper
+MmcHelper是MMC的辅助工具类，提供MMC的注册、创建和计算功能。
+- `static float Calculate(Entity ge, Modifier mod, float currentValue)`
+    - 计算修改器的最终值 
+    - ge：GameplayEffect的Entity
+    - mod：修改器配置
+    - currentValue：当前属性值
+    - 返回值：计算后的属性值
+    - 该方法会根据修改器的MMC类型和操作类型（Add/Multiply/Override）计算最终值
+- `static ModMagnitudeCalculationBase TryCreateMmc(Type mmcType, IMmcParameter mmcParameter)`
+    - 创建MMC实例 
+    - mmcType：MMC类型
+    - mmcParameter：MMC参数
+    - 返回值：MMC实例
+- `static void RegisterMmc(string sType, Type logicType, Type mmcParamType)`
+    - 注册MMC类型
+    - sType：MMC类型名称
+    - logicType：MMC逻辑类的Type
+    - mmcParamType：MMC参数类的Type
+- `static Type GetMmcParamTypeByMmcType(string mmcTypeName)`
+    - 根据MMC类型名称获取参数类型
+    - mmcTypeName：MMC类型名称
+    - 返回值：参数类型
+
+#### 3.8.6 在GameplayEffect中使用MMC
+MMC在GameplayEffect的Modifier中引用，通过`MCModifiers`组件存储。
+
+**EffectModifier结构**：
+- `int AttrSetCode`：目标AttributeSet的配置ID
+- `int AttrCode`：目标Attribute的配置ID
+- `GEOperation Operation`：操作类型（Add/Multiply/Override）
+- `float Magnitude`：基础模值
+- `ModMagnitudeCalculationBase MMC`：MMC实例
+
+**配置加载流程**：
+1. 从配置表读取`ModifierSetting`数组
+2. 遍历每个设置，调用`MMCConfig.CreateMmc()`创建MMC实例
+3. 构造`EffectModifier`数组
+4. 创建`MCModifiers`组件并添加到GE Entity
+
+#### 3.8.7 配置表结构
+MMC配置存储在`exgas_tbmmc.json`中。
+
+**配置字段**：
+- `int ID`：MMC的唯一ID
+- `string Name`：MMC名称
+- `string Desc`：描述信息
+- `MmcLogic MmcLogic`：MMC逻辑配置（多态类型）
+
+**代码生成**：
+1. 从配置表读取MMC数据
+2. 根据`MmcLogic`类型解析参数
+3. 生成`GetMmcConfig(int id)`方法
+4. 返回`MMCConfig`对象
+
+#### 3.8.8 自定义MMC示例
+
+继承`ModMagnitudeCalculationBase<TParam>`实现自定义MMC：
+
+```csharp
+public class MMCCriticalDamage : ModMagnitudeCalculationBase<MmcParamCritical>
+{
+    public override float CalculateMagnitude(Entity geEntity, float magnitude)
+    {
+        var critRate = Parameter.CritRate;
+        var critDamage = Parameter.CritDamage;
+        
+        if (Random.value < critRate)
+            return magnitude * critDamage;
+        return magnitude;
+    }
+}
+```
+
+**应用场景**：
+- 暴击系统
+- 多属性联合计算
+- 复杂的游戏逻辑（如连击加成、距离衰减等）
+
+
+> EX-GAS 2.0的MMC系统与1.x版本的主要区别：
+> 1. **ECS集成**：MMC实例存储在`MCModifiers`托管组件中，而非ScriptableObject
+> 2. **参数接口化**：所有参数类实现`IMmcParameter`接口，支持Excel数据编解码
+> 3. **配置表驱动**：MMC配置通过Luban从Excel导出为JSON，运行时加载
+> 4. **泛型基类**：使用泛型基类`ModMagnitudeCalculationBase<T>`简化参数访问
+
+> 所有MMC相关的操作都应该通过配置表和代码生成完成，避免手动创建MMC实例。
 
 ### 3.9 外围Helper 工具类
 #### 3.9.1 EntityHelper
