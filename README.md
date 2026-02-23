@@ -2715,8 +2715,8 @@ XAttrSet是AttributeSet的常量库和配置管理类，它是自动生成的代
 
 > 所有Attribute相关的操作都应该使用生成的`XAttribute`和`XAttrSet`常量，避免硬编码数字ID。
 
-### 3.6 GameplayEffect
-#### 3.6.1 GameplayEffectSpec
+### 3.5 GameplayEffect
+#### 3.5.1 GameplayEffectSpec
 GameplayEffectSpec是GameplayEffect的OOP包装类，用于管理GE Entity实例。
 - `Entity Entity { get; set; }`
     - GE对应的ECS Entity实例
@@ -2727,7 +2727,7 @@ GameplayEffectSpec是GameplayEffect的OOP包装类，用于管理GE Entity实例
     - 通过已存在的GE Entity创建Spec包装
     - geEntity：GE的Entity实例
 
-#### 3.6.2 GameplayEffectController
+#### 3.5.2 GameplayEffectController
 GameplayEffectController是GE的控制器类，负责ASC对GE的所有操作.
 - `DynamicBuffer<BGameplayEffect> CurrentGameplayEffects`
     - 获取当前ASC的所有GameplayEffect Buffer
@@ -2742,7 +2742,7 @@ GameplayEffectController是GE的控制器类，负责ASC对GE的所有操作.
 - `void ClearGameplayEffects()`
     - 清空ASC的所有GameplayEffect
 
-#### 3.6.3 GameplayEffectHelper
+#### 3.5.3 GameplayEffectHelper
 GameplayEffectHelper是GE的辅助工具类，提供GE的激活、失活和查询功能。
 - `static DynamicBuffer<BGameplayEffect> GameplayEffectsOf(Entity asc)`
     - 获取指定ASC的GameplayEffect Buffer
@@ -2783,7 +2783,7 @@ GameplayEffectHelper是GE的辅助工具类，提供GE的激活、失活和查�
     - level：GE等级（默认为1）
     - 返回值：实例化的GE Entity
 
-#### 3.6.4 EffectUtil
+#### 3.5.4 EffectUtil
 EffectUtil是GE的工具类，提供GE的创建和应用功能。
 - `static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)`
     - 创建GameplayEffect Entity
@@ -2802,12 +2802,12 @@ EffectUtil是GE的工具类，提供GE的创建和应用功能。
     - 移除GameplayEffect
     - gameplayEffect：GE的Entity
 
-#### 3.6.5 BGameplayEffect
+#### 3.5.5 BGameplayEffect
 BGameplayEffect是ASC的GameplayEffect Buffer组件，用于存储ASC持有的所有GE引用。
 - `Entity GameplayEffect`
     - GE的Entity引用
 
-#### 3.6.6 GameplayEffect组件配置
+#### 3.5.6 GameplayEffect组件配置
 GameplayEffect通过组件化设计实现，所有组件配置通过`XLuban.GetGameplayEffectConfig(int id)`从配置表加载。 
 **主要组件类型**：
 - `ConfAssetTags`：描述性标签
@@ -2821,7 +2821,7 @@ GameplayEffect通过组件化设计实现，所有组件配置通过`XLuban.GetG
 - `MCConfModifiers`：属性修改器配置
 - `ConfCueOnApply/OnTick/OnAdd/OnRemove/OnActivate/OnDeactivate`：各阶段Cue配置
 
-#### 3.6.7 AbilitySystemCell中的GE操作
+#### 3.5.7 AbilitySystemCell中的GE操作
 AbilitySystemCell提供了GE的便捷操作接口：
 - `void ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemCell target)`
     - 对目标ASC施加GE 
@@ -2838,176 +2838,273 @@ AbilitySystemCell提供了GE的便捷操作接口：
 > 3. **系统驱动**：GE的应用、激活、失活等操作由ECS系统`SApplyGameplayEffect`驱动
 > 4. **OOP包装**：通过`GameplayEffectSpec`和`GameplayEffectController`提供OOP风格的接口，隐藏ECS细节
 
-
 ### 3.7 Ability
-#### 3.7.1 AbilityAsset
-AbilityAsset是GAS的游戏能力配置类，是预设用ScriptableObject。他本身是一个抽象基类，所有的AbilityAsset都必须继承自他。
-- `abstract Type AbilityType()`：能力的类型。用于把AbilityAsset和Ability类一一匹配。
-    - 返回值：能力的类型。
-- `string UniqueName`：唯一名称，用于标识该能力。
-- `GameplayEffectAsset Cost`：花费效果，该能力的消耗效果。
-- `GameplayEffectAsset Cooldown`：冷却效果，该能力的冷却效果。如果为空，冷却时间也不会生效。
-- `float CooldownTime`：冷却时间，该能力的冷却时间长度。
-- `GameplayTag[] AssetTag`：资产标签，该能力的标签。
-- `GameplayTag[] CancelAbilityTags`：取消能力标签，用于取消该能力的标签。
-- `GameplayTag[] BlockAbilityTags`：阻止能力标签，用于阻止该能力的标签。
-- `GameplayTag[] ActivationOwnedTag`：激活所需标签，该能力激活所需的标签。
-- `GameplayTag[] ActivationRequiredTags`：激活要求标签，该能力激活所需的标签。
-- `GameplayTag[] ActivationBlockedTags`：激活阻止标签，用于阻止该能力的激活标签。
+#### 3.7.1 AbilitySpec
+AbilitySpec是Ability的OOP包装类，用于管理Ability Entity实例。
+- `Entity AbilityEntity { get; }`
+    - Ability对应的ECS Entity实例 
+- `AbilitySystemCell Owner { get; }`
+    - 获取拥有该Ability的ASC实例
+    - 通过Ability Entity的`CAbilityBaseInfo`组件获取Owner Entity，再转换为AbilitySystemCell
+- `AbilitySpec(Entity abilityEntity)`
+    - 通过Ability Entity创建Spec包装
+    - abilityEntity：Ability的Entity实例
 
-#### 3.7.2 AbstractAbility
-AbstractAbility是GAS的游戏能力数据基类，他本身是一个抽象基类，所有的Ability都必须继承自他。
-- `string Name`：名称，表示能力的名称。
-- `AbilityAsset DataReference`：数据引用，指向与该能力相关联的能力资产。
-- `AbilityTagContainer Tag`：标签，该能力的标签容器。
-- `GameplayEffect Cooldown`：冷却效果，该能力的冷却效果。
-- `float CooldownTime`：冷却时间，该能力的冷却时间长度。
-- `GameplayEffect Cost`：花费效果，该能力的消耗效果。
-- `AbstractAbility(AbilityAsset abilityAsset)`：抽象能力构造函数，初始化抽象能力实例。
-  - `abilityAsset`：能力资产，与该能力相关联的能力资产。
-- `abstract AbilitySpec CreateSpec(AbilitySystemComponent owner)`：创建能力规格的抽象方法，用于生成能力的规格实例。
-  - `owner`：所有者，拥有该能力的实体。
-- `void SetCooldown(GameplayEffect coolDown)`：设置冷却效果的方法。
-  - `coolDown`：冷却效果，要设置的冷却效果。
-- `void SetCost(GameplayEffect cost)`：设置花费效果的方法。
-  - `cost`：花费效果，要设置的花费效果。
-#### 3.7.2.a AbstractAbility<T> :AbstractAbility where T : AbilityAsset
-AbstractAbility<T>是AbstractAbility的泛型子类，用于实现AbstractAbility的泛型版本。
-通常Ability都继承自他。方便对应的AbilityAsset和Ability一一匹配。
-#### 3.7.3 AbilitySpec
-AbilitySpec是GAS的游戏能力规格类，用于实现对Ability的实例化。本身是一个抽象基类，所有的AbilitySpec都必须继承自他。
-AbilitySpec是用于实现Ability游戏内实际的表现逻辑。
-- `AbstractAbility Ability`：能力，与该能力规格类相关联的能力实例。
-- `AbilitySystemComponent Owner`：所有者，拥有该能力规格的单位。
-- `float Level`：等级，该能力的等级。
-- `bool IsActive`：是否激活，表示该能力当前是否处于激活状态。
-- `int ActiveCount`：激活计数，记录该能力被激活的次数。
-- ` void RegisterActivateResult(Action<AbilityActivateResult> onActivateResult)`：注册激活结果的方法，用于注册激活结果的回调函数。
-- ` void UnregisterActivateResult(Action<AbilityActivateResult> onActivateResult)`：注销激活结果的方法，用于注销激活结果的回调函数。
-- ` void RegisterEndAbility(Action onEndAbility)`：注册结束能力的方法，用于注册结束能力的回调函数。
-- ` void UnregisterEndAbility(Action onEndAbility)`：注销结束能力的方法，用于注销结束能力的回调函数。
-- ` void RegisterCancelAbility(Action onCancelAbility)`：注册取消能力的方法，用于注册取消能力的回调函数。
-- ` void UnregisterCancelAbility(Action onCancelAbility)`：注销取消能力的方法，用于注销取消能力的回调函数。
-- ` virtual AbilityActivateResult CanActivate()`：检查能力规格是否可以被激活。
-  - 返回值：激活结果：
-    - Success：成功
-    - FailHasActivated：失败，已经激活
-    - FailTagRequirement：失败，Tag要求不满足
-    - FailCost： 失败，消耗不足
-    - FailCooldown： 失败，还在冷却
-    - FailOtherReason： 失败，其他原因
-- ` void DoCost()`：执行花费的方法，用于执行激活该能力规格的花费操作。
-- ` virtual bool TryActivateAbility(params object[] args)`：尝试激活能力
-- ` virtual void TryEndAbility()`：尝试结束能力
-- ` virtual void TryCancelAbility()`：尝试取消能力
-- ` void Tick()`：处理能力的帧更新。
-- ` abstract void ActivateAbility(params object[] args)`：激活能力的抽象方法，用于执行激活该能力的操作。
-- ` abstract void CancelAbility()`：取消能力的抽象方法，用于执行取消该能力的操作。
-- ` abstract void EndAbility()`：结束能力的抽象方法，用于执行结束该能力的操作。
-#### 3.7.4 AbilityContainer
-能力容器，是ASC的间接管理能力的对象。
-- `void Tick()`：处理的方法，用于处理能力容器中所有能力的Tick逻辑。
-- ` void GrantAbility(AbstractAbility ability)`：授予能力的方法，用于向能力容器中添加新的能力。
-  - `ability`：能力，要添加的新能力实例。
-- `void RemoveAbility(AbstractAbility ability)`：移除能力的方法，根据能力实例从能力容器中移除能力规格。
-  - `ability`：能力，要移除的能力实例。
-- `public void RemoveAbility(string abilityName)`：移除能力的方法，根据能力名称从能力容器中移除能力规格。
-  - `abilityName`：能力名称，要移除的能力名称。
-- `bool TryActivateAbility(string abilityName, params object[] args)`：尝试激活能力的方法
-  - `abilityName`：能力名称，要激活的能力名称。
-  - `args`：参数，激活能力所需的额外参数。
-  - 返回值：布尔值，表示能否成功激活能力。
-- `void EndAbility(string abilityName)`：结束能力
-  - `abilityName`：能力名称，要结束的能力名称。
-- `void CancelAbility(string abilityName)`：取消能力
-  - `abilityName`：能力名称，要取消的能力名称。
-- `Dictionary<string, AbilitySpec> AbilitySpecs()`：获取容器内所有能力字典
-  - 返回值：包含所有能力规格的能力名称与对应的能力规格实例。
-#### 3.7.5 AbilityTask(W.I.P)
-Ability我们只能控制他的激活，结束等，并且这些接口都是功能性的即时方法，不存在异步，持续管理的说法。
+#### 3.7.2 AbilityController
+AbilityController是Ability的控制器类，负责ASC对Ability的所有操作。
+- `DynamicBuffer<BAbility> CurrentAbilities`
+    - 获取当前ASC的所有Ability Buffer 
+- `void GrantAbility(AbilityConfig abilityConfig)`
+    - 授予Ability 
+    - abilityConfig：Ability配置对象
+    - 该方法会创建Ability Entity并附加到ASC
+- `void RemoveAbility(int abilityCode)`
+    - 移除指定的Ability
+    - abilityCode：Ability的配置ID
+- `AbilitySpec GetAbilitySpec(int code)`
+    - 获取Ability的Spec实例
+    - code：Ability的配置ID
+    - 返回值：AbilitySpec实例
+- `MCAbilityLogic GetAbilityLogic(int abilityCode)`
+    - 获取Ability的逻辑组件
+    - abilityCode：Ability的配置ID
+    - 返回值：MCAbilityLogic组件
+- `bool IsAbilityActive(int abilityCode)`
+    - 判断Ability是否处于激活状态
+    - abilityCode：Ability的配置ID
+    - 返回值：是否激活
+- `void TryActivateAbility(int abilityCode, XParam param = null)`
+    - 尝试激活Ability 
+    - abilityCode：Ability的配置ID
+    - param：激活参数（可选）
+    - 该方法会添加`CAbilityInTryActivate`组件，由ECS系统处理激活逻辑
+- `void SetAbilityParam(int abilityCode, XParam param)`
+    - 设置Ability的运行参数 
+    - abilityCode：Ability的配置ID
+    - param：新的参数对象
+- `void EndAbility(int abilityCode)`
+    - 结束Ability
+    - abilityCode：Ability的配置ID
+- `void CancelAbility(int abilityCode)`
+    - 取消Ability
+    - abilityCode：Ability的配置ID
 
-但是Ability不可能都是瞬时逻辑，因此在Ability的逻辑实现中需要开发者对Tick处理，或者使用异步自行实现逻辑。
-而在UE的GAS中，为了解决这个问题，设计团队创造了AbilityTask的概念，他们让AbilityTask来承载实现Ability
-逻辑的任务。在UE版本的GAS中，AbilityTask的种类很多，他们能实现即时/异步/持续/等待的逻辑处理。功能非常强大。
+#### 3.7.3 AbilityHelper
+AbilityHelper是Ability的辅助工具类，提供Ability逻辑和任务的注册与创建功能。
+**AbilityLogic相关**：
+- `static void RegisterAbilityLogic(string sType, Type logicType, Type abilityParamType)`
+    - 注册Ability逻辑类型
+    - sType：逻辑类型名称
+    - logicType：逻辑类的Type
+    - abilityParamType：参数类的Type
+- `static AbilityLogicBase TryCreateAbilityLogic(string logicType, Entity ability)`
+    - 创建Ability逻辑实例
+    - logicType：逻辑类型名称
+    - ability：Ability的Entity
+    - 返回值：AbilityLogicBase实例
+  
+**AbilityTask相关**：
+- `static void RegisterAbilityTask(string sType, Type taskType, Type taskParamType)`
+    - 注册Ability任务类型
+    - sType：任务类型名称
+    - taskType：任务类的Type
+    - taskParamType：参数类的Type
+- `static AbilityTaskBase TryCreateAbilityTask(string taskType, AbilityLogicBase abilityLogic)`
+    - 创建Ability任务实例
+    - taskType：任务类型名称
+    - abilityLogic：关联的Ability逻辑
+    - 返回值：AbilityTaskBase实例
 
-因此，我也试着模仿了这个概念，但目前的版本来说，AbilityTask的功能和目的性还很弱。在之后的版本迭代中，我会慢慢完善
-AbilityTask，以此来强化GAS中的Ability的逻辑处理能力和可编辑性。
-- AbilityTaskBase:基类，Task是依附于Ability的存在，因此他的初始化必须依赖于AbilitySpec。
-  - ```
-    public abstract class AbilityTaskBase
-    {
-        protected AbilitySpec _spec;
-        public AbilitySpec Spec => _spec;
-        public virtual void Init(AbilitySpec spec)
-        {
-            _spec = spec;
-        }
-    }
-    ```
-- InstantAbilityTask: 即时类型的Task，最为常见的Task之一。
-  - ```
-    public abstract class InstantAbilityTask:AbilityTaskBase
-    {
-        #if UNITY_EDITOR
-        /// <summary>
-        ///  编辑器预览用
-        ///  【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
-        /// </summary>
-        public virtual void OnEditorPreview()
-        {
-        }
-        #endif
-        public abstract void OnExecute();
-    }
-    ``` 
-- OngoingAbilityTask: 持续类型的Task，目前这类Task和TimelineAbility强关联，往后的设计里会抽象出来，让Task更加灵活。
-  - ```
-    public abstract class OngoingAbilityTask:AbilityTaskBase
-    {
-        #if UNITY_EDITOR
-        /// <summary>
-        /// 编辑器预览用
-        /// 【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
-        /// </summary>
-        /// <param name="frame"></param>
-        /// <param name="startFrame"></param>
-        /// <param name="endFrame"></param>
-        public virtual void OnEditorPreview(int frame, int startFrame, int endFrame)
-        {
-        }
-        #endif
-        public abstract void OnStart(int startFrame);
+#### 3.7.4 BAbility
+BAbility是ASC的Ability Buffer组件，用于存储ASC持有的所有Ability引用。
+- `Entity Ability`
+    - Ability的Entity引用
 
-        public abstract void OnEnd(int endFrame);
+#### 3.7.5 XAbility（Script-Generated Code）
+XAbility是Ability的常量库和注册代码，它是自动生成的代码。
+- `public const int ABILITY_XXX = ID;`
+    - 生成所有Ability的ID常量
+    - 例如：`public const int ABILITY_move = 10001;`
+- `static void LoadAbilityCode()`
+    - 加载并注册所有Ability逻辑和任务类型
+    - 该方法会调用`AbilityHelper.RegisterAbilityLogic()`和`AbilityHelper.RegisterAbilityTask()`注册所有类型
 
-        public abstract void OnTick(int frameIndex,int startFrame,int endFrame);
-    }
-    ```     
----
+**注册的AbilityLogic类型**:
+- `ALMove`：移动逻辑
+- `ALApplyEffect`：施加效果逻辑
+- `ALDebugLog`：调试日志逻辑
+- `ALTimeline`：时间轴逻辑
 
-[//]: # (### 3.7.EX Timeline Ability（W.I.P）)
+**注册的AbilityTask类型**：
+- `TaskPlayCuePreset`：播放Cue预设
+- `TaskDebug`：调试任务
+- `TaskDoCost`：执行消耗
+- `TaskDoNothing`：空任务
+- `TaskPlayCue`：播放Cue
 
-[//]: # (#### 3.7.EX.1 TimelineAbilityAsset)
+#### 3.7.6 AbilitySystemCell中的Ability操作
+AbilitySystemCell提供了Ability的便捷操作接口：
+- `void TryActivateAbility(int abilityCode, XParam param = null)`
+    - 尝试激活Ability
+- `void TryEndAbility(int abilityCode)`
+    - 尝试结束Ability
+- `void TryCancelAbility(int abilityCode)`
+    - 尝试取消Ability
+- `bool IsAbilityActive(int abilityCode)`
+    - 判断Ability是否激活
+- `void SetAbilityParam(int abilityCode, XParam param)`
+    - 设置Ability参数
+- `MCAbilityLogic GetAbilityLogic(int abilityCode)`
+    - 获取Ability逻辑 
+- `AbilitySpec GetAbilitySpec(int abilityCode)`
+    - 获取Ability Spec 
+- `void GrantAbility(AbilityConfig abilityCfg)`
+    - 授予Ability
+- `void RemoveAbility(int abilityCode)`
+    - 移除Ability
 
-[//]: # (#### 3.7.EX.2 TimelineAbility)
+**使用示例**
+```csharp
+// 激活移动技能
+if(!AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_move))
+    AbilitySystemComponent.TryActivateAbility(XAbility.ABILITY_move, _cacheParamMove);
 
-[//]: # (#### 3.7.EX.3 TimelineAbilitySpec)
+// 更新技能参数
+AbilitySystemComponent.Cell.SetAbilityParam(XAbility.ABILITY_move, _cacheParamMove);
 
-[//]: # (#### 3.7.EX.4 TimelineAbilityPlayer)
+// 停止移动
+if(AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_move)) 
+    AbilitySystemComponent.TryEndAbility(XAbility.ABILITY_move);
 
-[//]: # (#### 3.7.EX.5 Target Catcher)
+// 激活攻击技能
+AbilitySystemComponent.Cell.TryActivateAbility(XAbility.ABILITY_Attack);
+```
 
-[//]: # (##### 3.7.EX.5.1 TargetCatcherBase)
+#### 3.7.7 Ability激活流程
+Ability的激活、取消和结束由三个ECS系统协同处理，它们在`SGAbility`系统组中按顺序执行。
 
-[//]: # (##### 3.7.EX.5.2 CatchSelf)
+**激活流程（STryActivateAbility）**：
 
-[//]: # (##### 3.7.EX.5.3 CatchTarget)
+1. 系统查询所有带有`CAbilityInTryActivate`组件的Ability Entity
+2. 调用`GAUtil.CanActivateAbility()`检查激活条件（Tag要求、冷却、消耗等）
+3. 如果检查通过：
+    - 添加`CAbilityActive`组件标记激活状态
+    - 如果配置了`CAbilityActivationOwnedTags`，向Owner ASC添加临时Tag
+    - 调用`MCAbilityLogic.Logic.ActivateAbility()`执行自定义逻辑
+4. 触发`GASEventCenter.InvokeOnActivateResult()`事件
+5. 移除`CAbilityInTryActivate`组件
 
-[//]: # (##### 3.7.EX.5.4 CatchAreaBox2D)
+**取消流程（STryCancelAbility）**：
 
-[//]: # (##### 3.7.EX.5.5 CatchAreaCircle2D)
+1. 系统查询所有带有`CAbilityInTryCancel`组件的Ability Entity
+2. 检查Ability是否处于激活状态（是否有`CAbilityActive`组件）
+3. 如果激活中：
+    - 移除`CAbilityActive`组件
+    - 调用`ASCHelper.RestoreDynamicTags()`恢复临时Tag
+    - 调用`MCAbilityLogic.Logic.CancelAbility()`执行取消逻辑
+    - 触发`GASEventCenter.InvokeOnCancelAbility()`事件
+4. 移除`CAbilityInTryCancel`组件
 
----
+**结束流程（STryEndAbility）**：
+
+1. 系统查询所有带有`CAbilityInTryEnd`组件的Ability Entity 
+2. 检查Ability是否处于激活状态
+3. 如果激活中：
+    - 移除`CAbilityActive`组件
+    - 调用`ASCHelper.RestoreDynamicTags()`恢复临时Tag
+    - 调用`MCAbilityLogic.Logic.EndAbility()`执行结束逻辑
+    - 触发`GASEventCenter.InvokeOnEndAbility()`事件
+4. 移除`CAbilityInTryEnd`组件
+
+**流程图**：
+
+```mermaid
+sequenceDiagram
+    participant User as 用户代码
+    participant ASC as AbilitySystemComponent
+    participant Controller as AbilityController
+    participant System as STryActivateAbility
+    participant Logic as AbilityLogicBase
+    
+    User->>ASC: TryActivateAbility(abilityCode)
+    ASC->>Controller: TryActivateAbility(abilityCode)
+    Controller->>Controller: 添加 CAbilityInTryActivate 组件
+    
+    Note over System: 下一帧 ECS Update
+    System->>System: 查询 CAbilityInTryActivate
+    System->>System: CanActivateAbility() 检查
+    
+    alt 检查通过
+        System->>System: 添加 CAbilityActive 组件
+        System->>System: 添加临时 Tag 到 Owner
+        System->>Logic: ActivateAbility(globalTimer)
+        Logic-->>User: 执行自定义逻辑
+        System->>System: 触发 OnActivateResult 事件
+    else 检查失败
+        System->>System: 触发 OnActivateResult(失败原因)
+    end
+    
+    System->>System: 移除 CAbilityInTryActivate
+```
+
+#### 3.7.8 AbilityLogicBase
+AbilityLogicBase是所有Ability逻辑的抽象基类，定义了Ability的生命周期方法。
+- `AbilitySpec Spec { get; }`
+    - 获取Ability的Spec包装实例
+- `abstract void ActivateAbility(GlobalTimer timer)`
+    - 激活Ability时调用，子类必须实现
+    - timer：全局计时器，用于获取当前逻辑帧时间
+- `abstract void CancelAbility(GlobalTimer timer)`
+    - 取消Ability时调用，子类必须实现
+- `abstract void EndAbility(GlobalTimer timer)`
+    - 结束Ability时调用，子类必须实现
+- `abstract void AbilityTick(GlobalTimer timer)`
+    - 每帧更新时调用，子类必须实现
+- `void TryEndSelf()`
+    - 在Ability逻辑内部主动结束自己
+    - 添加`CAbilityInTryEnd`组件，由系统在下一帧处理
+- `Entity GetAscEntity()`
+    - 获取Owner ASC的Entity
+- `Entity GetOwnerAscEntity()`
+    - 获取Owner ASC的Entity（别名方法）
+
+**常用Ability逻辑示例**：
+
+`ALApplyEffect`：施加GameplayEffect的Ability逻辑
+- 激活时：遍历配置的Effect ID列表，创建并施加到Owner
+- 结束时：移除所有由该Ability创建的GameplayEffect
+
+#### 3.7.9 Ability Tick更新
+所有激活的Ability每帧都会调用`AbilityTick()`方法，由`SAbilityTick`系统驱动。
+
+**使用场景**：
+- 持续性技能的逻辑更新（如移动、持盾）
+- 检查技能结束条件
+- 更新技能参数
+
+**示例**：
+```csharp
+// 移动技能持续更新方向
+public override void Move(Vector3 direction)
+{
+    if(!AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_move))
+        AbilitySystemComponent.TryActivateAbility(XAbility.ABILITY_move, _cacheParamMove);
+    
+    // 每帧更新移动参数
+    _cacheParamMove.SetDirection(direction, viewPointForward);
+    AbilitySystemComponent.Cell.SetAbilityParam(XAbility.ABILITY_move, _cacheParamMove);
+}
+```
+
+> EX-GAS 2.0的Ability系统与1.x版本的主要区别：
+> 1. **ECS驱动**：Ability的激活、取消、结束由ECS系统处理，而非直接调用方法
+> 2. **组件标记**：使用Tag Component（`CAbilityInTryActivate`、`CAbilityActive`等）标记状态，而非布尔字段
+> 3. **异步执行**：调用`TryActivateAbility()`后，实际激活发生在下一帧ECS Update，而非立即执行
+> 4. **OOP包装**：通过`AbilitySpec`和`AbilityLogicBase`提供OOP接口，隐藏ECS细节
+
+> 所有Ability相关的操作都应该使用生成的`XAbility`常量，例如`XAbility.ABILITY_move`，配合`AbilitySystemComponent`或`AbilitySystemCell`的API进行调用。
+
+
 ### 3.8 GameplayCue
 #### 3.8.1 GameplayCue
 GameplayCue是GAS的游戏提示配置类，用于实现对游戏效果的提示。他本身是一个抽象基类，所有的GameplayCue都必须继承自他。
