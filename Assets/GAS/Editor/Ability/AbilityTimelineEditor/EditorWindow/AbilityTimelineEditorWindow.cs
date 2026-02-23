@@ -61,6 +61,17 @@ namespace GAS.Editor
             HandleShortcut();
         }
 
+        private void OnDestroy()
+        {
+            // Inspector 选中的物体置为空
+            Selection.activeObject = null;
+            EditorApplication.delayCall += () =>
+            {
+                if (_childInspector != null)
+                    _childInspector.Close();
+            };
+        }
+
         /// <summary>
         /// 这个方法被反射引用到, 重构请小心!!
         /// </summary>
