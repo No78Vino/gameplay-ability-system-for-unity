@@ -1916,6 +1916,146 @@ graph TB
 ---
 
 #### 2.8.b.1 AbilityTask
+AbilityTask 是**可复用的行为单元**,用于实现技能的具体逻辑。每个 Task 占据时间轴上的一个时间段(StartTime 到 EndTime),并在播放过程中接收生命周期回调。
+
+> AbilityTask在TimelineAbility 中应用最广泛，整个TimelineAbility的实现都是基于它。
+
+**核心特点**:
+- **帧驱动**: 基于离散帧执行,不受帧率波动影响
+- **参数化**: 通过 `XParam` 系统接收类型安全的配置参数
+- **可组合**: 一个Ability内，可以复数个AbilityTask组合使用
+- **可预览**: 支持编辑器中的非运行时预览
+
+##### AbilityTask 基类架构
+```mermaid
+classDiagram
+    class AbilityTaskBase {
+        #AbilityLogicBase _logic
+        #AbilitySpec Spec
+        #AbilitySystemCell Owner
+        #TimeUnit _timeUnit
+        #int _startTime
+        +InitParameters(XParam)
+        +Begin(int)
+        +Tick(int)
+        +Finish(int)
+        +Dispose()
+        +OnEditorPreview(GameObject, int, int, int)*
+        #OnBegin(int)*
+        #OnTick(int)*
+        #OnFinish(int)*
+    }
+    
+    class AbilityTaskBase_T~T~ {
+        +T Parameter
+        +InitParameters(XParam)
+    }
+    
+    class TaskPlayCue {
+        -GameplayCueUnit _cueUnit
+        #OnBegin(int)
+        #OnFinish(int)
+    }
+    
+    class TaskPlayCuePreset {
+        -GameplayCueUnit[] _cueUnits
+        #OnBegin(int)
+        #OnFinish(int)
+    }
+    
+    class TaskDebug {
+        #OnBegin(int)
+    }
+    
+    class TaskDoCost {
+        #OnBegin(int)
+    }
+    
+    class TaskDoNothing {
+    }
+    
+    AbilityTaskBase <|-- AbilityTaskBase_T
+    AbilityTaskBase_T <|-- TaskPlayCue
+    AbilityTaskBase_T <|-- TaskPlayCuePreset
+    AbilityTaskBase_T <|-- TaskDebug
+    AbilityTaskBase_T <|-- TaskDoCost
+    AbilityTaskBase_T <|-- TaskDoNothing
+```
+**核心属性**
+
+| 属性 | 类型 | 功能说明 |
+|------|------|---------|
+| `_logic` | `AbilityLogicBase` | 父级 AbilityLogic 引用(通常是 `ALTimeline`) |
+| `Spec` | `AbilitySpec` | Ability 规格,包含配置信息 |
+| `Owner` | `AbilitySystemCell` | 拥有该 Ability 的 ASC |
+| `_timeUnit` | `TimeUnit` | 时间单位(Frame/Second) |
+| `_startTime` | `int` | Task 开始执行的帧 |
+
+**生命周期：三阶段执行模型**
+
+| 方法 | 调用时机 | 调用次数 | 典型用途 |
+|------|---------|---------|---------|
+| `Begin(int startTime)` | `frameIndex == startFrame` | 1 次 | 初始化状态,创建资源(如特效、音效) |
+| `Tick(int tickTime)` | `startFrame ≤ frameIndex ≤ endFrame` | 每帧 | 更新持续效果(如动画采样、位置插值) |
+| `Finish(int endTime)` | `frameIndex == endFrame` | 1 次 | 清理资源,触发结束逻辑 |
+
+**执行示例**:
+```
+Frame:  0  1  2  3  4  5  6  7  8
+Task A: -  -  B  T  T  T  F  -  -   (StartTime=2, EndTime=6)
+
+B = Begin(), T = Tick(), F = Finish()
+```
+**参数初始化**:
+
+泛型基类 `AbilityTaskBase<T>` 提供类型安全的参数传递:
+```csharp
+public override void InitParameters(XParam parameter)
+{
+    if (parameter is T t)
+        Parameter = t;  // 自动类型转换
+    else
+        Debug.LogError($"Parameter type mismatch");
+}
+```
+##### 官方提供的功能性 Task(W.I.P)
+
+| Task 类名 | 参数类型 | 功能说明 |
+|----------|---------|---------|
+| `TaskPlayCue` | `XParamCue` | 播放单个 GameplayCue(动画/音效/特效) |
+| `TaskPlayCuePreset` | `XParamCueList` |
+| `TaskDebug` | `XParamString` | 输出调试日志 |
+| `TaskDoCost` | `XParamNone` | 执行 Ability 消耗 |
+| `TaskDoNothing` | `XParamNone` | 空任务(占位/测试用) |
+
+- TaskPlayCue - 播放单个 Cue
+  - **功能**: 播放单个 GameplayCue,支持 Tag 过滤和编辑器预览
+  - **生命周期**:
+    ```csharp
+    InitParameters() → 创建 GameplayCueUnit
+    OnBegin()        → AddToAsc() + Play()
+    OnFinish()       → Stop() + RemoveFromAsc()
+    ```
+- TaskPlayCuePreset - 批量播放 Cue
+  - **功能**: 同时播放多个 Cue,适用于复杂的视听效果组合
+  - **核心逻辑**:
+    ```csharp
+    InitParameters() → 创建 GameplayCueUnit 数组
+    OnBegin()        → foreach(cue) { Create() + AddToAsc() + Play() }
+    OnFinish()       → foreach(cue) { Stop() + RemoveFromAsc() + Destroy() }
+    ```
+  - **参数**: `XParamCueList.IDs` - Cue ID 数组
+- TaskDebug - 调试日志
+  - **功能**: 在指定帧输出调试信息,用于验证 Timeline 执行流程
+  - **实现**: 仅在 `OnBegin()` 输出 `Parameter.Value` 字符串
+- TaskDoCost - 执行消耗
+  - **功能**: 在技能执行过程中应用 Cost GameplayEffect
+  - **典型用法**: 放在 Timeline 的第 1 帧,确保消耗在技能开始时扣除
+- TaskDoNothing - 空任务
+  - **功能**: 不执行任何逻辑,用于:
+    - 占位(预留轨道位置)
+    - 测试 Timeline 播放流程
+    - 标记特定时间点
 
 
 #### 2.8.b.3 TimelineAbility 编辑器
