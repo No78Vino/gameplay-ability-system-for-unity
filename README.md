@@ -2303,18 +2303,6 @@ ASC预设是为了可视化角色（单位）的参数。
   角色，那也应该是把无敌的Tag放在一个永久GameplayEffect上，然后挂到ASC上。而不是把无敌Tag直接当作固有Tag。
 - 固有能力：Abilities，单位的基础能力。通常会把单位的基础能力放在这里，比如攻击，防御，跳跃等等。
 
->如何使用ASC预设？
-> 
-> 1.AbilitySystemComponent组件自带了序列化的ASC预设字段，可以通过预制体添加，也可以实例化添加。
-> 2.依赖ASC预设的初始化，通过AbilitySystemComponentExtension中的静态扩展方法InitWithPreset即可。
-> 
-> InitWithPreset的参数：
->  - AbilitySystemComponent asc：初始化的ASC，
->  - int level：初始等级
->  - AbilitySystemComponentPreset preset：初始化用的ASC预设
->  - 
-> 示例： asc.InitWithPreset(1,ascPreset); // 如果预制体已经设置了参数，那么可以不传ascPreset。
-
 ---
 ## 3.API && Source Code Documentation
 本章节会在介绍API和源码的同时，从代码的角度来理解GAS的运作逻辑。
@@ -2324,46 +2312,58 @@ ASC预设是为了可视化角色（单位）的参数。
 > GAS的推进和运行，就是在不断的重复这件事。
 > 体系外的脚本不断的拨动ASC的Ability，而GAS内部会对Ability的运行结果自行消化。
 
-### 3.1 Core 
+### 3.1 Core
+EX-GAS 2.0 的核心层基于 Unity DOTS/ECS 架构实现,主要由 `GASManager` 静态类统一管理整个系统的生命周期和运行时环境。
 
-#### 3.1.1 GameplayAbilitySystem
-GameplayAbilitySystem作为核心类，他的作用有2个：管理ASC，控制GAS的运行与否。
-- ` static GameplayAbilitySystem GAS`
-  - GAS的单例，所有的GAS操作都是通过GAS单例来进行的。
-- ` List<AbilitySystemComponent> AbilitySystemComponents { get; } `
-  - GAS当前运行的所有AbilitySystemComponent的集合。
-- `void Register(AbilitySystemComponent abilitySystemComponent)`
-  -  注册ASC到GAS中。
-- `void UnRegister(AbilitySystemComponent abilitySystemComponent)`
-  -  从GAS中注销ASC。
-- `bool IsPaused`
-  - GAS是否暂停运行。
-- ` void Pause()`
-  - 暂停GAS运行。 
-- ` void Unpause()`
-  - 恢复GAS运行。 
-#### 3.1.2 GASTimer
-GASTimer是GAS的计时器，它是GAS的时间基准。
-- `static long Timestamp()`
-  - GAS当前时间戳（毫秒）
-- `static long TimestampSeconds()`
-  - GAS当前时间戳（秒）
-- `static int CurrentFrameCount`
-  - GAS当前运行帧数
-- `static long StartTimestamp`
-  - GAS启动时间戳
-- `static void InitStartTimestamp()`
-  - GAS初始化启动时间戳
-- `static void Pause()`
-  - 暂停GASTimer计时 
-- `static void Unpause()`
-  - 恢复GASTimer计时 
-- `static int FrameRate`
-  - GAS帧率
-#### 3.1.3 GasHost
-GasHost是GAS的宿主，它是GAS的运行机器和环境，GasHost没有API可以从外部干涉。
+#### 3.1.1 GASManager
+`GASManager` 是 EX-GAS 2.0 的核心管理类,负责初始化和管理整个 GAS 系统的 ECS 环境。
 
----
+**主要属性:**
+- `static World ExWorld { get; private set; }`
+    - EX-GAS 专用的 ECS World 实例,名为 "EX_GAS_World"。
+- `static EntityManager EntityManager { get; private set; }`
+    - 用于管理所有 ECS Entity 的 EntityManager 实例。
+- `static TurnController TurnController { get; private set; }`
+    - 回合控制器,用于管理回合制逻辑。
+- `static bool IsRunning { get; private set; }`
+    - 标识 GAS 系统是否正在运行。
+- `static bool IsInitialized { get; private set; }`
+    - 标识 GAS 系统是否已初始化。
+- `static Entity EntityGlobalTimer { get; private set; }`
+    - 全局计时器 Entity,用于系统逻辑帧计时。
+  
+**主要方法:**
+- `static void Initialize()`
+    - 初始化 GAS 系统,创建 ECS World、EntityManager、系统组以及全局计时器。
+    - 该方法会创建以下系统组结构:
+        - `InitializationSystemGroup`
+        - `SimulationSystemGroup`
+            - `FixedStepSimulationSystemGroup` (固定时间步长)
+                - `SGLogic` (逻辑系统组)
+                    - `SGlobalTimer` (全局计时器系统)
+                    - `SGAbility` (技能系统组)
+                    - `SGAttribute` (属性系统组)
+                    - `SGEffect` (效果系统组)
+        - `PresentationSystemGroup`
+- `static void Run()`
+    - 启动 GAS 系统运行。
+- `static void Stop()`
+    - 停止 GAS 系统运行。
+  
+#### 3.1.2 系统组架构
+EX-GAS 2.0 采用分层的系统组架构,所有游戏逻辑在 `FixedStepSimulationSystemGroup` 中以固定时间步长运行,确保逻辑帧的稳定性。
+**核心系统组:**
+- `SGLogic`: 逻辑系统组,包含所有 GAS 核心逻辑系统。
+- `SGAbility`: 技能系统组,处理技能的激活、取消、结束和 Tick 更新。
+- `SGAttribute`: 属性系统组,处理属性值的计算和更新。
+- `SGEffect`: 效果系统组,处理 GameplayEffect 的应用和更新。
+
+> 原1.x版本中的 `GASTimer` 和 `GasHost` 类在 2.0 版本中已被重构。 计时功能现在由 `GlobalTimer` 组件和 `SGlobalTimer` 系统实现, 
+> 而原有的 `GasHost` 宿主概念已被 ECS 的 `World` 和 `SystemGroup` 架构取代。
+> 
+> 新架构下,所有 ASC、Ability、GameplayEffect 等都以 ECS Entity 的形式存在,通过对应的 Component 和 Buffer 存储数据,由各个 System 处理逻辑。 
+> 这与 1.x 版本的 OOP 实现有本质区别。
+
 ### 3.2 AbilitySystemComponent
 #### 3.2.1 AbilitySystemComponent
 AbilitySystemComponent是GAS的基本运行单位，它是GAS的核心类。
