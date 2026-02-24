@@ -36,6 +36,7 @@ namespace GAS.Runtime
             }
             
             ecb.Playback(state.EntityManager);
+            EntityHelper.ExecuteDeferredCommands();
             ecb.Dispose();
             EntityHelper.UnregisterEntityCommandBuffer();
         }

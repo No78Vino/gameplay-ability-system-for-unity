@@ -14,13 +14,17 @@ namespace GAS.Runtime
             {
                 entities[i] = GASManager.EntityManager.CreateEntity();
                 var c = cues[i];
-                // Cue是否播放组件
+                // Cue是否可播放组件
                 EntityHelper.AddComponent<ECCuePlayable>(entities[i]);
                 EntityHelper.SetComponentEnabled<ECCuePlayable>(entities[i],false);
                 
-                // Cue是否播放组件
+                // Cue是否播放中组件
                 EntityHelper.AddComponent<ECCuePlaying>(entities[i]);
                 EntityHelper.SetComponentEnabled<ECCuePlaying>(entities[i],false);
+                
+                // Cue是否死亡组件
+                EntityHelper.AddComponent<ECKillCue>(entities[i]);
+                EntityHelper.SetComponentEnabled<ECKillCue>(entities[i],false);
                 
                 // Cue逻辑
                 EntityHelper.AddManagedComponent<MCCue>(entities[i]);

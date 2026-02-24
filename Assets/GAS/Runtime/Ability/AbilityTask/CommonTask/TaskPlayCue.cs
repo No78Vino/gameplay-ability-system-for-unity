@@ -13,18 +13,18 @@ namespace GAS.Runtime
         public override void Dispose()
         {
             base.Dispose();
-            _cueUnit.Destroy();
+            // _cueUnit.Destroy();
         }
 
         public override void InitParameters(XParam parameter)
         {
             base.InitParameters(parameter);
             _cueUnit = new GameplayCueUnit(Parameter.GetCueConfig());
-            _cueUnit.Create();
         }
 
         protected override void OnBegin(int startFrame)
         {
+            _cueUnit.Create();
             _cueUnit.AddToAsc(Owner);
             _cueUnit.Play();
         }
@@ -33,6 +33,7 @@ namespace GAS.Runtime
         {
             _cueUnit.Stop();
             _cueUnit.RemoveFromAsc();
+            _cueUnit.Destroy();
         }
 
         protected override void OnTick(int frameIndex)

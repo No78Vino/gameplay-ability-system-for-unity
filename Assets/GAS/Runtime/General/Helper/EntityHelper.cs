@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
@@ -12,6 +13,15 @@ namespace GAS.Runtime
         private static bool _usingEcb;
         private static EntityManager _entityManager => GASManager.EntityManager;
 
+        // 新增:记录通过ECB添加的Component类型
+        private static Dictionary<(Entity, Type), bool> _pendingComponents = new();
+    
+        // 新增:记录延迟的SetComponent命令
+        private static List<Action> _deferredSetCommands = new();
+
+        // 新增:缓存待设置的Component数据
+        private static Dictionary<(Entity, Type), object> _pendingComponentData = new();
+        
         /// <summary>
         ///     注册ECB
         /// </summary>
@@ -21,9 +31,12 @@ namespace GAS.Runtime
         {
             _ecb = new EntityCommandBuffer(allocator);
             _usingEcb = true;
+            _pendingComponents.Clear();
+            _deferredSetCommands.Clear();
+            _pendingComponentData.Clear();
             return _ecb;
         }
-
+        
         /// <summary>
         ///     注销ECB
         /// </summary>
@@ -32,8 +45,23 @@ namespace GAS.Runtime
         {
             _ecb = default;
             _usingEcb = false;
+            _pendingComponents.Clear();
+            _deferredSetCommands.Clear();
+            _pendingComponentData.Clear();
         }
 
+        /// <summary>
+        ///     新增:在Playback后执行延迟命令
+        /// </summary>
+        public static void ExecuteDeferredCommands()
+        {
+            foreach (var command in _deferredSetCommands)
+                command();
+            
+            _deferredSetCommands.Clear();
+            _pendingComponentData.Clear();
+        }
+        
         /// <summary>
         /// 获取非托管组件
         /// </summary>
@@ -42,6 +70,12 @@ namespace GAS.Runtime
         /// <returns></returns>
         public static T GetComponentData<T>(Entity entity) where T : unmanaged, IComponentData
         {
+            if (_usingEcb && _pendingComponentData.ContainsKey((entity, typeof(T))))
+            {
+                // 返回缓存的数据
+                return (T)_pendingComponentData[(entity, typeof(T))];
+            }
+        
             return _entityManager.GetComponentData<T>(entity);
         }
 
@@ -53,6 +87,11 @@ namespace GAS.Runtime
         /// <returns></returns>
         public static T GetManagedComponentData<T>(Entity entity) where T : class, IComponentData, new()
         {
+            if (_usingEcb && _pendingComponentData.ContainsKey((entity, typeof(T))))
+            {
+                return (T)_pendingComponentData[(entity, typeof(T))];
+            }
+        
             return _entityManager.GetComponentData<T>(entity);
         }
         
@@ -84,9 +123,15 @@ namespace GAS.Runtime
         public static void AddComponent<T>(Entity entity) where T : unmanaged, IComponentData
         {
             if (_usingEcb)
+            {
                 _ecb.AddComponent<T>(entity);
+                // 记录这个Component是通过ECB添加的
+                _pendingComponents[(entity, typeof(T))] = true;
+            }
             else
+            {
                 _entityManager.AddComponent<T>(entity);
+            }
         }
 
         /// <summary>
@@ -97,9 +142,14 @@ namespace GAS.Runtime
         public static void AddManagedComponent<T>(Entity entity) where T : class, IComponentData
         {
             if (_usingEcb)
+            {
                 _ecb.AddComponent<T>(entity);
+                _pendingComponents[(entity, typeof(T))] = true;
+            }
             else
+            {
                 _entityManager.AddComponent<T>(entity);
+            }
         }
 
         /// <summary>
@@ -124,9 +174,30 @@ namespace GAS.Runtime
         public static void SetComponent<T>(Entity entity, T component) where T : unmanaged, IComponentData
         {
             if (_usingEcb)
-                _ecb.SetComponent(entity, component);
+            {
+                if (_pendingComponents.ContainsKey((entity, typeof(T))))
+                {
+                    // 缓存数据供GetComponentData使用
+                    _pendingComponentData[(entity, typeof(T))] = component;
+                
+                    // 延迟执行
+                    _deferredSetCommands.Add(() => 
+                    {
+                        if (_entityManager.Exists(entity) && _entityManager.HasComponent<T>(entity))
+                        {
+                            _entityManager.SetComponentData(entity, component);
+                        }
+                    });
+                }
+                else
+                {
+                    _ecb.SetComponent(entity, component);
+                }
+            }
             else
+            {
                 _entityManager.SetComponentData(entity, component);
+            }
         }
 
         /// <summary>
@@ -138,9 +209,28 @@ namespace GAS.Runtime
         public static void SetManagedComponent<T>(Entity entity, T component) where T : class, IComponentData, new()
         {
             if (_usingEcb)
-                _ecb.SetComponent(entity, component);
+            {
+                if (_pendingComponents.ContainsKey((entity, typeof(T))))
+                {
+                    _pendingComponentData[(entity, typeof(T))] = component;
+                
+                    _deferredSetCommands.Add(() => 
+                    {
+                        if (_entityManager.Exists(entity) && _entityManager.HasComponent<T>(entity))
+                        {
+                            _entityManager.SetComponentData(entity, component);
+                        }
+                    });
+                }
+                else
+                {
+                    _ecb.SetComponent(entity, component);
+                }
+            }
             else
+            {
                 _entityManager.SetComponentData(entity, component);
+            }
         }
         
         /// <summary>

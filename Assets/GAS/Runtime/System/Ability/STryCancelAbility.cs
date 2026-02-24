@@ -34,6 +34,8 @@ namespace GAS.Runtime
                 ecb.RemoveComponent<CAbilityInTryCancel>(ability);
             }
             ecb.Playback(state.EntityManager);
+            EntityHelper.ExecuteDeferredCommands();
+            ecb.Dispose();
             EntityHelper.UnregisterEntityCommandBuffer();
         }
 

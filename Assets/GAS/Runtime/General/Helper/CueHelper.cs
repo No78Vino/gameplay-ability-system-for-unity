@@ -132,12 +132,6 @@ namespace GAS.Runtime
 
         #region 通用型工具接口
 
-        public static void KillCue(Entity cueEntity)
-        {
-            GASManager.EntityManager.AddComponent<ECKillCue>(cueEntity);
-        }
-
-
         public static void TryPlayCueOnAsc(EntityManager entityManager,Entity targetAsc,Entity cueEntity)
         {
             // 1.先判断tag是否可以播放cue
