@@ -12,22 +12,55 @@ namespace GAS.Runtime
         [ValueDropdown(nameof(GameplayEffectIDChoices), IsUniqueList = true)]
         public int[] IDs;
         
+        [ShowInInspector]
+        [LabelText("Catcher类型")]
+        //[ValueDropdown(nameof(CatcherClassChoice))]
+        [OnValueChanged(nameof(OnTypeChange))]
+        public string CatcherType { get; private set; }
+
+        [ShowInInspector]
+        [HideLabel]
+        [HideReferenceObjectPicker]
+        public XParam Param { get; set; }
+        
         public void SetIDs(int[] value)
         {
             IDs = value;
         }
         
+        public void SetCatcherType(string catcherType)
+        {
+            CatcherType = catcherType;
+        }
+
+        public void SetParam(XParam param)
+        {
+            Param = param;
+        }
+
         public XParamApplyEffects()
         {
             IDs = Array.Empty<int>();
+            CatcherType = string.Empty;
+            Param = null;
         }
-        
-        public XParamApplyEffects(int[] ds)
+
+        public XParamApplyEffects(int[] ids)
         {
-            IDs = ds;
+            IDs = ids;
         }
         
         public List<ValueDropdownItem> GameplayEffectIDChoices => GeneralGasChoiceHelper.GameplayEffects();
+        
+        //public IEnumerable<string> CatcherClassChoice => GeneralGasChoiceHelper.Catchers();
+
+        private void OnTypeChange()
+        {
+#if UNITY_EDITOR
+            //Param = AbilityHelper.CreateCatcherParameter(CatcherType);
+#endif
+        }
+        
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

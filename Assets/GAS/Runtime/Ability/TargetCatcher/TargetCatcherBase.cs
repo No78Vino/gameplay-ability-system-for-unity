@@ -8,10 +8,6 @@ namespace GAS.Runtime
     {
         public AbilitySystemComponent Owner;
 
-        protected TargetCatcherBase()
-        {
-        }
-
         public virtual void Init(AbilitySystemComponent owner)
         {
             Owner = owner;
@@ -27,10 +23,9 @@ namespace GAS.Runtime
             return result;
         }
 
-        public void CatchTargetsNonAllocSafe(AbilitySystemComponent mainTarget, List<AbilitySystemComponent> results)
+        public void CatchTargetsNonAllocSafe(AbilitySystemComponent mainTarget, ref List<AbilitySystemComponent> results)
         {
             results.Clear();
-
             CatchTargetsNonAlloc(mainTarget, results);
         }
 
@@ -41,5 +36,20 @@ namespace GAS.Runtime
         {
         }
 #endif
+    }
+    
+    public abstract class TargetCatcherBase<T> : TargetCatcherBase where T : XParam
+    {
+        public T Parameter { get; private set; }
+
+        public virtual void InitParameters(XParam parameter)
+        {
+            if (parameter is T t)
+                Parameter = t;
+#if UNITY_EDITOR
+            else
+                Debug.LogError($"Parameter type mismatch: expected {typeof(T)}, but got {parameter.GetType()}");
+#endif
+        }
     }
 }
