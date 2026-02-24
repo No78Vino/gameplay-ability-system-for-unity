@@ -7,6 +7,75 @@
 
 >该项目完全开源，欢迎大家一起参与开发，提出建议，共同完善。可以基于该项目进行二次开发。
 
+## 目录
+- [使用事项](#使用事项使用ex-gas前请务必确认)
+- [入门教学案例系列文章](#入门教学案例系列文章)
+- 1.[快速开始](#1快速开始)
+    - [安装](#安装)
+    - [使用](#使用)
+        - [关于配置需求](#关于配置需求)
+        - [建议使用流程](#建议使用流程luban-excel-json-配置工作流)
+- [【选读】A. Excel 配置表说明](#选读a-excel-配置表说明)
+    - [配置表概述](#配置表概述)
+    - [配置表文件列表](#配置表文件列表)
+    - [通用表格式规范](#通用表格式规范)
+    - [1. GameplayTag 配置表](#1-gameplaytag-配置表-exgasgameplaytagsxlsx)
+    - [2. Attribute 配置表](#2-attribute-配置表-exgasattributexlsx)
+    - [3. AttributeSet 配置表](#3-attributeset-配置表-exgasattributesetxlsx)
+    - [4. GameplayEffect 配置表](#4-gameplayeffect-配置表-exgasgameplayeffectxlsx)
+    - [5. Ability 配置表](#5-ability-配置表-exgasabilityxlsx)
+    - [6. GameplayCue 配置表](#6-gameplaycue-配置表-exgasgameplaycuexlsx)
+    - [7. MMC 配置表](#7-mmc-配置表-exgasmmcxlsx)
+    - [8. ASC 配置表](#8-asc-配置表-exgasascxlsx)
+    - [9. TimelineAbility 配置表](#9-timelineability-配置表-exgastimelineabilityxlsx)
+    - [流式配置说明](#流式配置说明)
+    - [配置表导出流程](#配置表导出流程)
+- [【选读】B. EX-GAS中心管理器使用说明](#选读b-ex-gas中心管理器-gascenterwindow-使用说明)
+    - [打开方式](#打开方式)
+    - [UI 布局](#ui-布局)
+    - [各配置页面功能](#各配置页面功能)
+    - [完整使用流程](#完整使用流程)
+    - [日常编辑流程](#日常编辑流程)
+    - [重要提示](#重要提示)
+- 2.[GAS系统介绍](#2ex-gas系统介绍)
+    - 2.1 [EX-GAS概述](#21-ex-gas概述)
+    - 2.2 [GameplayTag](#22-gameplaytag)
+        - 2.2.a [GameplayTag Manager](#22a-gameplaytag-manager)
+    - 2.3 [Attribute](#23-attribute)
+        - 2.3.a [Attribute Manager](#23a-attribute-manager)
+    - 2.4 [AttributeSet](#24-attributeset)
+        - 2.4.a [AttributeSet Manager](#24a-attributeset-manager)
+    - 2.5 [ModifierMagnitudeCalculation](#25-modifiermagnitudecalculation)
+    - 2.6 [GameplayCue](#26-gameplaycue)
+    - 2.7 [GameplayEffect](#27-gameplayeffect)
+    - 2.8 [Ability](#28-ability)
+        - 2.8.a [Ability Manager](#28a-ability-manager)
+        - 2.8.b [Timeline Ability Editor](#28b-timeline-ability-editor)
+        - 2.8.c [Granted Ability From GameplayEffect](#28c-granted-ability-from-gameplayeffect-来自游戏效果授予的能力)
+    - 2.9 [AbilitySystemComponent](#29-abilitysystemcomponentabilitysystemcell)
+        - 2.9.a [AbilitySystemComponent Preset](#29a-abilitysystemcomponent-preset)
+- 3.[API && Source Code Documentation](#3api--source-code-documentation)
+    - 3.1 [Core](#31-core)
+    - 3.2 [AbilitySystemComponent](#32-abilitysystemcomponent)
+    - 3.3 [Tag](#33-tag)
+    - 3.4 [Attribute & AttributeSet](#34-attribute--attributeset)
+    - 3.5 [GameplayEffect](#35-gameplayeffect)
+    - 3.6 [Ability](#36-ability)
+    - 3.7 [GameplayCue](#37-gameplaycue)
+    - 3.8 [MMC](#38-mmc)
+    - 3.9 [外围Helper 工具类](#39-外围helper-工具类)
+    - 3.10 [配置表访问](#310-配置表访问)
+    - 3.11 [代码生成](#311-代码生成)
+    - 3.12 [Timeline Ability 系统](#312-timeline-ability-系统)
+    - 3.13 [全局管理](#313-全局管理)
+- 4.[调试工具 监测台GASWatcher](#4调试工具-监测台gaswatcher)
+- 5.[如果...我想...,应该怎么做?](#5如果我想应该怎么做wip)
+- 6.[暂不支持的功能](#6暂不支持的功能可能有遗漏)
+- 7.[后续计划](#7后续计划)
+- 8.[特别感谢](#8特别感谢)
+- 9.[插件反馈渠道](#9插件反馈渠道)
+
+---
 ## 使用事项 【使用EX-GAS前，请务必确认】
 1. 该插件要求Unity版本 : 2022.3+
 2. 该插件要求使用Unity的官方包 : Entities 1.2.3版本（前后版本不要差距太多）
@@ -26,36 +95,13 @@
 
 >我非常希望EX-GAS 2.0能早日稳定，为更多游戏提供支持帮助。
 
+---
 [//]: # (## 参考案例 [Demo]&#40;Assets/Demo&#41;)
 ## 入门教学案例系列文章
 
 W.I.P 施工中...
 
-## 目录
-- 1.[快速开始](#快速开始)
-  - [安装](#安装)
-  - [使用](#使用)
-- 2.[GAS系统介绍](#GAS系统介绍)
-  - [2.1 EX-GAS概述](#21-ex-gas概述)
-  - [2.2 GameplayTag](#22-gameplaytag)
-  - [2.3 Attribute](#23-attribute)
-  - [2.4 AttributeSet](#24-attributeset)
-  - [2.5 ModifierMagnitudeCalculation](#25-modifiermagnitudecalculation)
-  - [2.6 GameplayCue](#26-gameplaycue)
-  - [2.7 GameplayEffect](#27-gameplayeffect)
-  - [2.8 Ability](#28-ability)
-  - [2.9 AbilitySystemComponent](#29-abilitysystemcomponent)
-- 3.[API && Source Code Documentation (W.I.P 施工中)](#3api--source-code-documentation)
-- 4.[可视化功能](#4可视化功能)
-  - [GAS Base Manager (GAS基础配置管理器)](#1-gas-base-manager-gas基础配置管理器)
-  - [GAS Asset Aggregator (GAS配置资源聚合器)](#2-gas-asset-aggregator-gas配置资源聚合器)
-  - [GAS Runtime Watcher (GAS运行时监视器)](#3-gas-runtime-watcher-gas运行时监视器)
-- 5.[如果...我想...,应该怎么做?(持续补充)](#5如果我想应该怎么做wip)
-- 6.[暂不支持的功能（可能有遗漏）](#6暂不支持的功能可能有遗漏)
-- 7.[后续计划](#7后续计划)
-- 8.[特别感谢](#8特别感谢)
-- 9.[插件反馈渠道](#9插件反馈渠道)
-
+---
 ## 1.快速开始
 ### 安装
 1. （如果你要使用我提供的配置方案工作流）导入Odin Inspector插件(付费),Odin Inspector来源请自行解决。建议使用3.2+版本。
