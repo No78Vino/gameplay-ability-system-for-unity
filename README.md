@@ -62,10 +62,10 @@
     - 3.5 [GameplayEffect](#35-gameplayeffect)
     - 3.6 [Ability](#36-ability)
     - 3.7 [GameplayCue](#37-gameplaycue)
-    - 3.8 [MMC](#38-mmc)
+    - 3.8 [ModifierMagnitudeCalculation](#38-modifiermagnitudecalculation)
     - 3.9 [外围Helper 工具类](#39-外围helper-工具类)
-    - 3.10 [配置表访问](#310-配置表访问)
-    - 3.11 [代码生成](#311-代码生成)
+    - 3.10 [事件系统](#310-事件系统)
+    - 3.11 [XParam 参数系统](#311-XParam-参数系统)
     - 3.12 [Timeline Ability 系统](#312-timeline-ability-系统)
     - 3.13 [全局管理](#313-全局管理)
 - 4.[调试工具 监测台GASWatcher](#4调试工具-监测台gaswatcher)
@@ -3321,7 +3321,7 @@ Cue系统由四个ECS系统驱动，它们在`SysGrpDisplay`系统组中按顺�
 
 > 所有Cue相关的操作都应该使用生成的`XCue`常量，例如`XCue.CUE_CueLog`，配合`GameplayCueUnit`或`CueHelper`进行创建和管理。
 
-### 3.8 ModifierMagnitudeCalculation (MMC)
+### 3.8 ModifierMagnitudeCalculation
 #### 3.8.1 核心概念
 MMC是GameplayEffect中属性修改的计算单元，负责将基础模值（Magnitude）转换为最终修改值。
 - **核心作用**：在GAS体系内，只有GameplayEffect能修改Attribute数值，而GameplayEffect正是通过MMC来实现数值计算的。
