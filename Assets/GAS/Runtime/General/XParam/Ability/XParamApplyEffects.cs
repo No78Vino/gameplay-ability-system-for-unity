@@ -99,7 +99,7 @@ namespace GAS.Runtime
         {  
             var result = new List<object>();  
             // IDs（slot 0）  
-            result.Add(IDs == null || IDs.Length == 0 ? string.Empty : string.Join(";", IDs));  
+            result.Add(IDs == null || IDs.Length == 0 ? "0" : string.Join(";", IDs));  
             // CatcherType（slot 1）  
             result.Add(CatcherType ?? string.Empty);  
             // CatcherParam（slot 2+）  

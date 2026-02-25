@@ -30,10 +30,8 @@ namespace GAS.Runtime
         protected abstract void CatchTargetsNonAlloc(AbilitySystemCell mainTarget, List<AbilitySystemCell> results);  
   
         public virtual void InitParameters(XParam parameter) { }  
-  
-#if UNITY_EDITOR  
+        
         public virtual void OnEditorPreview(GameObject obj) { }  
-#endif  
     }
     
     public abstract class TargetCatcherBase<T> : TargetCatcherBase where T : XParam

@@ -30,18 +30,19 @@ namespace GAS.Runtime
         /// </summary>
         /// <param name="timeUnit"></param>
         public void SetTimeUnit(TimeUnit timeUnit) => _timeUnit = timeUnit;
-#if UNITY_EDITOR
+
         /// <summary>
         /// 编辑器预览用
         /// 【注意】 覆写时，记得用UNITY_EDITOR宏包裹，这是预览表现用的函数，不该被编译。
         /// </summary>
+        /// <param name="target"></param>
         /// <param name="frame"></param>
         /// <param name="startFrame"></param>
         /// <param name="endFrame"></param>
         public virtual void OnEditorPreview(GameObject target,int frame, int startFrame, int endFrame)
         {
         }
-#endif
+        
         public void Begin(int startTime)
         {
             _startTime = startTime;

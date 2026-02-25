@@ -24,6 +24,15 @@ namespace GAS.General
             ReflectionHelper.InvokeStaticMethod("GAS.Runtime.XLauncher", "InitCache");
             ReflectionHelper.InvokeStaticMethod("GAS.Runtime.XLuban", "LoadTablesForEditor");
             ReflectionHelper.InvokeStaticMethod("GAS.Runtime.XAbility", "LoadAbilityCode");
+            _tags?.Clear();
+            _cues?.Clear();
+            _mmcs?.Clear();
+            _effects?.Clear();
+            _abilities?.Clear();
+            _ascs?.Clear();
+            _attrSets?.Clear();
+            _attrs?.Clear();
+            _timelineAbilityIDs?.Clear();
 #endif
         }
 
@@ -39,7 +48,7 @@ namespace GAS.General
 
         public static List<ValueDropdownItem> Tags()
         {
-            if (_tags != null) return _tags;
+            if (_tags is { Count: > 0 }) return _tags;
             
             _tags = new List<ValueDropdownItem>();
             var tagIDs = GasChoiceRawAccessor.GetGameplayTagsKeysToList();
@@ -54,7 +63,7 @@ namespace GAS.General
 
         public static List<ValueDropdownItem> TimelineAbilityIDs()
         {
-            if (_timelineAbilityIDs != null) return _timelineAbilityIDs;
+            if (_timelineAbilityIDs is { Count: > 0 }) return _timelineAbilityIDs;
             
             _timelineAbilityIDs = new List<ValueDropdownItem>();
             var ids = GasChoiceRawAccessor.GetTimelineAbilityIDs();
@@ -69,9 +78,10 @@ namespace GAS.General
 
         public static List<ValueDropdownItem> GameplayEffects()
         {
-            if (_effects != null) return _effects;
+            if (_effects is { Count: > 0 }) return _effects;
             
             _effects = new List<ValueDropdownItem>();
+            
             var ids = GasChoiceRawAccessor.GetGameplayEffectIDs();
             foreach (var id in ids)
             {
@@ -80,6 +90,22 @@ namespace GAS.General
             }
 
             return _effects;
+        }
+
+        public static List<ValueDropdownItem> GameplayCues()
+        {
+            if (_cues is { Count: > 0 }) return _cues;
+            
+            _cues = new List<ValueDropdownItem>();
+            
+            var ids = GasChoiceRawAccessor.GetGameplayCueIDs();
+            foreach (var id in ids)
+            {
+                string name = GasChoiceRawAccessor.GetGameplayCueName(id);
+                _cues.Add(new ValueDropdownItem($"[{id}]{name}",id));
+            }
+            
+            return _cues;
         }
     }
 }

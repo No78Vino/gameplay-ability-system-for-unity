@@ -349,5 +349,15 @@ namespace GAS.General
             );
         }
         
+        public static string GetGameplayCueName(int id)
+        {
+            return ReflectionPathHelper.GetRawMemberById<string>(
+                "TbgameplayCue",
+                id,
+                "Name",
+                "GAS.Runtime.XLuban"
+            );
+        }
+        
     }
 }

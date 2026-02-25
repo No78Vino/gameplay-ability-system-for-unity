@@ -86,6 +86,8 @@ namespace GAS.Runtime
         /// <returns></returns>
         public static int[] FilterInvalidTags(int[] tags)
         {
+            if (_tagMap== null) return tags;
+ 
             var validTags = new List<int>();
             foreach (var tag in tags)
                 if (_tagMap.ContainsKey(tag))
@@ -95,6 +97,8 @@ namespace GAS.Runtime
         
         public static List<int> FilterInvalidTags(List<int> tags)
         {
+            if (_tagMap== null) return tags;
+            
             var validTags = new List<int>();
             foreach (var tag in tags)
                 if (_tagMap.ContainsKey(tag))

@@ -16,18 +16,17 @@ namespace GAS.Runtime
         public override void InitParameters(XParam parameter)  
         {  
             base.InitParameters(parameter);  
-            if (Parameter == null) return;  
-  
-            if (!string.IsNullOrEmpty(Parameter.CatcherType))  
+            if (Parameter == null) return;
+
+            if (string.IsNullOrEmpty(Parameter.CatcherType)) return;
+            
+            _catcher = TargetCatcherHelper.TryCreateTargetCatcher(Parameter.CatcherType);  
+            if (_catcher != null & Application.isPlaying)  
             {  
-                _catcher = TargetCatcherHelper.TryCreateTargetCatcher(Parameter.CatcherType);  
-                if (_catcher != null)  
-                {  
-                    _catcher.Init(Owner); // Owner 来自 AbilityTaskBase  
-                    if (Parameter.Param != null)  
-                        _catcher.InitParameters(Parameter.Param);  
-                }  
-            }  
+                _catcher.Init(Owner); // Owner 来自 AbilityTaskBase  
+                if (Parameter.Param != null)  
+                    _catcher.InitParameters(Parameter.Param);  
+            }
         }  
   
         protected override void OnBegin(int startFrame)  
@@ -44,6 +43,12 @@ namespace GAS.Runtime
                     EffectUtil.ApplyGameplayEffectTo(geEntity, target.Entity, Owner.Entity);  
                 }  
             }  
+        }
+
+        public override void OnEditorPreview(GameObject target, int frame, int startFrame, int endFrame)
+        {
+            base.OnEditorPreview(target, frame, startFrame, endFrame);
+            _catcher.OnEditorPreview(target);
         }
     }  
 }

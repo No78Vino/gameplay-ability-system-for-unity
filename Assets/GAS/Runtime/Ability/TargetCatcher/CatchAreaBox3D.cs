@@ -37,7 +37,41 @@ namespace GAS.Runtime
                 var mono = Colliders[i].GetComponent<AbilitySystemComponent>();  
                 if (mono != null)  results.Add(mono.Cell);  
             }  
-        }  
+        }
+
+        public override void OnEditorPreview(GameObject obj)
+        {
+            if (Parameter == null) return;  
+  
+            Vector3 center;  
+            Quaternion rotation;  
+  
+            if (Parameter.isWorldSpace)  
+            {  
+                // 世界空间：直接使用参数中的 offset 和 rotation  
+                center = Parameter.offset;  
+                rotation = Quaternion.Euler(Parameter.rotation);  
+            }  
+            else  
+            {  
+                // 本地空间：相对于 previewObject 的 Transform 做变换  
+                // 与运行时 CatchTargetsNonAlloc 的逻辑完全对应  
+                if (obj == null) return;  
+                var t = obj.transform;  
+                center = t.TransformPoint(Parameter.offset);  
+                rotation = Quaternion.Euler(t.TransformDirection(Parameter.rotation));  
+            }  
+  
+            // 使用 Gizmos 绘制线框盒子（在 Scene 视图中可见）  
+            var oldMatrix = UnityEditor.Handles.matrix;  
+            UnityEditor.Handles.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);  
+            UnityEditor.Handles.color = Color.green;  
+            UnityEditor.Handles.DrawWireCube(Vector3.zero, Parameter.size);  
+            UnityEditor.Handles.matrix = oldMatrix;  
+  
+            // 也可以用 Debug.DrawLine 系列，但 Handles.DrawWireCube 在 Scene 视图中更直观  
+            UnityEditor.SceneView.RepaintAll();  
+        }
     }
 
     public class XParamCatchAreaBox3D : XParam
@@ -89,9 +123,9 @@ namespace GAS.Runtime
             }
             
             // size
-            if (paramData.Count > 3)
+            if (paramData.Count > 2)
             {
-                var strData = paramData[3] as string;
+                var strData = paramData[2] as string;
                 if (string.IsNullOrEmpty(strData)) return;
                 
                 var data = strData.Split(',');
@@ -107,9 +141,9 @@ namespace GAS.Runtime
             }
             
             // rotation
-            if (paramData.Count > 4)
+            if (paramData.Count > 3)
             {
-                var strData = paramData[4] as string;
+                var strData = paramData[3] as string;
                 if (string.IsNullOrEmpty(strData)) return;
 
                 var data = strData.Split(',');
@@ -125,9 +159,9 @@ namespace GAS.Runtime
             }
 
             // layer
-            if (paramData.Count > 5)
+            if (paramData.Count > 4)
             {
-                var strData = paramData[5] as string;
+                var strData = paramData[4] as string;
                 if (string.IsNullOrEmpty(strData)) return;
 
                 if (int.TryParse(strData, out var layerNumber)) layer = layerNumber;
@@ -142,7 +176,7 @@ namespace GAS.Runtime
                 $"{offset.x},{offset.y},{offset.z}",
                 $"{size.x},{size.y},{size.z}",
                 $"{rotation.x},{rotation.y},{rotation.z}",
-                layer.ToString()
+                layer.value.ToString()
             };
             return data;
         }
