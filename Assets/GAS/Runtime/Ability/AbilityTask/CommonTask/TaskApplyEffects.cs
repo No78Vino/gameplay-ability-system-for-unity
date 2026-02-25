@@ -7,7 +7,7 @@ namespace GAS.Runtime
     public class TaskApplyEffects : AbilityTaskBase<XParamApplyEffects>  
     {  
         private TargetCatcherBase _catcher;  
-        private List<AbilitySystemComponent> _catchResults = new List<AbilitySystemComponent>();  
+        private List<AbilitySystemCell> _catchResults = new List<AbilitySystemCell>();  
   
         public TaskApplyEffects(AbilityLogicBase logic) : base(logic)  
         {  
@@ -34,10 +34,16 @@ namespace GAS.Runtime
         {  
             if (_catcher == null || Parameter?.IDs == null) return;  
             
-            // _catcher.CatchTargetsNonAllocSafe(Spec.Target, ref _catchResults);  
-            // foreach (var target in _catchResults)  
-            // foreach (var id in Parameter.IDs)  
-            //     Owner.ApplyGameplayEffectTo(id, target); // 根据你的 ASC API 调整  
+            _catcher.CatchTargetsNonAllocSafe(Owner, ref _catchResults);  
+            foreach (var target in _catchResults)  
+            {  
+                foreach (var id in Parameter.IDs)  
+                {  
+                    var effectCfg = GameplayEffectHelper.GetConfigByID(id);  
+                    var geEntity = EffectUtil.CreateGameplayEffectEntity(effectCfg.ComponentConfigs);  
+                    EffectUtil.ApplyGameplayEffectTo(geEntity, target.Entity, Owner.Entity);  
+                }  
+            }  
         }
     }  
 }
