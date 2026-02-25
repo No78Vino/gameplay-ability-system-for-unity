@@ -23,6 +23,7 @@ namespace GAS.General
 #if UNITY_EDITOR
             ReflectionHelper.InvokeStaticMethod("GAS.Runtime.XLauncher", "InitCache");
             ReflectionHelper.InvokeStaticMethod("GAS.Runtime.XLuban", "LoadTablesForEditor");
+            ReflectionHelper.InvokeStaticMethod("GAS.Runtime.XAbility", "LoadAbilityCode");
 #endif
         }
 

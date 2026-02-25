@@ -4,44 +4,40 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class CatchAreaBox3D : TargetCatcherBase<XParamCatchAreaBox3D>
-    {
-        // 最大捕获数量为64，超出则无视64之后的目标
-        private static readonly Collider[] Colliders = new Collider[64];
-
-        protected override void CatchTargetsNonAlloc(AbilitySystemComponent mainTarget,
-            List<AbilitySystemComponent> results)
-        {
-            // 根据XParamCatchAreaBox3D参数，捕获范围内的目标
-            int count;
-            if (Parameter.isWorldSpace)
-            {
-                count = Physics.OverlapBoxNonAlloc(
-                    Parameter.offset,
-                    Parameter.size*0.5f,
-                    Colliders,
-                    Quaternion.Euler(Parameter.rotation),
-                    Parameter.layer.value);
-            }
-            else
-            {
-                count = Physics.OverlapBoxNonAlloc(
-                    mainTarget.transform.TransformPoint(Parameter.offset),
-                    Parameter.size*0.5f,
-                    Colliders,
-                    Quaternion.Euler(mainTarget.transform.TransformDirection(Parameter.rotation)),
-                    Parameter.layer.value);
-            }
-
-            for (var i = 0; i < count; ++i)
-            {
-                var targetUnit = Colliders[i].GetComponent<AbilitySystemComponent>();
-                if (targetUnit != null)
-                {
-                    results.Add(targetUnit);
-                }
-            }
-        }
+    public class CatchAreaBox3D : TargetCatcherBase<XParamCatchAreaBox3D>  
+    {  
+        private static readonly Collider[] Colliders = new Collider[64];  
+  
+        protected override void CatchTargetsNonAlloc(AbilitySystemCell mainTarget, List<AbilitySystemCell> results)  
+        {  
+            int count;  
+            if (Parameter.isWorldSpace)  
+            {  
+                count = Physics.OverlapBoxNonAlloc(  
+                    Parameter.offset,  
+                    Parameter.size * 0.5f,  
+                    Colliders,  
+                    Quaternion.Euler(Parameter.rotation),  
+                    Parameter.layer.value);  
+            }  
+            else  
+            {  
+                var mainTransform = mainTarget.GameObject.transform;  
+                count = Physics.OverlapBoxNonAlloc(  
+                    mainTransform.TransformPoint(Parameter.offset),  
+                    Parameter.size * 0.5f,  
+                    Colliders,  
+                    Quaternion.Euler(mainTransform.TransformDirection(Parameter.rotation)),  
+                    Parameter.layer.value);  
+            }  
+  
+            for (var i = 0; i < count; ++i)  
+            {  
+                // 通过 MonoBehaviour 上的 AbilitySystemComponent 拿到 Cell  
+                var mono = Colliders[i].GetComponent<AbilitySystemComponent>();  
+                if (mono != null)  results.Add(mono.Cell);  
+            }  
+        }  
     }
 
     public class XParamCatchAreaBox3D : XParam

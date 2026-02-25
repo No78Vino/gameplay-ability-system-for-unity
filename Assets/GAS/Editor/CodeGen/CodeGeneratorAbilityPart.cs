@@ -69,6 +69,21 @@ namespace GAS.Editor
                                 $"GAS.Runtime.AbilityHelper.RegisterAbilityTask({shortTypeName}.Name, {shortTypeName},typeof({abilityTaskParamTypeFullName}));");
                         }
                         
+                        writer.WriteLine("");  
+                        writer.WriteLine("///  TargetCatcher");  
+                        var subCatcherTypes = EditorTargetCatcherHelper.GetCachedTargetCatcherTypes();  
+                        foreach (var subCatcherType in subCatcherTypes)  
+                        {  
+                            var typeFullName = subCatcherType.FullName;  
+                            var shortTypeName = subCatcherType.Name;  
+                            var catcherParamType =  
+                                EditorTargetCatcherHelper.CatcherToParamTypeMap()[shortTypeName];  
+                            var catcherParamTypeFullName = catcherParamType.FullName;  
+                            writer.WriteLine($"var {shortTypeName} = typeof({typeFullName});");  
+                            writer.WriteLine(  
+                                $"GAS.Runtime.TargetCatcherHelper.RegisterTargetCatcher({shortTypeName}.Name, {shortTypeName},typeof({catcherParamTypeFullName}));");  
+                        }
+                        
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
