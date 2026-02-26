@@ -13,22 +13,19 @@ using SimpleJSON;
 
 namespace cfg
 {
-public abstract partial class AbilityTask : Luban.BeanBase
+public abstract partial class TargetCatcherBase : Luban.BeanBase
 {
-    public AbilityTask(JSONNode _buf) 
+    public TargetCatcherBase(JSONNode _buf) 
     {
     }
 
-    public static AbilityTask DeserializeAbilityTask(JSONNode _buf)
+    public static TargetCatcherBase DeserializeTargetCatcherBase(JSONNode _buf)
     {
         switch ((string)_buf["$type"])
         {
-            case "TaskDoNothing": return new TaskDoNothing(_buf);
-            case "TaskDoCost": return new TaskDoCost(_buf);
-            case "TaskDebug": return new TaskDebug(_buf);
-            case "TaskPlayCue": return new TaskPlayCue(_buf);
-            case "TaskPlayCuePreset": return new TaskPlayCuePreset(_buf);
-            case "TaskApplyEffects": return new TaskApplyEffects(_buf);
+            case "CatchSelf": return new CatchSelf(_buf);
+            case "CatchTarget": return new CatchTarget(_buf);
+            case "CatchAreaBox3D": return new CatchAreaBox3D(_buf);
             default: throw new SerializationException();
         }
     }

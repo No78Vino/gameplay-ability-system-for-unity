@@ -34,12 +34,14 @@ public abstract partial class XParam : Luban.BeanBase
             case "XParamArrayFloat": return new XParamArrayFloat(_buf);
             case "XParamArrayString": return new XParamArrayString(_buf);
             case "XParamCueIDs": return new XParamCueIDs(_buf);
-            case "XParamCue": return new XParamCue(_buf);
             case "XParamALTimelineID": return new XParamALTimelineID(_buf);
             case "XParamEffectIDs": return new XParamEffectIDs(_buf);
+            case "XParamCue": return new XParamCue(_buf);
             case "XParamMMCScalable": return new XParamMMCScalable(_buf);
             case "XParamLogging": return new XParamLogging(_buf);
             case "XParamAnimator": return new XParamAnimator(_buf);
+            case "XParamCatchAreaBox3D": return new XParamCatchAreaBox3D(_buf);
+            case "XParamApplyEffects": return new XParamApplyEffects(_buf);
             default: throw new SerializationException();
         }
     }

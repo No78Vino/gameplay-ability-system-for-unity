@@ -80,8 +80,34 @@
             "EndTime": 9,
             "Name": "造成伤害",
             "Task": {
-              "$type": "TaskDoCost",
-              "Param": {}
+              "$type": "TaskApplyEffects",
+              "Param": {
+                "IDs": [
+                  1001
+                ],
+                "TargetCatcher": {
+                  "$type": "CatchAreaBox3D",
+                  "Param": {
+                    "isWorldSpace": false,
+                    "offset": {
+                      "x": 0,
+                      "y": 0,
+                      "z": 3
+                    },
+                    "size": {
+                      "x": 2,
+                      "y": 2,
+                      "z": 5
+                    },
+                    "rotation": {
+                      "x": 0,
+                      "y": 0,
+                      "z": 0
+                    },
+                    "layer": 256
+                  }
+                }
+              }
             }
           }
         ]
