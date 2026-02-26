@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GAS.Runtime
 {
-    public class CatchAreaBox3D : TargetCatcherBase<XParamCatchAreaBox3D>  
+    public sealed class CatchAreaBox3D : TargetCatcherBase<XParamCatchAreaBox3D>  
     {  
         private static readonly Collider[] Colliders = new Collider[64];  
   
