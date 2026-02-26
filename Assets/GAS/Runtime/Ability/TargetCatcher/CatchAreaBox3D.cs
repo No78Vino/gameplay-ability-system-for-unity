@@ -83,6 +83,31 @@ namespace GAS.Runtime
         [LabelText("监测层级")]
         public LayerMask layer;
         
+        
+        public void SetIsWorldSpace(bool isWorld)
+        {
+            isWorldSpace = isWorld;
+        }
+        
+        public void SetOffset(Vector3 offset)
+        {
+            this.offset = offset;
+        }
+        
+        public void SetSize(Vector3 size)
+        {
+            this.size = size;
+        }
+        
+        public void SetRotation(Vector3 rotation)
+        {
+            this.rotation = rotation;
+        }
+        
+        public void SetLayer(int layer)
+        {
+            this.layer.value = layer;
+        }
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {

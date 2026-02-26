@@ -70,7 +70,6 @@ namespace GAS.Editor
                     writer.WriteLine("public static void LoadTablesForEditor()");
                     writer.WriteLine("{");
                     writer.Indent++;
-                    writer.WriteLine("if (_tables != null) return;");
                     writer.WriteLine("_tables = new Tables(file => JSON.Parse(File.ReadAllText($\"{GAME_CONF_DIR}/{file}.json\")));");
                     writer.Indent--;
                     writer.WriteLine("}");
@@ -581,7 +580,7 @@ namespace GAS.Editor
                         writer.WriteLine("var mmcLogicName = data.MmcLogic.GetType().Name;");
                         writer.WriteLine("var mmcLogicParamType = MmcHelper.GetMmcParamTypeByMmcType(mmcLogicName);");
                         writer.WriteLine(
-                            "IMmcParameter mmcParam = Activator.CreateInstance(mmcLogicParamType) as IMmcParameter;");
+                            "XParam mmcParam = Activator.CreateInstance(mmcLogicParamType) as XParam;");
                         writer.WriteLine("if (mmcParam != null)");
                         writer.WriteLine("{");
                         writer.Indent++;

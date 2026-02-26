@@ -20,7 +20,6 @@ namespace GAS.Runtime
         {
             XLuban.Init(loader);
         }
-        
         public static void Launch()
         {
             InitCache();

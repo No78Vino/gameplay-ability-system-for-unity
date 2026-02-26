@@ -200,7 +200,7 @@
   },
   {
     "ID": 1006,
-    "Name": "自动恢复耐力",
+    "Name": "恢复2点耐力",
     "Desc": "耐力恢复2点/60帧",
     "AssetTags": [],
     "GrantedTags": [],
@@ -248,6 +248,60 @@
       "FirstTrigger": false
     },
     "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 2001,
+    "Name": "扣3点血",
+    "Desc": "扣3点血",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 1,
+        "Magnitude": 3,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 2002,
+    "Name": "扣10滴血",
+    "Desc": "扣10滴血",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 1,
+        "Magnitude": 10,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
     "CueOnApply": [],
     "CueOnTick": [],
     "CueOnAdd": [],

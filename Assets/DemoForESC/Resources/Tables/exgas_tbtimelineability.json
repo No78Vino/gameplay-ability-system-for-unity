@@ -43,7 +43,7 @@
             "Task": {
               "$type": "TaskDebug",
               "Param": {
-                "Value": "测试135"
+                "Value": "播放攻击音效1"
               }
             }
           }
@@ -76,14 +76,14 @@
             }
           },
           {
-            "StartTime": 9,
-            "EndTime": 9,
+            "StartTime": 8,
+            "EndTime": 8,
             "Name": "造成伤害",
             "Task": {
               "$type": "TaskApplyEffects",
               "Param": {
                 "IDs": [
-                  1001
+                  2002
                 ],
                 "TargetCatcher": {
                   "$type": "CatchAreaBox3D",

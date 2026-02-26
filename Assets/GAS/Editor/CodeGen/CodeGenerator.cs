@@ -75,6 +75,8 @@ namespace GAS.Editor
             finally
             {
                 process.Close();
+                // 刷新资源
+                AssetDatabase.Refresh();
             }
         }
         

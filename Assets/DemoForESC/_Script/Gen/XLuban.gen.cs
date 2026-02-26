@@ -34,7 +34,6 @@ namespace GAS.Runtime
 
         public static void LoadTablesForEditor()
         {
-            if (_tables != null) return;
             _tables = new Tables(file => JSON.Parse(File.ReadAllText($"{GAME_CONF_DIR}/{file}.json")));
         }
 
@@ -456,6 +455,14 @@ namespace GAS.Runtime
                                 taskParam = tp;
                                 break;
                             }
+                            case cfg.TaskApplyEffects taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamApplyEffects;
+                                tp?.SetIDs(taskData.Param.IDs);
+                                tp?.SetTargetCatcher(taskData.Param.TargetCatcher);
+                                taskParam = tp;
+                                break;
+                            }
                             case cfg.TaskDebug taskData:
                             {
                                 var tp = taskParam as GAS.Runtime.XParamString;
@@ -553,6 +560,45 @@ namespace GAS.Runtime
         if (data != null) return data.Name;
         Debug.LogError($"Attribute_Code:{code}  不存在.");
         return string.Empty;
+    }
+    
+    public static void SetTargetCatcher(this GAS.Runtime.XParamApplyEffects param, cfg.TargetCatcherBase targetCatcher)
+    {
+        param.SetCatcherType(targetCatcher.GetType().Name);
+        
+        var catcherParamType = TargetCatcherHelper.GetCatcherParamType(targetCatcher.GetType().Name);
+        var catcherParam = Activator.CreateInstance(catcherParamType) as XParam;
+        if (catcherParam != null)
+        {
+            switch (targetCatcher)
+            {
+                case cfg.CatchTarget cData:
+                {
+                    var cp = catcherParam as GAS.Runtime.XParamNone;
+                    catcherParam = cp;
+                    break;
+                }
+                case cfg.CatchSelf cData:
+                {
+                    var cp = catcherParam as GAS.Runtime.XParamNone;
+                    catcherParam = cp;
+                    break;
+                }
+                case cfg.CatchAreaBox3D cData:
+                {
+                    var cp = catcherParam as GAS.Runtime.XParamCatchAreaBox3D;
+                    //cp?.SetOffset(cData.Param.Offset);
+                    // cp?.SetSize(cData.Param.Size);
+                    // cp?.SetRotation(cData.Param.Rotation);
+                    cp?.SetIsWorldSpace(cData.Param.IsWorldSpace);
+                    cp?.SetLayer(cData.Param.Layer);
+                    catcherParam = cp;
+                    break;
+                }
+            }
+        }
+
+        param.SetParam(catcherParam);
     }
 }
 }
