@@ -168,6 +168,37 @@ namespace GAS.General
             State.Commands.Add(cmd);
         }
 
+        public static void DrawWireCube(Vector3 center, Quaternion rotation, Vector3 size, Color color,   
+            float duration = 0f, bool depthTest = true)  
+        {  
+            if (!State.Enabled) return;  
+  
+            Vector3 hx = rotation * (Vector3.right   * size.x * 0.5f);  
+            Vector3 hy = rotation * (Vector3.up      * size.y * 0.5f);  
+            Vector3 hz = rotation * (Vector3.forward * size.z * 0.5f);  
+  
+            Vector3 p000 = center - hx - hy - hz;  
+            Vector3 p001 = center - hx - hy + hz;  
+            Vector3 p010 = center - hx + hy - hz;  
+            Vector3 p011 = center - hx + hy + hz;  
+            Vector3 p100 = center + hx - hy - hz;  
+            Vector3 p101 = center + hx - hy + hz;  
+            Vector3 p110 = center + hx + hy - hz;  
+            Vector3 p111 = center + hx + hy + hz;  
+  
+            var cfg = new DrawConfig { color = color, duration = duration,   
+                layer = State.CurrentLayer, lineWidth = 2f, depthTest = depthTest };  
+  
+            void Line(Vector3 a, Vector3 b) => DrawLine(a, b, cfg);  
+  
+            // 底面  
+            Line(p000, p100); Line(p100, p101); Line(p101, p001); Line(p001, p000);  
+            // 顶面  
+            Line(p010, p110); Line(p110, p111); Line(p111, p011); Line(p011, p010);  
+            // 立柱  
+            Line(p000, p010); Line(p100, p110); Line(p101, p111); Line(p001, p011);  
+        }
+        
         // ---- 简易“球体”：用 3 个正交圆环线框近似 ----
 
         public static void DrawWireSphere3Rings(Vector3 center, float radius, Color color, float duration = 0f,

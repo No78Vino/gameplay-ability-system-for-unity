@@ -21,9 +21,11 @@ namespace GAS.Runtime
             if (string.IsNullOrEmpty(Parameter.CatcherType)) return;
             
             _catcher = TargetCatcherHelper.TryCreateTargetCatcher(Parameter.CatcherType);  
-            if (_catcher != null & Application.isPlaying)  
-            {  
-                _catcher.Init(Owner); // Owner 来自 AbilityTaskBase  
+            if (_catcher != null)
+            {
+                if (Application.isPlaying)
+                    _catcher.Init(Owner);
+                
                 if (Parameter.Param != null)  
                     _catcher.InitParameters(Parameter.Param);  
             }
