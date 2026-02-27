@@ -9,6 +9,7 @@ namespace GAS.Runtime
     {
         public const string MMC_MMCNone = "MMCNone";
         public const string MMC_MMCScalableFloat = "MMCScalableFloat";
+        public const string MMC_MMCAttributeBased = "MMCAttributeBased";
 
         public static void LoadMmcType()
         {
@@ -16,6 +17,8 @@ namespace GAS.Runtime
             MmcHelper.RegisterMmc(MMC_MMCNone, MMCNone,typeof(GAS.Runtime.XParamNone));
             var MMCScalableFloat = typeof(GAS.Runtime.MMCScalableFloat);
             MmcHelper.RegisterMmc(MMC_MMCScalableFloat, MMCScalableFloat,typeof(GAS.Runtime.MmcParaFloatScale));
+            var MMCAttributeBased = typeof(GAS.Runtime.MMCAttributeBased);
+            MmcHelper.RegisterMmc(MMC_MMCAttributeBased, MMCAttributeBased,typeof(GAS.Runtime.AttributeBasedMmcParam));
         }
     }
 }
