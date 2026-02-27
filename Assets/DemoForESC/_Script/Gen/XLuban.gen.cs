@@ -561,20 +561,26 @@ namespace GAS.Runtime
         Debug.LogError($"Attribute_Code:{code}  不存在.");
         return string.Empty;
     }
-    
+
+    #region TargetCatcher
+
     public static void SetTargetCatcher(this GAS.Runtime.XParamApplyEffects param, cfg.TargetCatcherBase targetCatcher)
     {
         param.SetCatcherType(targetCatcher.GetType().Name);
-        
         var catcherParamType = TargetCatcherHelper.GetCatcherParamType(targetCatcher.GetType().Name);
         var catcherParam = Activator.CreateInstance(catcherParamType) as XParam;
         if (catcherParam != null)
         {
             switch (targetCatcher)
             {
-                case cfg.CatchTarget cData:
+                case cfg.CatchAreaBox3D cData:
                 {
-                    var cp = catcherParam as GAS.Runtime.XParamNone;
+                    var cp = catcherParam as GAS.Runtime.XParamCatchAreaBox3D;
+                    cp?.SetIsWorldSpace(cData.Param.IsWorldSpace);
+                    cp?.SetOffset(new UnityEngine.Vector3(cData.Param.Offset.X, cData.Param.Offset.Y, cData.Param.Offset.Z));
+                    cp?.SetSize(new UnityEngine.Vector3(cData.Param.Size.X, cData.Param.Size.Y, cData.Param.Size.Z));
+                    cp?.SetRotation(new UnityEngine.Vector3(cData.Param.Rotation.X, cData.Param.Rotation.Y, cData.Param.Rotation.Z));
+                    cp?.SetLayer(cData.Param.Layer);
                     catcherParam = cp;
                     break;
                 }
@@ -584,21 +590,22 @@ namespace GAS.Runtime
                     catcherParam = cp;
                     break;
                 }
-                case cfg.CatchAreaBox3D cData:
+                case cfg.CatchTarget cData:
                 {
-                    var cp = catcherParam as GAS.Runtime.XParamCatchAreaBox3D;
-                    //cp?.SetOffset(cData.Param.Offset);
-                    // cp?.SetSize(cData.Param.Size);
-                    // cp?.SetRotation(cData.Param.Rotation);
-                    cp?.SetIsWorldSpace(cData.Param.IsWorldSpace);
-                    cp?.SetLayer(cData.Param.Layer);
+                    var cp = catcherParam as GAS.Runtime.XParamNone;
                     catcherParam = cp;
+                    break;
+                }
+                default:
+                {
+                    Debug.LogError($"[XLuban] Unknown TargetCatcher type: {targetCatcher.GetType().Name}");
                     break;
                 }
             }
         }
-
         param.SetParam(catcherParam);
     }
+
+    #endregion
 }
 }

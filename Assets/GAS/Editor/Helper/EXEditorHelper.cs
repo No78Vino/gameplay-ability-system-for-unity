@@ -39,6 +39,20 @@ namespace GAS.Editor
 
             return readonlyFieldNames;
         }
+        
+        public static List<(string Name, Type FieldType)> GetAllReadOnlyFields(Type targetType)  
+        {  
+            var result = new List<(string, Type)>();  
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;  
+            if (targetType != null)  
+            {  
+                var allFields = targetType.GetFields(bindingFlags);  
+                foreach (var field in allFields)  
+                    if (field.IsInitOnly)  
+                        result.Add((field.Name, field.FieldType));  
+            }  
+            return result;  
+        }
 
         public static int GetFrameRate()
         {

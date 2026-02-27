@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GAS.General;
@@ -7,6 +8,33 @@ namespace GAS.Editor
 {
     public static class CodeGeneratorLubanPart
     {
+        // Luban cfg 类型 → Unity 类型转换模板（{0} 为字段访问表达式）  
+        private static readonly Dictionary<string, string> LubanTypeConversionMap = new()
+        {
+            ["cfg.vector3"] = "new UnityEngine.Vector3({0}.X, {0}.Y, {0}.Z)",
+            ["cfg.vector2"] = "new UnityEngine.Vector2({0}.X, {0}.Y)",
+            ["cfg.vector4"] = "new UnityEngine.Vector4({0}.X, {0}.Y, {0}.Z, {0}.W)",
+        };
+
+        private static void WriteFieldAssignment(
+            IndentedWriter writer,
+            string paramVar, // 如 "cp", "tp", "ap", "mp"  
+            string fieldName, // 如 "Offset"  
+            string dataAccessExpr, // 如 "cData.Param.Offset"  
+            Type fieldType)
+        {
+            var typeName = fieldType.FullName ?? fieldType.Name;
+            if (LubanTypeConversionMap.TryGetValue(typeName, out var template))
+            {
+                var converted = string.Format(template, dataAccessExpr);
+                writer.WriteLine($"{paramVar}?.Set{fieldName}({converted});");
+            }
+            else
+            {
+                writer.WriteLine($"{paramVar}?.Set{fieldName}({dataAccessExpr});");
+            }
+        }
+
         public static void GenerateLubanExtension()
         {
             var setting = GASSettingAsset.LoadOrCreate();
@@ -66,7 +94,7 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     writer.WriteLine("");
-                    
+
                     writer.WriteLine("public static void LoadTablesForEditor()");
                     writer.WriteLine("{");
                     writer.Indent++;
@@ -75,7 +103,7 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     writer.WriteLine("");
-                    
+
                     writer.WriteLine("public static void Init(Func<string, JSONNode> loader)");
                     writer.WriteLine("{");
                     writer.Indent++;
@@ -176,9 +204,10 @@ namespace GAS.Editor
                                 writer.Indent++;
                                 writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");
 
-                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                                foreach (var fieldName in readOnlyFields)
-                                    writer.WriteLine($"cp?.Set{fieldName}(cData.Param.{fieldName});");
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFields(tType);
+                                foreach (var (fieldName, fieldType) in readOnlyFields)
+                                    WriteFieldAssignment(writer, "cp", fieldName, $"cData.Param.{fieldName}",
+                                        fieldType);
 
                                 writer.WriteLine("cueParam = cp;");
                                 writer.WriteLine("break;");
@@ -508,11 +537,10 @@ namespace GAS.Editor
                                     writer.WriteLine("{");
                                     writer.Indent++;
                                     writer.WriteLine($"var ap = abilityParam as {abilityParamType.FullName};");
-                                    var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                                    foreach (var fieldName in readOnlyFields)
-                                    {
-                                        writer.WriteLine($"ap?.Set{fieldName}(aData.Param.{fieldName});");
-                                    }
+                                    var readOnlyFields = EXEditorHelper.GetAllReadOnlyFields(tType);
+                                    foreach (var (fieldName, fieldType) in readOnlyFields)
+                                        WriteFieldAssignment(writer, "ap", fieldName, $"aData.Param.{fieldName}",
+                                            fieldType);
 
                                     if (abilityParamType.Name == "XParamALTimelineID")
                                     {
@@ -604,11 +632,10 @@ namespace GAS.Editor
                                 writer.WriteLine("{");
                                 writer.Indent++;
                                 writer.WriteLine($"var mp = mmcParam as {mmcParamType.FullName};");
-                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                                foreach (var fieldName in readOnlyFields)
-                                {
-                                    writer.WriteLine($"mp?.Set{fieldName}(mmcData.Param.{fieldName});");
-                                }
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFields(tType);
+                                foreach (var (fieldName, fieldType) in readOnlyFields)
+                                    WriteFieldAssignment(writer, "mp", fieldName, $"mmcData.Param.{fieldName}",
+                                        fieldType);
 
                                 writer.WriteLine("mmcParam = mp;");
                                 writer.WriteLine("break;");
@@ -739,14 +766,15 @@ namespace GAS.Editor
                         writer.WriteLine("switch (clipData.Task)");
                         writer.WriteLine("{");
                         writer.Indent++;
-                        
-                        
+
+
                         var allTasks = EditorAbilityHelper.GetCachedAbilityTaskTypes();
                         var taskTypes = allTasks as Type[] ?? allTasks.ToArray();
                         foreach (var taskType in taskTypes)
                         {
                             var taskTypeName = taskType.Name;
-                            var taskParamType = EditorAbilityHelper.AbilityTaskToAbilityTaskParamTypeMap()[taskTypeName];
+                            var taskParamType =
+                                EditorAbilityHelper.AbilityTaskToAbilityTaskParamTypeMap()[taskTypeName];
                             var tType = ReflectionHelper.GetMemberType($"cfg.{taskTypeName}", "Param");
 
                             if (tType == null) continue;
@@ -758,25 +786,25 @@ namespace GAS.Editor
                             if (taskParamType.Name == "XParamCue")
                             {
                                 // 特殊处理XParamCue的创建逻辑
-                                writer.WriteLine($"tp?.SetCueLogic(CreateCueLogicUnit(taskData.Param.CueLogic,taskData.Param.RequiredTags,taskData.Param.ImmunityTags));");
+                                writer.WriteLine(
+                                    $"tp?.SetCueLogic(CreateCueLogicUnit(taskData.Param.CueLogic,taskData.Param.RequiredTags,taskData.Param.ImmunityTags));");
                             }
                             else
                             {
-                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                                foreach (var fieldName in readOnlyFields)
-                                {
-                                    writer.WriteLine($"tp?.Set{fieldName}(taskData.Param.{fieldName});");
-                                }
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFields(tType);
+                                foreach (var (fieldName, fieldType) in readOnlyFields)
+                                    WriteFieldAssignment(writer, "tp", fieldName, $"taskData.Param.{fieldName}",
+                                        fieldType);
                             }
-                            
+
 
                             writer.WriteLine("taskParam = tp;");
                             writer.WriteLine("break;");
                             writer.Indent--;
                             writer.WriteLine("}");
                         }
-                        
-                        
+
+
                         writer.Indent--;
                         writer.WriteLine("}");
                     }
@@ -801,8 +829,10 @@ namespace GAS.Editor
                     writer.WriteLine("");
 
                     #region 动态创建CueLogic
-                    
-                    writer.WriteLine("private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)"); writer.WriteLine("{");
+
+                    writer.WriteLine(
+                        "private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)");
+                    writer.WriteLine("{");
                     writer.Indent++;
                     {
                         writer.WriteLine("var cueLogicName = cueLogic.GetType().Name;");
@@ -815,8 +845,8 @@ namespace GAS.Editor
                             writer.WriteLine("switch (cueLogic)");
                             writer.WriteLine("{");
                             writer.Indent++;
-                            
-                            
+
+
                             var allCueLogic = EditorCueHelper.GetCachedCueTypes();
                             var cueLogicTypes = allCueLogic as Type[] ?? allCueLogic.ToArray();
                             foreach (var cueLogicType in cueLogicTypes)
@@ -831,32 +861,32 @@ namespace GAS.Editor
                                 writer.WriteLine("{");
                                 writer.Indent++;
                                 writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");
-                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFieldNames(tType);
-                                foreach (var fieldName in readOnlyFields)
-                                {
-                                    writer.WriteLine($"cp?.Set{fieldName}(cData.Param.{fieldName});");
-                                }
+                                var readOnlyFields = EXEditorHelper.GetAllReadOnlyFields(tType);
+                                foreach (var (fieldName, fieldType) in readOnlyFields)
+                                    WriteFieldAssignment(writer, "cp", fieldName, $"cData.Param.{fieldName}",
+                                        fieldType);
 
                                 writer.WriteLine("cueParam = cp;");
                                 writer.WriteLine("break;");
                                 writer.Indent--;
                                 writer.WriteLine("}");
                             }
-                            
-                            
+
+
                             writer.Indent--;
                             writer.WriteLine("}");
                         }
                         writer.Indent--;
                         writer.WriteLine("}");
                         writer.WriteLine("var cueLogicType = CueHelper.GetCueType(cueLogicName);");
-                        writer.WriteLine("return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);");
+                        writer.WriteLine(
+                            "return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
 
                     #endregion
-                    
+
                     #region Utils
 
                     writer.WriteLine("public static string GetAbilityNameByCode(int id)");
@@ -898,6 +928,76 @@ namespace GAS.Editor
                     writer.WriteLine("}");
 
                     #endregion
+
+                    #region TargetCatcher
+                    writer.WriteLine("");
+                    writer.WriteLine("#region TargetCatcher");
+                    writer.WriteLine("");
+                    writer.WriteLine(
+                        "public static void SetTargetCatcher(this GAS.Runtime.XParamApplyEffects param, cfg.TargetCatcherBase targetCatcher)");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    {
+                        writer.WriteLine("param.SetCatcherType(targetCatcher.GetType().Name);");
+                        writer.WriteLine(
+                            "var catcherParamType = TargetCatcherHelper.GetCatcherParamType(targetCatcher.GetType().Name);");
+                        writer.WriteLine("var catcherParam = Activator.CreateInstance(catcherParamType) as XParam;");
+                        writer.WriteLine("if (catcherParam != null)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        {
+                            writer.WriteLine("switch (targetCatcher)");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            {
+                                var catcherTypes = EditorTargetCatcherHelper.GetCachedTargetCatcherTypes();
+                                foreach (var catcherType in catcherTypes)
+                                {
+                                    var catcherName = catcherType.Name;
+                                    var catcherParamType =
+                                        EditorTargetCatcherHelper.CatcherToParamTypeMap()[catcherName];
+                                    var tType = ReflectionHelper.GetMemberType($"cfg.{catcherName}", "Param");
+
+                                    writer.WriteLine($"case cfg.{catcherName} cData:");
+                                    writer.WriteLine("{");
+                                    writer.Indent++;
+                                    writer.WriteLine($"var cp = catcherParam as {catcherParamType.FullName};");
+                                    if (tType != null)
+                                    {
+                                        var readOnlyFields = EXEditorHelper.GetAllReadOnlyFields(tType);
+                                        foreach (var (fieldName, fieldType) in readOnlyFields)
+                                            WriteFieldAssignment(writer, "cp", fieldName, $"cData.Param.{fieldName}",
+                                                fieldType);
+                                    }
+
+                                    writer.WriteLine("catcherParam = cp;");
+                                    writer.WriteLine("break;");
+                                    writer.Indent--;
+                                    writer.WriteLine("}");
+                                }
+
+                                writer.WriteLine("default:");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                writer.WriteLine(
+                                    "Debug.LogError($\"[XLuban] Unknown TargetCatcher type: {targetCatcher.GetType().Name}\");");
+                                writer.WriteLine("break;");
+                                writer.Indent--;
+                                writer.WriteLine("}");
+                            }
+                            writer.Indent--;
+                            writer.WriteLine("}");
+                        }
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("param.SetParam(catcherParam);");
+                    }
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                    writer.WriteLine("");
+                    writer.WriteLine("#endregion");
+                    #endregion
+                    
                 }
                 writer.Indent--;
                 writer.WriteLine("}");
