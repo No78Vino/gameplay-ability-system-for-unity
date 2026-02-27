@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GAS.Runtime
 {
@@ -170,6 +171,45 @@ namespace GAS.Runtime
             // TODO 2.触发 OnGameplayEffectListIsDirty 注册的事件
         }
 
+        
+        #region GameplayEffect 相关工具函数
+        
+        /// <summary>  
+        /// 从 GE Entity 获取 Source ASC 的 Entity。  
+        /// 通过 CEffectInUsage 组件读取 Source 字段。  
+        /// </summary>  
+        public static Entity GetSourceAscEntity(Entity geEntity)  
+        {
+            if (EntityHelper.HasComponent<CEffectInUsage>(geEntity))
+                return EntityHelper.GetComponentData<CEffectInUsage>(geEntity).Source;
+            Debug.LogWarning("[ASCHelper] GE 上没有 CEffectInUsage 组件，无法获取 Source ASC Entity。");  
+            return Entity.Null;
+        }  
+  
+        /// <summary>  
+        /// 从 GE Entity 获取 Target ASC 的 Entity。  
+        /// 通过 CEffectInUsage 组件读取 Target 字段。  
+        /// </summary>  
+        public static Entity GetTargetAscEntity(Entity geEntity)  
+        {
+            if (EntityHelper.HasComponent<CEffectInUsage>(geEntity))
+                return EntityHelper.GetComponentData<CEffectInUsage>(geEntity).Target;
+            Debug.LogWarning("[ASCHelper] GE 上没有 CEffectInUsage 组件，无法获取 Target ASC Entity。");  
+            return Entity.Null;
+        }  
+  
+        /// <summary>  
+        /// 从 GE Entity 获取 Source ASC 的 OOP 包装（AbilitySystemCell）。  
+        /// 先取 Source Entity，再通过 GASManager 转换为 AbilitySystemCell。  
+        /// </summary>  
+        public static AbilitySystemCell GetSourceAsc(Entity geEntity)  
+        {  
+            var sourceEntity = GetSourceAscEntity(geEntity);  
+            return sourceEntity == Entity.Null ? null : GASManager.GetAscFromEntity(sourceEntity);
+        }
+        
+        #endregion
+        
         #region 重计算AttrSet Current Value相关工具函数
 
         /// <summary>

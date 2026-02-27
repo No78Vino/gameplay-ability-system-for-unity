@@ -24,6 +24,20 @@ namespace GAS.Runtime
         public GEOperation Operation;
         public float Magnitude;
         public ModMagnitudeCalculationBase MMC;
+        
+        public float Apply(Entity geEntity, float currentValue)  
+        {  
+            var magnitude = MMC.CalculateMagnitude(geEntity, Magnitude);  
+            return Operation switch  
+            {  
+                GEOperation.Add      => currentValue + magnitude,  
+                GEOperation.Minus    => currentValue - magnitude,  
+                GEOperation.Multiply => currentValue * magnitude,  
+                GEOperation.Divide   => currentValue / magnitude,  
+                GEOperation.Override => magnitude,  
+                _                    => throw new ArgumentOutOfRangeException()  
+            };  
+        }
     }
 
     public sealed class MCConfModifiers : GameplayEffectComponentConfig

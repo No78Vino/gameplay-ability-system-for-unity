@@ -45,6 +45,10 @@ namespace GAS.Runtime
         public abstract float CalculateMagnitude(Entity geEntity, float magnitude);
 
         public abstract void InitParameters(XParam parameter);
+        
+        public virtual void OnApplied(Entity targetAsc, int targetAttrSetCode, int targetAttrCode) { }  
+     
+        public virtual void OnRemoved() { }
     }
     
     public abstract class ModMagnitudeCalculationBase<T> : ModMagnitudeCalculationBase
