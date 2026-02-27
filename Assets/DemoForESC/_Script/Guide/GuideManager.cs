@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DemoForESC._Script.Controller;
 using DemoForESC._Script.UI.View;
 using EXUI;
+using Unity.VisualScripting;
 using UnityEngine;
 using XYooAsset;
 
@@ -10,139 +12,119 @@ namespace DemoForESC._Script
     public class GuideManager
     {
         private static GuideManager _inst;
-        
-        // I For GuideManager
         public static GuideManager I => _inst ??= new GuideManager();
 
-        private int _guideType = -1;
         private int _guideIndex = -1;
+        private List<GuideInfo> _steps;
 
         public GuideInfo GuideInfo =>
-            _guideType >= 0 && _guideIndex >= 0 ? GuideConfig.Data[_guideType][_guideIndex] : null;
+            _steps != null && _guideIndex >= 0 && _guideIndex < _steps.Count
+                ? _steps[_guideIndex]
+                : null;
 
         public bool IsInGuide => GuideInfo != null;
 
-        /// <summary>
-        /// 1.禁止输入
-        /// 2.启动当前引导允许的输入
-        /// 3.弹出引导提示
-        /// </summary>
+        // 引导中的场景对象  
+        private GameObject _guideTarget;
+
         public void StartGuide()
         {
-            _guideType = 0;
+            _steps = GuideConfig.Type1Steps;
             _guideIndex = 0;
             TriggerGuide();
         }
 
         public void ContinueGuide()
         {
-            if (_guideIndex + 1 >= GuideConfig.Data[_guideType].Count)
-            {
+            _guideIndex++;
+            if (_guideIndex >= _steps.Count)
                 OnGuideEnd();
-            }
             else
-            {
-                _guideIndex++;
                 TriggerGuide();
-            }
-        }
-
-        public void OnGuideEnd()
-        {
-            
         }
 
         private void TriggerGuide()
         {
-            GuideInfo.BeginGuide();
-            // 1.刷新 GuideWindow
+            var info = GuideInfo;
+            // 注册完成回调，由 GuideInfo 内部监听事件  
+            info.BeginGuide(ContinueGuide);
+
+            // 刷新 UI  
             var w = XUI.M.OpenWindow<GuideWindow>();
-            w.VM.UpdateInfo(GuideInfo);
-            // 2.重置Player位置状态
+            w.VM.UpdateInfo(info);
+
+            // 重置玩家位置  
             GameManager.I.ResetPlayerStateToGuidePoint();
-            // 3.锁定
+
+            // 根据步骤类型生成引导对象  
+            OnGuideStepBegin(info);
         }
 
-        #region 引导事件合集
+        private void OnGuideStepBegin(GuideInfo info)
+        {
+            // 清理上一步的引导对象  
+            if (_guideTarget != null)
+            {
+                Object.Destroy(_guideTarget);
+                _guideTarget = null;
+            }
 
-        private GameObject _guideTargetMove;
-        private GameObject _guideTargetRun;
-        public void OnGuideStart_Move()
-        {
-            var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab");
-            _guideTargetMove = Object.Instantiate(prefab);
-        }
-        
-        public void OnGuideFinish_Move()
-        {
-            EasyInputController.Inst().SetBanInput(true);
-            var player = GameManager.I.Player;
-            player.StopMove();
-            var w = XUI.M.OpenWindow<MaskWindow>();
-            w.VM.SetOnOpen(() =>
+            switch (info.LearningKey)
             {
-                player.StopMove();
-                OnWaitGuideFinish_Move();
-            });
-            w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
-            w.VM.MaskFadeIn();
-            
-            Object.Destroy(_guideTargetMove);
+                case GuideLearningKey.Move:
+                    _guideTarget = Object.Instantiate(
+                        XYoo.LoadAssetSync<GameObject>(
+                            "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Move.prefab"));
+                    break;
+                case GuideLearningKey.Run:
+                    _guideTarget = Object.Instantiate(
+                        XYoo.LoadAssetSync<GameObject>(
+                            "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Run.prefab"));
+                    break;
+                case GuideLearningKey.MeleeAttack:
+                    _guideTarget = Object.Instantiate(
+                        XYoo.LoadAssetSync<GameObject>(
+                            "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab"));
+                    break;
+            }
         }
 
-        async void OnWaitGuideFinish_Move()
-        {
-            await Task.Delay(1000);
-            GameManager.I.ResetPlayerStateToGuidePoint();
-            var w = XUI.M.OpenWindow<MaskWindow>();
-            w.VM.MaskFadeOut();
-        }
-        
-        public void OnGuideStart_Run()
-        {
-            var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Run.prefab");
-            _guideTargetRun = Object.Instantiate(prefab);
-        }
-        
-        public void OnGuideFinish_Run()
+        // 步骤完成后的过渡动画（统一处理）  
+        public async void OnGuideStepFinishTransition(System.Action onTransitionDone)
         {
             EasyInputController.Inst().SetBanInput(true);
-            var player = GameManager.I.Player;
+            GameManager.I.Player.StopMove();
+            GameManager.I.Player.StopRun();
+
             var w = XUI.M.OpenWindow<MaskWindow>();
-            w.VM.SetOnOpen(() =>
+            w.VM.SetOnOpen(async () =>
             {
-                player.StopMove();
-                player.StopRun();
-                OnWaitGuideFinish_Move();
+                await Task.Delay(800);
+                GameManager.I.ResetPlayerStateToGuidePoint();
+                var w2 = XUI.M.OpenWindow<MaskWindow>();
+                w2.VM.SetOnClose(() =>
+                {
+                    EasyInputController.Inst().SetBanInput(false);
+                    onTransitionDone?.Invoke();
+                });
+                w2.VM.MaskFadeOut();
             });
-            w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
             w.VM.MaskFadeIn();
-            
-            Object.Destroy(_guideTargetRun);
         }
-        
-        public void OnGuideStart_Attack()
+
+        public void OnGuideEnd()
         {
-            var prefab = XYoo.LoadAssetSync<GameObject>("Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab");
-            _guideTargetRun = Object.Instantiate(prefab);
-        }
-        
-        public void OnGuideFinish_Attack()
-        {
-            EasyInputController.Inst().SetBanInput(true);
-            var player = GameManager.I.Player;
-            var w = XUI.M.OpenWindow<MaskWindow>();
-            w.VM.SetOnOpen(() =>
+            _guideIndex = -1;
+            if (_guideTarget != null)
             {
-                player.StopMove();
-                player.StopRun();
-                OnWaitGuideFinish_Move();
-            });
-            w.VM.SetOnClose(()=>EasyInputController.Inst().SetBanInput(false));
-            w.VM.MaskFadeIn();
-            
-            Object.Destroy(_guideTargetRun);
+                Object.Destroy(_guideTarget);
+                _guideTarget = null;
+            }
+
+            var w = XUI.M.Windows<GuideWindow>();
+            w.Hide();
+            // 移除引导 Tag，通知 GameManager 引导结束  
+            GameManager.I.OnGuideComplete();
         }
-        #endregion
     }
 }

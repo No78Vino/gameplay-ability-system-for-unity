@@ -114,6 +114,20 @@ namespace DemoForESC._Script
                 }
             }
         }
+        
+        /// <summary>  
+        /// 由 GuideManager.OnGuideEnd() 调用，正式开始游戏  
+        /// </summary>  
+        public void OnGuideComplete()  
+        {  
+            // 1. 移除引导 Tag，触发 OnGlobalAscTagChange 的 RemoveTag 分支  
+            GlobalAsc.KillFixedTag(XTag.Guide_Type1);  
+  
+            // 2. 生成 Spider Boss（地址参考 YooAsset 注册的 Monster_ 前缀）  
+            var spiderPrefab = XYoo.LoadAssetSync<GameObject>(  
+                "Assets/DemoForESC/Resources/Prefabs/Monster/Spider.prefab");  
+            Object.Instantiate(spiderPrefab, new Vector3(0, 0, 10), Quaternion.identity);  
+        }
 
         private static readonly Vector3 GuidePlayerPosition = new Vector3(0,1.5f,0);
         /// <summary>
