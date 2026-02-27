@@ -405,6 +405,18 @@ namespace GAS.Runtime
                         mmcParam = mp;
                         break;
                     }
+                    case cfg.MMCAttributeBased mmcData:
+                    {
+                        var mp = mmcParam as GAS.Runtime.AttributeBasedMmcParam;
+                        mp?.SetAttrSetCode(mmcData.Param.AttrSetCode);
+                        mp?.SetAttrCode(mmcData.Param.AttrCode);
+                        mp?.SetFromType(mmcData.Param.FromType);
+                        mp?.SetCaptureType(mmcData.Param.CaptureType);
+                        mp?.SetK(mmcData.Param.K);
+                        mp?.SetB(mmcData.Param.B);
+                        mmcParam = mp;
+                        break;
+                    }
                 }
             }
 

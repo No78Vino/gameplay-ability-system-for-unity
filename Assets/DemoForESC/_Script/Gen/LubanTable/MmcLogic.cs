@@ -24,6 +24,7 @@ public abstract partial class MmcLogic : Luban.BeanBase
         switch ((string)_buf["$type"])
         {
             case "MMCScalableFloat": return new MMCScalableFloat(_buf);
+            case "MMCAttributeBased": return new MMCAttributeBased(_buf);
             default: throw new SerializationException();
         }
     }
