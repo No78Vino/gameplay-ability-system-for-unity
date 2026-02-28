@@ -54,6 +54,13 @@ namespace GAS.Editor
             BuildMenuTree();
         }
 
+        [HorizontalGroup("Tag总览/A")]  
+        [Button("🌐 Web编辑器")]  
+        void OpenTagWebEditor()  
+        {  
+            GASWebEditorManager.LaunchTagWebEditor();  
+        }
+        
         // 添加分割线控制参数
         private static float _splitterPosition = 300f;
         private static bool _isDraggingSplitter;
