@@ -41,14 +41,27 @@ namespace GAS.Runtime
         [PropertyOrder(-1)]
         public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
 #endif
-
-        public abstract float CalculateMagnitude(Entity geEntity, float magnitude);
-
+        
         public abstract void InitParameters(XParam parameter);
         
-        public virtual void OnAdded(Entity targetAsc, int targetAttrSetCode, int targetAttrCode) { }  
-     
-        public virtual void OnRemoved() { }
+        public abstract float CalculateMagnitude(MmcContext mmcContext, float magnitude);
+
+        public void OnAddMmc(Entity gameplayEffect, int targetAttrSetCode, int targetAttrCode)
+        {
+            var context = MmcHelper.BuildMmcContext(gameplayEffect);  
+            OnAdded(context,targetAttrSetCode,targetAttrCode);
+        }  
+        
+        public void OnRemoveMmc()
+        {
+            OnRemoved();
+        }  
+        
+        
+        protected virtual void OnAdded(MmcContext context, int targetAttrSetCode, int targetAttrCode) { }
+        
+        protected virtual void OnRemoved() { }
+        
     }
     
     public abstract class ModMagnitudeCalculationBase<T> : ModMagnitudeCalculationBase

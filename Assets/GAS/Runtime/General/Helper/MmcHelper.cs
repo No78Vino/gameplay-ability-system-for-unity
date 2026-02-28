@@ -37,9 +37,27 @@ namespace GAS.Runtime
 #endif
             return null;
         }
-
+        
+        // 框架内部方法，用户不直接调用  
         public static float Calculate(Entity ge, EffectModifier modifier, float sourceValue)  
-            => modifier.Apply(ge, sourceValue);
+        {  
+            // 在这里构建 MmcContext，隔离 ECS 细节  
+            var context = BuildMmcContext(ge);  
+            return modifier.Apply(context, sourceValue);  
+        }  
+  
+        public static MmcContext BuildMmcContext(Entity ge)  
+        {  
+            // 从 GE Entity 上读取 Source/Target ASC Entity  
+            // 再通过 GASManager 的 Entity→AbilitySystemCell 映射转换为 OOP 包装  
+            var geData = EntityHelper.GetComponentData<CEffectInUsage>(ge);
+            return new MmcContext  
+            {  
+                EffectSpec = new GameplayEffectSpec(ge),  
+                Source = GASManager.GetAscFromEntity(geData.Source),  
+                Target = GASManager.GetAscFromEntity(geData.Target),  
+            };  
+        }
 
         #region MMC
 

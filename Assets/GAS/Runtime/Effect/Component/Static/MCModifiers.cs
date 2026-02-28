@@ -25,9 +25,9 @@ namespace GAS.Runtime
         public float Magnitude;
         public ModMagnitudeCalculationBase MMC;
         
-        public float Apply(Entity geEntity, float currentValue)  
-        {  
-            var magnitude = MMC.CalculateMagnitude(geEntity, Magnitude);  
+        public float Apply(MmcContext mmcContext, float currentValue)
+        {
+            var magnitude = MMC.CalculateMagnitude(mmcContext, Magnitude);  
             return Operation switch  
             {  
                 GEOperation.Add      => currentValue + magnitude,  

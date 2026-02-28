@@ -4,7 +4,7 @@ namespace GAS.Runtime
 {
     public class MMCNone : ModMagnitudeCalculationBase<XParamNone>
     {
-        public override float CalculateMagnitude(Entity geEntity, float magnitude)
+        public override float CalculateMagnitude(MmcContext context, float magnitude)
         {
             return magnitude;
         }

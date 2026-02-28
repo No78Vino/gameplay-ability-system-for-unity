@@ -35,6 +35,8 @@ namespace GAS.Runtime
                 bool isAttrDirty = false;
                 foreach (var modifier in modifiers)
                 {
+                    modifier.MMC?.OnAddMmc(ge, modifier.AttrSetCode, modifier.AttrCode); 
+                    
                     var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
                     if (attrSetIndex == -1) continue;
                     
@@ -51,8 +53,6 @@ namespace GAS.Runtime
                     attrSets[attrSetIndex] = attrSet;
                     
                     isAttrDirty = true;
-                    
-                    modifier.MMC?.OnAdded(targetAsc, modifier.AttrSetCode, modifier.AttrCode); 
                 }
                 if(isAttrDirty) ecb.AddComponent<CAttributeIsDirty>(targetAsc);
             }

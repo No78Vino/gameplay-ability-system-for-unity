@@ -24,7 +24,7 @@ namespace GAS.Runtime
         private AbilitySystemCell _sourceAsc;  
         private Action<float, float> _trackCallback;  
   
-        public override float CalculateMagnitude(Entity geEntity, float magnitude)  
+        public override float CalculateMagnitude(MmcContext mmcContext, float magnitude)  
         {  
             var resolver = AttributeBasedMmcParam.GetResolver();  
             if (resolver == null)  
@@ -38,14 +38,14 @@ namespace GAS.Runtime
             {  
                 if (!_snapshotCaptured)  
                 {  
-                    _snapshotValue = ResolveAttributeValue(geEntity, resolver);  
+                    _snapshotValue = ResolveAttributeValue(mmcContext.EffectSpec.Entity, resolver);  
                     _snapshotCaptured = true;  
                 }  
                 attrValue = _snapshotValue;  
             }  
             else // Track：每次实时读取  
             {  
-                attrValue = ResolveAttributeValue(geEntity, resolver);  
+                attrValue = ResolveAttributeValue(mmcContext.EffectSpec.Entity, resolver);  
             }  
   
             return attrValue * Parameter.K + Parameter.B;  
@@ -55,12 +55,11 @@ namespace GAS.Runtime
         /// GE 被激活应用到目标 ASC 时调用。  
         /// Track 模式下注册依赖属性的 BaseValue 变化监听，实现推导属性自动重计算。  
         /// </summary>  
-        public override void OnAdded(Entity targetAscEntity, int targetAttrSetCode, int targetAttrCode)  
+        protected override void OnAdded(MmcContext mmcContext, int targetAttrSetCode, int targetAttrCode)  
         {  
             if (Parameter.CaptureType != AttributeCaptureType.Track) return;  
-  
-            // 立即转换为 OOP 层的 AbilitySystemCell，后续不再接触 Entity  
-            _targetAsc = GASManager.GetAscFromEntity(targetAscEntity);  
+            
+            _targetAsc = mmcContext.Target;  
             if (_targetAsc == null) return;  
   
             _targetAttrSetCode = targetAttrSetCode;  
@@ -71,7 +70,7 @@ namespace GAS.Runtime
             // Source 模式 → 依赖属性在 GE 的施放者上（需要从 GE 上下文获取，此处由框架在 OnApplied 前设置好）  
             _sourceAsc = Parameter.FromType == AttributeFromType.Target  
                 ? _targetAsc  
-                : ASCHelper.GetSourceAsc(targetAscEntity); // 框架侧辅助方法，返回 AbilitySystemCell  
+                : mmcContext.Source; // 框架侧辅助方法，返回 AbilitySystemCell  
   
             if (_sourceAsc == null) return;  
   
@@ -87,7 +86,7 @@ namespace GAS.Runtime
         /// <summary>  
         /// GE 被移除时调用，注销 Track 监听，防止内存泄漏。  
         /// </summary>  
-        public override void OnRemoved()  
+        protected override void OnRemoved()  
         {  
             if (_trackCallback == null) return;  
             GASEventCenter.UnRegisterOnBaseValueChangeAfter(  

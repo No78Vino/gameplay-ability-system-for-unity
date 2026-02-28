@@ -1,16 +1,30 @@
 using System;  
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class AttributeBasedMmcParam : XParam
     {
+        [ShowInInspector]
+        [LabelText("属性集Code")]
         public int AttrSetCode { get; private set; }
+
+        [ShowInInspector]
+        [LabelText("属性Code")]
         public int AttrCode { get; private set; }
+
+        [ShowInInspector] 
+        [LabelText("来源类型")]
         public AttributeFromType FromType { get; private set; }
+
+        [ShowInInspector]
+        [LabelText("属性捕获类型")]
         public AttributeCaptureType CaptureType { get; private set; }
-        public float K { get; private set; } = 1f;
-        public float B { get; private set; } = 0f;
+
+        [ShowInInspector] [LabelText("系数K")] public float K { get; private set; } = 1f;
+
+        [ShowInInspector] [LabelText("偏移B")] public float B { get; private set; } = 0f;
 
         public void SetAttrSetCode(int v) => AttrSetCode = v;
         public void SetAttrCode(int v) => AttrCode = v;

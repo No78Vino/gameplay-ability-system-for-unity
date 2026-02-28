@@ -18,7 +18,7 @@ namespace GAS.Runtime
 
         [SerializeField] private float b;
 
-        public override float CalculateMagnitude(Entity specEntity, float magnitude)
+        public override float CalculateMagnitude(MmcContext context, float magnitude)
         {
             return magnitude * k + b;
         }
