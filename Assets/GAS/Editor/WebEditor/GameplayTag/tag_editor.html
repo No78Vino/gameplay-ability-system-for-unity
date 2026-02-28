@@ -41,13 +41,20 @@
     <div id="modal">
         <h3>新增 Tag</h3>
         <div class="field-group">
+            <label>ID <small>（留空则自动生成）</small></label>
+            <input id="modal-id" type="number" placeholder="自动生成">
+        </div>
+        
+        <div class="field-group">
             <label>Tag 名称 <small>（点分层级，如 State.Debuff.Stun）</small></label>
             <input id="modal-name" type="text" placeholder="State.Debuff.Stun" autocomplete="off">
         </div>
+
         <div class="field-group">
             <label>描述</label>
             <textarea id="modal-desc" placeholder="可选描述"></textarea>
         </div>
+        
         <div id="modal-actions">
             <button class="btn btn-neutral" onclick="App.closeModal()">取消</button>
             <button class="btn btn-success" onclick="App.confirmAdd()">确认新增</button>

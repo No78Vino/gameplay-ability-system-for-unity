@@ -137,12 +137,19 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):  
         p = urlparse(self.path).path  
         if p == "/api/tags":  
-            # 新增 Tag  
             try:  
                 body = self.read_json()  
                 tags = read_tags()  
+                custom_id = body.get("id")  
+                if custom_id is not None:  
+                    custom_id = int(custom_id)  
+                    if any(t["id"] == custom_id for t in tags):  
+                        return self.send_json({"ok": False, "error": f"ID {custom_id} 已存在"}, 400)  
+                    new_id = custom_id  
+                else:  
+                    new_id = next_id(tags)  
                 new_tag = {  
-                    "id":   next_id(tags),  
+                    "id":   new_id,  
                     "name": body.get("name", "").strip(),  
                     "desc": body.get("desc", "").strip(),  
                 }  
@@ -152,9 +159,7 @@ class Handler(BaseHTTPRequestHandler):
                 write_tags(tags + [new_tag])  
                 self.send_json({"ok": True, "tag": new_tag})  
             except Exception as e:  
-                self.send_json({"ok": False, "error": str(e)}, 500)  
-        else:  
-            self.send_json({"ok": False, "error": "Not Found"}, 404)  
+                self.send_json({"ok": False, "error": str(e)}, 500)
   
     def do_PUT(self):  
         # PUT /api/tags/{id}  

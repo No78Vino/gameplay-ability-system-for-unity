@@ -1,11 +1,11 @@
 const API = 'http://127.0.0.1:8765';
 
-// ── 状态 ─────────────────────────────────────────────────────────────────  
+// ── 状态 ─────────────────────────────────────────────────────────────────    
 let allTags = [];
 let selectedId = null;
 let searchText = '';
 
-// ── 工具 ─────────────────────────────────────────────────────────────────  
+// ── 工具 ─────────────────────────────────────────────────────────────────    
 function setStatus(msg, type = '') {
     const el = document.getElementById('status-msg');
     el.textContent = msg;
@@ -15,7 +15,7 @@ function setCount(n) {
     document.getElementById('status-count').textContent = `共 ${n} 个 Tag`;
 }
 
-// ── 数据加载 ─────────────────────────────────────────────────────────────  
+// ── 数据加载 ─────────────────────────────────────────────────────────────    
 async function loadInfo() {
     try {
         const r = await fetch(`${API}/api/info`).then(r => r.json());
@@ -37,7 +37,7 @@ async function loadTags() {
     }
 }
 
-// ── 树构建 ───────────────────────────────────────────────────────────────  
+// ── 树构建 ───────────────────────────────────────────────────────────────    
 function buildTree(tags) {
     const root = { children: new Map() };
     for (const tag of tags) {
@@ -117,7 +117,7 @@ function renderTreeNode(node, container) {
     }
 }
 
-// ── 右侧表单 ─────────────────────────────────────────────────────────────  
+// ── 右侧表单 ─────────────────────────────────────────────────────────────    
 function showForm(tag) {
     const formBody = document.getElementById('form-body');
     formBody.className = '';
@@ -125,7 +125,7 @@ function showForm(tag) {
     document.getElementById('btn-delete').style.display = '';
     document.getElementById('btn-save').style.display = '';
 
-    // 层级路径预览  
+    // 层级路径预览    
     const parts = tag.name.split('.');
     const pathHtml = parts.map((p, i) =>
         i < parts.length - 1
@@ -133,23 +133,23 @@ function showForm(tag) {
             : `<span style="color:#cdd6f4">${p}</span>`
     ).join('');
 
-    formBody.innerHTML = `  
-    <div class="field-group">  
-      <label>ID</label>  
-      <input class="field-readonly" type="text" value="${tag.id}" readonly>  
-    </div>  
-    <div class="field-group">  
-      <label>Tag 名称 <small>（点分层级，如 State.Debuff.Stun）</small></label>  
-      <input id="edit-name" type="text" value="${escHtml(tag.name)}">  
-      <div class="tag-path-preview">${pathHtml}</div>  
-    </div>  
-    <div class="field-group">  
-      <label>描述</label>  
-      <textarea id="edit-desc">${escHtml(tag.desc)}</textarea>  
-    </div>  
+    formBody.innerHTML = `    
+    <div class="field-group">    
+      <label>ID</label>    
+      <input class="field-readonly" type="text" value="${tag.id}" readonly>    
+    </div>    
+    <div class="field-group">    
+      <label>Tag 名称 <small>（点分层级，如 State.Debuff.Stun）</small></label>    
+      <input id="edit-name" type="text" value="${escHtml(tag.name)}">    
+      <div class="tag-path-preview">${pathHtml}</div>    
+    </div>    
+    <div class="field-group">    
+      <label>描述</label>    
+      <textarea id="edit-desc">${escHtml(tag.desc)}</textarea>    
+    </div>    
   `;
 
-    // 实时更新路径预览  
+    // 实时更新路径预览    
     document.getElementById('edit-name').addEventListener('input', function () {
         const ps = this.value.split('.');
         const html = ps.map((p, i) =>
@@ -178,7 +178,7 @@ function escHtml(s) {
         .replace(/"/g, '&quot;');
 }
 
-// ── App 命名空间（供 HTML onclick 调用）──────────────────────────────────  
+// ── App 命名空间（供 HTML onclick 调用）──────────────────────────────────    
 const App = {
 
     reload() {
@@ -194,7 +194,7 @@ const App = {
 
     selectTag(id) {
         selectedId = id;
-        renderTree(); // 刷新选中高亮  
+        renderTree(); // 刷新选中高亮    
         const tag = allTags.find(t => t.id === id);
         if (tag) showForm(tag);
     },
@@ -220,7 +220,7 @@ const App = {
             if (!r.ok) throw new Error(r.error);
             setStatus('保存成功', 'ok');
             await loadTags();
-            // 重新选中  
+            // 重新选中    
             App.selectTag(selectedId);
         } catch (e) {
             setStatus('保存失败: ' + e.message, 'err');
@@ -252,6 +252,7 @@ const App = {
     addTag() {
         document.getElementById('modal-name').value = '';
         document.getElementById('modal-desc').value = '';
+        document.getElementById('modal-id').value = '';  // ← 新增：清空 ID 输入框  
         document.getElementById('modal-overlay').classList.add('show');
         setTimeout(() => document.getElementById('modal-name').focus(), 50);
     },
@@ -263,14 +264,17 @@ const App = {
     async confirmAdd() {
         const name = document.getElementById('modal-name').value.trim();
         const desc = document.getElementById('modal-desc').value.trim();
+        const idVal = document.getElementById('modal-id').value.trim();  // ← 新增：读取 ID  
         if (!name) { setStatus('Tag名称不能为空', 'err'); return; }
 
         setStatus('新增中...');
         try {
+            const payload = { name, desc };
+            if (idVal !== '') payload.id = parseInt(idVal);  // ← 新增：有值才传 id  
             const r = await fetch(`${API}/api/tags`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, desc })
+                body: JSON.stringify(payload)
             }).then(r => r.json());
 
             if (!r.ok) throw new Error(r.error);
@@ -284,23 +288,23 @@ const App = {
     }
 };
 
-// ── 键盘快捷键 ───────────────────────────────────────────────────────────  
+// ── 键盘快捷键 ───────────────────────────────────────────────────────────    
 document.addEventListener('keydown', e => {
-    // Ctrl+S 保存  
+    // Ctrl+S 保存    
     if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
         App.saveSelected();
     }
-    // Escape 关闭对话框  
+    // Escape 关闭对话框    
     if (e.key === 'Escape') {
         App.closeModal();
     }
-    // Enter 确认新增（对话框内）  
+    // Enter 确认新增（对话框内）    
     if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('show')) {
         App.confirmAdd();
     }
 });
 
-// ── 初始化 ───────────────────────────────────────────────────────────────  
+// ── 初始化 ───────────────────────────────────────────────────────────────    
 loadInfo();
 loadTags();
