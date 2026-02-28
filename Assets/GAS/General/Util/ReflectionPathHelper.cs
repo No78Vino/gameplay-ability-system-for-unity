@@ -359,5 +359,24 @@ namespace GAS.General
             );
         }
         
+        public static string GetAttrSetNameByCode(int id)  
+        {  
+            return ReflectionPathHelper.GetRawMemberById<string>(  
+                "TbattributeSet",  
+                id,  
+                "Name",  
+                "GAS.Runtime.XLuban"  
+            );  
+        }  
+  
+        public static string GetAttributeNameByCode(int id)  
+        {  
+            return ReflectionPathHelper.GetRawMemberById<string>(  
+                "Tbattribute",  
+                id,  
+                "Name",  
+                "GAS.Runtime.XLuban"  
+            );  
+        }
     }
 }

@@ -107,5 +107,44 @@ namespace GAS.General
             
             return _cues;
         }
+     
+        public static List<ValueDropdownItem> AttrSets()  
+        {  
+            if (_attrSets is { Count: > 0 }) return _attrSets;  
+  
+            _attrSets = new List<ValueDropdownItem>();  
+  
+            var ids = GasChoiceRawAccessor.GetAttributeSetIDs();  
+            if (ids == null) return _attrSets;  
+            foreach (var id in ids)  
+            {  
+                string name = GasChoiceRawAccessor.GetAttrSetNameByCode(id);  
+                _attrSets.Add(new ValueDropdownItem($"[{id}]{name}", id));  
+            }  
+  
+            return _attrSets;  
+        }  
+  
+        public static List<ValueDropdownItem> Attrs(int attrSetCode)  
+        {  
+            _attrs ??= new Dictionary<int, List<ValueDropdownItem>>();  
+            if (_attrs.TryGetValue(attrSetCode, out var cached) && cached.Count > 0) return cached;  
+  
+            var list = new List<ValueDropdownItem>();  
+            _attrs[attrSetCode] = list;  
+  
+            // 读取该属性集包含的属性ID列表  
+            var attrIds = ReflectionPathHelper.GetRawMemberById<int[]>(  
+                "TbattributeSet", attrSetCode, "Attributes", "GAS.Runtime.XLuban");  
+            if (attrIds == null) return list;  
+  
+            foreach (var id in attrIds)  
+            {  
+                string name = GasChoiceRawAccessor.GetAttributeNameByCode(id);  
+                list.Add(new ValueDropdownItem($"[{id}]{name}", id));  
+            }  
+  
+            return list;  
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System;  
 using System.Collections.Generic;
+using GAS.General;
 using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
@@ -8,18 +9,23 @@ namespace GAS.Runtime
     {
         [ShowInInspector]
         [LabelText("属性集Code")]
+        [ValueDropdown(nameof(AttrSetChoices))]  
+        [OnValueChanged(nameof(OnAttrSetChanged))]  
         public int AttrSetCode { get; private set; }
 
         [ShowInInspector]
         [LabelText("属性Code")]
+        [ValueDropdown(nameof(AttrChoices))]  
         public int AttrCode { get; private set; }
 
         [ShowInInspector] 
         [LabelText("来源类型")]
+        [EnumToggleButtons]
         public AttributeFromType FromType { get; private set; }
 
         [ShowInInspector]
         [LabelText("属性捕获类型")]
+        [EnumToggleButtons]
         public AttributeCaptureType CaptureType { get; private set; }
 
         [ShowInInspector] [LabelText("系数K")] public float K { get; private set; } = 1f;
@@ -36,6 +42,18 @@ namespace GAS.Runtime
         private static IAttributeValueResolver _resolver;
 
         public static IAttributeValueResolver GetResolver() => _resolver ??= new DefaultAttributeValueResolver();
+        
+        // 属性集下拉选项  
+        public List<ValueDropdownItem> AttrSetChoices => GeneralGasChoiceHelper.AttrSets();  
+  
+        // 属性下拉选项：根据当前 AttrSetCode 过滤  
+        public List<ValueDropdownItem> AttrChoices => GeneralGasChoiceHelper.Attrs(AttrSetCode);  
+  
+        private void OnAttrSetChanged()  
+        {  
+            // 切换属性集时重置属性选择  
+            AttrCode = 0;  
+        }  
 
 #if UNITY_EDITOR
         public List<object> EncodeExcelData() => new List<object>
