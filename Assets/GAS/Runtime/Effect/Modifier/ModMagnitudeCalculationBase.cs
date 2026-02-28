@@ -46,7 +46,7 @@ namespace GAS.Runtime
 
         public abstract void InitParameters(XParam parameter);
         
-        public virtual void OnApplied(Entity targetAsc, int targetAttrSetCode, int targetAttrCode) { }  
+        public virtual void OnAdded(Entity targetAsc, int targetAttrSetCode, int targetAttrCode) { }  
      
         public virtual void OnRemoved() { }
     }

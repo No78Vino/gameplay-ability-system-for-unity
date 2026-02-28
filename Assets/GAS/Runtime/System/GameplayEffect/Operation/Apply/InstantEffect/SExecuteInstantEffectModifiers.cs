@@ -78,7 +78,7 @@ namespace GAS.Runtime
                     attrSets[attrSetIndex] = attrSet;
                 }
 
-                // TODO 触发刷新CurrentValue的事件
+                // 触发刷新CurrentValue的事件
                 if (change) ecb.AddComponent<CAttributeIsDirty>(asc);
             }
 

@@ -49,6 +49,8 @@ namespace GAS.Runtime
                     attrSets[attrSetIndex] = attrSet;
                     
                     isAttrDirty = true;
+                    
+                    modifier.MMC?.OnRemoved(); 
                 }
                 if(isAttrDirty) ecb.AddComponent<CAttributeIsDirty>(targetAsc);
             }

@@ -17,8 +17,7 @@ namespace GAS.Runtime
         {
             try
             {
-                var mmc = Activator.CreateInstance(type) as ModMagnitudeCalculationBase;
-                if (mmc != null)
+                if (Activator.CreateInstance(type) is ModMagnitudeCalculationBase mmc)
                 {
                     mmc.InitParameters(param);
                     return mmc;

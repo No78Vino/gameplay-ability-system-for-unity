@@ -55,7 +55,7 @@ namespace GAS.Runtime
         /// GE 被激活应用到目标 ASC 时调用。  
         /// Track 模式下注册依赖属性的 BaseValue 变化监听，实现推导属性自动重计算。  
         /// </summary>  
-        public override void OnApplied(Entity targetAscEntity, int targetAttrSetCode, int targetAttrCode)  
+        public override void OnAdded(Entity targetAscEntity, int targetAttrSetCode, int targetAttrCode)  
         {  
             if (Parameter.CaptureType != AttributeCaptureType.Track) return;  
   
