@@ -133,13 +133,33 @@ namespace GAS.General
             var list = new List<ValueDropdownItem>();  
             _attrs[attrSetCode] = list;  
   
-            // 读取该属性集包含的属性ID列表  
-            var attrIds = ReflectionPathHelper.GetRawMemberById<int[]>(  
-                "TbattributeSet", attrSetCode, "Attributes", "GAS.Runtime.XLuban");  
-            if (attrIds == null) return list;  
+            // 1. 获取 TbattributeSet 行对象（整行，不取某个字段）  
+            object tablesObj = ReflectionHelper.GetStaticFieldOrProperty("GAS.Runtime.XLuban", "Tables");  
+            if (tablesObj == null) return list;  
   
-            foreach (var id in attrIds)  
+            var tablesType = tablesObj.GetType();  
+            var tableProp = tablesType.GetProperty("TbattributeSet",  
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);  
+            if (tableProp == null) return list;  
+  
+            var tableObj = tableProp.GetValue(tablesObj);  
+            if (tableObj == null) return list;  
+  
+            // 2. 调用 Get(attrSetCode) 拿到行对象  
+            object rowObj = ReflectionHelper.InvokeInstanceMethod(tableObj, "Get", attrSetCode);  
+            if (rowObj == null) return list;  
+  
+            // 3. 取 Attribute 字段（复合对象数组，字段名是 "Attribute" 单数）  
+            var attrArrayObj = ReflectionHelper.GetProperty<object>(rowObj, "Attribute");  
+            if (attrArrayObj == null) return list;  
+  
+            // 4. 遍历数组，逐元素取 ID 和 Name  
+            var attrArray = attrArrayObj as System.Array;  
+            if (attrArray == null) return list;  
+  
+            foreach (var attrObj in attrArray)  
             {  
+                var id = ReflectionHelper.GetProperty<int>(attrObj, "ID");  
                 string name = GasChoiceRawAccessor.GetAttributeNameByCode(id);  
                 list.Add(new ValueDropdownItem($"[{id}]{name}", id));  
             }  
