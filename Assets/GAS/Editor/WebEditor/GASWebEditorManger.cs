@@ -26,7 +26,7 @@ namespace GAS.Editor
         public static void LaunchTagWebEditor()  
         {  
             var setting = GASSettingAsset.LoadOrCreate();  
-            var xlsxPath = setting.PathOfExcelTag;  
+            var xlsxPath = Path.GetFullPath(setting.PathOfExcelTag);
             if (!File.Exists(xlsxPath))  
             {  
                 EditorUtility.DisplayDialog("错误",  
