@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>EX-GAS Attribute 编辑器</title>
+    <link rel="stylesheet" href="attr_editor.css">
+</head>
+<body>
+
+<header>
+    <h1>📊 EX-GAS Attribute 编辑器</h1>
+    <span id="xlsx-path">加载中...</span>
+    <button class="btn btn-success" onclick="App.addAttr()">＋ 新增属性</button>
+    <button class="btn btn-primary" onclick="App.reload()">↺ 刷新</button>
+</header>
+
+<main>
+    <div id="list-panel">
+        <div id="list-toolbar">
+            <input id="search" type="text" placeholder="搜索属性..." oninput="App.onSearch(this.value)">
+        </div>
+        <div id="attr-list"></div>
+    </div>
+    <div id="form-panel">
+        <div id="form-header">
+            <h2 id="form-title">请从左侧选择一个属性</h2>
+            <button class="btn btn-warn btn-sm" id="btn-delete" style="display:none" onclick="App.deleteSelected()">🗑 删除</button>
+            <button class="btn btn-primary btn-sm" id="btn-save" style="display:none" onclick="App.saveSelected()">💾 保存</button>
+        </div>
+        <div id="form-body" class="empty-hint">← 从左侧选择一个属性进行编辑</div>
+    </div>
+</main>
+
+<div id="statusbar">
+    <span id="status-msg">就绪</span>
+    <span id="status-count"></span>
+</div>
+
+<!-- 新增属性对话框 -->
+<div id="modal-overlay">
+    <div id="modal">
+        <h3>新增属性</h3>
+        <div class="field-group">
+            <label>ID <small>（留空则自动生成）</small></label>
+            <input id="modal-id" type="number" placeholder="自动生成">
+        </div>
+        <div class="field-group">
+            <label>属性名称 <small>（如 Health, Attack）</small></label>
+            <input id="modal-name" type="text" placeholder="Health" autocomplete="off">
+        </div>
+        <div class="field-group">
+            <label>描述</label>
+            <textarea id="modal-desc" placeholder="可选描述"></textarea>
+        </div>
+        <div id="modal-actions">
+            <button class="btn btn-neutral" onclick="App.closeModal()">取消</button>
+            <button class="btn btn-success" onclick="App.confirmAdd()">确认新增</button>
+        </div>
+    </div>
+</div>
+
+<script src="attr_editor.js"></script>
+</body>
+</html>

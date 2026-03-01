@@ -18,7 +18,7 @@ function setCount(n) {
 // ── 数据加载 ─────────────────────────────────────────────────────────────    
 async function loadInfo() {
     try {
-        const r = await fetch(`${API}/api/info`).then(r => r.json());
+        const r = await fetch(`${API}/api/info`).then(res => res.json());
         if (r.ok) document.getElementById('xlsx-path').textContent = r.xlsx;
     } catch (e) {}
 }
@@ -26,7 +26,7 @@ async function loadInfo() {
 async function loadTags() {
     setStatus('加载中...');
     try {
-        const r = await fetch(`${API}/api/tags`).then(r => r.json());
+        const r = await fetch(`${API}/api/tags`).then(res => res.json());
         if (!r.ok) throw new Error(r.error);
         allTags = r.tags;
         setCount(allTags.length);
@@ -276,7 +276,7 @@ const App = {
         try {
             const r = await fetch(`${API}/api/tags/${selectedId}`, {
                 method: 'DELETE'
-            }).then(r => r.json());
+            }).then(res => res.json());
 
             if (!r.ok) throw new Error(r.error);
             setStatus('删除成功', 'ok');
@@ -314,7 +314,7 @@ const App = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
-            }).then(r => r.json());
+            }).then(res => res.json());
 
             if (!r.ok) throw new Error(r.error);
             App.closeModal();

@@ -22,7 +22,7 @@ namespace GAS.Editor
         }  
   
         // ── GameplayTag 编辑器 ────────────────────────────────────────────  
-        [MenuItem("EXTool/EX-GAS/Web编辑器/🌐 启动 Tag 网页编辑器")]  
+        [MenuItem("EXTool/EX-GAS/Web编辑器/Tag 网页编辑器")]  
         public static void LaunchTagWebEditor()  
         {  
             var setting = GASSettingAsset.LoadOrCreate();  
@@ -39,6 +39,26 @@ namespace GAS.Editor
             RunBat(batPath, arguments: $"\"{xlsxPath}\"");  
         }  
   
+        // Attribute 编辑器子目录  
+        private const string ATTR_EDITOR_DIR = "Attribute";  
+  
+        [MenuItem("EXTool/EX-GAS/Web编辑器/Attribute 网页编辑器")]  
+        public static void LaunchAttrWebEditor()  
+        {  
+            var setting = GASSettingAsset.LoadOrCreate();  
+            var xlsxPath = Path.GetFullPath(setting.PathOfExcelAttr);  // ← 用 PathOfExcelAttr  
+            if (!File.Exists(xlsxPath))  
+            {  
+                EditorUtility.DisplayDialog("错误",  
+                    $"Attribute Excel 文件未找到:\n{xlsxPath}\n\n请先在 Setting 页面配置正确的 ConfigProjectPath。",  
+                    "确定");  
+                return;  
+            }  
+            // start.bat 在 Attribute 子目录下  
+            var batPath = GetFullPath(ATTR_EDITOR_DIR, "start.bat");  // ← ATTR_EDITOR_DIR  
+            RunBat(batPath, arguments: $"\"{xlsxPath}\"");            // ← 传入 xlsx 路径  
+        }
+        
         // ── 未来扩展 ──────────────────────────────────────────────────────  
         // [MenuItem("EXTool/EX-GAS/Web编辑器/🌐 启动 Effect 网页编辑器")]  
         // public static void LaunchEffectWebEditor() { ... }  
