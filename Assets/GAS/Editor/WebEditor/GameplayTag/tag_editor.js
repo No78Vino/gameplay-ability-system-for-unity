@@ -35,6 +35,22 @@ async function loadTags() {
     } catch (e) {
         setStatus('加载失败: ' + e.message, 'err');
     }
+
+    allTags = r.tags;
+    // 客户端警告检测  
+    const nameSet = new Set(allTags.map(t => t.name));
+    const idCount = {};
+    allTags.forEach(t => idCount[t.id] = (idCount[t.id] || 0) + 1);
+    const warns = [];
+    allTags.forEach(t => {
+        if (idCount[t.id] > 1) warns.push(`重复ID ${t.id}: 「${t.name}」`);
+        const parts = t.name.split('.');
+        for (let i = 1; i < parts.length; i++) {
+            const parent = parts.slice(0, i).join('.');
+            if (!nameSet.has(parent)) warns.push(`「${t.name}」缺少父类「${parent}」`);
+        }
+    });
+    if (warns.length > 0) showWarnings(warns); else clearWarnings();
 }
 
 // ── 树构建 ───────────────────────────────────────────────────────────────    
@@ -136,7 +152,7 @@ function showForm(tag) {
     formBody.innerHTML = `    
     <div class="field-group">    
       <label>ID</label>    
-      <input class="field-readonly" type="text" value="${tag.id}" readonly>    
+      <input id="edit-id" type="number" value="${tag.id}">    
     </div>    
     <div class="field-group">    
       <label>Tag 名称 <small>（点分层级，如 State.Debuff.Stun）</small></label>    
@@ -178,6 +194,21 @@ function escHtml(s) {
         .replace(/"/g, '&quot;');
 }
 
+function showWarnings(warnings) {
+    let el = document.getElementById('warning-bar');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'warning-bar';
+        el.style.cssText = 'background:#fab387;color:#1e1e2e;padding:6px 20px;font-size:12px;';
+        document.getElementById('statusbar').after(el);
+    }
+    el.innerHTML = '⚠️ ' + warnings.join('<br>⚠️ ');
+}
+function clearWarnings() {
+    const el = document.getElementById('warning-bar');
+    if (el) el.remove();
+}
+
 // ── App 命名空间（供 HTML onclick 调用）──────────────────────────────────    
 const App = {
 
@@ -203,10 +234,12 @@ const App = {
         if (selectedId == null) return;
         const nameEl = document.getElementById('edit-name');
         const descEl = document.getElementById('edit-desc');
-        if (!nameEl || !descEl) return;
+        const idEl   = document.getElementById('edit-id');
+        if (!nameEl || !descEl || !idEl) return;
 
-        const name = nameEl.value.trim();
-        const desc = descEl.value.trim();
+        const name  = nameEl.value.trim();
+        const desc  = descEl.value.trim();
+        const newId = parseInt(idEl.value);
         if (!name) { setStatus('Tag名称不能为空', 'err'); return; }
 
         setStatus('保存中...');
@@ -214,14 +247,20 @@ const App = {
             const r = await fetch(`${API}/api/tags/${selectedId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, desc })
-            }).then(r => r.json());
+                body: JSON.stringify({ id: newId, name, desc })
+            }).then(res => res.json());
 
             if (!r.ok) throw new Error(r.error);
-            setStatus('保存成功', 'ok');
+            // 显示警告  
+            if (r.warnings && r.warnings.length > 0) {
+                setStatus('保存成功（有警告）', 'ok');
+                showWarnings(r.warnings);
+            } else {
+                setStatus('保存成功', 'ok');
+                clearWarnings();
+            }
             await loadTags();
-            // 重新选中    
-            App.selectTag(selectedId);
+            App.selectTag(newId);  // ID 可能已变，用新 ID 选中  
         } catch (e) {
             setStatus('保存失败: ' + e.message, 'err');
         }

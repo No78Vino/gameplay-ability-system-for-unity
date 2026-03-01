@@ -65,16 +65,31 @@ def write_tags(tags):
     wb.close()  
   
 def next_id(tags):  
-    return max((t["id"] for t in tags), default=1000) + 1  
-  
-def validate_tags(tags):  
-    """校验：name不为空、不重复。返回 error string 或 None。"""  
-    names = [t["name"].strip() for t in tags]  
-    if any(not n for n in names):  
-        return "Tag名称不能为空"  
-    if len(names) != len(set(names)):  
-        return "存在重复的Tag名称"  
-    return None  
+    return max((t["id"] for t in tags), default=1000) + 1
+
+def validate_tags(tags):
+    """校验：name不为空、不重复、ID不重复。返回 error string 或 None。"""
+    names = [t["name"].strip() for t in tags]
+    if any(not n for n in names):
+        return "Tag名称不能为空"
+    if len(names) != len(set(names)):
+        return "存在重复的Tag名称"
+    ids = [t["id"] for t in tags]
+    if len(ids) != len(set(ids)):
+        return "存在重复的Tag ID"
+    return None
+
+def get_warnings(tags):
+    """返回警告列表（不阻止保存）：缺少父类的Tag。"""
+    name_set = {t["name"] for t in tags}
+    warnings = []
+    for t in tags:
+        parts = t["name"].split(".")
+        for i in range(1, len(parts)):
+            parent = ".".join(parts[:i])
+            if parent not in name_set:
+                warnings.append(f"Tag「{t['name']}」缺少父类「{parent}」")
+    return warnings
   
 # ── HTTP 处理器 ──────────────────────────────────────────────────────────────  
   
@@ -160,29 +175,34 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({"ok": True, "tag": new_tag})  
             except Exception as e:  
                 self.send_json({"ok": False, "error": str(e)}, 500)
-  
-    def do_PUT(self):  
-        # PUT /api/tags/{id}  
-        parts = urlparse(self.path).path.strip("/").split("/")  
-        if len(parts) == 3 and parts[:2] == ["api", "tags"]:  
-            try:  
-                tid = int(parts[2])  
-                body = self.read_json()  
-                tags = read_tags()  
-                tag = next((t for t in tags if t["id"] == tid), None)  
-                if not tag:  
-                    return self.send_json({"ok": False, "error": f"ID不存在: {tid}"}, 404)  
-                tag["name"] = body.get("name", tag["name"]).strip()  
-                tag["desc"] = body.get("desc", tag["desc"]).strip()  
-                err = validate_tags(tags)  
-                if err:  
-                    return self.send_json({"ok": False, "error": err}, 400)  
-                write_tags(tags)  
-                self.send_json({"ok": True})  
-            except Exception as e:  
-                self.send_json({"ok": False, "error": str(e)}, 500)  
-        else:  
-            self.send_json({"ok": False, "error": "Not Found"}, 404)  
+
+    def do_PUT(self):
+        parts = urlparse(self.path).path.strip("/").split("/")
+        if len(parts) == 3 and parts[:2] == ["api", "tags"]:
+            try:
+                tid = int(parts[2])
+                body = self.read_json()
+                tags = read_tags()
+                tag = next((t for t in tags if t["id"] == tid), None)
+                if not tag:
+                    return self.send_json({"ok": False, "error": f"ID不存在: {tid}"}, 404)
+                    # 支持修改 ID  
+                new_id = body.get("id")
+                if new_id is not None:
+                    new_id = int(new_id)
+                    if new_id != tid and any(t["id"] == new_id for t in tags):
+                        return self.send_json({"ok": False, "error": f"ID {new_id} 已存在"}, 400)
+                    tag["id"] = new_id
+                tag["name"] = body.get("name", tag["name"]).strip()
+                tag["desc"] = body.get("desc", tag["desc"]).strip()
+                err = validate_tags(tags)
+                if err:
+                    return self.send_json({"ok": False, "error": err}, 400)
+                write_tags(tags)
+                warnings = get_warnings(tags)
+                self.send_json({"ok": True, "warnings": warnings})
+            except Exception as e:
+                self.send_json({"ok": False, "error": str(e)}, 500)
   
     def do_DELETE(self):  
         # DELETE /api/tags/{id}  
