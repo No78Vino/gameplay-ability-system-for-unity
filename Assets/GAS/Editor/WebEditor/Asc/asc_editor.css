@@ -38,6 +38,7 @@ main { display: flex; flex: 1; overflow: hidden; }
 #form-body { flex: 1; overflow-y: auto; padding: 24px 32px; }
 #form-body.empty-hint { display: flex; align-items: center; justify-content: center; color: #45475a; font-size: 14px; }
 
+/* 字段组 */
 .field-group { margin-bottom: 20px; }
 .field-group label { display: block; font-size: 12px; color: #a6adc8; margin-bottom: 6px; }
 .field-group small { color: #6c7086; }
@@ -46,26 +47,105 @@ main { display: flex; flex: 1; overflow: hidden; }
     padding: 8px 10px; color: #cdd6f4; font-size: 13px; outline: none; transition: border-color .15s;
 }
 .field-group input:focus, .field-group textarea:focus { border-color: #89b4fa; }
-.field-group textarea { resize: vertical; min-height: 72px; font-family: inherit; }
+.field-group textarea { resize: vertical; min-height: 52px; font-family: inherit; }
 .field-readonly { background: #181825 !important; color: #6c7086 !important; cursor: default; }
 
-/* 多选标签区（Tag / AttrSet / Ability） */
-.chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 28px; }
-.chip {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: #313244; border: 1px solid #45475a; border-radius: 20px;
-    padding: 3px 10px; font-size: 12px; color: #cdd6f4;
+/* 基础信息两列网格 */
+.basic-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
 }
-.chip-del { background: none; border: none; color: #f38ba8; cursor: pointer; font-size: 12px; padding: 0 2px; line-height: 1; }
+.basic-info-grid .field-full {
+    grid-column: 1 / -1;
+}
+
+/* 三栏并排容器 */
+.refs-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+/* 每个分区面板 */
+.ref-panel {
+    flex: 1;
+    min-width: 0;
+    background: #181825;
+    border: 1px solid #45475a;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.ref-panel-header {
+    padding: 7px 12px;
+    background: #1e1e2e;
+    border-bottom: 1px solid #313244;
+    font-size: 12px;
+    font-weight: 600;
+    color: #89b4fa;
+    letter-spacing: .5px;
+}
+.ref-panel-body {
+    flex: 1;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+    max-height: 280px;
+}
+
+/* Chip 列表 — 改为纵向 */
+.chip-list {
+    display: flex;
+    flex-direction: column;   /* ← 改这里，原来是 flex-wrap: wrap */
+    gap: 5px;
+    min-height: 24px;
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;   /* ← 新增这一行 */
+    gap: 3px;
+    background: #313244;
+    border: 1px solid #45475a;
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 11px;
+    color: #cdd6f4;
+}
+.chip-del {
+    background: none;
+    border: none;
+    color: #f38ba8;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 0 2px;
+    line-height: 1;
+}
 .chip-del:hover { color: #fab387; }
 
-.add-chip-row { display: flex; gap: 6px; align-items: center; }
+/* 添加行 */
+.add-chip-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 4px;
+}
 .chip-select {
-    flex: 1; background: #313244; border: 1px solid #45475a; border-radius: 5px;
-    padding: 5px 8px; color: #cdd6f4; font-size: 13px; outline: none;
+    flex: 1;
+    background: #313244;
+    border: 1px solid #45475a;
+    border-radius: 5px;
+    padding: 4px 7px;
+    color: #cdd6f4;
+    font-size: 12px;
+    outline: none;
 }
 .chip-select:focus { border-color: #89b4fa; }
-.btn-add-chip { font-size: 12px; padding: 4px 12px; }
+.btn-add-chip { font-size: 11px; padding: 3px 10px; }
 
 /* 状态栏 */
 #statusbar { background: #181825; border-top: 1px solid #313244; padding: 5px 20px; font-size: 11px; color: #6c7086; display: flex; gap: 16px; }

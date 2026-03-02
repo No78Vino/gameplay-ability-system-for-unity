@@ -129,44 +129,63 @@ function renderForm(asc) {
     const body = document.getElementById('form-body');
     body.className = '';
     body.innerHTML = `  
-        <div class="field-group">  
-            <label>ID</label>  
-            <input class="field-readonly" type="number" value="${asc.id}" readonly>  
-        </div>  
-        <div class="field-group">  
-            <label>预设名称</label>  
-            <input id="edit-name" type="text" value="${asc.name}" autocomplete="off">  
-        </div>  
-        <div class="field-group">  
-            <label>描述</label>  
-            <textarea id="edit-desc">${asc.desc}</textarea>  
-        </div>  
-        <div class="field-group">  
-            <label>等级</label>  
-            <input id="edit-level" type="number" value="${asc.level}" min="1">  
-        </div>  
-        <div class="field-group">  
-            <label>初始 Tag</label>  
-            <div id="tag-chips" class="chip-list"></div>  
-            <div class="add-chip-row">  
-                <select id="tag-select" class="chip-select">${buildOptions(tagChoices)}</select>  
-                <button class="btn btn-success btn-add-chip" onclick="addChipFromSelect('tag-select','tag-chips',tagChoices)">＋ 添加</button>  
+        <!-- 基础信息：两列网格 -->  
+        <div class="basic-info-grid">  
+            <div class="field-group">  
+                <label>ID</label>  
+                <input class="field-readonly" type="number" value="${asc.id}" readonly>  
+            </div>  
+            <div class="field-group">  
+                <label>等级</label>  
+                <input id="edit-level" type="number" value="${asc.level}" min="1">  
+            </div>  
+            <div class="field-group">  
+                <label>预设名称</label>  
+                <input id="edit-name" type="text" value="${asc.name}" autocomplete="off">  
+            </div>  
+            <div class="field-group" style="grid-column:1/-1">  
+                <label>描述</label>  
+                <textarea id="edit-desc" style="min-height:52px">${asc.desc}</textarea>  
             </div>  
         </div>  
-        <div class="field-group">  
-            <label>属性集 AttrSet</label>  
-            <div id="attrset-chips" class="chip-list"></div>  
-            <div class="add-chip-row">  
-                <select id="attrset-select" class="chip-select">${buildOptions(attrSetChoices)}</select>  
-                <button class="btn btn-success btn-add-chip" onclick="addChipFromSelect('attrset-select','attrset-chips',attrSetChoices)">＋ 添加</button>  
+  
+        <!-- 三栏并排 -->  
+        <div class="refs-row">  
+            <!-- Tag -->  
+            <div class="ref-panel">  
+                <div class="ref-panel-header">🏷 初始 Tag</div>  
+                <div class="ref-panel-body">  
+                    <div id="tag-chips" class="chip-list"></div>  
+                    <div class="add-chip-row">  
+                        <select id="tag-select" class="chip-select">${buildOptions(tagChoices)}</select>  
+                        <button class="btn btn-success btn-add-chip"  
+                            onclick="addChipFromSelect('tag-select','tag-chips',tagChoices)">＋</button>  
+                    </div>  
+                </div>  
             </div>  
-        </div>  
-        <div class="field-group">  
-            <label>初始技能 Ability</label>  
-            <div id="ability-chips" class="chip-list"></div>  
-            <div class="add-chip-row">  
-                <select id="ability-select" class="chip-select">${buildOptions(abilityChoices)}</select>  
-                <button class="btn btn-success btn-add-chip" onclick="addChipFromSelect('ability-select','ability-chips',abilityChoices)">＋ 添加</button>  
+            <!-- AttrSet -->  
+            <div class="ref-panel">  
+                <div class="ref-panel-header">📦 属性集 AttrSet</div>  
+                <div class="ref-panel-body">  
+                    <div id="attrset-chips" class="chip-list"></div>  
+                    <div class="add-chip-row">  
+                        <select id="attrset-select" class="chip-select">${buildOptions(attrSetChoices)}</select>  
+                        <button class="btn btn-success btn-add-chip"  
+                            onclick="addChipFromSelect('attrset-select','attrset-chips',attrSetChoices)">＋</button>  
+                    </div>  
+                </div>  
+            </div>  
+            <!-- Ability -->  
+            <div class="ref-panel">  
+                <div class="ref-panel-header">⚡ 初始技能 Ability</div>  
+                <div class="ref-panel-body">  
+                    <div id="ability-chips" class="chip-list"></div>  
+                    <div class="add-chip-row">  
+                        <select id="ability-select" class="chip-select">${buildOptions(abilityChoices)}</select>  
+                        <button class="btn btn-success btn-add-chip"  
+                            onclick="addChipFromSelect('ability-select','ability-chips',abilityChoices)">＋</button>  
+                    </div>  
+                </div>  
             </div>  
         </div>  
     `;
