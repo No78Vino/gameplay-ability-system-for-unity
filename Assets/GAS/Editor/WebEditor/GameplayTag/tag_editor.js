@@ -32,25 +32,24 @@ async function loadTags() {
         setCount(allTags.length);
         renderTree();
         setStatus('加载完成', 'ok');
+
+        // 客户端警告检测（移入 try 块内，删除重复的 allTags = r.tags）  
+        const nameSet = new Set(allTags.map(t => t.name));
+        const idCount = {};
+        allTags.forEach(t => idCount[t.id] = (idCount[t.id] || 0) + 1);
+        const warns = [];
+        allTags.forEach(t => {
+            if (idCount[t.id] > 1) warns.push(`重复ID ${t.id}: 「${t.name}」`);
+            const parts = t.name.split('.');
+            for (let i = 1; i < parts.length; i++) {
+                const parent = parts.slice(0, i).join('.');
+                if (!nameSet.has(parent)) warns.push(`「${t.name}」缺少父类「${parent}」`);
+            }
+        });
+        if (warns.length > 0) showWarnings(warns); else clearWarnings();
     } catch (e) {
         setStatus('加载失败: ' + e.message, 'err');
     }
-
-    allTags = r.tags;
-    // 客户端警告检测  
-    const nameSet = new Set(allTags.map(t => t.name));
-    const idCount = {};
-    allTags.forEach(t => idCount[t.id] = (idCount[t.id] || 0) + 1);
-    const warns = [];
-    allTags.forEach(t => {
-        if (idCount[t.id] > 1) warns.push(`重复ID ${t.id}: 「${t.name}」`);
-        const parts = t.name.split('.');
-        for (let i = 1; i < parts.length; i++) {
-            const parent = parts.slice(0, i).join('.');
-            if (!nameSet.has(parent)) warns.push(`「${t.name}」缺少父类「${parent}」`);
-        }
-    });
-    if (warns.length > 0) showWarnings(warns); else clearWarnings();
 }
 
 // ── 树构建 ───────────────────────────────────────────────────────────────    
