@@ -78,7 +78,9 @@ namespace GAS.Editor
             }
 
             var batPath = GetFullPath(ATTR_SET_EDITOR_DIR, "start.bat");
-            RunBat(batPath, $"\"{xlsxPath}\"");
+            
+            var xlsxAttr = Path.GetFullPath(setting.PathOfExcelAttr);  
+            RunBat(batPath, $"\"{xlsxPath}\" --attr-xlsx \"{xlsxAttr}\"");
         }
 
         // ── 未来扩展 ──────────────────────────────────────────────────────  

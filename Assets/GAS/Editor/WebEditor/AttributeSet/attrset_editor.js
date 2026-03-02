@@ -36,6 +36,51 @@ async function loadAttrSets() {
     }
 }
 
+// ── 全局：attribute choices 缓存 ─────────────────────────────────────────────  
+let attrChoices = []; // [{id, name}, ...]  
+
+async function loadAttrChoices() {
+    try {
+        const r = await fetch(`${API}/api/choices/attrs`).then(resp => resp.json());
+        if (r.ok) attrChoices = r.attrs;
+    } catch (e) {}
+}
+
+// ── 生成单个属性卡片 ──────────────────────────────────────────────────────────  
+function buildAttrCard(a = { id: 0, initValue: 0, minValue: 0, maxValue: 999, useMinValue: true, useMaxValue: true }) {
+    const options = attrChoices.map(ch =>
+        `<option value="${ch.id}" ${ch.id === a.id ? 'selected' : ''}>${ch.name} #${ch.id}</option>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'attr-card';
+    card.innerHTML = `  
+        <div class="attr-card-header">  
+            <select class="attr-select" data-field="id">  
+                <option value="0">-- 选择 Attribute --</option>  
+                ${options}  
+            </select>  
+            <button class="attr-card-del" onclick="this.closest('.attr-card').remove()">✕</button>  
+        </div>  
+        <div class="attr-card-body">  
+            <label>初始值  
+                <input type="number" step="any" data-field="initValue" value="${a.initValue}">  
+            </label>  
+            <label class="attr-minmax">  
+                <input type="checkbox" data-field="useMinValue" ${a.useMinValue ? 'checked' : ''}>  
+                最小值  
+                <input type="number" step="any" data-field="minValue" value="${a.minValue}">  
+            </label>  
+            <label class="attr-minmax">  
+                <input type="checkbox" data-field="useMaxValue" ${a.useMaxValue ? 'checked' : ''}>  
+                最大值  
+                <input type="number" step="any" data-field="maxValue" value="${a.maxValue}">  
+            </label>  
+        </div>  
+    `;
+    return card;
+}
+
 // ── 渲染左侧列表 ──────────────────────────────────────────────────────────────  
 function renderList() {
     const container = document.getElementById('attrset-list');
@@ -54,40 +99,20 @@ function renderList() {
 
 // ── 读取当前表单中的 attributes 子行数据 ──────────────────────────────────────  
 function collectAttrRows() {
-    const rows = document.querySelectorAll('.attr-subrow');
-    const result = [];
-    rows.forEach(row => {
-        const inputs = row.querySelectorAll('input');
-        // inputs: [id, initValue, minValue, maxValue, useMinValue(checkbox), useMaxValue(checkbox)]  
-        result.push({
-            id:          parseInt(inputs[0].value) || 0,
-            initValue:   parseFloat(inputs[1].value) || 0,
-            minValue:    parseFloat(inputs[2].value) || 0,
-            maxValue:    parseFloat(inputs[3].value) || 0,
-            useMinValue: inputs[4].checked,
-            useMaxValue: inputs[5].checked,
-        });
-    });
-    return result;
+    return Array.from(document.querySelectorAll('.attr-card')).map(card => ({
+        id:          parseInt(card.querySelector('[data-field="id"]').value) || 0,
+        initValue:   parseFloat(card.querySelector('[data-field="initValue"]').value) || 0,
+        minValue:    parseFloat(card.querySelector('[data-field="minValue"]').value) || 0,
+        maxValue:    parseFloat(card.querySelector('[data-field="maxValue"]').value) || 0,
+        useMinValue: card.querySelector('[data-field="useMinValue"]').checked,
+        useMaxValue: card.querySelector('[data-field="useMaxValue"]').checked,
+    }));
 }
 
 // ── 渲染右侧表单 ──────────────────────────────────────────────────────────────  
 function renderForm(attrset) {
     const body = document.getElementById('form-body');
     body.className = '';
-
-    const attrRows = (attrset.attributes || []).map((a, idx) => `  
-        <div class="attr-subrow">  
-            <input class="attr-subrow-id" type="number" value="${a.id}" placeholder="AttrID" title="Attribute ID">  
-            <input type="number" step="any" value="${a.initValue}" placeholder="初始值" title="初始值">  
-            <input type="number" step="any" value="${a.minValue}" placeholder="最小值" title="最小值">  
-            <input type="number" step="any" value="${a.maxValue}" placeholder="最大值" title="最大值">  
-            <input type="checkbox" title="启用最小值" ${a.useMinValue ? 'checked' : ''}>  
-            <input type="checkbox" title="启用最大值" ${a.useMaxValue ? 'checked' : ''}>  
-            <button class="attr-subrow-del" onclick="this.closest('.attr-subrow').remove()">✕</button>  
-        </div>  
-    `).join('');
-
     body.innerHTML = `  
         <div class="field-group">  
             <label>ID</label>  
@@ -102,23 +127,13 @@ function renderForm(attrset) {
             <textarea id="edit-desc">${attrset.desc}</textarea>  
         </div>  
         <div class="field-group">  
-            <label>属性列表 <small>（ID · 初始值 · 最小值 · 最大值 · 启用Min · 启用Max）</small></label>  
-            <div class="attr-sublist">  
-                <div class="attr-sublist-header">  
-                    <span>AttrID</span>  
-                    <span>初始值</span>  
-                    <span>最小值</span>  
-                    <span>最大值</span>  
-                    <span title="启用最小值">Min✓</span>  
-                    <span title="启用最大值">Max✓</span>  
-                    <span style="width:28px"></span>  
-                </div>  
-                <div id="attr-subrows">${attrRows}</div>  
-            </div>  
+            <label>属性列表</label>  
+            <div id="attr-cards"></div>  
             <button class="btn btn-success btn-add-attr" onclick="App.addAttrRow()">＋ 新增属性</button>  
         </div>  
     `;
-
+    const container = document.getElementById('attr-cards');
+    (attrset.attributes || []).forEach(a => container.appendChild(buildAttrCard(a)));
     document.getElementById('form-title').textContent = `编辑: ${attrset.name}`;
     document.getElementById('btn-delete').style.display = '';
     document.getElementById('btn-save').style.display = '';
@@ -154,21 +169,11 @@ const App = {
         if (attrset) renderForm(attrset);
     },
 
+// 在 App 对象中：  
     addAttrRow() {
-        const container = document.getElementById('attr-subrows');
+        const container = document.getElementById('attr-cards');
         if (!container) return;
-        const div = document.createElement('div');
-        div.className = 'attr-subrow';
-        div.innerHTML = `  
-            <input class="attr-subrow-id" type="number" value="0" placeholder="AttrID" title="Attribute ID">  
-            <input type="number" step="any" value="0" placeholder="初始值" title="初始值">  
-            <input type="number" step="any" value="0" placeholder="最小值" title="最小值">  
-            <input type="number" step="any" value="999" placeholder="最大值" title="最大值">  
-            <input type="checkbox" title="启用最小值" checked>  
-            <input type="checkbox" title="启用最大值" checked>  
-            <button class="attr-subrow-del" onclick="this.closest('.attr-subrow').remove()">✕</button>  
-        `;
-        container.appendChild(div);
+        container.appendChild(buildAttrCard());
     },
 
     async saveSelected() {
@@ -270,4 +275,5 @@ document.addEventListener('keydown', e => {
 
 // ── 初始化 ───────────────────────────────────────────────────────────────────  
 loadInfo();
+loadAttrChoices();  // 新增  
 loadAttrSets();

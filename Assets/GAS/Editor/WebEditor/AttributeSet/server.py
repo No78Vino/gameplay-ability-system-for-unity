@@ -174,6 +174,13 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({"ok": False, "error": str(e)}, 500)  
         elif p == "/api/info":  
             self.send_json({"ok": True, "xlsx": XLSX_PATH})  
+        elif p == "/api/choices/attrs":  
+            try:  
+                from gas_xlsx_choice import GasXlsxChoice  
+                c = GasXlsxChoice({"attr": ATTR_XLSX_PATH})  
+                self.send_json({"ok": True, "attrs": c.attrs()})  
+            except Exception as e:  
+                self.send_json({"ok": False, "error": str(e)}, 500)    
         else:  
             self.send_json({"ok": False, "error": "Not Found"}, 404)  
   
@@ -260,6 +267,7 @@ def main():
     ap.add_argument("--xlsx", required=True, help="#exgas.attributeSet.xlsx 路径")  
     ap.add_argument("--port", type=int, default=8767)  
     ap.add_argument("--no-browser", action="store_true")  
+    ap.add_argument("--attr-xlsx", default="", help="#exgas.attribute.xlsx 路径（用于属性选择）")
     args = ap.parse_args()  
   
     XLSX_PATH = os.path.abspath(args.xlsx)  

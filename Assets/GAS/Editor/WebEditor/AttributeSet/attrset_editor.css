@@ -49,64 +49,50 @@ main { display: flex; flex: 1; overflow: hidden; }
 .field-group textarea { resize: vertical; min-height: 72px; font-family: inherit; }
 .field-readonly { background: #181825 !important; color: #6c7086 !important; cursor: default; }
 
-/* Attribute 子列表（右侧表单内）—— 修复列对齐 */
-.attr-sublist { background: #181825; border: 1px solid #313244; border-radius: 8px; overflow: hidden; }
+/* 属性卡片容器 */
+#attr-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
 
-/* 表头与数据行共用 flex 布局 */
-.attr-sublist-header,
-.attr-subrow {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
+/* 单个属性卡片 */
+.attr-card {
+    background: #181825; border: 1px solid #313244;
+    border-radius: 8px; overflow: hidden;
 }
-.attr-sublist-header {
-    border-bottom: 1px solid #313244;
-    font-size: 12px;
-    color: #a6adc8;
+.attr-card-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-bottom: 1px solid #313244;
+    background: #1e1e2e;
 }
-.attr-subrow {
-    border-bottom: 1px solid #313244;
+.attr-select {
+    flex: 1; background: #313244; border: 1px solid #45475a;
+    border-radius: 5px; padding: 5px 8px; color: #cdd6f4;
+    font-size: 13px; outline: none;
 }
-.attr-subrow:last-child { border-bottom: none; }
+.attr-select:focus { border-color: #89b4fa; }
+.attr-card-del {
+    background: none; border: none; color: #f38ba8;
+    cursor: pointer; font-size: 14px; padding: 2px 6px; flex-shrink: 0;
+}
+.attr-card-del:hover { color: #fab387; }
 
-/* 各列统一宽度：表头 span 与数据行 .col-* div 一一对应 */
-.attr-sublist-header span:nth-child(1),
-.col-attr-id   { flex: 0 0 60px; text-align: center; }
-
-.attr-sublist-header span:nth-child(2),
-.col-attr-init { flex: 1; text-align: center; }
-
-.attr-sublist-header span:nth-child(3),
-.col-attr-min  { flex: 1; text-align: center; }
-
-.attr-sublist-header span:nth-child(4),
-.col-attr-max  { flex: 1; text-align: center; }
-
-.attr-sublist-header span:nth-child(5),
-.col-attr-usemin { flex: 0 0 40px; text-align: center; }
-
-.attr-sublist-header span:nth-child(6),
-.col-attr-usemax { flex: 0 0 40px; text-align: center; }
-
-.attr-sublist-header span:nth-child(7),
-.col-attr-del  { flex: 0 0 28px; text-align: center; }
-
-/* input / checkbox / 删除按钮样式 */
-.attr-subrow input[type="number"] {
-    width: 100%; background: #313244; border: 1px solid #45475a;
+/* 卡片内数值区 */
+.attr-card-body {
+    display: flex; gap: 16px; padding: 10px 12px;
+    flex-wrap: wrap;
+}
+.attr-card-body label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: #a6adc8;
+}
+.attr-card-body input[type="number"] {
+    width: 80px; background: #313244; border: 1px solid #45475a;
     border-radius: 4px; padding: 4px 6px; color: #cdd6f4;
     font-size: 12px; outline: none; text-align: center;
 }
-.attr-subrow input[type="checkbox"] {
-    width: 16px; height: 16px; accent-color: #cba6f7;
-    flex-shrink: 0; margin: auto;
+.attr-card-body input[type="number"]:focus { border-color: #89b4fa; }
+.attr-card-body input[type="checkbox"] {
+    width: 15px; height: 15px; accent-color: #cba6f7;
 }
-.attr-subrow-del {
-    background: none; border: none; color: #f38ba8;
-    cursor: pointer; font-size: 14px; padding: 2px 4px; flex-shrink: 0;
-}
-.attr-subrow-del:hover { color: #fab387; }
+.attr-minmax { opacity: 1; transition: opacity .15s; }
 .btn-add-attr { margin-top: 8px; font-size: 12px; padding: 4px 12px; }
 
 /* 状态栏 */
