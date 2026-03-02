@@ -76,3 +76,5 @@ crashlytics-build.properties
 
 #Test
 /[Aa]ssets/_Test/*
+/Assets/GAS/Editor/WebEditor/__pycache__
+Assets/GAS/Editor/WebEditor/__pycache__.meta
