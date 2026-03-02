@@ -17,7 +17,7 @@ except ImportError:
     sys.exit(1)  
   
 # ── 常量 ────────────────────────────────────────────────────────────────────  
-DATA_START_ROW = 4   # 数据从第4行开始（1-3行为表头+Luban类型定义）  
+DATA_START_ROW = 5   # 数据从第5行开始（1-3行为表头+Luban类型定义）  
 COL_ID         = 2   # 第2列: ID  
 COL_NAME       = 3   # 第3列: Name  
 COL_DESC       = 4   # 第4列: Desc  
@@ -28,7 +28,6 @@ XLSX_PATH = ""       # 由命令行参数注入
   
 # ── Excel 读写 ───────────────────────────────────────────────────────────────  
 def read_attrsets():  
-    """读取所有 AttributeSet，返回 list[dict]。"""  
     wb = openpyxl.load_workbook(XLSX_PATH)  
     ws = wb.active  
     result = []  
@@ -36,6 +35,12 @@ def read_attrsets():
         id_val = row[COL_ID - 1]  
         if id_val is None:  
             break  
+        # 跳过非整数行（如残留的表头行）  
+        try:  
+            id_int = int(id_val)  
+        except (ValueError, TypeError):  
+            continue  
+            
         name_val  = row[COL_NAME - 1] or ""  
         desc_val  = row[COL_DESC - 1] or ""  
         attr_val  = row[COL_ATTRIBUTE - 1] or ""  
