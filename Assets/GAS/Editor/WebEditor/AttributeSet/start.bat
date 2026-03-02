@@ -1,3 +1,3 @@
 @echo off  
-python "%~dp0server.py" --xlsx %1  
+python "%~dp0server.py" --xlsx %*  
 pause
