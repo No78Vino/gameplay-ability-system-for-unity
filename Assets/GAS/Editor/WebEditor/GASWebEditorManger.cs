@@ -18,6 +18,10 @@ namespace GAS.Editor
         // AttributeSet 编辑器子目录  
         private const string ATTR_SET_EDITOR_DIR = "AttributeSet";
 
+        
+        // ASC 编辑器子目录（新增）  
+        private const string ASC_EDITOR_DIR = "ASC";
+        
         // ── 环境部署（install_deps.bat 在根目录，所有编辑器共用）────────  
         [MenuItem("EXTool/EX-GAS/Web编辑器/📦 一键部署编辑器环境")]
         public static void DeployWebEditorEnv()
@@ -82,6 +86,26 @@ namespace GAS.Editor
             RunBat(batPath, $"\"{xlsxPath}\" --attr-xlsx \"{xlsxAttr}\"");  // ← 追加参数  
         }
 
+        [MenuItem("EXTool/EX-GAS/Web编辑器/ASC预设 网页编辑器")]  
+        public static void LaunchAscWebEditor()  
+        {  
+            var setting     = GASSettingAsset.LoadOrCreate();  
+            var xlsxPath    = Path.GetFullPath(setting.PathOfExcelAsc);  
+            var xlsxTag     = Path.GetFullPath(setting.PathOfExcelTag);  
+            var xlsxAttrSet = Path.GetFullPath(setting.PathOfExcelAttrSet);  
+            var xlsxAbility = Path.GetFullPath(setting.PathOfExcelAbility);  
+  
+            if (!File.Exists(xlsxPath))  
+            {  
+                EditorUtility.DisplayDialog("错误",  
+                    $"ASC Excel 文件未找到:\n{xlsxPath}\n\n请先在 Setting 页面配置正确的 ConfigProjectPath。",  
+                    "确定");  
+                return;  
+            }  
+  
+            var batPath = GetFullPath(ASC_EDITOR_DIR, "start.bat");  
+            RunBat(batPath, $"\"{xlsxPath}\" --tag-xlsx \"{xlsxTag}\" --attrset-xlsx \"{xlsxAttrSet}\" --ability-xlsx \"{xlsxAbility}\"");  
+        }
         // ── 未来扩展 ──────────────────────────────────────────────────────  
         // [MenuItem("EXTool/EX-GAS/Web编辑器/🌐 启动 Effect 网页编辑器")]  
         // public static void LaunchEffectWebEditor() { ... }  
