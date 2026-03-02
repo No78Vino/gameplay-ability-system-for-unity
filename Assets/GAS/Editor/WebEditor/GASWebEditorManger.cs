@@ -64,23 +64,22 @@ namespace GAS.Editor
             RunBat(batPath, $"\"{xlsxPath}\""); // ← 传入 xlsx 路径  
         }
 
-        [MenuItem("EXTool/EX-GAS/Web编辑器/AttributeSet 网页编辑器")]
-        public static void LaunchAttrSetWebEditor()
-        {
-            var setting = GASSettingAsset.LoadOrCreate();
-            var xlsxPath = Path.GetFullPath(setting.PathOfExcelAttrSet); // ← 需确认 GASSettingAsset 中是否已有该属性  
-            if (!File.Exists(xlsxPath))
-            {
-                EditorUtility.DisplayDialog("错误",
-                    $"AttributeSet Excel 文件未找到:\n{xlsxPath}\n\n请先在 Setting 页面配置正确的 ConfigProjectPath。",
-                    "确定");
-                return;
-            }
-
-            var batPath = GetFullPath(ATTR_SET_EDITOR_DIR, "start.bat");
-            
-            var xlsxAttr = Path.GetFullPath(setting.PathOfExcelAttr);  
-            RunBat(batPath, $"\"{xlsxPath}\" --attr-xlsx \"{xlsxAttr}\"");
+        [MenuItem("EXTool/EX-GAS/Web编辑器/AttributeSet 网页编辑器")]  
+        public static void LaunchAttrSetWebEditor()  
+        {  
+            var setting = GASSettingAsset.LoadOrCreate();  
+            var xlsxPath = Path.GetFullPath(setting.PathOfExcelAttrSet);  
+            var xlsxAttr = Path.GetFullPath(setting.PathOfExcelAttr);  // ← 新增  
+            if (!File.Exists(xlsxPath))  
+            {  
+                EditorUtility.DisplayDialog("错误",  
+                    $"AttributeSet Excel 文件未找到:\n{xlsxPath}\n\n请先在 Setting 页面配置正确的 ConfigProjectPath。",  
+                    "确定");  
+                return;  
+            }  
+  
+            var batPath = GetFullPath(ATTR_SET_EDITOR_DIR, "start.bat");  
+            RunBat(batPath, $"\"{xlsxPath}\" --attr-xlsx \"{xlsxAttr}\"");  // ← 追加参数  
         }
 
         // ── 未来扩展 ──────────────────────────────────────────────────────  

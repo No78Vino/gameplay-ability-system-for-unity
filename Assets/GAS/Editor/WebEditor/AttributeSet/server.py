@@ -5,17 +5,24 @@ EX-GAS AttributeSet 网页编辑器 - 本地 HTTP 服务
 依赖: pip install openpyxl  
 用法: python server.py --xlsx "path/to/#exgas.attributeSet.xlsx"  
 """  
-  
+
+
 import argparse, json, os, sys, threading, webbrowser  
 from http.server import BaseHTTPRequestHandler, HTTPServer  
 from urllib.parse import urlparse, parse_qs  
-  
+
+# 将 WebEditor 根目录加入 Python 模块搜索路径  
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ 
 try:  
     import openpyxl  
 except ImportError:  
     print("[ERROR] 请先运行: pip install openpyxl")  
     sys.exit(1)  
-  
+
+
+ATTR_XLSX_PATH = ""   # 由 --attr-xlsx 参数注入
+
 # ── 常量 ────────────────────────────────────────────────────────────────────  
 DATA_START_ROW  = 5  
 COL_SET_ID      = 2   # 第2列: AttributeSet ID  
@@ -173,14 +180,14 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as e:  
                 self.send_json({"ok": False, "error": str(e)}, 500)  
         elif p == "/api/info":  
-            self.send_json({"ok": True, "xlsx": XLSX_PATH})  
+            self.send_json({"ok": True, "xlsx": XLSX_PATH})   
         elif p == "/api/choices/attrs":  
             try:  
                 from gas_xlsx_choice import GasXlsxChoice  
                 c = GasXlsxChoice({"attr": ATTR_XLSX_PATH})  
                 self.send_json({"ok": True, "attrs": c.attrs()})  
             except Exception as e:  
-                self.send_json({"ok": False, "error": str(e)}, 500)    
+                self.send_json({"ok": False, "error": str(e)}, 500)
         else:  
             self.send_json({"ok": False, "error": "Not Found"}, 404)  
   
@@ -267,8 +274,11 @@ def main():
     ap.add_argument("--xlsx", required=True, help="#exgas.attributeSet.xlsx 路径")  
     ap.add_argument("--port", type=int, default=8767)  
     ap.add_argument("--no-browser", action="store_true")  
-    ap.add_argument("--attr-xlsx", default="", help="#exgas.attribute.xlsx 路径（用于属性选择）")
+    ap.add_argument("--attr-xlsx", default="", help="#exgas.attribute.xlsx 路径（用于属性下拉选择）")
     args = ap.parse_args()  
+  
+    global ATTR_XLSX_PATH  
+    ATTR_XLSX_PATH = os.path.abspath(args.attr_xlsx) if args.attr_xlsx else ""
   
     XLSX_PATH = os.path.abspath(args.xlsx)  
     if not os.path.exists(XLSX_PATH):  

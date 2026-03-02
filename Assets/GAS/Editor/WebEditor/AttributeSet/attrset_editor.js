@@ -150,11 +150,12 @@ function clearForm() {
 
 // ── App 命名空间（供 HTML onclick 调用）──────────────────────────────────────  
 const App = {
-    reload() {
+    async reload() {
         selectedId = null;
         clearForm();
         loadInfo();
-        loadAttrSets();
+        await loadAttrChoices();
+        await loadAttrSets();
     },
 
     onSearch(val) {
@@ -274,6 +275,8 @@ document.addEventListener('keydown', e => {
 });
 
 // ── 初始化 ───────────────────────────────────────────────────────────────────  
-loadInfo();
-loadAttrChoices();  // 新增  
-loadAttrSets();
+(async function init() {
+    loadInfo();
+    await loadAttrChoices();  // 先等 choices 加载完，确保 attrChoices 有数据  
+    await loadAttrSets();     // 再加载属性集列表  
+})();
