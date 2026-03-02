@@ -17,11 +17,17 @@ except ImportError:
     sys.exit(1)  
   
 # ── 常量 ────────────────────────────────────────────────────────────────────  
-DATA_START_ROW = 5   # 数据从第5行开始（1-3行为表头+Luban类型定义）  
-COL_ID         = 2   # 第2列: ID  
-COL_NAME       = 3   # 第3列: Name  
-COL_DESC       = 4   # 第4列: Desc  
-COL_ATTRIBUTE  = 5   # 第5列: Attribute（分号分隔，每项格式: ID,InitValue,MinValue,MaxValue,UseMinValue,UseMaxValue）  
+DATA_START_ROW  = 5  
+COL_SET_ID      = 2   # 第2列: AttributeSet ID  
+COL_SET_NAME    = 3   # 第3列: Name  
+COL_SET_DESC    = 4   # 第4列: Desc  
+COL_ATTR_ID     = 5   # 第5列: Attribute.ID  
+# 第6列: 注释列（不导出，跳过）  
+COL_ATTR_INIT   = 7   # 第7列: Attribute.InitValue  
+COL_ATTR_MIN    = 8   # 第8列: Attribute.MinValue  
+COL_ATTR_MAX    = 9   # 第9列: Attribute.MaxValue  
+COL_ATTR_USEMIN = 10  # 第10列: Attribute.UseMinValue  
+COL_ATTR_USEMAX = 11  # 第11列: Attribute.UseMaxValue   
   
 XLSX_PATH = ""       # 由命令行参数注入  
   
@@ -31,78 +37,75 @@ def read_attrsets():
     wb = openpyxl.load_workbook(XLSX_PATH)  
     ws = wb.active  
     result = []  
+    current_set = None  
+  
     for row in ws.iter_rows(min_row=DATA_START_ROW, values_only=True):  
-        id_val = row[COL_ID - 1]  
-        if id_val is None:  
-            break  
-        # 跳过非整数行（如残留的表头行）  
-        try:  
-            id_int = int(id_val)  
-        except (ValueError, TypeError):  
-            continue  
-            
-        name_val  = row[COL_NAME - 1] or ""  
-        desc_val  = row[COL_DESC - 1] or ""  
-        attr_val  = row[COL_ATTRIBUTE - 1] or ""  
+        set_id_val  = row[COL_SET_ID - 1]  
+        attr_id_val = row[COL_ATTR_ID - 1]  
   
-        # 解析 Attribute 列：分号分隔，每项逗号分隔  
-        attributes = []  
-        if attr_val:  
-            for item in str(attr_val).split(";"):  
-                item = item.strip()  
-                if not item:  
-                    continue  
-                parts = item.split(",")  
-                if len(parts) >= 6:  
-                    try:  
-                        attributes.append({  
-                            "id":           int(parts[0]),  
-                            "initValue":    float(parts[1]),  
-                            "minValue":     float(parts[2]),  
-                            "maxValue":     float(parts[3]),  
-                            "useMinValue":  parts[4].strip().lower() in ("true", "1"),  
-                            "useMaxValue":  parts[5].strip().lower() in ("true", "1"),  
-                        })  
-                    except ValueError:  
-                        pass  
+        if set_id_val is not None:  
+            # 新的 AttributeSet 主行  
+            try:  
+                set_id_int = int(set_id_val)  
+            except (ValueError, TypeError):  
+                continue  
+            current_set = {  
+                "id":         set_id_int,  
+                "name":       str(row[COL_SET_NAME - 1] or ""),  
+                "desc":       str(row[COL_SET_DESC - 1] or ""),  
+                "attributes": [],  
+            }  
+            result.append(current_set)  
   
-        result.append({  
-            "id":         int(id_val),  
-            "name":       str(name_val),  
-            "desc":       str(desc_val),  
-            "attributes": attributes,  
-        })  
+        # 同一行或续行：解析 Attribute 条目  
+        if attr_id_val is not None and current_set is not None:  
+            try:  
+                current_set["attributes"].append({  
+                    "id":         int(attr_id_val),  
+                    "initValue":  float(row[COL_ATTR_INIT - 1] or 0),  
+                    "minValue":   float(row[COL_ATTR_MIN - 1] or 0),  
+                    "maxValue":   float(row[COL_ATTR_MAX - 1] or 0),  
+                    "useMinValue": str(row[COL_ATTR_USEMIN - 1] or "").strip().lower() in ("true", "1"),  
+                    "useMaxValue": str(row[COL_ATTR_USEMAX - 1] or "").strip().lower() in ("true", "1"),  
+                })  
+            except (ValueError, TypeError):  
+                pass  
+        # 两列都为 None：空行，跳过  
+  
+    wb.close()  
     return result  
   
   
 def write_attrsets(attrsets):  
-    """将 attrsets 写回 Excel，按 ID 升序排列，只覆盖数据区。"""  
     wb = openpyxl.load_workbook(XLSX_PATH)  
     ws = wb.active  
   
-    # 清空旧数据行  
-    max_row = ws.max_row  
-    for r in range(DATA_START_ROW, max_row + 1):  
-        for c in [COL_ID, COL_NAME, COL_DESC, COL_ATTRIBUTE]:  
+    # 清空旧数据区  
+    for r in range(DATA_START_ROW, ws.max_row + 1):  
+        for c in range(COL_SET_ID, COL_ATTR_USEMAX + 1):  
             ws.cell(row=r, column=c).value = None  
   
-    for i, attrset in enumerate(sorted(attrsets, key=lambda s: s["id"])):  
-        r = DATA_START_ROW + i  
-        ws.cell(row=r, column=COL_ID).value   = attrset["id"]  
-        ws.cell(row=r, column=COL_NAME).value = attrset["name"]  
-        ws.cell(row=r, column=COL_DESC).value = attrset["desc"]  
+    row_cursor = DATA_START_ROW  
+    for attrset in sorted(attrsets, key=lambda s: s["id"]):  
+        attrs = attrset.get("attributes", [])  
+        row_count = max(len(attrs), 1)  
+        for i in range(row_count):  
+            r = row_cursor + i  
+            if i == 0:  
+                ws.cell(row=r, column=COL_SET_ID).value   = attrset["id"]  
+                ws.cell(row=r, column=COL_SET_NAME).value = attrset["name"]  
+                ws.cell(row=r, column=COL_SET_DESC).value = attrset["desc"]  
+            if i < len(attrs):  
+                a = attrs[i]  
+                ws.cell(row=r, column=COL_ATTR_ID).value     = a["id"]  
+                ws.cell(row=r, column=COL_ATTR_INIT).value   = a["initValue"]  
+                ws.cell(row=r, column=COL_ATTR_MIN).value    = a["minValue"]  
+                ws.cell(row=r, column=COL_ATTR_MAX).value    = a["maxValue"]  
+                ws.cell(row=r, column=COL_ATTR_USEMIN).value = "true" if a.get("useMinValue") else "false"  
+                ws.cell(row=r, column=COL_ATTR_USEMAX).value = "true" if a.get("useMaxValue") else "false"  
+        row_cursor += row_count  
   
-        # 序列化 Attribute 列  
-        parts = []  
-        for a in attrset.get("attributes", []):  
-            use_min = "true" if a.get("useMinValue") else "false"  
-            use_max = "true" if a.get("useMaxValue") else "false"  
-            parts.append(  
-                f"{a['id']},{a['initValue']},{a['minValue']},{a['maxValue']},{use_min},{use_max}"  
-            )  
-        ws.cell(row=r, column=COL_ATTRIBUTE).value = ";".join(parts)  
-  
-    wb.save(XLSX_PATH)  
+    wb.save(XLSX_PATH)
   
   
 # ── 校验 ─────────────────────────────────────────────────────────────────────  

@@ -49,16 +49,63 @@ main { display: flex; flex: 1; overflow: hidden; }
 .field-group textarea { resize: vertical; min-height: 72px; font-family: inherit; }
 .field-readonly { background: #181825 !important; color: #6c7086 !important; cursor: default; }
 
-/* Attribute 子列表（右侧表单内） */
+/* Attribute 子列表（右侧表单内）—— 修复列对齐 */
 .attr-sublist { background: #181825; border: 1px solid #313244; border-radius: 8px; overflow: hidden; }
-.attr-sublist-header { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid #313244; font-size: 12px; color: #a6adc8; gap: 8px; }
-.attr-sublist-header span { flex: 1; text-align: center; }
-.attr-subrow { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-bottom: 1px solid #313244; }
+
+/* 表头与数据行共用 flex 布局 */
+.attr-sublist-header,
+.attr-subrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+}
+.attr-sublist-header {
+    border-bottom: 1px solid #313244;
+    font-size: 12px;
+    color: #a6adc8;
+}
+.attr-subrow {
+    border-bottom: 1px solid #313244;
+}
 .attr-subrow:last-child { border-bottom: none; }
-.attr-subrow input[type="number"] { width: 100%; background: #313244; border: 1px solid #45475a; border-radius: 4px; padding: 4px 6px; color: #cdd6f4; font-size: 12px; outline: none; text-align: center; }
-.attr-subrow input[type="checkbox"] { width: 16px; height: 16px; accent-color: #cba6f7; flex-shrink: 0; }
-.attr-subrow-id { width: 50px; min-width: 50px; }
-.attr-subrow-del { background: none; border: none; color: #f38ba8; cursor: pointer; font-size: 14px; padding: 2px 4px; flex-shrink: 0; }
+
+/* 各列统一宽度：表头 span 与数据行 .col-* div 一一对应 */
+.attr-sublist-header span:nth-child(1),
+.col-attr-id   { flex: 0 0 60px; text-align: center; }
+
+.attr-sublist-header span:nth-child(2),
+.col-attr-init { flex: 1; text-align: center; }
+
+.attr-sublist-header span:nth-child(3),
+.col-attr-min  { flex: 1; text-align: center; }
+
+.attr-sublist-header span:nth-child(4),
+.col-attr-max  { flex: 1; text-align: center; }
+
+.attr-sublist-header span:nth-child(5),
+.col-attr-usemin { flex: 0 0 40px; text-align: center; }
+
+.attr-sublist-header span:nth-child(6),
+.col-attr-usemax { flex: 0 0 40px; text-align: center; }
+
+.attr-sublist-header span:nth-child(7),
+.col-attr-del  { flex: 0 0 28px; text-align: center; }
+
+/* input / checkbox / 删除按钮样式 */
+.attr-subrow input[type="number"] {
+    width: 100%; background: #313244; border: 1px solid #45475a;
+    border-radius: 4px; padding: 4px 6px; color: #cdd6f4;
+    font-size: 12px; outline: none; text-align: center;
+}
+.attr-subrow input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: #cba6f7;
+    flex-shrink: 0; margin: auto;
+}
+.attr-subrow-del {
+    background: none; border: none; color: #f38ba8;
+    cursor: pointer; font-size: 14px; padding: 2px 4px; flex-shrink: 0;
+}
 .attr-subrow-del:hover { color: #fab387; }
 .btn-add-attr { margin-top: 8px; font-size: 12px; padding: 4px 12px; }
 
