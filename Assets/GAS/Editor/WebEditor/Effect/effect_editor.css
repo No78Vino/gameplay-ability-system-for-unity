@@ -124,18 +124,11 @@ main { display: flex; flex: 1; overflow: hidden; }
 .enum-btns button.active { background: #89b4fa; color: #1e1e2e; border-color: #89b4fa; }
 
 /* 警告提示 */
+/* ✅ 通过 classList.toggle('show') 控制，不使用 inline style */
 .warn-box { background: #45475a; border-left: 3px solid #fab387; padding: 8px 12px; margin-bottom: 10px; font-size: 12px; color: #fab387; display: none; }
 .warn-box.show { display: block; }
 
-/* Tab 样式 */
-.tab-container { margin-bottom: 12px; }
-.tab-header { display: flex; gap: 2px; background: #181825; border-radius: 6px 6px 0 0; overflow: hidden; }
-.tab-btn { padding: 8px 16px; background: #313244; border: none; color: #a6adc8; font-size: 12px; cursor: pointer; transition: all .15s; }
-.tab-btn:hover { background: #45475a; }
-.tab-btn.active { background: #1e1e2e; color: #89b4fa; }
-.tab-content { background: #181825; border: 1px solid #45475a; border-top: none; border-radius: 0 0 6px 6px; padding: 12px; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
+/* ✅ Tab 样式已删除（死代码，HTML/JS 中无使用） */
 
 /* 滚动条美化 */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
