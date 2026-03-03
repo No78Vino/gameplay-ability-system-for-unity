@@ -128,7 +128,7 @@ function readChipIds(listId) {
 
 async function loadInfo() {
     try {
-        const r = await fetch(`${API}/api/info`).then(r => r.json());
+        const r = await fetch(`${API}/api/info`).then(resp => resp.json());
         if (r.ok) document.getElementById('xlsx-path').textContent = r.xlsx;
     } catch(e) {}
 }
@@ -152,7 +152,7 @@ async function loadChoices() {
 
 async function loadEffects() {
     try {
-        const r = await fetch(`${API}/api/effects`).then(r => r.json());
+        const r = await fetch(`${API}/api/effects`).then(resp => resp.json());
         if (!r.ok) throw new Error(r.error);
         allEffects = r.effects;
         // 同步 effectChoices（供 Period.effects / Stacking.overflowEffects 下拉）  
@@ -546,16 +546,16 @@ function renderCompDetails(effect) {
     // ── Stacking ──────────────────────────────────────────────────────  
     if (active.has('Stacking')) {
         const st = effect.stacking || {
-            code:0, stackingType:'AggregateBySource', limitCount:1,
-            durationRefreshPolicy:'NeverRefresh', periodResetPolicy:'NeverRefresh',
-            expirationPolicy:'ClearEntireStack',
-            denyOverflowApplication:false, clearStackOnOverflow:false, overflowEffects:[]
+            code: 0, stackingType: 'AggregateBySource', limitCount: 1,
+            durationRefreshPolicy: 'NeverRefresh', periodResetPolicy: 'NeverRefresh',
+            expirationPolicy: 'ClearEntireStack',
+            denyOverflowApplication: false, clearStackOnOverflow: false, overflowEffects: []
         };
         html += `  
 <div class="panel" id="panel-Stacking">  
     <div class="panel-header">Stacking 层数叠加</div>  
     <div class="panel-body">  
-        <div class="warn-box" ${!active.has('Duration')?'style="display:block"':''}>  
+        <div class="warn-box" ${!active.has('Duration') ? 'style="display:block"' : ''}>  
             ⚠ Stacking 需要 Duration 组件才会生效！  
         </div>  
         <div class="inline-fields">  
@@ -573,7 +573,7 @@ function renderCompDetails(effect) {
             <div class="enum-btns" id="st-type-btns">  
                 ${ENUM_STACKING_TYPE.map(v =>
             `<button onclick="setEnumBtn('st-type-btns',this,'${v}')"  
-                        class="${st.stackingType===v?'active':''}">${v}</button>`
+                        class="${st.stackingType === v ? 'active' : ''}">${v}</button>`
         ).join('')}  
             </div>  
         </div>  
@@ -582,7 +582,7 @@ function renderCompDetails(effect) {
             <div class="enum-btns" id="st-dur-btns">  
                 ${ENUM_DURATION_REFRESH.map(v =>
             `<button onclick="setEnumBtn('st-dur-btns',this,'${v}')"  
-                        class="${st.durationRefreshPolicy===v?'active':''}">${v}</button>`
+                        class="${st.durationRefreshPolicy === v ? 'active' : ''}">${v}</button>`
         ).join('')}  
             </div>  
         </div>  
@@ -591,7 +591,7 @@ function renderCompDetails(effect) {
             <div class="enum-btns" id="st-per-btns">  
                 ${ENUM_PERIOD_RESET.map(v =>
             `<button onclick="setEnumBtn('st-per-btns',this,'${v}')"  
-                        class="${st.periodResetPolicy===v?'active':''}">${v}</button>`
+                        class="${st.periodResetPolicy === v ? 'active' : ''}">${v}</button>`
         ).join('')}  
             </div>  
         </div>  
@@ -600,31 +600,31 @@ function renderCompDetails(effect) {
             <div class="enum-btns" id="st-exp-btns">  
                 ${ENUM_EXPIRATION.map(v =>
             `<button onclick="setEnumBtn('st-exp-btns',this,'${v}')"  
-                        class="${st.expirationPolicy===v?'active':''}">${v}</button>`
+                        class="${st.expirationPolicy === v ? 'active' : ''}">${v}</button>`
         ).join('')}  
             </div>  
         </div>  
         <div class="field-group">  
             <label>  
-                <input type="checkbox" id="st-deny" ${st.denyOverflowApplication?'checked':''}>  
+                <input type="checkbox" id="st-deny" ${st.denyOverflowApplication ? 'checked' : ''}>  
                 &nbsp;拒绝溢出应用 (denyOverflowApplication)  
             </label>  
         </div>  
         <div class="field-group">  
             <label>  
-                <input type="checkbox" id="st-clear" ${st.clearStackOnOverflow?'checked':''}>  
+                <input type="checkbox" id="st-clear" ${st.clearStackOnOverflow ? 'checked' : ''}>  
                 &nbsp;溢出时清空层数 (clearStackOnOverflow)  
             </label>  
         </div>  
         <div class="field-group">  
             <label>溢出触发的 Effect IDs</label>  
             <div class="chip-list" id="chips-st-overflow">  
-                ${(st.overflowEffects||[]).map(id => chipHtml('st-overflow', id, effectChoices)).join('')}  
+                ${(st.overflowEffects || []).map(id => chipHtml('st-overflow', id, effectChoices)).join('')}  
             </div>  
             <div class="add-chip-row">  
                 <select class="chip-select" id="sel-st-overflow">  
                     <option value="">-- 选择Effect --</option>  
-                    ${effectChoices.filter(e => !(st.overflowEffects||[]).includes(e.id)).map(e =>
+                    ${effectChoices.filter(e => !(st.overflowEffects || []).includes(e.id)).map(e =>
             `<option value="${e.id}">[${e.id}] ${escHtml(e.name)}</option>`
         ).join('')}  
                 </select>  
@@ -634,6 +634,7 @@ function renderCompDetails(effect) {
         </div>  
     </div>  
 </div>`;
+    }
 
         // ── Cue 类 ────────────────────────────────────────────────────────  
         const cueFieldMap = {
@@ -839,7 +840,7 @@ function renderCompDetails(effect) {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(effect),
-                }).then(r => r.json());
+                }).then(resp => resp.json());
                 if (!r.ok) throw new Error(r.error);
                 setStatus('保存成功', 'ok');
                 await loadEffects();
@@ -859,7 +860,7 @@ function renderCompDetails(effect) {
             try {
                 const r = await fetch(`${API}/api/effects/${selectedId}`, {
                     method: 'DELETE',
-                }).then(r => r.json());
+                }).then(resp => resp.json());
                 if (!r.ok) throw new Error(r.error);
                 selectedId = null;
                 clearForm();
@@ -897,7 +898,7 @@ function renderCompDetails(effect) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
-                }).then(r => r.json());
+                }).then(resp => resp.json());
                 if (!r.ok) throw new Error(r.error);
                 App.closeModal();
                 setStatus('新增成功', 'ok');
@@ -906,7 +907,7 @@ function renderCompDetails(effect) {
             } catch (e) {
                 setStatus('新增失败: ' + e.message, 'err');
             }
-        },
+        },   // ← confirmAdd 最后一个方法的逗号  
     };
 
 // ── 键盘快捷键 ────────────────────────────────────────────────────────  
@@ -926,5 +927,6 @@ function renderCompDetails(effect) {
 // ── 初始化 ────────────────────────────────────────────────────────────  
     (async function init() {
         loadInfo();
-        await loadChoices();   // 先等 choices 加载完（tag/cue/ability/attrset/effect）  
-        await loadEffects();   // 再加载 effect 列表  
+        await loadChoices();
+        await loadEffects();
+    })();
