@@ -35,12 +35,6 @@ namespace EXUI
         {
             get { return _bindingContext ??= this.BindingContext(); }
         }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            InitViewComponents();
-        }
         
         public virtual void Init(string viewName)
         {
@@ -134,15 +128,15 @@ namespace EXUI
         protected T _vm;
         public T VM => _vm;
         
-        public override void Init(string viewName)
-        {
-            base.Init(viewName);
-            _vm = Activator.CreateInstance<T>();
-            _viewModel = _vm;
-            //将视图模型赋值到DataContext
-            BindingContext.DataContext = _vm;
-            // 绑定
-            BindData();
+        // BaseView<T>.Init()  
+        public override void Init(string viewName)  
+        {  
+            base.Init(viewName);                       // 设置 _name  
+            _vm = Activator.CreateInstance<T>();  
+            _viewModel = _vm;  
+            BindingContext.DataContext = _vm;          // _bindingContext 和 _vm 已就绪  
+            InitViewComponents();                     // ✅ 此时调用，_vm 已可用  
+            BindData();                               // ✅ 此时绑定，组件引用已就绪  
         }
     }
 }
