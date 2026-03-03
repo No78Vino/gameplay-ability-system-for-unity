@@ -108,17 +108,16 @@ namespace GAS.Editor
             var batPath = GetFullPath(ASC_EDITOR_DIR, "start.bat");  
             RunBat(batPath, $"\"{xlsxPath}\" --tag-xlsx \"{xlsxTag}\" --attrset-xlsx \"{xlsxAttrSet}\" --ability-xlsx \"{xlsxAbility}\"");  
         }
-        
-        
+
         [MenuItem("EXTool/EX-GAS/Web编辑器/Effect 网页编辑器")]  
         public static void LaunchEffectWebEditor()  
         {  
-            var setting      = GASSettingAsset.LoadOrCreate();  
-            var xlsxPath     = Path.GetFullPath(setting.PathOfExcelEffect);  
-            var xlsxTag      = Path.GetFullPath(setting.PathOfExcelTag);  
-            var xlsxAttrSet  = Path.GetFullPath(setting.PathOfExcelAttrSet);  
-            var xlsxAbility  = Path.GetFullPath(setting.PathOfExcelAbility);  
-            var xlsxCue      = Path.GetFullPath(setting.PathOfExcelCue);  
+            var setting     = GASSettingAsset.LoadOrCreate();  
+            var xlsxPath    = Path.GetFullPath(setting.PathOfExcelEffect);  
+            var xlsxTag     = Path.GetFullPath(setting.PathOfExcelTag);  
+            var xlsxAttrSet = Path.GetFullPath(setting.PathOfExcelAttrSet);  
+            var xlsxAbility = Path.GetFullPath(setting.PathOfExcelAbility);  
+            var xlsxCue     = Path.GetFullPath(setting.PathOfExcelCue);  
   
             if (!File.Exists(xlsxPath))  
             {  
