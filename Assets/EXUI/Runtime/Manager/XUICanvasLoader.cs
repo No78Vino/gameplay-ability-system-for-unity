@@ -28,24 +28,31 @@ namespace EXUI
             CreateLayerRoots(); // ✅ 新增  
         }
 
-        private void CreateLayerRoots()  
-        {  
-            foreach (UILayer layer in System.Enum.GetValues(typeof(UILayer)))  
-            {  
-                var layerObj = new GameObject($"Layer_{layer}");  
-                layerObj.transform.SetParent(_uiCanvasObj.transform, false);  
-          
-                // 每个层级独立 Canvas，设置 sortingOrder  
-                var canvas = layerObj.AddComponent<Canvas>();  
-                canvas.overrideSorting = true;  
-                canvas.sortingOrder = (int)layer;  
-                layerObj.AddComponent<GraphicRaycaster>();  
-          
-                Object.DontDestroyOnLoad(layerObj);  
-                _layerRoots[layer] = layerObj;  
-            }  
+        private void CreateLayerRoots()
+        {
+            foreach (UILayer layer in System.Enum.GetValues(typeof(UILayer)))
+            {
+                // ✅ 构造时传入 typeof(RectTransform)，自动添加该组件  
+                var layerObj = new GameObject($"Layer_{layer}", typeof(RectTransform));
+                layerObj.transform.SetParent(_uiCanvasObj.transform, false);
+
+                // 此时 GetComponent<RectTransform>() 不再报错  
+                var rt = layerObj.GetComponent<RectTransform>();
+                rt.anchorMin = Vector2.zero;
+                rt.anchorMax = Vector2.one;
+                rt.offsetMin = Vector2.zero;
+                rt.offsetMax = Vector2.zero;
+
+                var canvas = layerObj.AddComponent<Canvas>();
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = (int)layer;
+                layerObj.AddComponent<GraphicRaycaster>();
+
+                Object.DontDestroyOnLoad(layerObj);
+                _layerRoots[layer] = layerObj;
+            }
         }
-        
+
         private void CreateCanvas()
         {
             GameObject canvasObj = new GameObject("UICanvas");

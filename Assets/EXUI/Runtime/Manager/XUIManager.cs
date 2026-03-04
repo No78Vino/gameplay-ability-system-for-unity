@@ -100,7 +100,7 @@ namespace EXUI
   
             // 4. ✅ 根据 view.Layer 获取对应层级容器，再重新设置父级  
             var layerRoot = _canvasLoader.GetLayerRoot(view.Layer);  
-            instance.transform.SetParent(layerRoot.transform, false);  
+            instance.transform.SetParent(layerRoot.transform, false);
   
             // 5. 初始化 View（Init 内部会依次调用 CreateVM → InitViewComponents → BindData）  
             view.Init(name);  
