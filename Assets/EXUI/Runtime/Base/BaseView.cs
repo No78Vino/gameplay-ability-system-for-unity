@@ -10,17 +10,20 @@ namespace EXUI
     public abstract class BaseView: UIView
     {
         protected IBindingContext _bindingContext;
+        
+        // 子类通过 override 声明自己所在层级  
+        public virtual UILayer Layer => UILayer.Normal;  
 
         /// <summary>
         ///     是否全屏
         /// </summary>
-        protected bool _isFullScreen;
-
+        public virtual bool IsFullScreen => false;  // 子类 override 声明  
+        
         /// <summary>
         ///     是否为模态窗口
         /// </summary>
-        protected bool _isModal;
-
+        public virtual bool IsModal => false;       // 子类 override 声明
+        
         protected string _name;
 
         protected string _prefabPath;
@@ -51,22 +54,29 @@ namespace EXUI
             _viewModel.OnHide();
         }
         
-        public virtual void Show()
-        {
-            gameObject.SetActive(true);
-            PlayShowAnim();
-            OnShow();
-        }
-
-        public virtual void Hide()
-        {
-            PlayHideAnim();
-            OnHide();
-        }
-
-        protected virtual void OnHideAnimEnd()
-        {
-            gameObject.SetActive(false);
+        
+        // BaseView.cs  
+        private bool _isShowing = false;  
+        public bool IsShowing => _isShowing;  
+  
+        public virtual void Show()  
+        {  
+            gameObject.SetActive(true);  
+            _isShowing = true;      // ✅ 立即标记为 showing  
+            PlayShowAnim();  
+            OnShow();  
+        }  
+  
+        public virtual void Hide()  
+        {  
+            _isShowing = false;     // ✅ 立即标记为 not showing，UITick 停止驱动  
+            PlayHideAnim();  
+            OnHide();  
+        }  
+  
+        protected virtual void OnHideAnimEnd()  
+        {  
+            gameObject.SetActive(false); // GameObject 延迟禁用，不影响 IsShowing 判断  
         }
 
         public virtual void PlayShowAnim()
@@ -85,8 +95,6 @@ namespace EXUI
                 Debug.Log($"{GetType()} receive message.   args.Context = {args.Context}");
 #endif
         }
-
-        public bool IsShowing => gameObject.activeSelf;
         
         /// <summary>
         /// 
@@ -123,20 +131,32 @@ namespace EXUI
         }
     }
 
-    public abstract class BaseView<T> : BaseView where T : ViewModelCommon
-    {
-        protected T _vm;
-        public T VM => _vm;
-        
-        // BaseView<T>.Init()  
+    public abstract class BaseView<T> : BaseView where T : ViewModelCommon  
+    {  
+        protected T _vm;  
+        public T VM => _vm;  
+  
         public override void Init(string viewName)  
         {  
-            base.Init(viewName);                       // 设置 _name  
-            _vm = Activator.CreateInstance<T>();  
+            base.Init(viewName);  
+            _vm = Activator.CreateInstance<T>();  // 默认行为：无参构造  
+            SetupViewModel();  
+        }  
+  
+        // ✅ 新增：允许外部注入已构造好的 VM  
+        public void InitWithViewModel(string viewName, T vm)  
+        {  
+            base.Init(viewName);  
+            _vm = vm;  
+            SetupViewModel();  
+        }  
+  
+        private void SetupViewModel()  
+        {  
             _viewModel = _vm;  
-            BindingContext.DataContext = _vm;          // _bindingContext 和 _vm 已就绪  
-            InitViewComponents();                     // ✅ 此时调用，_vm 已可用  
-            BindData();                               // ✅ 此时绑定，组件引用已就绪  
-        }
+            BindingContext.DataContext = _vm;  
+            InitViewComponents();  
+            BindData();  
+        }  
     }
 }

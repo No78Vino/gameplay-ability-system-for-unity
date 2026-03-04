@@ -49,12 +49,10 @@ namespace DemoForESC._Script
 
         private void OnMainSceneLoaded(SceneHandle sceneHandle)
         {
-            // 主场景加载完成后的逻辑
-            Debug.Log("主场景加载完成");
-            XUI.M.OpenWindow<MaskWindow>();
-            var vmMaskWindow = XUI.M.VM<VMMaskWindow>();
-            vmMaskWindow.SetOnOpen(LoadMenu);
-            vmMaskWindow.MaskFadeIn(false);
+            Debug.Log("主场景加载完成");  
+            var w = XUI.M.OpenWindow<MaskWindow>();   // ✅ 直接用返回值  
+            w.VM.SetOnOpen(LoadMenu);                 // ✅ 通过 w.VM 访问，不走 XUI.M.VM<T>()  
+            w.VM.MaskFadeIn(false);  
         }
         
         /// <summary>

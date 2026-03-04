@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,15 +15,37 @@ namespace EXUI
         private EventSystem _eventSystem;
         private GraphicRaycaster _graphicRaycaster;
         
+        private readonly Dictionary<UILayer, GameObject> _layerRoots = new();  
+  
+        public GameObject GetLayerRoot(UILayer layer) => _layerRoots[layer];  
+        
         public void Create()
         {
-            _uiRoot = new GameObject("UIRoot");
-            Object.DontDestroyOnLoad(_uiRoot);
-            // 生成UGUI核心组件（Canvas + EventSystem）
-            CreateCanvas();
-            CreateEventSystem();
+            _uiRoot = new GameObject("UIRoot");  
+            Object.DontDestroyOnLoad(_uiRoot);  
+            CreateCanvas();  
+            CreateEventSystem();  
+            CreateLayerRoots(); // ✅ 新增  
         }
 
+        private void CreateLayerRoots()  
+        {  
+            foreach (UILayer layer in System.Enum.GetValues(typeof(UILayer)))  
+            {  
+                var layerObj = new GameObject($"Layer_{layer}");  
+                layerObj.transform.SetParent(_uiCanvasObj.transform, false);  
+          
+                // 每个层级独立 Canvas，设置 sortingOrder  
+                var canvas = layerObj.AddComponent<Canvas>();  
+                canvas.overrideSorting = true;  
+                canvas.sortingOrder = (int)layer;  
+                layerObj.AddComponent<GraphicRaycaster>();  
+          
+                Object.DontDestroyOnLoad(layerObj);  
+                _layerRoots[layer] = layerObj;  
+            }  
+        }
+        
         private void CreateCanvas()
         {
             GameObject canvasObj = new GameObject("UICanvas");

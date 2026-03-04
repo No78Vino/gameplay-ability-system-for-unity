@@ -101,13 +101,12 @@ namespace DemoForESC._Script
             {
                 await Task.Delay(800);
                 GameManager.I.ResetPlayerStateToGuidePoint();
-                var w2 = XUI.M.OpenWindow<MaskWindow>();
-                w2.VM.SetOnClose(() =>
+                w.VM.SetOnClose(() =>
                 {
                     EasyInputController.Inst().SetBanInput(false);
                     onTransitionDone?.Invoke();
                 });
-                w2.VM.MaskFadeOut();
+                w.VM.MaskFadeOut();
             });
             w.VM.MaskFadeIn();
         }

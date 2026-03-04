@@ -10,6 +10,7 @@ namespace DemoForESC._Script.UI.View
     public class MaskWindow : BaseView<VMMaskWindow>
     {
         private Image _bg;
+        public override UILayer Layer => UILayer.Mask;
 
         protected override void InitViewComponents()
         {
