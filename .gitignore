@@ -78,3 +78,4 @@ crashlytics-build.properties
 /[Aa]ssets/_Test/*
 /Assets/GAS/Editor/WebEditor/__pycache__
 Assets/GAS/Editor/WebEditor/__pycache__.meta
+/Bundles/StandaloneWindows64/MainPackage/Simulate
