@@ -20,8 +20,9 @@ namespace DemoForESC._Script
       
             
             XUI.Launch();
-            XUI.M.RegisterViewPrefabPath(UIConfig.WindowPathMap, XYooAssetManager.Instance.LoadAssetSync<GameObject>);
-
+            //XUI.M.RegisterViewPrefabPath(UIConfig.WindowPathMap, XYooAssetManager.Instance.LoadAssetSync<GameObject>);
+            XUI.M.RegisterConfig(new XUIConfigFromYooAsset(UIConfig.WindowPathMap));
+            
             // 自身设置为不随场景切换而销毁
             DontDestroyOnLoad(gameObject);
 

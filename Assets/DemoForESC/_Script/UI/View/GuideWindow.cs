@@ -7,6 +7,8 @@ namespace DemoForESC._Script.UI.View
 {
     public class GuideWindow: BaseView<VMGuideWindow>
     {
+        public override UILayer Layer => UILayer.Modal; 
+        
         private Text _labelTitle;
         private Text _labelContent;
         
