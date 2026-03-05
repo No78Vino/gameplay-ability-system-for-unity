@@ -26,7 +26,9 @@ TAG_XLSX_PATH = ""
 ATTRSET_XLSX_PATH = ""  
 ABILITY_XLSX_PATH = ""  
 CUE_XLSX_PATH = ""  
-  
+MMC_XLSX_PATH = ""
+ATTR_XLSX_PATH = ""
+
 STATIC_TYPES = {  
     ".html": "text/html; charset=utf-8",  
     ".css":  "text/css; charset=utf-8",  
@@ -109,50 +111,103 @@ def read_cues_for_dropdown():
     except Exception as e:  
         print(f"[WARN] 读取Cue失败: {e}")  
         return []  
-  
+
+def read_mmcs_for_dropdown():  
+    """读取MMC数据用于下拉选择"""  
+    if not MMC_XLSX_PATH or not os.path.exists(MMC_XLSX_PATH):  
+        return []  
+    try:  
+        wb = openpyxl.load_workbook(MMC_XLSX_PATH)  
+        ws = wb.worksheets[0]  
+        mmcs = []  
+        row = DATA_START_ROW  
+        while ws.cell(row=row, column=2).value is not None:  
+            mmc_id = ws.cell(row=row, column=2).value  
+            mmc_name = ws.cell(row=row, column=3).value  
+            if mmc_id is not None:  
+                mmcs.append({"id": int(mmc_id), "name": str(mmc_name or "")})  
+            row += 1  
+        wb.close()  
+        return mmcs  
+    except Exception as e:  
+        print(f"[WARN] 读取MMC失败: {e}")  
+        return []
+          
 def read_attrsets_for_dropdown():  
-    """读取AttributeSet数据用于下拉选择  
-      
-    修复：attrs 从字符串列表改为 {id, name} 对象列表，  
-    以支持 JS 侧 modifierItemHtml 的 as.attrs.map(a => a.id, a.name) 调用。  
-    attrset xlsx 第4列存储 attr id 列表（分号分隔）。  
+    """读取AttributeSet数据用于下拉选择（Modifier 的 AttrSet/Attr 级联下拉）  
+  
+    修复：  
+    1. AttributeSet xlsx 数据从第5行开始（不是第4行）  
+    2. 列结构为多行格式：col2=SetID, col3=Name, col4=Desc, col5=Attribute.ID  
+       主行 col2 有值，子行 col2 为 None  
+    3. 需要 attr.xlsx 做 id->name 映射  
     """  
+    ATTRSET_DATA_START_ROW = 5  # AttributeSet 表从第5行开始  
+  
     if not ATTRSET_XLSX_PATH or not os.path.exists(ATTRSET_XLSX_PATH):  
         return []  
     try:  
-        wb = openpyxl.load_workbook(ATTRSET_XLSX_PATH)  
+        # ── 步骤1：构建 attr id -> name 映射 ──  
+        attr_name_map = {}  
+        if ATTR_XLSX_PATH and os.path.exists(ATTR_XLSX_PATH):  
+            try:  
+                wb_attr = openpyxl.load_workbook(ATTR_XLSX_PATH, read_only=True)  
+                ws_attr = wb_attr.worksheets[0]  
+                row_a = 4  # attr.xlsx 从第4行开始  
+                while True:  
+                    aid = ws_attr.cell(row=row_a, column=2).value  
+                    if aid is None:  
+                        break  
+                    aname = ws_attr.cell(row=row_a, column=3).value  
+                    try:  
+                        attr_name_map[int(aid)] = str(aname or "")  
+                    except (ValueError, TypeError):  
+                        pass  
+                    row_a += 1  
+                wb_attr.close()  
+            except Exception as e:  
+                print(f"[WARN] 读取Attribute失败: {e}")  
+  
+        # ── 步骤2：读取 AttributeSet 多行格式 ──  
+        wb = openpyxl.load_workbook(ATTRSET_XLSX_PATH, read_only=True)  
         ws = wb.worksheets[0]  
         attrsets = []  
-        row = DATA_START_ROW  
-        while ws.cell(row=row, column=2).value is not None:  
-            attrset_id = ws.cell(row=row, column=2).value  
-            attrset_name = ws.cell(row=row, column=3).value  
-            attrs_raw = ws.cell(row=row, column=4).value  
-            attrs = []  
-            if attrs_raw:  
-                parts = str(attrs_raw).split(';')  
-                for p in parts:  
-                    p = p.strip()  
-                    if p:  
-                        try:  
-                            # 尝试解析为 "id:name" 或纯 id  
-                            if ':' in p:  
-                                attr_id_str, attr_name = p.split(':', 1)  
-                                attrs.append({"id": int(attr_id_str.strip()), "name": attr_name.strip()})  
-                            else:  
-                                attr_id = int(p)  
-                                attrs.append({"id": attr_id, "name": str(attr_id)})  
-                        except:  
-                            # 无法解析为数字，当作名称处理（向后兼容）  
-                            attrs.append({"id": len(attrs), "name": p})  
-            if attrset_id is not None:  
-                attrsets.append({"id": int(attrset_id), "name": str(attrset_name or ""), "attrs": attrs})  
-            row += 1  
+        current_set = None  
+  
+        for row_data in ws.iter_rows(min_row=ATTRSET_DATA_START_ROW, values_only=True):  
+            set_id_val  = row_data[1]  # 第2列 (0-indexed=1): SetID  
+            attr_id_val = row_data[4]  # 第5列 (0-indexed=4): Attribute.ID  
+  
+            if set_id_val is not None:  
+                # 主行：新的 AttributeSet  
+                try:  
+                    set_id_int = int(set_id_val)  
+                except (ValueError, TypeError):  
+                    continue  
+                set_name = str(row_data[2] or "")  # 第3列: Name  
+                current_set = {  
+                    "id": set_id_int,  
+                    "name": set_name,  
+                    "attrs": []  
+                }  
+                attrsets.append(current_set)  
+  
+            # 主行或子行：解析 Attribute ID  
+            if attr_id_val is not None and current_set is not None:  
+                try:  
+                    aid = int(attr_id_val)  
+                    current_set["attrs"].append({  
+                        "id": aid,  
+                        "name": attr_name_map.get(aid, str(aid))  
+                    })  
+                except (ValueError, TypeError):  
+                    pass  
+  
         wb.close()  
         return attrsets  
     except Exception as e:  
         print(f"[WARN] 读取AttributeSet失败: {e}")  
-        return []  
+        return [] 
   
 def read_effects_for_dropdown():  
     """读取Effect数据用于Period效果选择"""  
@@ -557,7 +612,13 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({"ok": True, "effects": read_effects_for_dropdown()})  
             except Exception as e:  
                 self.send_json({"ok": False, "error": str(e)}, 500)  
-  
+                
+        elif p == "/api/choices/mmcs":  
+                    try:  
+                        self.send_json({"ok": True, "mmcs": read_mmcs_for_dropdown()})  
+                    except Exception as e:  
+                        self.send_json({"ok": False, "error": str(e)}, 500)
+                        
         elif p == "/api/enums":  
             self.send_json({  
                 "ok": True,  
@@ -692,49 +753,57 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({"ok": False, "error": "Not Found"}, 404) 
 
 
-# ── 入口 ────────────────────────────────────────────────────────────────────  
+# ── 入口 ────────────────────────────────────────────────────────────────────    
   
-def main():  
-    global XLSX_PATH, TAG_XLSX_PATH, ATTRSET_XLSX_PATH, ABILITY_XLSX_PATH, CUE_XLSX_PATH  
+def main():    
+    global XLSX_PATH, TAG_XLSX_PATH, ATTRSET_XLSX_PATH, ABILITY_XLSX_PATH, CUE_XLSX_PATH, MMC_XLSX_PATH, ATTR_XLSX_PATH   
   
-    ap = argparse.ArgumentParser(description="EX-GAS GameplayEffect 网页编辑器服务")  
-    ap.add_argument("--xlsx", required=True, help="#exgas.gameplayEffects.xlsx 路径")  
-    ap.add_argument("--tag-xlsx", help="#exgas.gameplayTags.xlsx 路径")  
-    ap.add_argument("--attrset-xlsx", help="#exgas.attributeSets.xlsx 路径")  
-    ap.add_argument("--ability-xlsx", help="#exgas.abilities.xlsx 路径")  
-    ap.add_argument("--cue-xlsx", help="#exgas.cues.xlsx 路径")  
-    ap.add_argument("--port", type=int, default=8766)  
-    ap.add_argument("--no-browser", action="store_true")  
-    args = ap.parse_args()  
+    ap = argparse.ArgumentParser(description="EX-GAS GameplayEffect 网页编辑器服务")    
+    ap.add_argument("--xlsx", required=True, help="#exgas.gameplayEffects.xlsx 路径")    
+    ap.add_argument("--tag-xlsx", help="#exgas.gameplayTags.xlsx 路径")    
+    ap.add_argument("--attr-xlsx", help="#exgas.attribute.xlsx 路径")
+    ap.add_argument("--attrset-xlsx", help="#exgas.attributeSets.xlsx 路径")    
+    ap.add_argument("--ability-xlsx", help="#exgas.abilities.xlsx 路径")    
+    ap.add_argument("--cue-xlsx", help="#exgas.cues.xlsx 路径")    
+    ap.add_argument("--mmc-xlsx", help="#exgas.mmc.xlsx 路径")    
+    ap.add_argument("--port", type=int, default=8766)    
+    ap.add_argument("--no-browser", action="store_true")    
+    args = ap.parse_args()    
   
-    XLSX_PATH = os.path.abspath(args.xlsx)  
-    if not os.path.exists(XLSX_PATH):  
-        print(f"[ERROR] 文件不存在: {XLSX_PATH}")  
-        sys.exit(1)  
+    XLSX_PATH = os.path.abspath(args.xlsx)    
+    if not os.path.exists(XLSX_PATH):    
+        print(f"[ERROR] 文件不存在: {XLSX_PATH}")    
+        sys.exit(1)    
   
-    if args.tag_xlsx:  
-        TAG_XLSX_PATH = os.path.abspath(args.tag_xlsx)  
-    if args.attrset_xlsx:  
-        ATTRSET_XLSX_PATH = os.path.abspath(args.attrset_xlsx)  
-    if args.ability_xlsx:  
-        ABILITY_XLSX_PATH = os.path.abspath(args.ability_xlsx)  
-    if args.cue_xlsx:  
-        CUE_XLSX_PATH = os.path.abspath(args.cue_xlsx)  
+    if args.tag_xlsx:    
+        TAG_XLSX_PATH = os.path.abspath(args.tag_xlsx)    
+    if args.attrset_xlsx:    
+        ATTRSET_XLSX_PATH = os.path.abspath(args.attrset_xlsx)    
+    if args.ability_xlsx:    
+        ABILITY_XLSX_PATH = os.path.abspath(args.ability_xlsx)    
+    if args.cue_xlsx:    
+        CUE_XLSX_PATH = os.path.abspath(args.cue_xlsx)    
+    if args.mmc_xlsx:    
+        MMC_XLSX_PATH = os.path.abspath(args.mmc_xlsx)   
+    if args.attr_xlsx:  
+        ATTR_XLSX_PATH = os.path.abspath(args.attr_xlsx) 
   
-    init_col_map()  
+    init_col_map()    
   
-    url = f"http://127.0.0.1:{args.port}"  
-    print(f"[EX-GAS Effect Editor] {url}")  
-    print(f"  Excel: {XLSX_PATH}")  
-    print(f"  Ctrl+C 停止")  
+    url = f"http://127.0.0.1:{args.port}"    
+    print(f"[EX-GAS Effect Editor] {url}")    
+    print(f"  Excel: {XLSX_PATH}")    
+    if MMC_XLSX_PATH:    
+        print(f"  MMC:   {MMC_XLSX_PATH}")    
+    print(f"  Ctrl+C 停止")    
   
-    if not args.no_browser:  
-        threading.Timer(0.8, lambda: webbrowser.open(url)).start()  
+    if not args.no_browser:    
+        threading.Timer(0.8, lambda: webbrowser.open(url)).start()    
   
-    try:  
-        HTTPServer(("127.0.0.1", args.port), Handler).serve_forever()  
-    except KeyboardInterrupt:  
-        print("\n[EX-GAS Effect Editor] 服务已停止")  
+    try:    
+        HTTPServer(("127.0.0.1", args.port), Handler).serve_forever()    
+    except KeyboardInterrupt:    
+        print("\n[EX-GAS Effect Editor] 服务已停止")    
   
-if __name__ == "__main__":  
+if __name__ == "__main__":    
     main()

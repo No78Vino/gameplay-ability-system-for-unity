@@ -15,6 +15,7 @@ let cueChoices     = [];   // [{id, name}]
 let abilityChoices = [];   // [{id, name}]  
 let attrSetChoices = [];   // [{id, name, attrs:[{id,name}]}]  
 let effectChoices  = [];   // [{id, name}]  
+let mmcChoices     = [];   // [{id, name}]  
 
 // ── 枚举（与 server.py ENUM_* 对齐）─────────────────────────────────  
 const ENUM_TIME_UNIT        = ['Frame', 'Turn'];
@@ -37,6 +38,27 @@ const CUE_COMPONENTS = [
     'CueOnRemove', 'CueOnActivate', 'CueOnDeactivate'
 ];
 const FUNC_COMPONENTS = ['Duration', 'Period', 'Modifiers', 'GrantedAbility', 'Stacking'];
+
+// ── 组件中文标签（对齐 C# EffectEditComponent 的 [LabelText]）────────  
+const COMP_LABELS = {
+    'AssetTags': '描述标签',
+    'GrantedTags': '获得标签',
+    'ApplicationRequiredTags': '应用需求标签',
+    'OngoingRequiredTags': '持续需求标签',
+    'RemoveGameplayEffectsWithTags': '移除持有标签的buff',
+    'ImmunityTags': '被免疫的标签',
+    'Duration': '持续时间',
+    'Period': '间隔执行',
+    'Modifiers': '修改器',
+    'CueOnApply': '应用时触发的Cue',
+    'CueOnTick': '帧更新的Cue',
+    'CueOnAdd': '添加时触发的Cue',
+    'CueOnRemove': '移除时触发的Cue',
+    'CueOnActivate': '激活时触发的Cue',
+    'CueOnDeactivate': '失活时触发的Cue',
+    'GrantedAbility': '获取技能',
+    'Stacking': 'buff堆叠'
+};
 
 // ═══════════════════════════════════════════════════════════════════  
 // § 2  工具函数  
@@ -83,7 +105,32 @@ function toggleComponent(chip, compName) {
     renderCompDetails(effect);
 }
 
-/** 生成 Chip 的 HTML（标签/Cue/Effect 通用） */
+/** Tab 切换 */
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+    // 切到详情 tab 时刷新详情  
+    if (tabId === 'tab-details') {
+        const effect = buildEffectFromForm();
+        renderCompDetails(effect);
+    }
+}
+
+// ── Tag Chip（主要显示 name，ID 为辅，对齐 C# GasXlsxChoice.Tags()）──  
+function tagChipHtml(listId, id, choices) {
+    const item = choices.find(c => c.id === id);
+    const label = item
+        ? `${escHtml(item.name)} <span style="opacity:.5;font-size:10px">#${id}</span>`
+        : `#${id}`;
+    return `<span class="chip" data-id="${id}">  
+        ${label}  
+        <button class="chip-del" onclick="removeChip('${listId}',${id})">✕</button>  
+    </span>`;
+}
+
+/** 生成 Chip 的 HTML（Cue/Effect 通用，显示 [id] name） */
 function chipHtml(listId, id, choices) {
     const item = choices.find(c => c.id === id);
     const label = item ? `[${id}] ${escHtml(item.name)}` : `[${id}]`;
@@ -101,8 +148,8 @@ function removeChip(listId, id) {
     if (chip) chip.remove();
 }
 
-/** 把 select 中选中的值添加为 chip */
-function addChip(listId, selId, choices) {
+/** 把 select 中选中的值添加为 chip（支持 tag 格式和通用格式） */
+function addChip(listId, selId, choices, useTagFormat) {
     const sel = document.getElementById(selId);
     if (!sel || !sel.value) return;
     const id = parseInt(sel.value);
@@ -110,7 +157,8 @@ function addChip(listId, selId, choices) {
     if (!container) return;
     // 防重复  
     if (container.querySelector(`.chip[data-id="${id}"]`)) return;
-    container.insertAdjacentHTML('beforeend', chipHtml(listId, id, choices));
+    const html = useTagFormat ? tagChipHtml(listId, id, choices) : chipHtml(listId, id, choices);
+    container.insertAdjacentHTML('beforeend', html);
     sel.value = '';
 }
 
@@ -121,6 +169,79 @@ function readChipIds(listId) {
     return [...container.querySelectorAll('.chip[data-id]')]
         .map(el => parseInt(el.dataset.id));
 }
+
+// ── 可搜索下拉组件 ────────────────────────────────────────────────────  
+let _sdCounter = 0;
+
+/**
+ * 生成可搜索下拉 HTML
+ * @param {string} selectId - 兼容旧 addChip 的 select id
+ * @param {string} placeholder
+ * @param {Array} choices - [{id, name}]
+ * @param {string} displayMode - 'tag' 显示 name(#id), 'default' 显示 [id] name
+ * @returns {string} HTML
+ */
+function searchableDropdownHtml(selectId, placeholder, choices, displayMode) {
+    const uid = `sd-${_sdCounter++}`;
+    const mode = displayMode || 'default';
+    return `  
+    <div class="search-dropdown" id="${uid}" data-sd-select-id="${selectId}" data-sd-mode="${mode}">  
+        <input class="sd-input" type="text" placeholder="${escHtml(placeholder)}"  
+            onfocus="sdOpen('${uid}')"  
+            oninput="sdFilter('${uid}', this.value)">  
+        <div class="sd-list">  
+            ${choices.map(c => {
+        const display = mode === 'tag'
+            ? `${escHtml(c.name)} (#${c.id})`
+            : `[${c.id}] ${escHtml(c.name)}`;
+        return `<div class="sd-item" data-value="${c.id}" onclick="sdSelect('${uid}',${c.id})">${display}</div>`;
+    }).join('')}  
+        </div>  
+        <select id="${selectId}" style="display:none">  
+            <option value=""></option>  
+            ${choices.map(c => `<option value="${c.id}">${c.id}</option>`).join('')}  
+        </select>  
+    </div>`;
+}
+
+function sdOpen(uid) {
+    // 关闭其他  
+    document.querySelectorAll('.search-dropdown.open').forEach(d => {
+        if (d.id !== uid) d.classList.remove('open');
+    });
+    const el = document.getElementById(uid);
+    if (el) el.classList.add('open');
+}
+
+function sdFilter(uid, keyword) {
+    const el = document.getElementById(uid);
+    if (!el) return;
+    el.classList.add('open');
+    const kw = keyword.toLowerCase();
+    el.querySelectorAll('.sd-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(kw) ? '' : 'none';
+    });
+}
+
+function sdSelect(uid, value) {
+    const el = document.getElementById(uid);
+    if (!el) return;
+    // 设置隐藏 select 的值  
+    const selId = el.dataset.sdSelectId;
+    const hiddenSel = document.getElementById(selId);
+    if (hiddenSel) hiddenSel.value = value;
+    // 清空输入 & 关闭  
+    el.querySelector('.sd-input').value = '';
+    el.classList.remove('open');
+}
+
+// 全局点击关闭下拉  
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-dropdown')) {
+        document.querySelectorAll('.search-dropdown.open').forEach(d => d.classList.remove('open'));
+    }
+});
 
 // ═══════════════════════════════════════════════════════════════════  
 // § 3  数据加载（API 通信）  
@@ -135,18 +256,20 @@ async function loadInfo() {
 
 async function loadChoices() {
     try {
-        const [tags, cues, abilities, attrsets, effects] = await Promise.all([
+        const [tags, cues, abilities, attrsets, effects, mmcs] = await Promise.all([
             fetch(`${API}/api/choices/tags`).then(r => r.json()),
             fetch(`${API}/api/choices/cues`).then(r => r.json()),
             fetch(`${API}/api/choices/abilities`).then(r => r.json()),
             fetch(`${API}/api/choices/attrsets`).then(r => r.json()),
             fetch(`${API}/api/choices/effects`).then(r => r.json()),
+            fetch(`${API}/api/choices/mmcs`).then(r => r.json()).catch(() => ({ok:false})),
         ]);
         if (tags.ok)      tagChoices     = tags.tags       || [];
         if (cues.ok)      cueChoices     = cues.cues       || [];
         if (abilities.ok) abilityChoices = abilities.abilities || [];
         if (attrsets.ok)  attrSetChoices = attrsets.attrsets  || [];
         if (effects.ok)   effectChoices  = effects.effects    || [];
+        if (mmcs.ok)      mmcChoices     = mmcs.mmcs          || [];
     } catch(e) { console.warn('loadChoices failed', e); }
 }
 
@@ -215,40 +338,49 @@ function renderForm(effect) {
     </div>  
 </div>  
   
-<div class="panel">  
-    <div class="panel-header">组件开关（点击切换）</div>  
-    <div class="panel-body">  
-        <div class="component-section">  
-            <h3>Tag 组件</h3>  
-            <div class="component-grid">  
-                ${TAG_COMPONENTS.map(c => `  
-                    <div class="component-chip ${active.has(c)?'active':''}"  
-                         onclick="toggleComponent(this,'${c}')" data-comp="${c}">${c}</div>  
-                `).join('')}  
+<div class="tab-bar">  
+    <button class="tab-btn active" onclick="switchTab('tab-components', this)">组件列表</button>  
+    <button class="tab-btn" onclick="switchTab('tab-details', this)">详情</button>  
+</div>  
+  
+<div id="tab-components" class="tab-content active">  
+    <div class="panel">  
+        <div class="panel-header">组件开关（点击切换）</div>  
+        <div class="panel-body">  
+            <div class="component-section">  
+                <h3>Tag 组件</h3>  
+                <div class="component-grid">  
+                    ${TAG_COMPONENTS.map(c => `  
+                        <div class="component-chip ${active.has(c)?'active':''}"  
+                             onclick="toggleComponent(this,'${c}')" data-comp="${c}">${c}<small>${COMP_LABELS[c]||''}</small></div>  
+                    `).join('')}  
+                </div>  
             </div>  
-        </div>  
-        <div class="component-section">  
-            <h3>功能组件</h3>  
-            <div class="component-grid">  
-                ${FUNC_COMPONENTS.map(c => `  
-                    <div class="component-chip ${active.has(c)?'active':''}"  
-                         onclick="toggleComponent(this,'${c}')" data-comp="${c}">${c}</div>  
-                `).join('')}  
+            <div class="component-section">  
+                <h3>功能组件</h3>  
+                <div class="component-grid">  
+                    ${FUNC_COMPONENTS.map(c => `  
+                        <div class="component-chip ${active.has(c)?'active':''}"  
+                             onclick="toggleComponent(this,'${c}')" data-comp="${c}">${c}<small>${COMP_LABELS[c]||''}</small></div>  
+                    `).join('')}  
+                </div>  
             </div>  
-        </div>  
-        <div class="component-section">  
-            <h3>Cue 组件</h3>  
-            <div class="component-grid">  
-                ${CUE_COMPONENTS.map(c => `  
-                    <div class="component-chip ${active.has(c)?'active':''}"  
-                         onclick="toggleComponent(this,'${c}')" data-comp="${c}">${c}</div>  
-                `).join('')}  
+            <div class="component-section">  
+                <h3>Cue 组件</h3>  
+                <div class="component-grid">  
+                    ${CUE_COMPONENTS.map(c => `  
+                        <div class="component-chip ${active.has(c)?'active':''}"  
+                             onclick="toggleComponent(this,'${c}')" data-comp="${c}">${c}<small>${COMP_LABELS[c]||''}</small></div>  
+                    `).join('')}  
+                </div>  
             </div>  
         </div>  
     </div>  
 </div>  
   
-<div id="comp-details"></div>  
+<div id="tab-details" class="tab-content">  
+    <div id="comp-details"></div>  
+</div>  
 `;
     renderCompDetails(effect);
 }
@@ -261,6 +393,11 @@ function modifierItemHtml(m, i) {
     const as = attrSetChoices.find(a => a.id === m.attrSet);
     const attrOpts = (as ? as.attrs || [] : []).map(a =>
         `<option value="${a.id}" ${a.id===m.attr?'selected':''}>[${a.id}] ${escHtml(a.name)}</option>`
+    ).join('');
+
+    const mmcVal = m.mmc ?? 0;
+    const mmcOpts = mmcChoices.map(mc =>
+        `<option value="${mc.id}" ${mc.id===mmcVal?'selected':''}>[${mc.id}] ${escHtml(mc.name)}</option>`
     ).join('');
 
     return `  
@@ -288,8 +425,11 @@ function modifierItemHtml(m, i) {
             <input type="number" step="any" data-mod-magnitude="${i}" value="${m.magnitude ?? 0}">  
         </div>  
         <div class="field-group">  
-            <label>MMC ID（0=无）</label>  
-            <input type="number" data-mod-mmc="${i}" value="${m.mmc ?? 0}">  
+            <label>MMC</label>  
+            <select data-mod-mmc="${i}">  
+                <option value="0">-- 无MMC --</option>  
+                ${mmcOpts}  
+            </select>  
         </div>  
     </div>  
     <div class="field-group">  
@@ -393,7 +533,7 @@ function removeGrantedAbility(i) {
 }
 
 // ═══════════════════════════════════════════════════════════════════  
-// § 5-A  renderCompDetails（Tag类 → Stacking）  
+// § 5-A  renderCompDetails（Tag类 → Stacking → Cue类）  
 // ═══════════════════════════════════════════════════════════════════  
 
 function renderCompDetails(effect) {
@@ -402,7 +542,7 @@ function renderCompDetails(effect) {
     if (!container) return;
     let html = '';
 
-    // ── Tag 类 ────────────────────────────────────────────────────────  
+    // ── Tag 类（使用 searchableDropdown + tagChipHtml）──────────────────  
     const tagFieldMap = {
         'AssetTags':                     { key:'assetTags',               label:'AssetTags 描述标签' },
         'GrantedTags':                   { key:'grantedTags',             label:'GrantedTags 授予标签' },
@@ -414,22 +554,18 @@ function renderCompDetails(effect) {
     for (const [comp, meta] of Object.entries(tagFieldMap)) {
         if (!active.has(comp)) continue;
         const ids = effect[meta.key] || [];
+        const filteredChoices = tagChoices.filter(t => !ids.includes(t.id));
         html += `  
 <div class="panel" id="panel-${comp}">  
     <div class="panel-header">${meta.label}</div>  
     <div class="panel-body">  
         <div class="chip-list" id="chips-${comp}">  
-            ${ids.map(id => chipHtml(comp, id, tagChoices)).join('')}  
+            ${ids.map(id => tagChipHtml(comp, id, tagChoices)).join('')}  
         </div>  
         <div class="add-chip-row">  
-            <select class="chip-select" id="sel-${comp}">  
-                <option value="">-- 选择Tag --</option>  
-                ${tagChoices.filter(t => !ids.includes(t.id)).map(t =>
-            `<option value="${t.id}">[${t.id}] ${escHtml(t.name)}</option>`
-        ).join('')}  
-            </select>  
+            ${searchableDropdownHtml(`sel-${comp}`, '搜索Tag...', filteredChoices, 'tag')}  
             <button class="btn btn-success btn-sm"  
-                onclick="addChip('${comp}','sel-${comp}',tagChoices)">添加</button>  
+                onclick="addChip('${comp}','sel-${comp}',tagChoices,true)">添加</button>  
         </div>  
     </div>  
 </div>`;
@@ -442,7 +578,7 @@ function renderCompDetails(effect) {
 <div class="panel" id="panel-Duration">  
     <div class="panel-header">Duration 持续时间</div>  
     <div class="panel-body">  
-        <div class="warn-box" id="dur-inf-warn" ${dur.time===-1?'style="display:block"':''}>  
+        <div class="warn-box ${dur.time===-1?'show':''}" id="dur-inf-warn">  
             ⚠ time=-1 表示 Infinite（无限持续）  
         </div>  
         <div class="inline-fields">  
@@ -458,7 +594,7 @@ function renderCompDetails(effect) {
             <div class="field-group">  
                 <label>时长（-1=无限）</label>  
                 <input id="dur-time" type="number" value="${dur.time}"  
-                    oninput="document.getElementById('dur-inf-warn').style.display=+this.value===-1?'block':'none'">  
+                    oninput="document.getElementById('dur-inf-warn').classList.toggle('show',+this.value===-1)">  
             </div>  
         </div>  
         <div class="field-group">  
@@ -474,11 +610,12 @@ function renderCompDetails(effect) {
     // ── Period ────────────────────────────────────────────────────────  
     if (active.has('Period')) {
         const per = effect.period || { time:0, effects:[], firstTrigger:false };
+        const filteredEffects = effectChoices.filter(e => !(per.effects||[]).includes(e.id));
         html += `  
 <div class="panel" id="panel-Period">  
     <div class="panel-header">Period 周期执行</div>  
     <div class="panel-body">  
-        <div class="warn-box" ${!active.has('Duration')?'style="display:block"':''}>  
+        <div class="warn-box ${!active.has('Duration')?'show':''}">  
             ⚠ Period 需要 Duration 组件才会生效！  
         </div>  
         <div class="inline-fields">  
@@ -499,14 +636,9 @@ function renderCompDetails(effect) {
                 ${(per.effects||[]).map(id => chipHtml('Period-effects', id, effectChoices)).join('')}  
             </div>  
             <div class="add-chip-row">  
-                <select class="chip-select" id="sel-Period-effects">  
-                    <option value="">-- 选择Effect --</option>  
-                    ${effectChoices.filter(e => !(per.effects||[]).includes(e.id)).map(e =>
-            `<option value="${e.id}">[${e.id}] ${escHtml(e.name)}</option>`
-        ).join('')}  
-                </select>  
+                ${searchableDropdownHtml('sel-Period-effects', '搜索Effect...', filteredEffects, 'default')}  
                 <button class="btn btn-success btn-sm"  
-                    onclick="addChip('Period-effects','sel-Period-effects',effectChoices)">添加</button>  
+                    onclick="addChip('Period-effects','sel-Period-effects',effectChoices,false)">添加</button>  
             </div>  
         </div>  
     </div>  
@@ -551,11 +683,12 @@ function renderCompDetails(effect) {
             expirationPolicy: 'ClearEntireStack',
             denyOverflowApplication: false, clearStackOnOverflow: false, overflowEffects: []
         };
+        const filteredOverflow = effectChoices.filter(e => !(st.overflowEffects || []).includes(e.id));
         html += `  
 <div class="panel" id="panel-Stacking">  
     <div class="panel-header">Stacking 层数叠加</div>  
     <div class="panel-body">  
-        <div class="warn-box" ${!active.has('Duration') ? 'style="display:block"' : ''}>  
+        <div class="warn-box ${!active.has('Duration') ? 'show' : ''}">  
             ⚠ Stacking 需要 Duration 组件才会生效！  
         </div>  
         <div class="inline-fields">  
@@ -622,33 +755,29 @@ function renderCompDetails(effect) {
                 ${(st.overflowEffects || []).map(id => chipHtml('st-overflow', id, effectChoices)).join('')}  
             </div>  
             <div class="add-chip-row">  
-                <select class="chip-select" id="sel-st-overflow">  
-                    <option value="">-- 选择Effect --</option>  
-                    ${effectChoices.filter(e => !(st.overflowEffects || []).includes(e.id)).map(e =>
-            `<option value="${e.id}">[${e.id}] ${escHtml(e.name)}</option>`
-        ).join('')}  
-                </select>  
+                ${searchableDropdownHtml('sel-st-overflow', '搜索Effect...', filteredOverflow, 'default')}  
                 <button class="btn btn-success btn-sm"  
-                    onclick="addChip('st-overflow','sel-st-overflow',effectChoices)">添加</button>  
+                    onclick="addChip('st-overflow','sel-st-overflow',effectChoices,false)">添加</button>  
             </div>  
         </div>  
     </div>  
 </div>`;
     }
 
-        // ── Cue 类 ────────────────────────────────────────────────────────  
-        const cueFieldMap = {
-            'CueOnApply':      { key:'cueOnApply',      label:'CueOnApply（Instant触发）' },
-            'CueOnTick':       { key:'cueOnTick',        label:'CueOnTick（每帧）' },
-            'CueOnAdd':        { key:'cueOnAdd',         label:'CueOnAdd（添加时）' },
-            'CueOnRemove':     { key:'cueOnRemove',      label:'CueOnRemove（移除时）' },
-            'CueOnActivate':   { key:'cueOnActivate',    label:'CueOnActivate（激活时）' },
-            'CueOnDeactivate': { key:'cueOnDeactivate',  label:'CueOnDeactivate（失活时）' },
-        };
-        for (const [comp, meta] of Object.entries(cueFieldMap)) {
-            if (!active.has(comp)) continue;
-            const ids = effect[meta.key] || [];
-            html += `  
+    // ── Cue 类（使用 searchableDropdown）──────────────────────────────  
+    const cueFieldMap = {
+        'CueOnApply':      { key:'cueOnApply',      label:'CueOnApply（Instant触发）' },
+        'CueOnTick':       { key:'cueOnTick',        label:'CueOnTick（每帧）' },
+        'CueOnAdd':        { key:'cueOnAdd',         label:'CueOnAdd（添加时）' },
+        'CueOnRemove':     { key:'cueOnRemove',      label:'CueOnRemove（移除时）' },
+        'CueOnActivate':   { key:'cueOnActivate',    label:'CueOnActivate（激活时）' },
+        'CueOnDeactivate': { key:'cueOnDeactivate',  label:'CueOnDeactivate（失活时）' },
+    };
+    for (const [comp, meta] of Object.entries(cueFieldMap)) {
+        if (!active.has(comp)) continue;
+        const ids = effect[meta.key] || [];
+        const filteredCues = cueChoices.filter(c => !ids.includes(c.id));
+        html += `  
 <div class="panel" id="panel-${comp}">  
     <div class="panel-header">${meta.label}</div>  
     <div class="panel-body">  
@@ -656,277 +785,272 @@ function renderCompDetails(effect) {
             ${ids.map(id => chipHtml(comp, id, cueChoices)).join('')}  
         </div>  
         <div class="add-chip-row">  
-            <select class="chip-select" id="sel-${comp}">  
-                <option value="">-- 选择Cue --</option>  
-                ${cueChoices.filter(c => !ids.includes(c.id)).map(c =>
-                `<option value="${c.id}">[${c.id}] ${escHtml(c.name)}</option>`
-            ).join('')}  
-            </select>  
+            ${searchableDropdownHtml(`sel-${comp}`, '搜索Cue...', filteredCues, 'default')}  
             <button class="btn btn-success btn-sm"  
-                onclick="addChip('${comp}','sel-${comp}',cueChoices)">添加</button>  
+                onclick="addChip('${comp}','sel-${comp}',cueChoices,false)">添加</button>  
         </div>  
     </div>  
 </div>`;
-        }
-
-        // ── 写入 DOM ──────────────────────────────────────────────────────  
-        container.innerHTML = html;
     }
-// ═══ § 5 结束 ═══════════════════════════════════════════════════════
+
+    // ── 写入 DOM ──────────────────────────────────────────────────────  
+    container.innerHTML = html;
+}
+// ═══ § 5 结束 ═══════════════════════════════════════════════════════  
 
 // ═══════════════════════════════════════════════════════════════════  
 // § 6  buildEffectFromForm + App 对象 + 初始化  
 // ═══════════════════════════════════════════════════════════════════  
 
-    /** 从当前 DOM 表单中收集数据，构建 effect 对象 */
-    function buildEffectFromForm() {
-        const effect = _currentEffect
-            ? JSON.parse(JSON.stringify(_currentEffect))
-            : { id: 0, name: '', desc: '', components: [] };
+/** 从当前 DOM 表单中收集数据，构建 effect 对象 */
+function buildEffectFromForm() {
+    const effect = _currentEffect
+        ? JSON.parse(JSON.stringify(_currentEffect))
+        : { id: 0, name: '', desc: '', components: [] };
 
-        // 基础信息  
-        const nameEl = document.getElementById('f-name');
-        const descEl = document.getElementById('f-desc');
-        if (nameEl) effect.name = nameEl.value.trim();
-        if (descEl) effect.desc = descEl.value.trim();
+    // 基础信息  
+    const nameEl = document.getElementById('f-name');
+    const descEl = document.getElementById('f-desc');
+    if (nameEl) effect.name = nameEl.value.trim();
+    if (descEl) effect.desc = descEl.value.trim();
 
-        // 激活组件  
-        effect.components = getActiveComponents();
-        const active = new Set(effect.components);
+    // 激活组件  
+    effect.components = getActiveComponents();
+    const active = new Set(effect.components);
 
-        // ── Tag 类 ────────────────────────────────────────────────────────  
-        const tagKeyMap = {
-            'AssetTags':                     'assetTags',
-            'GrantedTags':                   'grantedTags',
-            'ApplicationRequiredTags':       'applicationRequiredTags',
-            'OngoingRequiredTags':           'ongoingRequiredTags',
-            'RemoveGameplayEffectsWithTags': 'removeEffectsWithTags',
-            'ImmunityTags':                  'immunityTags',
-        };
-        for (const [comp, key] of Object.entries(tagKeyMap)) {
-            effect[key] = active.has(comp) ? readChipIds(comp) : [];
-        }
-
-        // ── Duration ──────────────────────────────────────────────────────  
-        if (active.has('Duration')) {
-            effect.duration = {
-                unit: getEnumBtnValue('dur-unit-btns', 'Frame'),
-                time: parseInt(document.getElementById('dur-time')?.value ?? 0),
-                resetStartTimeWhenActivated: document.getElementById('dur-reset')?.checked ?? false,
-            };
-        } else {
-            effect.duration = null;
-        }
-
-        // ── Period ────────────────────────────────────────────────────────  
-        if (active.has('Period')) {
-            effect.period = {
-                time: parseInt(document.getElementById('per-time')?.value ?? 0),
-                effects: readChipIds('Period-effects'),
-                firstTrigger: document.getElementById('per-first')?.checked ?? false,
-            };
-        } else {
-            effect.period = null;
-        }
-
-        // ── Modifiers ─────────────────────────────────────────────────────  
-        if (active.has('Modifiers')) {
-            const items = document.querySelectorAll('.modifier-item');
-            effect.modifiers = Array.from(items).map(el => {
-                const idx = el.dataset.idx;
-                return {
-                    attrSet:   parseInt(el.querySelector(`[data-mod-attrset="${idx}"]`)?.value || 0),
-                    attr:      parseInt(el.querySelector(`[data-mod-attr="${idx}"]`)?.value || 0),
-                    magnitude: parseFloat(el.querySelector(`[data-mod-magnitude="${idx}"]`)?.value || 0),
-                    operation: getEnumBtnValue(`mod-op-btns-${idx}`, 'Add'),
-                    mmc:       parseInt(el.querySelector(`[data-mod-mmc="${idx}"]`)?.value || 0),
-                };
-            });
-        } else {
-            effect.modifiers = [];
-        }
-
-        // ── GrantedAbility ────────────────────────────────────────────────  
-        if (active.has('GrantedAbility')) {
-            const items = document.querySelectorAll('.ability-item');
-            effect.grantedAbilities = Array.from(items).map(el => {
-                const idx = el.dataset.idx;
-                return {
-                    abilityId:          parseInt(el.querySelector(`[data-ab-id="${idx}"]`)?.value || 0),
-                    level:              parseInt(el.querySelector(`[data-ab-level="${idx}"]`)?.value || 1),
-                    activationPolicy:   getEnumBtnValue(`ab-act-btns-${idx}`, 'None'),
-                    deactivationPolicy: getEnumBtnValue(`ab-deact-btns-${idx}`, 'None'),
-                    removePolicy:       getEnumBtnValue(`ab-rem-btns-${idx}`, 'None'),
-                };
-            });
-        } else {
-            effect.grantedAbilities = [];
-        }
-
-        // ── Stacking ──────────────────────────────────────────────────────  
-        if (active.has('Stacking')) {
-            effect.stacking = {
-                code:                    parseInt(document.getElementById('st-code')?.value || 0),
-                stackingType:            getEnumBtnValue('st-type-btns', 'AggregateBySource'),
-                limitCount:              parseInt(document.getElementById('st-limit')?.value || 1),
-                durationRefreshPolicy:   getEnumBtnValue('st-dur-btns', 'NeverRefresh'),
-                periodResetPolicy:       getEnumBtnValue('st-per-btns', 'NeverRefresh'),
-                expirationPolicy:        getEnumBtnValue('st-exp-btns', 'ClearEntireStack'),
-                denyOverflowApplication: document.getElementById('st-deny')?.checked ?? false,
-                clearStackOnOverflow:    document.getElementById('st-clear')?.checked ?? false,
-                overflowEffects:         readChipIds('st-overflow'),
-            };
-        } else {
-            effect.stacking = null;
-        }
-
-        // ── Cue 类 ────────────────────────────────────────────────────────  
-        const cueKeyMap = {
-            'CueOnApply':      'cueOnApply',
-            'CueOnTick':       'cueOnTick',
-            'CueOnAdd':        'cueOnAdd',
-            'CueOnRemove':     'cueOnRemove',
-            'CueOnActivate':   'cueOnActivate',
-            'CueOnDeactivate': 'cueOnDeactivate',
-        };
-        for (const [comp, key] of Object.entries(cueKeyMap)) {
-            effect[key] = active.has(comp) ? readChipIds(comp) : [];
-        }
-
-        return effect;
+    // ── Tag 类 ────────────────────────────────────────────────────────  
+    const tagKeyMap = {
+        'AssetTags':                     'assetTags',
+        'GrantedTags':                   'grantedTags',
+        'ApplicationRequiredTags':       'applicationRequiredTags',
+        'OngoingRequiredTags':           'ongoingRequiredTags',
+        'RemoveGameplayEffectsWithTags': 'removeEffectsWithTags',
+        'ImmunityTags':                  'immunityTags',
+    };
+    for (const [comp, key] of Object.entries(tagKeyMap)) {
+        effect[key] = active.has(comp) ? readChipIds(comp) : [];
     }
+
+    // ── Duration ──────────────────────────────────────────────────────  
+    if (active.has('Duration')) {
+        effect.duration = {
+            unit: getEnumBtnValue('dur-unit-btns', 'Frame'),
+            time: parseInt(document.getElementById('dur-time')?.value ?? 0),
+            resetStartTimeWhenActivated: document.getElementById('dur-reset')?.checked ?? false,
+        };
+    } else {
+        effect.duration = null;
+    }
+
+    // ── Period ────────────────────────────────────────────────────────  
+    if (active.has('Period')) {
+        effect.period = {
+            time: parseInt(document.getElementById('per-time')?.value ?? 0),
+            effects: readChipIds('Period-effects'),
+            firstTrigger: document.getElementById('per-first')?.checked ?? false,
+        };
+    } else {
+        effect.period = null;
+    }
+
+    // ── Modifiers ─────────────────────────────────────────────────────  
+    if (active.has('Modifiers')) {
+        const items = document.querySelectorAll('.modifier-item');
+        effect.modifiers = Array.from(items).map(el => {
+            const idx = el.dataset.idx;
+            return {
+                attrSet:   parseInt(el.querySelector(`[data-mod-attrset="${idx}"]`)?.value || 0),
+                attr:      parseInt(el.querySelector(`[data-mod-attr="${idx}"]`)?.value || 0),
+                magnitude: parseFloat(el.querySelector(`[data-mod-magnitude="${idx}"]`)?.value || 0),
+                operation: getEnumBtnValue(`mod-op-btns-${idx}`, 'Add'),
+                mmc:       parseInt(el.querySelector(`[data-mod-mmc="${idx}"]`)?.value || 0),
+            };
+        });
+    } else {
+        effect.modifiers = [];
+    }
+
+    // ── GrantedAbility ────────────────────────────────────────────────  
+    if (active.has('GrantedAbility')) {
+        const items = document.querySelectorAll('.ability-item');
+        effect.grantedAbilities = Array.from(items).map(el => {
+            const idx = el.dataset.idx;
+            return {
+                abilityId:          parseInt(el.querySelector(`[data-ab-id="${idx}"]`)?.value || 0),
+                level:              parseInt(el.querySelector(`[data-ab-level="${idx}"]`)?.value || 1),
+                activationPolicy:   getEnumBtnValue(`ab-act-btns-${idx}`, 'None'),
+                deactivationPolicy: getEnumBtnValue(`ab-deact-btns-${idx}`, 'None'),
+                removePolicy:       getEnumBtnValue(`ab-rem-btns-${idx}`, 'None'),
+            };
+        });
+    } else {
+        effect.grantedAbilities = [];
+    }
+
+    // ── Stacking ──────────────────────────────────────────────────────  
+    if (active.has('Stacking')) {
+        effect.stacking = {
+            code:                    parseInt(document.getElementById('st-code')?.value || 0),
+            stackingType:            getEnumBtnValue('st-type-btns', 'AggregateBySource'),
+            limitCount:              parseInt(document.getElementById('st-limit')?.value || 1),
+            durationRefreshPolicy:   getEnumBtnValue('st-dur-btns', 'NeverRefresh'),
+            periodResetPolicy:       getEnumBtnValue('st-per-btns', 'NeverRefresh'),
+            expirationPolicy:        getEnumBtnValue('st-exp-btns', 'ClearEntireStack'),
+            denyOverflowApplication: document.getElementById('st-deny')?.checked ?? false,
+            clearStackOnOverflow:    document.getElementById('st-clear')?.checked ?? false,
+            overflowEffects:         readChipIds('st-overflow'),
+        };
+    } else {
+        effect.stacking = null;
+    }
+
+    // ── Cue 类 ────────────────────────────────────────────────────────  
+    const cueKeyMap = {
+        'CueOnApply':      'cueOnApply',
+        'CueOnTick':       'cueOnTick',
+        'CueOnAdd':        'cueOnAdd',
+        'CueOnRemove':     'cueOnRemove',
+        'CueOnActivate':   'cueOnActivate',
+        'CueOnDeactivate': 'cueOnDeactivate',
+    };
+    for (const [comp, key] of Object.entries(cueKeyMap)) {
+        effect[key] = active.has(comp) ? readChipIds(comp) : [];
+    }
+
+    return effect;
+}
 
 // ── clearForm ─────────────────────────────────────────────────────────  
-    function clearForm() {
-        document.getElementById('form-title').textContent = '请从左侧选择一个Effect';
-        document.getElementById('btn-delete').style.display = 'none';
-        document.getElementById('btn-save').style.display   = 'none';
-        const body = document.getElementById('form-body');
-        body.className = 'empty-hint';
-        body.textContent = '← 从左侧选择一个Effect进行编辑';
-        _currentEffect = null;
-    }
+function clearForm() {
+    document.getElementById('form-title').textContent = '请从左侧选择一个Effect';
+    document.getElementById('btn-delete').style.display = 'none';
+    document.getElementById('btn-save').style.display   = 'none';
+    const body = document.getElementById('form-body');
+    body.className = 'empty-hint';
+    body.textContent = '← 从左侧选择一个Effect进行编辑';
+    _currentEffect = null;
+}
 
 // ── App 命名空间（供 HTML onclick 调用）──────────────────────────────  
-    const App = {
-        async reload() {
-            selectedId = null;
-            clearForm();
-            loadInfo();
-            await loadChoices();
-            await loadEffects();
-        },
-
-        onSearch(val) {
-            searchText = val;
-            renderList();
-        },
-
-        selectEffect(id) {
-            selectedId = id;
-            renderList();
-            const effect = allEffects.find(e => e.id === id);
-            if (effect) renderForm(effect);
-        },
-
-        async saveSelected() {
-            if (selectedId == null) return;
-            const effect = buildEffectFromForm();
-            if (!effect.name) { setStatus('Effect名称不能为空', 'err'); return; }
-
-            setStatus('保存中...');
-            try {
-                const r = await fetch(`${API}/api/effects/${selectedId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(effect),
-                }).then(resp => resp.json());
-                if (!r.ok) throw new Error(r.error);
-                setStatus('保存成功', 'ok');
-                await loadEffects();
-                App.selectEffect(selectedId);
-            } catch (e) {
-                setStatus('保存失败: ' + e.message, 'err');
-            }
-        },
-
-        async deleteSelected() {
-            if (selectedId == null) return;
-            const effect = allEffects.find(e => e.id === selectedId);
-            if (!effect) return;
-            if (!confirm(`确认删除 Effect「${effect.name}」(ID: ${effect.id})？`)) return;
-
-            setStatus('删除中...');
-            try {
-                const r = await fetch(`${API}/api/effects/${selectedId}`, {
-                    method: 'DELETE',
-                }).then(resp => resp.json());
-                if (!r.ok) throw new Error(r.error);
-                selectedId = null;
-                clearForm();
-                setStatus('删除成功', 'ok');
-                await loadEffects();
-            } catch (e) {
-                setStatus('删除失败: ' + e.message, 'err');
-            }
-        },
-
-        addEffect() {
-            document.getElementById('modal-id').value   = '';
-            document.getElementById('modal-name').value = '';
-            document.getElementById('modal-desc').value = '';
-            document.getElementById('modal-overlay').classList.add('show');
-            setTimeout(() => document.getElementById('modal-name').focus(), 50);
-        },
-
-        closeModal() {
-            document.getElementById('modal-overlay').classList.remove('show');
-        },
-
-        async confirmAdd() {
-            const idVal = document.getElementById('modal-id').value.trim();
-            const name  = document.getElementById('modal-name').value.trim();
-            const desc  = document.getElementById('modal-desc').value.trim();
-            if (!name) { setStatus('Effect名称不能为空', 'err'); return; }
-
-            const payload = { name, desc, components: [] };
-            if (idVal !== '') payload.id = parseInt(idVal);
-
-            setStatus('新增中...');
-            try {
-                const r = await fetch(`${API}/api/effects`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                }).then(resp => resp.json());
-                if (!r.ok) throw new Error(r.error);
-                App.closeModal();
-                setStatus('新增成功', 'ok');
-                await loadEffects();
-                App.selectEffect(r.effect.id);
-            } catch (e) {
-                setStatus('新增失败: ' + e.message, 'err');
-            }
-        },   // ← confirmAdd 最后一个方法的逗号  
-    };
-
-// ── 键盘快捷键 ────────────────────────────────────────────────────────  
-    document.addEventListener('keydown', e => {
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            App.saveSelected();
-        }
-        if (e.key === 'Escape') {
-            App.closeModal();
-        }
-        if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('show')) {
-            App.confirmAdd();
-        }
-    });
-
-// ── 初始化 ────────────────────────────────────────────────────────────  
-    (async function init() {
+const App = {
+    async reload() {
+        selectedId = null;
+        clearForm();
         loadInfo();
         await loadChoices();
         await loadEffects();
-    })();
+    },
+
+    onSearch(val) {
+        searchText = val;
+        renderList();
+    },
+
+    selectEffect(id) {
+        selectedId = id;
+        renderList();
+        const effect = allEffects.find(e => e.id === id);
+        if (effect) renderForm(effect);
+    },
+
+    async saveSelected() {
+        if (selectedId == null) return;
+        const effect = buildEffectFromForm();
+        if (!effect.name) { setStatus('Effect名称不能为空', 'err'); return; }
+
+        setStatus('保存中...');
+        try {
+            const r = await fetch(`${API}/api/effects/${selectedId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(effect),
+            }).then(resp => resp.json());
+            if (!r.ok) throw new Error(r.error);
+            setStatus('保存成功', 'ok');
+            await loadEffects();
+            App.selectEffect(selectedId);
+        } catch (e) {
+            setStatus('保存失败: ' + e.message, 'err');
+        }
+    },
+
+    async deleteSelected() {
+        if (selectedId == null) return;
+        const effect = allEffects.find(e => e.id === selectedId);
+        if (!effect) return;
+        if (!confirm(`确认删除 Effect「${effect.name}」(ID: ${effect.id})？`)) return;
+
+        setStatus('删除中...');
+        try {
+            const r = await fetch(`${API}/api/effects/${selectedId}`, {
+                method: 'DELETE',
+            }).then(resp => resp.json());
+            if (!r.ok) throw new Error(r.error);
+            selectedId = null;
+            clearForm();
+            setStatus('删除成功', 'ok');
+            await loadEffects();
+        } catch (e) {
+            setStatus('删除失败: ' + e.message, 'err');
+        }
+    },
+
+    addEffect() {
+        document.getElementById('modal-id').value   = '';
+        document.getElementById('modal-name').value = '';
+        document.getElementById('modal-desc').value = '';
+        document.getElementById('modal-overlay').classList.add('show');
+        setTimeout(() => document.getElementById('modal-name').focus(), 50);
+    },
+
+    closeModal() {
+        document.getElementById('modal-overlay').classList.remove('show');
+    },
+
+    async confirmAdd() {
+        const idVal = document.getElementById('modal-id').value.trim();
+        const name  = document.getElementById('modal-name').value.trim();
+        const desc  = document.getElementById('modal-desc').value.trim();
+        if (!name) { setStatus('Effect名称不能为空', 'err'); return; }
+
+        const payload = { name, desc, components: [] };
+        if (idVal !== '') payload.id = parseInt(idVal);
+
+        setStatus('新增中...');
+        try {
+            const r = await fetch(`${API}/api/effects`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }).then(resp => resp.json());
+            if (!r.ok) throw new Error(r.error);
+            App.closeModal();
+            setStatus('新增成功', 'ok');
+            await loadEffects();
+            App.selectEffect(r.effect.id);
+        } catch (e) {
+            setStatus('新增失败: ' + e.message, 'err');
+        }
+    },
+};
+
+// ── 键盘快捷键 ────────────────────────────────────────────────────────  
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        App.saveSelected();
+    }
+    if (e.key === 'Escape') {
+        App.closeModal();
+    }
+    if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('show')) {
+        App.confirmAdd();
+    }
+});
+
+// ── 初始化 ────────────────────────────────────────────────────────────  
+(async function init() {
+    loadInfo();
+    await loadChoices();
+    await loadEffects();
+})();
