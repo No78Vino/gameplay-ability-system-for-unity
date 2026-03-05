@@ -16,6 +16,8 @@ namespace GAS.Runtime
         public static void LoadAbilityCode()
         {
             ///  AbilityLogic
+            var ALDeath = typeof(DemoForESC._Script.Gas.Ability.ALDeath);
+            GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALDeath.Name, ALDeath,typeof(GAS.Runtime.XParamEffectIDs));
             var ALMove = typeof(DemoForESC._Script.Gas.Ability.ALMove);
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALMove.Name, ALMove,typeof(DemoForESC._Script.Gas.Ability.XParamMove));
             var ALApplyEffect = typeof(GAS.Runtime.ALApplyEffect);

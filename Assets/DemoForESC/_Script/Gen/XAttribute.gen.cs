@@ -16,5 +16,6 @@ namespace GAS.Runtime
         public const int HpMax = 7;
         public const int MpMax = 8;
         public const int SpMax = 9;
+        public const int AtkRate = 10;
     }
 }

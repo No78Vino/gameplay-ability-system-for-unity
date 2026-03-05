@@ -24,7 +24,7 @@ namespace GAS.Runtime
             var CuePlayAnimator = typeof(GAS.Runtime.CuePlayAnimator);
             CueHelper.RegisterCue(CUE_CuePlayAnimator, CuePlayAnimator, typeof(GAS.Runtime.XParamAnimator));
             var CuePlaySound = typeof(GAS.Runtime.CuePlaySound);
-            CueHelper.RegisterCue(CUE_CuePlaySound, CuePlaySound, typeof(GAS.Runtime.XParamString));
+            CueHelper.RegisterCue(CUE_CuePlaySound, CuePlaySound, typeof(GAS.Runtime.XParamPlaySound));
         }
     }
 }

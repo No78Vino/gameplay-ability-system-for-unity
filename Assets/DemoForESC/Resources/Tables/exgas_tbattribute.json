@@ -43,5 +43,10 @@
     "ID": 9,
     "Name": "SpMax",
     "Desc": "耐力上限"
+  },
+  {
+    "ID": 10,
+    "Name": "AtkRate",
+    "Desc": "攻击加成百分比"
   }
 ]

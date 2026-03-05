@@ -72,7 +72,7 @@
         "ID": 9,
         "InitValue": 100,
         "MinValue": 0,
-        "MaxValue": 999,
+        "MaxValue": 9999,
         "UseMinValue": true,
         "UseMaxValue": true
       }

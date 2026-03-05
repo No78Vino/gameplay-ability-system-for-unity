@@ -1,8 +1,23 @@
 [
   {
-    "id": 1000000,
-    "Name": "Faction",
-    "Desc": "阵营描述标签"
+    "id": 200,
+    "Name": "Ability",
+    "Desc": "技能"
+  },
+  {
+    "id": 300,
+    "Name": "Event",
+    "Desc": "事件"
+  },
+  {
+    "id": 400,
+    "Name": "State",
+    "Desc": "状态"
+  },
+  {
+    "id": 500,
+    "Name": "Guide",
+    "Desc": "新手引导"
   },
   {
     "id": 1001,
@@ -13,11 +28,6 @@
     "id": 1002,
     "Name": "Faction.Enemy",
     "Desc": "敌人阵营"
-  },
-  {
-    "id": 200,
-    "Name": "Ability",
-    "Desc": "技能"
   },
   {
     "id": 2001,
@@ -50,9 +60,19 @@
     "Desc": "技能：闪避"
   },
   {
-    "id": 300,
-    "Name": "Event",
-    "Desc": "事件"
+    "id": 2008,
+    "Name": "Ability.Magic",
+    "Desc": "魔法"
+  },
+  {
+    "id": 2009,
+    "Name": "Ability.Magic.Boom",
+    "Desc": "爆弹"
+  },
+  {
+    "id": 2010,
+    "Name": "Ability.Gun",
+    "Desc": "枪械"
   },
   {
     "id": 3001,
@@ -70,11 +90,6 @@
     "Desc": "事件：正在攻击"
   },
   {
-    "id": 400,
-    "Name": "State",
-    "Desc": "状态"
-  },
-  {
     "id": 4001,
     "Name": "State.Buff",
     "Desc": "状态：正向增益"
@@ -83,26 +98,6 @@
     "id": 4002,
     "Name": "State.Debuff",
     "Desc": "状态：负面增益"
-  },
-  {
-    "id": 4001001,
-    "Name": "State.Buff.BulkUp",
-    "Desc": "霸体"
-  },
-  {
-    "id": 4001002,
-    "Name": "State.Buff.SpeedUp",
-    "Desc": "状态：移速增加"
-  },
-  {
-    "id": 4001003,
-    "Name": "State.Buff.SpCosting",
-    "Desc": "状态：耐力消耗中"
-  },
-  {
-    "id": 500,
-    "Name": "Guide",
-    "Desc": "新手引导"
   },
   {
     "id": 5001,
@@ -118,5 +113,40 @@
     "id": 5003,
     "Name": "Guide.Type3",
     "Desc": "新手引导：类型3"
+  },
+  {
+    "id": 1000000,
+    "Name": "Faction",
+    "Desc": "阵营描述标签"
+  },
+  {
+    "id": 2010001,
+    "Name": "Ability.Gun.Aim",
+    "Desc": "瞄准"
+  },
+  {
+    "id": 2010002,
+    "Name": "Ability.Gun.Shoot",
+    "Desc": "射击"
+  },
+  {
+    "id": 2010003,
+    "Name": "Ability.Gun.SuperShoot",
+    "Desc": "强力射击"
+  },
+  {
+    "id": 4001001,
+    "Name": "State.Buff.BulkUp",
+    "Desc": "霸体"
+  },
+  {
+    "id": 4001002,
+    "Name": "State.Buff.SpeedUp",
+    "Desc": "状态：移速增加"
+  },
+  {
+    "id": 4001003,
+    "Name": "State.Buff.SpCosting",
+    "Desc": "状态：耐力消耗中"
   }
 ]

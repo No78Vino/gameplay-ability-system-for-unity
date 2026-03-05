@@ -397,14 +397,6 @@ namespace GAS.Runtime
             {
                 switch (mmcLogic)
                 {
-                    case cfg.MMCScalableFloat mmcData:
-                    {
-                        var mp = mmcParam as GAS.Runtime.MmcParaFloatScale;
-                        mp?.SetK(mmcData.Param.K);
-                        mp?.SetB(mmcData.Param.B);
-                        mmcParam = mp;
-                        break;
-                    }
                     case cfg.MMCAttributeBased mmcData:
                     {
                         var mp = mmcParam as GAS.Runtime.AttributeBasedMmcParam;
@@ -412,6 +404,14 @@ namespace GAS.Runtime
                         mp?.SetAttrCode(mmcData.Param.AttrCode);
                         mp?.SetFromType(mmcData.Param.FromType);
                         mp?.SetCaptureType(mmcData.Param.CaptureType);
+                        mp?.SetK(mmcData.Param.K);
+                        mp?.SetB(mmcData.Param.B);
+                        mmcParam = mp;
+                        break;
+                    }
+                    case cfg.MMCScalableFloat mmcData:
+                    {
+                        var mp = mmcParam as GAS.Runtime.MmcParaFloatScale;
                         mp?.SetK(mmcData.Param.K);
                         mp?.SetB(mmcData.Param.B);
                         mmcParam = mp;

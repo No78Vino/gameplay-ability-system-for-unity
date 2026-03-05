@@ -34,5 +34,21 @@
         "B": 0
       }
     }
+  },
+  {
+    "ID": 2001,
+    "Name": "读取攻击力数值",
+    "Desc": "读取攻击力数值",
+    "MmcLogic": {
+      "$type": "MMCAttributeBased",
+      "Param": {
+        "AttrSetCode": 1,
+        "AttrCode": 4,
+        "FromType": 0,
+        "CaptureType": 1,
+        "K": 1,
+        "B": 0
+      }
+    }
   }
 ]
