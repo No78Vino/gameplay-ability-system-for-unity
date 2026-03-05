@@ -27,7 +27,7 @@ namespace DemoForESC._Script
             AbilitySystemComponent = transform.GetOrAddComponent<AbilitySystemComponent>();
             AbilitySystemComponent.Init(XLuban.GetAscConfig(_ascPresetId));
             var abilityLogic = AbilitySystemComponent.Cell.GetAbilityLogic(XAbility.ABILITY_move);
-            ((ALMove)abilityLogic.Logic).SetUnit(this);
+            ((ALMove)abilityLogic?.Logic)?.SetUnit(this);
         }
         
         protected virtual void OnEnable()

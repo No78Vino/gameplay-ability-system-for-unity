@@ -472,6 +472,10 @@ namespace GAS.Editor
         [MenuItem("EXTool/EX-GAS/生成脚本/生成所有")]
         public static void GenerateAllCode()
         {
+            // 先更新Bean定义（因为其他代码生成可能依赖它）
+            // TODO 待测试
+            // BeanUpdater.UpdateBeans();
+
             GenerateTagCode();
             GenerateAttrCode();
             GenerateAttrSetCode();
