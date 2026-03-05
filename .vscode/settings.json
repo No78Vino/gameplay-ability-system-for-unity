@@ -7,5 +7,6 @@
         "**/obj": true,
         "**/Build": true,
         "**/Bundles": true
-    }
+    },
+    "dotnet.preferCSharpExtension": true
 }
