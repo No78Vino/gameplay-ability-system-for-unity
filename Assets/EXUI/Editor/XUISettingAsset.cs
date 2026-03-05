@@ -1,8 +1,6 @@
 ﻿using System.IO;
-using Sirenix.OdinInspector;  
-using Sirenix.Utilities;  
-using UnityEngine;  
-  
+using Sirenix.Utilities;
+
 namespace EXUI.Editor  
 {  
     [GlobalConfig("Assets/EXUI/Editor/Resources")]  
