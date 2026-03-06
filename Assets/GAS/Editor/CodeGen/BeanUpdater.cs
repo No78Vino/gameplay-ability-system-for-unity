@@ -168,7 +168,7 @@ namespace GAS.Editor
             // 添加抽象基类  
             beans.Add(new BeanDefinition
             {
-                Name = "CueLogic",
+                Name = "GameplayCueBase",
                 Parent = "",
                 Comment = "Cue逻辑基类",
                 IsAbstract = true
@@ -184,7 +184,7 @@ namespace GAS.Editor
                 var bean = new BeanDefinition
                 {
                     Name = type.Name,
-                    Parent = "CueLogic",
+                    Parent = "GameplayCueBase",
                     Comment = GetXmlComment(type) ?? $"Cue: {type.Name}",
                     IsAbstract = false
                 };
@@ -210,7 +210,7 @@ namespace GAS.Editor
             // 添加抽象基类  
             beans.Add(new BeanDefinition
             {
-                Name = "MmcLogic",
+                Name = "ModMagnitudeCalculationBase",
                 Parent = "",
                 Comment = "MMC逻辑基类",
                 IsAbstract = true
@@ -226,7 +226,7 @@ namespace GAS.Editor
                 var bean = new BeanDefinition
                 {
                     Name = type.Name,
-                    Parent = "MmcLogic",
+                    Parent = "ModMagnitudeCalculationBase",
                     Comment = GetXmlComment(type) ?? $"MMC: {type.Name}",
                     IsAbstract = false
                 };
@@ -252,7 +252,7 @@ namespace GAS.Editor
             // 添加抽象基类  
             beans.Add(new BeanDefinition
             {
-                Name = "AbilityLogic",
+                Name = "AbilityLogicBase",
                 Parent = "",
                 Comment = "Ability逻辑基类",
                 IsAbstract = true
@@ -268,7 +268,7 @@ namespace GAS.Editor
                 var bean = new BeanDefinition
                 {
                     Name = type.Name,
-                    Parent = "AbilityLogic",
+                    Parent = "AbilityLogicBase",
                     Comment = GetXmlComment(type) ?? $"Ability: {type.Name}",
                     IsAbstract = false
                 };
@@ -294,7 +294,7 @@ namespace GAS.Editor
             // 添加抽象基类  
             beans.Add(new BeanDefinition
             {
-                Name = "AbilityTask",
+                Name = "AbilityTaskBase",
                 Parent = "",
                 Comment = "AbilityTask基类",
                 IsAbstract = true
@@ -309,7 +309,7 @@ namespace GAS.Editor
                 var bean = new BeanDefinition
                 {
                     Name = type.Name,
-                    Parent = "AbilityTask",
+                    Parent = "AbilityTaskBase",
                     Comment = GetXmlComment(type) ?? $"Task: {type.Name}",
                     IsAbstract = false
                 };
@@ -345,7 +345,7 @@ namespace GAS.Editor
             // 添加抽象基类  
             beans.Add(new BeanDefinition
             {
-                Name = "TargetCatcher",
+                Name = "TargetCatcherBase",
                 Parent = "",
                 Comment = "TargetCatcher基类",
                 IsAbstract = true
@@ -360,7 +360,7 @@ namespace GAS.Editor
                 var bean = new BeanDefinition
                 {
                     Name = type.Name,
-                    Parent = "TargetCatcher",
+                    Parent = "TargetCatcherBase",
                     Comment = GetXmlComment(type) ?? $"TargetCatcher: {type.Name}",
                     IsAbstract = false
                 };
