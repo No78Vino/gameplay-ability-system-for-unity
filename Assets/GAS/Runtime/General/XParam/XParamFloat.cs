@@ -7,6 +7,7 @@ namespace GAS.Runtime
     {
         [LabelText("值")]
         [ShowInInspector]
+        [BeanField(nameof(SetValue), Comment = "值")]
         public float Value { get; private set; }
         
         public XParamFloat()
