@@ -1,25 +1,28 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class XParamInt: XParam
     {
-        private int _value;
-        public int Value => _value;
+        [LabelText("值")]
+        [ShowInInspector]
+        [BeanField(nameof(SetValue), Comment = "值")]
+        public int Value { get; private set; }
         
         public void SetValue(int value)
         {
-            _value = value;
+            Value = value;
         }
         
         public XParamInt(int value)
         {
-            _value = value;
+            Value = value;
         }
         
         public XParamInt()
         {
-            _value = 0;
+            Value = 0;
         }
         
 #if UNITY_EDITOR
@@ -27,26 +30,23 @@ namespace GAS.Runtime
         {
             if (paramData == null || paramData.Count == 0)
             {
-                _value = 0;
+                Value = 0;
                 return;
             }
 
             var strData = paramData[0] as string;
             if (string.IsNullOrEmpty(strData))
             {
-                _value = 0;
+                Value = 0;
                 return;
             }
 
-            if (!int.TryParse(strData, out _value))
-            {
-                _value = 0;
-            }
+            Value = !int.TryParse(strData, out var result) ? 0 : result;
         }
 
         public List<object> EncodeExcelData()
         {
-            var result = new List<object> { _value.ToString() };
+            var result = new List<object> { Value.ToString() };
             return result;
         }
 #endif

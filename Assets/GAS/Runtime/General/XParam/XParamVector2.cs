@@ -1,25 +1,28 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class XParamVector2: XParam
     {
-        private UnityEngine.Vector2 _value;
-        public UnityEngine.Vector2 Value => _value;
+        [LabelText("值")]
+        [ShowInInspector]
+        [BeanField(nameof(SetValue), Comment = "值")]
+        public UnityEngine.Vector2 Value { get; private set; }
         
         public void SetValue(UnityEngine.Vector2 value)
         {
-            _value = value;
+            Value = value;
         }
         
         public XParamVector2(UnityEngine.Vector2 value)
         {
-            _value = value;
+            Value = value;
         }
         
         public XParamVector2()
         {
-            _value = UnityEngine.Vector2.zero;
+            Value = UnityEngine.Vector2.zero;
         }
         
 #if UNITY_EDITOR
@@ -27,14 +30,14 @@ namespace GAS.Runtime
         {
             if (paramData == null || paramData.Count == 0)
             {
-                _value = UnityEngine.Vector2.zero;
+                Value = UnityEngine.Vector2.zero;
                 return;
             }
 
             var strData = paramData[0] as string;
             if (string.IsNullOrEmpty(strData))
             {
-                _value = UnityEngine.Vector2.zero;
+                Value = UnityEngine.Vector2.zero;
                 return;
             }
             var dataParts = strData.Split(';');
@@ -42,15 +45,15 @@ namespace GAS.Runtime
                 !float.TryParse(dataParts[0], out var x) || 
                 !float.TryParse(dataParts[1], out var y))
             {
-                _value = UnityEngine.Vector2.zero;
+                Value = UnityEngine.Vector2.zero;
                 return;
             }
-            _value = new UnityEngine.Vector2(x, y);
+            Value = new UnityEngine.Vector2(x, y);
         }
 
         public List<object> EncodeExcelData()
         {
-            var result = new List<object> { $"{_value.x};{_value.y}" };
+            var result = new List<object> { $"{Value.x};{Value.y}" };
             return result;
         }
 #endif

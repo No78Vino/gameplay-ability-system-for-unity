@@ -1,24 +1,27 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     public class XParamVector3: XParam
     {
-        private UnityEngine.Vector3 _value;
-        public UnityEngine.Vector3 Value => _value;
+        [LabelText("值")]
+        [ShowInInspector]
+        [BeanField(nameof(SetValue), Comment = "值")]
+        public UnityEngine.Vector3 Value { get; private set; }
         
         public XParamVector3()
         {
-            _value = UnityEngine.Vector3.zero;
+            Value = UnityEngine.Vector3.zero;
         }
         
         public XParamVector3(UnityEngine.Vector3 value)
         {
-            _value = value;
+            Value = value;
         }
         public void SetValue(UnityEngine.Vector3 value)
         {
-            _value = value;
+            Value = value;
         }
         
 #if UNITY_EDITOR
@@ -26,14 +29,14 @@ namespace GAS.Runtime
         {
             if (paramData == null || paramData.Count == 0)
             {
-                _value = UnityEngine.Vector3.zero;
+                Value = UnityEngine.Vector3.zero;
                 return;
             }
 
             var strData = paramData[0] as string;
             if (string.IsNullOrEmpty(strData))
             {
-                _value = UnityEngine.Vector3.zero;
+                Value = UnityEngine.Vector3.zero;
                 return;
             }
 
@@ -43,18 +46,18 @@ namespace GAS.Runtime
                 !float.TryParse(parts[1], out var y) ||
                 !float.TryParse(parts[2], out var z))
             {
-                _value = UnityEngine.Vector3.zero;
+                Value = UnityEngine.Vector3.zero;
                 return;
             }
 
-            _value = new UnityEngine.Vector3(x, y, z);
+            Value = new UnityEngine.Vector3(x, y, z);
         }
 
         public List<object> EncodeExcelData()
         {
             var result = new List<object>
             {
-                $"{_value.x},{_value.y},{_value.z}"
+                $"{Value.x},{Value.y},{Value.z}"
             };
             return result;
         }
