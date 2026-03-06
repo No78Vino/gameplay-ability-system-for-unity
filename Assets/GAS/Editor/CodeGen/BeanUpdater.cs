@@ -51,7 +51,6 @@ namespace GAS.Editor
             public string Name; // 字段名  
             public string Type; // 字段类型  
             public string Comment; // 注释  
-            public bool IsList; // 是否数组  
         }
 
         #endregion
@@ -457,37 +456,37 @@ namespace GAS.Editor
         /// </summary>  
         private static void CollectFieldsFromType(Type type, BeanDefinition bean)
         {
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            // 扫描范围包含非公开成员，以支持 [BeanField] 标注在 private 成员上  
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             foreach (var field in fields)
             {
-                if (field.IsInitOnly) continue; // 跳过readonly字段  
+                var attr = field.GetCustomAttribute<BeanFieldAttribute>();
+                if (attr == null) continue; // 只收录标注了 [BeanField] 的成员  
 
                 bean.Fields.Add(new BeanField
                 {
-                    Name = field.Name,
-                    Type = MapCSharpTypeToLubanType(field.FieldType),
-                    Comment = GetFieldComment(field),
-                    IsList = typeof(IList<>).IsAssignableFrom(field.FieldType) ||
-                             field.FieldType.IsArray
+                    Name = attr.Name ?? field.Name,
+                    Type = attr.LubanType ?? MapCSharpTypeToLubanType(field.FieldType),
+                    Comment = attr.Comment ?? field.Name,
                 });
             }
 
             foreach (var prop in properties)
             {
-                if (!prop.CanRead || !prop.CanWrite) continue;
+                var attr = prop.GetCustomAttribute<BeanFieldAttribute>();
+                if (attr == null) continue; // 只收录标注了 [BeanField] 的成员  
 
                 bean.Fields.Add(new BeanField
                 {
-                    Name = prop.Name,
-                    Type = MapCSharpTypeToLubanType(prop.PropertyType),
-                    Comment = GetPropertyComment(prop),
-                    IsList = typeof(IList<>).IsAssignableFrom(prop.PropertyType) ||
-                             prop.PropertyType.IsArray
+                    Name = attr.Name ?? prop.Name,
+                    Type = attr.LubanType ?? MapCSharpTypeToLubanType(prop.PropertyType),
+                    Comment = attr.Comment ?? prop.Name,
                 });
             }
         }
+
 
         /// <summary>  
         /// C#类型映射到Luban类型  
@@ -504,14 +503,14 @@ namespace GAS.Editor
             if (type == typeof(Vector3)) return "vector3";
             if (type == typeof(Vector4)) return "vector4";
 
-            // 数组类型 → Luban bean 定义格式: (array#sep=,),ElementType  
+            // 数组类型 → Luban bean 定义格式  
             if (type.IsArray)
             {
                 var elemType = type.GetElementType();
                 return $"(array#sep=,),{MapCSharpTypeToLubanType(elemType)}";
             }
 
-            // List类型 → Luban bean 定义格式: (array#sep=,),ElementType  
+            // List类型 → Luban bean 定义格式  
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var elemType = type.GetGenericArguments()[0];
@@ -530,25 +529,7 @@ namespace GAS.Editor
             // TODO: 从XML文档文件读取注释  
             return null;
         }
-
-        /// <summary>  
-        /// 获取字段注释  
-        /// </summary>  
-        private static string GetFieldComment(FieldInfo field)
-        {
-            // TODO: 从XML文档文件读取注释  
-            return field.Name;
-        }
-
-        /// <summary>  
-        /// 获取属性注释  
-        /// </summary>  
-        private static string GetPropertyComment(PropertyInfo prop)
-        {
-            // TODO: 从XML文档文件读取注释  
-            return prop.Name;
-        }
-
+        
         #endregion
 
         #region 生成和更新Excel

@@ -54,6 +54,59 @@ namespace GAS.Editor
             return result;  
         }
 
+
+        /// <summary>  
+        /// 从运行时 XParam 类型中提取所有 [BeanField] 标注的字段/属性信息  
+        /// </summary>  
+        public struct BeanFieldInfo  
+        {  
+            public string Name;       // Bean 字段名（attr.Name ?? 成员名）  
+            public string Setter;     // Setter 方法名（attr.Setter）  
+            public string LubanType;  // Luban 类型（attr.LubanType，可能为 null）  
+            public Type MemberType;   // 成员的 C# 类型  
+            public string Comment;    // 注释  
+        }  
+  
+        public static List<BeanFieldInfo> GetBeanFields(Type runtimeParamType)  
+        {  
+            var result = new List<BeanFieldInfo>();  
+            if (runtimeParamType == null) return result;  
+  
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;  
+  
+            // 扫描字段  
+            foreach (var field in runtimeParamType.GetFields(bindingFlags))  
+            {  
+                var attr = field.GetCustomAttribute<GAS.Runtime.BeanFieldAttribute>();  
+                if (attr == null) continue;  
+                result.Add(new BeanFieldInfo  
+                {  
+                    Name = attr.Name ?? field.Name,  
+                    Setter = attr.Setter,  
+                    LubanType = attr.LubanType,  
+                    MemberType = field.FieldType,  
+                    Comment = attr.Comment,  
+                });  
+            }  
+  
+            // 扫描属性  
+            foreach (var prop in runtimeParamType.GetProperties(bindingFlags))  
+            {  
+                var attr = prop.GetCustomAttribute<GAS.Runtime.BeanFieldAttribute>();  
+                if (attr == null) continue;  
+                result.Add(new BeanFieldInfo  
+                {  
+                    Name = attr.Name ?? prop.Name,  
+                    Setter = attr.Setter,  
+                    LubanType = attr.LubanType,  
+                    MemberType = prop.PropertyType,  
+                    Comment = attr.Comment,  
+                });  
+            }  
+  
+            return result;  
+        }
+        
         public static int GetFrameRate()
         {
             return (int)Math.Round(1 / Time.fixedDeltaTime);
