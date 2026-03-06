@@ -12,6 +12,7 @@ namespace DemoForESC._Script.Gas.Ability
         private Vector3 _viewPointForward;
 
         [ShowInInspector]
+        [BeanField(nameof(SetRotationOffset), Name = "RotationOffset")]  
         public float RotationOffset { get; private set; } = 0.1f;
 
         public Vector3 ViewPointForward => _viewPointForward;
@@ -30,7 +31,7 @@ namespace DemoForESC._Script.Gas.Ability
             _viewPointForward = viewPointForward;
         }
         
-        public void SetValue(float offset)
+        public void SetRotationOffset(float offset)
         {
             RotationOffset = offset;
         }

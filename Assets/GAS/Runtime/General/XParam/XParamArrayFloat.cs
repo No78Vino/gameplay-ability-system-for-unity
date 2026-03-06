@@ -17,6 +17,7 @@ namespace GAS.Runtime
         }
 
         [ShowInInspector]
+        [BeanField(nameof(SetValue))]
         public float[] Value { get; private set; }
 
         public void SetValue(float[] value)

@@ -10,6 +10,7 @@ namespace GAS.Runtime
         [ShowInInspector] 
         [LabelText("buff效果ID")] 
         [ValueDropdown(nameof(GameplayEffectIDChoices), IsUniqueList = true)]
+        [BeanField(nameof(SetIDs))]
         public int[] IDs;
 
         public void SetIDs(int[] value)

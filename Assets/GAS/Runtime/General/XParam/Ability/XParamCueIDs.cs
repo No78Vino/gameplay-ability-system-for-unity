@@ -7,7 +7,9 @@ namespace GAS.Runtime
 {
     public class XParamCueIDs : XParam
     {
-        [ShowInInspector] public int[] IDs;
+        [ShowInInspector] 
+        [BeanField(nameof(SetValue))]
+        public int[] IDs;
 
         public void SetValue(int[] value)
         {

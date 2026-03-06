@@ -10,6 +10,7 @@ namespace GAS.Runtime
         
         [ShowInInspector]
         [ValueDropdown(nameof(CueIDs))]
+        [BeanField(nameof(SetIDs))]
         public int[] IDs { get; private set; }
 
         public void SetIDs(int[] value)

@@ -337,7 +337,7 @@ namespace GAS.Runtime
                         case cfg.ALMove aData:
                         {
                             var ap = abilityParam as DemoForESC._Script.Gas.Ability.XParamMove;
-                            ap?.SetValue(aData.Param.Value);
+                            ap?.SetRotationOffset(aData.Param.Value);
                             abilityParam = ap;
                             break;
                         }
@@ -497,7 +497,7 @@ namespace GAS.Runtime
                             case cfg.TaskPlayCue taskData:
                             {
                                 var tp = taskParam as GAS.Runtime.XParamCue;
-                                tp?.SetCueLogic(CreateCueLogicUnit(taskData.Param.CueLogic,taskData.Param.RequiredTags,taskData.Param.ImmunityTags));
+                                tp?.SetCueLogic(taskData);
                                 taskParam = tp;
                                 break;
                             }
@@ -618,6 +618,16 @@ namespace GAS.Runtime
         param.SetParam(catcherParam);
     }
 
+    #endregion
+    
+    #region Cue
+    
+    public static void SetCueLogic(this GAS.Runtime.XParamCue cue, cfg.TaskPlayCue taskData)
+    {
+        var cueUnit = CreateCueLogicUnit(taskData.Param.CueLogic, taskData.Param.RequiredTags, taskData.Param.ImmunityTags);
+        cue?.SetCueType(cueUnit.CueType.Name);
+        cue?.SetParam(cueUnit.Param);
+    }
     #endregion
 }
 }

@@ -9,6 +9,7 @@ namespace GAS.Runtime
         [ShowInInspector] 
         [LabelText("时间轴技能ID")] 
         [ValueDropdown(nameof(TimelineAbilityIDChoices), IsUniqueList = true)]
+        [BeanField(nameof(SetID))]
         public int ID;
         
         

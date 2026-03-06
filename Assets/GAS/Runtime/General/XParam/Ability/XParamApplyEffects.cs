@@ -10,17 +10,20 @@ namespace GAS.Runtime
         [ShowInInspector] 
         [LabelText("buff效果ID")] 
         [ValueDropdown(nameof(GameplayEffectIDChoices), IsUniqueList = true)]
+        [BeanField(nameof(SetIDs),Comment = "buff效果ID")] 
         public int[] IDs;
         
         [ShowInInspector]
         [LabelText("Catcher类型")]
         [ValueDropdown(nameof(CatcherClassChoice))]
         [OnValueChanged(nameof(OnTypeChange))]
+        [BeanField(nameof(SetCatcherType),Comment = "Catcher类型")] 
         public string CatcherType { get; private set; }
 
         [ShowInInspector]
         [HideLabel]
         [HideReferenceObjectPicker]
+        [BeanField(nameof(SetParam))] 
         public XParam Param { get; set; }
         
         public void SetIDs(int[] value)
