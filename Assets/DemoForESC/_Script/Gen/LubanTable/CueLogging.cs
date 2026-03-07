@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class CueLogging : CueLogic
+/// <summary>
+/// Cue: CueLogging
+/// </summary>
+public sealed partial class CueLogging : GameplayCueBase
 {
     public CueLogging(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class CueLogging : CueLogic
         return new CueLogging(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamLogging Param;
    
     public const int __ID__ = 636841420;

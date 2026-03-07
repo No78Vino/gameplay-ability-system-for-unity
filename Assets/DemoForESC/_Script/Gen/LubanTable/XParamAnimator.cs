@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamAnimator
+/// </summary>
 public sealed partial class XParamAnimator : XParam
 {
     public XParamAnimator(JSONNode _buf)  : base(_buf) 
@@ -26,7 +29,13 @@ public sealed partial class XParamAnimator : XParam
         return new XParamAnimator(_buf);
     }
 
+    /// <summary>
+    /// 动画机节点路径
+    /// </summary>
     public readonly string AnimatorNodePath;
+    /// <summary>
+    /// 动画状态名称
+    /// </summary>
     public readonly string AnimationName;
    
     public const int __ID__ = -356366052;

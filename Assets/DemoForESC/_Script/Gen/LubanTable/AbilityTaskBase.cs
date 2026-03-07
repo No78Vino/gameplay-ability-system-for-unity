@@ -13,19 +13,25 @@ using SimpleJSON;
 
 namespace cfg
 {
-public abstract partial class CueLogic : Luban.BeanBase
+/// <summary>
+/// AbilityTask基类
+/// </summary>
+public abstract partial class AbilityTaskBase : Luban.BeanBase
 {
-    public CueLogic(JSONNode _buf) 
+    public AbilityTaskBase(JSONNode _buf) 
     {
     }
 
-    public static CueLogic DeserializeCueLogic(JSONNode _buf)
+    public static AbilityTaskBase DeserializeAbilityTaskBase(JSONNode _buf)
     {
         switch ((string)_buf["$type"])
         {
-            case "CueLog": return new CueLog(_buf);
-            case "CueLogging": return new CueLogging(_buf);
-            case "CuePlayAnimator": return new CuePlayAnimator(_buf);
+            case "TaskPlayCuePreset": return new TaskPlayCuePreset(_buf);
+            case "TaskApplyEffects": return new TaskApplyEffects(_buf);
+            case "TaskDebug": return new TaskDebug(_buf);
+            case "TaskDoCost": return new TaskDoCost(_buf);
+            case "TaskDoNothing": return new TaskDoNothing(_buf);
+            case "TaskPlayCue": return new TaskPlayCue(_buf);
             default: throw new SerializationException();
         }
     }

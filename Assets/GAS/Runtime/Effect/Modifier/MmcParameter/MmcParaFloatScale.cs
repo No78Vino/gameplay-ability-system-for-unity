@@ -1,46 +1,52 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace GAS.Runtime
 {
     [Serializable]
     public class MmcParaFloatScale : XParam
     {
-        public float k;
-        public float b;
+        [ShowInInspector]
+        [BeanField(nameof(SetK))]
+        public float K { get; private set; }
+
+        [ShowInInspector]
+        [BeanField(nameof(SetB))]
+        public float B  { get; private set; }
 
         public MmcParaFloatScale()
         {
-            k = 1;
-            b = 0;
+            K = 1;
+            B = 0;
         }
 
         public MmcParaFloatScale(float k, float b)
         {
-            this.k = k;
-            this.b = b;
+            K = k;
+            B = b;
         }
         
-        public void SetK(float k) =>this.k = k;
-        public void SetB(float b) =>this.b = b;
+        public void SetK(float k) =>K = k;
+        public void SetB(float b) =>B = b;
         
 #if UNITY_EDITOR
         public void DecodeExcelData(List<object> paramData)
         {
             if (paramData.Count > 1)
-                k = Convert.ToSingle(paramData[0]);
+                K = Convert.ToSingle(paramData[0]);
             else
-                k = 1;
+                K = 1;
 
             if (paramData.Count > 2)
-                b = Convert.ToSingle(paramData[1]);
+                B = Convert.ToSingle(paramData[1]);
             else
-                b = 0;
+                B = 0;
         }
 
         public List<object> EncodeExcelData()
         {
-            return new List<object> { k, b };
+            return new List<object> { K, B };
         }
 #endif
     }

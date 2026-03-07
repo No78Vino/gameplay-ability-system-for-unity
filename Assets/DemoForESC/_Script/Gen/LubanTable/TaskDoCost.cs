@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class TaskDoCost : AbilityTask
+/// <summary>
+/// Task: TaskDoCost
+/// </summary>
+public sealed partial class TaskDoCost : AbilityTaskBase
 {
     public TaskDoCost(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class TaskDoCost : AbilityTask
         return new TaskDoCost(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamNone Param;
    
     public const int __ID__ = -1766917891;

@@ -86,6 +86,20 @@ namespace GAS.Runtime
             {
                 switch (cueLogic)
                 {
+                    case cfg.CLCameraFovShake cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamFloat;
+                        cp?.SetValue(cData.Param.Value);
+                        cueParam = cp;
+                        break;
+                    }
+                    case cfg.CueHitReaction cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamFloat;
+                        cp?.SetValue(cData.Param.Value);
+                        cueParam = cp;
+                        break;
+                    }
                     case cfg.CueLog cData:
                     {
                         var cp = cueParam as GAS.Runtime.XParamString;
@@ -101,11 +115,45 @@ namespace GAS.Runtime
                         cueParam = cp;
                         break;
                     }
+                    case cfg.CueMountPrefab cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamMountPrefab;
+                        cp?.SetPrefabPath(cData.Param.PrefabPath);
+                        cp?.SetMountPointPath(cData.Param.MountPointPath);
+                        cp?.SetFollowHost(cData.Param.FollowHost);
+                        cp?.SetLocalPosition(cData.Param.LocalPosition);
+                        cp?.SetLocalRotation(cData.Param.LocalRotation);
+                        cp?.SetLocalScale(cData.Param.LocalScale);
+                        cp?.SetUseWorldSpace(cData.Param.UseWorldSpace);
+                        cp?.SetLayer(cData.Param.Layer);
+                        cp?.SetSortingOrder(cData.Param.SortingOrder);
+                        cp?.SetSortingLayerName(cData.Param.SortingLayerName);
+                        cp?.SetRecursiveLayer(cData.Param.RecursiveLayer);
+                        cp?.SetDestroyWithHost(cData.Param.DestroyWithHost);
+                        cp?.SetDestroyOnStop(cData.Param.DestroyOnStop);
+                        cp?.SetDestroyDelay(cData.Param.DestroyDelay);
+                        cp?.SetAutoPlayParticle(cData.Param.AutoPlayParticle);
+                        cp?.SetStopParticleOnDeactivate(cData.Param.StopParticleOnDeactivate);
+                        cp?.SetParticleStopAction(cData.Param.ParticleStopAction);
+                        cueParam = cp;
+                        break;
+                    }
                     case cfg.CuePlayAnimator cData:
                     {
                         var cp = cueParam as GAS.Runtime.XParamAnimator;
                         cp?.SetAnimatorNodePath(cData.Param.AnimatorNodePath);
                         cp?.SetAnimationName(cData.Param.AnimationName);
+                        cueParam = cp;
+                        break;
+                    }
+                    case cfg.CuePlaySound cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamPlaySound;
+                        cp?.SetAudioClipPath(cData.Param.AudioClipPath);
+                        cp?.SetVolume(cData.Param.Volume);
+                        cp?.SetSpeed(cData.Param.Speed);
+                        cp?.SetLoop(cData.Param.Loop);
+                        cp?.SetAudioSourceNodePath(cData.Param.AudioSourceNodePath);
                         cueParam = cp;
                         break;
                     }
@@ -334,10 +382,17 @@ namespace GAS.Runtime
                 {
                     switch (abilityLogic)
                     {
+                        case cfg.ALDeath aData:
+                        {
+                            var ap = abilityParam as GAS.Runtime.XParamEffectIDs;
+                            ap?.SetIDs(aData.Param.IDs);
+                            abilityParam = ap;
+                            break;
+                        }
                         case cfg.ALMove aData:
                         {
                             var ap = abilityParam as DemoForESC._Script.Gas.Ability.XParamMove;
-                            ap?.SetRotationOffset(aData.Param.Value);
+                            ap?.SetRotationOffset(aData.Param.RotationOffset);
                             abilityParam = ap;
                             break;
                         }
@@ -409,6 +464,12 @@ namespace GAS.Runtime
                         mmcParam = mp;
                         break;
                     }
+                    case cfg.MMCNone mmcData:
+                    {
+                        var mp = mmcParam as GAS.Runtime.XParamNone;
+                        mmcParam = mp;
+                        break;
+                    }
                     case cfg.MMCScalableFloat mmcData:
                     {
                         var mp = mmcParam as GAS.Runtime.MmcParaFloatScale;
@@ -471,7 +532,46 @@ namespace GAS.Runtime
                             {
                                 var tp = taskParam as GAS.Runtime.XParamApplyEffects;
                                 tp?.SetIDs(taskData.Param.IDs);
-                                tp?.SetTargetCatcher(taskData.Param.TargetCatcher);
+                                // [BeanPolymorphicField] TargetCatcher
+                                var polyBean = taskData.Param.TargetCatcher;
+                                tp?.SetCatcherType(polyBean.GetType().Name);
+                                var resolvedParamType = TargetCatcherHelper.GetCatcherParamType(polyBean.GetType().Name);
+                                var resolvedParam = Activator.CreateInstance(resolvedParamType) as XParam;
+                                if (resolvedParam != null)
+                                {
+                                    switch (polyBean)
+                                    {
+                                        case cfg.CatchAreaBox3D pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamCatchAreaBox3D;
+                                            rp?.SetIsWorldSpace(pData.Param.isWorldSpace);
+                                            rp?.SetOffset(pData.Param.offset);
+                                            rp?.SetSize(pData.Param.size);
+                                            rp?.SetRotation(pData.Param.rotation);
+                                            rp?.SetLayer(pData.Param.layer);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CatchSelf pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamNone;
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CatchTarget pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamNone;
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        default:
+                                        {
+                                            Debug.LogError($"[XLuban] Unknown TargetCatcher type: {polyBean.GetType().Name}");
+                                            break;
+                                        }
+                                    }
+                                }
+                                tp?.SetParam(resolvedParam);
                                 taskParam = tp;
                                 break;
                             }
@@ -497,7 +597,96 @@ namespace GAS.Runtime
                             case cfg.TaskPlayCue taskData:
                             {
                                 var tp = taskParam as GAS.Runtime.XParamCue;
-                                tp?.SetCueLogic(taskData);
+                                tp?.SetRequiredTags(taskData.Param.RequiredTags);
+                                tp?.SetImmunityTags(taskData.Param.ImmunityTags);
+                                // [BeanPolymorphicField] CueLogic
+                                var polyBean = taskData.Param.CueLogic;
+                                tp?.SetCueType(polyBean.GetType().Name);
+                                var resolvedParamType = CueHelper.GetCueLogicParamType(polyBean.GetType().Name);
+                                var resolvedParam = Activator.CreateInstance(resolvedParamType) as XParam;
+                                if (resolvedParam != null)
+                                {
+                                    switch (polyBean)
+                                    {
+                                        case cfg.CLCameraFovShake pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamFloat;
+                                            rp?.SetValue(pData.Param.Value);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CueHitReaction pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamFloat;
+                                            rp?.SetValue(pData.Param.Value);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CueLog pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamString;
+                                            rp?.SetValue(pData.Param.Value);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CueLogging pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamLogging;
+                                            rp?.SetValue(pData.Param.Value);
+                                            rp?.SetDuration(pData.Param.Duration);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CueMountPrefab pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamMountPrefab;
+                                            rp?.SetPrefabPath(pData.Param.PrefabPath);
+                                            rp?.SetMountPointPath(pData.Param.MountPointPath);
+                                            rp?.SetFollowHost(pData.Param.FollowHost);
+                                            rp?.SetLocalPosition(pData.Param.LocalPosition);
+                                            rp?.SetLocalRotation(pData.Param.LocalRotation);
+                                            rp?.SetLocalScale(pData.Param.LocalScale);
+                                            rp?.SetUseWorldSpace(pData.Param.UseWorldSpace);
+                                            rp?.SetLayer(pData.Param.Layer);
+                                            rp?.SetSortingOrder(pData.Param.SortingOrder);
+                                            rp?.SetSortingLayerName(pData.Param.SortingLayerName);
+                                            rp?.SetRecursiveLayer(pData.Param.RecursiveLayer);
+                                            rp?.SetDestroyWithHost(pData.Param.DestroyWithHost);
+                                            rp?.SetDestroyOnStop(pData.Param.DestroyOnStop);
+                                            rp?.SetDestroyDelay(pData.Param.DestroyDelay);
+                                            rp?.SetAutoPlayParticle(pData.Param.AutoPlayParticle);
+                                            rp?.SetStopParticleOnDeactivate(pData.Param.StopParticleOnDeactivate);
+                                            rp?.SetParticleStopAction(pData.Param.ParticleStopAction);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CuePlayAnimator pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamAnimator;
+                                            rp?.SetAnimatorNodePath(pData.Param.AnimatorNodePath);
+                                            rp?.SetAnimationName(pData.Param.AnimationName);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CuePlaySound pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamPlaySound;
+                                            rp?.SetAudioClipPath(pData.Param.AudioClipPath);
+                                            rp?.SetVolume(pData.Param.Volume);
+                                            rp?.SetSpeed(pData.Param.Speed);
+                                            rp?.SetLoop(pData.Param.Loop);
+                                            rp?.SetAudioSourceNodePath(pData.Param.AudioSourceNodePath);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        default:
+                                        {
+                                            Debug.LogError($"[XLuban] Unknown CueLogic type: {polyBean.GetType().Name}");
+                                            break;
+                                        }
+                                    }
+                                }
+                                tp?.SetParam(resolvedParam);
                                 taskParam = tp;
                                 break;
                             }
@@ -513,43 +702,6 @@ namespace GAS.Runtime
         }
 
 
-    private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)
-    {
-        var cueLogicName = cueLogic.GetType().Name;
-        var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);
-        var cueParam = Activator.CreateInstance(cueParamType) as XParam;
-        if (cueParam != null)
-        {
-            switch (cueLogic)
-            {
-                case cfg.CueLog cData:
-                {
-                    var cp = cueParam as GAS.Runtime.XParamString;
-                    cp?.SetValue(cData.Param.Value);
-                    cueParam = cp;
-                    break;
-                }
-                case cfg.CueLogging cData:
-                {
-                    var cp = cueParam as GAS.Runtime.XParamLogging;
-                    cp?.SetValue(cData.Param.Value);
-                    cp?.SetDuration(cData.Param.Duration);
-                    cueParam = cp;
-                    break;
-                }
-                case cfg.CuePlayAnimator cData:
-                {
-                    var cp = cueParam as GAS.Runtime.XParamAnimator;
-                    cp?.SetAnimatorNodePath(cData.Param.AnimatorNodePath);
-                    cp?.SetAnimationName(cData.Param.AnimationName);
-                    cueParam = cp;
-                    break;
-                }
-            }
-        }
-        var cueLogicType = CueHelper.GetCueType(cueLogicName);
-        return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);
-    }
     public static string GetAbilityNameByCode(int id)
     {
         var data = Tables.Tbability.Get(id);
@@ -573,61 +725,5 @@ namespace GAS.Runtime
         Debug.LogError($"Attribute_Code:{code}  不存在.");
         return string.Empty;
     }
-
-    #region TargetCatcher
-
-    public static void SetTargetCatcher(this GAS.Runtime.XParamApplyEffects param, cfg.TargetCatcherBase targetCatcher)
-    {
-        param.SetCatcherType(targetCatcher.GetType().Name);
-        var catcherParamType = TargetCatcherHelper.GetCatcherParamType(targetCatcher.GetType().Name);
-        var catcherParam = Activator.CreateInstance(catcherParamType) as XParam;
-        if (catcherParam != null)
-        {
-            switch (targetCatcher)
-            {
-                case cfg.CatchAreaBox3D cData:
-                {
-                    var cp = catcherParam as GAS.Runtime.XParamCatchAreaBox3D;
-                    cp?.SetIsWorldSpace(cData.Param.IsWorldSpace);
-                    cp?.SetOffset(new UnityEngine.Vector3(cData.Param.Offset.X, cData.Param.Offset.Y, cData.Param.Offset.Z));
-                    cp?.SetSize(new UnityEngine.Vector3(cData.Param.Size.X, cData.Param.Size.Y, cData.Param.Size.Z));
-                    cp?.SetRotation(new UnityEngine.Vector3(cData.Param.Rotation.X, cData.Param.Rotation.Y, cData.Param.Rotation.Z));
-                    cp?.SetLayer(cData.Param.Layer);
-                    catcherParam = cp;
-                    break;
-                }
-                case cfg.CatchSelf cData:
-                {
-                    var cp = catcherParam as GAS.Runtime.XParamNone;
-                    catcherParam = cp;
-                    break;
-                }
-                case cfg.CatchTarget cData:
-                {
-                    var cp = catcherParam as GAS.Runtime.XParamNone;
-                    catcherParam = cp;
-                    break;
-                }
-                default:
-                {
-                    Debug.LogError($"[XLuban] Unknown TargetCatcher type: {targetCatcher.GetType().Name}");
-                    break;
-                }
-            }
-        }
-        param.SetParam(catcherParam);
-    }
-
-    #endregion
-    
-    #region Cue
-    
-    public static void SetCueLogic(this GAS.Runtime.XParamCue cue, cfg.TaskPlayCue taskData)
-    {
-        var cueUnit = CreateCueLogicUnit(taskData.Param.CueLogic, taskData.Param.RequiredTags, taskData.Param.ImmunityTags);
-        cue?.SetCueType(cueUnit.CueType.Name);
-        cue?.SetParam(cueUnit.Param);
-    }
-    #endregion
 }
 }

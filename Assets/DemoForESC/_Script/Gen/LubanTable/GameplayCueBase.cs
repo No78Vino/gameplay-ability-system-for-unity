@@ -13,18 +13,26 @@ using SimpleJSON;
 
 namespace cfg
 {
-public abstract partial class MmcLogic : Luban.BeanBase
+/// <summary>
+/// Cue逻辑基类
+/// </summary>
+public abstract partial class GameplayCueBase : Luban.BeanBase
 {
-    public MmcLogic(JSONNode _buf) 
+    public GameplayCueBase(JSONNode _buf) 
     {
     }
 
-    public static MmcLogic DeserializeMmcLogic(JSONNode _buf)
+    public static GameplayCueBase DeserializeGameplayCueBase(JSONNode _buf)
     {
         switch ((string)_buf["$type"])
         {
-            case "MMCScalableFloat": return new MMCScalableFloat(_buf);
-            case "MMCAttributeBased": return new MMCAttributeBased(_buf);
+            case "CLCameraFovShake": return new CLCameraFovShake(_buf);
+            case "CueHitReaction": return new CueHitReaction(_buf);
+            case "CueLog": return new CueLog(_buf);
+            case "CueLogging": return new CueLogging(_buf);
+            case "CueMountPrefab": return new CueMountPrefab(_buf);
+            case "CuePlayAnimator": return new CuePlayAnimator(_buf);
+            case "CuePlaySound": return new CuePlaySound(_buf);
             default: throw new SerializationException();
         }
     }

@@ -20,7 +20,7 @@ public partial struct TaskClip
         { if(!_buf["StartTime"].IsNumber) { throw new SerializationException(); }  StartTime = _buf["StartTime"]; }
         { if(!_buf["EndTime"].IsNumber) { throw new SerializationException(); }  EndTime = _buf["EndTime"]; }
         { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-        { if(!_buf["Task"].IsObject) { throw new SerializationException(); }  Task = global::cfg.AbilityTask.DeserializeAbilityTask(_buf["Task"]);  }
+        { if(!_buf["Task"].IsObject) { throw new SerializationException(); }  Task = global::cfg.AbilityTaskBase.DeserializeAbilityTaskBase(_buf["Task"]);  }
     }
 
     public static TaskClip DeserializeTaskClip(JSONNode _buf)
@@ -31,7 +31,7 @@ public partial struct TaskClip
     public readonly int StartTime;
     public readonly int EndTime;
     public readonly string Name;
-    public readonly AbilityTask Task;
+    public readonly AbilityTaskBase Task;
    
 
     public  void ResolveRef(Tables tables)

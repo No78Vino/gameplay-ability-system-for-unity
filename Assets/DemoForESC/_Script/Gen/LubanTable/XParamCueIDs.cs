@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamCueIDs
+/// </summary>
 public sealed partial class XParamCueIDs : XParam
 {
     public XParamCueIDs(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class XParamCueIDs : XParam
         return new XParamCueIDs(_buf);
     }
 
+    /// <summary>
+    /// IDs
+    /// </summary>
     public readonly int[] IDs;
    
     public const int __ID__ = 505655066;

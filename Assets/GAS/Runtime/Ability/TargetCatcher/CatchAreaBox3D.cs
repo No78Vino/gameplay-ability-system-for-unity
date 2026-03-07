@@ -69,23 +69,23 @@ namespace GAS.Runtime
     public class XParamCatchAreaBox3D : XParam
     {
         [LabelText("是否是世界空间坐标系")]
-        [BeanField(nameof(SetIsWorldSpace))]
+        [BeanField(nameof(SetIsWorldSpace),Order = 1)]
         public bool isWorldSpace;
         
         [LabelText("偏移")]
-        [BeanField(nameof(SetOffset))]
+        [BeanField(nameof(SetOffset),Order = 2)]
         public Vector3 offset;
         
         [LabelText("大小")]
-        [BeanField(nameof(SetSize))]
+        [BeanField(nameof(SetSize),Order = 3)]
         public Vector3 size;
         
         [LabelText("旋转")]
-        [BeanField(nameof(SetRotation))]
+        [BeanField(nameof(SetRotation),Order = 4)]
         public Vector3 rotation;
         
         [LabelText("监测层级")]
-        [BeanField(nameof(SetLayer), LubanType = "int")]
+        [BeanField(nameof(SetLayer), LubanType = "int",Order = 5)]
         public LayerMask layer;
         
         

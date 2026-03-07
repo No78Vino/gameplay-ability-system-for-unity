@@ -19,7 +19,7 @@
     "AbilityLogic": {
       "$type": "ALMove",
       "Param": {
-        "Value": 0.5
+        "RotationOffset": 0.5
       }
     }
   },

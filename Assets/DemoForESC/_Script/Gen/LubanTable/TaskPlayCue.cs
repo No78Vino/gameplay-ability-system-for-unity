@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class TaskPlayCue : AbilityTask
+/// <summary>
+/// Task: TaskPlayCue
+/// </summary>
+public sealed partial class TaskPlayCue : AbilityTaskBase
 {
     public TaskPlayCue(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class TaskPlayCue : AbilityTask
         return new TaskPlayCue(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamCue Param;
    
     public const int __ID__ = -1232667398;

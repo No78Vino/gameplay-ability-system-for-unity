@@ -20,7 +20,7 @@ public sealed partial class mmc : Luban.BeanBase
         { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
         { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
         { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-        { if(!_buf["MmcLogic"].IsObject) { throw new SerializationException(); }  MmcLogic = global::cfg.MmcLogic.DeserializeMmcLogic(_buf["MmcLogic"]);  }
+        { if(!_buf["MmcLogic"].IsObject) { throw new SerializationException(); }  MmcLogic = global::cfg.ModMagnitudeCalculationBase.DeserializeModMagnitudeCalculationBase(_buf["MmcLogic"]);  }
     }
 
     public static mmc Deserializemmc(JSONNode _buf)
@@ -43,7 +43,7 @@ public sealed partial class mmc : Luban.BeanBase
     /// <summary>
     /// mmc修改器计算逻辑：支持多态，添加新MmcLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
     /// </summary>
-    public readonly MmcLogic MmcLogic;
+    public readonly ModMagnitudeCalculationBase MmcLogic;
    
     public const int __ID__ = 622845467;
     public override int GetTypeId() => __ID__;

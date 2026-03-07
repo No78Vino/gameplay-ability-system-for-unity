@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamApplyEffects
+/// </summary>
 public sealed partial class XParamApplyEffects : XParam
 {
     public XParamApplyEffects(JSONNode _buf)  : base(_buf) 
@@ -26,7 +29,13 @@ public sealed partial class XParamApplyEffects : XParam
         return new XParamApplyEffects(_buf);
     }
 
+    /// <summary>
+    /// buff效果ID
+    /// </summary>
     public readonly int[] IDs;
+    /// <summary>
+    /// TargetCatcher
+    /// </summary>
     public readonly TargetCatcherBase TargetCatcher;
    
     public const int __ID__ = -91655831;

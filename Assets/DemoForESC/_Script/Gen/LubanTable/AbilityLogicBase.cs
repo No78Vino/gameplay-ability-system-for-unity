@@ -13,19 +13,23 @@ using SimpleJSON;
 
 namespace cfg
 {
-public abstract partial class AbilityLogic : Luban.BeanBase
+/// <summary>
+/// Ability逻辑基类
+/// </summary>
+public abstract partial class AbilityLogicBase : Luban.BeanBase
 {
-    public AbilityLogic(JSONNode _buf) 
+    public AbilityLogicBase(JSONNode _buf) 
     {
     }
 
-    public static AbilityLogic DeserializeAbilityLogic(JSONNode _buf)
+    public static AbilityLogicBase DeserializeAbilityLogicBase(JSONNode _buf)
     {
         switch ((string)_buf["$type"])
         {
-            case "ALDebugLog": return new ALDebugLog(_buf);
-            case "ALApplyEffect": return new ALApplyEffect(_buf);
+            case "ALDeath": return new ALDeath(_buf);
             case "ALMove": return new ALMove(_buf);
+            case "ALApplyEffect": return new ALApplyEffect(_buf);
+            case "ALDebugLog": return new ALDebugLog(_buf);
             case "ALTimeline": return new ALTimeline(_buf);
             default: throw new SerializationException();
         }

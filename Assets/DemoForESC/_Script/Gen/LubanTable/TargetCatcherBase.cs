@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// TargetCatcher基类
+/// </summary>
 public abstract partial class TargetCatcherBase : Luban.BeanBase
 {
     public TargetCatcherBase(JSONNode _buf) 
@@ -23,9 +26,9 @@ public abstract partial class TargetCatcherBase : Luban.BeanBase
     {
         switch ((string)_buf["$type"])
         {
+            case "CatchAreaBox3D": return new CatchAreaBox3D(_buf);
             case "CatchSelf": return new CatchSelf(_buf);
             case "CatchTarget": return new CatchTarget(_buf);
-            case "CatchAreaBox3D": return new CatchAreaBox3D(_buf);
             default: throw new SerializationException();
         }
     }

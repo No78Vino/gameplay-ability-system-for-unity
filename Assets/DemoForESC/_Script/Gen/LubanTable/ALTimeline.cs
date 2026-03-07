@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class ALTimeline : AbilityLogic
+/// <summary>
+/// Ability: ALTimeline
+/// </summary>
+public sealed partial class ALTimeline : AbilityLogicBase
 {
     public ALTimeline(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class ALTimeline : AbilityLogic
         return new ALTimeline(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamALTimelineID Param;
    
     public const int __ID__ = -1828067956;

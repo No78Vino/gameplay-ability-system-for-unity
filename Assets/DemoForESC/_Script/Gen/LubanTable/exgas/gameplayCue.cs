@@ -22,7 +22,7 @@ public sealed partial class gameplayCue : Luban.BeanBase
         { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
         { var __json0 = _buf["RequiredTag"]; if(!__json0.IsArray) { throw new SerializationException(); } RequiredTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RequiredTag.Add(__v0); }   }
         { var __json0 = _buf["ImmunityTag"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTag.Add(__v0); }   }
-        { if(!_buf["CueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.CueLogic.DeserializeCueLogic(_buf["CueLogic"]);  }
+        { if(!_buf["CueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.GameplayCueBase.DeserializeGameplayCueBase(_buf["CueLogic"]);  }
     }
 
     public static gameplayCue DeserializegameplayCue(JSONNode _buf)
@@ -53,7 +53,7 @@ public sealed partial class gameplayCue : Luban.BeanBase
     /// <summary>
     /// cue逻辑：支持多态，添加新CueLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
     /// </summary>
-    public readonly CueLogic CueLogic;
+    public readonly GameplayCueBase CueLogic;
    
     public const int __ID__ = 1239638405;
     public override int GetTypeId() => __ID__;

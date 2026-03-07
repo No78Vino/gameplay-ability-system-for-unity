@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamCatchAreaBox3D
+/// </summary>
 public sealed partial class XParamCatchAreaBox3D : XParam
 {
     public XParamCatchAreaBox3D(JSONNode _buf)  : base(_buf) 
@@ -29,10 +32,25 @@ public sealed partial class XParamCatchAreaBox3D : XParam
         return new XParamCatchAreaBox3D(_buf);
     }
 
+    /// <summary>
+    /// isWorldSpace
+    /// </summary>
     public readonly bool IsWorldSpace;
+    /// <summary>
+    /// offset
+    /// </summary>
     public readonly vector3 Offset;
+    /// <summary>
+    /// size
+    /// </summary>
     public readonly vector3 Size;
+    /// <summary>
+    /// rotation
+    /// </summary>
     public readonly vector3 Rotation;
+    /// <summary>
+    /// layer
+    /// </summary>
     public readonly int Layer;
    
     public const int __ID__ = 1103905513;

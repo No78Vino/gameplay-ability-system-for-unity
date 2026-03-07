@@ -13,11 +13,14 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class ALMove : AbilityLogic
+/// <summary>
+/// Ability: ALMove
+/// </summary>
+public sealed partial class ALMove : AbilityLogicBase
 {
     public ALMove(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamFloat.DeserializeXParamFloat(_buf["Param"]);  }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamMove.DeserializeXParamMove(_buf["Param"]);  }
     }
 
     public static ALMove DeserializeALMove(JSONNode _buf)
@@ -25,7 +28,10 @@ public sealed partial class ALMove : AbilityLogic
         return new ALMove(_buf);
     }
 
-    public readonly XParamFloat Param;
+    /// <summary>
+    /// 参数
+    /// </summary>
+    public readonly XParamMove Param;
    
     public const int __ID__ = 1933486748;
     public override int GetTypeId() => __ID__;

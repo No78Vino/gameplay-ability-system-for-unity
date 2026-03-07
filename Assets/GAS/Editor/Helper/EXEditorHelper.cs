@@ -64,47 +64,104 @@ namespace GAS.Editor
             public string Setter;     // Setter 方法名（attr.Setter）  
             public string LubanType;  // Luban 类型（attr.LubanType，可能为 null）  
             public Type MemberType;   // 成员的 C# 类型  
-            public string Comment;    // 注释  
+            public string Comment;    // 注释 
+            public int Order;         // 排序权重（来自 BeanFieldAttribute.Order）  
         }  
   
-        public static List<BeanFieldInfo> GetBeanFields(Type runtimeParamType)  
+        public static List<BeanFieldInfo> GetBeanFields(Type runtimeParamType)    
+        {    
+            var result = new List<BeanFieldInfo>();    
+            if (runtimeParamType == null) return result;    
+  
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;    
+  
+            // 扫描字段    
+            foreach (var field in runtimeParamType.GetFields(bindingFlags))    
+            {    
+                var attr = field.GetCustomAttribute<GAS.Runtime.BeanFieldAttribute>();    
+                if (attr == null) continue;    
+                result.Add(new BeanFieldInfo    
+                {    
+                    Name = attr.Name ?? field.Name,    
+                    Setter = attr.Setter,    
+                    LubanType = attr.LubanType,    
+                    MemberType = field.FieldType,    
+                    Comment = attr.Comment,    
+                    Order = attr.Order,  
+                });    
+            }    
+  
+            // 扫描属性    
+            foreach (var prop in runtimeParamType.GetProperties(bindingFlags))    
+            {    
+                var attr = prop.GetCustomAttribute<GAS.Runtime.BeanFieldAttribute>();    
+                if (attr == null) continue;    
+                result.Add(new BeanFieldInfo    
+                {    
+                    Name = attr.Name ?? prop.Name,    
+                    Setter = attr.Setter,    
+                    LubanType = attr.LubanType,    
+                    MemberType = prop.PropertyType,    
+                    Comment = attr.Comment,    
+                    Order = attr.Order,  
+                });    
+            }    
+  
+            // 按 Order 排序（稳定排序，Order 相同时保持收集顺序）  
+            result.Sort((a, b) => a.Order.CompareTo(b.Order));  
+  
+            return result;    
+        }
+        
+        
+        /// <summary>  
+        /// 从运行时 XParam 类型中提取所有 [BeanPolymorphicField] 标注的字段/属性信息  
+        /// </summary>  
+        public struct BeanPolymorphicFieldInfo  
         {  
-            var result = new List<BeanFieldInfo>();  
+            public string BeanFieldName;        // 写入 __beans__.xlsx 的字段名  
+            public string LubanPolymorphicType; // Luban 多态抽象 Bean 类型名  
+            public string TypeSetter;           // 类型判别符 Setter  
+            public string ParamSetter;          // Param Setter  
+            public string ParamTypeResolver;    // 运行时 Param 类型解析方法  
+            public string HelperCategory;       // Editor Helper 类别  
+        }  
+  
+        public static List<BeanPolymorphicFieldInfo> GetBeanPolymorphicFields(Type runtimeParamType)  
+        {  
+            var result = new List<BeanPolymorphicFieldInfo>();  
             if (runtimeParamType == null) return result;  
   
             var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;  
   
-            // 扫描字段  
             foreach (var field in runtimeParamType.GetFields(bindingFlags))  
             {  
-                var attr = field.GetCustomAttribute<GAS.Runtime.BeanFieldAttribute>();  
+                var attr = field.GetCustomAttribute<GAS.Runtime.BeanPolymorphicFieldAttribute>();  
                 if (attr == null) continue;  
-                result.Add(new BeanFieldInfo  
-                {  
-                    Name = attr.Name ?? field.Name,  
-                    Setter = attr.Setter,  
-                    LubanType = attr.LubanType,  
-                    MemberType = field.FieldType,  
-                    Comment = attr.Comment,  
-                });  
+                result.Add(MapAttrToInfo(attr));  
             }  
   
-            // 扫描属性  
             foreach (var prop in runtimeParamType.GetProperties(bindingFlags))  
             {  
-                var attr = prop.GetCustomAttribute<GAS.Runtime.BeanFieldAttribute>();  
+                var attr = prop.GetCustomAttribute<GAS.Runtime.BeanPolymorphicFieldAttribute>();  
                 if (attr == null) continue;  
-                result.Add(new BeanFieldInfo  
-                {  
-                    Name = attr.Name ?? prop.Name,  
-                    Setter = attr.Setter,  
-                    LubanType = attr.LubanType,  
-                    MemberType = prop.PropertyType,  
-                    Comment = attr.Comment,  
-                });  
+                result.Add(MapAttrToInfo(attr));  
             }  
   
             return result;  
+  
+            static BeanPolymorphicFieldInfo MapAttrToInfo(GAS.Runtime.BeanPolymorphicFieldAttribute attr)  
+            {  
+                return new BeanPolymorphicFieldInfo  
+                {  
+                    BeanFieldName = attr.BeanFieldName,  
+                    LubanPolymorphicType = attr.LubanPolymorphicType,  
+                    TypeSetter = attr.TypeSetter,  
+                    ParamSetter = attr.ParamSetter,  
+                    ParamTypeResolver = attr.ParamTypeResolver,  
+                    HelperCategory = attr.HelperCategory,  
+                };  
+            }  
         }
         
         public static int GetFrameRate()

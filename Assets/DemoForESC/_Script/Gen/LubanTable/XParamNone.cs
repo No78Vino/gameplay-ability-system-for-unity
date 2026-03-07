@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamNone
+/// </summary>
 public sealed partial class XParamNone : XParam
 {
     public XParamNone(JSONNode _buf)  : base(_buf) 

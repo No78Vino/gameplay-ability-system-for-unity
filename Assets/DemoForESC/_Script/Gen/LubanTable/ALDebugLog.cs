@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class ALDebugLog : AbilityLogic
+/// <summary>
+/// Ability: ALDebugLog
+/// </summary>
+public sealed partial class ALDebugLog : AbilityLogicBase
 {
     public ALDebugLog(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class ALDebugLog : AbilityLogic
         return new ALDebugLog(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamString Param;
    
     public const int __ID__ = 796369212;

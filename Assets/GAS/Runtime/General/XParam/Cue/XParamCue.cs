@@ -11,13 +11,13 @@ namespace GAS.Runtime
         [ShowInInspector]
         [LabelText("需求标签")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
-        [BeanField(nameof(SetRequiredTags))]
+        [BeanField(nameof(SetRequiredTags),Order = 1)]
         public List<int> RequiredTags;
 
         [ShowInInspector] 
         [LabelText("免疫标签")] 
         [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
-        [BeanField(nameof(SetImmunityTags))]
+        [BeanField(nameof(SetImmunityTags),Order = 2)]
         public List<int> ImmunityTags;
         
         
@@ -25,13 +25,19 @@ namespace GAS.Runtime
         [LabelText("Cue类型")]
         [ValueDropdown(nameof(CueClassChoice))]
         [OnValueChanged(nameof(OnTypeChange))]
-        [BeanField(nameof(SetCueType))]
+        [BeanPolymorphicField(  
+            beanFieldName: "CueLogic",  
+            lubanPolymorphicType: nameof(GameplayCueBase),  
+            typeSetter: nameof(SetCueType),  
+            paramSetter: nameof(SetParam),  
+            ParamTypeResolver = "CueHelper.GetCueLogicParamType",  
+            HelperCategory = "Cue",
+            Order = 3)] 
         public string CueType { get; private set; }
 
         [ShowInInspector]
         [HideLabel]
         [HideReferenceObjectPicker]
-        [BeanField(nameof(SetParam), LubanType = "XParam")]
         public XParam Param { get; set; }
         
         public void SetCueType(string cueType)

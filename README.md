@@ -165,6 +165,12 @@ EX-GAS2.0还优化了分层，将数据层和逻辑层做了强分离。我提�
 
 EX-GAS 2.0 采用 **Excel → Luban → JSON** 的配置工作流,所有配置表位于 `配置工程目录/Datas/` 文件夹下。
 
+---
+### **Bean EX-GAS多态定义**
+
+详见[BeanMappingSpec.md](BeanMappingSpec.md)
+
+---
 ### 配置表文件列表
 
 | 配置表文件 | JSON 输出 | 用途 |  

@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamMMCScalable
+/// </summary>
 public sealed partial class XParamMMCScalable : XParam
 {
     public XParamMMCScalable(JSONNode _buf)  : base(_buf) 
@@ -26,7 +29,13 @@ public sealed partial class XParamMMCScalable : XParam
         return new XParamMMCScalable(_buf);
     }
 
+    /// <summary>
+    /// K
+    /// </summary>
     public readonly float K;
+    /// <summary>
+    /// B
+    /// </summary>
     public readonly float B;
    
     public const int __ID__ = 1587770339;

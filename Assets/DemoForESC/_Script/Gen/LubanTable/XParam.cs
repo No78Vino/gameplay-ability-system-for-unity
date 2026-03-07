@@ -14,7 +14,7 @@ using SimpleJSON;
 namespace cfg
 {
 /// <summary>
-/// EX-GAS内部通用的参数类型，所有自定义泛型类的参数都需要继承自XParam，以此来规范传参
+/// EX-GAS内部通用的参数类型，所有自定义泛型类的参数都需要继承自XParam
 /// </summary>
 public abstract partial class XParam : Luban.BeanBase
 {
@@ -26,22 +26,31 @@ public abstract partial class XParam : Luban.BeanBase
     {
         switch ((string)_buf["$type"])
         {
-            case "XParamNone": return new XParamNone(_buf);
-            case "XParamInt": return new XParamInt(_buf);
-            case "XParamFloat": return new XParamFloat(_buf);
-            case "XParamString": return new XParamString(_buf);
-            case "XParamArrayInt": return new XParamArrayInt(_buf);
-            case "XParamArrayFloat": return new XParamArrayFloat(_buf);
-            case "XParamArrayString": return new XParamArrayString(_buf);
-            case "XParamCueIDs": return new XParamCueIDs(_buf);
+            case "XParamCueList": return new XParamCueList(_buf);
+            case "XParamMove": return new XParamMove(_buf);
+            case "XParamCatchAreaBox3D": return new XParamCatchAreaBox3D(_buf);
+            case "XParamTimeline": return new XParamTimeline(_buf);
+            case "AttributeBasedMmcParam": return new AttributeBasedMmcParam(_buf);
+            case "MmcParaFloatScale": return new MmcParaFloatScale(_buf);
             case "XParamALTimelineID": return new XParamALTimelineID(_buf);
+            case "XParamApplyEffects": return new XParamApplyEffects(_buf);
+            case "XParamCueIDs": return new XParamCueIDs(_buf);
             case "XParamEffectIDs": return new XParamEffectIDs(_buf);
             case "XParamCue": return new XParamCue(_buf);
-            case "XParamMMCScalable": return new XParamMMCScalable(_buf);
             case "XParamLogging": return new XParamLogging(_buf);
+            case "XParamMountPrefab": return new XParamMountPrefab(_buf);
+            case "XParamPlaySound": return new XParamPlaySound(_buf);
+            case "XParamMMCScalable": return new XParamMMCScalable(_buf);
             case "XParamAnimator": return new XParamAnimator(_buf);
-            case "XParamCatchAreaBox3D": return new XParamCatchAreaBox3D(_buf);
-            case "XParamApplyEffects": return new XParamApplyEffects(_buf);
+            case "XParamArrayFloat": return new XParamArrayFloat(_buf);
+            case "XParamArrayInt": return new XParamArrayInt(_buf);
+            case "XParamBool": return new XParamBool(_buf);
+            case "XParamFloat": return new XParamFloat(_buf);
+            case "XParamInt": return new XParamInt(_buf);
+            case "XParamNone": return new XParamNone(_buf);
+            case "XParamString": return new XParamString(_buf);
+            case "XParamVector2": return new XParamVector2(_buf);
+            case "XParamVector3": return new XParamVector3(_buf);
             default: throw new SerializationException();
         }
     }

@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamInt
+/// </summary>
 public sealed partial class XParamInt : XParam
 {
     public XParamInt(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class XParamInt : XParam
         return new XParamInt(_buf);
     }
 
+    /// <summary>
+    /// 值
+    /// </summary>
     public readonly int Value;
    
     public const int __ID__ = 1093840026;

@@ -13,13 +13,16 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamCue
+/// </summary>
 public sealed partial class XParamCue : XParam
 {
     public XParamCue(JSONNode _buf)  : base(_buf) 
     {
         { var __json0 = _buf["RequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; RequiredTags = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RequiredTags[__index0++] = __v0; }   }
         { var __json0 = _buf["ImmunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; ImmunityTags = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags[__index0++] = __v0; }   }
-        { if(!_buf["CueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.CueLogic.DeserializeCueLogic(_buf["CueLogic"]);  }
+        { if(!_buf["CueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.GameplayCueBase.DeserializeGameplayCueBase(_buf["CueLogic"]);  }
     }
 
     public static XParamCue DeserializeXParamCue(JSONNode _buf)
@@ -27,9 +30,18 @@ public sealed partial class XParamCue : XParam
         return new XParamCue(_buf);
     }
 
+    /// <summary>
+    /// RequiredTags
+    /// </summary>
     public readonly int[] RequiredTags;
+    /// <summary>
+    /// ImmunityTags
+    /// </summary>
     public readonly int[] ImmunityTags;
-    public readonly CueLogic CueLogic;
+    /// <summary>
+    /// CueLogic
+    /// </summary>
+    public readonly GameplayCueBase CueLogic;
    
     public const int __ID__ = 1093834462;
     public override int GetTypeId() => __ID__;

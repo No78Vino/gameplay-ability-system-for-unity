@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamALTimelineID
+/// </summary>
 public sealed partial class XParamALTimelineID : XParam
 {
     public XParamALTimelineID(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class XParamALTimelineID : XParam
         return new XParamALTimelineID(_buf);
     }
 
+    /// <summary>
+    /// ID
+    /// </summary>
     public readonly int ID;
    
     public const int __ID__ = 1580163900;

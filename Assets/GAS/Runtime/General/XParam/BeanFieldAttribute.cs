@@ -1,5 +1,5 @@
-﻿// Assets/GAS/Runtime/General/XParam/BeanFieldAttribute.cs  
-using System;  
+﻿using System;  
+using System.Runtime.CompilerServices;  
   
 namespace GAS.Runtime  
 {  
@@ -26,9 +26,17 @@ namespace GAS.Runtime
         /// </summary>  
         public string Comment { get; set; }  
   
-        public BeanFieldAttribute(string setter)  
+        /// <summary>  
+        /// 字段在 Bean 中的排序权重。  
+        /// 默认值由 [CallerLineNumber] 自动填入源码行号，保证声明顺序。  
+        /// 也可显式指定: [BeanField("SetXxx", Order = 100)]  
+        /// </summary>  
+        public int Order { get; set; }  
+  
+        public BeanFieldAttribute(string setter, [CallerLineNumber] int order = 0)  
         {  
             Setter = setter;  
+            Order = order;  
         }  
     }  
 }

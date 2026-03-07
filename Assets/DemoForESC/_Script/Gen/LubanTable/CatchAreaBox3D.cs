@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// TargetCatcher: CatchAreaBox3D
+/// </summary>
 public sealed partial class CatchAreaBox3D : TargetCatcherBase
 {
     public CatchAreaBox3D(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class CatchAreaBox3D : TargetCatcherBase
         return new CatchAreaBox3D(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamCatchAreaBox3D Param;
    
     public const int __ID__ = 995044500;

@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class ALApplyEffect : AbilityLogic
+/// <summary>
+/// Ability: ALApplyEffect
+/// </summary>
+public sealed partial class ALApplyEffect : AbilityLogicBase
 {
     public ALApplyEffect(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class ALApplyEffect : AbilityLogic
         return new ALApplyEffect(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamEffectIDs Param;
    
     public const int __ID__ = -1283340940;

@@ -13,11 +13,14 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class TaskPlayCuePreset : AbilityTask
+/// <summary>
+/// Task: TaskPlayCuePreset
+/// </summary>
+public sealed partial class TaskPlayCuePreset : AbilityTaskBase
 {
     public TaskPlayCuePreset(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamCueIDs.DeserializeXParamCueIDs(_buf["Param"]);  }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamCueList.DeserializeXParamCueList(_buf["Param"]);  }
     }
 
     public static TaskPlayCuePreset DeserializeTaskPlayCuePreset(JSONNode _buf)
@@ -25,7 +28,10 @@ public sealed partial class TaskPlayCuePreset : AbilityTask
         return new TaskPlayCuePreset(_buf);
     }
 
-    public readonly XParamCueIDs Param;
+    /// <summary>
+    /// 参数
+    /// </summary>
+    public readonly XParamCueList Param;
    
     public const int __ID__ = 338274425;
     public override int GetTypeId() => __ID__;

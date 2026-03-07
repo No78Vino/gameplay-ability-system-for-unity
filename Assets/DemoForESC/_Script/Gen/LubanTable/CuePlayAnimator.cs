@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class CuePlayAnimator : CueLogic
+/// <summary>
+/// Cue: CuePlayAnimator
+/// </summary>
+public sealed partial class CuePlayAnimator : GameplayCueBase
 {
     public CuePlayAnimator(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class CuePlayAnimator : CueLogic
         return new CuePlayAnimator(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamAnimator Param;
    
     public const int __ID__ = -1994686482;

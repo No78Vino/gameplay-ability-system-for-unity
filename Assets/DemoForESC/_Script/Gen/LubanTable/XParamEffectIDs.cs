@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamEffectIDs
+/// </summary>
 public sealed partial class XParamEffectIDs : XParam
 {
     public XParamEffectIDs(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class XParamEffectIDs : XParam
         return new XParamEffectIDs(_buf);
     }
 
+    /// <summary>
+    /// IDs
+    /// </summary>
     public readonly int[] IDs;
    
     public const int __ID__ = -749644814;

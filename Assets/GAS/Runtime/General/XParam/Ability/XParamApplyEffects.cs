@@ -17,13 +17,18 @@ namespace GAS.Runtime
         [LabelText("Catcher类型")]
         [ValueDropdown(nameof(CatcherClassChoice))]
         [OnValueChanged(nameof(OnTypeChange))]
-        [BeanField(nameof(SetCatcherType),Comment = "Catcher类型")] 
+        [BeanPolymorphicField(  
+            beanFieldName: "TargetCatcher",  
+            lubanPolymorphicType: nameof(TargetCatcherBase),  
+            typeSetter: nameof(SetCatcherType),  
+            paramSetter: nameof(SetParam),  
+            ParamTypeResolver = "TargetCatcherHelper.GetCatcherParamType",  
+            HelperCategory = "TargetCatcher")]  
         public string CatcherType { get; private set; }
 
         [ShowInInspector]
         [HideLabel]
         [HideReferenceObjectPicker]
-        [BeanField(nameof(SetParam))] 
         public XParam Param { get; set; }
         
         public void SetIDs(int[] value)

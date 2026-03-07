@@ -29,7 +29,7 @@ public sealed partial class ability : Luban.BeanBase
         { var __json0 = _buf["ActivationOwnedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationOwnedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationOwnedTags.Add(__v0); }   }
         { var __json0 = _buf["ActivationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationRequiredTags.Add(__v0); }   }
         { var __json0 = _buf["ActivationBlockedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationBlockedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationBlockedTags.Add(__v0); }   }
-        { if(!_buf["AbilityLogic"].IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogic.DeserializeAbilityLogic(_buf["AbilityLogic"]);  }
+        { if(!_buf["AbilityLogic"].IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogicBase.DeserializeAbilityLogicBase(_buf["AbilityLogic"]);  }
     }
 
     public static ability Deserializeability(JSONNode _buf)
@@ -73,7 +73,7 @@ public sealed partial class ability : Luban.BeanBase
     /// <summary>
     /// 技能逻辑：支持多态，添加新AbilityLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
     /// </summary>
-    public readonly AbilityLogic AbilityLogic;
+    public readonly AbilityLogicBase AbilityLogic;
    
     public const int __ID__ = 712278146;
     public override int GetTypeId() => __ID__;

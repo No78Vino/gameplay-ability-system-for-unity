@@ -13,7 +13,10 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class TaskApplyEffects : AbilityTask
+/// <summary>
+/// Task: TaskApplyEffects
+/// </summary>
+public sealed partial class TaskApplyEffects : AbilityTaskBase
 {
     public TaskApplyEffects(JSONNode _buf)  : base(_buf) 
     {
@@ -25,6 +28,9 @@ public sealed partial class TaskApplyEffects : AbilityTask
         return new TaskApplyEffects(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamApplyEffects Param;
    
     public const int __ID__ = -874109959;

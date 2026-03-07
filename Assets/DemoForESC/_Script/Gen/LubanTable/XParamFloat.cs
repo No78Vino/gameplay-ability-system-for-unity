@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamFloat
+/// </summary>
 public sealed partial class XParamFloat : XParam
 {
     public XParamFloat(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class XParamFloat : XParam
         return new XParamFloat(_buf);
     }
 
+    /// <summary>
+    /// 值
+    /// </summary>
     public readonly float Value;
    
     public const int __ID__ = -1089554361;

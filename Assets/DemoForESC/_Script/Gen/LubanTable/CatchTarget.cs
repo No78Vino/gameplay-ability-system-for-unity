@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// TargetCatcher: CatchTarget
+/// </summary>
 public sealed partial class CatchTarget : TargetCatcherBase
 {
     public CatchTarget(JSONNode _buf)  : base(_buf) 
@@ -25,6 +28,9 @@ public sealed partial class CatchTarget : TargetCatcherBase
         return new CatchTarget(_buf);
     }
 
+    /// <summary>
+    /// 参数
+    /// </summary>
     public readonly XParamNone Param;
    
     public const int __ID__ = -181355508;

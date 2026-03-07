@@ -9,37 +9,37 @@ namespace GAS.Runtime
     {
         [ShowInInspector]
         [LabelText("属性集Code")]
-        [BeanField(nameof(SetAttrSetCode), Comment = "属性集Code")]
+        [BeanField(nameof(SetAttrSetCode), Comment = "属性集Code",Order = 1)]
         [ValueDropdown(nameof(AttrSetChoices))]  
         [OnValueChanged(nameof(OnAttrSetChanged))]  
         public int AttrSetCode { get; private set; }
 
         [ShowInInspector]
         [LabelText("属性Code")]
-        [BeanField(nameof(SetAttrCode), Comment = "属性Code")]
+        [BeanField(nameof(SetAttrCode), Comment = "属性Code",Order = 2)]
         [ValueDropdown(nameof(AttrChoices))]  
         public int AttrCode { get; private set; }
 
         [ShowInInspector] 
         [LabelText("来源类型")]
         [EnumToggleButtons]
-        [BeanField(nameof(SetFromType), LubanType = "int")]  
+        [BeanField(nameof(SetFromType), LubanType = "int",Order = 3)]  
         public AttributeFromType FromType { get; private set; }
 
         [ShowInInspector]
         [LabelText("属性捕获类型")]
         [EnumToggleButtons]
-        [BeanField(nameof(SetCaptureType), LubanType = "int")]  
+        [BeanField(nameof(SetCaptureType), LubanType = "int",Order = 4)]  
         public AttributeCaptureType CaptureType { get; private set; }
 
         [ShowInInspector]
         [LabelText("系数K")]
-        [BeanField(nameof(SetK))]  
+        [BeanField(nameof(SetK),Order = 5)]  
         public float K { get; private set; } = 1f;
 
         [ShowInInspector]
         [LabelText("偏移B")] 
-        [BeanField(nameof(SetB))]  
+        [BeanField(nameof(SetB),Order = 6)]  
         public float B { get; private set; } = 0f;
 
         public void SetAttrSetCode(int v) => AttrSetCode = v;

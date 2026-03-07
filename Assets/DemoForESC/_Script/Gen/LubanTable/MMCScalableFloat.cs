@@ -13,11 +13,14 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class MMCScalableFloat : MmcLogic
+/// <summary>
+/// MMC: MMCScalableFloat
+/// </summary>
+public sealed partial class MMCScalableFloat : ModMagnitudeCalculationBase
 {
     public MMCScalableFloat(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.XParamMMCScalable.DeserializeXParamMMCScalable(_buf["Param"]);  }
+        { if(!_buf["Param"].IsObject) { throw new SerializationException(); }  Param = global::cfg.MmcParaFloatScale.DeserializeMmcParaFloatScale(_buf["Param"]);  }
     }
 
     public static MMCScalableFloat DeserializeMMCScalableFloat(JSONNode _buf)
@@ -25,7 +28,10 @@ public sealed partial class MMCScalableFloat : MmcLogic
         return new MMCScalableFloat(_buf);
     }
 
-    public readonly XParamMMCScalable Param;
+    /// <summary>
+    /// 参数
+    /// </summary>
+    public readonly MmcParaFloatScale Param;
    
     public const int __ID__ = -1201348828;
     public override int GetTypeId() => __ID__;

@@ -16,23 +16,110 @@ namespace GAS.Editor
             ["cfg.vector4"] = "new UnityEngine.Vector4({0}.X, {0}.Y, {0}.Z, {0}.W)",
         };
 
-        private static void WriteFieldAssignment(  
-            IndentedWriter writer,  
-            string paramVar,  
-            string setter,           // BeanFieldAttribute.Setter  
-            string dataAccessExpr,  
-            Type fieldType)  
-        {  
-            var typeName = fieldType.FullName ?? fieldType.Name;  
-            if (LubanTypeConversionMap.TryGetValue(typeName, out var template))  
-            {  
-                var converted = string.Format(template, dataAccessExpr);  
-                writer.WriteLine($"{paramVar}?.{setter}({converted});");  
-            }  
-            else  
-            {  
-                writer.WriteLine($"{paramVar}?.{setter}({dataAccessExpr});");  
-            }  
+        private static void WriteFieldAssignment(
+            IndentedWriter writer,
+            string paramVar,
+            string setter, // BeanFieldAttribute.Setter  
+            string dataAccessExpr,
+            Type fieldType)
+        {
+            var typeName = fieldType.FullName ?? fieldType.Name;
+            if (LubanTypeConversionMap.TryGetValue(typeName, out var template))
+            {
+                var converted = string.Format(template, dataAccessExpr);
+                writer.WriteLine($"{paramVar}?.{setter}({converted});");
+            }
+            else
+            {
+                writer.WriteLine($"{paramVar}?.{setter}({dataAccessExpr});");
+            }
+        }
+
+        /// <summary>  
+        /// 生成多态 Bean 的拆解代码（通用逻辑）  
+        /// 包括: 设置 TypeName、创建 Param 实例、switch-case 逐子类赋值、设置 Param  
+        /// </summary>  
+        private static void WritePolymorphicFieldAssignment(
+            IndentedWriter writer,
+            string paramVar, // 宿主变量名, e.g. "tp"  
+            string dataAccessExpr, // 数据访问路径, e.g. "taskData.Param.CueLogic"  
+            EXEditorHelper.BeanPolymorphicFieldInfo polyInfo,
+            IEnumerable<Type> subtypes, // 多态子类列表  
+            Func<string, Type> getParamTypeByName) // subtypeName → runtime XParam type  
+        {
+            writer.WriteLine($"// [BeanPolymorphicField] {polyInfo.BeanFieldName}");
+            writer.WriteLine($"var polyBean = {dataAccessExpr};");
+            writer.WriteLine($"{paramVar}?.{polyInfo.TypeSetter}(polyBean.GetType().Name);");
+            writer.WriteLine($"var resolvedParamType = {polyInfo.ParamTypeResolver}(polyBean.GetType().Name);");
+            writer.WriteLine("var resolvedParam = Activator.CreateInstance(resolvedParamType) as XParam;");
+            writer.WriteLine("if (resolvedParam != null)");
+            writer.WriteLine("{");
+            writer.Indent++;
+            {
+                writer.WriteLine("switch (polyBean)");
+                writer.WriteLine("{");
+                writer.Indent++;
+                {
+                    foreach (var subtype in subtypes)
+                    {
+                        var subtypeName = subtype.Name;
+                        var runtimeParamType = getParamTypeByName(subtypeName);
+
+                        // 检查 cfg 侧是否有 Param 成员  
+                        var tType = ReflectionHelper.GetMemberType($"cfg.{subtypeName}", "Param");
+                        if (tType == null) continue;
+
+                        writer.WriteLine($"case cfg.{subtypeName} pData:");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine($"var rp = resolvedParam as {runtimeParamType.FullName};");
+
+                        var beanFields = EXEditorHelper.GetBeanFields(runtimeParamType);
+                        foreach (var bf in beanFields)
+                            WriteFieldAssignment(writer, "rp", bf.Setter, $"pData.Param.{bf.Name}", bf.MemberType);
+
+                        writer.WriteLine("resolvedParam = rp;");
+                        writer.WriteLine("break;");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                    }
+
+                    writer.WriteLine("default:");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine(
+                        $"Debug.LogError($\"[XLuban] Unknown {polyInfo.BeanFieldName} type: {{polyBean.GetType().Name}}\");");
+                    writer.WriteLine("break;");
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                }
+                writer.Indent--;
+                writer.WriteLine("}");
+            }
+            writer.Indent--;
+            writer.WriteLine("}");
+            writer.WriteLine($"{paramVar}?.{polyInfo.ParamSetter}(resolvedParam);");
+        }
+
+
+        private static (IEnumerable<Type> subtypes, Func<string, Type> getParamType)
+            GetPolymorphicHelperInfo(string helperCategory)
+        {
+            switch (helperCategory)
+            {
+                case "Cue":
+                    return (
+                        EditorCueHelper.GetCachedCueTypes(),
+                        name => EditorCueHelper.CueToCueParamTypeMap()[name]
+                    );
+                case "TargetCatcher":
+                    return (
+                        EditorTargetCatcherHelper.GetCachedTargetCatcherTypes(),
+                        name => EditorTargetCatcherHelper.CatcherToParamTypeMap()[name]
+                    );
+                default:
+                    throw new ArgumentException($"Unknown HelperCategory: {helperCategory}");
+            }
         }
 
         public static void GenerateLubanExtension()
@@ -98,7 +185,8 @@ namespace GAS.Editor
                     writer.WriteLine("public static void LoadTablesForEditor()");
                     writer.WriteLine("{");
                     writer.Indent++;
-                    writer.WriteLine("_tables = new Tables(file => JSON.Parse(File.ReadAllText($\"{GAME_CONF_DIR}/{file}.json\")));");
+                    writer.WriteLine(
+                        "_tables = new Tables(file => JSON.Parse(File.ReadAllText($\"{GAME_CONF_DIR}/{file}.json\")));");
                     writer.Indent--;
                     writer.WriteLine("}");
 
@@ -192,21 +280,32 @@ namespace GAS.Editor
                         {
                             var allCue = EditorCueHelper.GetCachedCueTypes();
                             var cueTypes = allCue as Type[] ?? allCue.ToArray();
-                            foreach (var cueType in cueTypes)  
-                            {  
-                                var cueName = cueType.Name;  
-                                var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];  
-                                Type tType = ReflectionHelper.GetMemberType($"cfg.{cueName}", "Param");  
-                                if (tType == null) continue;  
-  
-                                writer.WriteLine($"case cfg.{cueName} cData:");  
-                                writer.WriteLine("{");  
-                                writer.Indent++;  
-                                writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");  
-  
-                                var beanFields = EXEditorHelper.GetBeanFields(cueParamType);  
-                                foreach (var bf in beanFields)  
-                                    WriteFieldAssignment(writer, "cp", bf.Setter, $"cData.Param.{bf.Name}", bf.MemberType);
+                            foreach (var cueType in cueTypes)
+                            {
+                                var cueName = cueType.Name;
+                                var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueName];
+                                Type tType = ReflectionHelper.GetMemberType($"cfg.{cueName}", "Param");
+                                if (tType == null) continue;
+
+                                writer.WriteLine($"case cfg.{cueName} cData:");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");
+
+                                // 标准 BeanField 赋值  
+                                var beanFields = EXEditorHelper.GetBeanFields(cueParamType);
+                                foreach (var bf in beanFields)
+                                    WriteFieldAssignment(writer, "cp", bf.Setter, $"cData.Param.{bf.Name}",
+                                        bf.MemberType);
+
+                                // 多态 BeanPolymorphicField 赋值  
+                                var polyFields = EXEditorHelper.GetBeanPolymorphicFields(cueParamType);
+                                foreach (var pf in polyFields)
+                                {
+                                    var (subtypes, getParamType) = GetPolymorphicHelperInfo(pf.HelperCategory);
+                                    WritePolymorphicFieldAssignment(writer, "cp", $"cData.Param.{pf.BeanFieldName}", pf,
+                                        subtypes, getParamType);
+                                }
 
                                 writer.WriteLine("cueParam = cp;");
                                 writer.WriteLine("break;");
@@ -524,24 +623,37 @@ namespace GAS.Editor
 
                                 var allAbilities = EditorAbilityHelper.GetCachedAbilityLogicTypes();
                                 var abilityTypes = allAbilities as Type[] ?? allAbilities.ToArray();
-                                foreach (var abilityType in abilityTypes)  
-                                {  
-                                    var abilityTypeName = abilityType.Name;  
-                                    var abilityParamType = EditorAbilityHelper.AbilityToAbilityParamTypeMap()[abilityTypeName];  
-                                    Type tType = ReflectionHelper.GetMemberType($"cfg.{abilityTypeName}", "Param");  
-                                    if (tType == null) continue;  
-  
-                                    writer.WriteLine($"case cfg.{abilityTypeName} aData:");  
-                                    writer.WriteLine("{");  
-                                    writer.Indent++;  
-                                    writer.WriteLine($"var ap = abilityParam as {abilityParamType.FullName};");  
-                                    var beanFields = EXEditorHelper.GetBeanFields(abilityParamType);  
-                                    foreach (var bf in beanFields)  
-                                        WriteFieldAssignment(writer, "ap", bf.Setter, $"aData.Param.{bf.Name}", bf.MemberType);
+                                foreach (var abilityType in abilityTypes)
+                                {
+                                    var abilityTypeName = abilityType.Name;
+                                    var abilityParamType =
+                                        EditorAbilityHelper.AbilityToAbilityParamTypeMap()[abilityTypeName];
+                                    Type tType = ReflectionHelper.GetMemberType($"cfg.{abilityTypeName}", "Param");
+                                    if (tType == null) continue;
+
+                                    writer.WriteLine($"case cfg.{abilityTypeName} aData:");
+                                    writer.WriteLine("{");
+                                    writer.Indent++;
+                                    writer.WriteLine($"var ap = abilityParam as {abilityParamType.FullName};");
+
+                                    // 标准 BeanField 赋值  
+                                    var beanFields = EXEditorHelper.GetBeanFields(abilityParamType);
+                                    foreach (var bf in beanFields)
+                                        WriteFieldAssignment(writer, "ap", bf.Setter, $"aData.Param.{bf.Name}",
+                                            bf.MemberType);
+
+                                    // 多态 BeanPolymorphicField 赋值  
+                                    var polyFields = EXEditorHelper.GetBeanPolymorphicFields(abilityParamType);
+                                    foreach (var pf in polyFields)
+                                    {
+                                        var (subtypes, getParamType) = GetPolymorphicHelperInfo(pf.HelperCategory);
+                                        WritePolymorphicFieldAssignment(writer, "ap", $"aData.Param.{pf.BeanFieldName}",
+                                            pf, subtypes, getParamType);
+                                    }
 
                                     if (abilityParamType.Name == "XParamALTimelineID")
                                     {
-                                        // 特殊处理TimelineAbility的Param，主动生成XParamTimeline的缓存
+                                        // 特殊处理TimelineAbility的Param，主动生成XParamTimeline的缓存  
                                         writer.WriteLine("// 缓存Timeline参数");
                                         writer.WriteLine("if (ap != null)");
                                         writer.WriteLine("{");
@@ -617,20 +729,32 @@ namespace GAS.Editor
 
                             var mmcs = EditorMmcHelper.GetCachedMmcTypes();
                             var mmcTypes = mmcs as Type[] ?? mmcs.ToArray();
-                            foreach (var mmcType in mmcTypes)  
-                            {  
-                                var mmcTypeName = mmcType.Name;  
-                                var mmcParamType = EditorMmcHelper.MmcToMmcParamTypeMap()[mmcTypeName];  
-                                var tType = ReflectionHelper.GetMemberType($"cfg.{mmcTypeName}", "Param");  
-                                if (tType == null) continue;  
-  
-                                writer.WriteLine($"case cfg.{mmcTypeName} mmcData:");  
-                                writer.WriteLine("{");  
-                                writer.Indent++;  
-                                writer.WriteLine($"var mp = mmcParam as {mmcParamType.FullName};");  
-                                var beanFields = EXEditorHelper.GetBeanFields(mmcParamType);  
-                                foreach (var bf in beanFields)  
-                                    WriteFieldAssignment(writer, "mp", bf.Setter, $"mmcData.Param.{bf.Name}", bf.MemberType);
+                            foreach (var mmcType in mmcTypes)
+                            {
+                                var mmcTypeName = mmcType.Name;
+                                var mmcParamType = EditorMmcHelper.MmcToMmcParamTypeMap()[mmcTypeName];
+                                var tType = ReflectionHelper.GetMemberType($"cfg.{mmcTypeName}", "Param");
+                                if (tType == null) continue;
+
+                                writer.WriteLine($"case cfg.{mmcTypeName} mmcData:");
+                                writer.WriteLine("{");
+                                writer.Indent++;
+                                writer.WriteLine($"var mp = mmcParam as {mmcParamType.FullName};");
+
+                                // 标准 BeanField 赋值  
+                                var beanFields = EXEditorHelper.GetBeanFields(mmcParamType);
+                                foreach (var bf in beanFields)
+                                    WriteFieldAssignment(writer, "mp", bf.Setter, $"mmcData.Param.{bf.Name}",
+                                        bf.MemberType);
+
+                                // 多态 BeanPolymorphicField 赋值  
+                                var polyFields = EXEditorHelper.GetBeanPolymorphicFields(mmcParamType);
+                                foreach (var pf in polyFields)
+                                {
+                                    var (subtypes, getParamType) = GetPolymorphicHelperInfo(pf.HelperCategory);
+                                    WritePolymorphicFieldAssignment(writer, "mp", $"mmcData.Param.{pf.BeanFieldName}",
+                                        pf, subtypes, getParamType);
+                                }
 
                                 writer.WriteLine("mmcParam = mp;");
                                 writer.WriteLine("break;");
@@ -765,22 +889,33 @@ namespace GAS.Editor
 
                         var allTasks = EditorAbilityHelper.GetCachedAbilityTaskTypes();
                         var taskTypes = allTasks as Type[] ?? allTasks.ToArray();
-                        foreach (var taskType in taskTypes)  
-                        {  
-                            var taskTypeName = taskType.Name;  
-                            var taskParamType = EditorAbilityHelper.AbilityTaskToAbilityTaskParamTypeMap()[taskTypeName];  
-                            var tType = ReflectionHelper.GetMemberType($"cfg.{taskTypeName}", "Param");  
-                            if (tType == null) continue;  
-  
-                            writer.WriteLine($"case cfg.{taskTypeName} taskData:");  
-                            writer.WriteLine("{");  
-                            writer.Indent++;  
-                            writer.WriteLine($"var tp = taskParam as {taskParamType.FullName};");  
-  
-                            var beanFields = EXEditorHelper.GetBeanFields(taskParamType);  
-                            foreach (var bf in beanFields)  
-                                WriteFieldAssignment(writer, "tp", bf.Setter, $"taskData.Param.{bf.Name}", bf.MemberType);
+                        foreach (var taskType in taskTypes)
+                        {
+                            var taskTypeName = taskType.Name;
+                            var taskParamType =
+                                EditorAbilityHelper.AbilityTaskToAbilityTaskParamTypeMap()[taskTypeName];
+                            var tType = ReflectionHelper.GetMemberType($"cfg.{taskTypeName}", "Param");
+                            if (tType == null) continue;
 
+                            writer.WriteLine($"case cfg.{taskTypeName} taskData:");
+                            writer.WriteLine("{");
+                            writer.Indent++;
+                            writer.WriteLine($"var tp = taskParam as {taskParamType.FullName};");
+
+                            // 标准 BeanField 赋值  
+                            var beanFields = EXEditorHelper.GetBeanFields(taskParamType);
+                            foreach (var bf in beanFields)
+                                WriteFieldAssignment(writer, "tp", bf.Setter, $"taskData.Param.{bf.Name}",
+                                    bf.MemberType);
+
+                            // 多态 BeanPolymorphicField 赋值  
+                            var polyFields = EXEditorHelper.GetBeanPolymorphicFields(taskParamType);
+                            foreach (var pf in polyFields)
+                            {
+                                var (subtypes, getParamType) = GetPolymorphicHelperInfo(pf.HelperCategory);
+                                WritePolymorphicFieldAssignment(writer, "tp", $"taskData.Param.{pf.BeanFieldName}", pf,
+                                    subtypes, getParamType);
+                            }
 
                             writer.WriteLine("taskParam = tp;");
                             writer.WriteLine("break;");
@@ -812,62 +947,6 @@ namespace GAS.Editor
 
                     writer.WriteLine("");
 
-                    #region 动态创建CueLogic
-
-                    writer.WriteLine(
-                        "private static GameplayCueUnit CreateCueLogicUnit(cfg.CueLogic cueLogic, int[] requiredTags, int[] immunityTags)");
-                    writer.WriteLine("{");
-                    writer.Indent++;
-                    {
-                        writer.WriteLine("var cueLogicName = cueLogic.GetType().Name;");
-                        writer.WriteLine("var cueParamType = CueHelper.GetCueLogicParamType(cueLogicName);");
-                        writer.WriteLine("var cueParam = Activator.CreateInstance(cueParamType) as XParam;");
-                        writer.WriteLine("if (cueParam != null)");
-                        writer.WriteLine("{");
-                        writer.Indent++;
-                        {
-                            writer.WriteLine("switch (cueLogic)");
-                            writer.WriteLine("{");
-                            writer.Indent++;
-
-
-                            var allCueLogic = EditorCueHelper.GetCachedCueTypes();
-                            var cueLogicTypes = allCueLogic as Type[] ?? allCueLogic.ToArray();
-                            foreach (var cueLogicType in cueLogicTypes)  
-                            {  
-                                var cueLogicTypeName = cueLogicType.Name;  
-                                var cueParamType = EditorCueHelper.CueToCueParamTypeMap()[cueLogicTypeName];  
-                                var tType = ReflectionHelper.GetMemberType($"cfg.{cueLogicTypeName}", "Param");  
-                                if (tType == null) continue;  
-  
-                                writer.WriteLine($"case cfg.{cueLogicTypeName} cData:");  
-                                writer.WriteLine("{");  
-                                writer.Indent++;  
-                                writer.WriteLine($"var cp = cueParam as {cueParamType.FullName};");  
-                                var beanFields = EXEditorHelper.GetBeanFields(cueParamType);  
-                                foreach (var bf in beanFields)  
-                                    WriteFieldAssignment(writer, "cp", bf.Setter, $"cData.Param.{bf.Name}", bf.MemberType);
-
-                                writer.WriteLine("cueParam = cp;");
-                                writer.WriteLine("break;");
-                                writer.Indent--;
-                                writer.WriteLine("}");
-                            }
-
-
-                            writer.Indent--;
-                            writer.WriteLine("}");
-                        }
-                        writer.Indent--;
-                        writer.WriteLine("}");
-                        writer.WriteLine("var cueLogicType = CueHelper.GetCueType(cueLogicName);");
-                        writer.WriteLine(
-                            "return new GameplayCueUnit(cueLogicType, cueParam, requiredTags, immunityTags);");
-                    }
-                    writer.Indent--;
-                    writer.WriteLine("}");
-
-                    #endregion
 
                     #region Utils
 
@@ -911,69 +990,6 @@ namespace GAS.Editor
 
                     #endregion
 
-                    #region TargetCatcher
-                    writer.WriteLine("");
-                    writer.WriteLine("#region TargetCatcher");
-                    writer.WriteLine("");
-                    writer.WriteLine(
-                        "public static void SetTargetCatcher(this GAS.Runtime.XParamApplyEffects param, cfg.TargetCatcherBase targetCatcher)");
-                    writer.WriteLine("{");
-                    writer.Indent++;
-                    {
-                        writer.WriteLine("param.SetCatcherType(targetCatcher.GetType().Name);");
-                        writer.WriteLine(
-                            "var catcherParamType = TargetCatcherHelper.GetCatcherParamType(targetCatcher.GetType().Name);");
-                        writer.WriteLine("var catcherParam = Activator.CreateInstance(catcherParamType) as XParam;");
-                        writer.WriteLine("if (catcherParam != null)");
-                        writer.WriteLine("{");
-                        writer.Indent++;
-                        {
-                            writer.WriteLine("switch (targetCatcher)");
-                            writer.WriteLine("{");
-                            writer.Indent++;
-                            {
-                                var catcherTypes = EditorTargetCatcherHelper.GetCachedTargetCatcherTypes();
-                                foreach (var catcherType in catcherTypes)  
-                                {  
-                                    var catcherName = catcherType.Name;  
-                                    var catcherParamType = EditorTargetCatcherHelper.CatcherToParamTypeMap()[catcherName];  
-  
-                                    writer.WriteLine($"case cfg.{catcherName} cData:");  
-                                    writer.WriteLine("{");  
-                                    writer.Indent++;  
-                                    writer.WriteLine($"var cp = catcherParam as {catcherParamType.FullName};");  
-                                    var beanFields = EXEditorHelper.GetBeanFields(catcherParamType);  
-                                    foreach (var bf in beanFields)  
-                                        WriteFieldAssignment(writer, "cp", bf.Setter, $"cData.Param.{bf.Name}", bf.MemberType);
-
-                                    writer.WriteLine("catcherParam = cp;");
-                                    writer.WriteLine("break;");
-                                    writer.Indent--;
-                                    writer.WriteLine("}");
-                                }
-
-                                writer.WriteLine("default:");
-                                writer.WriteLine("{");
-                                writer.Indent++;
-                                writer.WriteLine(
-                                    "Debug.LogError($\"[XLuban] Unknown TargetCatcher type: {targetCatcher.GetType().Name}\");");
-                                writer.WriteLine("break;");
-                                writer.Indent--;
-                                writer.WriteLine("}");
-                            }
-                            writer.Indent--;
-                            writer.WriteLine("}");
-                        }
-                        writer.Indent--;
-                        writer.WriteLine("}");
-                        writer.WriteLine("param.SetParam(catcherParam);");
-                    }
-                    writer.Indent--;
-                    writer.WriteLine("}");
-                    writer.WriteLine("");
-                    writer.WriteLine("#endregion");
-                    #endregion
-                    
                 }
                 writer.Indent--;
                 writer.WriteLine("}");

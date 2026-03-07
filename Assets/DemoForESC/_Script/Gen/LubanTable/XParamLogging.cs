@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 参数类型: XParamLogging
+/// </summary>
 public sealed partial class XParamLogging : XParam
 {
     public XParamLogging(JSONNode _buf)  : base(_buf) 
@@ -26,7 +29,13 @@ public sealed partial class XParamLogging : XParam
         return new XParamLogging(_buf);
     }
 
+    /// <summary>
+    /// 日志
+    /// </summary>
     public readonly string Value;
+    /// <summary>
+    /// 持续时长
+    /// </summary>
     public readonly float Duration;
    
     public const int __ID__ = 2019005066;

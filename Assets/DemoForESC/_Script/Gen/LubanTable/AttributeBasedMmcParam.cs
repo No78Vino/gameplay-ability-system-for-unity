@@ -13,9 +13,12 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class AttributeBasedMmcParam : Luban.BeanBase
+/// <summary>
+/// 参数类型: AttributeBasedMmcParam
+/// </summary>
+public sealed partial class AttributeBasedMmcParam : XParam
 {
-    public AttributeBasedMmcParam(JSONNode _buf) 
+    public AttributeBasedMmcParam(JSONNode _buf)  : base(_buf) 
     {
         { if(!_buf["AttrSetCode"].IsNumber) { throw new SerializationException(); }  AttrSetCode = _buf["AttrSetCode"]; }
         { if(!_buf["AttrCode"].IsNumber) { throw new SerializationException(); }  AttrCode = _buf["AttrCode"]; }
@@ -30,18 +33,37 @@ public sealed partial class AttributeBasedMmcParam : Luban.BeanBase
         return new AttributeBasedMmcParam(_buf);
     }
 
+    /// <summary>
+    /// 属性集Code
+    /// </summary>
     public readonly int AttrSetCode;
+    /// <summary>
+    /// 属性Code
+    /// </summary>
     public readonly int AttrCode;
+    /// <summary>
+    /// FromType
+    /// </summary>
     public readonly int FromType;
+    /// <summary>
+    /// CaptureType
+    /// </summary>
     public readonly int CaptureType;
+    /// <summary>
+    /// K
+    /// </summary>
     public readonly float K;
+    /// <summary>
+    /// B
+    /// </summary>
     public readonly float B;
    
     public const int __ID__ = -574920895;
     public override int GetTypeId() => __ID__;
 
-    public  void ResolveRef(Tables tables)
+    public override void ResolveRef(Tables tables)
     {
+        base.ResolveRef(tables);
     }
 
     public override string ToString()

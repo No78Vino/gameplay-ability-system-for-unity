@@ -332,19 +332,12 @@ namespace GAS.Editor
         /// </summary>  
         private static void CollectTargetCatcherBeans(List<BeanDefinition> beans)
         {
-            // 查找TargetCatcherBase类型  
-            var catcherBaseType = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .FirstOrDefault(t => t.Name == "TargetCatcherBase" || t.Name == "TargetCatcher`1");
-
-            if (catcherBaseType == null) return;
-
-            var catcherTypes = GetTypesInheritingFrom(catcherBaseType);
+            var catcherTypes = GetTypesInheritingFrom(typeof(TargetCatcherBase));
 
             // 添加抽象基类  
             beans.Add(new BeanDefinition
             {
-                Name = "TargetCatcherBase",
+                Name = "TargetCatcherBase", // 统一命名  
                 Parent = "",
                 Comment = "TargetCatcher基类",
                 IsAbstract = true
@@ -354,12 +347,13 @@ namespace GAS.Editor
             {
                 if (type.IsAbstract) continue;
 
-                var paramType = GetGenericParamType(type, catcherBaseType);
+                // 关键修复：用 typeof(TargetCatcherBase<>) 提取泛型参数 T  
+                var paramType = GetGenericParamType(type, typeof(TargetCatcherBase<>));
 
                 var bean = new BeanDefinition
                 {
                     Name = type.Name,
-                    Parent = "TargetCatcherBase",
+                    Parent = "TargetCatcherBase", // 统一命名  
                     Comment = GetXmlComment(type) ?? $"TargetCatcher: {type.Name}",
                     IsAbstract = false
                 };
@@ -451,42 +445,79 @@ namespace GAS.Editor
             return null;
         }
 
-        /// <summary>  
-        /// 从类型收集字段信息  
-        /// </summary>  
+        /// <summary>    
+        /// 从类型收集字段信息，按 Order 排序（默认为源码行号，由 [CallerLineNumber] 自动填入）    
+        /// 同时收集 [BeanField] 和 [BeanPolymorphicField] 标注的成员    
+        /// </summary>    
         private static void CollectFieldsFromType(Type type, BeanDefinition bean)
         {
-            // 扫描范围包含非公开成员，以支持 [BeanField] 标注在 private 成员上  
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var items = new List<(int order, BeanField beanField)>();
+
+            var fields = type.GetFields(bindingFlags);
+            var properties = type.GetProperties(bindingFlags);
+
+            // ── 扫描 [BeanField] ──  
 
             foreach (var field in fields)
             {
                 var attr = field.GetCustomAttribute<BeanFieldAttribute>();
-                if (attr == null) continue; // 只收录标注了 [BeanField] 的成员  
+                if (attr == null) continue;
 
-                bean.Fields.Add(new BeanField
+                items.Add((attr.Order, new BeanField
                 {
                     Name = attr.Name ?? field.Name,
                     Type = attr.LubanType ?? MapCSharpTypeToLubanType(field.FieldType),
                     Comment = attr.Comment ?? field.Name,
-                });
+                }));
             }
 
             foreach (var prop in properties)
             {
                 var attr = prop.GetCustomAttribute<BeanFieldAttribute>();
-                if (attr == null) continue; // 只收录标注了 [BeanField] 的成员  
+                if (attr == null) continue;
 
-                bean.Fields.Add(new BeanField
+                items.Add((attr.Order, new BeanField
                 {
                     Name = attr.Name ?? prop.Name,
                     Type = attr.LubanType ?? MapCSharpTypeToLubanType(prop.PropertyType),
                     Comment = attr.Comment ?? prop.Name,
-                });
+                }));
             }
-        }
 
+            // ── 扫描 [BeanPolymorphicField] ──  
+
+            foreach (var field in fields)
+            {
+                var polyAttr = field.GetCustomAttribute<BeanPolymorphicFieldAttribute>();
+                if (polyAttr == null) continue;
+
+                items.Add((polyAttr.Order, new BeanField
+                {
+                    Name = polyAttr.BeanFieldName,
+                    Type = polyAttr.LubanPolymorphicType,
+                    Comment = polyAttr.BeanFieldName,
+                }));
+            }
+
+            foreach (var prop in properties)
+            {
+                var polyAttr = prop.GetCustomAttribute<BeanPolymorphicFieldAttribute>();
+                if (polyAttr == null) continue;
+
+                items.Add((polyAttr.Order, new BeanField
+                {
+                    Name = polyAttr.BeanFieldName,
+                    Type = polyAttr.LubanPolymorphicType,
+                    Comment = polyAttr.BeanFieldName,
+                }));
+            }
+
+            // ── 按 Order 排序后写入 ──  
+            // 使用 LINQ OrderBy（稳定排序），Order 相同时保持收集顺序  
+            foreach (var item in items.OrderBy(x => x.order))
+                bean.Fields.Add(item.beanField);
+        }
 
         /// <summary>  
         /// C#类型映射到Luban类型  
@@ -507,14 +538,14 @@ namespace GAS.Editor
             if (type.IsArray)
             {
                 var elemType = type.GetElementType();
-                return $"(array#sep=,),{MapCSharpTypeToLubanType(elemType)}";
+                return $"(array#sep=;),{MapCSharpTypeToLubanType(elemType)}";
             }
 
             // List类型 → Luban bean 定义格式  
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var elemType = type.GetGenericArguments()[0];
-                return $"(array#sep=,),{MapCSharpTypeToLubanType(elemType)}";
+                return $"(array#sep=;),{MapCSharpTypeToLubanType(elemType)}";
             }
 
             // 默认返回类型名（自定义类型，如 CueLogic、TargetCatcher 等）  
@@ -529,7 +560,7 @@ namespace GAS.Editor
             // TODO: 从XML文档文件读取注释  
             return null;
         }
-        
+
         #endregion
 
         #region 生成和更新Excel
