@@ -121,9 +121,9 @@ namespace GAS.Runtime
                         cp?.SetPrefabPath(cData.Param.PrefabPath);
                         cp?.SetMountPointPath(cData.Param.MountPointPath);
                         cp?.SetFollowHost(cData.Param.FollowHost);
-                        cp?.SetLocalPosition(cData.Param.LocalPosition);
-                        cp?.SetLocalRotation(cData.Param.LocalRotation);
-                        cp?.SetLocalScale(cData.Param.LocalScale);
+                        cp?.SetLocalPosition(new Vector3(cData.Param.LocalPosition.X , cData.Param.LocalPosition.Y, cData.Param.LocalPosition.Z));
+                        cp?.SetLocalRotation(new Vector3(cData.Param.LocalRotation.X, cData.Param.LocalRotation.Y, cData.Param.LocalRotation.Z));
+                        cp?.SetLocalScale(new Vector3(cData.Param.LocalScale.X, cData.Param.LocalScale.Y, cData.Param.LocalScale.Z));
                         cp?.SetUseWorldSpace(cData.Param.UseWorldSpace);
                         cp?.SetLayer(cData.Param.Layer);
                         cp?.SetSortingOrder(cData.Param.SortingOrder);
@@ -544,11 +544,11 @@ namespace GAS.Runtime
                                         case cfg.CatchAreaBox3D pData:
                                         {
                                             var rp = resolvedParam as GAS.Runtime.XParamCatchAreaBox3D;
-                                            rp?.SetIsWorldSpace(pData.Param.isWorldSpace);
-                                            rp?.SetOffset(pData.Param.offset);
-                                            rp?.SetSize(pData.Param.size);
-                                            rp?.SetRotation(pData.Param.rotation);
-                                            rp?.SetLayer(pData.Param.layer);
+                                            rp?.SetIsWorldSpace(pData.Param.IsWorldSpace);
+                                            rp?.SetOffset(new Vector3(pData.Param.Offset.X, pData.Param.Offset.Y, pData.Param.Offset.Z));
+                                            rp?.SetSize(new Vector3(pData.Param.Size.X, pData.Param.Size.Y, pData.Param.Size.Z));
+                                            rp?.SetRotation(new Vector3(pData.Param.Rotation.X, pData.Param.Rotation.Y, pData.Param.Rotation.Z));
+                                            rp?.SetLayer(pData.Param.Layer);
                                             resolvedParam = rp;
                                             break;
                                         }
@@ -643,9 +643,9 @@ namespace GAS.Runtime
                                             rp?.SetPrefabPath(pData.Param.PrefabPath);
                                             rp?.SetMountPointPath(pData.Param.MountPointPath);
                                             rp?.SetFollowHost(pData.Param.FollowHost);
-                                            rp?.SetLocalPosition(pData.Param.LocalPosition);
-                                            rp?.SetLocalRotation(pData.Param.LocalRotation);
-                                            rp?.SetLocalScale(pData.Param.LocalScale);
+                                            rp?.SetLocalPosition(new Vector3(pData.Param.LocalPosition.X, pData.Param.LocalPosition.Y, pData.Param.LocalPosition.Z));
+                                            rp?.SetLocalRotation(new Vector3(pData.Param.LocalRotation.X, pData.Param.LocalRotation.Y, pData.Param.LocalRotation.Z));
+                                            rp?.SetLocalScale(new Vector3(pData.Param.LocalScale.X, pData.Param.LocalScale.Y, pData.Param.LocalScale.Z));
                                             rp?.SetUseWorldSpace(pData.Param.UseWorldSpace);
                                             rp?.SetLayer(pData.Param.Layer);
                                             rp?.SetSortingOrder(pData.Param.SortingOrder);

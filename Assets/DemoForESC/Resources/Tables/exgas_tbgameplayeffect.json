@@ -172,33 +172,6 @@
     }
   },
   {
-    "ID": 9001,
-    "Name": "奔跑耐力消耗",
-    "Desc": "耐力消耗1点",
-    "AssetTags": [],
-    "GrantedTags": [],
-    "ApplicationRequiredTags": [],
-    "OngoingRequiredTags": [],
-    "RemoveGameplayEffectsWithTags": [],
-    "ImmunityTags": [],
-    "Modifiers": [
-      {
-        "AttrSet": 1,
-        "Attribute": 6,
-        "Magnitude": 1,
-        "Operation": 3,
-        "Mmc": 1001
-      }
-    ],
-    "CueOnApply": [],
-    "CueOnTick": [],
-    "CueOnAdd": [],
-    "CueOnRemove": [],
-    "CueOnActivate": [],
-    "CueOnDeactivate": [],
-    "GrantedAbility": []
-  },
-  {
     "ID": 1006,
     "Name": "恢复2点耐力",
     "Desc": "耐力恢复2点/60帧",
@@ -298,6 +271,35 @@
         "AttrSet": 1,
         "Attribute": 1,
         "Magnitude": 10,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [
+      3000
+    ],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 9001,
+    "Name": "奔跑耐力消耗",
+    "Desc": "耐力消耗1点",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 1,
         "Operation": 3,
         "Mmc": 1001
       }

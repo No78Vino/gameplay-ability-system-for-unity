@@ -62,5 +62,18 @@
         "Duration": 30
       }
     }
+  },
+  {
+    "ID": 3000,
+    "Name": "受击倾斜效果",
+    "Desc": "受击倾斜效果",
+    "RequiredTag": [],
+    "ImmunityTag": [],
+    "CueLogic": {
+      "$type": "CueHitReaction",
+      "Param": {
+        "Value": 0.25
+      }
+    }
   }
 ]
