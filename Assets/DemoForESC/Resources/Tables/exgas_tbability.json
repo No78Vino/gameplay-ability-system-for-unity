@@ -15,7 +15,9 @@
       3001
     ],
     "ActivationRequiredTags": [],
-    "ActivationBlockedTags": [],
+    "ActivationBlockedTags": [
+      2010
+    ],
     "AbilityLogic": {
       "$type": "ALMove",
       "Param": {
