@@ -275,20 +275,23 @@ namespace EXUI
                 UnloadWindow(name);
         }
         
-        private void InsertModalBackdrop(BaseView modalView)  
-        {  
-            var backdropObj = new GameObject("ModalBackdrop");  
-            backdropObj.transform.SetParent(modalView.transform.parent, false);  
-            backdropObj.transform.SetSiblingIndex(modalView.transform.GetSiblingIndex()); // 插到 modal 正下方  
+        private void InsertModalBackdrop(BaseView modalView)    
+        {    
+            // ✅ 直接用 RectTransform 创建，避免 Transform → RectTransform 替换  
+            var backdropObj = new GameObject("ModalBackdrop", typeof(RectTransform));    
+            backdropObj.transform.SetParent(modalView.transform.parent, false);    
   
-            var image = backdropObj.AddComponent<Image>();  
-            image.color = new Color(0, 0, 0, 0.5f);  
-            image.raycastTarget = true; // ✅ 阻断下层点击  
+            var image = backdropObj.AddComponent<Image>();    
+            image.color = new Color(0, 0, 0, 0.5f);    
+            image.raycastTarget = true;    
   
-            var rt = backdropObj.GetComponent<RectTransform>();  
-            rt.anchorMin = Vector2.zero;  
-            rt.anchorMax = Vector2.one;  
-            rt.offsetMin = rt.offsetMax = Vector2.zero;  
+            var rt = backdropObj.GetComponent<RectTransform>();    
+            rt.anchorMin = Vector2.zero;    
+            rt.anchorMax = Vector2.one;    
+            rt.offsetMin = rt.offsetMax = Vector2.zero;    
+  
+            // ✅ 在所有组件添加完毕后再设置 sibling index  
+            backdropObj.transform.SetSiblingIndex(modalView.transform.GetSiblingIndex());    
         }
     }
 }
