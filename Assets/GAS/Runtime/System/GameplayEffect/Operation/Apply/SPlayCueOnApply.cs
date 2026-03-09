@@ -4,7 +4,7 @@ using Unity.Entities;
 namespace GAS.Runtime
 {
     [UpdateInGroup(typeof(SGApplyEffect))]
-    [UpdateBefore(typeof(SApplyEnd))]
+    [UpdateBefore(typeof(SGInstantEffect))]
     public partial struct SPlayCueOnApply : ISystem
     {
         [BurstCompile]
