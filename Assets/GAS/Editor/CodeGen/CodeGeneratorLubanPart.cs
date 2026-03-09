@@ -8,14 +8,23 @@ namespace GAS.Editor
 {
     public static class CodeGeneratorLubanPart
     {
-        // Luban cfg 类型 → Unity 类型转换模板（{0} 为字段访问表达式）  
-        private static readonly Dictionary<string, string> LubanTypeConversionMap = new()
-        {
-            ["cfg.vector3"] = "new UnityEngine.Vector3({0}.X, {0}.Y, {0}.Z)",
-            ["cfg.vector2"] = "new UnityEngine.Vector2({0}.X, {0}.Y)",
-            ["cfg.vector4"] = "new UnityEngine.Vector4({0}.X, {0}.Y, {0}.Z, {0}.W)",
+        // C# 运行时类型 FullName → Luban cfg 类型转换模板（{0} 为字段访问表达式）    
+        private static readonly Dictionary<string, string> LubanTypeConversionMap = new()  
+        {  
+            ["UnityEngine.Vector3"] = "new UnityEngine.Vector3({0}.X, {0}.Y, {0}.Z)",  
+            ["UnityEngine.Vector2"] = "new UnityEngine.Vector2({0}.X, {0}.Y)",  
+            ["UnityEngine.Vector4"] = "new UnityEngine.Vector4({0}.X, {0}.Y, {0}.Z, {0}.W)",  
         };
 
+        /// <summary>  
+        /// 将字段名首字母大写，匹配 Luban 的 format_property_name PascalCase 规则  
+        /// </summary>  
+        private static string ToPascalCase(string name)  
+        {  
+            if (string.IsNullOrEmpty(name)) return name;  
+            return char.ToUpperInvariant(name[0]) + name.Substring(1);  
+        }
+        
         private static void WriteFieldAssignment(
             IndentedWriter writer,
             string paramVar,
@@ -47,7 +56,7 @@ namespace GAS.Editor
             IEnumerable<Type> subtypes, // 多态子类列表  
             Func<string, Type> getParamTypeByName) // subtypeName → runtime XParam type  
         {
-            writer.WriteLine($"// [BeanPolymorphicField] {polyInfo.BeanFieldName}");
+            writer.WriteLine($"// [BeanPolymorphicField] {ToPascalCase(polyInfo.BeanFieldName)}");
             writer.WriteLine($"var polyBean = {dataAccessExpr};");
             writer.WriteLine($"{paramVar}?.{polyInfo.TypeSetter}(polyBean.GetType().Name);");
             writer.WriteLine($"var resolvedParamType = {polyInfo.ParamTypeResolver}(polyBean.GetType().Name);");
@@ -76,7 +85,7 @@ namespace GAS.Editor
 
                         var beanFields = EXEditorHelper.GetBeanFields(runtimeParamType);
                         foreach (var bf in beanFields)
-                            WriteFieldAssignment(writer, "rp", bf.Setter, $"pData.Param.{bf.Name}", bf.MemberType);
+                            WriteFieldAssignment(writer, "rp", bf.Setter, $"pData.Param.{ToPascalCase(bf.Name)}", bf.MemberType);
 
                         writer.WriteLine("resolvedParam = rp;");
                         writer.WriteLine("break;");
@@ -88,7 +97,7 @@ namespace GAS.Editor
                     writer.WriteLine("{");
                     writer.Indent++;
                     writer.WriteLine(
-                        $"Debug.LogError($\"[XLuban] Unknown {polyInfo.BeanFieldName} type: {{polyBean.GetType().Name}}\");");
+                        $"Debug.LogError($\"[XLuban] Unknown {ToPascalCase(polyInfo.BeanFieldName)} type: {{polyBean.GetType().Name}}\");");
                     writer.WriteLine("break;");
                     writer.Indent--;
                     writer.WriteLine("}");
@@ -295,7 +304,7 @@ namespace GAS.Editor
                                 // 标准 BeanField 赋值  
                                 var beanFields = EXEditorHelper.GetBeanFields(cueParamType);
                                 foreach (var bf in beanFields)
-                                    WriteFieldAssignment(writer, "cp", bf.Setter, $"cData.Param.{bf.Name}",
+                                    WriteFieldAssignment(writer, "cp", bf.Setter, $"cData.Param.{ToPascalCase(bf.Name)}",
                                         bf.MemberType);
 
                                 // 多态 BeanPolymorphicField 赋值  
@@ -639,7 +648,7 @@ namespace GAS.Editor
                                     // 标准 BeanField 赋值  
                                     var beanFields = EXEditorHelper.GetBeanFields(abilityParamType);
                                     foreach (var bf in beanFields)
-                                        WriteFieldAssignment(writer, "ap", bf.Setter, $"aData.Param.{bf.Name}",
+                                        WriteFieldAssignment(writer, "ap", bf.Setter, $"aData.Param.{ToPascalCase(bf.Name)}",
                                             bf.MemberType);
 
                                     // 多态 BeanPolymorphicField 赋值  
@@ -744,7 +753,7 @@ namespace GAS.Editor
                                 // 标准 BeanField 赋值  
                                 var beanFields = EXEditorHelper.GetBeanFields(mmcParamType);
                                 foreach (var bf in beanFields)
-                                    WriteFieldAssignment(writer, "mp", bf.Setter, $"mmcData.Param.{bf.Name}",
+                                    WriteFieldAssignment(writer, "mp", bf.Setter, $"mmcData.Param.{ToPascalCase(bf.Name)}",
                                         bf.MemberType);
 
                                 // 多态 BeanPolymorphicField 赋值  
@@ -905,7 +914,7 @@ namespace GAS.Editor
                             // 标准 BeanField 赋值  
                             var beanFields = EXEditorHelper.GetBeanFields(taskParamType);
                             foreach (var bf in beanFields)
-                                WriteFieldAssignment(writer, "tp", bf.Setter, $"taskData.Param.{bf.Name}",
+                                WriteFieldAssignment(writer, "tp", bf.Setter, $"taskData.Param.{ToPascalCase(bf.Name)}",
                                     bf.MemberType);
 
                             // 多态 BeanPolymorphicField 赋值  
@@ -913,7 +922,7 @@ namespace GAS.Editor
                             foreach (var pf in polyFields)
                             {
                                 var (subtypes, getParamType) = GetPolymorphicHelperInfo(pf.HelperCategory);
-                                WritePolymorphicFieldAssignment(writer, "tp", $"taskData.Param.{pf.BeanFieldName}", pf,
+                                WritePolymorphicFieldAssignment(writer, "tp", $"taskData.Param.{ToPascalCase(pf.BeanFieldName)}", pf,
                                     subtypes, getParamType);
                             }
 
