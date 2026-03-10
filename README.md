@@ -1650,6 +1650,59 @@ Ability运作逻辑的组成可以拆成两部分：
 | **ActivationBlockedTags** | Tag | - | 整数数组 | Owner 拥有**任意**这些 Tag 时无法激活。用于定义激活的禁止条件 | 攻击时阻止 `State.Attacking`(防止重复攻击),眩晕时阻止 `State.Stunned`(无法行动),沉默时阻止 `State.Silenced`(无法施法) |
 | **AbilityLogic** | 逻辑 | ✓ | 多态对象 | 定义 Ability 的具体执行逻辑和参数。包含 `$type`(逻辑类型名)和 `Param`(逻辑参数对象)两个字段。不同的逻辑类型对应不同的参数结构 | `ALMove` 实现移动控制,`ALApplyEffect` 施加 GameplayEffect,`ALTimeline` 执行基于时间轴的复杂技能序列,`ALDebugLog` 输出调试信息 |
 
+
+---
+##### Cooldown (冷却) 配置设计准则
+
+> Cooldown 通过一个 **Durational 类型的 GameplayEffect** 来管理冷却状态。冷却 GE 在生效期间会通过 `GrantedTags` 向 Owner ASC 授予冷却标签，
+> 框架通过检查 ASC 上是否存在冷却标签来判断技能是否处于冷却中。
+
+**配置字段**
+
+| 字段 | 说明 |
+|------|------|
+| `CdEffect` | 冷却 GE 的 ID。该 GE **必须**为 Durational 类型，且**必须**配置 `GrantedTags`（如 `Cooldown.Fireball`） |
+| `Cd` | 冷却时长（帧数）。运行时会**覆盖** `CdEffect` 引用的 GE 的 Duration 字段。允许多个 Ability 复用同一个 CdEffect 模板但配置不同冷却时长 |
+
+**冷却判断机制**
+
+冷却状态的判断基于 **Tag 匹配**，而非 GE 实例引用：
+- 启动冷却时，冷却 GE 被 Apply 并 Activate，其 `GrantedTags` 授予给 Owner ASC
+- 检查冷却时，`CheckCooldownReady` 检查 Owner ASC 是否拥有冷却 GE 的 `GrantedTags` 中的**任意一个**
+- 冷却 GE 到期后，框架自动移除 `GrantedTags`，冷却检查通过
+
+**执行时机**
+
+冷却的启动**不是框架自动执行的**，而是由开发者在 `AbilityLogic` 中自行调用 `GAUtil.DoCooldown(ability)` 或使用 `TaskDoCooldown` 任务节点。
+这样设计是为了支持**前摇打断**等场景——技能激活后若在前摇阶段被打断，冷却不会生效。
+
+**CdEffect GE 配置要求**
+
+| 组件 | 必须 | 说明 |
+|------|------|------|
+| `Duration` | ✓ | 提供基础冷却时长（会被 Ability 的 `Cd` 字段覆盖） |
+| `GrantedTags` | ✓ | 冷却标签（如 `Cooldown.Fireball`），用于冷却状态判断 |
+| 其他组件 | 可选 | 可配置 `CueOnActivate`/`CueOnDeactivate` 等用于冷却 UI 表现 |
+
+**共享冷却设计**
+
+通过 Tag 的层级匹配能力，可以实现共享冷却组：
+
+```
+示例：所有火系技能共享冷却
+├── 火球术的 CdEffect → GrantedTags: [Cooldown.Fire.Fireball]
+├── 烈焰风暴的 CdEffect → GrantedTags: [Cooldown.Fire.FlameStorm]
+└── 两个技能的 CooldownTags 都匹配 Cooldown.Fire → 任一技能进入冷却，另一个也无法激活
+```
+
+**配置检查清单**
+- [ ] `CdEffect` 引用的 GE 是否为 Durational 类型（配置了 Duration 组件）
+- [ ] `CdEffect` 引用的 GE 是否配置了 `GrantedTags`
+- [ ] Ability 的 `Cd` 字段是否已填写（覆盖 GE 的 Duration）
+- [ ] `AbilityLogic` 中是否在正确的时机调用了 `DoCooldown`（如前摇结束后）
+
+---
+
 #### 2.8.2 【选读】Ability配置工作流程
 
 | 阶段 | 工具 | 操作内容 | 输出结果 | 注意事项 |
