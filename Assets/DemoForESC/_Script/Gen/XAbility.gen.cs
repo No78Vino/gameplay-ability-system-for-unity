@@ -34,6 +34,8 @@ namespace GAS.Runtime
             GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskApplyEffects.Name, TaskApplyEffects,typeof(GAS.Runtime.XParamApplyEffects));
             var TaskDebug = typeof(GAS.Runtime.TaskDebug);
             GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDebug.Name, TaskDebug,typeof(GAS.Runtime.XParamString));
+            var TaskDoCooldown = typeof(GAS.Runtime.TaskDoCooldown);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDoCooldown.Name, TaskDoCooldown,typeof(GAS.Runtime.XParamNone));
             var TaskDoCost = typeof(GAS.Runtime.TaskDoCost);
             GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDoCost.Name, TaskDoCost,typeof(GAS.Runtime.XParamNone));
             var TaskDoNothing = typeof(GAS.Runtime.TaskDoNothing);

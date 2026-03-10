@@ -473,8 +473,7 @@ namespace GAS.Editor
         public static void GenerateAllCode()
         {
             // 先更新Bean定义（因为其他代码生成可能依赖它）
-            // TODO 待测试
-            // BeanUpdater.UpdateBeans();
+            BeanUpdater.UpdateBeans();
 
             GenerateTagCode();
             GenerateAttrCode();

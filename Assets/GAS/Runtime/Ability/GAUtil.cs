@@ -125,14 +125,18 @@ namespace GAS.Runtime
             return true;
         }
 
-        public static bool CheckCooldownReady(Entity ability)
-        {
-            bool hasCooldownComponent = _entityManager.HasComponent<CAbilityCooldown>(ability);
-            if (!hasCooldownComponent) return true;
-            
-            CAbilityCooldown cooldown = _entityManager.GetComponentData<CAbilityCooldown>(ability);
-            // 没有激活的实例,说明冷却已经结束
-            return cooldown.CooldownGameplayEffectInstance == Entity.Null;
+        public static bool CheckCooldownReady(Entity ability)  
+        {  
+            bool hasCooldownComponent = _entityManager.HasComponent<CAbilityCooldown>(ability);  
+            if (!hasCooldownComponent) return true;  
+  
+            CAbilityCooldown cooldown = _entityManager.GetComponentData<CAbilityCooldown>(ability);  
+            // 没有配置 CooldownTags，则始终就绪  
+            if (!cooldown.CooldownTags.IsCreated || cooldown.CooldownTags.Length == 0) return true;  
+  
+            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
+            // ASC 上有任意一个 CooldownTag → 冷却中 → 不可激活  
+            return !ASCHelper.HasAnyTags(owner, cooldown.CooldownTags);  
         }
 
         public static void DoCost(Entity ability)
@@ -144,6 +148,31 @@ namespace GAS.Runtime
             EffectUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
+        /// <summary>  
+        ///     执行冷却：从原型克隆CD GE实例，覆写Duration，通过ECS管线应用到Owner  
+        /// </summary>  
+        public static void DoCooldown(Entity ability)  
+        {  
+            if (!_entityManager.HasComponent<CAbilityCooldown>(ability)) return;  
+  
+            var cooldown = _entityManager.GetComponentData<CAbilityCooldown>(ability);  
+            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
+  
+            // 1. 从原型克隆GE实例  
+            var instanceGe = _entityManager.Instantiate(cooldown.ProtoGameplayEffectCooldown);  
+  
+            // 2. 用Ability配置的Cooldown值覆写GE的Duration  
+            if (cooldown.Cooldown > 0 && _entityManager.HasComponent<CDuration>(instanceGe))  
+            {  
+                var duration = _entityManager.GetComponentData<CDuration>(instanceGe);  
+                duration.duration = cooldown.Cooldown;  
+                _entityManager.SetComponentData(instanceGe, duration);  
+            }  
+  
+            // 3. 通过ECS GE管线应用到Owner（走完整的 Instantiate→CheckApply→Apply→Activate 流程）  
+            EffectUtil.ApplyGameplayEffectTo(instanceGe, owner, owner);  
+        }
+        
         /// <summary>
         ///     检查是否有指定标签，能力的tag校验只校验AssetTag
         /// </summary>
