@@ -46,6 +46,25 @@ namespace GAS.Runtime
             return modifier.Apply(context, sourceValue);  
         }  
   
+        /// <summary>  
+        /// 指定 Source/Target 的 Calculate 重载，用于 Prototype GE（没有 CEffectInUsage）的场景  
+        /// </summary>  
+        public static float Calculate(Entity ge, EffectModifier modifier, float sourceValue, Entity sourceAsc, Entity targetAsc)  
+        {  
+            var context = BuildMmcContext(ge, sourceAsc, targetAsc);  
+            return modifier.Apply(context, sourceValue);  
+        }  
+  
+        public static MmcContext BuildMmcContext(Entity ge, Entity sourceAsc, Entity targetAsc)  
+        {  
+            return new MmcContext  
+            {  
+                EffectSpec = new GameplayEffectSpec(ge),  
+                Source = GASManager.GetAscFromEntity(sourceAsc),  
+                Target = GASManager.GetAscFromEntity(targetAsc),  
+            };  
+        }
+        
         public static MmcContext BuildMmcContext(Entity ge)  
         {  
             // 从 GE Entity 上读取 Source/Target ASC Entity  

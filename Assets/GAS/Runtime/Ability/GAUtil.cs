@@ -118,8 +118,8 @@ namespace GAS.Runtime
                 if (attrIndex == -1) continue;
                 
                 var attr = attributes[attrIndex];
-                var resultValue = MmcHelper.Calculate(costComponent.ProtoGameplayEffectCost, modifier, attr.CurrentValue);
-                return resultValue >= 0;
+                var resultValue = MmcHelper.Calculate(costComponent.ProtoGameplayEffectCost, modifier, attr.CurrentValue, owner, owner);
+                if (resultValue < 0) return false;  // 任一资源不足，立即失败  
             }
 
             return true;

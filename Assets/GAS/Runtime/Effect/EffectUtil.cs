@@ -1,5 +1,6 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace GAS.Runtime
 {
@@ -7,51 +8,98 @@ namespace GAS.Runtime
     {
         private static EntityManager _entityManager => GASManager.EntityManager;
 
-        // TODO
-        /// <summary>
-        /// 立即应用GameplayEffect
-        /// 所有派生的GameplayEffect，以及自定义逻辑中，都使用该接口来实现GameplayEffect的应用
-        /// </summary>
-        /// <param name="gameplayEffect"></param>
-        /// <param name="target"></param>
-        /// <param name="source"></param>
+        /// <summary>  
+        /// 立即应用 Instant 类型的 GameplayEffect（直接修改 BaseValue）  
+        /// 用于 Cost、或其他需要绕过 ECS GE 管线立即生效的场景。  
+        /// 该方法不会走 ECS GE 生命周期管线，不会产生 GE 实例 Entity。  
+        /// </summary>  
+        /// <param name="gameplayEffect">GE 的 Prototype Entity（需包含 MCModifiers）</param>  
+        /// <param name="target">目标 ASC Entity</param>  
+        /// <param name="source">来源 ASC Entity</param>  
         public static void ApplyGameplayEffectImmediate(Entity gameplayEffect, Entity target, Entity source)
         {
-           
+            if (!_entityManager.HasComponent<MCModifiers>(gameplayEffect)) return;
+
+            var modifiers = _entityManager.GetComponentData<MCModifiers>(gameplayEffect);
+            var attrSets = _entityManager.GetBuffer<BEAttrSet>(target);
+            bool change = false;
+
+            foreach (var modifier in modifiers.Modifiers)
+            {
+                var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
+                if (attrSetIndex == -1) continue;
+
+                var attrSet = attrSets[attrSetIndex];
+                var attributes = attrSet.Attributes;
+
+                var attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
+                if (attrIndex == -1) continue;
+
+                var data = attributes[attrIndex];
+                var oldValue = data.BaseValue;
+                // 使用显式 Source/Target 的 Calculate 重载，避免原型 Entity 缺少 CEffectInUsage 的问题  
+                var newValue = MmcHelper.Calculate(gameplayEffect, modifier, data.BaseValue, source, target);
+
+                // 钳制计算处理  
+                if (data.IsClampMin) newValue = Unity.Mathematics.math.max(newValue, data.MinValue);
+                if (data.IsClampMax) newValue = Unity.Mathematics.math.min(newValue, data.MaxValue);
+
+                // OnChangeBefore  
+                newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(target, modifier.AttrSetCode,
+                    modifier.AttrCode, newValue);
+
+                data.BaseValue = newValue;
+
+                // OnChangeAfter  
+                if (newValue != oldValue)
+                {
+                    data.Dirty = true;
+                    change = true;
+                    GASEventCenter.InvokeOnBaseValueChangeAfter(target, modifier.AttrSetCode,
+                        modifier.AttrCode, oldValue, newValue);
+                }
+
+                attrSet.Attributes[attrIndex] = data;
+                attrSets[attrSetIndex] = attrSet;
+            }
+
+            // 标记属性需要重计算 CurrentValue  
+            if (change)
+                EntityHelper.AddComponent<CAttributeIsDirty>(target);
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static bool HasAnyTags(Entity ge, NativeArray<int> tags)
         {
             // 1.判断AssetTags
