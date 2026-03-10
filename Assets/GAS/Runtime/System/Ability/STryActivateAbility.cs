@@ -39,6 +39,9 @@ namespace GAS.Runtime
                     // 激活能力【自定义逻辑】
                     var abilityLogic = state.EntityManager.GetComponentData<MCAbilityLogic>(ability);
                     abilityLogic.Logic.ActivateAbility(globalTimer.ValueRO);
+                    
+                    // 激活成功后，根据 CancelAbilityWithTags 取消其他匹配的能力  
+                    GAUtil.CancelAbilitiesWithTags(ability);
                 }
 
                 GASEventCenter.InvokeOnActivateResult(ability, result);

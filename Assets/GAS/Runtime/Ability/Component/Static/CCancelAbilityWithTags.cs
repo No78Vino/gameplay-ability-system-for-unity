@@ -3,18 +3,18 @@ using Unity.Entities;
 
 namespace GAS.Runtime
 {
-    public struct CBlockAbilityTags : IComponentData
+    public struct CCancelAbilityWithTags : IComponentData
     {
         public NativeArray<int> tags;
     }
     
-    public sealed class ConfBlockAbilityTags:AbilityComponentConfig
+    public sealed class ConfCancelAbilityWithTags:AbilityComponentConfig
     {
         public int[] tags;
 
         public override void LoadToGameplayAbilityEntity(Entity ability)
         {
-            _entityManager.AddComponentData(ability, new CBlockAbilityTags
+            _entityManager.AddComponentData(ability, new CCancelAbilityWithTags
             {
                 tags = new NativeArray<int>(tags, Allocator.Persistent)
             });

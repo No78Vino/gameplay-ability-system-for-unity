@@ -75,14 +75,15 @@ namespace GAS.Runtime
             {
                 var ownerAbilityEntity = ownerAbility.Ability;
                 if (ownerAbilityEntity == ability) continue;
+                if (!_entityManager.HasComponent<CAbilityActive>(ownerAbilityEntity)) continue;
                 
                 var ownerAbilityHasBlockAbilitiesWithTags =
-                    _entityManager.HasComponent<CBlockAbilityTags>(ownerAbilityEntity);
+                    _entityManager.HasComponent<CBlockAbilityWithTags>(ownerAbilityEntity);
                 if (!ownerAbilityHasBlockAbilitiesWithTags) continue;
                 
                 var ownerAbilityBlockAbilitiesWithTags =
-                    _entityManager.GetComponentData<CBlockAbilityTags>(ownerAbilityEntity);
-                if (!HasAnyTags(ownerAbilityEntity, ownerAbilityBlockAbilitiesWithTags.tags)) continue;
+                    _entityManager.GetComponentData<CBlockAbilityWithTags>(ownerAbilityEntity);
+                if (!HasAnyTags(ability, ownerAbilityBlockAbilitiesWithTags.tags)) continue;
                 
                 notBlockedByOtherAbility = false;
                 break;
@@ -143,58 +144,6 @@ namespace GAS.Runtime
             EffectUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
-        // public static AbilityActivationResult TryActivateAbility(Entity ability)
-        // {
-        //     var result = CanActivateAbility(ability);
-        //     if (result == AbilityActivationResult.Success)
-        //     {
-        //         var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-        //         if (_entityManager.HasComponent<CAbilityActivationOwnedTags>(ability))
-        //         {
-        //             var abilityActivationOwnedTags =
-        //                 _entityManager.GetComponentData<CAbilityActivationOwnedTags>(ability);
-        //             foreach (var tag in abilityActivationOwnedTags.tags)
-        //                 GTagUtil.AddTemporaryTagTo(owner, ability, tag);
-        //         }
-        //
-        //         _entityManager.AddComponentData(ability, new CAbilityActive());
-        //         
-        //         var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
-        //         abilityLogic.Logic.ActivateAbility();
-        //     }
-        //     GASEventCenter.InvokeOnActivateResult(ability, result);
-        //     return result;
-        // }
-        
-        // public static bool TryEndAbility(Entity ability)
-        // {
-        //     bool result = _entityManager.HasComponent<CAbilityActive>(ability);
-        //     if (result)
-        //     {
-        //         _entityManager.RemoveComponent<CAbilityActive>(ability);
-        //         ASCUtil.RestoreDynamicTags(ability);
-        //         var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
-        //         abilityLogic.Logic.EndAbility();
-        //         GASEventCenter.InvokeOnEndAbility(ability);
-        //     }
-        //     
-        //     return result;
-        // }
-        
-        // public static bool TryCancelAbility(Entity ability)
-        // {
-        //     bool result = _entityManager.HasComponent<CAbilityActive>(ability);
-        //     if (result)
-        //     {
-        //         _entityManager.RemoveComponent<CAbilityActive>(ability);
-        //         ASCUtil.RestoreDynamicTags(ability);
-        //         var abilityLogic = _entityManager.GetComponentData<MCAbilityLogic>(ability);
-        //         abilityLogic.Logic.CancelAbility();
-        //         GASEventCenter.InvokeOnCancelAbility(ability);
-        //     }
-        //     return true;
-        // }
-
         /// <summary>
         ///     检查是否有指定标签，能力的tag校验只校验AssetTag
         /// </summary>
@@ -204,7 +153,7 @@ namespace GAS.Runtime
         public static bool HasAnyTags(Entity ability, NativeArray<int> tags)
         {
             var hasAssetTag = _entityManager.HasComponent<CAbilityAssetTags>(ability);
-            if (!hasAssetTag) return true;
+            if (!hasAssetTag) return false;
 
             var assetTags = _entityManager.GetComponentData<CAbilityAssetTags>(ability);
             foreach (var tag in tags)
@@ -212,6 +161,36 @@ namespace GAS.Runtime
                 if (TagHelper.HasTag(assetTag, tag))
                     return true;
             return false;
+        }
+        
+        /// <summary>  
+        ///     激活能力时，根据 CancelAbilityWithTags 取消 Owner 上匹配的已激活能力  
+        /// </summary>  
+        public static void CancelAbilitiesWithTags(Entity ability)  
+        {  
+            if (!_entityManager.HasComponent<CCancelAbilityWithTags>(ability)) return;  
+  
+            var cancelTags = _entityManager.GetComponentData<CCancelAbilityWithTags>(ability);  
+            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
+            var ownerAbilities = _entityManager.GetBuffer<BAbility>(owner);  
+  
+            foreach (var ownerAbility in ownerAbilities)  
+            {  
+                var otherAbility = ownerAbility.Ability;  
+                if (otherAbility == ability) continue;  
+  
+                // 只取消已激活的能力  
+                if (!_entityManager.HasComponent<CAbilityActive>(otherAbility)) continue;  
+  
+                // 已经在取消流程中的跳过  
+                if (_entityManager.HasComponent<CAbilityInTryCancel>(otherAbility)) continue;  
+  
+                // 检查其他能力的 AssetTags 是否匹配 CancelAbilityTags 中的任意一个  
+                if (HasAnyTags(otherAbility, cancelTags.tags))  
+                {  
+                    EntityHelper.AddComponent<CAbilityInTryCancel>(otherAbility);  
+                }  
+            }  
         }
     }
 }

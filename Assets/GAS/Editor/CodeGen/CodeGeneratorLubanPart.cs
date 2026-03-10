@@ -568,12 +568,12 @@ namespace GAS.Editor
                         writer.WriteLine("// cancelAbilityWithTags");
                         writer.WriteLine("if (data.CancelAbilityWithTags is { Count: > 0 })");
                         writer.WriteLine(
-                            "    configs.Add(new ConfCancelAbilityTags { tags = data.CancelAbilityWithTags.ToArray() });");
+                            "    configs.Add(new ConfCancelAbilityWithTags { tags = data.CancelAbilityWithTags.ToArray() });");
 
                         writer.WriteLine("// blockAbilityWithTags");
                         writer.WriteLine("if (data.BlockAbilityWithTags is { Count: > 0 })");
                         writer.WriteLine(
-                            "    configs.Add(new ConfBlockAbilityTags { tags = data.BlockAbilityWithTags.ToArray() });");
+                            "    configs.Add(new ConfBlockAbilityWithTags { tags = data.BlockAbilityWithTags.ToArray() });");
 
                         writer.WriteLine("// activationOwnedTags");
                         writer.WriteLine("if (data.ActivationOwnedTags is { Count: > 0 })");

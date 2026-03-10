@@ -346,10 +346,10 @@ namespace GAS.Runtime
                 configs.Add(new ConfAbilityAssetTags { tags = data.AssetTags.ToArray() });
             // cancelAbilityWithTags
             if (data.CancelAbilityWithTags is { Count: > 0 })
-                configs.Add(new ConfCancelAbilityTags { tags = data.CancelAbilityWithTags.ToArray() });
+                configs.Add(new ConfCancelAbilityWithTags { tags = data.CancelAbilityWithTags.ToArray() });
             // blockAbilityWithTags
             if (data.BlockAbilityWithTags is { Count: > 0 })
-                configs.Add(new ConfBlockAbilityTags { tags = data.BlockAbilityWithTags.ToArray() });
+                configs.Add(new ConfBlockAbilityWithTags { tags = data.BlockAbilityWithTags.ToArray() });
             // activationOwnedTags
             if (data.ActivationOwnedTags is { Count: > 0 })
                 configs.Add(new ConfAbilityActivationOwnedTags { tags = data.ActivationOwnedTags.ToArray() });
