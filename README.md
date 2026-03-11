@@ -1634,21 +1634,21 @@ Ability运作逻辑的组成可以拆成两部分：
 - 具体游戏内的表现逻辑：每个Ability都有自己的表现逻辑（AbilityLogic），这部分逻辑是由程序开发人员自行实现的。
 
 #### 2.8.1 Ability各组件介绍
-| 字段名 | 类别 | 必填 | 数据类型 | 功能说明  | 典型应用场景 |
-|-------|------|------|---------|---------|-----------|
-| **ID** | 基础 | ✓ | 整数 | Ability 的全局唯一标识符,用于代码中引用、配置表查询和运行时加载。生成的常量会以 `ABILITY_{Name}` 形式存在于 `XAbility.gen.cs` 中 | 所有 Ability 必须配置。通过 `ASC.GrantAbility(10001)` 授予技能,通过 `XLuban.GetAbilityConfig(10001)` 加载配置 |
-| **Name** | 基础 | ✓ | 字符串 | Ability 的英文名称,用于编辑器显示、调试日志和代码常量生成。必须唯一且符合 C# 命名规范(不含空格和特殊字符) | 编辑器中快速识别 Ability,生成常量 `ABILITY_move = 10001` 供代码引用,调试时输出可读的技能名称 |
-| **Desc** | 基础 | - | 字符串 | Ability 的中文描述或详细说明,纯文档用途,不影响任何运行时逻辑 | 帮助策划理解技能用途,在编辑器中提供额外的上下文信息,便于团队协作 |
-| **Cost** | 资源 | - | 整数(GE ID) | 激活时消耗的资源,通过引用 GameplayEffect ID 实现。该 GE 会在激活检查通过后、`ActivateAbility()` 执行前应用到 Owner 身上。为 `0` 表示无消耗 | 技能消耗魔法值(GE 修改 Mana 属性),攻击消耗耐力(GE 修改 Stamina 属性),使用道具消耗数量(GE 修改 ItemCount 属性) |
-| **CdEffect** | 资源 | - | 整数(GE ID) | 冷却效果的 GameplayEffect ID,该 GE 会在激活成功后立即应用,通常包含一个 Duration 和授予冷却 Tag 的逻辑。与 `Cd` 字段配合使用| 定义技能冷却的 GameplayEffect,该 GE 会授予 `Cooldown.Skill` 等 Tag,阻止技能在冷却期间再次激活 |
-| **Cd** | 资源 | - | 整数(毫秒) | 冷却时长,会覆盖 `CdEffect` 引用的 GameplayEffect 的 Duration 字段。允许同一个冷却 GE 模板配置不同的冷却时长| 为不同等级的技能配置不同冷却时间,例如 1 级技能 10 秒 CD,2 级技能 8 秒 CD,但都使用同一个 CdEffect 模板 |
-| **AssetTags** | Tag | - | 整数数组 | 描述 Ability 特性的标签,纯描述性质,不影响激活逻辑。用于分类、查询和 UI 显示 | 标记技能类型(如 `Ability.Attack`、`Ability.Heal`),在 UI 中显示技能图标分类,通过 Tag 查询所有伤害类技能 |
-| **CancelAbilityWithTags** | Tag | - | 整数数组 | 激活时,取消 Owner 当前所有拥有**任意**这些 Tag 的 Ability。用于实现技能之间的互斥关系 | 攻击技能激活时取消移动技能,受击技能激活时取消施法技能,死亡技能激活时取消所有主动行为 |
-| **BlockAbilityWithTags** | Tag | - | 整数数组 | 激活时,阻止 Owner 激活所有拥有**任意**这些 Tag 的 Ability。已激活的不受影响,只阻止新的激活 | 冲刺技能激活时阻止普通移动激活,施法技能激活时阻止攻击激活,眩晕状态阻止所有主动技能激活 |
-| **ActivationOwnedTags** | Tag | - | 整数数组 | 激活时 Owner 获得这些 Tag,失活时自动移除。用于标识 Ability 的激活状态 | 移动技能授予 `State.Moving`,攻击技能授予 `State.Attacking`,防御技能授予 `State.Blocking`,用于其他系统判断当前状态 |
-| **ActivationRequiredTags** | Tag | - | 整数数组 | Owner 必须拥有**所有**这些 Tag 才能激活。用于定义激活的前置条件 | 跳跃需要 `State.Grounded`(在地面上),冲刺需要 `State.Moving`(正在移动),施法需要 `State.Alive`(存活状态) |
-| **ActivationBlockedTags** | Tag | - | 整数数组 | Owner 拥有**任意**这些 Tag 时无法激活。用于定义激活的禁止条件 | 攻击时阻止 `State.Attacking`(防止重复攻击),眩晕时阻止 `State.Stunned`(无法行动),沉默时阻止 `State.Silenced`(无法施法) |
-| **AbilityLogic** | 逻辑 | ✓ | 多态对象 | 定义 Ability 的具体执行逻辑和参数。包含 `$type`(逻辑类型名)和 `Param`(逻辑参数对象)两个字段。不同的逻辑类型对应不同的参数结构 | `ALMove` 实现移动控制,`ALApplyEffect` 施加 GameplayEffect,`ALTimeline` 执行基于时间轴的复杂技能序列,`ALDebugLog` 输出调试信息 |
+| 字段名 | 类别 | 必填 | 数据类型 | 功能说明                                                                                                   | 典型应用场景 |
+|-------|------|------|---------|--------------------------------------------------------------------------------------------------------|-----------|
+| **ID** | 基础 | ✓ | 整数 | Ability 的全局唯一标识符,用于代码中引用、配置表查询和运行时加载。生成的常量会以 `ABILITY_{Name}` 形式存在于 `XAbility.gen.cs` 中                | 所有 Ability 必须配置。通过 `ASC.GrantAbility(10001)` 授予技能,通过 `XLuban.GetAbilityConfig(10001)` 加载配置 |
+| **Name** | 基础 | ✓ | 字符串 | Ability 的英文名称,用于编辑器显示、调试日志和代码常量生成。必须唯一且符合 C# 命名规范(不含空格和特殊字符)                                           | 编辑器中快速识别 Ability,生成常量 `ABILITY_move = 10001` 供代码引用,调试时输出可读的技能名称 |
+| **Desc** | 基础 | - | 字符串 | Ability 的中文描述或详细说明,纯文档用途,不影响任何运行时逻辑                                                                    | 帮助策划理解技能用途,在编辑器中提供额外的上下文信息,便于团队协作 |
+| **Cost** | 资源 | - | 整数(GE ID) | 激活时消耗的资源,通过引用 GameplayEffect ID 实现。该 GE 会用于激活检查，Cost的执行可以由开发者自行调用或者自动执行，应用到 Owner 身上。为 `0` 表示无消耗       | 技能消耗魔法值(GE 修改 Mana 属性),攻击消耗耐力(GE 修改 Stamina 属性),使用道具消耗数量(GE 修改 ItemCount 属性) |
+| **CdEffect** | 资源 | - | 整数(GE ID) | 冷却效果的 GameplayEffect ID,该 GE 会用于激活检查，CD的执行可以由开发者自行调用或者自动执行,通常包含一个 Duration 和授予冷却 Tag 的逻辑。与 `Cd` 字段配合使用 | 定义技能冷却的 GameplayEffect,该 GE 会授予 `Cooldown.Skill` 等 Tag,阻止技能在冷却期间再次激活 |
+| **Cd** | 资源 | - | 整数(毫秒) | 冷却时长,会覆盖 `CdEffect` 引用的 GameplayEffect 的 Duration 字段。允许同一个冷却 GE 模板配置不同的冷却时长                            | 为不同等级的技能配置不同冷却时间,例如 1 级技能 10 秒 CD,2 级技能 8 秒 CD,但都使用同一个 CdEffect 模板 |
+| **AssetTags** | Tag | - | 整数数组 | 描述 Ability 特性的标签,纯描述性质,不影响激活逻辑。用于分类、查询和 UI 显示                                                          | 标记技能类型(如 `Ability.Attack`、`Ability.Heal`),在 UI 中显示技能图标分类,通过 Tag 查询所有伤害类技能 |
+| **CancelAbilityWithTags** | Tag | - | 整数数组 | 激活时,取消 Owner 当前所有拥有**任意**这些 Tag 的 Ability。用于实现技能之间的互斥关系                                                | 攻击技能激活时取消移动技能,受击技能激活时取消施法技能,死亡技能激活时取消所有主动行为 |
+| **BlockAbilityWithTags** | Tag | - | 整数数组 | 激活时,阻止 Owner 激活所有拥有**任意**这些 Tag 的 Ability。已激活的不受影响,只阻止新的激活                                             | 冲刺技能激活时阻止普通移动激活,施法技能激活时阻止攻击激活,眩晕状态阻止所有主动技能激活 |
+| **ActivationOwnedTags** | Tag | - | 整数数组 | 激活时 Owner 获得这些 Tag,失活时自动移除。用于标识 Ability 的激活状态                                                          | 移动技能授予 `State.Moving`,攻击技能授予 `State.Attacking`,防御技能授予 `State.Blocking`,用于其他系统判断当前状态 |
+| **ActivationRequiredTags** | Tag | - | 整数数组 | Owner 必须拥有**所有**这些 Tag 才能激活。用于定义激活的前置条件                                                                | 跳跃需要 `State.Grounded`(在地面上),冲刺需要 `State.Moving`(正在移动),施法需要 `State.Alive`(存活状态) |
+| **ActivationBlockedTags** | Tag | - | 整数数组 | Owner 拥有**任意**这些 Tag 时无法激活。用于定义激活的禁止条件                                                                 | 攻击时阻止 `State.Attacking`(防止重复攻击),眩晕时阻止 `State.Stunned`(无法行动),沉默时阻止 `State.Silenced`(无法施法) |
+| **AbilityLogic** | 逻辑 | ✓ | 多态对象 | 定义 Ability 的具体执行逻辑和参数。包含 `$type`(逻辑类型名)和 `Param`(逻辑参数对象)两个字段。不同的逻辑类型对应不同的参数结构                          | `ALMove` 实现移动控制,`ALApplyEffect` 施加 GameplayEffect,`ALTimeline` 执行基于时间轴的复杂技能序列,`ALDebugLog` 输出调试信息 |
 
 
 ---

@@ -12,6 +12,7 @@ namespace GAS.Runtime
         public const int ABILITY_debug_ge_ability = 1003;
         public const int ABILITY_debug_ge_2 = 1005;
         public const int ABILITY_Attack = 20001;
+        public const int ABILITY_Dodge = 5000;
 
         public static void LoadAbilityCode()
         {
@@ -28,6 +29,8 @@ namespace GAS.Runtime
             GAS.Runtime.AbilityHelper.RegisterAbilityLogic(ALTimeline.Name, ALTimeline,typeof(GAS.Runtime.XParamALTimelineID));
 
             ///  AbilityTask
+            var TaskDodgeMove = typeof(GAS.Runtime.TaskDodgeMove);
+            GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskDodgeMove.Name, TaskDodgeMove,typeof(GAS.Runtime.XParamDodgeMove));
             var TaskPlayCuePreset = typeof(GAS.Runtime.TaskPlayCuePreset);
             GAS.Runtime.AbilityHelper.RegisterAbilityTask(TaskPlayCuePreset.Name, TaskPlayCuePreset,typeof(GAS.Runtime.XParamCueList));
             var TaskApplyEffects = typeof(GAS.Runtime.TaskApplyEffects);
