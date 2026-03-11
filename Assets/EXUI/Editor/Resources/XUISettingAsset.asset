@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ce48d934af4c2094194a35440369c5, type: 3}
   m_Name: XUISettingAsset
   m_EditorClassIdentifier: 
-  ViewCodeOutputPath: Assets/Scripts/UI/View
-  ViewModelCodeOutputPath: Assets/Scripts/UI/ViewModel
+  ViewCodeOutputPath: Assets/DemoForESC/_Script/UI/View
+  ViewModelCodeOutputPath: Assets/DemoForESC/_Script/UI/ViewModel
   ViewNamespace: UI.View
   ViewModelNamespace: UI.ViewModel

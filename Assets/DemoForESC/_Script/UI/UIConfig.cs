@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DemoForESC._Script.UI.View;
+using UI.View;
 
 namespace DemoForESC._Script.UI
 {
@@ -13,6 +14,7 @@ namespace DemoForESC._Script.UI
             [typeof(MainWindow)] = "Assets/DemoForESC/Resources/Prefabs/UI/MainWindow",
             [typeof(GuideWindow)] = "Assets/DemoForESC/Resources/Prefabs/UI/GuideWindow",
             [typeof(DeathWindow)] = "Assets/DemoForESC/Resources/Prefabs/UI/DeathWindow",
+            [typeof(BossWindow)] = "Assets/DemoForESC/Resources/Prefabs/UI/BossWindow",
         };
     }
 }
