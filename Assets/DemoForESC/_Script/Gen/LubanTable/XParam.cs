@@ -26,6 +26,7 @@ public abstract partial class XParam : Luban.BeanBase
     {
         switch ((string)_buf["$type"])
         {
+            case "XParamDodgeMove": return new XParamDodgeMove(_buf);
             case "XParamCueList": return new XParamCueList(_buf);
             case "XParamMove": return new XParamMove(_buf);
             case "XParamCatchAreaBox3D": return new XParamCatchAreaBox3D(_buf);

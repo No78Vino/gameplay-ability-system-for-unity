@@ -286,6 +286,85 @@
     "GrantedAbility": []
   },
   {
+    "ID": 3001,
+    "Name": "闪避冷却",
+    "Desc": "闪避冷却",
+    "AssetTags": [],
+    "GrantedTags": [
+      6001
+    ],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": 60,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 3002,
+    "Name": "闪避耐力消耗",
+    "Desc": "闪避耐力消耗",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 20,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 3003,
+    "Name": "闪避无敌",
+    "Desc": "闪避无敌",
+    "AssetTags": [],
+    "GrantedTags": [
+      4001004
+    ],
+    "ApplicationRequiredTags": [],
+    "OngoingRequiredTags": [],
+    "RemoveGameplayEffectsWithTags": [],
+    "ImmunityTags": [],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
     "ID": 9001,
     "Name": "奔跑耐力消耗",
     "Desc": "耐力消耗1点",

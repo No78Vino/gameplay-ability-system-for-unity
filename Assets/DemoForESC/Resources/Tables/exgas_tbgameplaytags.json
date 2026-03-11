@@ -20,6 +20,11 @@
     "Desc": "新手引导"
   },
   {
+    "id": 600,
+    "Name": "Cooldown",
+    "Desc": "冷却"
+  },
+  {
     "id": 1001,
     "Name": "Faction.Player",
     "Desc": "玩家阵营"
@@ -115,6 +120,11 @@
     "Desc": "新手引导：类型3"
   },
   {
+    "id": 6001,
+    "Name": "Cooldown.Dodge",
+    "Desc": "冷却：闪避"
+  },
+  {
     "id": 1000000,
     "Name": "Faction",
     "Desc": "阵营描述标签"
@@ -148,5 +158,10 @@
     "id": 4001003,
     "Name": "State.Buff.SpCosting",
     "Desc": "状态：耐力消耗中"
+  },
+  {
+    "id": 4001004,
+    "Name": "State.Buff.Invincible",
+    "Desc": "状态：无敌"
   }
 ]

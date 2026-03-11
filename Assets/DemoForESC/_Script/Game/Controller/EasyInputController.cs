@@ -129,9 +129,7 @@ namespace DemoForESC._Script.Controller
         private void HandleDodge()  
         {  
             if (Input.GetKeyDown(KeyCode.F))  
-                demoPlayer.StartDebugGE2();  
-            else if (Input.GetKeyUp(KeyCode.F))  
-                demoPlayer.StopDebugGE2();  
+                demoPlayer.Dodge();  
         }  
   
         private void HandleGuideClick()  

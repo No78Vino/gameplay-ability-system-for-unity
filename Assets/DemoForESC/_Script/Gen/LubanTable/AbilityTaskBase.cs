@@ -26,9 +26,11 @@ public abstract partial class AbilityTaskBase : Luban.BeanBase
     {
         switch ((string)_buf["$type"])
         {
+            case "TaskDodgeMove": return new TaskDodgeMove(_buf);
             case "TaskPlayCuePreset": return new TaskPlayCuePreset(_buf);
             case "TaskApplyEffects": return new TaskApplyEffects(_buf);
             case "TaskDebug": return new TaskDebug(_buf);
+            case "TaskDoCooldown": return new TaskDoCooldown(_buf);
             case "TaskDoCost": return new TaskDoCost(_buf);
             case "TaskDoNothing": return new TaskDoNothing(_buf);
             case "TaskPlayCue": return new TaskPlayCue(_buf);

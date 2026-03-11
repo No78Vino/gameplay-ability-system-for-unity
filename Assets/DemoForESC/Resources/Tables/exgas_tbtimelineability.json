@@ -148,5 +148,149 @@
         ]
       }
     ]
+  },
+  {
+    "ID": 103,
+    "Name": "闪避",
+    "LifeTime": 25,
+    "ManualEndAbility": false,
+    "Tracks": [
+      {
+        "Name": "Cue轨道1",
+        "TaskClips": [
+          {
+            "StartTime": 0,
+            "EndTime": 5,
+            "Name": "前摇动画",
+            "Task": {
+              "$type": "TaskPlayCue",
+              "Param": {
+                "RequiredTags": [
+                  0
+                ],
+                "ImmunityTags": [
+                  0
+                ],
+                "CueLogic": {
+                  "$type": "CuePlayAnimator",
+                  "Param": {
+                    "AnimatorNodePath": "",
+                    "AnimationName": "dodge"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "StartTime": 5,
+            "EndTime": 18,
+            "Name": "闪避动画",
+            "Task": {
+              "$type": "TaskPlayCue",
+              "Param": {
+                "RequiredTags": [
+                  0
+                ],
+                "ImmunityTags": [
+                  0
+                ],
+                "CueLogic": {
+                  "$type": "CuePlayAnimator",
+                  "Param": {
+                    "AnimatorNodePath": "",
+                    "AnimationName": "dodge_move"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "StartTime": 18,
+            "EndTime": 25,
+            "Name": "闪避结束动画",
+            "Task": {
+              "$type": "TaskPlayCue",
+              "Param": {
+                "RequiredTags": [
+                  0
+                ],
+                "ImmunityTags": [
+                  0
+                ],
+                "CueLogic": {
+                  "$type": "CuePlayAnimator",
+                  "Param": {
+                    "AnimatorNodePath": "",
+                    "AnimationName": "dodge_finish"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "Name": "功能轨道1",
+        "TaskClips": [
+          {
+            "StartTime": 0,
+            "EndTime": 18,
+            "Name": "闪避Task逻辑",
+            "Task": {
+              "$type": "TaskDodgeMove",
+              "Param": {
+                "DodgeSpeed": 10,
+                "WindUpFrames": 5
+              }
+            }
+          }
+        ]
+      },
+      {
+        "Name": "功能轨道2",
+        "TaskClips": [
+          {
+            "StartTime": 5,
+            "EndTime": 5,
+            "Name": "执行消耗",
+            "Task": {
+              "$type": "TaskDoCost",
+              "Param": {}
+            }
+          },
+          {
+            "StartTime": 5,
+            "EndTime": 18,
+            "Name": "添加无敌帧",
+            "Task": {
+              "$type": "TaskApplyEffects",
+              "Param": {
+                "IDs": [
+                  1003
+                ],
+                "TargetCatcher": {
+                  "$type": "CatchSelf",
+                  "Param": {}
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "Name": "功能轨道3",
+        "TaskClips": [
+          {
+            "StartTime": 5,
+            "EndTime": 5,
+            "Name": "执行Cooldown冷却",
+            "Task": {
+              "$type": "TaskDoCooldown",
+              "Param": {}
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

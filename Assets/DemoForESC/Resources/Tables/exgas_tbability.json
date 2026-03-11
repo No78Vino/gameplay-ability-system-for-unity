@@ -117,5 +117,33 @@
         "ID": 101
       }
     }
+  },
+  {
+    "ID": 5000,
+    "Name": "Dodge",
+    "Desc": "闪避\n",
+    "Cost": 3002,
+    "CdEffect": 3001,
+    "Cd": 120,
+    "AssetTags": [
+      2006
+    ],
+    "CancelAbilityWithTags": [
+      3003
+    ],
+    "BlockAbilityWithTags": [],
+    "ActivationOwnedTags": [
+      3002
+    ],
+    "ActivationRequiredTags": [],
+    "ActivationBlockedTags": [
+      3002
+    ],
+    "AbilityLogic": {
+      "$type": "ALTimeline",
+      "Param": {
+        "ID": 103
+      }
+    }
   }
 ]

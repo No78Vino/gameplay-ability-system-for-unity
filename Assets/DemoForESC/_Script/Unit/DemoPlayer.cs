@@ -73,6 +73,12 @@ namespace DemoForESC._Script
                 AbilitySystemComponent.TryEndAbility(XAbility.ABILITY_debug_ge_2);
         }
 
+        public void Dodge()
+        {
+            if (AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_Dodge))
+                AbilitySystemComponent.TryEndAbility(XAbility.ABILITY_Dodge);
+        }
+
         protected override void OnSpChangeAfter(float lastSp, float newSp)
         {
             base.OnSpChangeAfter(lastSp, newSp);
