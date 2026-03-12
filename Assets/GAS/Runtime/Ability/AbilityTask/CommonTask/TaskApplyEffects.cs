@@ -23,9 +23,6 @@ namespace GAS.Runtime
             _catcher = TargetCatcherHelper.TryCreateTargetCatcher(Parameter.CatcherType);  
             if (_catcher != null)
             {
-                if (Application.isPlaying)
-                    _catcher.Init(Owner);
-                
                 if (Parameter.Param != null)  
                     _catcher.InitParameters(Parameter.Param);  
             }
@@ -34,6 +31,10 @@ namespace GAS.Runtime
         protected override void OnBegin(int startFrame)  
         {  
             if (_catcher == null || Parameter?.IDs == null) return;  
+            
+            // 延迟初始化：确保 Owner 已被正确设置  
+            if (_catcher.Owner == null)  
+                _catcher.Init(Owner);  
             
             _catcher.CatchTargetsNonAllocSafe(Owner, ref _catchResults);  
             foreach (var target in _catchResults)  
