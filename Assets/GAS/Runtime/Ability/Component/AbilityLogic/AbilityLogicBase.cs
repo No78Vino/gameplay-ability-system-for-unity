@@ -6,18 +6,12 @@ namespace GAS.Runtime
     {
         protected static EntityManager _entityManager => GASManager.EntityManager;
         protected XParam _paramRaw;
+        public XParam ParamRaw => _paramRaw;
         protected Entity _abilityEntity;
         protected int _code;
 
-        public AbilitySpec Spec
-        {
-            get
-            {
-                var owner = Owner;
-                return owner.GetAbilitySpec(_code);
-            }
-        }
-        
+        public AbilitySpec Spec => Owner.GetAbilitySpec(_code);
+
         protected AbilityLogicBase(Entity ability)
         {
 #if UNITY_EDITOR
