@@ -7,7 +7,7 @@ namespace GAS.Runtime
     {  
         protected override void OnBegin(int startFrame)  
         {  
-            GAUtil.DoCooldown(_logic.GetAbilityEntity());  
+            AbilityUtil.DoCooldown(_logic.GetAbilityEntity());  
         }  
   
         public TaskDoCooldown(AbilityLogicBase logic) : base(logic)  

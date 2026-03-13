@@ -7,7 +7,7 @@ namespace GAS.Runtime
     {
         protected override void OnBegin(int startFrame)
         {
-            GAUtil.DoCost(_logic.GetAbilityEntity());
+            AbilityUtil.DoCost(_logic.GetAbilityEntity());
         }
 
         public TaskDoCost(AbilityLogicBase logic) : base(logic)

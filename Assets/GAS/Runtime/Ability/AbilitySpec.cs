@@ -80,23 +80,23 @@ namespace GAS.Runtime
         public bool IsActive => IsValid && _em.HasComponent<CAbilityActive>(_abilityEntity);  
   
         /// <summary>综合检查是否可以激活（Tag、Cost、CD 全部通过）</summary>  
-        public bool CanActivate => IsValid && GAUtil.CanActivateAbility(_abilityEntity) == AbilityActivationResult.Success;  
+        public bool CanActivate => IsValid && AbilityUtil.CanActivateAbility(_abilityEntity) == AbilityActivationResult.Success;  
   
         /// <summary>详细的激活检查，返回具体失败原因</summary>  
         public AbilityActivationResult CheckActivation()  
         {  
             if (!IsValid) return AbilityActivationResult.FailOtherReason;  
-            return GAUtil.CanActivateAbility(_abilityEntity);  
+            return AbilityUtil.CanActivateAbility(_abilityEntity);  
         }  
   
         /// <summary>Tag 条件是否满足激活</summary>  
-        public bool IsTagRequirementMet => IsValid && GAUtil.CheckGameplayTagsValidTpActivate(_abilityEntity);  
+        public bool IsTagRequirementMet => IsValid && AbilityUtil.CheckGameplayTagsValidTpActivate(_abilityEntity);  
   
         /// <summary>Cost 是否足够</summary>  
-        public bool CanAffordCost => IsValid && GAUtil.CheckCost(_abilityEntity);  
+        public bool CanAffordCost => IsValid && AbilityUtil.CheckCost(_abilityEntity);  
   
         /// <summary>冷却是否就绪</summary>  
-        public bool IsCooldownReady => IsValid && GAUtil.CheckCooldownReady(_abilityEntity);  
+        public bool IsCooldownReady => IsValid && AbilityUtil.CheckCooldownReady(_abilityEntity);  
   
         #endregion  
   
@@ -128,14 +128,14 @@ namespace GAS.Runtime
         public void DoCooldown()  
         {  
             if (!IsValid) return;  
-            GAUtil.DoCooldown(_abilityEntity);  
+            AbilityUtil.DoCooldown(_abilityEntity);  
         }  
   
         /// <summary>手动触发 Cost</summary>  
         public void DoCost()  
         {  
             if (!IsValid) return;  
-            GAUtil.DoCost(_abilityEntity);  
+            AbilityUtil.DoCost(_abilityEntity);  
         }  
   
         #endregion  
