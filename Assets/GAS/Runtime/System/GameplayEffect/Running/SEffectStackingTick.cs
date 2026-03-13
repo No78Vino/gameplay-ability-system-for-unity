@@ -150,7 +150,7 @@ namespace GAS.Runtime
                 {
                     var inUsage = entityManager.GetComponentData<CEffectInUsage>(ge);
                     foreach (var overflowEffect in stacking.overflowEffects)
-                        EffectUtil.ApplyGameplayEffectImmediate(overflowEffect, inUsage.Target, inUsage.Source);
+                        GameplayEffectHelper.ApplyGameplayEffectImmediate(overflowEffect, inUsage.Target, inUsage.Source);
                 }
 
                 // Fix #7: clearStackOnOverflow 独立于 DurationRefreshPolicy  

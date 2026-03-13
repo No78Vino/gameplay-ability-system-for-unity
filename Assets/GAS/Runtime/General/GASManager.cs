@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GAS.Runtime.System.Attribute;
 using Unity.Entities;
 using UnityEngine;
 
@@ -85,7 +84,6 @@ namespace GAS.Runtime
             #region Attribute
 
             sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeCurrentValue>());
-            sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeBaseValue>());
             sgAttribute.SortSystems();
 
             #endregion

@@ -138,7 +138,7 @@ namespace GAS.Runtime
                     var target = inUsage.Target;  
                     var source = inUsage.Source;  
                     foreach (var overflowEffect in stacking.overflowEffects)  
-                        EffectUtil.ApplyGameplayEffectImmediate(overflowEffect, target, source);  
+                        GameplayEffectHelper.ApplyGameplayEffectImmediate(overflowEffect, target, source);  
                 }  
   
                 // 2. 检查是否拒绝溢出应用  

@@ -26,7 +26,7 @@ namespace GAS.Runtime
             for (var i = 0; i < GameplayEffectSettings.Length; i++)
             {
                 var comConfigs = GameplayEffectSettings[i];
-                geEntities[i] = EffectUtil.CreateGameplayEffectEntity(comConfigs);
+                geEntities[i] = GameplayEffectHelper.CreateGameplayEffectEntity(comConfigs);
             }
             
             EntityHelper.AddComponent<CPeriod>(ge);

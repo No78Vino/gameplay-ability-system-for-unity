@@ -387,7 +387,7 @@ namespace GAS.Runtime
             EntityHelper.AddComponent<CAbilityCost>(_abilityEntity);  
             EntityHelper.SetComponent(_abilityEntity, new CAbilityCost  
             {  
-                ProtoGameplayEffectCost = EffectUtil.CreateGameplayEffectEntity(effectCfg.ComponentConfigs),  
+                ProtoGameplayEffectCost = GameplayEffectHelper.CreateGameplayEffectEntity(effectCfg.ComponentConfigs),  
             });  
         }  
   

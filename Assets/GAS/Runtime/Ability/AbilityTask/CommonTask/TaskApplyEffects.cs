@@ -42,8 +42,8 @@ namespace GAS.Runtime
                 foreach (var id in Parameter.IDs)  
                 {  
                     var effectCfg = GameplayEffectHelper.GetConfigByID(id);  
-                    var geEntity = EffectUtil.CreateGameplayEffectEntity(effectCfg.ComponentConfigs);  
-                    EffectUtil.ApplyGameplayEffectTo(geEntity, target.Entity, Owner.Entity);  
+                    var geEntity = GameplayEffectHelper.CreateGameplayEffectEntity(effectCfg.ComponentConfigs);  
+                    GameplayEffectHelper.ApplyGameplayEffectTo(geEntity, target.Entity, Owner.Entity);  
                 }  
             }  
         }

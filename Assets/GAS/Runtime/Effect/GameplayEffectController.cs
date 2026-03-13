@@ -23,7 +23,7 @@ namespace GAS.Runtime
         
         private void AddGameplayEffectEntityTo(Entity gameplayEffect, Entity target)
         {
-            EffectUtil.ApplyGameplayEffectTo(gameplayEffect,target,_asc);
+            GameplayEffectHelper.ApplyGameplayEffectTo(gameplayEffect,target,_asc);
         }
         
         public GameplayEffectSpec ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffect, AbilitySystemCell target)
@@ -34,7 +34,7 @@ namespace GAS.Runtime
         
         public void RemoveGameplayEffect(Entity gameplayEffect)
         {
-            EffectUtil.RemoveGameplayEffect(gameplayEffect);
+            GameplayEffectHelper.RemoveGameplayEffect(gameplayEffect);
         }
 
         public void ClearGameplayEffects()

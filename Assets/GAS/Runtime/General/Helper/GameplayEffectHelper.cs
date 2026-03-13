@@ -1,163 +1,13 @@
 ﻿using System;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 
 namespace GAS.Runtime
 {
     public static class GameplayEffectHelper
     {
-        private static EntityManager GasEntityManager => GASManager.EntityManager;
-
-        public static DynamicBuffer<BGameplayEffect> GameplayEffectsOf(Entity asc)
-        {
-            return GasEntityManager.GetBuffer<BGameplayEffect>(asc);
-        }
-
-
-        private static bool CheckOngoingRequiredTags(Entity gameplayEffect, Entity targetAsc,
-            EntityManager entityManager)
-        {
-            if (!entityManager.HasComponent<COngoingRequiredTags>(gameplayEffect)) return true;
-            var ongoingRequiredTags = entityManager.GetComponentData<COngoingRequiredTags>(gameplayEffect);
-            return ASCHelper.HasAllTags(targetAsc, ongoingRequiredTags.tags);
-        }
-
-        public static NativeArray<Entity> GetTriggerCues(Entity gameplayEffect, Entity targetAsc,
-            EntityManager entityManager,
-            NativeArray<Entity> lastCueInstances, NativeArray<Entity> prefabCues)
-        {
-            // 0.先清楚已实例化的cue
-            foreach (var cueInstance in lastCueInstances)
-            {
-                if (!entityManager.Exists(cueInstance)) continue;
-                var mcCue = entityManager.GetComponentData<MCCue>(cueInstance);
-                mcCue.cue.KillSelf();
-            }
-
-            // 1.实例化Cue
-            var prefabCue = prefabCues;
-            var cueEntities = new NativeArray<Entity>(prefabCue.Length, Allocator.Persistent);
-            for (var i = 0; i < prefabCue.Length; i++)
-            {
-                var prefabEntity = prefabCue[i];
-                // 1.先判断tag是否可以播放cue
-                bool hasRequiredTags = entityManager.HasComponent<CPlayRequiredTags>(prefabEntity);
-                if (hasRequiredTags)
-                {
-                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
-                    if (!ASCHelper.HasAllTags(targetAsc, requiredTags.tags)) continue;
-                }
-
-                bool hasImmunitedTags = entityManager.HasComponent<CPlayImmunitedTags>(prefabEntity);
-                if (hasImmunitedTags)
-                {
-                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(prefabEntity);
-                    //if(ASCUtil.HasAnyTags(targetAsc,immunitedTags.tags)) continue;
-                }
-
-                // 2.创建运行cue实例
-                cueEntities[i] = entityManager.CreateEntity();
-                entityManager.SetName(cueEntities[i], $"RuntimeCue_{cueEntities[i].Version}_{cueEntities[i].Index}");
-                ;
-                // 2.1 复制RequiredTags
-                if (hasRequiredTags)
-                {
-                    EntityHelper.AddComponent<CPlayRequiredTags>(cueEntities[i]);
-                    var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(prefabEntity);
-                    EntityHelper.SetComponent(cueEntities[i], new CPlayRequiredTags
-                    {
-                        tags = new NativeArray<int>(requiredTags.tags.ToArray(), Allocator.Persistent)
-                    });
-                }
-
-                // 2.2 复制ImmunitedTags
-                if (hasImmunitedTags)
-                {
-                    EntityHelper.AddComponent<CPlayImmunitedTags>(cueEntities[i]);
-                    var immunitedTags = entityManager.GetComponentData<CPlayImmunitedTags>(prefabEntity);
-                    EntityHelper.SetComponent(cueEntities[i], new CPlayImmunitedTags
-                    {
-                        tags = new NativeArray<int>(immunitedTags.tags.ToArray(), Allocator.Persistent)
-                    });
-                }
-
-                // 2.3 复制 ECCuePlayable,ECCuePlaying,ECKillCue
-                EntityHelper.AddComponent<ECCuePlaying>(cueEntities[i]);
-                EntityHelper.AddComponent<ECCuePlayable>(cueEntities[i]);
-                EntityHelper.AddComponent<ECKillCue>(cueEntities[i]);
-
-                // 2.4 复制Cue逻辑
-                var cueLogic = entityManager.GetComponentData<MCCue>(prefabEntity);
-                EntityHelper.AddManagedComponent<MCCue>(cueEntities[i]);
-                var cloneCue = CueHelper.CopyCueComponent(cueLogic);
-                cloneCue = CueHelper.InitInstantCueFromGameplayEffect(cloneCue, cueEntities[i], gameplayEffect);
-                cloneCue.cue.AddToTargetAsc(targetAsc);
-                cloneCue.cue.Play(true);
-                EntityHelper.SetManagedComponent(cueEntities[i], cloneCue);
-            }
-
-            return cueEntities;
-        }
-
-        public static bool ActivateEffect(Entity gameplayEffect, Entity targetAsc, EntityManager entityManager,
-            GlobalTimer globalTimer)
-        {
-            if (!CheckOngoingRequiredTags(gameplayEffect, targetAsc, entityManager)) return false;
-
-            var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
-            if (duration.active) return false;
-
-            duration.active = true;
-            duration.activeTime = duration.timeUnit == TimeUnit.Frame
-                ? globalTimer.Frame
-                : globalTimer.Turn;
-            entityManager.SetComponentData(gameplayEffect, duration);
-
-            if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
-            {
-                var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
-                ASCHelper.TryAddDynamicAddedTags(targetAsc, gameplayEffect, grantedTags.tags.ToArray());
-            }
-
-            if (entityManager.HasComponent<CCueOnActivate>(gameplayEffect))
-            {
-                var cCue = entityManager.GetComponentData<CCueOnActivate>(gameplayEffect);
-                cCue.runtimeCues = GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
-                    cCue.cues);
-                entityManager.SetComponentData(gameplayEffect, cCue);
-            }
-
-            return true;
-
-        }
-
-        public static bool DeactivateEffect(Entity gameplayEffect, Entity targetAsc, EntityManager entityManager)
-        {
-            var duration = entityManager.GetComponentData<CDuration>(gameplayEffect);
-            if (!duration.active) return false;
-
-            duration.active = false;
-            entityManager.SetComponentData(gameplayEffect, duration);
-            if (entityManager.HasComponent<CEffectGrantedTags>(gameplayEffect))
-            {
-                var grantedTags = entityManager.GetComponentData<CEffectGrantedTags>(gameplayEffect);
-                ASCHelper.RestoreDynamicTags(targetAsc, gameplayEffect, grantedTags.tags);
-            }
-
-            if (entityManager.HasComponent<CCueOnDeactivate>(gameplayEffect))
-            {
-                var cCue = entityManager.GetComponentData<CCueOnDeactivate>(gameplayEffect);
-                cCue.runtimeCues = GetTriggerCues(gameplayEffect, targetAsc, entityManager, cCue.runtimeCues,
-                    cCue.cues);
-                entityManager.SetComponentData(gameplayEffect, cCue);
-            }
-
-            return true;
-        }
-
-
-        [BurstCompile]
+        private static EntityManager _em => GASManager.EntityManager;
+        
         public static Entity GetStackingEffectBySource(int stackingCode, Entity targetAsc, Entity sourceAsc,
             EntityManager entityManager)
         {
@@ -182,8 +32,7 @@ namespace GAS.Runtime
 
             return Entity.Null;
         }
-
-        [BurstCompile]
+        
         public static Entity GetStackingEffectByTarget(int stackingCode, Entity targetAsc, EntityManager entityManager)
         {
             var effects = entityManager.GetBuffer<BGameplayEffect>(targetAsc);
@@ -205,23 +54,6 @@ namespace GAS.Runtime
             return Entity.Null;
         }
 
-        [BurstCompile]
-        public static Entity InstantiateEffectEntity(EntityManager entityManager, Entity prefabEffect, Entity targetAsc,
-            Entity sourceAsc, int level = 1)
-        {
-            var instanceGe = entityManager.Instantiate(prefabEffect);
-            entityManager.AddComponent<CEffectApplied>(instanceGe);
-            entityManager.AddComponent<CInApplicationProgress>(instanceGe);
-            entityManager.AddComponent<CEffectInUsage>(instanceGe);
-            entityManager.SetComponentData(instanceGe, new CEffectInUsage()
-            {
-                Level = level,
-                Target = targetAsc,
-                Source = sourceAsc,
-            });
-            return instanceGe;
-        }
-
         #region GameplayEffectConfig
 
         private static Func<int, GameplayEffectConfig> _getConfigByID;
@@ -237,5 +69,118 @@ namespace GAS.Runtime
         }
 
         #endregion
+        
+        /// <summary>  
+        /// 立即应用 Instant 类型的 GameplayEffect（直接修改 BaseValue）  
+        /// 用于 Cost、或其他需要绕过 ECS GE 管线立即生效的场景。  
+        /// 该方法不会走 ECS GE 生命周期管线，不会产生 GE 实例 Entity。  
+        /// </summary>  
+        /// <param name="gameplayEffect">GE 的 Prototype Entity（需包含 MCModifiers）</param>  
+        /// <param name="target">目标 ASC Entity</param>  
+        /// <param name="source">来源 ASC Entity</param>  
+        public static void ApplyGameplayEffectImmediate(Entity gameplayEffect, Entity target, Entity source)
+        {
+            if (!_em.HasComponent<MCModifiers>(gameplayEffect)) return;
+
+            var modifiers = _em.GetComponentData<MCModifiers>(gameplayEffect);
+            var attrSets = _em.GetBuffer<BEAttrSet>(target);
+            bool change = false;
+
+            foreach (var modifier in modifiers.Modifiers)
+            {
+                var attrSetIndex = attrSets.IndexOfAttrSetCode(modifier.AttrSetCode);
+                if (attrSetIndex == -1) continue;
+
+                var attrSet = attrSets[attrSetIndex];
+                var attributes = attrSet.Attributes;
+
+                var attrIndex = attributes.IndexOfAttrCode(modifier.AttrCode);
+                if (attrIndex == -1) continue;
+
+                var data = attributes[attrIndex];
+                var oldValue = data.BaseValue;
+                // 使用显式 Source/Target 的 Calculate 重载，避免原型 Entity 缺少 CEffectInUsage 的问题  
+                var newValue = MmcHelper.Calculate(gameplayEffect, modifier, data.BaseValue, source, target);
+
+                // 钳制计算处理  
+                if (data.IsClampMin) newValue = Unity.Mathematics.math.max(newValue, data.MinValue);
+                if (data.IsClampMax) newValue = Unity.Mathematics.math.min(newValue, data.MaxValue);
+
+                // OnChangeBefore  
+                newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(target, modifier.AttrSetCode,
+                    modifier.AttrCode, newValue);
+
+                data.BaseValue = newValue;
+
+                // OnChangeAfter  
+                if (newValue != oldValue)
+                {
+                    data.Dirty = true;
+                    change = true;
+                    GASEventCenter.InvokeOnBaseValueChangeAfter(target, modifier.AttrSetCode,
+                        modifier.AttrCode, oldValue, newValue);
+                }
+
+                attrSet.Attributes[attrIndex] = data;
+                attrSets[attrSetIndex] = attrSet;
+            }
+
+            // 标记属性需要重计算 CurrentValue  
+            if (change)
+                EntityHelper.AddComponent<CAttributeIsDirty>(target);
+        }
+
+
+        public static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)
+        {
+            var entity = _em.CreateEntity();
+            EntityHelper.SetName(entity,$"GE_V{entity.Version}_{entity.Index}");
+            foreach (var config in componentAssets)
+                config.LoadToGameplayEffectEntity(entity);
+            return entity;
+        }
+
+        public static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
+        {
+            EntityHelper.AddComponent<CEffectInUsage>(gameplayEffect);
+            EntityHelper.AddComponent<WipInstantiateEffect>(gameplayEffect);
+            EntityHelper.SetComponent(gameplayEffect, new CEffectInUsage
+            {
+                Source = source,
+                Target = target
+            });
+        }
+        
+        public static void ApplyGameplayEffectTo(Entity gameplayEffect, AbilitySystemCell target, AbilitySystemCell source)
+        {
+            ApplyGameplayEffectTo(gameplayEffect, target.Entity, source.Entity);
+        }
+        
+        public static void RemoveGameplayEffect(Entity gameplayEffect)
+        {
+            if (!_em.HasComponent<CEffectInUsage>(gameplayEffect)) return;
+            
+            EntityHelper.AddComponent<CEffectDestroy>(gameplayEffect);
+            EntityHelper.AddComponent<WipDeactivateEffect>(gameplayEffect);
+            EntityHelper.AddComponent<WipRemoveEffect>(gameplayEffect);
+        }
+
+        public static void RemoveGameplayEffect(Entity gameplayEffect,EntityCommandBuffer ecb)
+        {
+            //if (!_entityManager.HasComponent<CInUsage>(gameplayEffect)) return;
+            ecb.RemoveComponent<CEffectApplied>(gameplayEffect);
+            ecb.AddComponent<CEffectDestroy>(gameplayEffect);
+            
+            // 从ASC容器中移除
+            var inUsage = _em.GetComponentData<CEffectInUsage>(gameplayEffect);
+            var target = inUsage.Target;
+            var gameplayEffects = _em.GetBuffer<BGameplayEffect>(target);
+            for (var i = 0; i < gameplayEffects.Length; i++)
+            {
+                if (gameplayEffects[i].GameplayEffect != gameplayEffect) continue;
+                gameplayEffects.RemoveAt(i);
+                break;
+            }
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace GAS.Runtime
 
         public GameplayEffectSpec(GameplayEffectComponentConfig[] componentConfigs)
         {
-            Entity = EffectUtil.CreateGameplayEffectEntity(componentConfigs);
+            Entity = GameplayEffectHelper.CreateGameplayEffectEntity(componentConfigs);
         }
 
         internal GameplayEffectSpec(Entity geEntity)
@@ -107,14 +107,14 @@ namespace GAS.Runtime
         public void Remove()
         {
             if (!IsValid) return;
-            EffectUtil.RemoveGameplayEffect(Entity);
+            GameplayEffectHelper.RemoveGameplayEffect(Entity);
         }
 
         /// <summary>对目标施加此 GE</summary>  
         public void ApplyTo(AbilitySystemCell target, AbilitySystemCell source)
         {
             if (!IsValid || target == null || source == null) return;
-            EffectUtil.ApplyGameplayEffectTo(Entity, target.Entity, source.Entity);
+            GameplayEffectHelper.ApplyGameplayEffectTo(Entity, target.Entity, source.Entity);
         }
 
         /// <summary>对目标施加此 GE（source = target，即自身施加）</summary>  
@@ -499,7 +499,7 @@ namespace GAS.Runtime
             var config = GameplayEffectHelper.GetConfigByID(geConfigID);
             if (config == null) return null;
 
-            var newGeEntity = EffectUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
+            var newGeEntity = GameplayEffectHelper.CreateGameplayEffectEntity(config.ComponentConfigs);
             AddPeriodGameplayEffectInternal(newGeEntity);
             return new GameplayEffectSpec(newGeEntity);
         }
@@ -512,7 +512,7 @@ namespace GAS.Runtime
         {
             if (!CheckPeriodExist()) return null;
 
-            var newGeEntity = EffectUtil.CreateGameplayEffectEntity(componentConfigs);
+            var newGeEntity = GameplayEffectHelper.CreateGameplayEffectEntity(componentConfigs);
             AddPeriodGameplayEffectInternal(newGeEntity);
             return new GameplayEffectSpec(newGeEntity);
         }
@@ -590,7 +590,7 @@ namespace GAS.Runtime
                 _em.DestroyEntity(oldGe);
 
             // 创建新的  
-            var newGeEntity = EffectUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
+            var newGeEntity = GameplayEffectHelper.CreateGameplayEffectEntity(config.ComponentConfigs);
             com.GameplayEffects[index] = newGeEntity;
             _em.SetComponentData(Entity, com);
             return new GameplayEffectSpec(newGeEntity);
@@ -637,7 +637,7 @@ namespace GAS.Runtime
             {
                 var config = GameplayEffectHelper.GetConfigByID(gameplayEffectConfigIDs[i]);
                 geEntities[i] = config != null
-                    ? EffectUtil.CreateGameplayEffectEntity(config.ComponentConfigs)
+                    ? GameplayEffectHelper.CreateGameplayEffectEntity(config.ComponentConfigs)
                     : Entity.Null;
             }
 

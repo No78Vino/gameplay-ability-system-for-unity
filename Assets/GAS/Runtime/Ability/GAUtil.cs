@@ -145,7 +145,7 @@ namespace GAS.Runtime
             
             var costComponent = _entityManager.GetComponentData<CAbilityCost>(ability);
             var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-            EffectUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
+            GameplayEffectHelper.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
         /// <summary>  
@@ -170,7 +170,7 @@ namespace GAS.Runtime
             }  
   
             // 3. 通过ECS GE管线应用到Owner（走完整的 Instantiate→CheckApply→Apply→Activate 流程）  
-            EffectUtil.ApplyGameplayEffectTo(instanceGe, owner, owner);  
+            GameplayEffectHelper.ApplyGameplayEffectTo(instanceGe, owner, owner);  
         }
         
         /// <summary>
