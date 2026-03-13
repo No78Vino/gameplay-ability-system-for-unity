@@ -21,9 +21,8 @@ namespace DemoForESC._Script
             base.Awake();
             _mainCamera = UnityEngine.Camera.main;
 
-
-            AbilitySystemComponent.Cell.GrantAbility(XLuban.GetAbilityConfig(XAbility.ABILITY_Dodge));
-            AbilitySystemComponent.Cell.AddFixedTag(XTag.Ability);
+            
+            // 自动恢复耐力Buff
             var buff1 = new GameplayEffectSpec(XLuban.GetGameplayEffectConfig(1007).ComponentConfigs);
             AbilitySystemComponent.Cell.ApplyGameplayEffectToSelf(buff1);
         }
