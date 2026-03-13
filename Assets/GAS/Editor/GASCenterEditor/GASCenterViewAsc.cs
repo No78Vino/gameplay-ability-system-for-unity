@@ -139,7 +139,7 @@ namespace GAS.Editor
 
                 // 写入当前cue数据到Excel
                 var row = _idToRowMap.TryGetValue(SelectedId, out var existingRow) ? existingRow : MaxRowForNewID();
-                worksheet.Cells[row, _headerMap["id"]].Value = SelectedId;
+                worksheet.Cells[row, _headerMap["ID"]].Value = SelectedId;
                 worksheet.Cells[row, _headerMap["Name"]].Value = name;
                 worksheet.Cells[row, _headerMap["Desc"]].Value = description;
                 worksheet.Cells[row, _headerMap["Level"]].Value = level;
