@@ -146,10 +146,11 @@ namespace GAS.Runtime
             sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SSetEffectDeactive>());
             sgDeactivateEffect.SortSystems();
 
-            var sgRemoveEffect = ExWorld.CreateSystemManaged<SGRemoveEffect>();
-            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveEnd>());
-            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnRemove>());
-            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveEffectFromAscBuffList>());
+            var sgRemoveEffect = ExWorld.CreateSystemManaged<SGRemoveEffect>();  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveEnd>());  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnRemove>());  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveEffectFromAscBuffList>());  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveGrantedAbilityOnRemove>()); // 新增  
             sgRemoveEffect.SortSystems();
 
             sgEffectOperation.AddSystemToUpdateList(sgCheckApplyEffect);
