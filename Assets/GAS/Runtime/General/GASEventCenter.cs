@@ -261,10 +261,6 @@ namespace GAS.Runtime
 
         #region Ability 事件
 
-        // protected event Action<AbilityActivateResult> _onActivateResult;
-        // protected event Action _onEndAbility;
-        // protected event Action _onCancelAbility;
-
         private static readonly Dictionary<Entity, Action<AbilityActivationResult>> _onActivateResult = new();
         private static readonly Dictionary<Entity, Action> _onEndAbility = new();
         private static readonly Dictionary<Entity, Action> _onCancelAbility = new();

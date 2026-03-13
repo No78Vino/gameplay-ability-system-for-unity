@@ -15,7 +15,7 @@ namespace GAS.Runtime
         {
             _entityManager.AddComponentData(ability, new CAbilityCost
             {
-                ProtoGameplayEffectCost = EffectUtil.CreateGameplayEffectEntity(CostComponentConfigs),
+                ProtoGameplayEffectCost = GameplayEffectHelper.CreateGameplayEffectEntity(CostComponentConfigs),
             });
         }
     }

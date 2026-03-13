@@ -7,78 +7,12 @@ namespace GAS.Runtime
 {
     public static class ASCHelper
     {
-        private static EntityManager _entityManager => GASManager.EntityManager;
-
-        public static void RemoveGameplayEffectWithAnyTags(this Entity asc, Entity gameplayEffect)
-        {
-            if (!_entityManager.HasComponent<CRemoveEffectWithTags>(gameplayEffect)) return;
-
-            var comRemoveEffectWithTags = _entityManager.GetComponentData<CRemoveEffectWithTags>(gameplayEffect);
-            var removeEffectWithTags = comRemoveEffectWithTags.tags;
-            if (removeEffectWithTags.Length == 0) return;
-
-            var geBuff = _entityManager.GetBuffer<BGameplayEffect>(asc);
-            for (var i = geBuff.Length - 1; i >= 0; i--)
-            {
-                var ge = geBuff[i].GameplayEffect;
-                var hasRemoveTag = ge.CheckEffectHasAnyTags(removeEffectWithTags);
-                if (!hasRemoveTag) continue;
-                geBuff.RemoveAt(i);
-                // 含有子实例的组件也要清理
-                if (_entityManager.HasComponent<CPeriod>(ge))
-                {
-                    var period = _entityManager.GetComponentData<CPeriod>(ge);
-                    foreach (var sonGe in period.GameplayEffects)
-                        _entityManager.DestroyEntity(sonGe);
-                }
-
-                _entityManager.DestroyEntity(ge);
-            }
-        }
-
-        public static void ApplyModFromInstantGameplayEffect(this Entity asc, Entity gameplayEffect)
-        {
-            var attrSets = _entityManager.GetBuffer<BEAttrSet>(asc);
-            var modifiers = _entityManager.GetComponentData<MCModifiers>(gameplayEffect);
-            foreach (var mod in modifiers.Modifiers)
-            {
-                var attrSetIndex = attrSets.IndexOfAttrSetCode(mod.AttrSetCode);
-                if (attrSetIndex == -1) continue;
-
-                var attrSet = attrSets[attrSetIndex];
-                var attributes = attrSet.Attributes;
-
-                var attrIndex = attributes.IndexOfAttrCode(mod.AttrCode);
-                if (attrIndex == -1) continue;
-
-                var attr = attributes[attrIndex];
-                var oldValue = attr.BaseValue;
-                var newValue = MmcHelper.Calculate(gameplayEffect, mod, attr.BaseValue);
-                    
-                // OnChangeBefore
-                // BaseValue 不做钳制，因为Max，Min是只针对Current Value
-                newValue = GASEventCenter.InvokeOnBaseValueChangeBefore(asc, mod.AttrSetCode, mod.AttrCode, newValue);
-
-                attr.BaseValue = newValue;
-
-                // OnChangeAfter
-                if (newValue != oldValue)
-                {
-                    // BaseValue 改变，需要标记Dirty
-                    attr.Dirty = true;
-                    GASManager.EntityManager.AddComponent<CAttributeIsDirty>(asc);
-                    GASEventCenter.InvokeOnBaseValueChangeAfter(asc, mod.AttrSetCode, mod.AttrCode, oldValue, newValue);
-                }
-
-                attrSet.Attributes[attrIndex] = attr;
-                attrSets[attrSetIndex] = attrSet;
-            }
-        }
+        private static EntityManager _em => GASManager.EntityManager;
 
         public static bool HasAllTags(Entity asc, NativeArray<int> tags)
         {
-            var fixedTags = _entityManager.GetBuffer<BFixedTag>(asc);
-            var tempTags = _entityManager.GetBuffer<BTemporaryTag>(asc);
+            var fixedTags = _em.GetBuffer<BFixedTag>(asc);
+            var tempTags = _em.GetBuffer<BTemporaryTag>(asc);
 
             foreach (var tag in tags)
             {
@@ -115,8 +49,8 @@ namespace GAS.Runtime
 
         public static bool HasAnyTags(Entity asc, NativeArray<int> tags)
         {
-            var fixedTags = _entityManager.GetBuffer<BFixedTag>(asc);
-            var tempTags = _entityManager.GetBuffer<BTemporaryTag>(asc);
+            var fixedTags = _em.GetBuffer<BFixedTag>(asc);
+            var tempTags = _em.GetBuffer<BTemporaryTag>(asc);
 
             foreach (var tag in tags)
             {
@@ -142,7 +76,7 @@ namespace GAS.Runtime
 
         public static bool HasGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
-            var geBuff = _entityManager.GetBuffer<BGameplayEffect>(asc);
+            var geBuff = _em.GetBuffer<BGameplayEffect>(asc);
             foreach (var geElem in geBuff)
                 if (geElem.GameplayEffect == gameplayEffect)
                     return true;
@@ -151,7 +85,7 @@ namespace GAS.Runtime
         
         public static bool TryAddGameplayEffect(this Entity asc, Entity gameplayEffect)
         {
-            var geBuff = _entityManager.GetBuffer<BGameplayEffect>(asc);
+            var geBuff = _em.GetBuffer<BGameplayEffect>(asc);
             foreach (var geElem in geBuff)
                 if (geElem.GameplayEffect == gameplayEffect)
                     return false;
@@ -159,19 +93,7 @@ namespace GAS.Runtime
             return true;
         }
 
-        /// <summary>
-        ///     GE列表为脏，需要重新计算Attribute的Current Value
-        /// </summary>
-        /// <param name="asc"></param>
-        public static void GameplayEffectListIsDirty(this Entity asc)
-        {
-            // 1.尝试更新自身的Attribute的Current Value
-            asc.TryRecalculateAttributeCurrentValue();
 
-            // TODO 2.触发 OnGameplayEffectListIsDirty 注册的事件
-        }
-
-        
         #region GameplayEffect 相关工具函数
         
         /// <summary>  
@@ -220,8 +142,8 @@ namespace GAS.Runtime
         public static bool TryRecalculateAttributeCurrentValue(this Entity asc)
         {
             bool isValueChanged = false;
-            var attrSets = _entityManager.GetBuffer<BEAttrSet>(asc);
-            var effects = _entityManager.GetBuffer<BGameplayEffect>(asc);
+            var attrSets = _em.GetBuffer<BEAttrSet>(asc);
+            var effects = _em.GetBuffer<BGameplayEffect>(asc);
             for (var attrSetIndex = 0; attrSetIndex < attrSets.Length; attrSetIndex++)
             {
                 var attrSet = attrSets[attrSetIndex];
@@ -237,7 +159,7 @@ namespace GAS.Runtime
                     foreach (var element in effects)
                     {
                         var ge = element.GameplayEffect;
-                        var mods = _entityManager.GetComponentData<MCModifiers>(ge);
+                        var mods = _em.GetComponentData<MCModifiers>(ge);
                         foreach (var modElement in mods.Modifiers)
                             if (modElement.AttrSetCode == attrSet.Code && modElement.AttrCode == attr.Code)
                                 newValue = MmcHelper.Calculate(ge, modElement, newValue);
@@ -270,12 +192,12 @@ namespace GAS.Runtime
 
         public static DynamicBuffer<BFixedTag> GetDynamicBufferFixedTags(Entity asc)
         {
-            return _entityManager.GetBuffer<BFixedTag>(asc);
+            return _em.GetBuffer<BFixedTag>(asc);
         }
         
         public static DynamicBuffer<BTemporaryTag> GetDynamicBufferTemporaryTags(Entity asc)
         {
-            return _entityManager.GetBuffer<BTemporaryTag>(asc);
+            return _em.GetBuffer<BTemporaryTag>(asc);
         }
         
         public static void TryAddDynamicAddedTag(Entity asc, Entity source, int tag)
@@ -328,32 +250,32 @@ namespace GAS.Runtime
         public static void RestoreDynamicTags(Entity source)
         {
             // 如果是ability
-            bool hasAbilityBaseInfo = _entityManager.HasComponent<CAbilityBaseInfo>(source);
+            bool hasAbilityBaseInfo = _em.HasComponent<CAbilityBaseInfo>(source);
             if (hasAbilityBaseInfo)
             {
-                bool hasActivationOwnedTags = _entityManager.HasComponent<CAbilityActivationOwnedTags>(source);
+                bool hasActivationOwnedTags = _em.HasComponent<CAbilityActivationOwnedTags>(source);
                 if (hasActivationOwnedTags)
                 {
-                    var activationOwnedTags = _entityManager.GetComponentData<CAbilityActivationOwnedTags>(source);
-                    if (_entityManager.HasComponent<CAbilityBaseInfo>(source))
+                    var activationOwnedTags = _em.GetComponentData<CAbilityActivationOwnedTags>(source);
+                    if (_em.HasComponent<CAbilityBaseInfo>(source))
                     {
-                        var abilityBaseInfo = _entityManager.GetComponentData<CAbilityBaseInfo>(source);
+                        var abilityBaseInfo = _em.GetComponentData<CAbilityBaseInfo>(source);
                         RestoreDynamicTags(abilityBaseInfo.Owner, source,activationOwnedTags.tags);
                     }
                 }
             }
             
             // 如果是durational effect
-            bool hasDuration = _entityManager.HasComponent<CDuration>(source);
+            bool hasDuration = _em.HasComponent<CDuration>(source);
             if (hasDuration)
             {
-                bool hasGrantedTags = _entityManager.HasComponent<CEffectGrantedTags>(source);
+                bool hasGrantedTags = _em.HasComponent<CEffectGrantedTags>(source);
                 if (hasGrantedTags)
                 {
-                    var grantedTags = _entityManager.GetComponentData<CEffectGrantedTags>(source);
-                    if (_entityManager.HasComponent<CEffectInUsage>(source))
+                    var grantedTags = _em.GetComponentData<CEffectGrantedTags>(source);
+                    if (_em.HasComponent<CEffectInUsage>(source))
                     {
-                        var inUsage = _entityManager.GetComponentData<CEffectInUsage>(source);
+                        var inUsage = _em.GetComponentData<CEffectInUsage>(source);
                         RestoreDynamicTags(inUsage.Target,source,grantedTags.tags);
                     }
                 }

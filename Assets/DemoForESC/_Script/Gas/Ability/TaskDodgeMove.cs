@@ -64,10 +64,10 @@ namespace GAS.Runtime
         {  
             // Demo中直接从InputController获取movement vector  
             var inputController = DemoForESC._Script.Controller  
-                .EasyInputController.Inst();  
-            if (inputController != null)  
-                return inputController.GetMovementVector();  
-            return Owner.GameObject.transform.forward;  
+                .EasyInputController.Inst();
+            if (inputController == null) return Owner.GameObject.transform.forward;
+            var direction = inputController.GetMovementVector();
+            return direction.magnitude>=0.9f?direction:Owner.GameObject.transform.forward;
         }  
     }  
 }

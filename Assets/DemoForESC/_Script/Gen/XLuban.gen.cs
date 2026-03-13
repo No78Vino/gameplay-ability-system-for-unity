@@ -521,6 +521,14 @@ namespace GAS.Runtime
                     {
                         switch (clipData.Task)
                         {
+                            case cfg.TaskDodgeMove taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamDodgeMove;
+                                tp?.SetDodgeSpeed(taskData.Param.DodgeSpeed);
+                                tp?.SetWindUpFrames(taskData.Param.WindUpFrames);
+                                taskParam = tp;
+                                break;
+                            }
                             case cfg.TaskPlayCuePreset taskData:
                             {
                                 var tp = taskParam as GAS.Runtime.XParamCueList;
@@ -579,6 +587,12 @@ namespace GAS.Runtime
                             {
                                 var tp = taskParam as GAS.Runtime.XParamString;
                                 tp?.SetValue(taskData.Param.Value);
+                                taskParam = tp;
+                                break;
+                            }
+                            case cfg.TaskDoCooldown taskData:
+                            {
+                                var tp = taskParam as GAS.Runtime.XParamNone;
                                 taskParam = tp;
                                 break;
                             }

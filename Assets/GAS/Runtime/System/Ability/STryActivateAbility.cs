@@ -22,7 +22,7 @@ namespace GAS.Runtime
             foreach (var (_, basicInfo, ability) in SystemAPI
                          .Query<RefRO<CAbilityInTryActivate>, RefRO<CAbilityBaseInfo>>().WithEntityAccess())
             {
-                var result = GAUtil.CanActivateAbility(ability);
+                var result = AbilityUtil.CanActivateAbility(ability);
                 if (result == AbilityActivationResult.Success)
                 {
                     var owner = basicInfo.ValueRO.Owner;
@@ -41,7 +41,7 @@ namespace GAS.Runtime
                     abilityLogic.Logic.ActivateAbility(globalTimer.ValueRO);
                     
                     // 激活成功后，根据 CancelAbilityWithTags 取消其他匹配的能力  
-                    GAUtil.CancelAbilitiesWithTags(ability);
+                    AbilityUtil.CancelAbilitiesWithTags(ability);
                 }
 
                 GASEventCenter.InvokeOnActivateResult(ability, result);

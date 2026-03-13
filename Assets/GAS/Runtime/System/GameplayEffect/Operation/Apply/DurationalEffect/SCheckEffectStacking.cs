@@ -40,9 +40,9 @@ namespace GAS.Runtime
                     EffectStackType.AggregateBySource =>
                         GameplayEffectHelper.GetStackingEffectBySource(stacking.ValueRO.StackingCode,
                             inUsage.ValueRO.Target, inUsage.ValueRO.Source, state.EntityManager),
-                    EffectStackType.AggregateByTarget =>
-                        GameplayEffectHelper.GetStackingEffectByTarget(stacking.ValueRO.StackingCode,
-                            inUsage.ValueRO.Source, state.EntityManager),
+                    EffectStackType.AggregateByTarget =>  
+                        GameplayEffectHelper.GetStackingEffectByTarget(stacking.ValueRO.StackingCode,  
+                            inUsage.ValueRO.Target, state.EntityManager),
                     _ => Entity.Null
                 };
 
@@ -54,8 +54,10 @@ namespace GAS.Runtime
                     ecb.AddComponent<CEffectDestroy>(ge);
                 }
                 
-                var operatedEffect = stackGe == Entity.Null ? ge : stackGe;
-                TryChangeStackCount(state.EntityManager, operatedEffect, stacking.ValueRO, stacking.ValueRO.StackCount + 1);
+                var operatedEffect = stackGe == Entity.Null ? ge : stackGe;  
+                // 读取已有堆叠GE的当前StackCount，而非新传入GE的StackCount  
+                var existingStacking = state.EntityManager.GetComponentData<CStacking>(operatedEffect);  
+                TryChangeStackCount(state.EntityManager, operatedEffect, existingStacking, existingStacking.StackCount + 1);
             }
 
             ecb.Playback(state.EntityManager);
@@ -87,19 +89,26 @@ namespace GAS.Runtime
             // 获取旧Stacking数据
             var globalFrameTimer = _globalTimer;
             var oldStackCount = entityManager.GetComponentData<CStacking>(ge).StackCount;
-            var newStackCount = stackCount;
-            if (stackCount <= stacking.LimitCount)
-            {
-                // 更新栈数
-                newStackCount = Math.Max(1, stackCount); // 最小层数为1
-                stacking.StackCount = newStackCount;
+            var newStackCount = stackCount;  
+            if (stackCount <= 0)  
+            {  
+                // 层数减到0，销毁GE  
+                newStackCount = 0;  
+                EntityHelper.RemoveComponent<CEffectApplied>(ge);  
+                EntityHelper.AddComponent<CEffectDestroy>(ge);  
+            }  
+            else if (stackCount <= stacking.LimitCount)  
+            {  
+                // 更新栈数  
+                newStackCount = stackCount;  
+                stacking.StackCount = newStackCount;  
                 entityManager.SetComponentData(ge, stacking);
 
                 // 是否刷新Duration
                 if (stacking.EffectDurationRefreshPolicy == EffectDurationRefreshPolicy.RefreshOnSuccessfulApplication)
                 {
                     var duration = entityManager.GetComponentData<CDuration>(ge);
-                    duration = UpdateActiveTime(duration, globalFrameTimer);
+                    duration = RefreshDuration(duration, globalFrameTimer);  
                     entityManager.SetComponentData(ge, duration);
                 }
 
@@ -120,38 +129,39 @@ namespace GAS.Runtime
                     }
                 }
             }
-            else
-            {
-                // 溢出GE生效
-                if (stacking.overflowEffects.Length > 0)
-                {
-                    var inUsage = entityManager.GetComponentData<CEffectInUsage>(ge);
-                    var target = inUsage.Target;
-                    var source = inUsage.Source;
-                    foreach (var overflowEffect in stacking.overflowEffects)
-                        EffectUtil.ApplyGameplayEffectImmediate(overflowEffect, target, source);
-                }
-
-                if (stacking.EffectDurationRefreshPolicy == EffectDurationRefreshPolicy.RefreshOnSuccessfulApplication)
-                {
-                    if (stacking.denyOverflowApplication)
-                    {
-                        //当DenyOverflowApplication为True是才有效，当Overflow时是否直接删除所有层数
-                        if (stacking.clearStackOnOverflow)
-                        {
-                            // 移除自身
-                            EntityHelper.RemoveComponent<CEffectApplied>(ge);
-                            EntityHelper.AddComponent<CEffectDestroy>(ge);
-                        }
-                    }
-                    else
-                    {
-                        // 刷新Duration
-                        var duration = entityManager.GetComponentData<CDuration>(ge);
-                        duration = UpdateActiveTime(duration, globalFrameTimer);
-                        entityManager.SetComponentData(ge, duration);
-                    }
-                }
+            else  
+            {  
+                // 1. 溢出GE生效  
+                if (stacking.overflowEffects.Length > 0)  
+                {  
+                    var inUsage = entityManager.GetComponentData<CEffectInUsage>(ge);  
+                    var target = inUsage.Target;  
+                    var source = inUsage.Source;  
+                    foreach (var overflowEffect in stacking.overflowEffects)  
+                        GameplayEffectHelper.ApplyGameplayEffectImmediate(overflowEffect, target, source);  
+                }  
+  
+                // 2. 检查是否拒绝溢出应用  
+                if (stacking.denyOverflowApplication)  
+                {  
+                    // 当DenyOverflowApplication为True时，溢出时是否直接删除所有层数  
+                    if (stacking.clearStackOnOverflow)  
+                    {  
+                        EntityHelper.RemoveComponent<CEffectApplied>(ge);  
+                        EntityHelper.AddComponent<CEffectDestroy>(ge);  
+                    }  
+                    // denyOverflow=true 时不刷新Duration（无论策略如何）  
+                }  
+                else  
+                {  
+                    // 3. 未拒绝溢出，根据策略刷新Duration  
+                    if (stacking.EffectDurationRefreshPolicy == EffectDurationRefreshPolicy.RefreshOnSuccessfulApplication)  
+                    {  
+                        var duration = entityManager.GetComponentData<CDuration>(ge);  
+                        duration = RefreshDuration(duration, globalFrameTimer);  
+                        entityManager.SetComponentData(ge, duration);  
+                    }  
+                }  
             }
 
             // StackCount尝试改变，事件
@@ -164,29 +174,28 @@ namespace GAS.Runtime
             }
         }
 
-        private CDuration UpdateActiveTime(CDuration duration, GlobalTimer globalFrameTimer)
-        {
-            var currentFrame = globalFrameTimer.Frame;
-            var currentTurn = globalFrameTimer.Turn;
-            //  更新激活时间
-            if (duration.active) return duration;
-            duration.active = true;
-            if (duration.timeUnit == TimeUnit.Frame)
-            {
-                if (duration.activeTime == 0 || duration.ResetStartTimeWhenActivated)
-                    duration.activeTime = currentFrame;
-
-                duration.lastActiveTime = currentFrame;
-            }
-            else
-            {
-                if (duration.activeTime == 0 || duration.ResetStartTimeWhenActivated)
-                    duration.activeTime = currentTurn;
-
-                duration.lastActiveTime = currentTurn;
-            }
-
-            return duration;
+        /// <summary>  
+        /// 刷新Duration的激活时间（用于Stacking的Duration刷新）。  
+        /// 无论当前是否已激活，都强制重置 activeTime 为当前时间。  
+        /// </summary>  
+        private CDuration RefreshDuration(CDuration duration, GlobalTimer globalFrameTimer)  
+        {  
+            var currentFrame = globalFrameTimer.Frame;  
+            var currentTurn = globalFrameTimer.Turn;  
+  
+            duration.active = true;  
+            if (duration.timeUnit == TimeUnit.Frame)  
+            {  
+                duration.activeTime = currentFrame;  
+                duration.lastActiveTime = currentFrame;  
+            }  
+            else  
+            {  
+                duration.activeTime = currentTurn;  
+                duration.lastActiveTime = currentTurn;  
+            }  
+  
+            return duration;  
         }
     }
 }

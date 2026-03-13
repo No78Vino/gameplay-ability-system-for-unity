@@ -6,18 +6,12 @@ namespace GAS.Runtime
     {
         protected static EntityManager _entityManager => GASManager.EntityManager;
         protected XParam _paramRaw;
+        public XParam ParamRaw => _paramRaw;
         protected Entity _abilityEntity;
         protected int _code;
 
-        public AbilitySpec Spec
-        {
-            get
-            {
-                var owner = Owner;
-                return owner.GetAbilitySpec(_code);
-            }
-        }
-        
+        public AbilitySpec Spec => Owner.GetAbilitySpec(_code);
+
         protected AbilityLogicBase(Entity ability)
         {
 #if UNITY_EDITOR
@@ -90,12 +84,12 @@ namespace GAS.Runtime
         
         protected Entity CreateGameplayEffectEntity(GameplayEffectConfig config)
         {
-            return EffectUtil.CreateGameplayEffectEntity(config.ComponentConfigs);
+            return GameplayEffectHelper.CreateGameplayEffectEntity(config.ComponentConfigs);
         } 
         
         protected void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)
         {
-            EffectUtil.ApplyGameplayEffectTo(gameplayEffect, target,source);
+            GameplayEffectHelper.ApplyGameplayEffectTo(gameplayEffect, target,source);
             EntityHelper.AddComponent<CCreatedByAbility>(gameplayEffect);
             EntityHelper.SetComponent(gameplayEffect,new CCreatedByAbility()
             {
@@ -110,7 +104,7 @@ namespace GAS.Runtime
 
         protected void RemoveGameplayEffect(Entity geEntity)
         {
-            EffectUtil.RemoveGameplayEffect(geEntity);
+            GameplayEffectHelper.RemoveGameplayEffect(geEntity);
         }
     }
 

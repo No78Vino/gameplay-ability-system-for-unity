@@ -19,9 +19,9 @@ namespace GAS.Runtime
     ///     原本Mono版本里的所有ability自身的功能性方法全部转为静态方法
     ///     Entity + Util方式代替Mono + AbilitySpec方式
     /// </summary>
-    public static class GAUtil
+    public static class AbilityUtil
     {
-        private static EntityManager _entityManager => GASManager.EntityManager;
+        private static EntityManager _em => GASManager.EntityManager;
 
         /// <summary>
         ///     检查能力是否可以激活
@@ -30,7 +30,7 @@ namespace GAS.Runtime
         /// <returns>   </returns>
         public static AbilityActivationResult CanActivateAbility(Entity ability)
         {
-            if (_entityManager.HasComponent<CAbilityActive>(ability))
+            if (_em.HasComponent<CAbilityActive>(ability))
                 return AbilityActivationResult.FailHasActivated;
 
             if (!CheckGameplayTagsValidTpActivate(ability))
@@ -47,42 +47,42 @@ namespace GAS.Runtime
 
         public static bool CheckGameplayTagsValidTpActivate(Entity ability)
         {
-            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+            var owner = _em.GetComponentData<CAbilityBaseInfo>(ability).Owner;
             // 1. 检查激活所需标签
             var hasAllTags = true;
-            var abilityHasActivationRequiredTags = _entityManager.HasComponent<CAbilityActivationRequiredTags>(ability);
+            var abilityHasActivationRequiredTags = _em.HasComponent<CAbilityActivationRequiredTags>(ability);
             if (abilityHasActivationRequiredTags)
             {
                 var abilityActivationRequiredTags =
-                    _entityManager.GetComponentData<CAbilityActivationRequiredTags>(ability);
+                    _em.GetComponentData<CAbilityActivationRequiredTags>(ability);
                 hasAllTags = ASCHelper.HasAllTags(owner, abilityActivationRequiredTags.tags);
             }
 
             // 2. 检查激活被阻止的标签
             var notHasAnyTags = true;
-            var abilityHasActivationBlockedTags = _entityManager.HasComponent<CAbilityActivationBlockedTags>(ability);
+            var abilityHasActivationBlockedTags = _em.HasComponent<CAbilityActivationBlockedTags>(ability);
             if (abilityHasActivationBlockedTags)
             {
                 var abilityActivationBlockedTags =
-                    _entityManager.GetComponentData<CAbilityActivationBlockedTags>(ability);
+                    _em.GetComponentData<CAbilityActivationBlockedTags>(ability);
                 notHasAnyTags = !ASCHelper.HasAnyTags(owner, abilityActivationBlockedTags.tags);
             }
 
             // 3. 检查是否被其他能力阻止,遍历宿主其它能力,检查是否有阻止激活的标签
             var notBlockedByOtherAbility = true;
-            var ownerAbilities = _entityManager.GetBuffer<BAbility>(owner);
+            var ownerAbilities = _em.GetBuffer<BAbility>(owner);
             foreach (var ownerAbility in ownerAbilities)
             {
                 var ownerAbilityEntity = ownerAbility.Ability;
                 if (ownerAbilityEntity == ability) continue;
-                if (!_entityManager.HasComponent<CAbilityActive>(ownerAbilityEntity)) continue;
+                if (!_em.HasComponent<CAbilityActive>(ownerAbilityEntity)) continue;
                 
                 var ownerAbilityHasBlockAbilitiesWithTags =
-                    _entityManager.HasComponent<CBlockAbilityWithTags>(ownerAbilityEntity);
+                    _em.HasComponent<CBlockAbilityWithTags>(ownerAbilityEntity);
                 if (!ownerAbilityHasBlockAbilitiesWithTags) continue;
                 
                 var ownerAbilityBlockAbilitiesWithTags =
-                    _entityManager.GetComponentData<CBlockAbilityWithTags>(ownerAbilityEntity);
+                    _em.GetComponentData<CBlockAbilityWithTags>(ownerAbilityEntity);
                 if (!HasAnyTags(ability, ownerAbilityBlockAbilitiesWithTags.tags)) continue;
                 
                 notBlockedByOtherAbility = false;
@@ -93,16 +93,16 @@ namespace GAS.Runtime
 
         public static bool CheckCost(Entity ability)
         {
-            bool hasCostComponent = _entityManager.HasComponent<CAbilityCost>(ability);
+            bool hasCostComponent = _em.HasComponent<CAbilityCost>(ability);
             if (!hasCostComponent) return true;
             
-            var costComponent = _entityManager.GetComponentData<CAbilityCost>(ability);
-            bool isInstantEffect = !_entityManager.HasComponent<CDuration>(costComponent.ProtoGameplayEffectCost);
+            var costComponent = _em.GetComponentData<CAbilityCost>(ability);
+            bool isInstantEffect = !_em.HasComponent<CDuration>(costComponent.ProtoGameplayEffectCost);
             if (!isInstantEffect) return true;
             
-            var mcModifiers = _entityManager.GetComponentData<MCModifiers>(costComponent.ProtoGameplayEffectCost);
-            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-            var attrSets = _entityManager.GetBuffer<BEAttrSet>(owner);
+            var mcModifiers = _em.GetComponentData<MCModifiers>(costComponent.ProtoGameplayEffectCost);
+            var owner = _em.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+            var attrSets = _em.GetBuffer<BEAttrSet>(owner);
             foreach (var modifier in mcModifiers.Modifiers)
             {
                 var opt = modifier.Operation;
@@ -127,25 +127,25 @@ namespace GAS.Runtime
 
         public static bool CheckCooldownReady(Entity ability)  
         {  
-            bool hasCooldownComponent = _entityManager.HasComponent<CAbilityCooldown>(ability);  
+            bool hasCooldownComponent = _em.HasComponent<CAbilityCooldown>(ability);  
             if (!hasCooldownComponent) return true;  
   
-            CAbilityCooldown cooldown = _entityManager.GetComponentData<CAbilityCooldown>(ability);  
+            CAbilityCooldown cooldown = _em.GetComponentData<CAbilityCooldown>(ability);  
             // 没有配置 CooldownTags，则始终就绪  
             if (!cooldown.CooldownTags.IsCreated || cooldown.CooldownTags.Length == 0) return true;  
   
-            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
+            var owner = _em.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
             // ASC 上有任意一个 CooldownTag → 冷却中 → 不可激活  
             return !ASCHelper.HasAnyTags(owner, cooldown.CooldownTags);  
         }
 
         public static void DoCost(Entity ability)
         {
-            if (!_entityManager.HasComponent<CAbilityCost>(ability)) return;
+            if (!_em.HasComponent<CAbilityCost>(ability)) return;
             
-            var costComponent = _entityManager.GetComponentData<CAbilityCost>(ability);
-            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;
-            EffectUtil.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
+            var costComponent = _em.GetComponentData<CAbilityCost>(ability);
+            var owner = _em.GetComponentData<CAbilityBaseInfo>(ability).Owner;
+            GameplayEffectHelper.ApplyGameplayEffectImmediate(costComponent.ProtoGameplayEffectCost, owner, owner);
         }
 
         /// <summary>  
@@ -153,24 +153,24 @@ namespace GAS.Runtime
         /// </summary>  
         public static void DoCooldown(Entity ability)  
         {  
-            if (!_entityManager.HasComponent<CAbilityCooldown>(ability)) return;  
+            if (!_em.HasComponent<CAbilityCooldown>(ability)) return;  
   
-            var cooldown = _entityManager.GetComponentData<CAbilityCooldown>(ability);  
-            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
+            var cooldown = _em.GetComponentData<CAbilityCooldown>(ability);  
+            var owner = _em.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
   
             // 1. 从原型克隆GE实例  
-            var instanceGe = _entityManager.Instantiate(cooldown.ProtoGameplayEffectCooldown);  
+            var instanceGe = _em.Instantiate(cooldown.ProtoGameplayEffectCooldown);  
   
             // 2. 用Ability配置的Cooldown值覆写GE的Duration  
-            if (cooldown.Cooldown > 0 && _entityManager.HasComponent<CDuration>(instanceGe))  
+            if (cooldown.Cooldown > 0 && _em.HasComponent<CDuration>(instanceGe))  
             {  
-                var duration = _entityManager.GetComponentData<CDuration>(instanceGe);  
+                var duration = _em.GetComponentData<CDuration>(instanceGe);  
                 duration.duration = cooldown.Cooldown;  
-                _entityManager.SetComponentData(instanceGe, duration);  
+                _em.SetComponentData(instanceGe, duration);  
             }  
   
             // 3. 通过ECS GE管线应用到Owner（走完整的 Instantiate→CheckApply→Apply→Activate 流程）  
-            EffectUtil.ApplyGameplayEffectTo(instanceGe, owner, owner);  
+            GameplayEffectHelper.ApplyGameplayEffectTo(instanceGe, owner, owner);  
         }
         
         /// <summary>
@@ -181,10 +181,10 @@ namespace GAS.Runtime
         /// <returns></returns>
         public static bool HasAnyTags(Entity ability, NativeArray<int> tags)
         {
-            var hasAssetTag = _entityManager.HasComponent<CAbilityAssetTags>(ability);
+            var hasAssetTag = _em.HasComponent<CAbilityAssetTags>(ability);
             if (!hasAssetTag) return false;
 
-            var assetTags = _entityManager.GetComponentData<CAbilityAssetTags>(ability);
+            var assetTags = _em.GetComponentData<CAbilityAssetTags>(ability);
             foreach (var tag in tags)
             foreach (var assetTag in assetTags.tags)
                 if (TagHelper.HasTag(assetTag, tag))
@@ -197,11 +197,11 @@ namespace GAS.Runtime
         /// </summary>  
         public static void CancelAbilitiesWithTags(Entity ability)  
         {  
-            if (!_entityManager.HasComponent<CCancelAbilityWithTags>(ability)) return;  
+            if (!_em.HasComponent<CCancelAbilityWithTags>(ability)) return;  
   
-            var cancelTags = _entityManager.GetComponentData<CCancelAbilityWithTags>(ability);  
-            var owner = _entityManager.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
-            var ownerAbilities = _entityManager.GetBuffer<BAbility>(owner);  
+            var cancelTags = _em.GetComponentData<CCancelAbilityWithTags>(ability);  
+            var owner = _em.GetComponentData<CAbilityBaseInfo>(ability).Owner;  
+            var ownerAbilities = _em.GetBuffer<BAbility>(owner);  
   
             foreach (var ownerAbility in ownerAbilities)  
             {  
@@ -209,10 +209,10 @@ namespace GAS.Runtime
                 if (otherAbility == ability) continue;  
   
                 // 只取消已激活的能力  
-                if (!_entityManager.HasComponent<CAbilityActive>(otherAbility)) continue;  
+                if (!_em.HasComponent<CAbilityActive>(otherAbility)) continue;  
   
                 // 已经在取消流程中的跳过  
-                if (_entityManager.HasComponent<CAbilityInTryCancel>(otherAbility)) continue;  
+                if (_em.HasComponent<CAbilityInTryCancel>(otherAbility)) continue;  
   
                 // 检查其他能力的 AssetTags 是否匹配 CancelAbilityTags 中的任意一个  
                 if (HasAnyTags(otherAbility, cancelTags.tags))  

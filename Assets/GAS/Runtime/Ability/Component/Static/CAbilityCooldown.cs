@@ -26,7 +26,7 @@ namespace GAS.Runtime
   
         public override void LoadToGameplayAbilityEntity(Entity ability)  
         {  
-            var protoGe = EffectUtil.CreateGameplayEffectEntity(CooldownComponentConfigs);  
+            var protoGe = GameplayEffectHelper.CreateGameplayEffectEntity(CooldownComponentConfigs);  
   
             // 从原型GE的GrantedTags中提取CooldownTags  
             NativeArray<int> cooldownTags = default;  

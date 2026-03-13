@@ -23,9 +23,6 @@ namespace GAS.Runtime
             _catcher = TargetCatcherHelper.TryCreateTargetCatcher(Parameter.CatcherType);  
             if (_catcher != null)
             {
-                if (Application.isPlaying)
-                    _catcher.Init(Owner);
-                
                 if (Parameter.Param != null)  
                     _catcher.InitParameters(Parameter.Param);  
             }
@@ -35,14 +32,18 @@ namespace GAS.Runtime
         {  
             if (_catcher == null || Parameter?.IDs == null) return;  
             
+            // 延迟初始化：确保 Owner 已被正确设置  
+            if (_catcher.Owner == null)  
+                _catcher.Init(Owner);  
+            
             _catcher.CatchTargetsNonAllocSafe(Owner, ref _catchResults);  
             foreach (var target in _catchResults)  
             {  
                 foreach (var id in Parameter.IDs)  
                 {  
                     var effectCfg = GameplayEffectHelper.GetConfigByID(id);  
-                    var geEntity = EffectUtil.CreateGameplayEffectEntity(effectCfg.ComponentConfigs);  
-                    EffectUtil.ApplyGameplayEffectTo(geEntity, target.Entity, Owner.Entity);  
+                    var geEntity = GameplayEffectHelper.CreateGameplayEffectEntity(effectCfg.ComponentConfigs);  
+                    GameplayEffectHelper.ApplyGameplayEffectTo(geEntity, target.Entity, Owner.Entity);  
                 }  
             }  
         }

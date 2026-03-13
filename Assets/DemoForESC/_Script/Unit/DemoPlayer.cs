@@ -22,6 +22,7 @@ namespace DemoForESC._Script
             _mainCamera = UnityEngine.Camera.main;
 
 
+            AbilitySystemComponent.Cell.GrantAbility(XLuban.GetAbilityConfig(XAbility.ABILITY_Dodge));
             AbilitySystemComponent.Cell.AddFixedTag(XTag.Ability);
             var buff1 = new GameplayEffectSpec(XLuban.GetGameplayEffectConfig(1007).ComponentConfigs);
             AbilitySystemComponent.Cell.ApplyGameplayEffectToSelf(buff1);
@@ -75,8 +76,7 @@ namespace DemoForESC._Script
 
         public void Dodge()
         {
-            if (AbilitySystemComponent.Cell.IsAbilityActive(XAbility.ABILITY_Dodge))
-                AbilitySystemComponent.TryEndAbility(XAbility.ABILITY_Dodge);
+            AbilitySystemComponent.TryActivateAbility(XAbility.ABILITY_Dodge);
         }
 
         protected override void OnSpChangeAfter(float lastSp, float newSp)

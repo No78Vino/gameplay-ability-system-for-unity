@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GAS.Runtime.System.Attribute;
 using Unity.Entities;
 using UnityEngine;
 
@@ -85,7 +84,6 @@ namespace GAS.Runtime
             #region Attribute
 
             sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeCurrentValue>());
-            sgAttribute.AddSystemToUpdateList(ExWorld.CreateSystem<SUpdateAttributeBaseValue>());
             sgAttribute.SortSystems();
 
             #endregion
@@ -148,10 +146,11 @@ namespace GAS.Runtime
             sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SSetEffectDeactive>());
             sgDeactivateEffect.SortSystems();
 
-            var sgRemoveEffect = ExWorld.CreateSystemManaged<SGRemoveEffect>();
-            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveEnd>());
-            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnRemove>());
-            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveEffectFromAscBuffList>());
+            var sgRemoveEffect = ExWorld.CreateSystemManaged<SGRemoveEffect>();  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveEnd>());  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnRemove>());  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveEffectFromAscBuffList>());  
+            sgRemoveEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SRemoveGrantedAbilityOnRemove>()); // 新增  
             sgRemoveEffect.SortSystems();
 
             sgEffectOperation.AddSystemToUpdateList(sgCheckApplyEffect);
