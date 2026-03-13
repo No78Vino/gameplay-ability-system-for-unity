@@ -1,6 +1,7 @@
 using Loxodon.Framework.Extension;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using XYooAsset;
 
 namespace DemoForESC._Script.UI.ViewModel
 {
@@ -18,6 +19,11 @@ namespace DemoForESC._Script.UI.ViewModel
         {
             EventCenter.Trigger("StartGame");
             request.Raise("close");
+            
+            // 6.加载假人
+            Object.Instantiate(
+                XYoo.LoadAssetSync<GameObject>(
+                    "Assets/DemoForESC/Resources/Prefabs/Guide/GuidePoints_Attack.prefab"));
         }
 
         public void Quit()

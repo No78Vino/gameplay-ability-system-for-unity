@@ -27,7 +27,7 @@ namespace DemoForESC._Script.UI.ViewModel
         public override void OnShow()
         {
             base.OnShow();
-            LabelPlayer.Value = "[玩家]蜘蛛机器人";
+            LabelPlayer.Value = "[玩家]";
             RefreshState();
 
             RegisterUpdateEvent();

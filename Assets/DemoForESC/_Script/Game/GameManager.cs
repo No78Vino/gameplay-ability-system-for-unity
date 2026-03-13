@@ -38,7 +38,7 @@ namespace DemoForESC._Script
         public GameManager()
         {
             GlobalAsc= new();
-            GASEventCenter.RegisterOnTagIsDirty(GlobalAsc,OnGlobalAscTagChange);
+            //GASEventCenter.RegisterOnTagIsDirty(GlobalAsc,OnGlobalAscTagChange);
         }
         
         public void LoadMainScene()
