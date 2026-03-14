@@ -27,10 +27,6 @@ namespace UI.View
 
         protected override void InitViewComponents()
         {
-            _labelLabelBoss = GetComponentByNode<Text>("boss_info/label_boss");
-            _imgValue = GetComponentByNode<Image>("boss_info/hp_bar/value");
-            _labelLabelValue = GetComponentByNode<Text>("boss_info/hp_bar/label_value");
-            _labelLabelName = GetComponentByNode<Text>("boss_info/hp_bar/label_name");
         }
 
         protected override void BindData()

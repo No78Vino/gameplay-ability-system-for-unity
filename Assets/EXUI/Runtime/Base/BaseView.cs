@@ -172,48 +172,49 @@ namespace EXUI
             BindData();  
         }
         
-        // ====== 反射扫描：仅首次执行 ======  
-        private static List<BindingDescriptor> BuildDescriptorsViaReflection(Type viewType)
-        {
-            var result = new List<BindingDescriptor>();
-            var fields = viewType.GetFields(
-                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-
-            foreach (var field in fields)
-            {
-                // 处理 [BindOneWay]  
-                var oneWay = field.GetCustomAttribute<BindOneWayAttribute>();
-                if (oneWay != null)
-                {
-                    result.Add(new BindingDescriptor
-                    {
-                        FieldInfo = field,
-                        NodePath = oneWay.NodePath,
-                        VMPropertyName = oneWay.VMPropertyName,
-                        UIPropertyName = oneWay.UIPropertyName,
-                        Mode = BindingMode.OneWay,
-                        // 编译 getter 委托，消除后续 FieldInfo.GetValue 的反射开销  
-                        FieldGetter = BuildFieldGetter(viewType, field)
-                    });
-                }
-
-                // 处理 [BindTwoWay]  
-                var twoWay = field.GetCustomAttribute<BindTwoWayAttribute>();
-                if (twoWay != null)
-                {
-                    result.Add(new BindingDescriptor
-                    {
-                        FieldInfo = field,
-                        NodePath = twoWay.NodePath,
-                        VMPropertyName = twoWay.VMPropertyName,
-                        UIPropertyName = twoWay.UIPropertyName,
-                        Mode = BindingMode.TwoWay,
-                        FieldGetter = BuildFieldGetter(viewType, field)
-                    });
-                }
-            }
-
-            return result;
+        // ====== 反射扫描：仅首次执行 ======    
+        private static List<BindingDescriptor> BuildDescriptorsViaReflection(Type viewType)  
+        {  
+            var result = new List<BindingDescriptor>();  
+            var fields = viewType.GetFields(  
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);  
+  
+            foreach (var field in fields)  
+            {  
+                // 处理 [BindOneWay]    
+                var oneWay = field.GetCustomAttribute<BindOneWayAttribute>();  
+                if (oneWay != null)  
+                {  
+                    result.Add(new BindingDescriptor  
+                    {  
+                        FieldInfo = field,  
+                        ComponentType = field.FieldType,        // 新增  
+                        NodePath = oneWay.NodePath,  
+                        VMPropertyName = oneWay.VMPropertyName,  
+                        UIPropertyName = oneWay.UIPropertyName,  
+                        Mode = BindingMode.OneWay,  
+                        FieldGetter = BuildFieldGetter(viewType, field)  
+                    });  
+                }  
+  
+                // 处理 [BindTwoWay]    
+                var twoWay = field.GetCustomAttribute<BindTwoWayAttribute>();  
+                if (twoWay != null)  
+                {  
+                    result.Add(new BindingDescriptor  
+                    {  
+                        FieldInfo = field,  
+                        ComponentType = field.FieldType,        // 新增  
+                        NodePath = twoWay.NodePath,  
+                        VMPropertyName = twoWay.VMPropertyName,  
+                        UIPropertyName = twoWay.UIPropertyName,  
+                        Mode = BindingMode.TwoWay,  
+                        FieldGetter = BuildFieldGetter(viewType, field)  
+                    });  
+                }  
+            }  
+  
+            return result;  
         }
 
         // ====== 将 FieldInfo 编译为强类型委托，彻底消除运行时反射 ======  
@@ -226,42 +227,70 @@ namespace EXUI
             return Expression.Lambda<Func<object, UnityEngine.Component>>(convertToComponent, param).Compile();
         }
 
-        // ====== 用缓存的描述符建立绑定，无反射 ======  
-        private void ApplyAttributeBindings(List<BindingDescriptor> descriptors)
-        {
-            if (descriptors == null || descriptors.Count == 0) return;
-
-            var bindingSet = new BindingSet<BaseView<T>, T>(_bindingContext, this);
-            foreach (var desc in descriptors)
-            {
-                // 用缓存的委托获取组件引用，无 FieldInfo.GetValue 反射  
-                var component = desc.FieldGetter(this);
-                if (component == null) continue;
-
-                if (desc.Mode == BindingMode.OneWay)
-                    bindingSet.Bind(component)
-                        .For(desc.UIPropertyName)
-                        .To($"{desc.VMPropertyName}.Value")
-                        .OneWay();
-                else if (desc.Mode == BindingMode.TwoWay)
-                    bindingSet.Bind(component)
-                        .For(desc.UIPropertyName)
-                        .To($"{desc.VMPropertyName}.Value")
-                        .TwoWay();
-            }
-
-            bindingSet.Build();
+        // ====== 用缓存的描述符建立绑定，无反射 ======    
+        private void ApplyAttributeBindings(List<BindingDescriptor> descriptors)  
+        {  
+            if (descriptors == null || descriptors.Count == 0) return;  
+  
+            // ✅ 核心修复：使用非泛型 BindingSet  
+            // 泛型 BindingSet<BaseView<T>, T> 会导致 BindingBuilder 将 TargetType   
+            // 设为 typeof(BaseView<T>)，代理工厂在该类型上找不到 "text" 等属性。  
+            // 非泛型 BindingSet 的 BindingBuilder 会用 target.GetType() 获取运行时类型  
+            // （如 Text），从而正确创建属性代理。  
+            var bindingSet = new BindingSet(_bindingContext, this);  
+            foreach (var desc in descriptors)  
+            {  
+                // 用缓存的委托获取组件引用，无 FieldInfo.GetValue 反射    
+                var component = desc.FieldGetter(this);  
+  
+                // ✅ 新增：字段为 null 时，利用 NodePath 自动查找并初始化组件  
+                if (component == null && !string.IsNullOrEmpty(desc.NodePath))  
+                {  
+                    var node = transform.Node(desc.NodePath);  
+                    if (node != null)  
+                    {  
+                        component = node.GetComponent(desc.ComponentType) as Component;  
+                        if (component != null)  
+                        {  
+                            // 回写字段，使 BindData() 等后续代码也能访问  
+                            desc.FieldInfo.SetValue(this, component);  
+                        }  
+                    }  
+                    else  
+                    {  
+                        Debug.LogError(  
+                            $"[EXUI] ApplyAttributeBindings: Can't find node '{desc.NodePath}' " +  
+                            $"for field '{desc.FieldInfo.Name}' in {GetType().Name}");  
+                    }  
+                }  
+  
+                if (component == null) continue;  
+  
+                if (desc.Mode == BindingMode.OneWay)  
+                    bindingSet.Bind(component)  
+                        .For(desc.UIPropertyName)  
+                        .To($"{desc.VMPropertyName}.Value")  
+                        .OneWay();  
+                else if (desc.Mode == BindingMode.TwoWay)  
+                    bindingSet.Bind(component)  
+                        .For(desc.UIPropertyName)  
+                        .To($"{desc.VMPropertyName}.Value")  
+                        .TwoWay();  
+            }  
+  
+            bindingSet.Build();  
         }
     }
 
-    // ====== 绑定描述符：纯数据结构，反射完成后不再需要 ======  
-    internal struct BindingDescriptor
-    {
-        public FieldInfo FieldInfo;
-        public string NodePath;
-        public string VMPropertyName;
-        public string UIPropertyName;
-        public BindingMode Mode;
-        public Func<object, UnityEngine.Component> FieldGetter; // 编译好的委托  
+    // ====== 绑定描述符：纯数据结构，反射完成后不再需要 ======    
+    internal struct BindingDescriptor  
+    {  
+        public FieldInfo FieldInfo;  
+        public Type ComponentType;              // 新增：字段声明类型（如 typeof(Text)）  
+        public string NodePath;  
+        public string VMPropertyName;  
+        public string UIPropertyName;  
+        public BindingMode Mode;  
+        public Func<object, UnityEngine.Component> FieldGetter; // 编译好的委托    
     }
 }
