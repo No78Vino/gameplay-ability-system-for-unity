@@ -1,6 +1,7 @@
 using DemoForESC._Script.UI.ViewModel;
 using EXUI;
 using Loxodon.Framework.Binding.Builder;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DemoForESC._Script.UI.View
@@ -36,6 +37,9 @@ namespace DemoForESC._Script.UI.View
         
         [BindOneWay("skill_info/skill/label_cd", nameof(VMMainWindow.DodgeCdText), nameof(Text.text))]  
         private Text _dodgeCdText;
+        
+        [BindOneWay("skill_info/skill", nameof(VMMainWindow.DodgeLayer), nameof(GameObject.layer))]  
+        private GameObject _dodgeLayer;
   
         protected override void BindData()  
         {  

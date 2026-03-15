@@ -304,7 +304,9 @@
     },
     "Modifiers": [],
     "CueOnApply": [],
-    "CueOnTick": [],
+    "CueOnTick": [
+      5000
+    ],
     "CueOnAdd": [],
     "CueOnRemove": [],
     "CueOnActivate": [],

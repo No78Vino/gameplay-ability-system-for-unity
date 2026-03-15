@@ -93,6 +93,12 @@ namespace GAS.Runtime
                         cueParam = cp;
                         break;
                     }
+                    case cfg.CueDodgeCooldownUI cData:
+                    {
+                        var cp = cueParam as GAS.Runtime.XParamNone;
+                        cueParam = cp;
+                        break;
+                    }
                     case cfg.CueHitReaction cData:
                     {
                         var cp = cueParam as GAS.Runtime.XParamFloat;
@@ -626,6 +632,12 @@ namespace GAS.Runtime
                                         {
                                             var rp = resolvedParam as GAS.Runtime.XParamFloat;
                                             rp?.SetValue(pData.Param.Value);
+                                            resolvedParam = rp;
+                                            break;
+                                        }
+                                        case cfg.CueDodgeCooldownUI pData:
+                                        {
+                                            var rp = resolvedParam as GAS.Runtime.XParamNone;
                                             resolvedParam = rp;
                                             break;
                                         }

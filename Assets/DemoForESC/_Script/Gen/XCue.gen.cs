@@ -8,6 +8,7 @@ namespace GAS.Runtime
     public static class XCue
     {
         public const string CUE_CLCameraFovShake = "CLCameraFovShake";
+        public const string CUE_CueDodgeCooldownUI = "CueDodgeCooldownUI";
         public const string CUE_CueHitReaction = "CueHitReaction";
         public const string CUE_CueLog = "CueLog";
         public const string CUE_CueLogging = "CueLogging";
@@ -19,6 +20,8 @@ namespace GAS.Runtime
         {
             var CLCameraFovShake = typeof(DemoForESC._Script.Gas.Cue.CLCameraFovShake);
             CueHelper.RegisterCue(CUE_CLCameraFovShake, CLCameraFovShake, typeof(GAS.Runtime.XParamFloat));
+            var CueDodgeCooldownUI = typeof(DemoForESC._Script.Gas.Cue.CueDodgeCooldownUI);
+            CueHelper.RegisterCue(CUE_CueDodgeCooldownUI, CueDodgeCooldownUI, typeof(GAS.Runtime.XParamNone));
             var CueHitReaction = typeof(DemoForESC._Script.Gas.Cue.CueHitReaction);
             CueHelper.RegisterCue(CUE_CueHitReaction, CueHitReaction, typeof(GAS.Runtime.XParamFloat));
             var CueLog = typeof(GAS.Runtime.CueLog);

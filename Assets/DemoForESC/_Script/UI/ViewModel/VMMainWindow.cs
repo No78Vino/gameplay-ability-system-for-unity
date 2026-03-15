@@ -16,6 +16,7 @@ namespace DemoForESC._Script.UI.ViewModel
         public ObservableVariable<float> DodgeCd { get; } = new();
         public ObservableVariable<string> DodgeName { get; } = new();
         public ObservableVariable<string> DodgeCdText { get; } = new();
+        public ObservableVariable<int> DodgeLayer { get; } = new();
 
         private AbilitySystemComponent PlayerAsc
         {
@@ -103,6 +104,17 @@ namespace DemoForESC._Script.UI.ViewModel
             var spMax = PlayerAsc.GetAttrCurrentValue(XAttrSet.FightUnit, XAttribute.SpMax);
             SpText.Value = $"{newValue}/{spMax}";
             Sp.Value = newValue / spMax;
+        }
+
+        public void SetDodgeVisible(bool visible)
+        {
+            DodgeLayer.Value = LayerMask.GetMask(visible?"UI":"Hide");
+        }
+        
+        public void UpdateDodgeCd(int currentTime,int duration)
+        {
+            DodgeCd.Value = (float)currentTime / duration;
+            DodgeCdText.Value = $"{(float)currentTime/Time.captureFramerate}s";
         }
     }
 }

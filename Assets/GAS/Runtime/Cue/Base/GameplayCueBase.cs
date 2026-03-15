@@ -12,6 +12,8 @@ namespace GAS.Runtime
         protected AbilitySystemCell _abilitySystemCell;
         protected static EntityManager EntityManager => GASManager.EntityManager;
 
+        protected GameplayEffectSpec _effectSpec;
+        
         public abstract void InitParameters(XParam xParam);
 
         public virtual void Reset()
@@ -99,6 +101,12 @@ namespace GAS.Runtime
         {
             StopImmediate();
             RemoveFromTargetAsc();
+        }
+
+        public GameplayEffectSpec GetEffectSpec()
+        {
+            if (_sourceType != CueSourceType.GameplayEffect) return null;
+            return _effectSpec ?? new GameplayEffectSpec(_sourceEntity);
         }
 
         #region system function

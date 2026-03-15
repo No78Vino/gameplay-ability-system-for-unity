@@ -75,5 +75,16 @@
         "Value": 0.25
       }
     }
+  },
+  {
+    "ID": 5000,
+    "Name": "闪避冷却CD显示",
+    "Desc": "闪避冷却CD显示",
+    "RequiredTag": [],
+    "ImmunityTag": [],
+    "CueLogic": {
+      "$type": "CueDodgeCooldownUI",
+      "Param": {}
+    }
   }
 ]

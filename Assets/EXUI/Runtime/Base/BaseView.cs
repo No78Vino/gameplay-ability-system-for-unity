@@ -210,13 +210,14 @@ namespace EXUI
         }
 
         // ====== 将 FieldInfo 编译为强类型委托，彻底消除运行时反射 ======  
-        private static Func<object, UnityEngine.Component> BuildFieldGetter(Type viewType, FieldInfo field)
+
+        private static Func<object, UnityEngine.Object> BuildFieldGetter(Type viewType, FieldInfo field)
         {
             var param = Expression.Parameter(typeof(object), "instance");
             var cast = Expression.Convert(param, viewType);
             var access = Expression.Field(cast, field);
-            var convertToComponent = Expression.Convert(access, typeof(UnityEngine.Component));
-            return Expression.Lambda<Func<object, UnityEngine.Component>>(convertToComponent, param).Compile();
+            var convertToObject = Expression.Convert(access, typeof(UnityEngine.Object));
+            return Expression.Lambda<Func<object, UnityEngine.Object>>(convertToObject, param).Compile();
         }
 
         // ====== 用缓存的描述符建立绑定，无反射 ======    
@@ -233,19 +234,19 @@ namespace EXUI
             foreach (var desc in descriptors)  
             {  
                 // 用缓存的委托获取组件引用，无 FieldInfo.GetValue 反射    
-                var component = desc.FieldGetter(this);  
+                var target = desc.FieldGetter(this);  
   
                 // ✅ 新增：字段为 null 时，利用 NodePath 自动查找并初始化组件  
-                if (component == null && !string.IsNullOrEmpty(desc.NodePath))  
+                if (target == null && !string.IsNullOrEmpty(desc.NodePath))  
                 {  
                     var node = transform.Node(desc.NodePath);  
                     if (node != null)  
                     {  
-                        component = node.GetComponent(desc.ComponentType) as Component;  
-                        if (component != null)  
+                        target = node.GetComponent(desc.ComponentType) as Component;  
+                        if (target != null)  
                         {  
                             // 回写字段，使 BindData() 等后续代码也能访问  
-                            desc.FieldInfo.SetValue(this, component);  
+                            desc.FieldInfo.SetValue(this, target);  
                         }  
                     }  
                     else  
@@ -256,15 +257,15 @@ namespace EXUI
                     }  
                 }  
   
-                if (component == null) continue;  
+                if (target == null) continue;  
   
                 if (desc.Mode == BindingMode.OneWay)  
-                    bindingSet.Bind(component)  
+                    bindingSet.Bind(target)  
                         .For(desc.UIPropertyName)  
                         .To($"{desc.VMPropertyName}.Value")  
                         .OneWay();  
                 else if (desc.Mode == BindingMode.TwoWay)  
-                    bindingSet.Bind(component)  
+                    bindingSet.Bind(target)  
                         .For(desc.UIPropertyName)  
                         .To($"{desc.VMPropertyName}.Value")  
                         .TwoWay();  
@@ -284,9 +285,19 @@ namespace EXUI
                     Debug.LogError($"Can't Find Node {desc.NodePath}");  
                     continue;  
                 }  
-                var component = node.GetComponent(desc.FieldInfo.FieldType);  
-                if (component != null)  
-                    desc.FieldInfo.SetValue(this, component);  
+  
+                var fieldType = desc.FieldInfo.FieldType;  
+          
+                if (fieldType == typeof(GameObject))  
+                    desc.FieldInfo.SetValue(this, node.gameObject);  
+                else if (fieldType == typeof(Transform))  
+                    desc.FieldInfo.SetValue(this, node);  
+                else // Component 子类  
+                {  
+                    var component = node.GetComponent(fieldType);  
+                    if (component != null)  
+                        desc.FieldInfo.SetValue(this, component);  
+                }  
             }  
         }
     }
@@ -300,6 +311,6 @@ namespace EXUI
         public string VMPropertyName;  
         public string UIPropertyName;  
         public BindingMode Mode;  
-        public Func<object, UnityEngine.Component> FieldGetter; // 编译好的委托    
+        public Func<object, UnityEngine.Object> FieldGetter; 
     }
 }

@@ -17,6 +17,24 @@ namespace GAS.Runtime
 
         public static Entity EntityGlobalTimer { get; private set; }
 
+        /// <summary>  
+        /// 获取当前全局计时器数据（逻辑帧数和回合数）  
+        /// </summary>  
+        public static GlobalTimer GetGlobalTimer()  
+        {  
+            return EntityManager.GetComponentData<GlobalTimer>(EntityGlobalTimer);  
+        }  
+  
+        /// <summary>  
+        /// 获取当前逻辑帧数  
+        /// </summary>  
+        public static int CurrentFrame => EntityManager.GetComponentData<GlobalTimer>(EntityGlobalTimer).Frame;  
+  
+        /// <summary>  
+        /// 获取当前回合数  
+        /// </summary>  
+        public static int CurrentTurn => EntityManager.GetComponentData<GlobalTimer>(EntityGlobalTimer).Turn;
+        
         public static void Initialize()
         {
             if (IsInitialized)

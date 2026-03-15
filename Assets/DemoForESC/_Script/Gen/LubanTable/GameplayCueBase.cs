@@ -27,6 +27,7 @@ public abstract partial class GameplayCueBase : Luban.BeanBase
         switch ((string)_buf["$type"])
         {
             case "CLCameraFovShake": return new CLCameraFovShake(_buf);
+            case "CueDodgeCooldownUI": return new CueDodgeCooldownUI(_buf);
             case "CueHitReaction": return new CueHitReaction(_buf);
             case "CueLog": return new CueLog(_buf);
             case "CueLogging": return new CueLogging(_buf);
