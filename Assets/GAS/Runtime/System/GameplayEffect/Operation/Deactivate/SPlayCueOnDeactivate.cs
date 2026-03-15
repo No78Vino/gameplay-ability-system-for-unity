@@ -22,7 +22,7 @@ namespace GAS.Runtime
             foreach (var (_, _, cueOnDeactivate, inUsage) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
-                         RefRO<WipActivateEffect>,
+                         RefRO<WipDeactivateEffect>,
                          RefRO<CCueOnDeactivate>,
                          RefRO<CEffectInUsage>>())
             {
