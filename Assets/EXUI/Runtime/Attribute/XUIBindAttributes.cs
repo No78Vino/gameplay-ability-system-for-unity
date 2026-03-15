@@ -16,7 +16,7 @@ namespace EXUI
         public string VMPropertyName { get; }  // VM 上 ObservableVariable 属性名  
         public string UIPropertyName { get; }  // UI组件上的属性名（默认 "text"）  
   
-        public BindOneWayAttribute(string nodePath, string vmPropertyName, string uiProperty = "text")  
+        public BindOneWayAttribute(string nodePath, string vmPropertyName, string uiProperty)  
         {  
             NodePath = nodePath;  
             VMPropertyName = vmPropertyName;  

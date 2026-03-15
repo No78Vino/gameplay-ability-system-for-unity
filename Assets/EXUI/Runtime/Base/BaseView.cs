@@ -107,23 +107,9 @@ namespace EXUI
         {
             Destroy(gameObject);
         }
-
-        /// <summary>
-        /// 使用格式如下：
-        /// var bindingDynamic = new BindingSet XXXWindow, VMXXXWindow (_bindingContext, this);
-        /// bindingDynamic.Bind(this).For(v => OnReceiveMessage).To(vm => vm.request);
-        /// bindingDynamic.Bind(titleText).For(v => v.text).To(vm => vm.title.Value).OneWay();
-        /// bindingDynamic.Bind(btnStartText).For(v => v.text).To(vm => vm.btnStartText.Value).OneWay();
-        /// bindingDynamic.Bind(btnStart).For(v => v.onClick).To(vm => vm.GameStart);
-        /// bindingDynamic.Build();
-        /// 
-        /// var bindingStatic = new BindingSet XXXWindow, VMXXXWindow (_bindingContext, this);
-        /// bindingDynamic.Bind(titleText).For(v => v.text).To(vm => vm.title.Value).OneWay();
-        /// bindingStatic.Build();
-        /// </summary>
-        protected abstract void BindData();
-
-        protected abstract void InitViewComponents();
+        
+        protected virtual void BindData() { }  
+        protected virtual void InitViewComponents() { }
 
         protected TCom GetComponentByNode<TCom>(string path) where TCom : Component
         {
@@ -156,6 +142,8 @@ namespace EXUI
             if (_cachedDescriptors == null)
                 _cachedDescriptors = BuildDescriptorsViaReflection(GetType());
 
+            // BaseView<T>.Init() 中，在 ApplyAttributeBindings 之前增加：  
+            AutoInitFieldsFromAttributes(_cachedDescriptors);
             ApplyAttributeBindings(_cachedDescriptors);
 
             // ✅ 手写的 BindData() 继续执行，处理事件绑定等复杂场景  
@@ -164,11 +152,15 @@ namespace EXUI
 
         public void InitWithViewModel(string viewName, T vm)  
         {  
-            base.Init(viewName);   // 设置 _name  
-            _vm = vm;              // 使用外部注入的 VM  
+            base.Init(viewName);  
+            _vm = vm;  
             _viewModel = _vm;  
             BindingContext.DataContext = _vm;  
             InitViewComponents();  
+      
+            _cachedDescriptors ??= BuildDescriptorsViaReflection(GetType());  
+            ApplyAttributeBindings(_cachedDescriptors);  // ← 补上  
+      
             BindData();  
         }
         
@@ -279,6 +271,23 @@ namespace EXUI
             }  
   
             bindingSet.Build();  
+        }
+        
+        private void AutoInitFieldsFromAttributes(List<BindingDescriptor> descriptors)  
+        {  
+            foreach (var desc in descriptors)  
+            {  
+                if (string.IsNullOrEmpty(desc.NodePath)) continue;  
+                var node = transform.Node(desc.NodePath);  
+                if (node == null)  
+                {  
+                    Debug.LogError($"Can't Find Node {desc.NodePath}");  
+                    continue;  
+                }  
+                var component = node.GetComponent(desc.FieldInfo.FieldType);  
+                if (component != null)  
+                    desc.FieldInfo.SetValue(this, component);  
+            }  
         }
     }
 

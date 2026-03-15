@@ -5,27 +5,22 @@ using UnityEngine.UI;
 
 namespace DemoForESC._Script.UI.View
 {
-    public class GuideWindow: BaseView<VMGuideWindow>
+    public class GuideWindow : BaseView<VMGuideWindow>
     {
-        public override UILayer Layer => UILayer.Modal; 
-        
+        public override UILayer Layer => UILayer.Modal;
+
+        [BindOneWay("guide/label_guide", nameof(VMGuideWindow.Title), nameof(Text.text))]
         private Text _labelTitle;
+
+        [BindOneWay("guide/label_content", nameof(VMGuideWindow.Content), nameof(Text.text))]
         private Text _labelContent;
-        
+
         protected override void BindData()
         {
-            var bindingDynamic = new BindingSet<GuideWindow, VMGuideWindow>(_bindingContext, this);
-            bindingDynamic.Bind(this).For(v => OnReceiveMessage).To(vm => vm.request);
-            bindingDynamic.Bind(_labelTitle).For(v => v.text).To(vm => vm.Title.Value).OneWay();
-            bindingDynamic.Bind(_labelContent).For(v => v.text).To(vm => vm.Content.Value).OneWay();
-
-            bindingDynamic.Build();
-        }
-
-        protected override void InitViewComponents()
-        {
-            _labelTitle = GetComponentByNode<Text>("guide/label_guide");
-            _labelContent = GetComponentByNode<Text>("guide/label_content");
+            // 仅保留 request 事件绑定  
+            var bs = new BindingSet<GuideWindow, VMGuideWindow>(_bindingContext, this);
+            bs.Bind(this).For(v => OnReceiveMessage).To(vm => vm.request);
+            bs.Build();
         }
     }
 }
