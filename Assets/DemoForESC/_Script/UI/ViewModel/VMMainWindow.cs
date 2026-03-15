@@ -108,13 +108,13 @@ namespace DemoForESC._Script.UI.ViewModel
 
         public void SetDodgeVisible(bool visible)
         {
-            DodgeLayer.Value = LayerMask.GetMask(visible?"UI":"Hide");
+            DodgeLayer.Value = LayerMask.NameToLayer(visible?"UI":"Hide");
         }
         
         public void UpdateDodgeCd(int currentTime,int duration)
         {
             DodgeCd.Value = (float)currentTime / duration;
-            DodgeCdText.Value = $"{(float)currentTime/Time.captureFramerate}s";
+            DodgeCdText.Value = $"{(float)currentTime/60}s";
         }
     }
 }

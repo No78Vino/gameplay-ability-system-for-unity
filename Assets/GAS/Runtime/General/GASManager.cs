@@ -153,6 +153,7 @@ namespace GAS.Runtime
             sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectAddGrantedTags>());
             sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnActivate>());
             sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SSetEffectActive>());
+            sgActivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnTick>());
             sgActivateEffect.SortSystems();
 
             var sgDeactivateEffect = ExWorld.CreateSystemManaged<SGDeactivateEffect>();
@@ -162,6 +163,7 @@ namespace GAS.Runtime
             sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SEffectRemoveGrantedTags>());
             sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SPlayCueOnDeactivate>());
             sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SSetEffectDeactive>());
+            sgDeactivateEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SStopCueOnTick>());
             sgDeactivateEffect.SortSystems();
 
             var sgRemoveEffect = ExWorld.CreateSystemManaged<SGRemoveEffect>();  
