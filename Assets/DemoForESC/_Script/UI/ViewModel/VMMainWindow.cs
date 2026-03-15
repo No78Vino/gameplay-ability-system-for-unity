@@ -13,6 +13,9 @@ namespace DemoForESC._Script.UI.ViewModel
         public ObservableVariable<float> Hp { get; } = new();
         public ObservableVariable<float> Mp { get; } = new();
         public ObservableVariable<float> Sp { get; } = new();
+        public ObservableVariable<float> DodgeCd { get; } = new();
+        public ObservableVariable<string> DodgeName { get; } = new();
+        public ObservableVariable<string> DodgeCdText { get; } = new();
 
         private AbilitySystemComponent PlayerAsc
         {
@@ -28,6 +31,7 @@ namespace DemoForESC._Script.UI.ViewModel
         {
             base.OnShow();
             LabelPlayer.Value = "[玩家]";
+            DodgeName.Value = "闪避";
             RefreshState();
 
             RegisterUpdateEvent();
