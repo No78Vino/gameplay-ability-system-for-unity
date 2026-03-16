@@ -6,11 +6,6 @@ namespace GAS.Runtime
     public struct CCueOnTick : IComponentData  
     {  
         public NativeArray<Entity> cues;  
-      
-        /// <summary>  
-        /// 运行时的实际Cue实例  
-        /// </summary>  
-        public NativeArray<Entity> runtimeCues;  
     }
 
     public sealed class ConfCueOnTick : ConfCueBase

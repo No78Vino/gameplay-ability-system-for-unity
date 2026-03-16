@@ -1087,7 +1087,6 @@ namespace GAS.Runtime
             if (!CheckCueOnAddExist()) return;
             var com = _em.GetComponentData<CCueOnAdd>(Entity);
             if (com.cues.IsCreated) com.cues.Dispose();
-            if (com.runtimeCues.IsCreated) com.runtimeCues.Dispose();
             _em.RemoveComponent<CCueOnAdd>(Entity);
         }
 
@@ -1097,7 +1096,6 @@ namespace GAS.Runtime
             if (!CheckCueOnRemoveExist()) return;
             var com = _em.GetComponentData<CCueOnRemove>(Entity);
             if (com.cues.IsCreated) com.cues.Dispose();
-            if (com.runtimeCues.IsCreated) com.runtimeCues.Dispose();
             _em.RemoveComponent<CCueOnRemove>(Entity);
         }
 
@@ -1107,7 +1105,6 @@ namespace GAS.Runtime
             if (!CheckCueOnActivateExist()) return;
             var com = _em.GetComponentData<CCueOnActivate>(Entity);
             if (com.cues.IsCreated) com.cues.Dispose();
-            if (com.runtimeCues.IsCreated) com.runtimeCues.Dispose();
             _em.RemoveComponent<CCueOnActivate>(Entity);
         }
 
@@ -1117,7 +1114,6 @@ namespace GAS.Runtime
             if (!CheckCueOnDeactivateExist()) return;
             var com = _em.GetComponentData<CCueOnDeactivate>(Entity);
             if (com.cues.IsCreated) com.cues.Dispose();
-            if (com.runtimeCues.IsCreated) com.runtimeCues.Dispose();
             _em.RemoveComponent<CCueOnDeactivate>(Entity);
         }
 

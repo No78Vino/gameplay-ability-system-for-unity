@@ -31,7 +31,7 @@ namespace GAS.Runtime
                 var entityManager = state.EntityManager;
                 var targetAsc = inUsage.ValueRO.Target;
                 foreach (var cueEntity in cues)
-                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity);
+                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity, ge);
             }
         }
 

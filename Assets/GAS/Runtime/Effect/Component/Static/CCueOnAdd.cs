@@ -9,12 +9,6 @@ namespace GAS.Runtime
         ///     cue entity
         /// </summary>
         public NativeArray<Entity> cues;
-        
-        
-        /// <summary>
-        /// 运行时的实际Cue实例
-        /// </summary>
-        public NativeArray<Entity> runtimeCues;
     }
 
     public sealed class ConfCueOnAdd : ConfCueBase

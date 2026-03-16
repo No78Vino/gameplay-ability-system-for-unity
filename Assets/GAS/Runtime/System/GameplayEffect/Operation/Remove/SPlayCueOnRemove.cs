@@ -21,19 +21,19 @@ namespace GAS.Runtime
         public void OnUpdate(ref SystemState state)
         {
             // 这里播放移除音效/特效等
-            foreach (var (_, _, inUsage,cueOnRemove, _) in
-                     SystemAPI.Query<
-                         RefRO<CEffectInstance>,
-                         RefRO<WipRemoveEffect>,
-                         RefRO<CEffectInUsage>,
-                         RefRO<CCueOnRemove>,
-                         RefRO<CDuration>>())
+            foreach (var (_, _, inUsage, cueOnRemove, _, ge) in  
+                     SystemAPI.Query<  
+                         RefRO<CEffectInstance>,  
+                         RefRO<WipRemoveEffect>,  
+                         RefRO<CEffectInUsage>,  
+                         RefRO<CCueOnRemove>,  
+                         RefRO<CDuration>>().WithEntityAccess())
             {
                 var cues = cueOnRemove.ValueRO.cues;
                 var entityManager = state.EntityManager;
                 var targetAsc = inUsage.ValueRO.Target;
                 foreach (var cueEntity in cues)
-                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity);
+                    CueHelper.TryPlayCueOnAsc(entityManager, targetAsc, cueEntity, ge);
             }
         }
 

@@ -132,7 +132,7 @@ namespace GAS.Runtime
 
         #region 通用型工具接口
 
-        public static void TryPlayCueOnAsc(EntityManager entityManager,Entity targetAsc,Entity cueEntity)
+        public static void TryPlayCueOnAsc(EntityManager entityManager, Entity targetAsc, Entity cueEntity, Entity sourceGE)
         {
             // 1.先判断tag是否可以播放cue
             if (entityManager.HasComponent<CPlayRequiredTags>(cueEntity))
@@ -148,6 +148,7 @@ namespace GAS.Runtime
             // 2.重置Cue逻辑单元
             var cueLogic = entityManager.GetComponentData<MCCue>(cueEntity);
             cueLogic.cue.Reset();
+            cueLogic.cue.SetSourceEntity(sourceGE, CueSourceType.GameplayEffect);
             cueLogic.cue.AddToTargetAsc(targetAsc);
             // 3.激活CuePlaying
             cueLogic.cue.Play(true);
