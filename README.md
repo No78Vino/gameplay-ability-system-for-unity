@@ -170,6 +170,22 @@ EX-GAS 2.0 采用 **Excel → Luban → JSON** 的配置工作流,所有配置�
 
 详见[BeanMappingSpec.md](BeanMappingSpec.md)
 
+**BeanUpdater 自动化工具**
+
+通过菜单 `EXTool/EX-GAS/生成脚本/更新Bean定义` 运行 BeanUpdater，自动扫描项目中的自定义类并更新 `__beans__.xlsx` 文件。
+
+BeanUpdater 会扫描以下 6 类继承体系，自动生成/更新对应的 Luban Bean 定义：
+| 扫描类型 | 基类 | 说明 |
+|---------|------|------|
+| XParam 参数类 | `XParam` | 通过 `[BeanField]` / `[BeanPolymorphicField]` 标注的字段自动收集 |
+| Cue 逻辑类 | `GameplayCueBase<T>` | 自动提取泛型参数类型 |
+| MMC 逻辑类 | `ModMagnitudeCalculationBase<T>` | 自动提取泛型参数类型 |
+| AbilityLogic 逻辑类 | `AbilityLogicBase<T>` | 自动提取泛型参数类型 |
+| AbilityTask 类 | `AbilityTaskBase<T>` | 自动提取泛型参数类型 |
+| TargetCatcher 类 | `TargetCatcherBase<T>` | 自动提取泛型参数类型 |
+
+> 新增自定义类后，运行 BeanUpdater 即可自动更新 Bean 定义，无需手动编辑 `__beans__.xlsx`。
+
 ---
 ### 配置表文件列表
 
@@ -1673,7 +1689,7 @@ Ability运作逻辑的组成可以拆成两部分：
 
 **执行时机**
 
-冷却的启动**不是框架自动执行的**，而是由开发者在 `AbilityLogic` 中自行调用 `GAUtil.DoCooldown(ability)` 或使用 `TaskDoCooldown` 任务节点。
+冷却的启动**不是框架自动执行的**，而是由开发者在 `AbilityLogic` 中自行调用 `AbilityUtil.DoCooldown(ability)` / `abilitySpec.DoCooldown()` 或使用 `TaskDoCooldown` 任务节点。
 这样设计是为了支持**前摇打断**等场景——技能激活后若在前摇阶段被打断，冷却不会生效。
 
 **CdEffect GE 配置要求**
@@ -2823,15 +2839,119 @@ XAttrSet是AttributeSet的常量库和配置管理类，它是自动生成的代
 
 ### 3.5 GameplayEffect
 #### 3.5.1 GameplayEffectSpec
-GameplayEffectSpec是GameplayEffect的OOP包装类，用于管理GE Entity实例。
-- `Entity Entity { get; set; }`
-    - GE对应的ECS Entity实例
+GameplayEffectSpec 是 GameplayEffect 的 OOP 包装类，面向用户的操作入口。所有 public 成员的形参和返回值中不出现 ECS/Entities 类型。
+
+> **【注意】组件的增删（Add/Remove）应在 GE Apply 之前完成。GE 被 Apply 后动态增删组件可能导致 ECS System 运行异常。数据修改（Set 系列方法）在任何阶段都是安全的。**
+
 - `GameplayEffectSpec(GameplayEffectComponentConfig[] componentConfigs)`
     - 通过组件配置数组创建GE实例
     - componentConfigs：GE组件配置数组
-- `GameplayEffectSpec(Entity geEntity)`
-    - 通过已存在的GE Entity创建Spec包装
-    - geEntity：GE的Entity实例
+
+**基础属性**
+- `bool IsValid`：GE 是否有效（底层 Entity 是否存在）
+- `string Name`：GE 名称（调试用）
+- `bool IsApplied`：GE 是否已被 Apply（已进入 ECS 管线）
+- `bool IsDestroyed`：GE 是否被标记销毁
+- `bool IsInstance`：GE 是否是实例（从原型 Instantiate 出来的）
+- `AbilitySystemCell Source`：施加来源 ASC（GE Apply 后才有值）
+- `AbilitySystemCell Target`：施加目标 ASC（GE Apply 后才有值）
+- `int Level { get; set; }`：GE 等级
+
+**操作方法**
+- `void Remove()`：移除此 GE（标记销毁，由 ECS System 执行实际移除）
+- `void ApplyTo(AbilitySystemCell target, AbilitySystemCell source)`：对目标施加此 GE
+- `void ApplyToSelf(AbilitySystemCell target)`：对目标施加此 GE（source = target）
+
+**Duration 组件操作**
+- `bool CheckDurationExist()`：检查是否存在 Duration 组件
+- `void AddDuration(int duration, TimeUnit timeUnit, bool resetStartTimeWhenActivated, bool stopTickWhenDeactivated)`：添加 Duration 组件
+- `void RemoveDuration()`：移除 Duration 组件
+- `int GetDuration()` / `void SetDuration(int duration)`：持续时间配置值
+- `TimeUnit GetDurationTimeUnit()` / `void SetDurationTimeUnit(TimeUnit timeUnit)`：计时单位
+- `bool IsDurationActive()`：是否激活生效中（运行时状态）
+- `int GetDurationActiveTime()`：激活起始时间点
+- `int GetDurationRemainTime()`：剩余持续时间
+- `bool GetDurationResetOnActivated()` / `void SetDurationResetOnActivated(bool)`：激活时是否重置计时
+- `bool GetDurationStopTickWhenDeactivated()` / `void SetDurationStopTickWhenDeactivated(bool)`：失活时是否停止计时
+
+**Tag 操作（6 组，每组均有 Check/Get/Set/Add/Remove）**
+| Tag 组 | 说明 |
+|--------|------|
+| `AssetTags` | 描述性标签 |
+| `GrantedTags` | 授予目标 ASC 的标签 |
+| `ApplicationRequiredTags` | 施加所需标签 |
+| `OngoingRequiredTags` | 持续生效所需标签 |
+| `RemoveEffectWithTags` | 移除带指定标签的 GE |
+| `ImmunityTags` | 免疫标签 |
+
+每组的 API 模式（以 `GrantedTags` 为例）：
+```csharp
+bool CheckGrantedTagsExist()
+int[] GetGrantedTags()
+void SetGrantedTags(int[] tags)
+void AddGrantedTags(int[] tags)
+void RemoveGrantedTags()
+```
+
+**Period 组件操作**
+- `bool CheckPeriodExist()`：周期组件是否存在
+- `int GetPeriod()` / `void SetPeriod(int period)`：周期间隔
+- `int GetPeriodStartTime()`：周期开始时间（运行时）
+- `bool GetPeriodResetOnDeactivated()` / `void SetPeriodResetOnDeactivated(bool)`：失活时是否重置计时
+- 子 GE 管理：
+  - `int GetPeriodGameplayEffectCount()`：获取子 GE 数量
+  - `GameplayEffectSpec GetPeriodGameplayEffect(int index)`：获取指定索引的子 GE
+  - `GameplayEffectSpec[] GetAllPeriodGameplayEffects()`：获取所有子 GE
+  - `GameplayEffectSpec AddPeriodGameplayEffectByConfigID(int geConfigID)`：通过配置 ID 添加子 GE
+  - `GameplayEffectSpec AddPeriodGameplayEffect(GameplayEffectComponentConfig[] componentConfigs)`：通过组件配置添加子 GE
+  - `void RemovePeriodGameplayEffectAt(int index)`：移除指定索引的子 GE
+  - `void ClearPeriodGameplayEffects()`：清空所有子 GE
+  - `GameplayEffectSpec ReplacePeriodGameplayEffectByConfigID(int index, int geConfigID)`：替换子 GE
+- `void AddPeriod(int period, bool resetOnDeactivated, int[] gameplayEffectConfigIDs)`：添加 Period 组件
+- `void RemovePeriod()`：移除 Period 组件
+
+**Stacking 组件操作**
+- `bool CheckStackingExist()`：堆叠组件是否存在
+- 配置读取：`GetStackType()` / `GetStackingCode()` / `GetStackLimitCount()` / `GetDurationRefreshPolicy()` / `GetPeriodResetPolicy()` / `GetExpirationPolicy()` / `GetDenyOverflowApplication()` / `GetClearStackOnOverflow()`
+- 配置修改：`SetStackType()` / `SetStackLimitCount()` / `SetDurationRefreshPolicy()` / `SetPeriodResetPolicy()` / `SetExpirationPolicy()` / `SetDenyOverflowApplication()` / `SetClearStackOnOverflow()`
+- 运行时状态：`int GetStackCount()` / `void SetStackCount(int count)`
+- 增删：`void AddStacking(int stackingCode, EffectStackType stackType, int limitCount)` / `void RemoveStacking()`
+
+**Modifier 组件操作**
+- `bool CheckModifiersExist()`：Modifier 组件是否存在
+- `int GetModifierCount()`：获取 Modifier 数量
+- `ModifierInfo GetModifier(int index)`：获取指定索引的 Modifier 信息
+- `ModifierInfo[] GetAllModifiers()`：获取所有 Modifier 信息
+- `void SetModifierMagnitude(int index, float magnitude)`：设置指定 Modifier 的 Magnitude
+- `void SetModifierOperation(int index, GEOperation operation)`：设置指定 Modifier 的 Operation
+- `void AddModifiers()`：添加 Modifiers 组件（初始为空数组）
+- `void RemoveModifiers()`：移除 Modifiers 组件
+
+> `ModifierInfo` 结构体包含：`int AttrSetCode`, `int AttrCode`, `GEOperation Operation`, `float Magnitude`
+
+**GrantedAbility 组件操作**
+- `bool CheckGrantedAbilityExist()`：GrantedAbility 组件是否存在
+- `int GetGrantedAbilityCount()`：获取授予能力数量
+- `GrantedAbilityInfo GetGrantedAbility(int index)`：获取指定索引的授予能力信息
+- `GrantedAbilityInfo[] GetAllGrantedAbilities()`：获取所有授予能力信息
+- `void AddGrantedAbility()`：添加 GrantedAbility 组件
+- `void RemoveGrantedAbility()`：移除 GrantedAbility 组件
+
+> `GrantedAbilityInfo` 结构体包含：`int Level`, `GrantedAbilityActivationPolicy ActivationPolicy`, `GrantedAbilityDeactivationPolicy DeactivationPolicy`, `GrantedAbilityRemovePolicy RemovePolicy`
+
+**Cue 组件操作**
+6 种 Cue 组件的检查和移除：
+- `CheckCueOnApplyExist()` / `RemoveCueOnApply()`
+- `CheckCueOnTickExist()` / `RemoveCueOnTick()`
+- `CheckCueOnAddExist()` / `RemoveCueOnAdd()`
+- `CheckCueOnRemoveExist()` / `RemoveCueOnRemove()`
+- `CheckCueOnActivateExist()` / `RemoveCueOnActivate()`
+- `CheckCueOnDeactivateExist()` / `RemoveCueOnDeactivate()`
+
+**ApplicationCondition 组件操作**
+- `bool CheckApplicationConditionExist()`
+- `int[] GetApplicationConditions()` / `void SetApplicationConditions(int[] conditions)`
+- `void AddApplicationCondition(int[] conditions)` / `void RemoveApplicationCondition()`
 
 #### 3.5.2 GameplayEffectController
 GameplayEffectController是GE的控制器类，负责ASC对GE的所有操作.
@@ -2889,31 +3009,14 @@ GameplayEffectHelper是GE的辅助工具类，提供GE的激活、失活和查�
     - level：GE等级（默认为1）
     - 返回值：实例化的GE Entity
 
-#### 3.5.4 EffectUtil
-EffectUtil是GE的工具类，提供GE的创建和应用功能。
-- `static Entity CreateGameplayEffectEntity(GameplayEffectComponentConfig[] componentAssets)`
-    - 创建GameplayEffect Entity
-    - componentAssets：GE组件配置数组
-    - 返回值：创建的GE Entity
-- `static GameplayEffectSpec CreateGameplayEffectSpec(GameplayEffectComponentConfig[] componentAssets)`
-    - 创建GameplayEffectSpec
-    - componentAssets：GE组件配置数组
-    - 返回值：创建的GE Spec
-- `static void ApplyGameplayEffectTo(Entity gameplayEffect, Entity target, Entity source)`
-    - 对目标应用GameplayEffect
-    - gameplayEffect：GE的Entity
-    - target：目标ASC Entity
-    - source：来源ASC Entity
-- `static void RemoveGameplayEffect(Entity gameplayEffect)`
-    - 移除GameplayEffect
-    - gameplayEffect：GE的Entity
+#### 3.5.4 BGameplayEffect
+> EffectUtil 类已在 2.0 迭代中移除，其功能已合并至 `GameplayEffectSpec` 和 `GameplayEffectHelper` 中。
 
-#### 3.5.5 BGameplayEffect
 BGameplayEffect是ASC的GameplayEffect Buffer组件，用于存储ASC持有的所有GE引用。
 - `Entity GameplayEffect`
     - GE的Entity引用
 
-#### 3.5.6 GameplayEffect组件配置
+#### 3.5.5 GameplayEffect组件配置
 GameplayEffect通过组件化设计实现，所有组件配置通过`XLuban.GetGameplayEffectConfig(int id)`从配置表加载。 
 **主要组件类型**：
 - `ConfAssetTags`：描述性标签
@@ -2927,7 +3030,7 @@ GameplayEffect通过组件化设计实现，所有组件配置通过`XLuban.GetG
 - `MCConfModifiers`：属性修改器配置
 - `ConfCueOnApply/OnTick/OnAdd/OnRemove/OnActivate/OnDeactivate`：各阶段Cue配置
 
-#### 3.5.7 AbilitySystemCell中的GE操作
+#### 3.5.6 AbilitySystemCell中的GE操作
 AbilitySystemCell提供了GE的便捷操作接口：
 - `void ApplyGameplayEffectTo(GameplayEffectSpec gameplayEffectSpec, AbilitySystemCell target)`
     - 对目标ASC施加GE 
@@ -2946,15 +3049,75 @@ AbilitySystemCell提供了GE的便捷操作接口：
 
 ### 3.6 Ability
 #### 3.6.1 AbilitySpec
-AbilitySpec是Ability的OOP包装类，用于管理Ability Entity实例。
-- `Entity AbilityEntity { get; }`
-    - Ability对应的ECS Entity实例 
-- `AbilitySystemCell Owner { get; }`
-    - 获取拥有该Ability的ASC实例
-    - 通过Ability Entity的`CAbilityBaseInfo`组件获取Owner Entity，再转换为AbilitySystemCell
-- `AbilitySpec(Entity abilityEntity)`
-    - 通过Ability Entity创建Spec包装
-    - abilityEntity：Ability的Entity实例
+AbilitySpec是Ability Entity的OOP包装层。所有 public 成员的形参和返回值不出现 ECS/Entities 类型，内部实现自由使用 ECS API。
+
+**基础信息**
+- `bool IsValid`：Ability Entity 是否仍然有效
+- `int Code`：能力 Code（配置 ID）
+- `int Level`：能力等级
+- `void SetLevel(int level)`：设置能力等级
+- `AbilitySystemCell Owner`：获取拥有该 Ability 的 ASC 实例（动态读取，不缓存）
+
+**运行时状态查询**
+- `bool IsActive`：是否正在激活
+- `bool CanActivate`：综合检查是否可以激活（Tag、Cost、CD 全部通过）
+- `AbilityActivationResult CheckActivation()`：详细的激活检查，返回具体失败原因
+- `bool IsTagRequirementMet`：Tag 条件是否满足激活
+- `bool CanAffordCost`：Cost 是否足够
+- `bool IsCooldownReady`：冷却是否就绪
+
+**操作方法**
+- `void TryActivate()`：尝试激活（添加 `CAbilityInTryActivate` 标记，下一帧由 System 处理）
+- `void TryEnd()`：尝试结束
+- `void TryCancel()`：尝试取消
+- `void DoCooldown()`：手动触发 CD
+- `void DoCost()`：手动触发 Cost
+
+**AbilityLogic 组件**
+- `AbilityLogicBase GetLogic()`：获取 AbilityLogicBase 实例
+- `T GetLogic<T>()`：获取强类型的 AbilityLogic 实例
+- `void SetParam(XParam param)`：设置 Ability 参数（传递给 AbilityLogicBase）
+
+**Tag 操作（6 组，每组均有 Check/Get/Set/Add/Remove）**
+每组 Tag 组件对应一个 ECS Component，通过以下统一模式操作：
+| Tag 组 | 说明 |
+|--------|------|
+| `AssetTags` | 描述性标签 |
+| `ActivationOwnedTags` | 激活期间授予 Owner ASC 的临时 Tag |
+| `ActivationRequiredTags` | 激活所需 Tag（Owner 必须全部拥有） |
+| `ActivationBlockedTags` | 激活阻止 Tag（Owner 拥有任一则阻止） |
+| `CancelAbilityTags` | 取消能力 Tag |
+| `BlockAbilityTags` | 阻止能力 Tag |
+
+每组的 API 模式（以 `AssetTags` 为例）：
+```csharp
+bool CheckAssetTagsExist()      // 组件是否存在
+int[] GetAssetTags()             // 获取 Tag 数组
+void SetAssetTags(int[] tags)    // 设置（覆盖）
+void AddAssetTags(int[] tags)    // 添加组件（首次）
+void RemoveAssetTags()           // 移除组件（含 NativeArray 释放）
+```
+
+**Cooldown API**
+- `bool CheckCooldownExist()`：冷却组件是否存在
+- `int GetCooldown()`：获取冷却时长（帧）
+- `void SetCooldown(int cooldown)`：设置冷却时长，会覆写原型 GE 的 Duration
+- `int[] GetCooldownTags()`：获取冷却 Tag 列表
+- `GameplayEffectSpec GetCooldownProtoGE()`：获取冷却原型 GE 的 Spec 包装
+
+**Cost API**
+- `bool CheckCostExist()`：消耗组件是否存在
+- `GameplayEffectSpec GetCostEffectProto()`：获取消耗 GE 原型的 Spec 包装
+- `void AddCost(int costEffectConfigID)`：添加 Cost 组件（建议在首次 Activate 之前调用）
+- `void RemoveCost()`：移除 Cost 组件
+
+**事件 API**
+- `void RegisterOnActivateResult(Action<AbilityActivationResult> action)`：注册激活结果回调
+- `void UnRegisterOnActivateResult(Action<AbilityActivationResult> action)`：注销激活结果回调
+- `void RegisterOnEndAbility(Action action)`：注册结束回调
+- `void UnRegisterOnEndAbility(Action action)`：注销结束回调
+- `void RegisterOnCancelAbility(Action action)`：注册取消回调
+- `void UnRegisterOnCancelAbility(Action action)`：注销取消回调
 
 #### 3.6.2 AbilityController
 AbilityController是Ability的控制器类，负责ASC对Ability的所有操作。
@@ -3092,7 +3255,7 @@ Ability的激活、取消和结束由三个ECS系统协同处理，它们在`SGA
 **激活流程（STryActivateAbility）**：
 
 1. 系统查询所有带有`CAbilityInTryActivate`组件的Ability Entity
-2. 调用`GAUtil.CanActivateAbility()`检查激活条件（Tag要求、冷却、消耗等）
+2. 调用`AbilityUtil.CanActivateAbility()`检查激活条件（Tag要求、冷却、消耗等）
 3. 如果检查通过：
     - 添加`CAbilityActive`组件标记激活状态
     - 如果配置了`CAbilityActivationOwnedTags`，向Owner ASC添加临时Tag
@@ -3446,6 +3609,32 @@ public abstract class ModMagnitudeCalculationBase<T> : ModMagnitudeCalculationBa
 - 固定数值的伤害/治疗
 - 不需要动态计算的简单效果
 
+##### 3.8.3.3 MMCAttributeBased - 基于属性值的计算
+基于角色属性值的 MMC，计算公式：`最终值 = AttributeValue × K + B`
+
+支持两种捕获模式：
+- **SnapShot（快照）**：首次计算时缓存属性值，后续复用（快照存在 MMC 实例内）
+- **Track（追踪）**：每次实时读取属性值；当依赖属性的 BaseValue 变化时，自动触发目标属性重计算（实现**推导属性**功能）
+
+**参数类型**：`AttributeBasedMmcParam`
+- `int AttrSetCode`：依赖属性所在的属性集 Code
+- `int AttrCode`：依赖属性的 Code
+- `AttributeFromType FromType`：属性来源（`Source` = GE 施放者 / `Target` = GE 目标）
+- `AttributeCaptureType CaptureType`：捕获类型（`SnapShot` / `Track`）
+- `float K`：缩放系数
+- `float B`：偏移量
+
+**Track 模式工作原理**：
+1. GE 被 Apply 到目标时，`OnAdded()` 注册依赖属性的 BaseValue 变化监听
+2. 当依赖属性变化时，自动调用 `AttributeHelper.RecalculateCurrentValue()` 重计算目标属性
+3. GE 被移除时，`OnRemoved()` 注销监听，防止内存泄漏
+
+**使用前提**：需要注册 `IAttributeValueResolver`，调用 `AttributeBasedMmcParam.RegisterResolver()` 完成注册。
+
+**应用场景**：
+- 推导属性：血量上限随力量成长（`HpMax = STR × 0.1 + 1`，使用 Track 模式 + Infinite GE）
+- 伤害随攻击力缩放：读取施放者的 ATK 属性作为伤害基础（使用 SnapShot 模式）
+
 #### 3.8.4 MMCConfig
 MMCConfig是MMC的配置类，用于存储MMC类型和参数。
 - `Type MmcType`
@@ -3698,8 +3887,48 @@ Timeline Ability系统是EX-GAS 2.0中用于实现复杂时序技能的核心模
 - `TaskDoNothing`：空任务
 - `TaskPlayCue`：播放单个Cue
 
-### 3.13 全局管理
-#### 3.13.1 GlobalTimer
+### 3.13 TargetCatcher 目标捕获系统
+
+TargetCatcher 是 EX-GAS 2.0 中用于在技能逻辑中查找/选取目标的多态系统。常用于 `TaskApplyEffects` 等 AbilityTask 中，决定 GameplayEffect 施加给哪些目标。
+
+#### 基类
+```csharp
+// 无参数版（需要参数时继承泛型版本）
+public abstract class TargetCatcherBase
+{
+    public AbilitySystemCell Owner;
+    public virtual void Init(AbilitySystemCell owner);
+    protected abstract void CatchTargetsNonAlloc(AbilitySystemCell mainTarget, List<AbilitySystemCell> results);
+    public void CatchTargetsNonAllocSafe(AbilitySystemCell mainTarget, ref List<AbilitySystemCell> results);
+    public virtual void InitParameters(XParam parameter);
+    public virtual void OnEditorPreview(GameObject obj);  // 编辑器预览
+}
+
+// 带强类型参数的泛型版本
+public abstract class TargetCatcherBase<T> : TargetCatcherBase where T : XParam
+{
+    public T Parameter { get; }
+}
+```
+
+#### 内置实现
+| 类名 | 参数类型 | 说明 |
+|------|---------|------|
+| `CatchSelf` | `XParamNone` | 返回 Owner 自身 |
+| `CatchTarget` | `XParamNone` | 返回 mainTarget（由 Ability 传入的主目标） |
+| `CatchAreaBox3D` | 自定义 XParam | 3D 长方体空间查询 |
+| `CatchAreaBox2D` | 自定义 XParam | 2D 矩形空间查询 |
+| `CatchAreaCircle2D` | 自定义 XParam | 2D 圆形空间查询 |
+
+#### 扩展方式
+1. 创建自定义类继承 `TargetCatcherBase<T>`，实现 `CatchTargetsNonAlloc` 方法
+2. 通过 `TargetCatcherHelper.RegisterTargetCatcher(typeName, catcherType, paramType)` 注册（通常在生成代码 `XAbility.gen.cs` 中自动注册）
+3. 在配置表的 TargetCatcher 字段中引用注册的类型名
+
+> 推荐使用 `CatchTargetsNonAllocSafe` 方法来避免 GC 分配。`CatchTargets` 方法已标记为 `[Obsolete]`。
+
+### 3.14 全局管理
+#### 3.14.1 GlobalTimer
 GlobalTimer是全局逻辑帧计时器，提供统一的逻辑帧时间。
 - `int Frame`
     - 当前逻辑帧数
@@ -3714,52 +3943,97 @@ var globalTimer = SystemAPI.GetSingletonRW<GlobalTimer>();
 int currentFrame = globalTimer.ValueRO.Frame;
 ```
 
-#### 3.13.2 TurnController
+#### 3.14.2 TurnController
 TurnController是回合控制器，用于管理回合制逻辑。
 - 用途：在回合制游戏中管理回合流转
 - 访问方式：`GASManager.TurnController`
 
+### 3.15 Web 编辑器
+
+EX-GAS 2.0 提供了 5 个基于浏览器的可视化编辑器，用于更直观地编辑 Excel 配置表。每个编辑器都由 Python 后端 + HTML/CSS/JS 前端组成。
+
+#### 启动方式
+通过 Unity 菜单 `EXTool/EX-GAS/Web编辑器` 选择对应的编辑器启动：
+
+| 菜单项 | 编辑器 | 说明 |
+|--------|--------|------|
+| 📦 一键部署编辑器环境 | — | 首次使用时安装 Python 依赖（运行 `install_deps.bat`） |
+| Tag 网页编辑器 | GameplayTag | 编辑 Tag 层级结构 |
+| Attribute 网页编辑器 | Attribute | 编辑属性定义 |
+| AttributeSet 网页编辑器 | AttributeSet | 编辑属性集（自动加载 Attribute 表作为引用） |
+| ASC预设 网页编辑器 | ASC | 编辑 ASC 预设模板（加载 Tag、AttrSet、Ability 表） |
+| Effect 网页编辑器 | Effect | 编辑 GameplayEffect 配置（加载 Tag、AttrSet、Ability、Cue、MMC、Attr 表） |
+
+#### 使用前提
+1. 首次使用需运行"一键部署编辑器环境"安装 Python 依赖
+2. 需要在 `GASSettingAsset` 中正确配置 `ConfigProjectPath`（Excel 表路径）
+3. 编辑器会自动读取对应的 `.xlsx` 文件，编辑后直接保存回 Excel
+
+> Web 编辑器文件位于 `Assets/GAS/Editor/WebEditor/`，每个编辑器子目录包含 `start.bat`（启动脚本）和 `server.py`（Python 后端）。
+
+---
+
 ## 4.调试工具 监测台GASWatcher
 ![gas_watcher.png](Wiki%2Fgas_watcher.png)
 
-GASWatcher 是 EX-GAS 2.0 的运行时监视器工具,
-用于实时查看和调试 AbilitySystemComponent (ASC) 的运行状态。该工具仅在游戏运行时可用,提供了对 ASC 实体的属性、标签、能力和游戏效果的可视化监控
+GASWatcher 是 EX-GAS 2.0 的运行时监视器工具，
+用于实时查看和调试 AbilitySystemComponent (ASC) 的运行状态。该工具仅在游戏运行时可用，提供了对 ASC 实体的属性、标签、能力和游戏效果的全面可视化监控。
 
 ### 打开方式
-通过菜单栏 `EXTool/EX-GAS/监测台` 打开监视器窗口。如果启用了热键功能,可使用快捷键 `Ctrl+F11` 快速打开。
+通过菜单栏 `EXTool/EX-GAS/监测台` 打开监视器窗口。如果启用了热键功能（`EX_GAS_ENABLE_HOT_KEYS`），可使用快捷键 `Ctrl+F11` 快速打开。
 
 ### 界面功能
-- 【ASC 实体选择】 顶部提供了 ASC 实体的下拉选择器和刷新按钮:
-  - **实体下拉列表**: 显示当前场景中所有包含 `CAscBasicData` 组件的实体
-  - **刷新按钮**: 点击"刷新当前ASC列表"更新可选实体列表
-  - **实体名称显示**: 以黄色高亮显示当前选中的实体名称
-- 【属性监控标签页】 显示选中 ASC 的所有属性集和属性值:
-  - **属性集名称**: 格式为 `属性集:{名称} - [{代码}]`
-  - **属性详情**: 每个属性显示为 `--- {属性名} : {当前值} (BaseValue:{基础值})`
-    > 属性数据从 `BEAttrSet` 缓冲区读取,实时反映属性的当前值和基础值。
-- 【标签监控标签页】 分为两列显示固有标签和临时标签:
-  - **固有标签 (Fixed Tags)**: 显示 ASC 的永久性标签,从 `BFixedTag` 缓冲区读取
-  - **临时标签 (Temporary Tags)**: 显示动态添加的标签及其来源,格式为 `{标签名} ->来源: {来源实体名}`
-- 【能力监控标签页】 显示 ASC 当前拥有的所有能力 :
-  - **能力信息**: 格式为 `Lv.{等级} - {能力名称} [{实体名}]`
-  - **激活状态**: 如果能力正在激活中,会额外显示 " - 激活中" 标记
-    > 能力数据从 `BAbility` 缓冲区和 `CAbilityBaseInfo` 组件读取。
 
-- 【GE效果(Buff)监控标签页】 显示 ASC 当前持有的所有 GameplayEffect :
-  - **效果信息**: 格式为 `[来源:{来源实体}] Lv.{等级} - {效果名称}` 
-  - **错误提示**: 如果 GE 实体已被销毁但未从容器移除,会显示错误信息 
-    > 效果数据从 `BGameplayEffect` 缓冲区和 `CEffectInUsage` 组件读取。
+**全局信息栏**
+选中 ASC 实体后，顶部会实时显示全局状态：
+- 当前帧数（Frame）、回合数（Turn）、ASC 等级、实体名称
+
+**ASC 实体选择**
+- 顶部提供了 ASC 实体的下拉选择器和刷新按钮
+- **实体下拉列表**：显示当前场景中所有包含 `CAscBasicData` 组件的实体
+- **刷新按钮**：点击"刷新当前ASC列表"更新可选实体列表
+
+**属性监控**
+- 按属性集分组显示，格式：`【属性集名称】`
+- 每个属性显示：`属性名: 当前值 (Base:基础值)`
+- 当前值与基础值不同时以橙色高亮
+- 显示 Clamp 范围（Min/Max，如果配置）
+- 属性值 Dirty 时显示红色标记
+
+**标签监控**
+- 分为固有标签和临时标签两组显示
+- **固有标签 (Fixed Tags)**：显示数量和标签全名
+- **临时标签 (Temporary Tags)**：显示标签全名和来源实体
+
+**能力监控**
+- 显示能力名称、等级、实体名
+- 激活状态高亮显示（绿色 `[激活]`）
+- **冷却（CD）状态监控**：
+  - 显示冷却 Tag 列表
+  - 实时显示冷却剩余时间/总时长（如 `CD: 30/60帧`）
+  - 支持帧/回合两种计时单位
+  - 区分 CD 就绪 / 冷却中 / 无冷却Tag 等状态
+- **ActivationOwnedTags 显示**：激活期间授予的临时 Tag 列表
+- **Logic 类型显示**：当前能力绑定的 AbilityLogic 实现类名
+
+**GE 效果（Buff）监控**
+- 显示 GE 索引、名称、等级、来源实体
+- **Duration 详情**：激活/失活状态、剩余时间/总时长、计时单位（帧/回合）、无限时长标识
+- **Stacking 详情**：当前层数/上限、堆叠类型（BySource/ByTarget）
+- **Period 详情**：周期间隔及计时单位
+- **GrantedTags 显示**：该 GE 授予的 Tag 列表
+- **AssetTags 显示**：该 GE 的描述性 Tag 列表
+- **Modifiers 详情**：每个 Modifier 的属性集、属性名、操作符（+/-/×/÷/=）、数值
+- GE 实体已销毁但未移出容器时显示错误提示
 
 ### 自动刷新机制
-监视器在游戏运行时会自动刷新显示内容。
-每次 Unity 编辑器的 `Update` 调用时,如果有选中的实体,监视器会调用 `RefreshASCContent()` 更新所有标签页的数据。
+监视器以 100ms 间隔自动刷新（通过 `EditorApplication.timeSinceStartup` 节流），实时反映运行时数据变化。进入/退出播放模式时自动清理所有缓存。
 
 ### 性能注意事项
-由于监视器采用强制刷新逻辑,存在明显的性能问题。建议仅在需要调试时打开,不要长时间后台挂载。
-> 目前监测台较为简陋，后续会优化监测台。
+由于监视器采用轮询刷新逻辑，建议仅在需要调试时打开，不要长时间后台挂载。
 
-> 监视台依赖 Odin Inspector 提供的编辑器 UI 功能,并使用 Unity DOTS 的 ECS 架构访问实体数据。
-所有显示的名称通过 `XLuban` 配置表查询获得,确保与游戏配置保持一致。监视台会在进入/退出播放模式时自动清理缓存。
+> 监视台依赖 Odin Inspector 提供的编辑器 UI 功能，并使用 Unity DOTS 的 ECS 架构访问实体数据。
+所有显示的名称通过 `XLuban` 配置表查询获得，确保与游戏配置保持一致。
 ---
 
 ## 5.如果...我想...,应该怎么做?(W.I.P)
