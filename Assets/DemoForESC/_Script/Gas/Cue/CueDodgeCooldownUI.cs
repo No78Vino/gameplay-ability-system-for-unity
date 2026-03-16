@@ -38,7 +38,6 @@ namespace DemoForESC._Script.Gas.Cue
         
         public override void OnDeactivate(float time)
         {
-            OnTick(time);
             var w = XUI.M.Windows<MainWindow>();
             w?.VM.SetDodgeVisible(false);
         }

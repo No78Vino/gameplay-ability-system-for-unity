@@ -106,7 +106,11 @@ namespace GAS.Runtime
         public GameplayEffectSpec GetEffectSpec()
         {
             if (_sourceType != CueSourceType.GameplayEffect) return null;
-            return _effectSpec ?? new GameplayEffectSpec(_sourceEntity);
+            
+            if (_effectSpec != null)
+                return _effectSpec.IsValid ? _effectSpec : null;
+            
+            return new GameplayEffectSpec(_sourceEntity);
         }
 
         #region system function
