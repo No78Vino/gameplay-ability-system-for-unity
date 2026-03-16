@@ -114,7 +114,7 @@ namespace DemoForESC._Script.UI.ViewModel
         public void UpdateDodgeCd(int currentTime,int duration)
         {
             DodgeCd.Value = (float)currentTime / duration;
-            DodgeCdText.Value = $"{(float)currentTime/60}s";
+            DodgeCdText.Value = $"{(duration-(float)currentTime)/60}s";
         }
     }
 }
