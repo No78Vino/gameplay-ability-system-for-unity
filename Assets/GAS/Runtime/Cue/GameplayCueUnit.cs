@@ -187,12 +187,10 @@ namespace GAS.Runtime
         
         /// <summary>
         ///     手动Tick
+        ///     TODO
         /// </summary>
         public void Tick()
         {
-            if (!CheckCueEntity()) return;
-            // TODO: 直接调用Cue的Tick方法
-            //EntityManager.SetComponentEnabled<ECCuePlayable>(_cueEntity,false);
         }
         
         /// <summary>
