@@ -323,9 +323,11 @@ namespace GAS.Runtime
         ///     解绑gameObject
         /// </summary>
         /// <param name="entity"></param>
-        public static void UnbindGameObjectToEntity(Entity entity)
-        {
-            if (_entityManager.Exists(entity)) _bindingGameObjects.Remove(entity);
+        public static void UnbindGameObjectToEntity(Entity entity)  
+        {  
+            if (GASManager.ExWorld != null && GASManager.ExWorld.IsCreated   
+                                           && _entityManager.Exists(entity))  
+                _bindingGameObjects.Remove(entity);  
         }
 
         /// <summary>

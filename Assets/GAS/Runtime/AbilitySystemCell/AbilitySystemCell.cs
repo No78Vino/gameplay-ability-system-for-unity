@@ -34,11 +34,12 @@ namespace GAS.Runtime
         public Entity Entity { get; private set; }
         private static EntityManager EntityManager => GASManager.EntityManager;
 
-        public void Dispose()
-        {
-            GASManager.UnbindAscToEntity(Entity);
-            EntityHelper.DestroyEntity(Entity);
-            Entity = Entity.Null;
+        public void Dispose()  
+        {  
+            GASManager.UnbindAscToEntity(Entity);  
+            if (GASManager.ExWorld != null && GASManager.ExWorld.IsCreated)  
+                EntityHelper.DestroyEntity(Entity);  
+            Entity = Entity.Null;  
         }
 
         public void Init(IEnumerable<int> baseTags, IEnumerable<AttrSetConfig> attrSets, IEnumerable<AbilityConfig> baseAbilities, int level = 1)
