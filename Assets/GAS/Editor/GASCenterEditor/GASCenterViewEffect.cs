@@ -152,40 +152,60 @@ namespace GAS.Editor
                     ComponentTypes.Contains(EffectEditComponent.GrantedTags) && GrantedTags.Count > 0
                         ? string.Join(";", GrantedTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap[EffectEditComponent.ApplicationTagRequirement.ToString()]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.ApplicationTagRequirement) &&
-                    ApplicationTagRequirement.HasAnyValue()
-                        ? $"{string.Join(",", ApplicationTagRequirement.All)};{string.Join(",", ApplicationTagRequirement.Any)};{string.Join(",", ApplicationTagRequirement.None)}"
-                        : string.Empty;
+                
+                void WriteTagRequirement(EffectEditComponent component, GEEditTagRequirement requirement)
+                {
+                    if(ComponentTypes.Contains(component) && requirement.HasAnyValue())
+                    {
+                        System.Text.StringBuilder sb = new ();
+                        if(requirement.All != null && requirement.All.Count > 0)
+                            sb.Append(string.Join(",", requirement.All));
+                        else
+                            sb.Append("0");
+                        sb.Append(";");
+
+                        if(requirement.Any != null && requirement.Any.Count > 0)
+                            sb.Append(string.Join(",", requirement.Any));
+                        else
+                            sb.Append("0");
+                        sb.Append(";");
+
+                        if(requirement.None != null && requirement.None.Count > 0)
+                            sb.Append(string.Join(",", requirement.None));
+                        else
+                            sb.Append("0");
+                    }
+                    else
+                    {
+                        worksheet.Cells[row, _headerMap[component.ToString()]].Value = string.Empty;
+                    }
+                }
+
+                WriteTagRequirement(EffectEditComponent.ApplicationTagRequirement, ApplicationTagRequirement);
+
                 worksheet.Cells[row, _headerMap["ApplicationRequiredTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.ApplicationRequiredTags) &&
                     ApplicationRequiredTags.Count > 0
                         ? string.Join(";", ApplicationRequiredTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap[EffectEditComponent.OngoingTagRequirement.ToString()]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.OngoingTagRequirement) &&
-                    OngoingTagRequirement.HasAnyValue()
-                        ? $"{string.Join(",", OngoingTagRequirement.All)};{string.Join(",", OngoingTagRequirement.Any)};{string.Join(",", OngoingTagRequirement.None)}"
-                        : string.Empty;
+
+                WriteTagRequirement(EffectEditComponent.ApplicationTagRequirement, ApplicationTagRequirement);
+
                 worksheet.Cells[row, _headerMap["OngoingRequiredTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.OngoingRequiredTags) && OngoingRequiredTags.Count > 0
                         ? string.Join(";", OngoingRequiredTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap[EffectEditComponent.RemoveGameplayEffectsWithTagRequirement.ToString()]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement) &&
-                    RemoveGameplayEffectsWithTagRequirement.HasAnyValue()
-                        ? $"{string.Join(",", RemoveGameplayEffectsWithTagRequirement.All)};{string.Join(",", RemoveGameplayEffectsWithTagRequirement.Any)};{string.Join(",", RemoveGameplayEffectsWithTagRequirement.None)}"
-                        : string.Empty;
+
+                WriteTagRequirement(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement, RemoveGameplayEffectsWithTagRequirement);
+
                 worksheet.Cells[row, _headerMap["RemoveGameplayEffectsWithTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.RemoveGameplayEffectsWithTags) &&
                     RemoveGameplayEffectsWithTags.Count > 0
                         ? string.Join(";", RemoveGameplayEffectsWithTags)
                         : string.Empty;
-                worksheet.Cells[row, _headerMap[EffectEditComponent.ImmunityTagRequirement.ToString()]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.ImmunityTagRequirement) &&
-                    ImmunityTagRequirement.HasAnyValue()
-                        ? $"{string.Join(",", ImmunityTagRequirement.All)};{string.Join(",", ImmunityTagRequirement.Any)};{string.Join(",", ImmunityTagRequirement.None)}"
-                        : string.Empty;
+
+                WriteTagRequirement(EffectEditComponent.ImmunityTagRequirement, ImmunityTagRequirement);
+
                 worksheet.Cells[row, _headerMap["ImmunityTags"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.ImmunityTags) && ImmunityTags.Count > 0
                         ? string.Join(";", ImmunityTags)
@@ -355,9 +375,9 @@ namespace GAS.Editor
                 if (isExistData)
                 {
                     string[] parts = rawData.Split(';');
-                    if(parts.Length > 0) requirement.All = parts[0].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
-                    if(parts.Length > 1) requirement.Any = parts[1].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
-                    if(parts.Length > 2) requirement.None = parts[2].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+                    if(parts.Length > 0) requirement.All = parts[0].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Where(x => x>0).ToList();
+                    if(parts.Length > 1) requirement.Any = parts[1].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Where(x => x>0).ToList();
+                    if(parts.Length > 2) requirement.None = parts[2].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Where(x => x>0).ToList();
                 }
                 return requirement;
             }

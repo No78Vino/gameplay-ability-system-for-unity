@@ -9,6 +9,7 @@ using cfg;
 using SimpleJSON;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
 namespace GAS.Runtime
 {
@@ -179,6 +180,25 @@ namespace GAS.Runtime
 
             var configs = new List<GameplayEffectComponentConfig>();
 
+            (int[] all, int[] any, int[] none)? ParseTagRequirement(cfg.TagRequirementData requirement)
+            {
+
+                int[] all = null, any = null, none = null;
+                if(requirement.All is {Count: > 0})
+                    all = requirement.All.Where(x => x > 0).ToArray();
+                if(requirement.Any is {Count: > 0})
+                    any = requirement.Any.Where(x => x > 0).ToArray();
+                if(requirement.None is {Count: > 0})
+                    none = requirement.None.Where(x => x > 0).ToArray();
+
+                if(all.Length == 0) all = null;
+                if(any.Length == 0) any = null;
+                if(none.Length == 0) none = null;
+
+                if(all == null && any == null && none == null) return null;
+                return (all, any, none);
+            }
+
             // assetTags
             if (data.AssetTags is { Count: > 0 })
                 configs.Add(new ConfAssetTags { tags = data.AssetTags.ToArray() });
@@ -188,16 +208,9 @@ namespace GAS.Runtime
             // applicationTagRequirement
             if (data.ApplicationTagRequirement != null)
             {
-                var requirement = data.ApplicationTagRequirement.Value;
-                int[] all = null, any = null, none = null;
-                if(requirement.All is {Count: > 0})
-                    all = requirement.All.ToArray();
-                if(requirement.Any is {Count: > 0})
-                    any = requirement.Any.ToArray();
-                if(requirement.None is {Count: > 0})
-                    none = requirement.None.ToArray();
-                if(all != null || any != null || none != null)
-                    configs.Add(new ConfApplicationTagRequirement{ all = all, any = any, none = none });
+                var result = ParseTagRequirement(data.ApplicationTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfApplicationTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
             // applicationRequiredTags
             if (data.ApplicationRequiredTags is { Count: > 0 })
@@ -205,16 +218,9 @@ namespace GAS.Runtime
             // ongoingTagRequirement
             if (data.OngoingTagRequirement != null)
             {
-                var requirement = data.OngoingTagRequirement.Value;
-                int[] all = null, any = null, none = null;
-                if(requirement.All is {Count: > 0})
-                    all = requirement.All.ToArray();
-                if(requirement.Any is {Count: > 0})
-                    any = requirement.Any.ToArray();
-                if(requirement.None is {Count: > 0})
-                    none = requirement.None.ToArray();
-                if(all != null || any != null || none != null)
-                    configs.Add(new ConfOngoingTagRequirement{ all = all, any = any, none = none });
+                var result = ParseTagRequirement(data.OngoingTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfOngoingTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
             // ongoingRequiredTags
             if (data.OngoingRequiredTags is { Count: > 0 })
@@ -222,16 +228,9 @@ namespace GAS.Runtime
             // removeGameplayEffectsWithTagRequirement
             if (data.RemoveGameplayEffectsWithTagRequirement != null)
             {
-                var requirement = data.RemoveGameplayEffectsWithTagRequirement.Value;
-                int[] all = null, any = null, none = null;
-                if(requirement.All is {Count: > 0})
-                    all = requirement.All.ToArray();
-                if(requirement.Any is {Count: > 0})
-                    any = requirement.Any.ToArray();
-                if(requirement.None is {Count: > 0})
-                    none = requirement.None.ToArray();
-                if(all != null || any != null || none != null)
-                    configs.Add(new ConfRemoveEffectWithTagRequirement{ all = all, any = any, none = none });
+                var result = ParseTagRequirement(data.RemoveGameplayEffectsWithTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfRemoveEffectWithTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
             // removeGameplayEffectsWithTags
             if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })
@@ -239,16 +238,9 @@ namespace GAS.Runtime
             // ImmunityTagRequirement
             if (data.ImmunityTagRequirement != null)
             {
-                var requirement = data.ImmunityTagRequirement.Value;
-                int[] all = null, any = null, none = null;
-                if(requirement.All is {Count: > 0})
-                    all = requirement.All.ToArray();
-                if(requirement.Any is {Count: > 0})
-                    any = requirement.Any.ToArray();
-                if(requirement.None is {Count: > 0})
-                    none = requirement.None.ToArray();
-                if(all != null || any != null || none != null)
-                    configs.Add(new ConfEffectImmunityTagRequirement{ all = all, any = any, none = none });
+                var result = ParseTagRequirement(data.ImmunityTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfEffectImmunityTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
             // immunityTags
             if (data.ImmunityTags is { Count: > 0 })
