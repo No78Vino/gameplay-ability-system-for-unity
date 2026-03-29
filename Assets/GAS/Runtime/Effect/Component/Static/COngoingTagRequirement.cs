@@ -5,7 +5,7 @@ namespace GAS.Runtime
 {
     public struct COngoingTagRequirement : IComponentData
     {
-        public TagRequirementData query;
+        public TagRequirementData requirement;
     }
 
     public sealed class ConfOngoingTagRequirement : GameplayEffectComponentConfig
@@ -19,7 +19,7 @@ namespace GAS.Runtime
             EntityHelper.AddComponent<COngoingTagRequirement>(ge);
             EntityHelper.SetComponent(ge, new COngoingTagRequirement
             {
-                query = new TagRequirementData
+                requirement = new TagRequirementData
                 {
                     all = new NativeArray<int>(all ?? System.Array.Empty<int>(), Allocator.Persistent),
                     any = new NativeArray<int>(any ?? System.Array.Empty<int>(), Allocator.Persistent),

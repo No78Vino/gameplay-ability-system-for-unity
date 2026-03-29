@@ -5,7 +5,7 @@ namespace GAS.Runtime
 {
     public struct CEffectImmunityTagRequirement : IComponentData
     {
-        public TagRequirementData query;
+        public TagRequirementData requirement;
     }
 
     public sealed class ConfEffectImmunityTagRequirement : GameplayEffectComponentConfig
@@ -19,7 +19,7 @@ namespace GAS.Runtime
             EntityHelper.AddComponent<CEffectImmunityTagRequirement>(ge);
             EntityHelper.SetComponent(ge, new CEffectImmunityTagRequirement
             {
-                query = new TagRequirementData
+                requirement = new TagRequirementData
                 {
                     all = new NativeArray<int>(all ?? System.Array.Empty<int>(), Allocator.Persistent),
                     any = new NativeArray<int>(any ?? System.Array.Empty<int>(), Allocator.Persistent),

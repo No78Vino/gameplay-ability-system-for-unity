@@ -1,4 +1,5 @@
-﻿﻿using Unity.Burst;
+﻿﻿using System.Diagnostics;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -17,7 +18,6 @@ namespace GAS.Runtime
             state.RequireForUpdate<SingletonGameplayTagMap>();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
@@ -38,24 +38,26 @@ namespace GAS.Runtime
 
                 if (hasRequirement || hasLegacyRequired)
                 {
-                    TagRequirementData query;
+                    TagRequirementData requirement;
                     if (hasRequirement)
                     {
-                        query = state.EntityManager.GetComponentData<COngoingTagRequirement>(ge).query;
+                        requirement = state.EntityManager.GetComponentData<COngoingTagRequirement>(ge).requirement;
                     }
                     else
                     {
-                        var required = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).tags;
-                        query = new TagRequirementData { all = required, any = default, none = default };
+                        var all = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).tags;
+                        requirement = new TagRequirementData { all = all, any = default, none = default };
                     }
 
-                    if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, query))
+                    if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement))
                     {
+                        UnityEngine.Debug.Log($"激活 all:{string.Join(",", requirement.all)} any:{string.Join(",", requirement.any)} none:{string.Join(",", requirement.none)} ");
                         // 分配到激活阶段 Activate Effect
                         ecb.AddComponent<WipActivateEffect>(ge);
                     }
                     else
                     {
+                        UnityEngine.Debug.Log($"失活 all:{string.Join(",", requirement.all)} any:{string.Join(",", requirement.any)} none:{string.Join(",", requirement.none)} ");
                         // 分配到失活阶段 Deactivate Effect
                         ecb.AddComponent<WipDeactivateEffect>(ge);
                     }

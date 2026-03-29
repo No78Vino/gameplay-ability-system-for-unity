@@ -38,18 +38,18 @@ namespace GAS.Runtime
                     continue;
 
                 var asc = inUsage.ValueRO.Target;
-                TagRequirementData query;
+                TagRequirementData requirement;
                 if (hasRequirement)
                 {
-                    query = state.EntityManager.GetComponentData<CApplicationTagRequirement>(ge).query;
+                    requirement = state.EntityManager.GetComponentData<CApplicationTagRequirement>(ge).requirement;
                 }
                 else
                 {
-                    var required = state.EntityManager.GetComponentData<CApplicationRequiredTags>(ge).tags;
-                    query = new TagRequirementData { all = required, any = default, none = default };
+                    var all = state.EntityManager.GetComponentData<CApplicationRequiredTags>(ge).tags;
+                    requirement = new TagRequirementData { all = all, any = default, none = default };
                 }
 
-                if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, query)) continue;
+                if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement)) continue;
                 ecb.RemoveComponent<CEffectInstance>(ge);
                 ecb.AddComponent<CEffectDestroy>(ge);
             }

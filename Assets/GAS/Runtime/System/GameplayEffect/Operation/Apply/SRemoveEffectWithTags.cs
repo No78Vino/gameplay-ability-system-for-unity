@@ -37,15 +37,15 @@ namespace GAS.Runtime
                 if (!hasRequirement && !hasLegacyRemove)
                     continue;
 
-                TagRequirementData query;
+                TagRequirementData requirement;
                 if(hasRequirement)
                 {
-                    query = state.EntityManager.GetComponentData<CRemoveEffectWithTagRequirement>(ge).query;
+                    requirement = state.EntityManager.GetComponentData<CRemoveEffectWithTagRequirement>(ge).requirement;
                 }
                 else
                 {
-                    var tags = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).tags;
-                    query = new TagRequirementData { all = default, any = tags, none = default };
+                    var any = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).tags;
+                    requirement = new TagRequirementData { all = default, any = any, none = default };
                 }
 
                 var asc = inUsage.ValueRO.Target;
@@ -54,7 +54,7 @@ namespace GAS.Runtime
                 for (var i = geBuffer.Length - 1; i >= 0; i--)
                 {
                     var geWillRemove = geBuffer[i].GameplayEffect;
-                    var hasRemoveTag = tagMap.EffectEvaluateTagRequirement(state.EntityManager, geWillRemove, query);
+                    var hasRemoveTag = tagMap.EffectEvaluateTagRequirement(state.EntityManager, geWillRemove, requirement);
                     if (!hasRemoveTag) continue;
                     
                     ecb.AddComponent<WipDeactivateEffect>(geWillRemove);
