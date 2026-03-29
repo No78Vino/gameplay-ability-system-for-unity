@@ -248,11 +248,47 @@ namespace GAS.Runtime
         private bool CheckTagComponentExist<T>() where T : unmanaged, IComponentData
             => IsValid && _em.HasComponent<T>(Entity);
 
+        private (int[] all, int[] any, int[] none) GetTagRequirementInternal<T>(Func<T, TagRequirementData> getter)
+            where T : unmanaged, IComponentData
+        {
+            if (!CheckTagComponentExist<T>()) return (Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>());
+            var requirement = getter(_em.GetComponentData<T>(Entity));
+            return (requirement.all.IsCreated ? requirement.all.ToArray() : Array.Empty<int>(),
+                requirement.any.IsCreated ? requirement.any.ToArray() : Array.Empty<int>(),
+                requirement.none.IsCreated ? requirement.none.ToArray() : Array.Empty<int>());
+        }
+
         private int[] GetTagsInternal<T>(Func<T, NativeArray<int>> getter) where T : unmanaged, IComponentData
         {
             if (!CheckTagComponentExist<T>()) return Array.Empty<int>();
             var native = getter(_em.GetComponentData<T>(Entity));
             return native.IsCreated ? native.ToArray() : Array.Empty<int>();
+        }
+
+        private void SetTagRequirementInternal<T>(int[] all, int[] any, int[] none,
+            Func<T, TagRequirementData> getter, Func<TagRequirementData, T> factory)
+            where T : unmanaged, IComponentData
+        {
+            if (!IsValid) return;
+            // 如果组件已存在，先释放旧 NativeArray  
+            if (_em.HasComponent<T>(Entity))
+            {
+                var old = getter(_em.GetComponentData<T>(Entity));
+                if (old.all.IsCreated) old.all.Dispose();
+                if (old.any.IsCreated) old.any.Dispose();
+                if (old.none.IsCreated) old.none.Dispose();
+            }
+            else
+            {
+                EntityHelper.AddComponent<T>(Entity);
+            }
+
+            EntityHelper.SetComponent(Entity, factory(new TagRequirementData
+            {
+                all = new NativeArray<int>(all ?? Array.Empty<int>(), Allocator.Persistent),
+                any = new NativeArray<int>(any ?? Array.Empty<int>(), Allocator.Persistent),
+                none = new NativeArray<int>(none ?? Array.Empty<int>(), Allocator.Persistent)
+            }));
         }
 
         private void SetTagsInternal<T>(int[] tags, Func<T, NativeArray<int>> getter, Func<NativeArray<int>, T> factory)
@@ -273,12 +309,36 @@ namespace GAS.Runtime
             EntityHelper.SetComponent(Entity, factory(new NativeArray<int>(tags, Allocator.Persistent)));
         }
 
+        private void AddTagRequirementComponentInternal<T>(int[] all, int[] any, int[] none, Func<TagRequirementData, T> factory)
+            where T : unmanaged, IComponentData
+        {
+            if (!IsValid || _em.HasComponent<T>(Entity)) return;
+            EntityHelper.AddComponent<T>(Entity);
+            EntityHelper.SetComponent(Entity, factory(new TagRequirementData
+            {
+                all = new NativeArray<int>(all ?? Array.Empty<int>(), Allocator.Persistent),
+                any = new NativeArray<int>(any ?? Array.Empty<int>(), Allocator.Persistent),
+                none = new NativeArray<int>(none ?? Array.Empty<int>(), Allocator.Persistent)
+            }));
+        }
+
         private void AddTagComponentInternal<T>(int[] tags, Func<NativeArray<int>, T> factory)
             where T : unmanaged, IComponentData
         {
             if (!IsValid || _em.HasComponent<T>(Entity)) return;
             EntityHelper.AddComponent<T>(Entity);
             EntityHelper.SetComponent(Entity, factory(new NativeArray<int>(tags, Allocator.Persistent)));
+        }
+
+        private void RemoveTagRequirementComponentInternal<T>(Func<T, TagRequirementData> getter)
+            where T : unmanaged, IComponentData
+        {
+            if (!IsValid || !_em.HasComponent<T>(Entity)) return;
+            var old = getter(_em.GetComponentData<T>(Entity));
+            if (old.all.IsCreated) old.all.Dispose();
+            if (old.any.IsCreated) old.any.Dispose();
+            if (old.none.IsCreated) old.none.Dispose();
+            EntityHelper.RemoveComponent<T>(Entity);
         }
 
         private void RemoveTagComponentInternal<T>(Func<T, NativeArray<int>> getter)
@@ -344,6 +404,22 @@ namespace GAS.Runtime
 
         #endregion
 
+        #region ApplicationRequirement
+        public bool CheckApplicationRequirementExist() => CheckTagComponentExist<CApplicationTagRequirement>();
+
+        public (int[] all, int[] any, int[] none) GetApplicationRequirement() =>
+            GetTagRequirementInternal<CApplicationTagRequirement>(c => c.requirement);
+
+        public void SetApplicationRequirement(int[] all, int[] any, int[] none) => SetTagRequirementInternal<CApplicationTagRequirement>(all, any, none,
+            c => c.requirement, req => new CApplicationTagRequirement { requirement = req });
+
+        public void AddApplicationRequirement(int[] all, int[] any, int[] none) => AddTagRequirementComponentInternal<CApplicationTagRequirement>(all, any, none,
+            req => new CApplicationTagRequirement { requirement = req });
+
+        public void RemoveApplicationRequirement() => 
+            RemoveTagRequirementComponentInternal<CApplicationTagRequirement>(c => c.requirement);
+        
+        #endregion
 
         #region OngoingRequiredTags
 
@@ -358,6 +434,27 @@ namespace GAS.Runtime
             arr => new COngoingRequiredTags { tags = arr });
 
         public void RemoveOngoingRequiredTags() => RemoveTagComponentInternal<COngoingRequiredTags>(c => c.tags);
+
+        #endregion
+
+
+        #region OngoingRequirement
+
+        public bool CheckOngoingRequirementExist() => CheckTagComponentExist<COngoingTagRequirement>();
+
+        public (int[] all, int[] any, int[] none) GetOngoingRequirement() =>
+            GetTagRequirementInternal<COngoingTagRequirement>(c => c.requirement);
+
+        public void SetOngoingRequirement(int[] all, int[] any, int[] none) =>
+            SetTagRequirementInternal<COngoingTagRequirement>(all, any, none,
+                c => c.requirement, req => new COngoingTagRequirement { requirement = req });
+
+        public void AddOngoingRequirement(int[] all, int[] any, int[] none) =>
+            AddTagRequirementComponentInternal<COngoingTagRequirement>(all, any, none,
+                req => new COngoingTagRequirement { requirement = req });
+
+        public void RemoveOngoingRequirement() =>
+            RemoveTagRequirementComponentInternal<COngoingTagRequirement>(c => c.requirement);
 
         #endregion
 
@@ -379,6 +476,27 @@ namespace GAS.Runtime
         #endregion
 
 
+        #region RemoveEffectWithRequirement
+
+        public bool CheckRemoveEffectWithRequirementExist() => CheckTagComponentExist<CRemoveEffectWithTagRequirement>();
+
+        public (int[] all, int[] any, int[] none) GetRemoveEffectWithRequirement() =>
+            GetTagRequirementInternal<CRemoveEffectWithTagRequirement>(c => c.requirement);
+
+        public void SetRemoveEffectWithRequirement(int[] all, int[] any, int[] none) =>
+            SetTagRequirementInternal<CRemoveEffectWithTagRequirement>(all, any, none,
+                c => c.requirement, req => new CRemoveEffectWithTagRequirement { requirement = req });
+
+        public void AddRemoveEffectWithRequirement(int[] all, int[] any, int[] none) =>
+            AddTagRequirementComponentInternal<CRemoveEffectWithTagRequirement>(all, any, none,
+                req => new CRemoveEffectWithTagRequirement { requirement = req });
+
+        public void RemoveRemoveEffectWithRequirement() =>
+            RemoveTagRequirementComponentInternal<CRemoveEffectWithTagRequirement>(c => c.requirement);
+
+        #endregion
+
+
         #region ImmunityTags
 
         public bool CheckImmunityTagsExist() => CheckTagComponentExist<CEffectImmunityTags>();
@@ -392,6 +510,27 @@ namespace GAS.Runtime
             arr => new CEffectImmunityTags { tags = arr });
 
         public void RemoveImmunityTags() => RemoveTagComponentInternal<CEffectImmunityTags>(c => c.tags);
+
+        #endregion
+
+
+        #region ImmunityRequirement
+
+        public bool CheckImmunityRequirementExist() => CheckTagComponentExist<CEffectImmunityTagRequirement>();
+
+        public (int[] all, int[] any, int[] none) GetImmunityRequirement() =>
+            GetTagRequirementInternal<CEffectImmunityTagRequirement>(c => c.requirement);
+
+        public void SetImmunityRequirement(int[] all, int[] any, int[] none) =>
+            SetTagRequirementInternal<CEffectImmunityTagRequirement>(all, any, none,
+                c => c.requirement, req => new CEffectImmunityTagRequirement { requirement = req });
+
+        public void AddImmunityRequirement(int[] all, int[] any, int[] none) =>
+            AddTagRequirementComponentInternal<CEffectImmunityTagRequirement>(all, any, none,
+                req => new CEffectImmunityTagRequirement { requirement = req });
+
+        public void RemoveImmunityRequirement() =>
+            RemoveTagRequirementComponentInternal<CEffectImmunityTagRequirement>(c => c.requirement);
 
         #endregion
 
