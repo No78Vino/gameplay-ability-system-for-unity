@@ -75,4 +75,10 @@
         <var name="Name" type="string"/>
         <var name="TaskClips" type="array,TaskClip"/>
     </bean>
+
+    <bean name="TagRequirementData" valueType="1" sep=";">
+        <var name="All" type="(list#sep=,), int"/>
+        <var name="Any" type="(list#sep=,), int"/>
+        <var name="None" type="(list#sep=,), int"/>
+    </bean>
 </module>

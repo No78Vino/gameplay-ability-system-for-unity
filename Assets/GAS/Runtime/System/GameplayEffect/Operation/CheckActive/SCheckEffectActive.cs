@@ -1,4 +1,4 @@
-﻿using Unity.Burst;
+﻿﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -32,12 +32,24 @@ namespace GAS.Runtime
                      >().WithEntityAccess())
             {
                 var asc = inUsage.ValueRO.Target;
-                var hasOngoingRequiredTags = SystemAPI.HasComponent<COngoingRequiredTags>(asc);
-                if (hasOngoingRequiredTags)
+                bool hasRequirement = state.EntityManager.HasComponent<COngoingTagRequirement>(ge);
+                // 兼容旧版本，旧版本使用 COngoingRequiredTags 来指定激活条件
+                bool hasLegacyRequired = state.EntityManager.HasComponent<COngoingRequiredTags>(ge);
+
+                if (hasRequirement || hasLegacyRequired)
                 {
-                    var ongoingRequiredTags = SystemAPI.GetComponentRO<COngoingRequiredTags>(asc);
-                    var tags = ongoingRequiredTags.ValueRO.tags;
-                    if (tagMap.AscHasAllTags(state.EntityManager, asc, tags))
+                    TagRequirementData query;
+                    if (hasRequirement)
+                    {
+                        query = state.EntityManager.GetComponentData<COngoingTagRequirement>(ge).query;
+                    }
+                    else
+                    {
+                        var required = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).tags;
+                        query = new TagRequirementData { all = required, any = default, none = default };
+                    }
+
+                    if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, query))
                     {
                         // 分配到激活阶段 Activate Effect
                         ecb.AddComponent<WipActivateEffect>(ge);
@@ -54,23 +66,6 @@ namespace GAS.Runtime
                     ecb.AddComponent<WipActivateEffect>(ge);
                 }
 
-                // 完成检查，移除标记组件
-                ecb.RemoveComponent<WipCheckActiveEffect>(ge);
-            }
-
-            
-            // 没有OngoingRequiredTags的Effect直接进入激活阶段
-            foreach (var (_, _, _, inUsage, ge) in
-                     SystemAPI.Query<
-                         RefRO<CEffectInstance>,
-                         RefRO<WipCheckActiveEffect>,
-                         RefRO<CDuration>,
-                         RefRO<CEffectInUsage>
-                     >().WithNone<COngoingRequiredTags>().WithEntityAccess())
-            {
-
-                // 分配到激活阶段 Activate Effect
-                ecb.AddComponent<WipActivateEffect>(ge);
                 // 完成检查，移除标记组件
                 ecb.RemoveComponent<WipCheckActiveEffect>(ge);
             }

@@ -10,16 +10,28 @@ namespace GAS.Editor
         
         [LabelText("获得标签")]
         GrantedTags,
+
+        [LabelText("应用GE需要匹配的Tag规则")]
+        ApplicationTagRequirement,
         
         [LabelText("应用需求标签")]
         ApplicationRequiredTags,
+
+        [LabelText("持续激活GE需要匹配的Tag规则")]
+        OngoingTagRequirement,
         
         [LabelText("持续需求标签")]
         OngoingRequiredTags,
         
+        [LabelText("移除匹配Tag规则的Effect")]
+        RemoveGameplayEffectsWithTagRequirement,
+
         [LabelText("移除持有标签的buff")]
         RemoveGameplayEffectsWithTags,
         
+        [LabelText("免疫GE需要匹配的Tag规则")]
+        ImmunityTagRequirement,
+
         [LabelText("被免疫的标签")]
         ImmunityTags,
         
@@ -65,9 +77,13 @@ namespace GAS.Editor
             {
                 EffectEditComponent.AssetTags,
                 EffectEditComponent.GrantedTags,
+                EffectEditComponent.ApplicationTagRequirement,
                 EffectEditComponent.ApplicationRequiredTags,
+                EffectEditComponent.OngoingTagRequirement,
                 EffectEditComponent.OngoingRequiredTags,
+                EffectEditComponent.RemoveGameplayEffectsWithTagRequirement,
                 EffectEditComponent.RemoveGameplayEffectsWithTags,
+                EffectEditComponent.ImmunityTagRequirement,
                 EffectEditComponent.ImmunityTags,
                 EffectEditComponent.Duration,
                 EffectEditComponent.Period,

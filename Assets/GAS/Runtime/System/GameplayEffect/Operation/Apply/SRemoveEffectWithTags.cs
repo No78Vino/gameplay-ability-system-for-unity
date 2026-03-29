@@ -12,7 +12,7 @@ namespace GAS.Runtime
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
-            state.RequireForUpdate<CRemoveEffectWithTags>();
+            state.RequireForUpdate(SystemAPI.QueryBuilder().WithAny<CRemoveEffectWithTagRequirement, CRemoveEffectWithTags>().Build());
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<WipApplyEffect>();
@@ -24,27 +24,41 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
             
-            foreach (var (_,_, removeEffectWithTags, inUsage) in
+            foreach (var (_,_, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipApplyEffect>,
-                         RefRO<CRemoveEffectWithTags>,
                          RefRO<CEffectInUsage>
-                     >())
+                     >().WithAny<CRemoveEffectWithTagRequirement, CRemoveEffectWithTags>().WithEntityAccess())
             {
-                var tags = removeEffectWithTags.ValueRO.tags;
-                if (tags.Length == 0) continue;
-                
-                var asc = inUsage.ValueRO.Target;
-                var geBuff = SystemAPI.GetBuffer<BGameplayEffect>(asc);
-                for (var i = geBuff.Length - 1; i >= 0; i--)
+                bool hasRequirement = state.EntityManager.HasComponent<CRemoveEffectWithTagRequirement>(ge);
+                // 兼容旧版本，旧版本使用 CRemoveEffectWithTags 来指定移除条件
+                bool hasLegacyRemove = state.EntityManager.HasComponent<CRemoveEffectWithTags>(ge);
+                if (!hasRequirement && !hasLegacyRemove)
+                    continue;
+
+                TagRequirementData query;
+                if(hasRequirement)
                 {
-                    var ge = geBuff[i].GameplayEffect;
-                    var hasRemoveTag = tagMap.EffectHasAnyTags(state.EntityManager,ge,tags);
+                    query = state.EntityManager.GetComponentData<CRemoveEffectWithTagRequirement>(ge).query;
+                }
+                else
+                {
+                    var tags = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).tags;
+                    query = new TagRequirementData { all = default, any = tags, none = default };
+                }
+
+                var asc = inUsage.ValueRO.Target;
+
+                var geBuffer = SystemAPI.GetBuffer<BGameplayEffect>(asc);
+                for (var i = geBuffer.Length - 1; i >= 0; i--)
+                {
+                    var geWillRemove = geBuffer[i].GameplayEffect;
+                    var hasRemoveTag = tagMap.EffectEvaluateTagRequirement(state.EntityManager, geWillRemove, query);
                     if (!hasRemoveTag) continue;
                     
-                    ecb.AddComponent<WipDeactivateEffect>(ge);
-                    ecb.AddComponent<WipRemoveEffect>(ge);
+                    ecb.AddComponent<WipDeactivateEffect>(geWillRemove);
+                    ecb.AddComponent<WipRemoveEffect>(geWillRemove);
                 }
             }
             

@@ -185,15 +185,71 @@ namespace GAS.Runtime
             // grantedTags
             if (data.GrantedTags is { Count: > 0 })
                 configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });
+            // applicationTagRequirement
+            if (data.ApplicationTagRequirement != null)
+            {
+                var requirement = data.ApplicationTagRequirement.Value;
+                int[] all = null, any = null, none = null;
+                if(requirement.All is {Count: > 0})
+                    all = requirement.All.ToArray();
+                if(requirement.Any is {Count: > 0})
+                    any = requirement.Any.ToArray();
+                if(requirement.None is {Count: > 0})
+                    none = requirement.None.ToArray();
+                if(all != null || any != null || none != null)
+                    configs.Add(new ConfApplicationTagRequirement{ all = all, any = any, none = none });
+            }
             // applicationRequiredTags
             if (data.ApplicationRequiredTags is { Count: > 0 })
                 configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });
+            // ongoingTagRequirement
+            if (data.OngoingTagRequirement != null)
+            {
+                var requirement = data.OngoingTagRequirement.Value;
+                int[] all = null, any = null, none = null;
+                if(requirement.All is {Count: > 0})
+                    all = requirement.All.ToArray();
+                if(requirement.Any is {Count: > 0})
+                    any = requirement.Any.ToArray();
+                if(requirement.None is {Count: > 0})
+                    none = requirement.None.ToArray();
+                if(all != null || any != null || none != null)
+                    configs.Add(new ConfOngoingTagRequirement{ all = all, any = any, none = none });
+            }
             // ongoingRequiredTags
             if (data.OngoingRequiredTags is { Count: > 0 })
                 configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });
+            // removeGameplayEffectsWithTagRequirement
+            if (data.RemoveGameplayEffectsWithTagRequirement != null)
+            {
+                var requirement = data.RemoveGameplayEffectsWithTagRequirement.Value;
+                int[] all = null, any = null, none = null;
+                if(requirement.All is {Count: > 0})
+                    all = requirement.All.ToArray();
+                if(requirement.Any is {Count: > 0})
+                    any = requirement.Any.ToArray();
+                if(requirement.None is {Count: > 0})
+                    none = requirement.None.ToArray();
+                if(all != null || any != null || none != null)
+                    configs.Add(new ConfRemoveEffectWithTagRequirement{ all = all, any = any, none = none });
+            }
             // removeGameplayEffectsWithTags
             if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })
                 configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });
+            // ImmunityTagRequirement
+            if (data.ImmunityTagRequirement != null)
+            {
+                var requirement = data.ImmunityTagRequirement.Value;
+                int[] all = null, any = null, none = null;
+                if(requirement.All is {Count: > 0})
+                    all = requirement.All.ToArray();
+                if(requirement.Any is {Count: > 0})
+                    any = requirement.Any.ToArray();
+                if(requirement.None is {Count: > 0})
+                    none = requirement.None.ToArray();
+                if(all != null || any != null || none != null)
+                    configs.Add(new ConfEffectImmunityTagRequirement{ all = all, any = any, none = none });
+            }
             // immunityTags
             if (data.ImmunityTags is { Count: > 0 })
                 configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });
