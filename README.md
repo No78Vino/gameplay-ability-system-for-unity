@@ -116,8 +116,8 @@ W.I.P 施工中...
 2. （如果你要使用我提供的配置方案工作流）导入Luban的Unity版本插件
 3. 导入EX-GAS，建议以下3种方式：
 - 使用Unity Package Manager安装
-在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS
->【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS
+在Unity Package Manager中添加git地址:https://github.com/No78Vino/gameplay-ability-system-for-unity.git?path=Assets/GAS#EX-GAS-2.0
+>【国内镜像】https://gitee.com/exhard/gameplay-ability-system-for-unity.git?path=Assets/GAS#EX-GAS-2.0
 - 使用git clone本仓库[镜像同上]，然后将Assets/GAS文件夹拷贝到你的项目中即可
 - 【个人推荐】（给自己的另一个插件打个广告）直接使用EX开源插件管理器来安装时序活动队列管理器。具体使用方法详见（默认menu已经包含EX-GAS）:
    https://zhuanlan.zhihu.com/p/1921532124277765575
