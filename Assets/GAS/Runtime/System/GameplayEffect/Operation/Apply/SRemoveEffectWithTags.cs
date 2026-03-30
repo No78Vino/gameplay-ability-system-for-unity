@@ -44,8 +44,7 @@ namespace GAS.Runtime
                 }
                 else
                 {
-                    var any = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).tags;
-                    requirement = new TagRequirementData { all = default, any = any, none = default };
+                    requirement = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).requirement;
                 }
 
                 var asc = inUsage.ValueRO.Target;

@@ -391,16 +391,16 @@ namespace GAS.Runtime
 
         public bool CheckApplicationRequiredTagsExist() => CheckTagComponentExist<CApplicationRequiredTags>();
 
-        public int[] GetApplicationRequiredTags() => GetTagsInternal<CApplicationRequiredTags>(c => c.tags);
+        public int[] GetApplicationRequiredTags() => GetTagRequirementInternal<CApplicationRequiredTags>(c => c.requirement).all;
 
-        public void SetApplicationRequiredTags(int[] tags) => SetTagsInternal<CApplicationRequiredTags>(tags,
-            c => c.tags, arr => new CApplicationRequiredTags { tags = arr });
+        public void SetApplicationRequiredTags(int[] tags) => SetTagRequirementInternal<CApplicationRequiredTags>(tags, Array.Empty<int>(), Array.Empty<int>(),
+            c => c.requirement, req => new CApplicationRequiredTags { requirement = req });
 
-        public void AddApplicationRequiredTags(int[] tags) => AddTagComponentInternal<CApplicationRequiredTags>(tags,
-            arr => new CApplicationRequiredTags { tags = arr });
+        public void AddApplicationRequiredTags(int[] tags) => AddTagRequirementComponentInternal<CApplicationRequiredTags>(tags, Array.Empty<int>(), Array.Empty<int>(),
+            req => new CApplicationRequiredTags { requirement = req });
 
         public void RemoveApplicationRequiredTags() =>
-            RemoveTagComponentInternal<CApplicationRequiredTags>(c => c.tags);
+            RemoveTagRequirementComponentInternal<CApplicationRequiredTags>(c => c.requirement);
 
         #endregion
 
@@ -425,15 +425,15 @@ namespace GAS.Runtime
 
         public bool CheckOngoingRequiredTagsExist() => CheckTagComponentExist<COngoingRequiredTags>();
 
-        public int[] GetOngoingRequiredTags() => GetTagsInternal<COngoingRequiredTags>(c => c.tags);
+        public int[] GetOngoingRequiredTags() => GetTagRequirementInternal<COngoingRequiredTags>(c => c.requirement).all;
 
-        public void SetOngoingRequiredTags(int[] tags) => SetTagsInternal<COngoingRequiredTags>(tags,
-            c => c.tags, arr => new COngoingRequiredTags { tags = arr });
+        public void SetOngoingRequiredTags(int[] tags) => SetTagRequirementInternal<COngoingRequiredTags>(tags, Array.Empty<int>(), Array.Empty<int>(),
+            c => c.requirement, req => new COngoingRequiredTags { requirement = req });
 
-        public void AddOngoingRequiredTags(int[] tags) => AddTagComponentInternal<COngoingRequiredTags>(tags,
-            arr => new COngoingRequiredTags { tags = arr });
+        public void AddOngoingRequiredTags(int[] tags) => AddTagRequirementComponentInternal<COngoingRequiredTags>(tags, Array.Empty<int>(), Array.Empty<int>(),
+            req => new COngoingRequiredTags { requirement = req });
 
-        public void RemoveOngoingRequiredTags() => RemoveTagComponentInternal<COngoingRequiredTags>(c => c.tags);
+        public void RemoveOngoingRequiredTags() => RemoveTagRequirementComponentInternal<COngoingRequiredTags>(c => c.requirement);
 
         #endregion
 
@@ -463,15 +463,15 @@ namespace GAS.Runtime
 
         public bool CheckRemoveEffectWithTagsExist() => CheckTagComponentExist<CRemoveEffectWithTags>();
 
-        public int[] GetRemoveEffectWithTags() => GetTagsInternal<CRemoveEffectWithTags>(c => c.tags);
+        public int[] GetRemoveEffectWithTags() => GetTagRequirementInternal<CRemoveEffectWithTags>(c => c.requirement).any;
 
-        public void SetRemoveEffectWithTags(int[] tags) => SetTagsInternal<CRemoveEffectWithTags>(tags,
-            c => c.tags, arr => new CRemoveEffectWithTags { tags = arr });
+        public void SetRemoveEffectWithTags(int[] tags) => SetTagRequirementInternal<CRemoveEffectWithTags>(Array.Empty<int>(), tags, Array.Empty<int>(),
+            c => c.requirement, req => new CRemoveEffectWithTags { requirement = req });
 
-        public void AddRemoveEffectWithTags(int[] tags) => AddTagComponentInternal<CRemoveEffectWithTags>(tags,
-            arr => new CRemoveEffectWithTags { tags = arr });
+        public void AddRemoveEffectWithTags(int[] tags) => AddTagRequirementComponentInternal<CRemoveEffectWithTags>(Array.Empty<int>(), tags, Array.Empty<int>(),
+            req => new CRemoveEffectWithTags { requirement = req });
 
-        public void RemoveRemoveEffectWithTags() => RemoveTagComponentInternal<CRemoveEffectWithTags>(c => c.tags);
+        public void RemoveRemoveEffectWithTags() => RemoveTagRequirementComponentInternal<CRemoveEffectWithTags>(c => c.requirement);
 
         #endregion
 
@@ -501,15 +501,15 @@ namespace GAS.Runtime
 
         public bool CheckImmunityTagsExist() => CheckTagComponentExist<CEffectImmunityTags>();
 
-        public int[] GetImmunityTags() => GetTagsInternal<CEffectImmunityTags>(c => c.tags);
+        public int[] GetImmunityTags() => GetTagRequirementInternal<CEffectImmunityTags>(c => c.requirement).any;
 
-        public void SetImmunityTags(int[] tags) => SetTagsInternal<CEffectImmunityTags>(tags,
-            c => c.tags, arr => new CEffectImmunityTags { tags = arr });
+        public void SetImmunityTags(int[] tags) => SetTagRequirementInternal<CEffectImmunityTags>(Array.Empty<int>(), tags, Array.Empty<int>(),
+            c => c.requirement, req => new CEffectImmunityTags { requirement = req });
 
-        public void AddImmunityTags(int[] tags) => AddTagComponentInternal<CEffectImmunityTags>(tags,
-            arr => new CEffectImmunityTags { tags = arr });
+        public void AddImmunityTags(int[] tags) => AddTagRequirementComponentInternal<CEffectImmunityTags>(Array.Empty<int>(), tags, Array.Empty<int>(),
+            req => new CEffectImmunityTags { requirement = req });
 
-        public void RemoveImmunityTags() => RemoveTagComponentInternal<CEffectImmunityTags>(c => c.tags);
+        public void RemoveImmunityTags() => RemoveTagRequirementComponentInternal<CEffectImmunityTags>(c => c.requirement);
 
         #endregion
 

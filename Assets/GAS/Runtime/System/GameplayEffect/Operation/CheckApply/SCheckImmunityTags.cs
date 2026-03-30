@@ -45,8 +45,7 @@ namespace GAS.Runtime
                 }
                 else
                 {
-                    var any = state.EntityManager.GetComponentData<CEffectImmunityTags>(ge);
-                    requirement = new TagRequirementData { all = default, any = any.tags, none = default };
+                    requirement = state.EntityManager.GetComponentData<CEffectImmunityTags>(ge).requirement;
                 }
 
                 if(!tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement)) continue;

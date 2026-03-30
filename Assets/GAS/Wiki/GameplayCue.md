@@ -49,6 +49,12 @@ GameplayCue的使用手段很多，最基础的是在GameplayEffect中使用，C
 
 除此之外，Cue的使用不限制于EX-GAS的体系内。开发者可以在任何地方使用Cue，只要能获取到GameplayCue的资源实例并且遵守Cue的原则即可。
 
+### Cue标签过滤（2026-03）
+Cue 的播放条件底层已统一到 `TagRequirementData` 三模式：`all` / `any` / `none`。  
+现有配置字段兼容映射：
+- `RequiredTags` -> `all`
+- `ImmunityTags` -> `none`
+
 ### 在GameplayEffect中使用Cue
 GameplayEffect中使用Cue会根据GameplayEffect执行策略产生变化。
 - 即时执行的GameplayEffect: 提供以下选项

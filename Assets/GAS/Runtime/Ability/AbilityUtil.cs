@@ -23,6 +23,14 @@ namespace GAS.Runtime
     {
         private static EntityManager _em => GASManager.EntityManager;
 
+        private static bool EvaluateAscTagRequirement(Entity asc, in TagRequirementData requirement)
+        {
+            bool passAll = !requirement.all.IsCreated || requirement.all.Length == 0 || ASCHelper.HasAllTags(asc, requirement.all);
+            bool passAny = !requirement.any.IsCreated || requirement.any.Length == 0 || ASCHelper.HasAnyTags(asc, requirement.any);
+            bool passNone = !requirement.none.IsCreated || requirement.none.Length == 0 || !ASCHelper.HasAnyTags(asc, requirement.none);
+            return passAll && passAny && passNone;
+        }
+
         /// <summary>
         ///     检查能力是否可以激活
         /// </summary>
@@ -55,7 +63,7 @@ namespace GAS.Runtime
             {
                 var abilityActivationRequiredTags =
                     _em.GetComponentData<CAbilityActivationRequiredTags>(ability);
-                hasAllTags = ASCHelper.HasAllTags(owner, abilityActivationRequiredTags.tags);
+                hasAllTags = EvaluateAscTagRequirement(owner, abilityActivationRequiredTags.requirement);
             }
 
             // 2. 检查激活被阻止的标签
@@ -65,7 +73,7 @@ namespace GAS.Runtime
             {
                 var abilityActivationBlockedTags =
                     _em.GetComponentData<CAbilityActivationBlockedTags>(ability);
-                notHasAnyTags = !ASCHelper.HasAnyTags(owner, abilityActivationBlockedTags.tags);
+                notHasAnyTags = EvaluateAscTagRequirement(owner, abilityActivationBlockedTags.requirement);
             }
 
             // 3. 检查是否被其他能力阻止,遍历宿主其它能力,检查是否有阻止激活的标签

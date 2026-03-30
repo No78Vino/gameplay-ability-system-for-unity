@@ -45,8 +45,7 @@ namespace GAS.Runtime
                     }
                     else
                     {
-                        var all = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).tags;
-                        requirement = new TagRequirementData { all = all, any = default, none = default };
+                        requirement = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).requirement;
                     }
 
                     if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement))

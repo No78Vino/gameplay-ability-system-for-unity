@@ -132,18 +132,26 @@ namespace GAS.Runtime
 
         #region 通用型工具接口
 
+        private static bool EvaluateAscTagRequirement(Entity asc, in TagRequirementData requirement)
+        {
+            bool passAll = !requirement.all.IsCreated || requirement.all.Length == 0 || ASCHelper.HasAllTags(asc, requirement.all);
+            bool passAny = !requirement.any.IsCreated || requirement.any.Length == 0 || ASCHelper.HasAnyTags(asc, requirement.any);
+            bool passNone = !requirement.none.IsCreated || requirement.none.Length == 0 || !ASCHelper.HasAnyTags(asc, requirement.none);
+            return passAll && passAny && passNone;
+        }
+
         public static void TryPlayCueOnAsc(EntityManager entityManager, Entity targetAsc, Entity cueEntity, Entity sourceGE)
         {
             // 1.先判断tag是否可以播放cue
             if (entityManager.HasComponent<CPlayRequiredTags>(cueEntity))
             {
                 var requiredTags = entityManager.GetComponentData<CPlayRequiredTags>(cueEntity);
-                if(!ASCHelper.HasAllTags(targetAsc,requiredTags.tags)) return;
+                if (!EvaluateAscTagRequirement(targetAsc, requiredTags.requirement)) return;
             }
             if (entityManager.HasComponent<CPlayImmunitedTags>(cueEntity))
             {
                 var immunityTags = entityManager.GetComponentData<CPlayImmunitedTags>(cueEntity);
-                if(ASCHelper.HasAnyTags(targetAsc,immunityTags.tags)) return;
+                if (!EvaluateAscTagRequirement(targetAsc, immunityTags.requirement)) return;
             }
             // 2.重置Cue逻辑单元
             var cueLogic = entityManager.GetComponentData<MCCue>(cueEntity);

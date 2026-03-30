@@ -38,7 +38,12 @@ namespace GAS.Runtime
                     EntityHelper.AddComponent<CPlayImmunitedTags>(entities[i]);
                     EntityHelper.SetComponent(entities[i], new CPlayImmunitedTags
                     {
-                        tags = new NativeArray<int>(c.ImmunityTags, Allocator.Persistent)
+                        requirement = new TagRequirementData
+                        {
+                            all = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent),
+                            any = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent),
+                            none = new NativeArray<int>(c.ImmunityTags, Allocator.Persistent)
+                        }
                     });
                 }
 
@@ -48,7 +53,12 @@ namespace GAS.Runtime
                     EntityHelper.AddComponent<CPlayRequiredTags>(entities[i]);
                     EntityHelper.SetComponent(entities[i], new CPlayRequiredTags
                     {
-                        tags = new NativeArray<int>(c.RequiredTags, Allocator.Persistent)
+                        requirement = new TagRequirementData
+                        {
+                            all = new NativeArray<int>(c.RequiredTags, Allocator.Persistent),
+                            any = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent),
+                            none = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent)
+                        }
                     });
                 }
             }

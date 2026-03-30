@@ -273,6 +273,13 @@ BeanUpdater 会扫描以下 6 类继承体系，自动生成/更新对应的 Lub
 
 **实现功能**: 通过组件化设计,支持复杂的 Buff 逻辑,包括持续时间、周期触发、层数叠加、条件激活等。
 
+> Tag 条件说明（2026-03 更新）  
+> GE / Ability / Cue 的条件型 Tag 组件已统一为 `TagRequirementData` 三模式：`all` / `any` / `none`。  
+> 旧字段默认映射：  
+> - `ApplicationRequiredTags` / `OngoingRequiredTags` / `ActivationRequiredTags` / `RequiredTags` -> `all`  
+> - `RemoveGameplayEffectsWithTags` / `ImmunityTags` -> `any`  
+> - `ActivationBlockedTags` / `Cue.ImmunityTags` -> `none`
+
 ### 5. Ability 配置表 (`#exgas.ability.xlsx`)
 
 **用途**: 配置技能/能力的基础参数。
@@ -1068,9 +1075,10 @@ Cue 系统设计为**可独立使用**的模块:
 #### 2.6.3 核心功能特性
 
 ##### 1. 标签过滤系统
-Cue 支持基于 GameplayTag 的条件播放:
-- **RequiredTags**: ASC 必须拥有**所有**这些标签才播放
-- **ImmunityTags**: ASC 拥有**任意**这些标签则不播放
+Cue 支持基于 GameplayTag 的条件播放（底层为 `TagRequirementData`）:
+- **RequiredTags**: 兼容字段，默认映射为 `all`
+- **ImmunityTags**: 兼容字段，默认映射为 `none`
+- 也可直接配置 `all/any/none` 组合表达更复杂条件
 
 **应用场景**:
 - 隐身单位不播放受击特效
@@ -1336,10 +1344,10 @@ GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它
 |---------|---------|---------|---------|---------|  
 | **AssetTags** | `List<int> AssetTags` | 标签 ID 列表 | 全部 | 描述 GE 特性(伤害/治疗/控制);<br/>配合 RemoveGameplayEffectsWithTags 批量移除;<br/>游戏逻辑判断和分类 |
 | **GrantedTags** | `List<int> GrantedTags` | 授予的标签 ID 列表 | Duration/Infinite | GE 生效时添加到目标 ASC;<br/>GE 移除时自动移除;<br/>状态标记(如"正在奔跑") |
-| **ApplicationRequiredTags** | `List<int> ApplicationRequiredTags` | 必需标签 ID 列表 | 全部 | 目标必须拥有**所有**这些标签才能被施加;<br/>实现条件性 Buff(如"只对眩晕目标生效") |
-| **OngoingRequiredTags** | `List<int> OngoingRequiredTags` | 激活条件标签列表 | Duration/Infinite | 目标必须拥有**所有**这些标签才会激活;<br/>控制 GE 激活/失活状态;<br/>标签条件满足时自动重新激活 |
+| **ApplicationRequiredTags** | `TagRequirementData (all/any/none)`<br/>兼容：`List<int> ApplicationRequiredTags` | 施加条件标签 | 全部 | 支持 `all/any/none` 组合判断;<br/>旧字段 `ApplicationRequiredTags` 默认映射到 `all` |
+| **OngoingRequiredTags** | `TagRequirementData (all/any/none)`<br/>兼容：`List<int> OngoingRequiredTags` | 激活条件标签 | Duration/Infinite | 支持 `all/any/none` 组合判断;<br/>旧字段 `OngoingRequiredTags` 默认映射到 `all` |
 | **RemoveGameplayEffectsWithTags** | `List<int> RemoveGameplayEffectsWithTags` | 要移除的 GE 标签列表 | 全部 | 目标身上拥有**任一**这些标签的 GE 会被移除;<br/>驱散特定类型 Buff/Debuff;<br/>实现互斥效果 | 
-| **ImmunityTags** | `List<int> ImmunityTags` | 免疫标签 ID 列表 | 全部 | 目标拥有**任一**这些标签时 GE 无法施加;<br/>实现免疫机制(如"霸体免疫控制") |
+| **ImmunityTags** | `TagRequirementData (all/any/none)`<br/>兼容：`List<int> ImmunityTags` | 免疫标签 | 全部 | 支持 `all/any/none` 组合判断;<br/>旧字段 `ImmunityTags` 默认映射到 `any` |
 | **Duration** | `TimeUnit` (Frame/Turn)<br/>`Time` (int)<br/>`ResetStartTimeWhenActivated` (bool) | 时间单位;<br/>持续时长(-1 表示无限);<br/>激活时是否重置计时 | Duration/Infinite | Duration 类型 GE 必需;<br/>Infinite 类型设置 Time=-1;<br/>控制 Buff/Debuff 持续时间 | 
 | **Period** | `Time` (int)<br/>`Effects` (List\<int\>)<br/>`FirstTrigger` (bool) | 周期间隔;<br/>周期执行的 GE ID 列表;<br/>是否首次立即触发 | Duration/Infinite<br/>(需要 Duration 组件) | 持续伤害/治疗(DoT/HoT);<br/>周期性触发效果;<br/>子 GE 通常为 Instant 类型 | 
 | **Modifiers** | `AttrSet` (int)<br/>`Attribute` (int)<br/>`Magnitude` (float)<br/>`Operation` (int)<br/>`Mmc` (int) | 属性集 ID;<br/>属性 ID;<br/>基础数值;<br/>操作类型(0=Add, 1=Multiply, 3=Override);<br/>MMC 计算逻辑 ID | 全部 | 修改目标属性值;<br/>支持加法/乘法/覆写;<br/>通过 MMC 实现复杂计算 |
@@ -1370,20 +1378,17 @@ GameplayEffect掌握了游戏内元素的属性控制权。理论上，只有它
 |---------|---------|---------|---------|---------|---------|
 | **AssetTags** | `List<int>` | 任一匹配 | 被其他 GE 检查时 | GE 自身 | 描述 GE 特性(伤害/治疗/控制等);<br/>被 RemoveGameplayEffectsWithTags 用于识别;<br/>被 CheckEffectHasAnyTags 检查 |
 | **GrantedTags** | `List<int>` | - | GE Apply/Remove 时 | 目标 ASC | GE 生效时添加到目标 ASC;<br/>GE 移除时从目标移除;<br/>Instant 类型无效 |
-| **ApplicationRequiredTags** | `List<int>` | 全部匹配 | GE Apply 前 | 目标 ASC | 目标必须拥有**所有**这些标签;<br/>否则 GE 无法施加;<br/>Apply 阶段校验 |
-| **OngoingRequiredTags** | `List<int>` | 全部匹配 | GE Activate 时 | 目标 ASC | 目标必须拥有**所有**这些标签;<br/>控制 GE 激活/失活状态;<br/>Instant 类型无效 |
+| **ApplicationRequiredTags** | `TagRequirementData` | `all/any/none` | GE Apply 前 | 目标 ASC | 支持三模式组合判断;<br/>旧字段默认使用 `all` |
+| **OngoingRequiredTags** | `TagRequirementData` | `all/any/none` | GE Activate 时 | 目标 ASC | 支持三模式组合判断;<br/>控制 GE 激活/失活状态;<br/>Instant 类型无效 |
 | **RemoveGameplayEffectsWithTags** | `List<int>` | 任一匹配 | GE Apply 时 | 目标身上的其他 GE | 移除目标身上拥有**任一**这些标签的 GE;<br/>检查其他 GE 的 AssetTags 和 GrantedTags |
-| **ImmunityTags** | `List<int>` | 任一匹配 | GE Apply 前 | 目标 ASC | 目标拥有**任一**这些标签时免疫此 GE;<br/>Apply 阶段校验 |
+| **ImmunityTags** | `TagRequirementData` | `all/any/none` | GE Apply 前 | 目标 ASC | 支持三模式组合判断;<br/>旧字段默认使用 `any` |
 
 ###### 1. 匹配逻辑差异
-Tag 组件分为两种匹配逻辑:
-- **全部匹配 (All Tags)**: ApplicationRequiredTags、OngoingRequiredTags
-    - 目标必须拥有列表中的**所有**标签才满足条件
-    - 实现通过 `ASCHelper.HasAllTags()` 检查 [4-cite-7](#4-cite-7)
-
-- **任一匹配 (Any Tag)**: AssetTags、GrantedTags、RemoveGameplayEffectsWithTags、ImmunityTags
-    - 只要拥有列表中的**任意一个**标签即满足条件
-    - 实现通过 `ASCHelper.HasAnyTags()` 或 `TagHelper.HasTag()` 检查 [4-cite-8](#4-cite-8)
+条件型 Tag 组件统一为三模式:
+- **all**: 必须拥有全部标签
+- **any**: 至少拥有一个标签
+- **none**: 不能拥有任意标签
+- 运行时统一通过 `TagRequirementData` 求值（`passAll && passAny && passNone`）
 
 ###### 2. 生命周期阶段
 Tag 组件在 GE 不同生命周期阶段发挥作用:
@@ -1668,8 +1673,8 @@ Ability运作逻辑的组成可以拆成两部分：
 | **CancelAbilityWithTags** | Tag | - | 整数数组 | 激活时,取消 Owner 当前所有拥有**任意**这些 Tag 的 Ability。用于实现技能之间的互斥关系                                                | 攻击技能激活时取消移动技能,受击技能激活时取消施法技能,死亡技能激活时取消所有主动行为 |
 | **BlockAbilityWithTags** | Tag | - | 整数数组 | 激活时,阻止 Owner 激活所有拥有**任意**这些 Tag 的 Ability。已激活的不受影响,只阻止新的激活                                             | 冲刺技能激活时阻止普通移动激活,施法技能激活时阻止攻击激活,眩晕状态阻止所有主动技能激活 |
 | **ActivationOwnedTags** | Tag | - | 整数数组 | 激活时 Owner 获得这些 Tag,失活时自动移除。用于标识 Ability 的激活状态                                                          | 移动技能授予 `State.Moving`,攻击技能授予 `State.Attacking`,防御技能授予 `State.Blocking`,用于其他系统判断当前状态 |
-| **ActivationRequiredTags** | Tag | - | 整数数组 | Owner 必须拥有**所有**这些 Tag 才能激活。用于定义激活的前置条件                                                                | 跳跃需要 `State.Grounded`(在地面上),冲刺需要 `State.Moving`(正在移动),施法需要 `State.Alive`(存活状态) |
-| **ActivationBlockedTags** | Tag | - | 整数数组 | Owner 拥有**任意**这些 Tag 时无法激活。用于定义激活的禁止条件                                                                 | 攻击时阻止 `State.Attacking`(防止重复攻击),眩晕时阻止 `State.Stunned`(无法行动),沉默时阻止 `State.Silenced`(无法施法) |
+| **ActivationRequiredTags** | Tag | - | `TagRequirementData`（兼容整数数组） | 激活条件支持 `all/any/none`；旧字段默认映射 `all`                                                                | 跳跃需要 `State.Grounded`(在地面上),冲刺需要 `State.Moving`(正在移动),施法需要 `State.Alive`(存活状态) |
+| **ActivationBlockedTags** | Tag | - | `TagRequirementData`（兼容整数数组） | 激活禁止条件支持 `all/any/none`；旧字段默认映射 `none`                                                                 | 攻击时阻止 `State.Attacking`(防止重复攻击),眩晕时阻止 `State.Stunned`(无法行动),沉默时阻止 `State.Silenced`(无法施法) |
 | **AbilityLogic** | 逻辑 | ✓ | 多态对象 | 定义 Ability 的具体执行逻辑和参数。包含 `$type`(逻辑类型名)和 `Param`(逻辑参数对象)两个字段。不同的逻辑类型对应不同的参数结构                          | `ALMove` 实现移动控制,`ALApplyEffect` 施加 GameplayEffect,`ALTimeline` 执行基于时间轴的复杂技能序列,`ALDebugLog` 输出调试信息 |
 
 
@@ -3090,8 +3095,8 @@ AbilitySpec是Ability Entity的OOP包装层。所有 public 成员的形参和�
 |--------|------|
 | `AssetTags` | 描述性标签 |
 | `ActivationOwnedTags` | 激活期间授予 Owner ASC 的临时 Tag |
-| `ActivationRequiredTags` | 激活所需 Tag（Owner 必须全部拥有） |
-| `ActivationBlockedTags` | 激活阻止 Tag（Owner 拥有任一则阻止） |
+| `ActivationRequiredTags` | 激活条件 Tag（底层支持 `all/any/none`；旧接口默认映射到 `all`） |
+| `ActivationBlockedTags` | 激活阻止 Tag（底层支持 `all/any/none`；旧接口默认映射到 `none`） |
 | `CancelAbilityTags` | 取消能力 Tag |
 | `BlockAbilityTags` | 阻止能力 Tag |
 

@@ -190,6 +190,18 @@ namespace GAS.Runtime
             var nativeArray = getter(com);  
             return nativeArray.IsCreated ? nativeArray.ToArray() : Array.Empty<int>();  
         }  
+
+        private (int[] all, int[] any, int[] none) GetTagRequirementInternal<T>(Func<T, TagRequirementData> getter)
+            where T : unmanaged, IComponentData
+        {
+            if (!CheckTagComponentExist<T>()) return (Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>());
+            var requirement = getter(_em.GetComponentData<T>(_abilityEntity));
+            return (
+                requirement.all.IsCreated ? requirement.all.ToArray() : Array.Empty<int>(),
+                requirement.any.IsCreated ? requirement.any.ToArray() : Array.Empty<int>(),
+                requirement.none.IsCreated ? requirement.none.ToArray() : Array.Empty<int>()
+            );
+        }
   
         private void SetTagsInternal<T>(int[] tags, Func<T, NativeArray<int>> getter, Func<NativeArray<int>, T> factory)  
             where T : unmanaged, IComponentData  
@@ -200,6 +212,23 @@ namespace GAS.Runtime
             if (old.IsCreated) old.Dispose();  
             _em.SetComponentData(_abilityEntity, factory(new NativeArray<int>(tags, Allocator.Persistent)));  
         }  
+
+        private void SetTagRequirementInternal<T>(int[] all, int[] any, int[] none,
+            Func<T, TagRequirementData> getter, Func<TagRequirementData, T> factory)
+            where T : unmanaged, IComponentData
+        {
+            if (!CheckTagComponentExist<T>()) return;
+            var old = getter(_em.GetComponentData<T>(_abilityEntity));
+            if (old.all.IsCreated) old.all.Dispose();
+            if (old.any.IsCreated) old.any.Dispose();
+            if (old.none.IsCreated) old.none.Dispose();
+            _em.SetComponentData(_abilityEntity, factory(new TagRequirementData
+            {
+                all = new NativeArray<int>(all ?? Array.Empty<int>(), Allocator.Persistent),
+                any = new NativeArray<int>(any ?? Array.Empty<int>(), Allocator.Persistent),
+                none = new NativeArray<int>(none ?? Array.Empty<int>(), Allocator.Persistent)
+            }));
+        }
   
         private void AddTagComponentInternal<T>(int[] tags, Func<NativeArray<int>, T> factory)  
             where T : unmanaged, IComponentData  
@@ -208,6 +237,19 @@ namespace GAS.Runtime
             EntityHelper.AddComponent<T>(_abilityEntity);  
             EntityHelper.SetComponent(_abilityEntity, factory(new NativeArray<int>(tags, Allocator.Persistent)));  
         }  
+
+        private void AddTagRequirementComponentInternal<T>(int[] all, int[] any, int[] none, Func<TagRequirementData, T> factory)
+            where T : unmanaged, IComponentData
+        {
+            if (!IsValid || CheckTagComponentExist<T>()) return;
+            EntityHelper.AddComponent<T>(_abilityEntity);
+            EntityHelper.SetComponent(_abilityEntity, factory(new TagRequirementData
+            {
+                all = new NativeArray<int>(all ?? Array.Empty<int>(), Allocator.Persistent),
+                any = new NativeArray<int>(any ?? Array.Empty<int>(), Allocator.Persistent),
+                none = new NativeArray<int>(none ?? Array.Empty<int>(), Allocator.Persistent)
+            }));
+        }
   
         private void RemoveTagComponentInternal<T>(Func<T, NativeArray<int>> getter)  
             where T : unmanaged, IComponentData  
@@ -218,6 +260,17 @@ namespace GAS.Runtime
             if (arr.IsCreated) arr.Dispose();  
             _em.RemoveComponent<T>(_abilityEntity);  
         }  
+
+        private void RemoveTagRequirementComponentInternal<T>(Func<T, TagRequirementData> getter)
+            where T : unmanaged, IComponentData
+        {
+            if (!CheckTagComponentExist<T>()) return;
+            var old = getter(_em.GetComponentData<T>(_abilityEntity));
+            if (old.all.IsCreated) old.all.Dispose();
+            if (old.any.IsCreated) old.any.Dispose();
+            if (old.none.IsCreated) old.none.Dispose();
+            _em.RemoveComponent<T>(_abilityEntity);
+        }
   
         
         #region AssetTags  
@@ -258,15 +311,22 @@ namespace GAS.Runtime
   
         public bool CheckActivationRequiredTagsExist() => CheckTagComponentExist<CAbilityActivationRequiredTags>();  
   
-        public int[] GetActivationRequiredTags() => GetTagsInternal<CAbilityActivationRequiredTags>(c => c.tags);  
+        public int[] GetActivationRequiredTags() => GetTagRequirementInternal<CAbilityActivationRequiredTags>(c => c.requirement).all;  
   
-        public void SetActivationRequiredTags(int[] tags) => SetTagsInternal<CAbilityActivationRequiredTags>(tags,  
-            c => c.tags, arr => new CAbilityActivationRequiredTags { tags = arr });  
+        public void SetActivationRequiredTags(int[] tags) => SetTagRequirementInternal<CAbilityActivationRequiredTags>(tags, Array.Empty<int>(), Array.Empty<int>(),  
+            c => c.requirement, req => new CAbilityActivationRequiredTags { requirement = req });  
   
-        public void AddActivationRequiredTags(int[] tags) => AddTagComponentInternal<CAbilityActivationRequiredTags>(tags,  
-            arr => new CAbilityActivationRequiredTags { tags = arr });  
+        public void AddActivationRequiredTags(int[] tags) => AddTagRequirementComponentInternal<CAbilityActivationRequiredTags>(tags, Array.Empty<int>(), Array.Empty<int>(),  
+            req => new CAbilityActivationRequiredTags { requirement = req });  
   
-        public void RemoveActivationRequiredTags() => RemoveTagComponentInternal<CAbilityActivationRequiredTags>(c => c.tags);  
+        public void RemoveActivationRequiredTags() => RemoveTagRequirementComponentInternal<CAbilityActivationRequiredTags>(c => c.requirement);  
+
+        public (int[] all, int[] any, int[] none) GetActivationRequiredTagRequirement() =>
+            GetTagRequirementInternal<CAbilityActivationRequiredTags>(c => c.requirement);
+
+        public void SetActivationRequiredTagRequirement(int[] all, int[] any, int[] none) =>
+            SetTagRequirementInternal<CAbilityActivationRequiredTags>(all, any, none,
+                c => c.requirement, req => new CAbilityActivationRequiredTags { requirement = req });
   
         #endregion  
   
@@ -275,15 +335,22 @@ namespace GAS.Runtime
   
         public bool CheckActivationBlockedTagsExist() => CheckTagComponentExist<CAbilityActivationBlockedTags>();  
   
-        public int[] GetActivationBlockedTags() => GetTagsInternal<CAbilityActivationBlockedTags>(c => c.tags);  
+        public int[] GetActivationBlockedTags() => GetTagRequirementInternal<CAbilityActivationBlockedTags>(c => c.requirement).none;  
   
-        public void SetActivationBlockedTags(int[] tags) => SetTagsInternal<CAbilityActivationBlockedTags>(tags,  
-            c => c.tags, arr => new CAbilityActivationBlockedTags { tags = arr });  
+        public void SetActivationBlockedTags(int[] tags) => SetTagRequirementInternal<CAbilityActivationBlockedTags>(Array.Empty<int>(), Array.Empty<int>(), tags,  
+            c => c.requirement, req => new CAbilityActivationBlockedTags { requirement = req });  
   
-        public void AddActivationBlockedTags(int[] tags) => AddTagComponentInternal<CAbilityActivationBlockedTags>(tags,  
-            arr => new CAbilityActivationBlockedTags { tags = arr });  
+        public void AddActivationBlockedTags(int[] tags) => AddTagRequirementComponentInternal<CAbilityActivationBlockedTags>(Array.Empty<int>(), Array.Empty<int>(), tags,  
+            req => new CAbilityActivationBlockedTags { requirement = req });  
   
-        public void RemoveActivationBlockedTags() => RemoveTagComponentInternal<CAbilityActivationBlockedTags>(c => c.tags);  
+        public void RemoveActivationBlockedTags() => RemoveTagRequirementComponentInternal<CAbilityActivationBlockedTags>(c => c.requirement);  
+
+        public (int[] all, int[] any, int[] none) GetActivationBlockedTagRequirement() =>
+            GetTagRequirementInternal<CAbilityActivationBlockedTags>(c => c.requirement);
+
+        public void SetActivationBlockedTagRequirement(int[] all, int[] any, int[] none) =>
+            SetTagRequirementInternal<CAbilityActivationBlockedTags>(all, any, none,
+                c => c.requirement, req => new CAbilityActivationBlockedTags { requirement = req });
   
         #endregion  
   
