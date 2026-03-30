@@ -9,6 +9,7 @@ using cfg;
 using SimpleJSON;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
 namespace GAS.Runtime
 {
@@ -179,21 +180,68 @@ namespace GAS.Runtime
 
             var configs = new List<GameplayEffectComponentConfig>();
 
+            (int[] all, int[] any, int[] none)? ParseTagRequirement(cfg.TagRequirementData requirement)
+            {
+
+                int[] all = null, any = null, none = null;
+                if(requirement.All is {Count: > 0})
+                    all = requirement.All.Where(x => x > 0).ToArray();
+                if(requirement.Any is {Count: > 0})
+                    any = requirement.Any.Where(x => x > 0).ToArray();
+                if(requirement.None is {Count: > 0})
+                    none = requirement.None.Where(x => x > 0).ToArray();
+
+                if(all.Length == 0) all = null;
+                if(any.Length == 0) any = null;
+                if(none.Length == 0) none = null;
+
+                if(all == null && any == null && none == null) return null;
+                return (all, any, none);
+            }
+
             // assetTags
             if (data.AssetTags is { Count: > 0 })
                 configs.Add(new ConfAssetTags { tags = data.AssetTags.ToArray() });
             // grantedTags
             if (data.GrantedTags is { Count: > 0 })
                 configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });
+            // applicationTagRequirement
+            if (data.ApplicationTagRequirement != null)
+            {
+                var result = ParseTagRequirement(data.ApplicationTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfApplicationTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
+            }
             // applicationRequiredTags
             if (data.ApplicationRequiredTags is { Count: > 0 })
                 configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });
+            // ongoingTagRequirement
+            if (data.OngoingTagRequirement != null)
+            {
+                var result = ParseTagRequirement(data.OngoingTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfOngoingTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
+            }
             // ongoingRequiredTags
             if (data.OngoingRequiredTags is { Count: > 0 })
                 configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });
+            // removeGameplayEffectsWithTagRequirement
+            if (data.RemoveGameplayEffectsWithTagRequirement != null)
+            {
+                var result = ParseTagRequirement(data.RemoveGameplayEffectsWithTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfRemoveEffectWithTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
+            }
             // removeGameplayEffectsWithTags
             if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })
                 configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });
+            // ImmunityTagRequirement
+            if (data.ImmunityTagRequirement != null)
+            {
+                var result = ParseTagRequirement(data.ImmunityTagRequirement.Value);
+                if(result != null)
+                    configs.Add(new ConfEffectImmunityTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
+            }
             // immunityTags
             if (data.ImmunityTags is { Count: > 0 })
                 configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });

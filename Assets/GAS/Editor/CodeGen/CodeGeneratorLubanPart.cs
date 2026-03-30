@@ -149,6 +149,7 @@ namespace GAS.Editor
             writer.WriteLine("using SimpleJSON;");
             writer.WriteLine("using System.IO;");
             writer.WriteLine("using UnityEngine;");
+            writer.WriteLine("using System.Linq;");
 
             writer.WriteLine("");
 
@@ -354,6 +355,25 @@ namespace GAS.Editor
                         writer.WriteLine("");
                         writer.WriteLine("var configs = new List<GameplayEffectComponentConfig>();");
                         writer.WriteLine("");
+                        writer.WriteLine("(int[] all, int[] any, int[] none)? ParseTagRequirement(cfg.TagRequirementData requirement)");
+                        writer.WriteLine("{");
+                        writer.WriteLine("");
+                        writer.WriteLine("    int[] all = null, any = null, none = null;");
+                        writer.WriteLine("    if(requirement.All is {Count: > 0})");
+                        writer.WriteLine("        all = requirement.All.Where(x => x > 0).ToArray();");
+                        writer.WriteLine("    if(requirement.Any is {Count: > 0})");
+                        writer.WriteLine("        any = requirement.Any.Where(x => x > 0).ToArray();");
+                        writer.WriteLine("    if(requirement.None is {Count: > 0})");
+                        writer.WriteLine("        none = requirement.None.Where(x => x > 0).ToArray();");
+                        writer.WriteLine("");
+                        writer.WriteLine("    if(all.Length == 0) all = null;");
+                        writer.WriteLine("    if(any.Length == 0) any = null;");
+                        writer.WriteLine("    if(none.Length == 0) none = null;");
+                        writer.WriteLine("");
+                        writer.WriteLine("    if(all == null && any == null && none == null) return null;");
+                        writer.WriteLine("    return (all, any, none);");
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
                         writer.WriteLine("// assetTags");
                         writer.WriteLine("if (data.AssetTags is { Count: > 0 })");
                         writer.WriteLine("    configs.Add(new ConfAssetTags { tags = data.AssetTags.ToArray() });");
@@ -361,18 +381,46 @@ namespace GAS.Editor
                         writer.WriteLine("if (data.GrantedTags is { Count: > 0 })");
                         writer.WriteLine(
                             "    configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });");
+                        writer.WriteLine("// applicationTagRequirement");
+                        writer.WriteLine("if (data.ApplicationTagRequirement != null)");
+                        writer.WriteLine("{");
+                        writer.WriteLine("    var result = ParseTagRequirement(data.ApplicationTagRequirement.Value);");
+                        writer.WriteLine("    if(result != null)");
+                        writer.WriteLine("        configs.Add(new ConfApplicationTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });");
+                        writer.WriteLine("}");
                         writer.WriteLine("// applicationRequiredTags");
                         writer.WriteLine("if (data.ApplicationRequiredTags is { Count: > 0 })");
                         writer.WriteLine(
                             "    configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });");
+                        writer.WriteLine("// ongoingTagRequirement");
+                        writer.WriteLine("if (data.OngoingTagRequirement != null)");
+                        writer.WriteLine("{");
+                        writer.WriteLine("    var result = ParseTagRequirement(data.OngoingTagRequirement.Value);");
+                        writer.WriteLine("    if(result != null)");
+                        writer.WriteLine("        configs.Add(new ConfOngoingTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });");
+                        writer.WriteLine("}");
                         writer.WriteLine("// ongoingRequiredTags");
                         writer.WriteLine("if (data.OngoingRequiredTags is { Count: > 0 })");
                         writer.WriteLine(
                             "    configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });");
+                        writer.WriteLine("// removeGameplayEffectsWithTagRequirement");
+                        writer.WriteLine("if (data.RemoveGameplayEffectsWithTagRequirement != null)");
+                        writer.WriteLine("{");
+                        writer.WriteLine("    var result = ParseTagRequirement(data.RemoveGameplayEffectsWithTagRequirement.Value);");
+                        writer.WriteLine("    if(result != null)");
+                        writer.WriteLine("        configs.Add(new ConfRemoveEffectWithTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });");
+                        writer.WriteLine("}");
                         writer.WriteLine("// removeGameplayEffectsWithTags");
                         writer.WriteLine("if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })");
                         writer.WriteLine(
                             "    configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });");
+                        writer.WriteLine("// ImmunityTagRequirement");
+                        writer.WriteLine("if (data.ImmunityTagRequirement != null)");
+                        writer.WriteLine("{");
+                        writer.WriteLine("    var result = ParseTagRequirement(data.ImmunityTagRequirement.Value);");
+                        writer.WriteLine("    if(result != null)");
+                        writer.WriteLine("        configs.Add(new ConfEffectImmunityTagRequirement{ all = result.Value.all, any = result.Value.any, none = result.Value.none });");
+                        writer.WriteLine("}");
                         writer.WriteLine("// immunityTags");
                         writer.WriteLine("if (data.ImmunityTags is { Count: > 0 })");
                         writer.WriteLine(

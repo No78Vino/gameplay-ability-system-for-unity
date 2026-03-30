@@ -13,7 +13,7 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate<CEffectImmunityTags>();
+            state.RequireForUpdate(SystemAPI.QueryBuilder().WithAny<CEffectImmunityTagRequirement, CEffectImmunityTags>().Build());
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<WipCheckApplyEffect>();
         }
@@ -24,17 +24,33 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
 
-            foreach (var (_, _, immunityTags, inUsage, ge) in
+            foreach (var (_, _, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipCheckApplyEffect>,
-                         RefRO<CEffectImmunityTags>,
                          RefRO<CEffectInUsage>
-                     >().WithEntityAccess())
+                     >().WithAny<CEffectImmunityTagRequirement, CEffectImmunityTags>().WithEntityAccess())
             {
+                bool hasRequirement = state.EntityManager.HasComponent<CEffectImmunityTagRequirement>(ge);
+                // 兼容旧版本，旧版本使用 CImmunityTags 来指定免疫条件
+                bool hasLegacyImmunity = state.EntityManager.HasComponent<CEffectImmunityTags>(ge);
+                if (!hasRequirement && !hasLegacyImmunity)
+                    continue;
+
                 var asc = inUsage.ValueRO.Target;
-                var tags = immunityTags.ValueRO.tags;
-                if (tagMap.AscHasAnyTags(state.EntityManager, asc, tags)) continue;
+                TagRequirementData requirement;
+                if (hasRequirement)
+                {
+                    requirement = state.EntityManager.GetComponentData<CEffectImmunityTagRequirement>(ge).requirement;
+                }
+                else
+                {
+                    var any = state.EntityManager.GetComponentData<CEffectImmunityTags>(ge);
+                    requirement = new TagRequirementData { all = default, any = any.tags, none = default };
+                }
+
+                if(!tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement)) continue;
+
                 ecb.RemoveComponent<CEffectInstance>(ge);
                 ecb.AddComponent<CEffectDestroy>(ge);
                 // TODO 触发免疫Cue

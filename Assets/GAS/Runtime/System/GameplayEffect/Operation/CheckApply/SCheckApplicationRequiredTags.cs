@@ -1,4 +1,4 @@
-﻿using Unity.Burst;
+﻿﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -13,7 +13,7 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate<CApplicationRequiredTags>();
+            state.RequireForUpdate(SystemAPI.QueryBuilder().WithAny<CApplicationTagRequirement, CApplicationRequiredTags>().Build());
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<WipCheckApplyEffect>();
         }
@@ -24,17 +24,32 @@ namespace GAS.Runtime
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var tagMap = SystemAPI.GetSingleton<SingletonGameplayTagMap>();
 
-            foreach (var (_,_, applicationRequiredTags, inUsage, ge) in
+            foreach (var (_, _, inUsage, ge) in
                      SystemAPI.Query<
                          RefRO<CEffectInstance>,
                          RefRO<WipCheckApplyEffect>,
-                         RefRO<CApplicationRequiredTags>,
                          RefRO<CEffectInUsage>
-                     >().WithEntityAccess())
+                     >().WithAny<CApplicationTagRequirement, CApplicationRequiredTags>().WithEntityAccess())
             {
+                bool hasRequirement = state.EntityManager.HasComponent<CApplicationTagRequirement>(ge);
+                // 兼容旧版本，旧版本使用 CApplicationRequiredTags 来指定应用条件
+                bool hasLegacyRequired = state.EntityManager.HasComponent<CApplicationRequiredTags>(ge);
+                if (!hasRequirement && !hasLegacyRequired)
+                    continue;
+
                 var asc = inUsage.ValueRO.Target;
-                var tags = applicationRequiredTags.ValueRO.tags;
-                if (tagMap.AscHasAllTags(state.EntityManager, asc, tags)) continue;
+                TagRequirementData requirement;
+                if (hasRequirement)
+                {
+                    requirement = state.EntityManager.GetComponentData<CApplicationTagRequirement>(ge).requirement;
+                }
+                else
+                {
+                    var all = state.EntityManager.GetComponentData<CApplicationRequiredTags>(ge).tags;
+                    requirement = new TagRequirementData { all = all, any = default, none = default };
+                }
+
+                if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement)) continue;
                 ecb.RemoveComponent<CEffectInstance>(ge);
                 ecb.AddComponent<CEffectDestroy>(ge);
             }
