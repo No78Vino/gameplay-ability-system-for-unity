@@ -1,0 +1,19 @@
+{
+  "name": "com.code-philosophy.luban",
+  "version": "1.2.0",
+  "displayName": "Luban",
+  "description": "luban is a powerful, easy-to-use, elegant and stable game configuration solution.",
+  "category": "Runtime",
+  "documentationUrl": "https://www.datable.cn/docs/intro",
+  "licensesUrl": "https://github.com/focus-creative-games/luban_unity/blob/main/LICENSE",
+  "keywords": [
+    "luban",
+    "focus-creative-games",
+    "code-philosophy"
+  ],
+  "author": {
+    "name": "Code Philosophy",
+    "email": "luban@code-philosophy.com",
+    "url": "https://code-philosophy.com"
+  }
+}
