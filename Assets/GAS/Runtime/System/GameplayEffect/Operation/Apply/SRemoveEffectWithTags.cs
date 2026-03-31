@@ -12,7 +12,7 @@ namespace GAS.Runtime
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
-            state.RequireForUpdate(SystemAPI.QueryBuilder().WithAny<CRemoveEffectWithTagRequirement, CRemoveEffectWithTags>().Build());
+            state.RequireForUpdate<CRemoveEffectWithTags>();
             state.RequireForUpdate<CEffectInstance>();
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<WipApplyEffect>();
@@ -29,23 +29,9 @@ namespace GAS.Runtime
                          RefRO<CEffectInstance>,
                          RefRO<WipApplyEffect>,
                          RefRO<CEffectInUsage>
-                     >().WithAny<CRemoveEffectWithTagRequirement, CRemoveEffectWithTags>().WithEntityAccess())
+                     >().WithAll<CRemoveEffectWithTags>().WithEntityAccess())
             {
-                bool hasRequirement = state.EntityManager.HasComponent<CRemoveEffectWithTagRequirement>(ge);
-                // 兼容旧版本，旧版本使用 CRemoveEffectWithTags 来指定移除条件
-                bool hasLegacyRemove = state.EntityManager.HasComponent<CRemoveEffectWithTags>(ge);
-                if (!hasRequirement && !hasLegacyRemove)
-                    continue;
-
-                TagRequirementData requirement;
-                if(hasRequirement)
-                {
-                    requirement = state.EntityManager.GetComponentData<CRemoveEffectWithTagRequirement>(ge).requirement;
-                }
-                else
-                {
-                    requirement = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).requirement;
-                }
+                var requirement = state.EntityManager.GetComponentData<CRemoveEffectWithTags>(ge).requirement;
 
                 var asc = inUsage.ValueRO.Target;
 

@@ -14,8 +14,12 @@ namespace GAS.Runtime
         private Type _cueType;
         private XParam _xParam;
         private AbilitySystemCell _asc;
-        private int[] _requiredTags;
-        private int[] _immunityTags;
+        private int[] _requiredAllTags;
+        private int[] _requiredAnyTags;
+        private int[] _requiredNoneTags;
+        private int[] _immunityAllTags;
+        private int[] _immunityAnyTags;
+        private int[] _immunityNoneTags;
         
         private static EntityManager EntityManager=>GASManager.EntityManager;
         
@@ -32,16 +36,24 @@ namespace GAS.Runtime
         {
             _cueType = cueType;
             _xParam = xParam;
-            _requiredTags = TagHelper.FilterInvalidTags(requiredTags);
-            _immunityTags = TagHelper.FilterInvalidTags(immunityTags);
+            _requiredAllTags = TagHelper.FilterInvalidTags(requiredTags);
+            _requiredAnyTags = Array.Empty<int>();
+            _requiredNoneTags = Array.Empty<int>();
+            _immunityAllTags = Array.Empty<int>();
+            _immunityAnyTags = Array.Empty<int>();
+            _immunityNoneTags = TagHelper.FilterInvalidTags(immunityTags);
         }
         
         public GameplayCueUnit(GameplayCueConfig config)
         {
             _cueType = config.CueType;
             _xParam = config.Param;
-            _requiredTags = TagHelper.FilterInvalidTags(config.RequiredTags);
-            _immunityTags = TagHelper.FilterInvalidTags(config.ImmunityTags);
+            _requiredAllTags = TagHelper.FilterInvalidTags(config.RequiredAllTags);
+            _requiredAnyTags = TagHelper.FilterInvalidTags(config.RequiredAnyTags);
+            _requiredNoneTags = TagHelper.FilterInvalidTags(config.RequiredNoneTags);
+            _immunityAllTags = TagHelper.FilterInvalidTags(config.ImmunityAllTags);
+            _immunityAnyTags = TagHelper.FilterInvalidTags(config.ImmunityAnyTags);
+            _immunityNoneTags = TagHelper.FilterInvalidTags(config.ImmunityNoneTags);
         }
 
         private bool CheckCueEntity()
@@ -57,15 +69,12 @@ namespace GAS.Runtime
             return true;
         }
         
-        private int[] FilterInvalidTags(int[] tags)
+        private bool EvaluateTagRequirement(Entity asc, int[] all, int[] any, int[] none)
         {
-            if (tags == null || tags.Length == 0) return new int[0];
-            var result = new int[tags.Length];
-            for (int i = 0; i < tags.Length; i++)
-            {
-                result[i] = tags[i];
-            }
-            return result;
+            bool passAll = all == null || all.Length == 0 || ASCHelper.HasAllTags(asc, all);
+            bool passAny = any == null || any.Length == 0 || ASCHelper.HasAnyTags(asc, any);
+            bool passNone = none == null || none.Length == 0 || !ASCHelper.HasAnyTags(asc, none);
+            return passAll && passAny && passNone;
         }
 
         /// <summary>
@@ -138,15 +147,8 @@ namespace GAS.Runtime
         {
             if (!CheckCueEntity()) return false;
             
-            if (_requiredTags != null)
-            {
-                if(!ASCHelper.HasAllTags(asc,_requiredTags)) return false;
-            }
-            
-            if (_immunityTags != null)
-            {
-                if(ASCHelper.HasAnyTags(asc,_immunityTags)) return false;
-            }
+            if (!EvaluateTagRequirement(asc, _requiredAllTags, _requiredAnyTags, _requiredNoneTags)) return false;
+            if (!EvaluateTagRequirement(asc, _immunityAllTags, _immunityAnyTags, _immunityNoneTags)) return false;
 
             var mcCue = EntityHelper.GetManagedComponentData<MCCue>(_cueEntity);
             mcCue.cue.AddToTargetAsc(asc);

@@ -13,7 +13,7 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate(SystemAPI.QueryBuilder().WithAny<CEffectImmunityTagRequirement, CEffectImmunityTags>().Build());
+            state.RequireForUpdate<CEffectImmunityTags>();
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<WipCheckApplyEffect>();
         }
@@ -29,24 +29,10 @@ namespace GAS.Runtime
                          RefRO<CEffectInstance>,
                          RefRO<WipCheckApplyEffect>,
                          RefRO<CEffectInUsage>
-                     >().WithAny<CEffectImmunityTagRequirement, CEffectImmunityTags>().WithEntityAccess())
+                     >().WithAll<CEffectImmunityTags>().WithEntityAccess())
             {
-                bool hasRequirement = state.EntityManager.HasComponent<CEffectImmunityTagRequirement>(ge);
-                // 兼容旧版本，旧版本使用 CImmunityTags 来指定免疫条件
-                bool hasLegacyImmunity = state.EntityManager.HasComponent<CEffectImmunityTags>(ge);
-                if (!hasRequirement && !hasLegacyImmunity)
-                    continue;
-
                 var asc = inUsage.ValueRO.Target;
-                TagRequirementData requirement;
-                if (hasRequirement)
-                {
-                    requirement = state.EntityManager.GetComponentData<CEffectImmunityTagRequirement>(ge).requirement;
-                }
-                else
-                {
-                    requirement = state.EntityManager.GetComponentData<CEffectImmunityTags>(ge).requirement;
-                }
+                var requirement = state.EntityManager.GetComponentData<CEffectImmunityTags>(ge).requirement;
 
                 if(!tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement)) continue;
 

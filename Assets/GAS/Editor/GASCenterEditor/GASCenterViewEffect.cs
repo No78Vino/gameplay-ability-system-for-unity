@@ -153,63 +153,63 @@ namespace GAS.Editor
                         ? string.Join(";", GrantedTags)
                         : string.Empty;
                 
-                void WriteTagRequirement(EffectEditComponent component, GEEditTagRequirement requirement)
+                string EncodeTagRequirement(GEEditTagRequirement requirement)
                 {
-                    if(ComponentTypes.Contains(component) && requirement.HasAnyValue())
-                    {
-                        System.Text.StringBuilder sb = new ();
-                        if(requirement.All != null && requirement.All.Count > 0)
-                            sb.Append(string.Join(",", requirement.All));
-                        else
-                            sb.Append("0");
-                        sb.Append(";");
-
-                        if(requirement.Any != null && requirement.Any.Count > 0)
-                            sb.Append(string.Join(",", requirement.Any));
-                        else
-                            sb.Append("0");
-                        sb.Append(";");
-
-                        if(requirement.None != null && requirement.None.Count > 0)
-                            sb.Append(string.Join(",", requirement.None));
-                        else
-                            sb.Append("0");
-                    }
-                    else
-                    {
-                        worksheet.Cells[row, _headerMap[component.ToString()]].Value = string.Empty;
-                    }
+                    if (requirement == null || !requirement.HasAnyValue()) return string.Empty;
+                    System.Text.StringBuilder sb = new();
+                    sb.Append(requirement.All != null && requirement.All.Count > 0 ? string.Join(",", requirement.All) : "0");
+                    sb.Append(";");
+                    sb.Append(requirement.Any != null && requirement.Any.Count > 0 ? string.Join(",", requirement.Any) : "0");
+                    sb.Append(";");
+                    sb.Append(requirement.None != null && requirement.None.Count > 0 ? string.Join(",", requirement.None) : "0");
+                    return sb.ToString();
                 }
 
-                WriteTagRequirement(EffectEditComponent.ApplicationTagRequirement, ApplicationTagRequirement);
+                string EncodeTagList(List<int> tags)
+                {
+                    return tags != null && tags.Count > 0 ? string.Join(";", tags) : string.Empty;
+                }
 
                 worksheet.Cells[row, _headerMap["ApplicationRequiredTags"]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.ApplicationRequiredTags) &&
-                    ApplicationRequiredTags.Count > 0
-                        ? string.Join(";", ApplicationRequiredTags)
+                    ComponentTypes.Contains(EffectEditComponent.ApplicationRequiredTags)
+                        ? EncodeTagList(ApplicationRequiredTags?.All)
                         : string.Empty;
-
-                WriteTagRequirement(EffectEditComponent.ApplicationTagRequirement, ApplicationTagRequirement);
 
                 worksheet.Cells[row, _headerMap["OngoingRequiredTags"]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.OngoingRequiredTags) && OngoingRequiredTags.Count > 0
-                        ? string.Join(";", OngoingRequiredTags)
+                    ComponentTypes.Contains(EffectEditComponent.OngoingRequiredTags)
+                        ? EncodeTagList(OngoingRequiredTags?.All)
                         : string.Empty;
-
-                WriteTagRequirement(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement, RemoveGameplayEffectsWithTagRequirement);
 
                 worksheet.Cells[row, _headerMap["RemoveGameplayEffectsWithTags"]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.RemoveGameplayEffectsWithTags) &&
-                    RemoveGameplayEffectsWithTags.Count > 0
-                        ? string.Join(";", RemoveGameplayEffectsWithTags)
+                    ComponentTypes.Contains(EffectEditComponent.RemoveGameplayEffectsWithTags)
+                        ? EncodeTagList(RemoveGameplayEffectsWithTags?.Any)
                         : string.Empty;
-
-                WriteTagRequirement(EffectEditComponent.ImmunityTagRequirement, ImmunityTagRequirement);
 
                 worksheet.Cells[row, _headerMap["ImmunityTags"]].Value =
-                    ComponentTypes.Contains(EffectEditComponent.ImmunityTags) && ImmunityTags.Count > 0
-                        ? string.Join(";", ImmunityTags)
+                    ComponentTypes.Contains(EffectEditComponent.ImmunityTags)
+                        ? EncodeTagList(ImmunityTags?.Any)
                         : string.Empty;
+
+                if (_headerMap.ContainsKey(EffectEditComponent.ApplicationTagRequirement.ToString()))
+                    worksheet.Cells[row, _headerMap[EffectEditComponent.ApplicationTagRequirement.ToString()]].Value =
+                        ComponentTypes.Contains(EffectEditComponent.ApplicationRequiredTags)
+                            ? EncodeTagRequirement(ApplicationRequiredTags)
+                            : string.Empty;
+                if (_headerMap.ContainsKey(EffectEditComponent.OngoingTagRequirement.ToString()))
+                    worksheet.Cells[row, _headerMap[EffectEditComponent.OngoingTagRequirement.ToString()]].Value =
+                        ComponentTypes.Contains(EffectEditComponent.OngoingRequiredTags)
+                            ? EncodeTagRequirement(OngoingRequiredTags)
+                            : string.Empty;
+                if (_headerMap.ContainsKey(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement.ToString()))
+                    worksheet.Cells[row, _headerMap[EffectEditComponent.RemoveGameplayEffectsWithTagRequirement.ToString()]].Value =
+                        ComponentTypes.Contains(EffectEditComponent.RemoveGameplayEffectsWithTags)
+                            ? EncodeTagRequirement(RemoveGameplayEffectsWithTags)
+                            : string.Empty;
+                if (_headerMap.ContainsKey(EffectEditComponent.ImmunityTagRequirement.ToString()))
+                    worksheet.Cells[row, _headerMap[EffectEditComponent.ImmunityTagRequirement.ToString()]].Value =
+                        ComponentTypes.Contains(EffectEditComponent.ImmunityTags)
+                            ? EncodeTagRequirement(ImmunityTags)
+                            : string.Empty;
                 worksheet.Cells[row, _headerMap["CueOnApply"]].Value =
                     ComponentTypes.Contains(EffectEditComponent.CueOnApply) && CueOnApply.Count > 0
                         ? string.Join(";", CueOnApply)
@@ -362,62 +362,78 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["GrantedTags"]].ToString().Split(';').Select(int.Parse).ToList()
                 : new List<int>();
 
-            GEEditTagRequirement GetTagRequirementData(string key)
+            GEEditTagRequirement CreateRequirement()
             {
-                bool isExistData = 
-                    selectInfo.ContainsKey(_headerMap[key]) 
-                    && selectInfo[_headerMap[key]] != null
-                    && !string.IsNullOrEmpty(selectInfo[_headerMap[key]].ToString());
-
-                string rawData = isExistData ? selectInfo[_headerMap[key]].ToString() : "";
-                var requirement = new GEEditTagRequirement();
-
-                if (isExistData)
+                return new GEEditTagRequirement
                 {
-                    string[] parts = rawData.Split(';');
-                    if(parts.Length > 0) requirement.All = parts[0].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Where(x => x>0).ToList();
-                    if(parts.Length > 1) requirement.Any = parts[1].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Where(x => x>0).ToList();
-                    if(parts.Length > 2) requirement.None = parts[2].Split(',', System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).Where(x => x>0).ToList();
+                    All = new List<int>(),
+                    Any = new List<int>(),
+                    None = new List<int>()
+                };
+            }
+
+            string ReadCell(string key)
+            {
+                if (!_headerMap.ContainsKey(key)) return string.Empty;
+                if (!selectInfo.ContainsKey(_headerMap[key])) return string.Empty;
+                return selectInfo[_headerMap[key]]?.ToString() ?? string.Empty;
+            }
+
+            List<int> ParseTagCsv(string raw)
+            {
+                if (string.IsNullOrWhiteSpace(raw)) return new List<int>();
+                return raw.Split(',', System.StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse).Where(x => x > 0).ToList();
+            }
+
+            GEEditTagRequirement ParseRequirementText(string raw, string legacyMode)
+            {
+                var requirement = CreateRequirement();
+                if (string.IsNullOrWhiteSpace(raw)) return requirement;
+                var parts = raw.Split(';');
+                bool useRequirementFormat = parts.Length == 3 &&
+                                            (raw.Contains(",") || parts.Any(p => p == "0" || string.IsNullOrWhiteSpace(p)));
+
+                if (useRequirementFormat)
+                {
+                    if (parts.Length > 0 && parts[0] != "0") requirement.All = ParseTagCsv(parts[0]);
+                    if (parts.Length > 1 && parts[1] != "0") requirement.Any = ParseTagCsv(parts[1]);
+                    if (parts.Length > 2 && parts[2] != "0") requirement.None = ParseTagCsv(parts[2]);
+                    return requirement;
+                }
+
+                var tags = raw.Split(';', System.StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse).Where(x => x > 0).ToList();
+                switch (legacyMode)
+                {
+                    case "all":
+                        requirement.All = tags;
+                        break;
+                    case "any":
+                        requirement.Any = tags;
+                        break;
+                    case "none":
+                        requirement.None = tags;
+                        break;
                 }
                 return requirement;
             }
 
-            ApplicationTagRequirement = GetTagRequirementData(EffectEditComponent.ApplicationTagRequirement.ToString());
+            GEEditTagRequirement MergeRequirement(string mainKey, string legacyReqKey, string legacyMode)
+            {
+                var legacyReq = ParseRequirementText(ReadCell(legacyReqKey), legacyMode);
+                if (legacyReq.HasAnyValue()) return legacyReq;
+                return ParseRequirementText(ReadCell(mainKey), legacyMode);
+            }
 
-            ApplicationRequiredTags = 
-                selectInfo.ContainsKey(_headerMap["ApplicationRequiredTags"]) 
-                && selectInfo[_headerMap["ApplicationRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["ApplicationRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["ApplicationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-
-            OngoingTagRequirement = GetTagRequirementData(EffectEditComponent.OngoingTagRequirement.ToString());
-
-            OngoingRequiredTags = 
-                selectInfo.ContainsKey(_headerMap["OngoingRequiredTags"]) 
-                && selectInfo[_headerMap["OngoingRequiredTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["OngoingRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["OngoingRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
-            
-            RemoveGameplayEffectsWithTagRequirement = GetTagRequirementData(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement.ToString());
-
-            RemoveGameplayEffectsWithTags =
-                selectInfo.ContainsKey(_headerMap["RemoveGameplayEffectsWithTags"]) 
-                && selectInfo[_headerMap["RemoveGameplayEffectsWithTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["RemoveGameplayEffectsWithTags"]].ToString())
-                    ? selectInfo[_headerMap["RemoveGameplayEffectsWithTags"]].ToString().Split(';').Select(int.Parse)
-                        .ToList()
-                    : new List<int>();
-
-            ImmunityTagRequirement = GetTagRequirementData(EffectEditComponent.ImmunityTagRequirement.ToString());
-
-            ImmunityTags = 
-                selectInfo.ContainsKey(_headerMap["ImmunityTags"]) 
-                && selectInfo[_headerMap["ImmunityTags"]] != null
-                && !string.IsNullOrEmpty(selectInfo[_headerMap["ImmunityTags"]].ToString())
-                ? selectInfo[_headerMap["ImmunityTags"]].ToString().Split(';').Select(int.Parse).ToList()
-                : new List<int>();
+            ApplicationRequiredTags = MergeRequirement("ApplicationRequiredTags",
+                EffectEditComponent.ApplicationTagRequirement.ToString(), "all");
+            OngoingRequiredTags = MergeRequirement("OngoingRequiredTags",
+                EffectEditComponent.OngoingTagRequirement.ToString(), "all");
+            RemoveGameplayEffectsWithTags = MergeRequirement("RemoveGameplayEffectsWithTags",
+                EffectEditComponent.RemoveGameplayEffectsWithTagRequirement.ToString(), "any");
+            ImmunityTags = MergeRequirement("ImmunityTags",
+                EffectEditComponent.ImmunityTagRequirement.ToString(), "any");
 
             CueOnApply = 
                 selectInfo.ContainsKey(_headerMap["CueOnApply"]) 
@@ -571,19 +587,14 @@ namespace GAS.Editor
             ComponentTypes = new List<EffectEditComponent>();
             if (AssetTags.Count > 0) ComponentTypes.Add(EffectEditComponent.AssetTags);
             if (GrantedTags.Count > 0) ComponentTypes.Add(EffectEditComponent.GrantedTags);
-            if (ApplicationTagRequirement != null && ApplicationTagRequirement.HasAnyValue()) 
-                ComponentTypes.Add(EffectEditComponent.ApplicationTagRequirement);
-            if (ApplicationRequiredTags.Count > 0) ComponentTypes.Add(EffectEditComponent.ApplicationRequiredTags);
-            if (OngoingTagRequirement != null && OngoingTagRequirement.HasAnyValue())
-                ComponentTypes.Add(EffectEditComponent.OngoingTagRequirement);
-            if (OngoingRequiredTags.Count > 0) ComponentTypes.Add(EffectEditComponent.OngoingRequiredTags);
-            if (RemoveGameplayEffectsWithTagRequirement != null && RemoveGameplayEffectsWithTagRequirement.HasAnyValue()) 
-                ComponentTypes.Add(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement);
-            if (RemoveGameplayEffectsWithTags.Count > 0)
+            if (ApplicationRequiredTags != null && ApplicationRequiredTags.HasAnyValue())
+                ComponentTypes.Add(EffectEditComponent.ApplicationRequiredTags);
+            if (OngoingRequiredTags != null && OngoingRequiredTags.HasAnyValue())
+                ComponentTypes.Add(EffectEditComponent.OngoingRequiredTags);
+            if (RemoveGameplayEffectsWithTags != null && RemoveGameplayEffectsWithTags.HasAnyValue())
                 ComponentTypes.Add(EffectEditComponent.RemoveGameplayEffectsWithTags);
-            if (ImmunityTagRequirement != null && ImmunityTagRequirement.HasAnyValue()) 
-                ComponentTypes.Add(EffectEditComponent.ImmunityTagRequirement);
-            if (ImmunityTags.Count > 0) ComponentTypes.Add(EffectEditComponent.ImmunityTags);
+            if (ImmunityTags != null && ImmunityTags.HasAnyValue())
+                ComponentTypes.Add(EffectEditComponent.ImmunityTags);
             if (Duration.time != 0) ComponentTypes.Add(EffectEditComponent.Duration);
             if (Period.time != 0) ComponentTypes.Add(EffectEditComponent.Period);
             if (CueOnApply.Count > 0) ComponentTypes.Add(EffectEditComponent.CueOnApply);
@@ -688,56 +699,28 @@ namespace GAS.Editor
         public List<int> GrantedTags;
 
         [TabGroup(T_G_TAB,"详情")]
-        [Title("ApplicationTagRequirement 应用GE需要匹配的Tag规则", Bold = false)]
-        [ShowIf("@HasComponent(EffectEditComponent.ApplicationTagRequirement)")]
-        [LabelText(" ")]
-        public GEEditTagRequirement ApplicationTagRequirement;
-
-        [TabGroup(T_G_TAB,"详情")]
-        [Title("ApplicationRequiredTags 应用需求tag", Bold = false)]
+        [Title("ApplicationRequiredTags 应用GE需要匹配的Tag规则", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ApplicationRequiredTags)")]
-        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
-        public List<int> ApplicationRequiredTags;
+        public GEEditTagRequirement ApplicationRequiredTags;
 
         [TabGroup(T_G_TAB,"详情")]
-        [Title("OngoingTagRequirement 持续激活GE需要匹配的Tag规则", Bold = false)]
-        [ShowIf("@HasComponent(EffectEditComponent.OngoingTagRequirement)")]
-        [LabelText(" ")]
-        public GEEditTagRequirement OngoingTagRequirement;
-
-        [TabGroup(T_G_TAB,"详情")]
-        [Title("OngoingRequiredTags 持续需求tag", Bold = false)]
+        [Title("OngoingRequiredTags 持续激活GE需要匹配的Tag规则", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.OngoingRequiredTags)")]
-        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
-        public List<int> OngoingRequiredTags;
+        public GEEditTagRequirement OngoingRequiredTags;
 
         [TabGroup(T_G_TAB,"详情")]
-        [Title("RemoveGameplayEffectsWithTagRequirement 移除匹配Tag规则的Effect", Bold = false)]
-        [ShowIf("@HasComponent(EffectEditComponent.RemoveGameplayEffectsWithTagRequirement)")]
-        [LabelText(" ")]
-        public GEEditTagRequirement RemoveGameplayEffectsWithTagRequirement;
-
-        [TabGroup(T_G_TAB,"详情")]
-        [Title("RemoveGameplayEffectsWithTags 移除持有tag的GE", Bold = false)]
+        [Title("RemoveGameplayEffectsWithTags 移除匹配Tag规则的Effect", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.RemoveGameplayEffectsWithTags)")]
-        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
-        public List<int> RemoveGameplayEffectsWithTags;
+        public GEEditTagRequirement RemoveGameplayEffectsWithTags;
 
         [TabGroup(T_G_TAB,"详情")]
-        [Title("ImmunityTagRequirement 免疫GE需要匹配的Tag规则", Bold = false)]
-        [ShowIf("@HasComponent(EffectEditComponent.ImmunityTagRequirement)")]
-        [LabelText(" ")]
-        public GEEditTagRequirement ImmunityTagRequirement;
-
-        [TabGroup(T_G_TAB,"详情")]
-        [Title("ImmunityTags 免疫的tag", Bold = false)]
+        [Title("ImmunityTags 免疫GE需要匹配的Tag规则", Bold = false)]
         [ShowIf("@HasComponent(EffectEditComponent.ImmunityTags)")]
-        [ValueDropdown(nameof(TagChoices), IsUniqueList = true)]
         [LabelText(" ")]
-        public List<int> ImmunityTags;
+        public GEEditTagRequirement ImmunityTags;
 
         [TabGroup(T_G_TAB,"详情")]
         [Title("持续时间", Bold = false)]

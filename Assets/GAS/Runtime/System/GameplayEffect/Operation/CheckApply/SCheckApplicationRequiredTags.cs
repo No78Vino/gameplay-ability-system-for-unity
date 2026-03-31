@@ -13,7 +13,7 @@ namespace GAS.Runtime
         {
             state.RequireForUpdate<SingletonGameplayTagMap>();
             state.RequireForUpdate<CEffectInstance>();
-            state.RequireForUpdate(SystemAPI.QueryBuilder().WithAny<CApplicationTagRequirement, CApplicationRequiredTags>().Build());
+            state.RequireForUpdate<CApplicationRequiredTags>();
             state.RequireForUpdate<CEffectInUsage>();
             state.RequireForUpdate<WipCheckApplyEffect>();
         }
@@ -29,24 +29,10 @@ namespace GAS.Runtime
                          RefRO<CEffectInstance>,
                          RefRO<WipCheckApplyEffect>,
                          RefRO<CEffectInUsage>
-                     >().WithAny<CApplicationTagRequirement, CApplicationRequiredTags>().WithEntityAccess())
+                     >().WithAll<CApplicationRequiredTags>().WithEntityAccess())
             {
-                bool hasRequirement = state.EntityManager.HasComponent<CApplicationTagRequirement>(ge);
-                // 兼容旧版本，旧版本使用 CApplicationRequiredTags 来指定应用条件
-                bool hasLegacyRequired = state.EntityManager.HasComponent<CApplicationRequiredTags>(ge);
-                if (!hasRequirement && !hasLegacyRequired)
-                    continue;
-
                 var asc = inUsage.ValueRO.Target;
-                TagRequirementData requirement;
-                if (hasRequirement)
-                {
-                    requirement = state.EntityManager.GetComponentData<CApplicationTagRequirement>(ge).requirement;
-                }
-                else
-                {
-                    requirement = state.EntityManager.GetComponentData<CApplicationRequiredTags>(ge).requirement;
-                }
+                var requirement = state.EntityManager.GetComponentData<CApplicationRequiredTags>(ge).requirement;
 
                 if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement)) continue;
                 ecb.RemoveComponent<CEffectInstance>(ge);

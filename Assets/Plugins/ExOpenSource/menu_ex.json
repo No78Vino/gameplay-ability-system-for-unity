@@ -51,6 +51,24 @@
       "Dependencies": []
     },
     {
+      "Name": "EX-GAS",
+      "Version": "2.0",
+      "Intro": "该项目为Unreal Engine的Gameplay Ability System的Unity实现，目前实现了部分功能，后续会继续完善。\n\n该项目完全开源，欢迎大家一起参与开发，提出建议，共同完善。可以基于该项目进行二次开发。",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "GAS",
+        "Gameplay技能系统"
+      ],
+      "MenuPath": "EXHard开源插件收藏/EX-GAS/2.0(ECS版本)",
+      "LocalPath": "Assets/Plugins/ExOpenSource/GAS2",
+      "GitURL_Username": "No78Vino",
+      "GitURL_RepoName": "gameplay-ability-system-for-unity",
+      "GitURL_Branch": "EX-GAS-2.0",
+      "GitURL_Path": "Assets/GAS",
+      "IntroductionURL": "https://github.com/No78Vino/gameplay-ability-system-for-unity",
+      "Dependencies": []
+    },
+    {
       "Name": "EX-Maid For UI (XUI)",
       "Version": "1.0",
       "Intro": "本插件集成了LoxodonFramework(MVVM)和FairyGUI，用于快速开发UI界面。适用于单人/小团队/小规模游戏开发。",
@@ -117,6 +135,89 @@
       "LocalPath": "Assets/Plugins/ExOpenSource/ValueSecondOrderSystem",
       "GitURL_Path": "Assets/_EXToyLib/ValueSecondOrderSystem",
       "IntroductionURL": "https://github.com/No78Vino/EX_Toy_Lib/blob/main/Assets/_EXToyLib/ValueSecondOrderSystem/GUIDE.md"
+    },
+    {
+      "Name": "PCG工具库 (pcg_for_unity)",
+      "Version": "0.1",
+      "Intro": "仿Houdini SOP的Unity Editor PCG工具库，支持可视化节点编辑和AI Agent自动化生产3D资产",
+      "Author": "Ex-Hard (git@ No78Vino)",
+      "Tags": [
+        "PCG",
+        "Graph",
+        "程序化生成"
+      ],
+      "MenuPath": "EXHard开源插件收藏/PCG/PCG工具库",
+      "LocalPath": "Assets/Plugins/ExOpenSource/PCGToolkit",
+      "GitURL_Username": "No78Vino",
+      "GitURL_RepoName": "pcg_for_unity",
+      "GitURL_Branch": "main",
+      "GitURL_Path": "",
+      "IntroductionURL": "https://github.com/No78Vino/pcg_for_unity",
+      "Dependencies": []
+    },
+    {
+      "Name": "HTML-to-UGUI-Baker",
+      "Version": "2.0",
+      "Intro": "将AI生成的HTML原型直接转换为Unity UGUI界面树的自动化生产管线。通过自定义的HTML数据属性规范（UI-DSL），结合Web坐标提取工具和Unity编辑器扩展，实现从“自然语言对话”到“生产级UGUI预制体”的无缝流转。\n\n支持多分辨率预设与动态适配、全控件拓扑支持（Toggle/Slider/Dropdown/ScrollRect等）、小驼峰命名法、零依赖纯C# Editor扩展。",
+      "Author": "StarrDream (git@ StarrDream)",
+      "Tags": [
+        "UI",
+        "HTML",
+        "UGUI",
+        "AI",
+        "编辑器工具"
+      ],
+      "MenuPath": "EXHard开源插件收藏/UI/HTML-to-UGUI-Baker",
+      "LocalPath": "Assets/Plugins/ExOpenSource/HTML-to-UGUI-Baker",
+      "GitURL_Username": "StarrDream",
+      "GitURL_RepoName": "HTML-to-UGUI-Baker",
+      "GitURL_Branch": "main",
+      "GitURL_Path": "",
+      "IntroductionURL": "https://github.com/StarrDream/HTML-to-UGUI-Baker",
+      "Dependencies": []
+    },
+    {
+      "Name": "Unity-Skills",
+      "Version": "1.0",
+      "Intro": "基于REST API的AI驱动Unity编辑器自动化引擎，让AI通过513个Skills直接操控Unity场景。\n\n支持半自动（代码优先）和全自动（直接操控）双模式，原生支持Claude Code、Antigravity、Gemini CLI、Codex四大IDE。涵盖GameObject、材质、场景、UI、Cinemachine、Timeline、物理、音频、地形、NavMesh、Shader、Prefab、动画等37个模块，支持批量操作、事务原子性（失败自动回滚）、多实例同时控制、超稳定长连接（Domain Reload自动恢复），并内置14个架构/性能/设计模式等顾问设计模块和防幻觉护栏。",
+      "Author": "Besty0728 (git@ Besty0728)",
+      "Tags": [
+        "AI",
+        "编辑器自动化",
+        "REST API",
+        "Skills",
+        "Claude",
+        "Gemini"
+      ],
+      "MenuPath": "EXHard开源插件收藏/编辑器工具/Unity-Skills",
+      "LocalPath": "Assets/Plugins/ExOpenSource/Unity-Skills",
+      "GitURL_Username": "Besty0728",
+      "GitURL_RepoName": "Unity-Skills",
+      "GitURL_Branch": "main",
+      "GitURL_Path": "SkillsForUnity",
+      "IntroductionURL": "https://github.com/Besty0728/Unity-Skills",
+      "Dependencies": []
+    },
+    {
+      "Name": "Loxodon Framework",
+      "Version": "2.6.7",
+      "Intro": "轻量级Unity MVVM框架，提供DataBinding、本地化、消息系统与异步任务等能力，支持Mono和IL2CPP，适用于中大型UI业务开发。",
+      "Author": "Clark Yang (git@ vovgou)",
+      "Tags": [
+        "UI",
+        "MVVM",
+        "DataBinding",
+        "Localization",
+        "Framework"
+      ],
+      "MenuPath": "EXHard开源插件收藏/UI/Loxodon Framework",
+      "LocalPath": "Assets/Plugins/ExOpenSource/LoxodonFramework",
+      "GitURL_Username": "vovgou",
+      "GitURL_RepoName": "loxodon-framework",
+      "GitURL_Branch": "master",
+      "GitURL_Path": "Loxodon.Framework/Assets/LoxodonFramework",
+      "IntroductionURL": "https://github.com/vovgou/loxodon-framework",
+      "Dependencies": []
     }
   ]
 }

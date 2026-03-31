@@ -9,6 +9,8 @@ namespace GAS.Runtime
 
         public NativeArray<Entity> CreateCueEntityArray(Entity ge)
         {
+            bool HasTags(int[] tags) => tags != null && tags.Length > 0;
+
             var entities = new Entity[cues.Length];
             for (var i = 0; i < cues.Length; i++)
             {
@@ -33,31 +35,31 @@ namespace GAS.Runtime
                 EntityHelper.SetManagedComponent(entities[i], instantCue);
                 
                 // cue播放免疫tag
-                if (c.ImmunityTags.Length > 0)
+                if (HasTags(c.ImmunityAllTags) || HasTags(c.ImmunityAnyTags) || HasTags(c.ImmunityNoneTags))
                 {
                     EntityHelper.AddComponent<CPlayImmunitedTags>(entities[i]);
                     EntityHelper.SetComponent(entities[i], new CPlayImmunitedTags
                     {
                         requirement = new TagRequirementData
                         {
-                            all = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent),
-                            any = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent),
-                            none = new NativeArray<int>(c.ImmunityTags, Allocator.Persistent)
+                            all = new NativeArray<int>(c.ImmunityAllTags ?? System.Array.Empty<int>(), Allocator.Persistent),
+                            any = new NativeArray<int>(c.ImmunityAnyTags ?? System.Array.Empty<int>(), Allocator.Persistent),
+                            none = new NativeArray<int>(c.ImmunityNoneTags ?? System.Array.Empty<int>(), Allocator.Persistent)
                         }
                     });
                 }
 
                 // cue播放需求tag
-                if (c.RequiredTags.Length > 0)
+                if (HasTags(c.RequiredAllTags) || HasTags(c.RequiredAnyTags) || HasTags(c.RequiredNoneTags))
                 {
                     EntityHelper.AddComponent<CPlayRequiredTags>(entities[i]);
                     EntityHelper.SetComponent(entities[i], new CPlayRequiredTags
                     {
                         requirement = new TagRequirementData
                         {
-                            all = new NativeArray<int>(c.RequiredTags, Allocator.Persistent),
-                            any = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent),
-                            none = new NativeArray<int>(System.Array.Empty<int>(), Allocator.Persistent)
+                            all = new NativeArray<int>(c.RequiredAllTags ?? System.Array.Empty<int>(), Allocator.Persistent),
+                            any = new NativeArray<int>(c.RequiredAnyTags ?? System.Array.Empty<int>(), Allocator.Persistent),
+                            none = new NativeArray<int>(c.RequiredNoneTags ?? System.Array.Empty<int>(), Allocator.Persistent)
                         }
                     });
                 }

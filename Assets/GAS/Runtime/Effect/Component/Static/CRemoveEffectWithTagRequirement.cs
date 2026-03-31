@@ -16,8 +16,8 @@ namespace GAS.Runtime
 
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            EntityHelper.AddComponent<CRemoveEffectWithTagRequirement>(ge);
-            EntityHelper.SetComponent(ge, new CRemoveEffectWithTagRequirement
+            EntityHelper.AddComponent<CRemoveEffectWithTags>(ge);
+            EntityHelper.SetComponent(ge, new CRemoveEffectWithTags
             {
                 requirement = new TagRequirementData
                 {

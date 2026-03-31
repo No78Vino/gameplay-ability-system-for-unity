@@ -77,13 +77,9 @@ namespace GAS.Editor
             {
                 EffectEditComponent.AssetTags,
                 EffectEditComponent.GrantedTags,
-                EffectEditComponent.ApplicationTagRequirement,
                 EffectEditComponent.ApplicationRequiredTags,
-                EffectEditComponent.OngoingTagRequirement,
                 EffectEditComponent.OngoingRequiredTags,
-                EffectEditComponent.RemoveGameplayEffectsWithTagRequirement,
                 EffectEditComponent.RemoveGameplayEffectsWithTags,
-                EffectEditComponent.ImmunityTagRequirement,
                 EffectEditComponent.ImmunityTags,
                 EffectEditComponent.Duration,
                 EffectEditComponent.Period,

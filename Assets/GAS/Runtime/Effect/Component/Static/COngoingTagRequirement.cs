@@ -16,8 +16,8 @@ namespace GAS.Runtime
 
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            EntityHelper.AddComponent<COngoingTagRequirement>(ge);
-            EntityHelper.SetComponent(ge, new COngoingTagRequirement
+            EntityHelper.AddComponent<COngoingRequiredTags>(ge);
+            EntityHelper.SetComponent(ge, new COngoingRequiredTags
             {
                 requirement = new TagRequirementData
                 {

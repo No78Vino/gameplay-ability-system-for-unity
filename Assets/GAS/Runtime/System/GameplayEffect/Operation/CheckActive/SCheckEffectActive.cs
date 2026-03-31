@@ -32,21 +32,11 @@ namespace GAS.Runtime
                      >().WithEntityAccess())
             {
                 var asc = inUsage.ValueRO.Target;
-                bool hasRequirement = state.EntityManager.HasComponent<COngoingTagRequirement>(ge);
-                // 兼容旧版本，旧版本使用 COngoingRequiredTags 来指定激活条件
-                bool hasLegacyRequired = state.EntityManager.HasComponent<COngoingRequiredTags>(ge);
+                var hasRequirement = state.EntityManager.HasComponent<COngoingRequiredTags>(ge);
 
-                if (hasRequirement || hasLegacyRequired)
+                if (hasRequirement)
                 {
-                    TagRequirementData requirement;
-                    if (hasRequirement)
-                    {
-                        requirement = state.EntityManager.GetComponentData<COngoingTagRequirement>(ge).requirement;
-                    }
-                    else
-                    {
-                        requirement = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).requirement;
-                    }
+                    var requirement = state.EntityManager.GetComponentData<COngoingRequiredTags>(ge).requirement;
 
                     if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement))
                     {

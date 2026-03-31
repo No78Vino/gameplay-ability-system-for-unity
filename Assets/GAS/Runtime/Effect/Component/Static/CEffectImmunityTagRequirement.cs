@@ -16,8 +16,8 @@ namespace GAS.Runtime
 
         public override void LoadToGameplayEffectEntity(Entity ge)
         {
-            EntityHelper.AddComponent<CEffectImmunityTagRequirement>(ge);
-            EntityHelper.SetComponent(ge, new CEffectImmunityTagRequirement
+            EntityHelper.AddComponent<CEffectImmunityTags>(ge);
+            EntityHelper.SetComponent(ge, new CEffectImmunityTags
             {
                 requirement = new TagRequirementData
                 {
