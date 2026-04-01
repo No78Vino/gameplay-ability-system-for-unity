@@ -1,1 +1,340 @@
-[{"ID":1001,"Name":"奔跑耐力消耗","Desc":"耐力减少1点/5帧","AssetTags":[],"GrantedTags":[4001003],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Duration":{"TimeUnit":0,"Time":-1,"ResetStartTimeWhenActivated":false},"Period":{"Time":5,"Effects":[9001],"FirstTrigger":true},"Modifiers":[],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":1002,"Name":"speed_up","Desc":"加速buff","AssetTags":[3001],"GrantedTags":[4001002],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Duration":{"TimeUnit":0,"Time":-1,"ResetStartTimeWhenActivated":false},"Modifiers":[{"AttrSet":1,"Attribute":3,"Magnitude":3,"Operation":1,"Mmc":1001}],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":1003,"Name":"debug_effect1","Desc":"调试用的测试ge","AssetTags":[3001],"GrantedTags":[],"ApplicationRequiredTags":{"All":[400],"Any":[],"None":[]},"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":{"All":[],"Any":[3001],"None":[]},"ImmunityTags":{"All":[],"Any":[2004],"None":[]},"Modifiers":[{"AttrSet":1,"Attribute":2,"Magnitude":10,"Operation":3,"Mmc":1002}],"CueOnApply":[1001],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":1005,"Name":"debug_effect2","Desc":"调试用测试GE","AssetTags":[],"GrantedTags":[2006],"ApplicationRequiredTags":null,"OngoingRequiredTags":{"All":[200],"Any":[],"None":[]},"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Duration":{"TimeUnit":0,"Time":600,"ResetStartTimeWhenActivated":false},"Period":{"Time":60,"Effects":[1001],"FirstTrigger":true},"Modifiers":[{"AttrSet":1,"Attribute":1,"Magnitude":1,"Operation":3,"Mmc":1001}],"CueOnApply":[],"CueOnTick":[1001],"CueOnAdd":[1001],"CueOnRemove":[1001],"CueOnActivate":[1001],"CueOnDeactivate":[1001],"GrantedAbility":[],"Stacking":{"StackingType":1,"StackCode":0,"LimitCount":10,"DurationRefreshPolicy":1,"PeriodResetPolicy":1,"ExpirationPolicy":0,"DenyOverflowApplication":false,"ClearStackOnOverflow":false,"OverflowEffects":[1001]}},{"ID":1006,"Name":"恢复2点耐力","Desc":"耐力恢复2点/60帧","AssetTags":[],"GrantedTags":[],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Modifiers":[{"AttrSet":1,"Attribute":6,"Magnitude":2,"Operation":0,"Mmc":1001}],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":1007,"Name":"自动恢复耐力","Desc":"自动恢复耐力","AssetTags":[],"GrantedTags":[],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Duration":{"TimeUnit":0,"Time":-1,"ResetStartTimeWhenActivated":false},"Period":{"Time":60,"Effects":[1006],"FirstTrigger":false},"Modifiers":[],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":2001,"Name":"扣3点血","Desc":"扣3点血","AssetTags":[],"GrantedTags":[],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Modifiers":[{"AttrSet":1,"Attribute":1,"Magnitude":3,"Operation":3,"Mmc":1001}],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":2002,"Name":"扣10滴血","Desc":"扣10滴血","AssetTags":[],"GrantedTags":[],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Modifiers":[{"AttrSet":1,"Attribute":1,"Magnitude":10,"Operation":3,"Mmc":1001}],"CueOnApply":[3000],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":3001,"Name":"闪避冷却","Desc":"闪避冷却","AssetTags":[],"GrantedTags":[6001],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Duration":{"TimeUnit":0,"Time":60,"ResetStartTimeWhenActivated":false},"Modifiers":[],"CueOnApply":[],"CueOnTick":[5000],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":3002,"Name":"闪避耐力消耗","Desc":"闪避耐力消耗","AssetTags":[],"GrantedTags":[],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Modifiers":[{"AttrSet":1,"Attribute":6,"Magnitude":20,"Operation":3,"Mmc":1001}],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":3003,"Name":"闪避无敌","Desc":"闪避无敌","AssetTags":[],"GrantedTags":[4001004],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Duration":{"TimeUnit":0,"Time":-1,"ResetStartTimeWhenActivated":false},"Modifiers":[],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]},{"ID":9001,"Name":"奔跑耐力消耗","Desc":"耐力消耗1点","AssetTags":[],"GrantedTags":[],"ApplicationRequiredTags":null,"OngoingRequiredTags":null,"RemoveGameplayEffectsWithTags":null,"ImmunityTags":null,"Modifiers":[{"AttrSet":1,"Attribute":6,"Magnitude":1,"Operation":3,"Mmc":1001}],"CueOnApply":[],"CueOnTick":[],"CueOnAdd":[],"CueOnRemove":[],"CueOnActivate":[],"CueOnDeactivate":[],"GrantedAbility":[]}]
+[
+  {
+    "ID": 1001,
+    "Name": "奔跑耐力消耗",
+    "Desc": "耐力减少1点/5帧",
+    "AssetTags": [],
+    "GrantedTags": [
+      4001003
+    ],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Period": {
+      "Time": 5,
+      "Effects": [
+        9001
+      ],
+      "FirstTrigger": true
+    },
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 1002,
+    "Name": "speed_up",
+    "Desc": "加速buff",
+    "AssetTags": [
+      3001
+    ],
+    "GrantedTags": [
+      4001002
+    ],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 3,
+        "Magnitude": 3,
+        "Operation": 1,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 1003,
+    "Name": "debug_effect1",
+    "Desc": "调试用的测试ge",
+    "AssetTags": [
+      3001
+    ],
+    "GrantedTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 2,
+        "Magnitude": 10,
+        "Operation": 3,
+        "Mmc": 1002
+      }
+    ],
+    "CueOnApply": [
+      1001
+    ],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 1005,
+    "Name": "debug_effect2",
+    "Desc": "调试用测试GE",
+    "AssetTags": [],
+    "GrantedTags": [
+      2006
+    ],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": 600,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Period": {
+      "Time": 60,
+      "Effects": [
+        1001
+      ],
+      "FirstTrigger": true
+    },
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 1,
+        "Magnitude": 1,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [
+      1001
+    ],
+    "CueOnAdd": [
+      1001
+    ],
+    "CueOnRemove": [
+      1001
+    ],
+    "CueOnActivate": [
+      1001
+    ],
+    "CueOnDeactivate": [
+      1001
+    ],
+    "GrantedAbility": [],
+    "Stacking": {
+      "StackingType": 1,
+      "StackCode": 0,
+      "LimitCount": 10,
+      "DurationRefreshPolicy": 1,
+      "PeriodResetPolicy": 1,
+      "ExpirationPolicy": 0,
+      "DenyOverflowApplication": false,
+      "ClearStackOnOverflow": false,
+      "OverflowEffects": [
+        1001
+      ]
+    }
+  },
+  {
+    "ID": 1006,
+    "Name": "恢复2点耐力",
+    "Desc": "耐力恢复2点/60帧",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 2,
+        "Operation": 0,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 1007,
+    "Name": "自动恢复耐力",
+    "Desc": "自动恢复耐力",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Period": {
+      "Time": 60,
+      "Effects": [
+        1006
+      ],
+      "FirstTrigger": false
+    },
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 2001,
+    "Name": "扣3点血",
+    "Desc": "扣3点血",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 1,
+        "Magnitude": 3,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 2002,
+    "Name": "扣10滴血",
+    "Desc": "扣10滴血",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 1,
+        "Magnitude": 10,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [
+      3000
+    ],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 3001,
+    "Name": "闪避冷却",
+    "Desc": "闪避冷却",
+    "AssetTags": [],
+    "GrantedTags": [
+      6001
+    ],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": 60,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [
+      5000
+    ],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 3002,
+    "Name": "闪避耐力消耗",
+    "Desc": "闪避耐力消耗",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 20,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 3003,
+    "Name": "闪避无敌",
+    "Desc": "闪避无敌",
+    "AssetTags": [],
+    "GrantedTags": [
+      4001004
+    ],
+    "Duration": {
+      "TimeUnit": 0,
+      "Time": -1,
+      "ResetStartTimeWhenActivated": false
+    },
+    "Modifiers": [],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  },
+  {
+    "ID": 9001,
+    "Name": "奔跑耐力消耗",
+    "Desc": "耐力消耗1点",
+    "AssetTags": [],
+    "GrantedTags": [],
+    "Modifiers": [
+      {
+        "AttrSet": 1,
+        "Attribute": 6,
+        "Magnitude": 1,
+        "Operation": 3,
+        "Mmc": 1001
+      }
+    ],
+    "CueOnApply": [],
+    "CueOnTick": [],
+    "CueOnAdd": [],
+    "CueOnRemove": [],
+    "CueOnActivate": [],
+    "CueOnDeactivate": [],
+    "GrantedAbility": []
+  }
+]

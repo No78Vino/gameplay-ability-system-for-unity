@@ -9,15 +9,20 @@
     "AssetTags": [
       2002
     ],
-    "CancelAbilityWithTags": [],
-    "BlockAbilityWithTags": [],
     "ActivationOwnedTags": [
       3001
     ],
-    "ActivationRequiredTags": [],
-    "ActivationBlockedTags": [
-      2010
-    ],
+    "ActivationBlockedTags": {
+      "All": [
+        2010
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
     "AbilityLogic": {
       "$type": "ALMove",
       "Param": {
@@ -33,13 +38,18 @@
     "CdEffect": 0,
     "Cd": 0,
     "AssetTags": [],
-    "CancelAbilityWithTags": [],
-    "BlockAbilityWithTags": [],
     "ActivationOwnedTags": [],
-    "ActivationRequiredTags": [
-      3001
-    ],
-    "ActivationBlockedTags": [],
+    "ActivationRequiredTags": {
+      "All": [
+        3001
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
     "AbilityLogic": {
       "$type": "ALApplyEffect",
       "Param": {
@@ -58,11 +68,7 @@
     "CdEffect": 0,
     "Cd": 0,
     "AssetTags": [],
-    "CancelAbilityWithTags": [],
-    "BlockAbilityWithTags": [],
     "ActivationOwnedTags": [],
-    "ActivationRequiredTags": [],
-    "ActivationBlockedTags": [],
     "AbilityLogic": {
       "$type": "ALApplyEffect",
       "Param": {
@@ -80,11 +86,7 @@
     "CdEffect": 0,
     "Cd": 0,
     "AssetTags": [],
-    "CancelAbilityWithTags": [],
-    "BlockAbilityWithTags": [],
     "ActivationOwnedTags": [],
-    "ActivationRequiredTags": [],
-    "ActivationBlockedTags": [],
     "AbilityLogic": {
       "$type": "ALApplyEffect",
       "Param": {
@@ -102,15 +104,20 @@
     "CdEffect": 0,
     "Cd": 0,
     "AssetTags": [],
-    "CancelAbilityWithTags": [],
-    "BlockAbilityWithTags": [],
     "ActivationOwnedTags": [
       3003
     ],
-    "ActivationRequiredTags": [],
-    "ActivationBlockedTags": [
-      3003
-    ],
+    "ActivationBlockedTags": {
+      "All": [
+        3003
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
     "AbilityLogic": {
       "$type": "ALTimeline",
       "Param": {
@@ -128,17 +135,31 @@
     "AssetTags": [
       2006
     ],
-    "CancelAbilityWithTags": [
-      3003
-    ],
-    "BlockAbilityWithTags": [],
+    "CancelAbilityWithTags": {
+      "All": [
+        3003
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
     "ActivationOwnedTags": [
       3002
     ],
-    "ActivationRequiredTags": [],
-    "ActivationBlockedTags": [
-      3002
-    ],
+    "ActivationBlockedTags": {
+      "All": [
+        3002
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
     "AbilityLogic": {
       "$type": "ALTimeline",
       "Param": {

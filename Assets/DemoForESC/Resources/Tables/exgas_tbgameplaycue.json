@@ -3,14 +3,30 @@
     "ID": 1001,
     "Name": "打印日志",
     "Desc": "用于打印日志",
-    "RequiredTag": [
-      100,
-      1001
-    ],
-    "ImmunityTag": [
-      200,
-      2001
-    ],
+    "RequiredTag": {
+      "All": [
+        100,
+        1001
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
+    "ImmunityTag": {
+      "All": [
+        200,
+        2001
+      ],
+      "Any": [
+        0
+      ],
+      "None": [
+        0
+      ]
+    },
     "CueLogic": {
       "$type": "CueLogging",
       "Param": {
@@ -23,13 +39,6 @@
     "ID": 1002,
     "Name": "打印持续日志",
     "Desc": "用于打印持续日志",
-    "RequiredTag": [
-      100,
-      1002,
-      2002,
-      2005
-    ],
-    "ImmunityTag": [],
     "CueLogic": {
       "$type": "CueLogging",
       "Param": {
@@ -42,19 +51,6 @@
     "ID": 1003,
     "Name": "测试3",
     "Desc": "看看拉屎都",
-    "RequiredTag": [
-      200,
-      2005
-    ],
-    "ImmunityTag": [
-      3002,
-      2006,
-      2003,
-      2001,
-      1002,
-      100,
-      1001
-    ],
     "CueLogic": {
       "$type": "CueLogging",
       "Param": {
@@ -67,8 +63,6 @@
     "ID": 3000,
     "Name": "受击倾斜效果",
     "Desc": "受击倾斜效果",
-    "RequiredTag": [],
-    "ImmunityTag": [],
     "CueLogic": {
       "$type": "CueHitReaction",
       "Param": {
@@ -80,8 +74,6 @@
     "ID": 5000,
     "Name": "闪避冷却CD显示",
     "Desc": "闪避冷却CD显示",
-    "RequiredTag": [],
-    "ImmunityTag": [],
     "CueLogic": {
       "$type": "CueDodgeCooldownUI",
       "Param": {}

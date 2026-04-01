@@ -328,8 +328,22 @@ namespace GAS.Editor
 
                         writer.Indent--;
                         writer.WriteLine("}");
+                        writer.WriteLine("(int[] all, int[] any, int[] none) ParseTagRequirement(cfg.TagRequirementData? requirement)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("if (requirement == null) return (Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>());");
+                        writer.WriteLine("var r = requirement.Value;");
+                        writer.WriteLine("var all = r.All?.Where(x => x > 0).ToArray() ?? Array.Empty<int>();");
+                        writer.WriteLine("var any = r.Any?.Where(x => x > 0).ToArray() ?? Array.Empty<int>();");
+                        writer.WriteLine("var none = r.None?.Where(x => x > 0).ToArray() ?? Array.Empty<int>();");
+                        writer.WriteLine("return (all, any, none);");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
+                        writer.WriteLine("var requiredTag = ParseTagRequirement(data.RequiredTag);");
+                        writer.WriteLine("var immunityTag = ParseTagRequirement(data.ImmunityTag);");
                         writer.WriteLine(
-                            "return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>(), data.ImmunityTag.ToArray());");
+                            "return new GameplayCueConfig(cueType, cueParam, requiredTag.all, requiredTag.any, requiredTag.none, immunityTag.all, immunityTag.any, immunityTag.none);");
                     }
                     writer.Indent--;
                     writer.WriteLine("}");
@@ -597,15 +611,42 @@ namespace GAS.Editor
                         writer.WriteLine(
                             "    configs.Add(new ConfAbilityAssetTags { tags = data.AssetTags.ToArray() });");
 
+                        writer.WriteLine("(int[] all, int[] any, int[] none)? ParseTagRequirement(cfg.TagRequirementData? requirement)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("if (requirement == null) return null;");
+                        writer.WriteLine("var r = requirement.Value;");
+                        writer.WriteLine("int[] all = null, any = null, none = null;");
+                        writer.WriteLine("if (r.All is { Count: > 0 }) all = r.All.Where(x => x > 0).ToArray();");
+                        writer.WriteLine("if (r.Any is { Count: > 0 }) any = r.Any.Where(x => x > 0).ToArray();");
+                        writer.WriteLine("if (r.None is { Count: > 0 }) none = r.None.Where(x => x > 0).ToArray();");
+                        writer.WriteLine("if (all == null && any == null && none == null) return null;");
+                        writer.WriteLine("return (all, any, none);");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
+                        writer.WriteLine("int[] PickSimpleTagSet((int[] all, int[] any, int[] none) req)");
+                        writer.WriteLine("{");
+                        writer.Indent++;
+                        writer.WriteLine("if (req.any is { Length: > 0 }) return req.any;");
+                        writer.WriteLine("if (req.all is { Length: > 0 }) return req.all;");
+                        writer.WriteLine("if (req.none is { Length: > 0 }) return req.none;");
+                        writer.WriteLine("return Array.Empty<int>();");
+                        writer.Indent--;
+                        writer.WriteLine("}");
+                        writer.WriteLine("");
+
                         writer.WriteLine("// cancelAbilityWithTags");
-                        writer.WriteLine("if (data.CancelAbilityWithTags is { Count: > 0 })");
+                        writer.WriteLine("var cancelTags = ParseTagRequirement(data.CancelAbilityWithTags);");
+                        writer.WriteLine("if (cancelTags != null)");
                         writer.WriteLine(
-                            "    configs.Add(new ConfCancelAbilityWithTags { tags = data.CancelAbilityWithTags.ToArray() });");
+                            "    configs.Add(new ConfCancelAbilityWithTags { tags = PickSimpleTagSet(cancelTags.Value) });");
 
                         writer.WriteLine("// blockAbilityWithTags");
-                        writer.WriteLine("if (data.BlockAbilityWithTags is { Count: > 0 })");
+                        writer.WriteLine("var blockTags = ParseTagRequirement(data.BlockAbilityWithTags);");
+                        writer.WriteLine("if (blockTags != null)");
                         writer.WriteLine(
-                            "    configs.Add(new ConfBlockAbilityWithTags { tags = data.BlockAbilityWithTags.ToArray() });");
+                            "    configs.Add(new ConfBlockAbilityWithTags { tags = PickSimpleTagSet(blockTags.Value) });");
 
                         writer.WriteLine("// activationOwnedTags");
                         writer.WriteLine("if (data.ActivationOwnedTags is { Count: > 0 })");
@@ -613,14 +654,16 @@ namespace GAS.Editor
                             "    configs.Add(new ConfAbilityActivationOwnedTags { tags = data.ActivationOwnedTags.ToArray() });");
 
                         writer.WriteLine("// activationRequiredTags");
-                        writer.WriteLine("if (data.ActivationRequiredTags is { Count: > 0 })");
+                        writer.WriteLine("var activationRequiredTags = ParseTagRequirement(data.ActivationRequiredTags);");
+                        writer.WriteLine("if (activationRequiredTags != null)");
                         writer.WriteLine(
-                            "    configs.Add(new ConfAbilityActivationRequiredTags { all = data.ActivationRequiredTags.ToArray() });");
+                            "    configs.Add(new ConfAbilityActivationRequiredTags { all = activationRequiredTags.Value.all, any = activationRequiredTags.Value.any, none = activationRequiredTags.Value.none });");
 
                         writer.WriteLine("// activationBlockedTags");
-                        writer.WriteLine("if (data.ActivationBlockedTags is { Count: > 0 })");
+                        writer.WriteLine("var activationBlockedTags = ParseTagRequirement(data.ActivationBlockedTags);");
+                        writer.WriteLine("if (activationBlockedTags != null)");
                         writer.WriteLine(
-                            "    configs.Add(new ConfAbilityActivationBlockedTags { none = data.ActivationBlockedTags.ToArray() });");
+                            "    configs.Add(new ConfAbilityActivationBlockedTags { all = activationBlockedTags.Value.all, any = activationBlockedTags.Value.any, none = activationBlockedTags.Value.none });");
 
                         writer.WriteLine("// cdEffect cd");
                         writer.WriteLine("if (data.Cd != 0)");

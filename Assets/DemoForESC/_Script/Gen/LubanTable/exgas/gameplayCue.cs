@@ -20,8 +20,8 @@ public sealed partial class gameplayCue : Luban.BeanBase
         { if(!_buf["ID"].IsNumber) { throw new SerializationException(); }  ID = _buf["ID"]; }
         { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
         { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-        { var __json0 = _buf["RequiredTag"]; if(!__json0.IsArray) { throw new SerializationException(); } RequiredTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RequiredTag.Add(__v0); }   }
-        { var __json0 = _buf["ImmunityTag"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTag = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTag.Add(__v0); }   }
+        { var _j = _buf["RequiredTag"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  RequiredTag = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { RequiredTag = null; } }
+        { var _j = _buf["ImmunityTag"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ImmunityTag = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ImmunityTag = null; } }
         { if(!_buf["CueLogic"].IsObject) { throw new SerializationException(); }  CueLogic = global::cfg.GameplayCueBase.DeserializeGameplayCueBase(_buf["CueLogic"]);  }
     }
 
@@ -45,11 +45,11 @@ public sealed partial class gameplayCue : Luban.BeanBase
     /// <summary>
     /// 需要的标签
     /// </summary>
-    public readonly System.Collections.Generic.List<int> RequiredTag;
+    public readonly TagRequirementData? RequiredTag;
     /// <summary>
     /// 免疫的标签
     /// </summary>
-    public readonly System.Collections.Generic.List<int> ImmunityTag;
+    public readonly TagRequirementData? ImmunityTag;
     /// <summary>
     /// cue逻辑：支持多态，添加新CueLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
     /// </summary>
@@ -69,8 +69,8 @@ public sealed partial class gameplayCue : Luban.BeanBase
         + "ID:" + ID + ","
         + "Name:" + Name + ","
         + "Desc:" + Desc + ","
-        + "RequiredTag:" + Luban.StringUtil.CollectionToString(RequiredTag) + ","
-        + "ImmunityTag:" + Luban.StringUtil.CollectionToString(ImmunityTag) + ","
+        + "RequiredTag:" + RequiredTag + ","
+        + "ImmunityTag:" + ImmunityTag + ","
         + "CueLogic:" + CueLogic + ","
         + "}";
     }

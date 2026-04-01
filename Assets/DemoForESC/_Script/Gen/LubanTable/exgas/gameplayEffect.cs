@@ -60,17 +60,20 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// 描述用tag
     /// </summary>
     public readonly System.Collections.Generic.List<int> AssetTags;
+    /// <summary>
+    /// 宿主获得tag
+    /// </summary>
     public readonly System.Collections.Generic.List<int> GrantedTags;
     /// <summary>
-    /// 应用GE需要匹配的Tag规则
+    /// 应用需要的tag&#39;
     /// </summary>
     public readonly TagRequirementData? ApplicationRequiredTags;
     /// <summary>
-    /// 激活需求tag
+    /// 运行需要的tag
     /// </summary>
     public readonly TagRequirementData? OngoingRequiredTags;
     /// <summary>
-    /// 移除持有这些tag的buff
+    /// 移出符合条件tag的GE
     /// </summary>
     public readonly TagRequirementData? RemoveGameplayEffectsWithTags;
     /// <summary>
@@ -156,3 +159,4 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     }
 }
 }
+

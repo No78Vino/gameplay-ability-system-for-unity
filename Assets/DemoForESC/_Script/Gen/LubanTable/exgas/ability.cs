@@ -24,11 +24,11 @@ public sealed partial class ability : Luban.BeanBase
         { if(!_buf["CdEffect"].IsNumber) { throw new SerializationException(); }  CdEffect = _buf["CdEffect"]; }
         { if(!_buf["Cd"].IsNumber) { throw new SerializationException(); }  Cd = _buf["Cd"]; }
         { var __json0 = _buf["AssetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
-        { var __json0 = _buf["CancelAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } CancelAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  CancelAbilityWithTags.Add(__v0); }   }
-        { var __json0 = _buf["BlockAbilityWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } BlockAbilityWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  BlockAbilityWithTags.Add(__v0); }   }
+        { var _j = _buf["CancelAbilityWithTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  CancelAbilityWithTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { CancelAbilityWithTags = null; } }
+        { var _j = _buf["BlockAbilityWithTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  BlockAbilityWithTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { BlockAbilityWithTags = null; } }
         { var __json0 = _buf["ActivationOwnedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationOwnedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationOwnedTags.Add(__v0); }   }
-        { var __json0 = _buf["ActivationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationRequiredTags.Add(__v0); }   }
-        { var __json0 = _buf["ActivationBlockedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ActivationBlockedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ActivationBlockedTags.Add(__v0); }   }
+        { var _j = _buf["ActivationRequiredTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ActivationRequiredTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ActivationRequiredTags = null; } }
+        { var _j = _buf["ActivationBlockedTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ActivationBlockedTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ActivationBlockedTags = null; } }
         { if(!_buf["AbilityLogic"].IsObject) { throw new SerializationException(); }  AbilityLogic = global::cfg.AbilityLogicBase.DeserializeAbilityLogicBase(_buf["AbilityLogic"]);  }
     }
 
@@ -65,11 +65,11 @@ public sealed partial class ability : Luban.BeanBase
     /// 描述标签
     /// </summary>
     public readonly System.Collections.Generic.List<int> AssetTags;
-    public readonly System.Collections.Generic.List<int> CancelAbilityWithTags;
-    public readonly System.Collections.Generic.List<int> BlockAbilityWithTags;
+    public readonly TagRequirementData? CancelAbilityWithTags;
+    public readonly TagRequirementData? BlockAbilityWithTags;
     public readonly System.Collections.Generic.List<int> ActivationOwnedTags;
-    public readonly System.Collections.Generic.List<int> ActivationRequiredTags;
-    public readonly System.Collections.Generic.List<int> ActivationBlockedTags;
+    public readonly TagRequirementData? ActivationRequiredTags;
+    public readonly TagRequirementData? ActivationBlockedTags;
     /// <summary>
     /// 技能逻辑：支持多态，添加新AbilityLogic类型去__bean__中添加即可。暂定给了13个变量的预留位，不够的话就自己加长。
     /// </summary>
@@ -93,11 +93,11 @@ public sealed partial class ability : Luban.BeanBase
         + "CdEffect:" + CdEffect + ","
         + "Cd:" + Cd + ","
         + "AssetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
-        + "CancelAbilityWithTags:" + Luban.StringUtil.CollectionToString(CancelAbilityWithTags) + ","
-        + "BlockAbilityWithTags:" + Luban.StringUtil.CollectionToString(BlockAbilityWithTags) + ","
+        + "CancelAbilityWithTags:" + CancelAbilityWithTags + ","
+        + "BlockAbilityWithTags:" + BlockAbilityWithTags + ","
         + "ActivationOwnedTags:" + Luban.StringUtil.CollectionToString(ActivationOwnedTags) + ","
-        + "ActivationRequiredTags:" + Luban.StringUtil.CollectionToString(ActivationRequiredTags) + ","
-        + "ActivationBlockedTags:" + Luban.StringUtil.CollectionToString(ActivationBlockedTags) + ","
+        + "ActivationRequiredTags:" + ActivationRequiredTags + ","
+        + "ActivationBlockedTags:" + ActivationBlockedTags + ","
         + "AbilityLogic:" + AbilityLogic + ","
         + "}";
     }

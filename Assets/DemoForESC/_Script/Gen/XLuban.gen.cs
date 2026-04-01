@@ -166,7 +166,19 @@ namespace GAS.Runtime
                     }
                 }
             }
-            return new GameplayCueConfig(cueType, cueParam, data.RequiredTag.ToArray(), Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>(), data.ImmunityTag.ToArray());
+            (int[] all, int[] any, int[] none) ParseTagRequirement(cfg.TagRequirementData? requirement)
+            {
+                if (requirement == null) return (Array.Empty<int>(), Array.Empty<int>(), Array.Empty<int>());
+                var r = requirement.Value;
+                var all = r.All?.Where(x => x > 0).ToArray() ?? Array.Empty<int>();
+                var any = r.Any?.Where(x => x > 0).ToArray() ?? Array.Empty<int>();
+                var none = r.None?.Where(x => x > 0).ToArray() ?? Array.Empty<int>();
+                return (all, any, none);
+            }
+
+            var requiredTag = ParseTagRequirement(data.RequiredTag);
+            var immunityTag = ParseTagRequirement(data.ImmunityTag);
+            return new GameplayCueConfig(cueType, cueParam, requiredTag.all, requiredTag.any, requiredTag.none, immunityTag.all, immunityTag.any, immunityTag.none);
         }
 
         public static GameplayEffectConfig GetGameplayEffectConfig(int id)
@@ -386,21 +398,45 @@ namespace GAS.Runtime
             // assetTags
             if (data.AssetTags is { Count: > 0 })
                 configs.Add(new ConfAbilityAssetTags { tags = data.AssetTags.ToArray() });
+            (int[] all, int[] any, int[] none)? ParseTagRequirement(cfg.TagRequirementData? requirement)
+            {
+                if (requirement == null) return null;
+                var r = requirement.Value;
+                int[] all = null, any = null, none = null;
+                if (r.All is { Count: > 0 }) all = r.All.Where(x => x > 0).ToArray();
+                if (r.Any is { Count: > 0 }) any = r.Any.Where(x => x > 0).ToArray();
+                if (r.None is { Count: > 0 }) none = r.None.Where(x => x > 0).ToArray();
+                if (all == null && any == null && none == null) return null;
+                return (all, any, none);
+            }
+
+            int[] PickSimpleTagSet((int[] all, int[] any, int[] none) req)
+            {
+                if (req.any is { Length: > 0 }) return req.any;
+                if (req.all is { Length: > 0 }) return req.all;
+                if (req.none is { Length: > 0 }) return req.none;
+                return Array.Empty<int>();
+            }
+
             // cancelAbilityWithTags
-            if (data.CancelAbilityWithTags is { Count: > 0 })
-                configs.Add(new ConfCancelAbilityWithTags { tags = data.CancelAbilityWithTags.ToArray() });
+            var cancelTags = ParseTagRequirement(data.CancelAbilityWithTags);
+            if (cancelTags != null)
+                configs.Add(new ConfCancelAbilityWithTags { tags = PickSimpleTagSet(cancelTags.Value) });
             // blockAbilityWithTags
-            if (data.BlockAbilityWithTags is { Count: > 0 })
-                configs.Add(new ConfBlockAbilityWithTags { tags = data.BlockAbilityWithTags.ToArray() });
+            var blockTags = ParseTagRequirement(data.BlockAbilityWithTags);
+            if (blockTags != null)
+                configs.Add(new ConfBlockAbilityWithTags { tags = PickSimpleTagSet(blockTags.Value) });
             // activationOwnedTags
             if (data.ActivationOwnedTags is { Count: > 0 })
                 configs.Add(new ConfAbilityActivationOwnedTags { tags = data.ActivationOwnedTags.ToArray() });
             // activationRequiredTags
-            if (data.ActivationRequiredTags is { Count: > 0 })
-                configs.Add(new ConfAbilityActivationRequiredTags { all = data.ActivationRequiredTags.ToArray() });
+            var activationRequiredTags = ParseTagRequirement(data.ActivationRequiredTags);
+            if (activationRequiredTags != null)
+                configs.Add(new ConfAbilityActivationRequiredTags { all = activationRequiredTags.Value.all, any = activationRequiredTags.Value.any, none = activationRequiredTags.Value.none });
             // activationBlockedTags
-            if (data.ActivationBlockedTags is { Count: > 0 })
-                configs.Add(new ConfAbilityActivationBlockedTags { none = data.ActivationBlockedTags.ToArray() });
+            var activationBlockedTags = ParseTagRequirement(data.ActivationBlockedTags);
+            if (activationBlockedTags != null)
+                configs.Add(new ConfAbilityActivationBlockedTags { all = activationBlockedTags.Value.all, any = activationBlockedTags.Value.any, none = activationBlockedTags.Value.none });
             // cdEffect cd
             if (data.Cd != 0)
             {
