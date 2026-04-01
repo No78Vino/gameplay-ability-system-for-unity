@@ -130,7 +130,6 @@ namespace GAS.Runtime
 
             // Operation: CheckApply,Apply,CheckActivate,Activate,Deactivate,Remove
             var sgCheckApplyEffect = ExWorld.CreateSystemManaged<SGCheckApplyEffect>();
-            sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckApplicationCondition>());
             sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckApplicationRequiredTags>());
             sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckImmunityTags>());
             sgCheckApplyEffect.AddSystemToUpdateList(ExWorld.CreateSystem<SCheckApplyEnd>());

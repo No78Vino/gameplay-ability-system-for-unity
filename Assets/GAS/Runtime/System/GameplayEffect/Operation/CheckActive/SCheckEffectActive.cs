@@ -1,4 +1,3 @@
-﻿﻿using System.Diagnostics;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -40,13 +39,11 @@ namespace GAS.Runtime
 
                     if (tagMap.AscEvaluateTagRequirement(state.EntityManager, asc, requirement))
                     {
-                        UnityEngine.Debug.Log($"激活 all:{string.Join(",", requirement.all)} any:{string.Join(",", requirement.any)} none:{string.Join(",", requirement.none)} ");
                         // 分配到激活阶段 Activate Effect
                         ecb.AddComponent<WipActivateEffect>(ge);
                     }
                     else
                     {
-                        UnityEngine.Debug.Log($"失活 all:{string.Join(",", requirement.all)} any:{string.Join(",", requirement.any)} none:{string.Join(",", requirement.none)} ");
                         // 分配到失活阶段 Deactivate Effect
                         ecb.AddComponent<WipDeactivateEffect>(ge);
                     }
