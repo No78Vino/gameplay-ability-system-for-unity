@@ -39,6 +39,15 @@ const CUE_COMPONENTS = [
 ];
 const FUNC_COMPONENTS = ['Duration', 'Period', 'Modifiers', 'GrantedAbility', 'Stacking'];
 
+const TAG_PROTOCOL_FIELDS = [
+    { comp: 'AssetTags', key: 'assetTags', label: 'AssetTags 描述标签' },
+    { comp: 'GrantedTags', key: 'grantedTags', label: 'GrantedTags 授予标签' },
+    { comp: 'ApplicationRequiredTags', key: 'applicationRequiredTags', label: 'ApplicationRequiredTags 应用需求标签' },
+    { comp: 'OngoingRequiredTags', key: 'ongoingRequiredTags', label: 'OngoingRequiredTags 持续需求标签' },
+    { comp: 'RemoveGameplayEffectsWithTags', key: 'removeEffectsWithTags', label: 'RemoveGEWithTags 移除GE标签' },
+    { comp: 'ImmunityTags', key: 'immunityTags', label: 'ImmunityTags 免疫标签' },
+];
+
 // ── 组件中文标签（对齐 C# EffectEditComponent 的 [LabelText]）────────  
 const COMP_LABELS = {
     'AssetTags': '描述标签',
@@ -543,21 +552,14 @@ function renderCompDetails(effect) {
     let html = '';
 
     // ── Tag 类（使用 searchableDropdown + tagChipHtml）──────────────────  
-    const tagFieldMap = {
-        'AssetTags':                     { key:'assetTags',               label:'AssetTags 描述标签' },
-        'GrantedTags':                   { key:'grantedTags',             label:'GrantedTags 授予标签' },
-        'ApplicationRequiredTags':       { key:'applicationRequiredTags', label:'ApplicationRequiredTags 应用需求标签' },
-        'OngoingRequiredTags':           { key:'ongoingRequiredTags',     label:'OngoingRequiredTags 持续需求标签' },
-        'RemoveGameplayEffectsWithTags': { key:'removeEffectsWithTags',   label:'RemoveGEWithTags 移除GE标签' },
-        'ImmunityTags':                  { key:'immunityTags',            label:'ImmunityTags 免疫标签' },
-    };
-    for (const [comp, meta] of Object.entries(tagFieldMap)) {
+    for (const field of TAG_PROTOCOL_FIELDS) {
+        const comp = field.comp;
         if (!active.has(comp)) continue;
-        const ids = effect[meta.key] || [];
+        const ids = effect[field.key] || [];
         const filteredChoices = tagChoices.filter(t => !ids.includes(t.id));
         html += `  
 <div class="panel" id="panel-${comp}">  
-    <div class="panel-header">${meta.label}</div>  
+    <div class="panel-header">${field.label}</div>  
     <div class="panel-body">  
         <div class="chip-list" id="chips-${comp}">  
             ${ids.map(id => tagChipHtml(comp, id, tagChoices)).join('')}  
@@ -819,16 +821,8 @@ function buildEffectFromForm() {
     const active = new Set(effect.components);
 
     // ── Tag 类 ────────────────────────────────────────────────────────  
-    const tagKeyMap = {
-        'AssetTags':                     'assetTags',
-        'GrantedTags':                   'grantedTags',
-        'ApplicationRequiredTags':       'applicationRequiredTags',
-        'OngoingRequiredTags':           'ongoingRequiredTags',
-        'RemoveGameplayEffectsWithTags': 'removeEffectsWithTags',
-        'ImmunityTags':                  'immunityTags',
-    };
-    for (const [comp, key] of Object.entries(tagKeyMap)) {
-        effect[key] = active.has(comp) ? readChipIds(comp) : [];
+    for (const field of TAG_PROTOCOL_FIELDS) {
+        effect[field.key] = active.has(field.comp) ? readChipIds(field.comp) : [];
     }
 
     // ── Duration ──────────────────────────────────────────────────────  

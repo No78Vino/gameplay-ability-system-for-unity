@@ -39,8 +39,8 @@ GameplayEffect的配置界面如图，接下来逐一解释各个参数的含义
     ModifierCalculation的类型在Wiki-MMC详细介绍。
 - Tags：标签。Tag具有非常重要的作用，合适的tag可以处理GameplayEffect之间复杂的关系。
   - 条件型 Tag 组件统一使用 `TagRequirementData`：`all` / `any` / `none` 三模式组合判断。
-    - `ApplicationRequiredTags` / `OngoingRequiredTags` 主要使用 `all`
-    - `RemoveGameplayEffectsWithTags` / `ImmunityTags` 主要使用 `any`
+    - `ApplicationRequiredTags` / `OngoingRequiredTags` 按 `all` 语义解释
+    - `RemoveGameplayEffectsWithTags` / `ImmunityTags` 按 `any` 语义解释
   - AssetTags：描述性质的标签，用来描述GameplayEffect的特性表现，比如伤害、治疗、控制等。
   - GrantedTags：GameplayEffect的持有者会获得这些标签，GameplayEffect被移除时，这些标签也会被移除。
     Instant类型的GameplayEffect的GrantedTags是无效的。

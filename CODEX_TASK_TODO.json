@@ -1,0 +1,143 @@
+{
+  "project": "EX-GAS",
+  "generated_at": "2026-04-01",
+  "context": "GAS目录冗余清理与命名统一收尾",
+  "key_decisions": {
+    "application_condition": {
+      "choice": "B/A",
+      "policy": "停用不删除，仅从GASManager移除SCheckApplicationCondition系统注册"
+    },
+    "gameplay_effect_spec_api": {
+      "choice": "B",
+      "policy": "保留...RequiredTags系列API，淘汰...Requirement系列API"
+    },
+    "gas_const_define_cleanup": {
+      "choice": "A",
+      "policy": "删除未引用常量"
+    },
+    "runtime_debug_log": {
+      "choice": "A",
+      "policy": "删除SCheckEffectActive中的运行期调试日志"
+    },
+    "effect_editor_duplicate_logic": {
+      "choice": "B",
+      "policy": "抽取公共协议层，收敛GASCenter与WebEditor双份读写逻辑"
+    },
+    "wiki_wording": {
+      "choice": "A",
+      "policy": "改为统一语义规范，不保留兼容映射口吻"
+    },
+    "immunity_const_rename": {
+      "choice": "A",
+      "policy": "将ApplicationImmunityTags历史常量名重命名为ImmunityTags风格并同步引用"
+    }
+  },
+  "task_todo": [
+    {
+      "id": "TASK-001",
+      "title": "停用ApplicationCondition检查系统",
+      "scope": [
+        "Assets/GAS/Runtime/General/GASManager.cs"
+      ],
+      "actions": [
+        "移除SCheckApplicationCondition注册",
+        "保留ApplicationCondition相关类型与API实现"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-002",
+      "title": "收敛GameplayEffectSpec重复API",
+      "scope": [
+        "Assets/GAS/Runtime/Effect/GameplayEffectSpec.cs"
+      ],
+      "actions": [
+        "移除或废弃...Requirement系列方法",
+        "保留...RequiredTags系列作为唯一外部入口"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-003",
+      "title": "删除运行期调试日志",
+      "scope": [
+        "Assets/GAS/Runtime/System/GameplayEffect/Operation/CheckActive/SCheckEffectActive.cs"
+      ],
+      "actions": [
+        "删除激活/失活Debug.Log输出"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-004",
+      "title": "清理GASConstDefine未引用常量",
+      "scope": [
+        "Assets/GAS/General/GASConstDefine.cs",
+        "Assets/GAS/**"
+      ],
+      "actions": [
+        "删除未引用常量",
+        "保留仍被引用的路径与配置常量"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-005",
+      "title": "重命名Immunity历史常量标识符",
+      "scope": [
+        "Assets/GAS/General/GASConstDefine.cs",
+        "Assets/GAS/**"
+      ],
+      "actions": [
+        "将TITLE_GE_TAG_ApplicationImmunityTags重命名为TITLE_GE_TAG_ImmunityTags",
+        "将TIP_GE_TAG_ApplicationImmunityTags重命名为TIP_GE_TAG_ImmunityTags",
+        "同步更新所有引用"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-006",
+      "title": "抽取Effect编辑公共协议层",
+      "scope": [
+        "Assets/GAS/Editor/GASCenterEditor/GASCenterViewEffect.cs",
+        "Assets/GAS/Editor/WebEditor/Effect/server.py",
+        "Assets/GAS/Editor/WebEditor/Effect/effect_editor.js",
+        "Assets/GAS/Editor/**"
+      ],
+      "actions": [
+        "定义统一TagRequirement读写协议",
+        "移除双份分散的解析/编码逻辑"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-007",
+      "title": "更新Wiki术语为统一规范",
+      "scope": [
+        "Assets/GAS/Wiki/Ability.md",
+        "Assets/GAS/Wiki/GameplayCue.md",
+        "Assets/GAS/Wiki/GameplayEffect.md"
+      ],
+      "actions": [
+        "删除兼容映射描述",
+        "统一描述为当前规范语义"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "TASK-008",
+      "title": "回归检查与验收",
+      "scope": [
+        "Assets/GAS/**",
+        "EX_GAS_Config/**",
+        "Assets/DemoForESC/**"
+      ],
+      "actions": [
+        "全局检索旧命名残留",
+        "验证配置表与运行时字段一致性",
+        "验证WebEditor脚本语法与基础读取流程"
+      ],
+      "status": "pending"
+    }
+  ]
+}

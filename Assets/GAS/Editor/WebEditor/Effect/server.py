@@ -46,6 +46,13 @@ ENUM_EXPIRATION = ["ClearEntireStack", "RemoveSingleStackAndRefreshDuration", "R
 ENUM_ABILITY_ACTIVATE = ["None", "WhenAdded", "SyncWithEffect"]  
 ENUM_ABILITY_DEACTIVATE = ["None", "SyncWithEffect"]  
 ENUM_ABILITY_REMOVE = ["None", "SyncWithEffect", "WhenEnd", "WhenCancel", "WhenCancelOrEnd"]  
+
+TAG_REQUIREMENT_PROTOCOL_FIELDS = [
+    {"component": "ApplicationRequiredTags", "excel_header": "ApplicationRequiredTags", "json_key": "applicationRequiredTags", "mode": "all"},
+    {"component": "OngoingRequiredTags", "excel_header": "OngoingRequiredTags", "json_key": "ongoingRequiredTags", "mode": "all"},
+    {"component": "RemoveGameplayEffectsWithTags", "excel_header": "RemoveGameplayEffectsWithTags", "json_key": "removeEffectsWithTags", "mode": "any"},
+    {"component": "ImmunityTags", "excel_header": "ImmunityTags", "json_key": "immunityTags", "mode": "any"},
+]
   
 # ── 辅助数据读取 ─────────────────────────────────────────────────────────────  
   
@@ -308,10 +315,6 @@ def read_effects():
             "components": [],  
             "assetTags": parse_int_list(get_cell_value(ws, row, "AssetTags")),  
             "grantedTags": parse_int_list(get_cell_value(ws, row, "GrantedTags")),  
-            "applicationRequiredTags": parse_tag_requirement(get_cell_value(ws, row, "ApplicationRequiredTags"), "all"),  
-            "ongoingRequiredTags": parse_tag_requirement(get_cell_value(ws, row, "OngoingRequiredTags"), "all"),  
-            "removeEffectsWithTags": parse_tag_requirement(get_cell_value(ws, row, "RemoveGameplayEffectsWithTags"), "any"),  
-            "immunityTags": parse_tag_requirement(get_cell_value(ws, row, "ImmunityTags"), "any"),  
             "duration": None,  
             "period": None,  
             "modifiers": [],  
@@ -324,13 +327,17 @@ def read_effects():
             "grantedAbilities": [],  
             "stacking": None  
         }  
+
+        for field in TAG_REQUIREMENT_PROTOCOL_FIELDS:
+            effect[field["json_key"]] = parse_tag_requirement(
+                get_cell_value(ws, row, field["excel_header"]), field["mode"]
+            )
   
         if effect["assetTags"]: effect["components"].append("AssetTags")  
         if effect["grantedTags"]: effect["components"].append("GrantedTags")  
-        if effect["applicationRequiredTags"]: effect["components"].append("ApplicationRequiredTags")  
-        if effect["ongoingRequiredTags"]: effect["components"].append("OngoingRequiredTags")  
-        if effect["removeEffectsWithTags"]: effect["components"].append("RemoveGameplayEffectsWithTags")  
-        if effect["immunityTags"]: effect["components"].append("ImmunityTags")  
+        for field in TAG_REQUIREMENT_PROTOCOL_FIELDS:
+            if effect[field["json_key"]]:
+                effect["components"].append(field["component"])
         if effect["cueOnApply"]: effect["components"].append("CueOnApply")  
         if effect["cueOnTick"]: effect["components"].append("CueOnTick")  
         if effect["cueOnAdd"]: effect["components"].append("CueOnAdd")  
@@ -463,10 +470,17 @@ def write_effects(effects):
         # Tags  
         ws.cell(row=row, column=COL_MAP.get("AssetTags", 5)).value = ";".join(map(str, effect.get("assetTags", []))) if "AssetTags" in comp else None  
         ws.cell(row=row, column=COL_MAP.get("GrantedTags", 6)).value = ";".join(map(str, effect.get("grantedTags", []))) if "GrantedTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("ApplicationRequiredTags", 7)).value = encode_tag_requirement(effect.get("applicationRequiredTags", []), "all") if "ApplicationRequiredTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("OngoingRequiredTags", 8)).value = encode_tag_requirement(effect.get("ongoingRequiredTags", []), "all") if "OngoingRequiredTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("RemoveGameplayEffectsWithTags", 9)).value = encode_tag_requirement(effect.get("removeEffectsWithTags", []), "any") if "RemoveGameplayEffectsWithTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("ImmunityTags", 10)).value = encode_tag_requirement(effect.get("immunityTags", []), "any") if "ImmunityTags" in comp else None  
+        fallback_col_map = {
+            "ApplicationRequiredTags": 7,
+            "OngoingRequiredTags": 8,
+            "RemoveGameplayEffectsWithTags": 9,
+            "ImmunityTags": 10,
+        }
+        for field in TAG_REQUIREMENT_PROTOCOL_FIELDS:
+            ws.cell(row=row, column=COL_MAP.get(field["excel_header"], fallback_col_map[field["excel_header"]])).value = (
+                encode_tag_requirement(effect.get(field["json_key"], []), field["mode"])
+                if field["component"] in comp else None
+            )
   
         # Cues  
         ws.cell(row=row, column=COL_MAP.get("CueOnApply", 11)).value = ";".join(map(str, effect.get("cueOnApply", []))) if "CueOnApply" in comp else None  
@@ -691,10 +705,6 @@ class Handler(BaseHTTPRequestHandler):
                     "components": body.get("components", []),  
                     "assetTags": body.get("assetTags", []),  
                     "grantedTags": body.get("grantedTags", []),  
-                    "applicationRequiredTags": body.get("applicationRequiredTags", []),  
-                    "ongoingRequiredTags": body.get("ongoingRequiredTags", []),  
-                    "removeEffectsWithTags": body.get("removeEffectsWithTags", []),  
-                    "immunityTags": body.get("immunityTags", []),  
                     "duration": body.get("duration"),  
                     "period": body.get("period"),  
                     "modifiers": body.get("modifiers", []),  
@@ -707,6 +717,9 @@ class Handler(BaseHTTPRequestHandler):
                     "grantedAbilities": body.get("grantedAbilities", []),  
                     "stacking": body.get("stacking")  
                 }  
+
+                for field in TAG_REQUIREMENT_PROTOCOL_FIELDS:
+                    new_effect[field["json_key"]] = body.get(field["json_key"], [])
   
                 err = validate_effect(new_effect)  
                 if err:  
@@ -742,10 +755,8 @@ class Handler(BaseHTTPRequestHandler):
                 effect["components"] = body.get("components", effect["components"])  
                 effect["assetTags"] = body.get("assetTags", effect.get("assetTags", []))  
                 effect["grantedTags"] = body.get("grantedTags", effect.get("grantedTags", []))  
-                effect["applicationRequiredTags"] = body.get("applicationRequiredTags", effect.get("applicationRequiredTags", []))  
-                effect["ongoingRequiredTags"] = body.get("ongoingRequiredTags", effect.get("ongoingRequiredTags", []))  
-                effect["removeEffectsWithTags"] = body.get("removeEffectsWithTags", effect.get("removeEffectsWithTags", []))  
-                effect["immunityTags"] = body.get("immunityTags", effect.get("immunityTags", []))  
+                for field in TAG_REQUIREMENT_PROTOCOL_FIELDS:
+                    effect[field["json_key"]] = body.get(field["json_key"], effect.get(field["json_key"], []))
                 effect["duration"] = body.get("duration")  
                 effect["period"] = body.get("period")  
                 effect["modifiers"] = body.get("modifiers", [])  
