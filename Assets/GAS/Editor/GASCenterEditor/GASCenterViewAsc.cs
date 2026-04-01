@@ -175,7 +175,7 @@ namespace GAS.Editor
         
         public List<int> ListIntFromString(string str)
         {
-            return string.IsNullOrEmpty(str) ? new List<int>() : str.Split(';').Select(int.Parse).ToList();
+            return GASCenterParseHelper.ParseIntListLoose(str);
         }
 
         public List<ValueDropdownItem> TagChoices => GasXlsxChoice.Tags();

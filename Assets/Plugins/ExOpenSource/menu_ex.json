@@ -84,7 +84,7 @@
       "IntroductionURL": "https://github.com/No78Vino/EXMaidForFGUIandLoxondon",
       "Dependencies": [
         {
-          "name":"com.vovgou.loxodon-framework",
+          "name": "com.vovgou.loxodon-framework",
           "version": "https://github.com/vovgou/loxodon-framework.git?path=Loxodon.Framework/Assets/LoxodonFramework"
         }
       ]
@@ -217,6 +217,27 @@
       "GitURL_Branch": "master",
       "GitURL_Path": "Loxodon.Framework/Assets/LoxodonFramework",
       "IntroductionURL": "https://github.com/vovgou/loxodon-framework",
+      "Dependencies": []
+    },
+    {
+      "Name": "YooAsset",
+      "Version": "2.6",
+      "Intro": "YooAsset是一套用于Unity3D的资源管理系统，经历多款百万DAU商业游戏验证。\n\n支持内置管线和可编程构建管线（SBP）、分布式构建、可寻址资源定位、基于标签的智能分包方案、引用计数资源管理、编辑器模拟/单机/联机/WebGL多运行模式、边玩边下载、断点续传、多线程下载、原生格式文件管理、热更新与版本管理（灰度更新/版本回退/多版本区分）、多平台适配（Android/iOS/PC/WebGL/微信小游戏/抖音小游戏）。\n\nUPM包名：com.tuyoogame.yooasset",
+      "Author": "tuyoogame (git@ tuyoogame)",
+      "Tags": [
+        "Asset",
+        "资源管理",
+        "热更新",
+        "AB包",
+        "加载系统"
+      ],
+      "MenuPath": "EXHard开源插件收藏/资源管理/YooAsset",
+      "LocalPath": "Assets/Plugins/ExOpenSource/YooAsset",
+      "GitURL_Username": "tuyoogame",
+      "GitURL_RepoName": "YooAsset",
+      "GitURL_Branch": "master",
+      "GitURL_Path": "",
+      "IntroductionURL": "https://github.com/tuyoogame/YooAsset",
       "Dependencies": []
     }
   ]

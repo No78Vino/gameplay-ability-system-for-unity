@@ -14,13 +14,13 @@
     ],
     "ActivationBlockedTags": {
       "All": [
-        2010
+        0
       ],
       "Any": [
         0
       ],
       "None": [
-        0
+        2010
       ]
     },
     "AbilityLogic": {
@@ -109,13 +109,13 @@
     ],
     "ActivationBlockedTags": {
       "All": [
-        3003
+        0
       ],
       "Any": [
         0
       ],
       "None": [
-        0
+        3003
       ]
     },
     "AbilityLogic": {
@@ -151,13 +151,13 @@
     ],
     "ActivationBlockedTags": {
       "All": [
-        3002
+        0
       ],
       "Any": [
         0
       ],
       "None": [
-        0
+        3002
       ]
     },
     "AbilityLogic": {

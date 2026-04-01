@@ -245,42 +245,42 @@ namespace GAS.Editor
                 selectInfo.ContainsKey(_headerMap["AssetTags"]) 
                 && selectInfo[_headerMap["AssetTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["AssetTags"]].ToString())
-                ? selectInfo[_headerMap["AssetTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["AssetTags"]].ToString())
                 : new List<int>();
             
             cancelAbilityWithTags = 
                 selectInfo.ContainsKey(_headerMap["CancelAbilityWithTags"]) 
                 && selectInfo[_headerMap["CancelAbilityWithTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CancelAbilityWithTags"]].ToString())
-                ? selectInfo[_headerMap["CancelAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CancelAbilityWithTags"]].ToString())
                 : new List<int>();
             
             blockAbilityWithTags = 
                 selectInfo.ContainsKey(_headerMap["BlockAbilityWithTags"]) 
                 && selectInfo[_headerMap["BlockAbilityWithTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["BlockAbilityWithTags"]].ToString())
-                ? selectInfo[_headerMap["BlockAbilityWithTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["BlockAbilityWithTags"]].ToString())
                 : new List<int>();
             
             activationOwnedTags =
                 selectInfo.ContainsKey(_headerMap["ActivationOwnedTags"]) 
                 && selectInfo[_headerMap["ActivationOwnedTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["ActivationOwnedTags"]].ToString())
-                ? selectInfo[_headerMap["ActivationOwnedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["ActivationOwnedTags"]].ToString())
                 : new List<int>();
             
             activationRequiredTags =
                 selectInfo.ContainsKey(_headerMap["ActivationRequiredTags"]) 
                 && selectInfo[_headerMap["ActivationRequiredTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["ActivationRequiredTags"]].ToString())
-                ? selectInfo[_headerMap["ActivationRequiredTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["ActivationRequiredTags"]].ToString())
                 : new List<int>();
             
             activationBlockedTags =
                 selectInfo.ContainsKey(_headerMap["ActivationBlockedTags"]) 
                 && selectInfo[_headerMap["ActivationBlockedTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["ActivationBlockedTags"]].ToString())
-                ? selectInfo[_headerMap["ActivationBlockedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["ActivationBlockedTags"]].ToString())
                 : new List<int>();
             
             // abilityLogic	

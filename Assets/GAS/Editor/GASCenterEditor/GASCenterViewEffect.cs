@@ -315,14 +315,14 @@ namespace GAS.Editor
                 selectInfo.ContainsKey(_headerMap["AssetTags"]) 
                 && selectInfo[_headerMap["AssetTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["AssetTags"]].ToString())
-                ? selectInfo[_headerMap["AssetTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["AssetTags"]].ToString())
                 : new List<int>();
 
             GrantedTags = 
                 selectInfo.ContainsKey(_headerMap["GrantedTags"]) 
                 && selectInfo[_headerMap["GrantedTags"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["GrantedTags"]].ToString())
-                ? selectInfo[_headerMap["GrantedTags"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["GrantedTags"]].ToString())
                 : new List<int>();
 
             string ReadCell(string key)
@@ -356,42 +356,42 @@ namespace GAS.Editor
                 selectInfo.ContainsKey(_headerMap["CueOnApply"]) 
                 && selectInfo[_headerMap["CueOnApply"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnApply"]].ToString())
-                ? selectInfo[_headerMap["CueOnApply"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CueOnApply"]].ToString())
                 : new List<int>();
 
             CueOnTick = 
                 selectInfo.ContainsKey(_headerMap["CueOnTick"]) 
                 && selectInfo[_headerMap["CueOnTick"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnTick"]].ToString())
-                ? selectInfo[_headerMap["CueOnTick"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CueOnTick"]].ToString())
                 : new List<int>();
 
             CueOnAdd = 
                 selectInfo.ContainsKey(_headerMap["CueOnAdd"]) 
                 && selectInfo[_headerMap["CueOnAdd"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnAdd"]].ToString())
-                ? ((string)selectInfo[_headerMap["CueOnAdd"]]).Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CueOnAdd"]].ToString())
                 : new List<int>();
 
             CueOnRemove = 
                 selectInfo.ContainsKey(_headerMap["CueOnRemove"]) 
                 && selectInfo[_headerMap["CueOnRemove"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnRemove"]].ToString())
-                ? selectInfo[_headerMap["CueOnRemove"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CueOnRemove"]].ToString())
                 : new List<int>();
 
             CueOnActivate = 
                 selectInfo.ContainsKey(_headerMap["CueOnActivate"]) 
                 && selectInfo[_headerMap["CueOnActivate"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnActivate"]].ToString())
-                ? selectInfo[_headerMap["CueOnActivate"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CueOnActivate"]].ToString())
                 : new List<int>();
 
             CueOnDeactivate = 
                 selectInfo.ContainsKey(_headerMap["CueOnDeactivate"]) 
                 && selectInfo[_headerMap["CueOnDeactivate"]] != null
                 && !string.IsNullOrEmpty(selectInfo[_headerMap["CueOnDeactivate"]].ToString())
-                ? selectInfo[_headerMap["CueOnDeactivate"]].ToString().Split(';').Select(int.Parse).ToList()
+                ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["CueOnDeactivate"]].ToString())
                 : new List<int>();
 
 
@@ -416,7 +416,7 @@ namespace GAS.Editor
                         ? int.Parse(selectInfo[_headerMap["Period"]].ToString())
                         : 0,
                     effects = selectInfo[_headerMap["Period"] + 1] != null
-                        ? ((string)selectInfo[_headerMap["Period"] + 1]).Split(';').Select(int.Parse).ToList()
+                        ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["Period"] + 1].ToString())
                         : new List<int>(),
                     firstTrigger = selectInfo[_headerMap["Period"] + 2] != null &&
                                    bool.Parse(selectInfo[_headerMap["Period"] + 2].ToString())
@@ -452,7 +452,7 @@ namespace GAS.Editor
                     clearStackOnOverflow = selectInfo[_headerMap["Stacking"] + 7] != null &&
                                            bool.Parse(selectInfo[_headerMap["Stacking"] + 7].ToString()),
                     overflowEffects = selectInfo[_headerMap["Stacking"] + 8] != null
-                        ? selectInfo[_headerMap["Stacking"] + 8].ToString().Split(';').Select(int.Parse).ToList()
+                        ? GASCenterParseHelper.ParseIntListLoose(selectInfo[_headerMap["Stacking"] + 8].ToString())
                         : new List<int>()
                 };
             else
@@ -487,7 +487,8 @@ namespace GAS.Editor
                 var abilities = selectInfo[_headerMap["GrantedAbility"]].ToString().Split('|').ToList();
                 foreach (var v in abilities)
                 {
-                    var cfg = v.Split(';').Select(int.Parse).ToList();
+                    var cfg = GASCenterParseHelper.ParseIntListLoose(v, positiveOnly: false);
+                    if (cfg.Count < 5) continue;
                     var a = new GEEditGrantedAbility
                     {
                         abilityID = cfg[0],
