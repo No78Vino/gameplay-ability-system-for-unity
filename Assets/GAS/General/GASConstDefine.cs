@@ -114,13 +114,13 @@
         public const string TITLE_GE_TAG_GrantedTags = "GrantedTags - 授予目标单位的标签";
         public const string TIP_GE_TAG_GrantedTags = "GrantedTags: 当[游戏效果]生效时，标签会被添加到目标单位上，并在[游戏效果]失效时移除。\n该标签对即时型（Instant）[游戏效果]的无效。";
         public const string TITLE_GE_TAG_ApplicationRequiredTags = "ApplicationRequiredTags - 应用该[游戏效果]的【全部】前提";
-        public const string TIP_GE_TAG_ApplicationRequiredTags = "ApplicationRequiredTags: [游戏效果]的目标单位必须具备【所有】这些标签才能应用于目标单位。\n如果想表达【任一】标签不可作用于目标，应该使用ApplicationImmunityTags标签。";
+        public const string TIP_GE_TAG_ApplicationRequiredTags = "ApplicationRequiredTags: [游戏效果]的目标单位必须具备【所有】这些标签才能应用于目标单位。\n如果想表达【任一】标签不可作用于目标，应该使用ImmunityTags标签。";
         public const string TITLE_GE_TAG_OngoingRequiredTags = "OngoingRequiredTags - 激活该[游戏效果]的【全部】前提";
         public const string TIP_GE_TAG_OngoingRequiredTags = "OngoingRequiredTags: [游戏效果]的目标单位必须具备【全部】这些标签，否则该效果不会触发。\n一旦[游戏效果]被施加，如果目标单位在效果持续期间标签发生变化，导致不再具备【全部】这些标签，效果将失效；反之，如果满足条件，效果将被激活。\n该标签对即时型（Instant）[游戏效果]的无效。";
         public const string TITLE_GE_TAG_RemoveGameplayEffectsWithTags = "RemoveGameplayEffectsWithTags - 移除具有【任一】标签的[游戏效果]";
         public const string TIP_GE_TAG_RemoveGameplayEffectsWithTags = "RemoveGameplayEffectsWithTags: [游戏效果]的目标单位当前持有的所有[游戏效果]中，其AssetTags或GrantedTags中具有【任一】这些标签的[游戏效果]将被移除。";
-        public const string TITLE_GE_TAG_ApplicationImmunityTags = "ApplicationImmunityTags - 无法应用于具有【任一】标签的目标";
-        public const string TIP_GE_TAG_ApplicationImmunityTags = "ApplicationImmunityTags: 该[游戏效果]无法作用于拥有【任一】这些标签的目标单位。";
+        public const string TITLE_GE_TAG_ApplicationImmunityTags = "ImmunityTags - 无法应用于具有【任一】标签的目标";
+        public const string TIP_GE_TAG_ApplicationImmunityTags = "ImmunityTags: 该[游戏效果]无法作用于拥有【任一】这些标签的目标单位。";
         
         public const string TITLE_GE_CUE_CueOnExecute = "CueOnExecute - 执行时触发";
         public const string TITLE_GE_CUE_CueDurational = "CueDurational - 存在时持续触发";

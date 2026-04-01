@@ -259,6 +259,39 @@ def parse_int_list(val):
         return [int(x.strip()) for x in str(val).split(';') if x.strip()]  
     except:  
         return []  
+
+def parse_tag_requirement(val, mode):  
+    if not val or str(val).strip() == '':  
+        return []  
+    raw = str(val).strip()  
+    parts = raw.split(';')  
+    # Requirement format: all;any;none (each section uses comma)
+    if len(parts) == 3:  
+        if mode == 'all':  
+            target = parts[0]  
+        elif mode == 'any':  
+            target = parts[1]  
+        else:  
+            target = parts[2]  
+        if target == '0' or target.strip() == '':  
+            return []  
+        try:  
+            return [int(x.strip()) for x in target.split(',') if x.strip()]  
+        except:  
+            return []  
+    # legacy list format: a;b;c
+    return parse_int_list(raw)  
+
+def encode_tag_requirement(vals, mode):  
+    nums = [int(x) for x in (vals or []) if int(x) > 0]  
+    if not nums:  
+        return None  
+    tag_csv = ','.join(map(str, nums))  
+    if mode == 'all':  
+        return f"{tag_csv};0;0"  
+    if mode == 'any':  
+        return f"0;{tag_csv};0"  
+    return f"0;0;{tag_csv}"  
   
 def read_effects():  
     wb = openpyxl.load_workbook(XLSX_PATH)  
@@ -275,10 +308,10 @@ def read_effects():
             "components": [],  
             "assetTags": parse_int_list(get_cell_value(ws, row, "AssetTags")),  
             "grantedTags": parse_int_list(get_cell_value(ws, row, "GrantedTags")),  
-            "applicationRequiredTags": parse_int_list(get_cell_value(ws, row, "ApplicationRequiredTags")),  
-            "ongoingRequiredTags": parse_int_list(get_cell_value(ws, row, "OngoingRequiredTags")),  
-            "removeEffectsWithTags": parse_int_list(get_cell_value(ws, row, "RemoveGameplayEffectsWithTags")),  
-            "immunityTags": parse_int_list(get_cell_value(ws, row, "ImmunityTags")),  
+            "applicationRequiredTags": parse_tag_requirement(get_cell_value(ws, row, "ApplicationRequiredTags"), "all"),  
+            "ongoingRequiredTags": parse_tag_requirement(get_cell_value(ws, row, "OngoingRequiredTags"), "all"),  
+            "removeEffectsWithTags": parse_tag_requirement(get_cell_value(ws, row, "RemoveGameplayEffectsWithTags"), "any"),  
+            "immunityTags": parse_tag_requirement(get_cell_value(ws, row, "ImmunityTags"), "any"),  
             "duration": None,  
             "period": None,  
             "modifiers": [],  
@@ -430,10 +463,10 @@ def write_effects(effects):
         # Tags  
         ws.cell(row=row, column=COL_MAP.get("AssetTags", 5)).value = ";".join(map(str, effect.get("assetTags", []))) if "AssetTags" in comp else None  
         ws.cell(row=row, column=COL_MAP.get("GrantedTags", 6)).value = ";".join(map(str, effect.get("grantedTags", []))) if "GrantedTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("ApplicationRequiredTags", 7)).value = ";".join(map(str, effect.get("applicationRequiredTags", []))) if "ApplicationRequiredTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("OngoingRequiredTags", 8)).value = ";".join(map(str, effect.get("ongoingRequiredTags", []))) if "OngoingRequiredTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("RemoveGameplayEffectsWithTags", 9)).value = ";".join(map(str, effect.get("removeEffectsWithTags", []))) if "RemoveGameplayEffectsWithTags" in comp else None  
-        ws.cell(row=row, column=COL_MAP.get("ImmunityTags", 10)).value = ";".join(map(str, effect.get("immunityTags", []))) if "ImmunityTags" in comp else None  
+        ws.cell(row=row, column=COL_MAP.get("ApplicationRequiredTags", 7)).value = encode_tag_requirement(effect.get("applicationRequiredTags", []), "all") if "ApplicationRequiredTags" in comp else None  
+        ws.cell(row=row, column=COL_MAP.get("OngoingRequiredTags", 8)).value = encode_tag_requirement(effect.get("ongoingRequiredTags", []), "all") if "OngoingRequiredTags" in comp else None  
+        ws.cell(row=row, column=COL_MAP.get("RemoveGameplayEffectsWithTags", 9)).value = encode_tag_requirement(effect.get("removeEffectsWithTags", []), "any") if "RemoveGameplayEffectsWithTags" in comp else None  
+        ws.cell(row=row, column=COL_MAP.get("ImmunityTags", 10)).value = encode_tag_requirement(effect.get("immunityTags", []), "any") if "ImmunityTags" in comp else None  
   
         # Cues  
         ws.cell(row=row, column=COL_MAP.get("CueOnApply", 11)).value = ";".join(map(str, effect.get("cueOnApply", []))) if "CueOnApply" in comp else None  

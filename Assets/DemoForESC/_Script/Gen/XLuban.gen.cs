@@ -205,42 +205,34 @@ namespace GAS.Runtime
             // grantedTags
             if (data.GrantedTags is { Count: > 0 })
                 configs.Add(new ConfEffectGrantedTags { tags = data.GrantedTags.ToArray() });
-            // application tags condition (Requirement 优先，回落到旧 tags 列)
-            if (data.ApplicationTagRequirement != null)
+            // application tags condition
+            if (data.ApplicationRequiredTags != null)
             {
-                var result = ParseTagRequirement(data.ApplicationTagRequirement.Value);
+                var result = ParseTagRequirement(data.ApplicationRequiredTags.Value);
                 if(result != null)
                     configs.Add(new ConfApplicationRequiredTags{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
-            else if (data.ApplicationRequiredTags is { Count: > 0 })
-                configs.Add(new ConfApplicationRequiredTags { tags = data.ApplicationRequiredTags.ToArray() });
-            // ongoing tags condition (Requirement 优先，回落到旧 tags 列)
-            if (data.OngoingTagRequirement != null)
+            // ongoing tags condition
+            if (data.OngoingRequiredTags != null)
             {
-                var result = ParseTagRequirement(data.OngoingTagRequirement.Value);
+                var result = ParseTagRequirement(data.OngoingRequiredTags.Value);
                 if(result != null)
                     configs.Add(new ConfOngoingRequiredTags{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
-            else if (data.OngoingRequiredTags is { Count: > 0 })
-                configs.Add(new ConfOngoingRequiredTags { tags = data.OngoingRequiredTags.ToArray() });
-            // remove-effect tags condition (Requirement 优先，回落到旧 tags 列)
-            if (data.RemoveGameplayEffectsWithTagRequirement != null)
+            // remove-effect tags condition
+            if (data.RemoveGameplayEffectsWithTags != null)
             {
-                var result = ParseTagRequirement(data.RemoveGameplayEffectsWithTagRequirement.Value);
+                var result = ParseTagRequirement(data.RemoveGameplayEffectsWithTags.Value);
                 if(result != null)
                     configs.Add(new ConfRemoveEffectWithTags{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
-            else if (data.RemoveGameplayEffectsWithTags is { Count: > 0 })
-                configs.Add(new ConfRemoveEffectWithTags { tags = data.RemoveGameplayEffectsWithTags.ToArray() });
-            // immunity tags condition (Requirement 优先，回落到旧 tags 列)
-            if (data.ImmunityTagRequirement != null)
+            // immunity tags condition
+            if (data.ImmunityTags != null)
             {
-                var result = ParseTagRequirement(data.ImmunityTagRequirement.Value);
+                var result = ParseTagRequirement(data.ImmunityTags.Value);
                 if(result != null)
                     configs.Add(new ConfEffectImmunityTags{ all = result.Value.all, any = result.Value.any, none = result.Value.none });
             }
-            else if (data.ImmunityTags is { Count: > 0 })
-                configs.Add(new ConfEffectImmunityTags { tags = data.ImmunityTags.ToArray() });
             // duration
             if (data.Duration != null && data.Duration.Value.Time != 0)
                 configs.Add(new ConfDuration

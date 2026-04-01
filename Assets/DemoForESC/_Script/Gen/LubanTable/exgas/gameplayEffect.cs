@@ -22,14 +22,10 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
         { var __json0 = _buf["AssetTags"]; if(!__json0.IsArray) { throw new SerializationException(); } AssetTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  AssetTags.Add(__v0); }   }
         { var __json0 = _buf["GrantedTags"]; if(!__json0.IsArray) { throw new SerializationException(); } GrantedTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  GrantedTags.Add(__v0); }   }
-        { var _j = _buf["ApplicationTagRequirement"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ApplicationTagRequirement = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ApplicationTagRequirement = null; } }
-        { var __json0 = _buf["ApplicationRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ApplicationRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ApplicationRequiredTags.Add(__v0); }   }
-        { var _j = _buf["OngoingTagRequirement"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  OngoingTagRequirement = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { OngoingTagRequirement = null; } }
-        { var __json0 = _buf["OngoingRequiredTags"]; if(!__json0.IsArray) { throw new SerializationException(); } OngoingRequiredTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  OngoingRequiredTags.Add(__v0); }   }
-        { var _j = _buf["RemoveGameplayEffectsWithTagRequirement"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  RemoveGameplayEffectsWithTagRequirement = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { RemoveGameplayEffectsWithTagRequirement = null; } }
-        { var __json0 = _buf["RemoveGameplayEffectsWithTags"]; if(!__json0.IsArray) { throw new SerializationException(); } RemoveGameplayEffectsWithTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  RemoveGameplayEffectsWithTags.Add(__v0); }   }
-        { var _j = _buf["ImmunityTagRequirement"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ImmunityTagRequirement = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ImmunityTagRequirement = null; } }
-        { var __json0 = _buf["ImmunityTags"]; if(!__json0.IsArray) { throw new SerializationException(); } ImmunityTags = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ImmunityTags.Add(__v0); }   }
+        { var _j = _buf["ApplicationRequiredTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ApplicationRequiredTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ApplicationRequiredTags = null; } }
+        { var _j = _buf["OngoingRequiredTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  OngoingRequiredTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { OngoingRequiredTags = null; } }
+        { var _j = _buf["RemoveGameplayEffectsWithTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  RemoveGameplayEffectsWithTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { RemoveGameplayEffectsWithTags = null; } }
+        { var _j = _buf["ImmunityTags"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  ImmunityTags = global::cfg.TagRequirementData.DeserializeTagRequirementData(_j);  } } else { ImmunityTags = null; } }
         { var _j = _buf["Duration"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Duration = global::cfg.Duration.DeserializeDuration(_j);  } } else { Duration = null; } }
         { var _j = _buf["Period"]; if (_j.Tag != JSONNodeType.None && _j.Tag != JSONNodeType.NullValue) { { if(!_j.IsObject) { throw new SerializationException(); }  Period = global::cfg.Period.DeserializePeriod(_j);  } } else { Period = null; } }
         { var __json0 = _buf["Modifiers"]; if(!__json0.IsArray) { throw new SerializationException(); } Modifiers = new System.Collections.Generic.List<Modifier>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { Modifier __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.Modifier.DeserializeModifier(__e0);  }  Modifiers.Add(__v0); }   }
@@ -68,35 +64,19 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     /// <summary>
     /// 应用GE需要匹配的Tag规则
     /// </summary>
-    public readonly TagRequirementData? ApplicationTagRequirement;
-    /// <summary>
-    /// 应用需求tag
-    /// </summary>
-    public readonly System.Collections.Generic.List<int> ApplicationRequiredTags;
-    /// <summary>
-    /// 激活GE需要匹配的Tag规则
-    /// </summary>
-    public readonly TagRequirementData? OngoingTagRequirement;
+    public readonly TagRequirementData? ApplicationRequiredTags;
     /// <summary>
     /// 激活需求tag
     /// </summary>
-    public readonly System.Collections.Generic.List<int> OngoingRequiredTags;
-    /// <summary>
-    /// 移除匹配Tag规则的Effect
-    /// </summary>
-    public readonly TagRequirementData? RemoveGameplayEffectsWithTagRequirement;
+    public readonly TagRequirementData? OngoingRequiredTags;
     /// <summary>
     /// 移除持有这些tag的buff
     /// </summary>
-    public readonly System.Collections.Generic.List<int> RemoveGameplayEffectsWithTags;
-    /// <summary>
-    /// 免疫GE需要匹配的Tag规则
-    /// </summary>
-    public readonly TagRequirementData? ImmunityTagRequirement;
+    public readonly TagRequirementData? RemoveGameplayEffectsWithTags;
     /// <summary>
     /// 免疫的tag
     /// </summary>
-    public readonly System.Collections.Generic.List<int> ImmunityTags;
+    public readonly TagRequirementData? ImmunityTags;
     /// <summary>
     /// 时间单位
     /// </summary>
@@ -157,14 +137,10 @@ public sealed partial class gameplayEffect : Luban.BeanBase
         + "Desc:" + Desc + ","
         + "AssetTags:" + Luban.StringUtil.CollectionToString(AssetTags) + ","
         + "GrantedTags:" + Luban.StringUtil.CollectionToString(GrantedTags) + ","
-        + "ApplicationTagRequirement:" + ApplicationTagRequirement + ","
-        + "ApplicationRequiredTags:" + Luban.StringUtil.CollectionToString(ApplicationRequiredTags) + ","
-        + "OngoingTagRequirement:" + OngoingTagRequirement + ","
-        + "OngoingRequiredTags:" + Luban.StringUtil.CollectionToString(OngoingRequiredTags) + ","
-        + "RemoveGameplayEffectsWithTagRequirement:" + RemoveGameplayEffectsWithTagRequirement + ","
-        + "RemoveGameplayEffectsWithTags:" + Luban.StringUtil.CollectionToString(RemoveGameplayEffectsWithTags) + ","
-        + "ImmunityTagRequirement:" + ImmunityTagRequirement + ","
-        + "ImmunityTags:" + Luban.StringUtil.CollectionToString(ImmunityTags) + ","
+        + "ApplicationRequiredTags:" + ApplicationRequiredTags + ","
+        + "OngoingRequiredTags:" + OngoingRequiredTags + ","
+        + "RemoveGameplayEffectsWithTags:" + RemoveGameplayEffectsWithTags + ","
+        + "ImmunityTags:" + ImmunityTags + ","
         + "Duration:" + Duration + ","
         + "Period:" + Period + ","
         + "Modifiers:" + Luban.StringUtil.CollectionToString(Modifiers) + ","
@@ -180,4 +156,3 @@ public sealed partial class gameplayEffect : Luban.BeanBase
     }
 }
 }
-
