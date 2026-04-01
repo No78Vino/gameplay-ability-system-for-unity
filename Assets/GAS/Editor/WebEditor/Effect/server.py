@@ -6,7 +6,7 @@ EX-GAS GameplayEffect 网页编辑器 - 本地 HTTP 服务
 用法: python server.py --xlsx "path/to/#exgas.gameplayEffects.xlsx"  
 """  
   
-import argparse, json, os, sys, threading, webbrowser  
+import argparse, json, os, re, sys, threading, webbrowser  
 from http.server import BaseHTTPRequestHandler, HTTPServer  
 from urllib.parse import urlparse, parse_qs  
   
@@ -263,7 +263,7 @@ def parse_int_list(val):
     if not val or str(val).strip() == '':  
         return []  
     try:  
-        return [int(x.strip()) for x in str(val).split(';') if x.strip()]  
+        return [int(x) for x in re.findall(r"-?\d+", str(val)) if int(x) > 0]  
     except:  
         return []  
 
@@ -282,10 +282,7 @@ def parse_tag_requirement(val, mode):
             target = parts[2]  
         if target == '0' or target.strip() == '':  
             return []  
-        try:  
-            return [int(x.strip()) for x in target.split(',') if x.strip()]  
-        except:  
-            return []  
+        return parse_int_list(target)  
     # legacy list format: a;b;c
     return parse_int_list(raw)  
 
@@ -810,7 +807,7 @@ def main():
     ap.add_argument("--ability-xlsx", help="#exgas.abilities.xlsx 路径")    
     ap.add_argument("--cue-xlsx", help="#exgas.cues.xlsx 路径")    
     ap.add_argument("--mmc-xlsx", help="#exgas.mmc.xlsx 路径")    
-    ap.add_argument("--port", type=int, default=8766)    
+    ap.add_argument("--port", type=int, default=8769)    
     ap.add_argument("--no-browser", action="store_true")    
     args = ap.parse_args()    
   

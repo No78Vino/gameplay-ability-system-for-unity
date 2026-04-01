@@ -76,9 +76,13 @@ crashlytics-build.properties
 
 #Test
 /[Aa]ssets/_Test/*
-/Assets/GAS/Editor/WebEditor/__pycache__
-Assets/GAS/Editor/WebEditor/__pycache__.meta
 /Bundles/StandaloneWindows64/MainPackage/Simulate
 Bundles/StandaloneWindows64/MainPackage/Simulate/MainPackage_Simulate.bytes
 Bundles/StandaloneWindows64/MainPackage/Simulate/MainPackage_Simulate.hash
 Bundles/StandaloneWindows64/MainPackage/Simulate/MainPackage_Simulate.json
+
+# Python cache
+__pycache__/
+__pycache__.meta
+*.py[cod]
+*$py.class

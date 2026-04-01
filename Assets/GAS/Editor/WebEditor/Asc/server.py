@@ -6,7 +6,7 @@ EX-GAS ASC预设 网页编辑器 - 本地 HTTP 服务
 用法: python server.py --xlsx "path/to/#exgas.asc.xlsx"  
 """  
   
-import argparse, json, os, sys, threading, webbrowser  
+import argparse, json, os, re, sys, threading, webbrowser  
 from http.server import BaseHTTPRequestHandler, HTTPServer  
 from urllib.parse import urlparse  
   
@@ -38,21 +38,13 @@ COL_ABILITY = 8
   
 # ── Excel 读写 ────────────────────────────────────────────────────────────────  
 def _parse_int_list(cell_val) -> list:  
-    """将分号分隔的整数字符串解析为 int 列表，空值返回 []"""  
+    """容错解析整型列表，支持 ; / , / 混合文本，过滤 <=0。"""  
     if cell_val is None:  
         return []  
     s = str(cell_val).strip()  
     if not s:  
         return []  
-    result = []  
-    for part in s.split(";"):  
-        part = part.strip()  
-        if part:  
-            try:  
-                result.append(int(part))  
-            except ValueError:  
-                pass  
-    return result  
+    return [int(x) for x in re.findall(r"-?\d+", s) if int(x) > 0]  
   
   
 def _join_int_list(lst: list) -> str:  
