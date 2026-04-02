@@ -150,6 +150,8 @@ namespace GAS.Runtime
                 var a = buffer[i].Ability;
                 var abi = EntityHelper.GetComponentData<CAbilityBaseInfo>(a);
                 if (abi.Code != abilityCode) continue;
+                var logic = EntityHelper.GetManagedComponentData<MCAbilityLogic>(a);
+                logic.Logic.SetParam(param);
                 EntityHelper.AddComponent<CAbilityInTryActivate>(a);
                 break;
             }
