@@ -273,7 +273,7 @@ namespace GAS.Editor
             }
         }
 
-        [TitleGroup("编辑配置")] [LabelText("名字")] [BehaviorDesigner.Runtime.Tasks.Tooltip("GE编辑页的mmc选项会用到这个参数，方便在编辑GE时选择对应的Mmc")]
+        [TitleGroup("编辑配置")] [LabelText("名字")] [Tooltip("GE编辑页的mmc选项会用到这个参数，方便在编辑GE时选择对应的Mmc")]
         public string name;
 
         [TitleGroup("编辑配置")] [LabelText("描述")] public string description;
