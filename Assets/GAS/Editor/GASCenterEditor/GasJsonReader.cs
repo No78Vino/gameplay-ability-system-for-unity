@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,13 +10,17 @@ namespace GAS.Editor
 {
     public static class GasJsonReader
     {
-        private static TagInEditor[] _tags;
-        private static AttrInEditor[] _attrs;
-        private static AttrSetInEditor[] _attrSets;
+        private static TagInEditor[] _tags = System.Array.Empty<TagInEditor>();
+        private static AttrInEditor[] _attrs = System.Array.Empty<AttrInEditor>();
+        private static AttrSetInEditor[] _attrSets = System.Array.Empty<AttrSetInEditor>();
+        private static readonly List<string> _loadErrors = new();
 
-        public static Dictionary<int, TagInEditor> TagMap() => _tags.ToDictionary(t => t.id, t => t);
-        public static Dictionary<int, AttrInEditor> AttrMap() => _attrs.ToDictionary(t => t.id, t => t);
-        public static Dictionary<int, AttrSetInEditor> AttrSetMap() => _attrSets.ToDictionary(t => t.id, t => t);
+        public static bool HasLoadErrors => _loadErrors.Count > 0;
+        public static string LoadErrorSummary => string.Join("\n", _loadErrors);
+
+        public static Dictionary<int, TagInEditor> TagMap() => BuildUniqueMap(_tags, "Tag");
+        public static Dictionary<int, AttrInEditor> AttrMap() => BuildUniqueMap(_attrs, "Attribute");
+        public static Dictionary<int, AttrSetInEditor> AttrSetMap() => BuildUniqueMap(_attrSets, "AttributeSet");
         
         static GasJsonReader()
         {
@@ -25,48 +30,145 @@ namespace GAS.Editor
         private static ValueDropdownItem[] _tagChoices;
         public static ValueDropdownItem[] TagChoices()
         {
-            return _tagChoices ??= _tags.Select(t => new ValueDropdownItem(t.name, t.id)).ToArray();
+            return _tagChoices ??= _tags
+                .Where(t => t != null)
+                .Select(t => new ValueDropdownItem(string.IsNullOrWhiteSpace(t.name) ? $"Tag_{t.id}" : t.name, t.id))
+                .ToArray();
         }
         
         public static void ReadAllAndCache()
         {
+            _loadErrors.Clear();
             var settingAsset = GASSettingAsset.Instance;
             var tagFilePath = settingAsset.PathOfJsonTag;
-            if (File.Exists(tagFilePath))
-                ReadTags(File.ReadAllText(tagFilePath));
-            else
-                Debug.LogError($"JSON file not found at {tagFilePath}");
+            _tags = TryReadJsonFile(tagFilePath, "Tag", ReadTags);
 
             var attrFilePath = settingAsset.PathOfJsonAttr;
-            if (File.Exists(attrFilePath))
-                ReadAttributes(File.ReadAllText(attrFilePath));
-            else
-                Debug.LogError($"JSON file not found at {attrFilePath}");
+            _attrs = TryReadJsonFile(attrFilePath, "Attribute", ReadAttributes);
             
             var attrSetFilePath = settingAsset.PathOfJsonAttrSet;
-            if (File.Exists(attrSetFilePath))
-                ReadAttributeSets(File.ReadAllText(attrSetFilePath));
-            else
-                Debug.LogError($"JSON file not found at {attrSetFilePath}");
+            _attrSets = TryReadJsonFile(attrSetFilePath, "AttributeSet", ReadAttributeSets);
         }
 
         public static TagInEditor[] ReadTags(string jsonContent)
         {
-            _tags = JsonConvert.DeserializeObject<TagInEditor[]>(jsonContent);
-            _tagChoices = _tags.Select(t => new ValueDropdownItem(t.name, t.id)).ToArray();
+            _tags = SafeDeserializeArray<TagInEditor>(jsonContent, "Tag");
+            _tagChoices = _tags
+                .Where(t => t != null)
+                .Select(t => new ValueDropdownItem(string.IsNullOrWhiteSpace(t.name) ? $"Tag_{t.id}" : t.name, t.id))
+                .ToArray();
             return _tags;
         }
         
         public static AttrInEditor[] ReadAttributes(string jsonContent)
         {
-            _attrs = JsonConvert.DeserializeObject<AttrInEditor[]>(jsonContent);
+            _attrs = SafeDeserializeArray<AttrInEditor>(jsonContent, "Attribute");
             return _attrs;
         }
         
         public static AttrSetInEditor[] ReadAttributeSets(string jsonContent)
         {
-            _attrSets = JsonConvert.DeserializeObject<AttrSetInEditor[]>(jsonContent);
+            _attrSets = SafeDeserializeArray<AttrSetInEditor>(jsonContent, "AttributeSet");
+            foreach (var attrSet in _attrSets.Where(x => x != null))
+            {
+                attrSet.attribute ??= System.Array.Empty<AttrInSetInEditor>();
+            }
             return _attrSets;
+        }
+
+        private static T[] TryReadJsonFile<T>(string path, string label, System.Func<string, T[]> parser)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                AddLoadError($"{label}: JSON 路径为空。请在 GAS Setting 配置路径。");
+                return System.Array.Empty<T>();
+            }
+
+            if (!File.Exists(path))
+            {
+                AddLoadError($"{label}: JSON 文件不存在 -> {path}");
+                return System.Array.Empty<T>();
+            }
+
+            try
+            {
+                return parser(File.ReadAllText(path)) ?? System.Array.Empty<T>();
+            }
+            catch (System.Exception ex)
+            {
+                AddLoadError($"{label}: 读取失败 -> {path}\n{ex.GetType().Name}: {ex.Message}");
+                return System.Array.Empty<T>();
+            }
+        }
+
+        private static T[] SafeDeserializeArray<T>(string jsonContent, string label)
+        {
+            if (string.IsNullOrWhiteSpace(jsonContent))
+            {
+                AddLoadError($"{label}: JSON 内容为空。");
+                return System.Array.Empty<T>();
+            }
+
+            try
+            {
+                var token = JToken.Parse(jsonContent);
+                if (token.Type == JTokenType.Array)
+                {
+                    return token.ToObject<T[]>() ?? System.Array.Empty<T>();
+                }
+
+                // 兼容部分导表格式：{ "items": [...] } / { "data": [...] } / { "list": [...] }
+                if (token.Type == JTokenType.Object)
+                {
+                    var obj = (JObject)token;
+                    var arrayToken = obj["items"] ?? obj["data"] ?? obj["list"];
+                    if (arrayToken is JArray jArray)
+                    {
+                        return jArray.ToObject<T[]>() ?? System.Array.Empty<T>();
+                    }
+                }
+
+                AddLoadError($"{label}: JSON 根节点不是数组，且未找到 items/data/list。");
+                return System.Array.Empty<T>();
+            }
+            catch (System.Exception ex)
+            {
+                AddLoadError($"{label}: JSON 反序列化失败 -> {ex.GetType().Name}: {ex.Message}");
+                return System.Array.Empty<T>();
+            }
+        }
+
+        private static Dictionary<int, T> BuildUniqueMap<T>(IEnumerable<T> source, string label) where T : class
+        {
+            var result = new Dictionary<int, T>();
+            if (source == null)
+            {
+                return result;
+            }
+
+            var idField = typeof(T).GetField("id");
+            if (idField == null || idField.FieldType != typeof(int))
+            {
+                AddLoadError($"{label}: 类型 {typeof(T).Name} 缺少 int id 字段。");
+                return result;
+            }
+
+            foreach (var item in source.Where(x => x != null))
+            {
+                var id = (int)idField.GetValue(item);
+                if (!result.TryAdd(id, item))
+                {
+                    Debug.LogWarning($"[EX-GAS] {label} 存在重复 id={id}，已保留第一项并忽略后续项。");
+                }
+            }
+
+            return result;
+        }
+
+        private static void AddLoadError(string message)
+        {
+            _loadErrors.Add(message);
+            Debug.LogWarning($"[EX-GAS] {message}");
         }
     }
 

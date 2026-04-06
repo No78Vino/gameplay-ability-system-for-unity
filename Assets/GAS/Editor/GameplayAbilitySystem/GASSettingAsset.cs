@@ -13,6 +13,9 @@ namespace GAS.Editor
         private const int LABEL_WIDTH = 200;
         private const int SHORT_LABEL_WIDTH = 200;
         private static GASSettingAsset _setting;
+        private const string DEFAULT_TABLE_OUTPUT_PATH = "Assets/DataGenerated/Luban/Json/GAS";
+        private const string DEFAULT_TABLE_CODE_OUTPUT_PATH = "Assets/DataGenerated/Luban/CSharp";
+        private const string DEFAULT_CONFIG_PROJECT_PATH = "EX_GAS_Config/ProjectConfigTable/exgas_config";
 
 
         [Title(GASConstDefine.TITLE_SETTING, Bold = true)]
@@ -29,7 +32,7 @@ namespace GAS.Editor
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath(RequireExistingPath = true)]
         [OnValueChanged(nameof(SaveAsset))]
-        public string TableOutpuPath = "";
+        public string TableOutpuPath = DEFAULT_TABLE_OUTPUT_PATH;
                 
         [BoxGroup("A")]
         [LabelText("表class生成路径")]
@@ -39,7 +42,7 @@ namespace GAS.Editor
         [LabelWidth(LABEL_WIDTH)]
         [FolderPath(RequireExistingPath = true)]
         [OnValueChanged(nameof(SaveAsset))]
-        public string TableClassCodeOutpuPath = "";
+        public string TableClassCodeOutpuPath = DEFAULT_TABLE_CODE_OUTPUT_PATH;
         
         [FormerlySerializedAs("TableExportToolPath")]
         [BoxGroup("A")]
@@ -49,7 +52,7 @@ namespace GAS.Editor
         [OnValueChanged(nameof(SaveAsset))]
         [InlineButton(nameof(OutputJsonTables),"导出Json表", ShowIf = nameof(IsShowOutputButton))]
         [InfoBox("配置表工程内没有luban导表工具gen.bat!", InfoMessageType.Error,VisibleIf = nameof(IsGenBatNotExist))]
-        public string ConfigProjectPath = "";
+        public string ConfigProjectPath = DEFAULT_CONFIG_PROJECT_PATH;
         
         #region 生成文件路径一览
 

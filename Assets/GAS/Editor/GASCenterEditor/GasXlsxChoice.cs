@@ -19,113 +19,12 @@ namespace GAS.Editor
         public static void LoadChoices()
         {
             var setting = GASSettingAsset.LoadOrCreate();
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelCue)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _cues = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _cues.Add(new ValueDropdownItem($"[{id}]{name}", id));
-                    row++;
-                }
-            }
-            
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelMmc)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _mmcs = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _mmcs.Add(new ValueDropdownItem($"[{id}]{name}", id));
-                    row++;
-                }
-            }
-            
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelTag)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _tags = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _tags.Add(new ValueDropdownItem($"{name}", id));
-                    row++;
-                }
-            }
-            
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelEffect)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _effects = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _effects.Add(new ValueDropdownItem($"[{id}]{name}", id));
-                    row++;
-                }
-            }
-            
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAbility)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _abilities = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _abilities.Add(new ValueDropdownItem($"[{id}]{name}", id));
-                    row++;
-                }
-            }
-            
-            using (var package = new ExcelPackage(new FileInfo(setting.PathOfExcelAsc)))
-            {
-                var worksheet = package.Workbook.Worksheets[1];
-                // 读取数据行,从第4行开始，第二列为key，即id。
-                // 以第2列是否有值为结束标志
-                _ascs = new List<ValueDropdownItem>();
-                var safeCnt = 99999;
-                var row = 4;
-                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
-                {
-                    safeCnt--;
-                    var id = int.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    var name = worksheet.Cells[row, 3].Value.ToString();
-                    _ascs.Add(new ValueDropdownItem($"[{id}]{name}", id));
-                    row++;
-                }
-            }
+            _cues = LoadChoiceListFromExcel(setting.PathOfExcelCue, "Cue", true);
+            _mmcs = LoadChoiceListFromExcel(setting.PathOfExcelMmc, "MMC", true);
+            _tags = LoadChoiceListFromExcel(setting.PathOfExcelTag, "Tag", false);
+            _effects = LoadChoiceListFromExcel(setting.PathOfExcelEffect, "Effect", true);
+            _abilities = LoadChoiceListFromExcel(setting.PathOfExcelAbility, "Ability", true);
+            _ascs = LoadChoiceListFromExcel(setting.PathOfExcelAsc, "ASC", true);
             
             // _attrs = GASXlsxReader.AttrChoices();
             
@@ -138,11 +37,64 @@ namespace GAS.Editor
             {
                 _attrSets.Add(new ValueDropdownItem(kv.Value.name,kv.Key));
                 _attrs.Add(kv.Key,new List<ValueDropdownItem>());
-                foreach (var attr in kv.Value.attribute)
+                var attributes = kv.Value.attribute ?? System.Array.Empty<AttrInSetInEditor>();
+                foreach (var attr in attributes)
                 {
                     _attrs[kv.Key].Add(new ValueDropdownItem(attr.GetAttrName(),attr.id));
                 }
             }
+        }
+
+        private static List<ValueDropdownItem> LoadChoiceListFromExcel(string path, string label, bool showIdInName)
+        {
+            var result = new List<ValueDropdownItem>();
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                UnityEngine.Debug.LogWarning($"[EX-GAS] {label} Excel 路径为空。");
+                return result;
+            }
+
+            if (!File.Exists(path))
+            {
+                UnityEngine.Debug.LogWarning($"[EX-GAS] {label} Excel 文件不存在: {path}");
+                return result;
+            }
+
+            try
+            {
+                using var package = new ExcelPackage(new FileInfo(path));
+                var worksheet = package.Workbook.Worksheets.Count > 0 ? package.Workbook.Worksheets[1] : null;
+                if (worksheet == null)
+                {
+                    UnityEngine.Debug.LogWarning($"[EX-GAS] {label} Excel 没有可读取工作表: {path}");
+                    return result;
+                }
+
+                var safeCnt = 99999;
+                var row = 4;
+                while (safeCnt > 0 && worksheet.Cells[row, 2].Value != null)
+                {
+                    safeCnt--;
+                    var rawId = worksheet.Cells[row, 2].Value.ToString();
+                    if (!int.TryParse(rawId, out var id))
+                    {
+                        UnityEngine.Debug.LogWarning($"[EX-GAS] {label} 第 {row} 行ID不是整数: {rawId}");
+                        row++;
+                        continue;
+                    }
+
+                    var name = worksheet.Cells[row, 3].Value?.ToString() ?? string.Empty;
+                    var showName = showIdInName ? $"[{id}]{name}" : name;
+                    result.Add(new ValueDropdownItem(showName, id));
+                    row++;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogWarning($"[EX-GAS] 读取 {label} Excel 失败: {path}\n{ex.GetType().Name}: {ex.Message}");
+            }
+
+            return result;
         }
 
         public static List<ValueDropdownItem> Cues()
