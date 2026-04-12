@@ -21,8 +21,21 @@ namespace GAS.Editor
         public GASCenterViewAsc()
         {
             LoadFile();
-            SelectedId = _data.Keys.FirstOrDefault();
-            OnSelectedIdChanged();
+            if (_data != null && _data.Count > 0)
+            {
+                SelectedId = _data.Keys.First();
+                OnSelectedIdChanged();
+            }
+            else
+            {
+                SelectedId = 0;
+                name = string.Empty;
+                description = string.Empty;
+                level = 0;
+                tags = new List<int>();
+                attrSets = new List<int>();
+                abilities = new List<int>();
+            }
         }
         
         [TitleGroup(TITLE_GRP, order: 1)]
@@ -70,6 +83,14 @@ namespace GAS.Editor
         private void RefreshAll()
         {
             LoadFile();
+            if (_data != null && _data.Count > 0)
+            {
+                if (!_data.ContainsKey(SelectedId))
+                {
+                    SelectedId = _data.Keys.First();
+                }
+                OnSelectedIdChanged();
+            }
         }
 
         [HorizontalGroup(TITLE_GRP_H_A)]
@@ -184,7 +205,16 @@ namespace GAS.Editor
 
         private void OnSelectedIdChanged()
         {
-            var selectInfo = _data[SelectedId];
+            if (_data == null || _data.Count == 0 || !_data.TryGetValue(SelectedId, out var selectInfo))
+            {
+                name = string.Empty;
+                description = string.Empty;
+                level = 0;
+                tags = new List<int>();
+                attrSets = new List<int>();
+                abilities = new List<int>();
+                return;
+            }
 
             name = selectInfo.ContainsKey(_headerMap["Name"])
                 ? selectInfo[_headerMap["Name"]]?.ToString()
@@ -254,9 +284,23 @@ namespace GAS.Editor
                 if (!EditorUtility.DisplayDialog("确认删除", $"你确定要删除ASC ID: {SelectedId}吗？", "是", "否"))
                     return;
                 _data.Remove(SelectedId);
+                _idToRowMap.Remove(SelectedId);
                 EditorWindow.focusedWindow.ShowNotification(new GUIContent($"已删除ASC ID: {SelectedId}"));
-                SelectedId = _idToRowMap.Keys.First(); // 重置选择ID
-                OnSelectedIdChanged();
+                if (_data.Count > 0)
+                {
+                    SelectedId = _data.Keys.First(); // 重置选择ID
+                    OnSelectedIdChanged();
+                }
+                else
+                {
+                    SelectedId = 0;
+                    name = string.Empty;
+                    description = string.Empty;
+                    level = 0;
+                    tags = new List<int>();
+                    attrSets = new List<int>();
+                    abilities = new List<int>();
+                }
             }
             else
             {
