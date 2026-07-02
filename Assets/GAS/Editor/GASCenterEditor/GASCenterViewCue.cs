@@ -235,7 +235,8 @@ namespace GAS.Editor
 
         private void OnSelectedIdChanged()
         {
-            if (_data == null || _data.Count == 0 || !_data.TryGetValue(SelectedId, out var selectInfo))
+            if (_headerMap == null || _data == null || _data.Count == 0 ||
+                !_data.TryGetValue(SelectedId, out var selectInfo))
             {
                 name = string.Empty;
                 description = string.Empty;
@@ -246,28 +247,26 @@ namespace GAS.Editor
                 return;
             }
 
-            name = selectInfo.ContainsKey(_headerMap["Name"])
-                ? selectInfo[_headerMap["Name"]]?.ToString()
-                : string.Empty;
+            // 按表头名安全获取单元格字符串：表头列缺失或单元格为空时返回 null，避免 _headerMap[key] 抛异常。
+            string GetCellString(string header)
+            {
+                if (_headerMap.TryGetValue(header, out var col)
+                    && selectInfo.TryGetValue(col, out var value)
+                    && value != null)
+                    return value.ToString();
+                return null;
+            }
 
-            description = selectInfo.ContainsKey(_headerMap["Desc"])
-                ? selectInfo[_headerMap["Desc"]]?.ToString()
-                : string.Empty;
-
-            requiredTags = selectInfo.TryGetValue(_headerMap["RequiredTag"], out var requiredTagValue) && requiredTagValue != null
-                ? ListIntFromString(requiredTagValue.ToString())
-                : new List<int>();
-
-            immunityTags = selectInfo.TryGetValue(_headerMap["ImmunityTag"], out var immunityTagValue) && immunityTagValue != null
-                ? ListIntFromString(immunityTagValue.ToString())
-                : new List<int>();
-
+            name = GetCellString("Name") ?? string.Empty;
+            description = GetCellString("Desc") ?? string.Empty;
+            requiredTags = ListIntFromString(GetCellString("RequiredTag"));
+            immunityTags = ListIntFromString(GetCellString("ImmunityTag"));
             // 加载Cue逻辑
-            type = selectInfo.ContainsKey(_headerMap["CueLogic"])
-                ? selectInfo[_headerMap["CueLogic"]]?.ToString()
-                : string.Empty;
+            type = GetCellString("CueLogic") ?? string.Empty;
 
-            Param = _cueLogicParameter.TryGetValue(SelectedId, out var cueParams) ? EditorCueHelper.CreateCueParameter(type, cueParams) : null;
+            Param = _cueLogicParameter != null && _cueLogicParameter.TryGetValue(SelectedId, out var cueParams)
+                ? EditorCueHelper.CreateCueParameter(type, cueParams)
+                : null;
         }
 
         #endregion
