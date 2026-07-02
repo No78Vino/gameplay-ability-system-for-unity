@@ -254,11 +254,11 @@ namespace GAS.Editor
                 ? selectInfo[_headerMap["Desc"]]?.ToString()
                 : string.Empty;
 
-            requiredTags = selectInfo.TryGetValue(_headerMap["RequiredTag"], out var requiredTagValue)
+            requiredTags = selectInfo.TryGetValue(_headerMap["RequiredTag"], out var requiredTagValue) && requiredTagValue != null
                 ? ListIntFromString(requiredTagValue.ToString())
                 : new List<int>();
 
-            immunityTags = selectInfo.TryGetValue(_headerMap["ImmunityTag"], out var immunityTagValue)
+            immunityTags = selectInfo.TryGetValue(_headerMap["ImmunityTag"], out var immunityTagValue) && immunityTagValue != null
                 ? ListIntFromString(immunityTagValue.ToString())
                 : new List<int>();
 
