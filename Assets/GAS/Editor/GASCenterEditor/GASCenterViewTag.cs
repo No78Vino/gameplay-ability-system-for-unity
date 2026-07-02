@@ -77,18 +77,28 @@ namespace GAS.Editor
 
         private void BuildMenuTree()
         {
+            var tree = new OdinMenuTree();
+            tree.Config.AutoScrollOnSelectionChanged = true;
+            tree.Config.DrawScrollView = true;
+            tree.Config.AutoHandleKeyboardNavigation = true;
+            tree.Config.DrawSearchToolbar = true;
+            tree.Selection.SelectionChanged += OnSelectionChanged;
+
             var tagJsonFilePath = _settingAsset.PathOfJsonTag;
             // 检查文件是否存在
             if (!File.Exists(tagJsonFilePath))
             {
-                EditorUtility.DisplayDialog("错误", $"Tag JSON文件未找到: {tagJsonFilePath}", "确定");
-                Debug.LogError($"Tag JSON file not found at {tagJsonFilePath}");
+                // 文件不存在时也要构建（空）菜单树并赋值给 _menuTree，否则 _menuTree 会一直为 null，
+                // 而 DrawMenuTreeArea 在 OnInspectorGUI 中每帧检测到 null 就会重新调用本方法，
+                // 从而反复弹窗/打印日志形成死循环。这里改为只记录一次警告，并在面板中以 HelpBox 提示。
+                Debug.LogWarning($"[EX-GAS] Tag JSON文件未找到，将以空列表显示: {tagJsonFilePath}");
+                _tags = new TagInEditor[0];
+                _menuTree = tree;
                 return;
             }
 
             var tagJsonText = File.ReadAllText(tagJsonFilePath);
             _tags = GasJsonReader.ReadTags(tagJsonText);
-            var tree = new OdinMenuTree();
             foreach (var tag in _tags)
             {
                 var tagMenu = tag.name;
@@ -98,12 +108,6 @@ namespace GAS.Editor
                 tree.Add(tagMenu, so);
             }
 
-            tree.Config.AutoScrollOnSelectionChanged = true;
-            tree.Config.DrawScrollView = true;
-            tree.Config.AutoHandleKeyboardNavigation = true;
-            tree.Config.DrawSearchToolbar = true;
-            tree.Config.AutoScrollOnSelectionChanged = true;
-            tree.Selection.SelectionChanged += OnSelectionChanged;
             _menuTree = tree;
         }
 
@@ -128,6 +132,9 @@ namespace GAS.Editor
             // 使用固定宽度，但保留最小宽度限制
             EditorGUILayout.BeginVertical(GUILayout.Width(_splitterPosition), GUILayout.MinWidth(150));
             if (_menuTree == null) BuildMenuTree();
+            if (_tags == null || _tags.Length == 0)
+                EditorGUILayout.HelpBox("Tag JSON文件未找到或为空，请先生成配置表（点击上方“导出更新Json表”），再点击“刷新”。",
+                    MessageType.Warning);
             _menuTree?.DrawMenuTree();
             EditorGUILayout.EndVertical();
         }
