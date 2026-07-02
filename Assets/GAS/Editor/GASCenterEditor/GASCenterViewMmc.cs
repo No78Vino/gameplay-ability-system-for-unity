@@ -110,6 +110,15 @@ namespace GAS.Editor
         private void LoadFile()
         {
             var excelFilePath = _settingAsset.PathOfExcelMmc;
+            if (!File.Exists(excelFilePath))
+            {
+                Debug.LogWarning($"[EX-GAS] MMC配置Excel文件不存在，将以空数据加载: {excelFilePath}");
+                _headerMap = new Dictionary<string, int>();
+                _data = new Dictionary<int, Dictionary<int, object>>();
+                _mmcParameter = new Dictionary<int, List<object>>();
+                _idToRowMap = new Dictionary<int, int>();
+                return;
+            }
             _xlsxFileInfo = new FileInfo(excelFilePath);
             using (var package = new ExcelPackage(_xlsxFileInfo))
             {
