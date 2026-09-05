@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace EXProceduralMachine
 {
+    /// <summary>
+    ///     可视化辅助：在场景视图中绘制一组线段（程序化动画调试用）。
+    /// </summary>
     public class XVisualLine : MonoBehaviour
     {
         [Serializable]
@@ -16,33 +19,22 @@ namespace EXProceduralMachine
 
         public bool showGizmo = true;
         public List<XVisualLineData> lines = new List<XVisualLineData>();
-        
-        #if UNITY_EDITOR
+
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            // 如果不显示Gizmo则直接返回
-            if (!showGizmo) return;
+            if (!showGizmo)
+                return;
 
             foreach (var data in lines)
             {
-                // 设置颜色
-                var c = data.gizmoColor;
-                c.a = 0.5f;
-                Gizmos.color = c;
-                // 划线
-                Gizmos.DrawLine(data.pointA,data.pointB);
-                Gizmos.DrawCube(data.pointA,Vector3.one*0.2f);
-                Gizmos.DrawCube(data.pointB,Vector3.one*0.2f);
+                var color = data.gizmoColor;
+                color.a = 0.5f;
+                Gizmos.color = color;
+                Gizmos.DrawLine(data.pointA, data.pointB);
+                Gizmos.DrawCube(data.pointA, Vector3.one * 0.2f);
+                Gizmos.DrawCube(data.pointB, Vector3.one * 0.2f);
             }
-        }
-
-        // 避免在构建版本中产生警告
-        private void Start()
-        {
-        }
-
-        private void Update()
-        {
         }
 #endif
     }

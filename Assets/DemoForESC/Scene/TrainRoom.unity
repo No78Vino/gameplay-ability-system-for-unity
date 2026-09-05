@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -228,11 +228,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -28.9, y: 44.63, z: 0}
---- !u!4 &68338934 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4779907921344940841, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-  m_PrefabInstance: {fileID: 4896897589305186151}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &532035407
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,11 +400,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!4 &553059066 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 805229388763636627, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-  m_PrefabInstance: {fileID: 4896897589305186151}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &554673869
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,11 +432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afc3ef39a64f492d95059e758a148f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rhythmSystem: {fileID: 680696085}
-  controlledTransform: {fileID: 554673874}
-  scaleRange: {x: 0.1, y: 0.1, z: 0.1}
-  positionRange: {x: 0, y: 0, z: 0}
-  rotationRange: {x: 0, y: 0, z: 0}
 --- !u!65 &554673871
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -632,17 +617,12 @@ Transform:
   m_GameObject: {fileID: 606859869}
   serializedVersion: 2
   m_LocalRotation: {x: -0.23084751, y: 0.36768687, z: 0.094748065, w: 0.89584523}
-  m_LocalPosition: {x: -0.62, y: -0.28, z: 8.91}
+  m_LocalPosition: {x: 10.02, y: -0.28, z: 8.91}
   m_LocalScale: {x: 17.26, y: 3.77, z: 15.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -28.9, y: 44.63, z: 0}
---- !u!4 &623845609 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1499835809795273696, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-  m_PrefabInstance: {fileID: 4896897589305186151}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &680696084
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,10 +652,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d84d88cbb5340fa915b84508e811684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cycles: []
-  blendMode: 0
-  rawValue: 0
-  timeScale: 1
 --- !u!4 &680696086
 Transform:
   m_ObjectHideFlags: 0
@@ -691,11 +667,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1029115519 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8343799650137694258, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
-  m_PrefabInstance: {fileID: 4896897589305186151}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1037607371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,12 +1030,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffe7f3fc0704ad7bf1f3b0abca8d27e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showGizmo: 1
-  shape: 0
-  gizmoColor: {r: 0.015686274, g: 0.91710067, b: 1, a: 0.37254903}
-  size: {x: 2.21, y: 2.31, z: 2.34}
-  radius: 0.5
-  syncRotation: 1
 --- !u!114 &1379354662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1077,13 +1042,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1e510f7c1d94ff9b17a03a1815e1fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 1937078007}
-  Targets:
-  - {fileID: 1029115519}
-  - {fileID: 623845609}
-  - {fileID: 68338934}
-  - {fileID: 553059066}
-  offset: 1.5
+--- !u!1001 &1519354144
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1000000, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_Name
+      value: SpiderMachine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -27.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000001, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c, type: 3}
 --- !u!4 &1937078007 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1851871172954606914, guid: d59493e6e44c27344a6e537171e6aecb, type: 3}
@@ -1255,3 +1270,4 @@ SceneRoots:
   - {fileID: 2082370295}
   - {fileID: 554673874}
   - {fileID: 680696086}
+  - {fileID: 1519354144}

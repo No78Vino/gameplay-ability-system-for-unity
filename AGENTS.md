@@ -41,3 +41,7 @@ Do not commit generated caches/build folders like `Library/`, `Temp/`, `Logs/`, 
   - What changed and why.
   - Affected modules/paths (for example `Assets/GAS/Runtime/Effect`).
   - Validation evidence (test run, editor verification, or screenshots for tooling/UI changes).
+
+## Project Memory (项目记忆)
+- **Read `PROJECT_MEMORY.md` first** before making changes: it is the on-boarding memory for AI agents covering the ECS system topology, ASC/Spec facade pattern, ECS naming conventions (C*/B*/S*/MC*/Conf*), the Excel → Luban → JSON → codegen config pipeline, the Bean mapping spec (`BeanMappingSpec.md`), editor tooling (GASCenter / WebEditor / GASWatcher), known issues, and working conventions.
+- Authoritative docs: `README.md` (system design & config tables), `BeanMappingSpec.md` (Bean mapping), `DemoFrameworkIntroduction.md` (Demo framework). Keep `PROJECT_MEMORY.md` in sync when the architecture or conventions change.
