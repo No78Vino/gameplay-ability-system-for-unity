@@ -55,6 +55,9 @@ MonoBehaviour:
   drag: 1.8
   hoverHeight: 2
   heightRestoreSpeed: 2
+  hoverBobOn: 1
+  hoverBobAmplitude: 0.08
+  hoverBobFrequency: 1.2
   bankPitch: 18
   bankRoll: 14
   turnBankWeight: 0.6

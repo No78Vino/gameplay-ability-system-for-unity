@@ -43,6 +43,18 @@ namespace EXProceduralMachine
         [LabelText("高度恢复速度")]
         public float heightRestoreSpeed = 2f;
 
+        [LabelText("启用漂浮浮动")]
+        [Tooltip("悬停漂浮时是否上下轻微起伏")]
+        public bool hoverBobOn = true;
+
+        [LabelText("漂浮浮动幅度(米)")]
+        [Tooltip("悬停漂浮时上下轻微浮动的幅度（直接叠加在高度上）")]
+        public float hoverBobAmplitude = 0.08f;
+
+        [LabelText("漂浮浮动频率(Hz)")]
+        [Tooltip("悬停漂浮时上下浮动的频率")]
+        public float hoverBobFrequency = 1.2f;
+
         [Title("Banking 姿态")]
         [LabelText("前倾幅度(度)")]
         public float bankPitch = 18f;
@@ -109,8 +121,11 @@ namespace EXProceduralMachine
             // 3. 位置积分
             Vector3 newPos = transform.position + _velocity * dt;
 
-            // 4. 高度保持（柔和恢复悬停高度）
-            newPos.y = Mathf.Lerp(newPos.y, _heightTarget, 1f - Mathf.Exp(-heightRestoreSpeed * dt));
+            // 4. 高度保持（柔和恢复悬停高度）+ 漂浮浮动（直接叠加在高度上，仅经二级系统柔化）
+            float bob = 0f;
+            if (hoverBobOn)
+                bob = Mathf.Sin(Time.time * hoverBobFrequency * Mathf.PI * 2f) * hoverBobAmplitude;
+            newPos.y = Mathf.Lerp(newPos.y, _heightTarget, 1f - Mathf.Exp(-heightRestoreSpeed * dt)) + bob;
             transform.position = newPos;
 
             // 5. 偏航
@@ -146,9 +161,10 @@ namespace EXProceduralMachine
             Gizmos.color = new Color(0.3f, 0.6f, 1f, 0.9f);
             Gizmos.DrawLine(transform.position, transform.position + _velocity);
 
-            // 目标高度
+            // 目标高度（含漂浮浮动）
             Gizmos.color = new Color(1f, 1f, 0f, 0.6f);
-            Vector3 hp = new Vector3(transform.position.x, _heightTarget, transform.position.z);
+            float bob = hoverBobOn ? Mathf.Sin(Time.time * hoverBobFrequency * Mathf.PI * 2f) * hoverBobAmplitude : 0f;
+            Vector3 hp = new Vector3(transform.position.x, _heightTarget + bob, transform.position.z);
             Gizmos.DrawLine(transform.position, hp);
             Gizmos.DrawWireSphere(hp, 0.15f);
 

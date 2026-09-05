@@ -73,6 +73,8 @@ Cube/Cylinder 网格 + 默认材质，零外部资源）。
   - 实例② `Rotation` 替身=`attitude` → **回弹**：倾斜过冲后回正弹跳。
 - **空气摩擦阻力**：`DroneFlyDriver.drag` 对速度做指数衰减（撤油门后滑行减速）。
 - **Banking 姿态**：前进低头、后退抬头、侧移/急转侧倾（压弯），写入 `attitude` 由次级运动平滑。
+- **悬停漂浮**：悬停时上下轻微浮动（`hoverBobOn` / `hoverBobAmplitude` / `hoverBobFrequency`，
+  默认 8cm @ 1.2Hz），直接叠加在高度上、经次级运动柔化，模拟气流托举起伏。
 - **使用**：拖入场景即**自动巡航**（环形 + 速度脉冲演示惯性/回弹）；关闭 `autoFly`
   后 W/S 前后、A/D 转向、Space/Ctrl 升降。Scene 中开启 `gizmosOn` 可看到
   逻辑位置框、速度向量、目标高度与姿态方向线。

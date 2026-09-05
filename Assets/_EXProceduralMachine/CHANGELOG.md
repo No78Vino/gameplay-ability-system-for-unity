@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [2.4.2] - 无人机新增悬停漂浮浮动
+
+### 新增（Features）
+
+- **悬停漂浮** `DroneFlyDriver`：悬停时上下轻微浮动（默认幅度 0.08m / 频率 1.2Hz），
+  可直接开关（`hoverBobOn`）；浮动直接叠加在高度上、只经 Body 二级系统柔化一次，
+  避免被高度恢复低通二次衰减导致效果过弱。
+
+### 验证
+
+- Roslyn 双重语义编译：编辑器语义 24 源 EXIT 0；Player 语义 22 源 EXIT 0。
+- prefab 序列化新增字段 `hoverBobOn` / `hoverBobAmplitude` / `hoverBobFrequency`。
+
+---
+
 ## [2.4.1] - 修复无人机方向切换时的欧拉角回绕翻转
 
 ### 修复（Fixes）

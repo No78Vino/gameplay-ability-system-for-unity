@@ -229,6 +229,7 @@ Inspector 中勾选组件「绘制值变化示例曲线」可预览任意实例�
 
 | 版本 | 内容 |
 |---|---|
+| 2.4.2 | 无人机新增悬停漂浮浮动（hoverBobOn/Amplitude/Frequency，默认 8cm @ 1.2Hz） |
 | 2.4.1 | 修复无人机方向切换欧拉角回绕翻转（Rotation 输入 WrapEuler 规范化） |
 | 2.4.0 | 次级运动系统内建化（SecondaryMotion/）；新增 DroneMachine 模板 + DroneFlyDriver；README/CHANGELOG/设计文档更新 |
 | — | meta BOM 修复（无 BOM UTF-8 重写 5 个 meta，GUID 不变） |
