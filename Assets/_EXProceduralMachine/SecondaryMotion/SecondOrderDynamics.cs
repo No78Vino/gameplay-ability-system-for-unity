@@ -56,6 +56,45 @@ namespace EXProceduralMachine
             _outputVelocity = Vector3.zero;
         }
 
+        /// <summary>
+        /// 仅更新动力学参数，不重置状态（运行时动态调参不会引起输出突变）。
+        /// 与 <see cref="Set"/>（参数+重置）区分。
+        /// </summary>
+        public void Configure(float frequency, float damping, float scale)
+        {
+            _frequency = frequency;
+            _damping = damping;
+            _scale = scale;
+            UpdateFactors();
+        }
+
+        /// <summary>当前输出值（用于外部查询/调试）</summary>
+        public Vector3 Output => _currentOutput;
+
+        /// <summary>当前输出速度（用于稳态判定/调试）</summary>
+        public Vector3 OutputVelocity => _outputVelocity;
+
+        /// <summary>当前输入目标（上一帧输入，用于稳态判定）</summary>
+        public Vector3 Target => _previousInput;
+
+        /// <summary>
+        /// 判定系统是否已收敛到目标附近（位置差与速度均小于容差）
+        /// </summary>
+        public bool IsSettled(float positionTolerance, float velocityTolerance)
+        {
+            float dp = (_currentOutput - _previousInput).sqrMagnitude;
+            float dv = _outputVelocity.sqrMagnitude;
+            return dp < positionTolerance * positionTolerance
+                   && dv < velocityTolerance * velocityTolerance;
+        }
+
+        private static bool IsNonFinite(float v) => float.IsNaN(v) || float.IsInfinity(v);
+
+        private static bool HasNonFinite(Vector3 v)
+        {
+            return IsNonFinite(v.x) || IsNonFinite(v.y) || IsNonFinite(v.z);
+        }
+
         public void UpdateFactors()
         {
             // 计算动力学常数（与原代码一致）
@@ -94,8 +133,18 @@ namespace EXProceduralMachine
         /// <returns>平滑后的输出值（y）</returns>
         public Vector3 Update(float deltaTime, Vector3 targetInput, Vector3? targetVelocity = null)
         {
+            // 除零/非法时间步防护：避免 NaN 污染状态后无法自愈
+            if (deltaTime <= 0f || IsNonFinite(deltaTime))
+                return _currentOutput;
+
+            // 输入含 NaN/Infinity 时跳过本帧更新，防止状态被污染
+            if (HasNonFinite(targetInput) || (targetVelocity.HasValue && HasNonFinite(targetVelocity.Value)))
+                return _currentOutput;
+
             // 1. 估计目标输入速度（若未提供）
             Vector3 estimatedVelocity = targetVelocity ?? (targetInput - _previousInput) / deltaTime;
+            if (HasNonFinite(estimatedVelocity))
+                estimatedVelocity = Vector3.zero;
             _previousInput = targetInput; // 更新输入历史
 
             // 2. 计算稳定的k2值（k2_stable）：核心改进点

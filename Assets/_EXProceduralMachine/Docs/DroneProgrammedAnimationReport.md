@@ -229,6 +229,8 @@ Inspector 中勾选组件「绘制值变化示例曲线」可预览任意实例�
 
 | 版本 | 内容 |
 |---|---|
+| 2.6.0 | 程序化动画工具箱浏览器：三层体系（工具/预制菜/玩具）+ 搜索筛选 + 预设系统 + 清单导出 JSON（网页端数据源） |
+| 2.5.0 | SecondaryMotion 增强：NaN 防护、启动/唤醒重置、时间模式、QuaternionRotation、Custom 委托、IsSettled、运行时 Gizmos、Tick 重构 |
 | 2.4.2 | 无人机新增悬停漂浮浮动（hoverBobOn/Amplitude/Frequency，默认 8cm @ 1.2Hz） |
 | 2.4.1 | 修复无人机方向切换欧拉角回绕翻转（Rotation 输入 WrapEuler 规范化） |
 | 2.4.0 | 次级运动系统内建化（SecondaryMotion/）；新增 DroneMachine 模板 + DroneFlyDriver；README/CHANGELOG/设计文档更新 |

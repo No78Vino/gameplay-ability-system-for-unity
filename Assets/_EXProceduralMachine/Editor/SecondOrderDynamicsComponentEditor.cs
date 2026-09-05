@@ -28,7 +28,7 @@ namespace EXProceduralMachine.Editor
         private readonly float _totalTime = 3f;
 
         private SecondOrderDynamicInstance _drawInst;
-        private void OnEnable()
+        protected override void OnEnable()
         {
             _target = (SecondOrderDynamicsComponent)target;
             _pointCount = Mathf.RoundToInt(_totalTime / _timeStep) + 1;

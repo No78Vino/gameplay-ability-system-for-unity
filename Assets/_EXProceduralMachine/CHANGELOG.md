@@ -1,5 +1,89 @@
 # CHANGELOG
 
+## [2.6.0] - 程序化动画工具箱浏览器（三层体系 + 预设 + 网页端数据源）
+
+### 新增（Features）
+
+- **工具箱浏览器升级**：`EXMachTemplateWindow` 重构为三层体系浏览器：
+  - 🧰 **工具**（基础系统）：`ToolboxCatalog.BuildTools()` 内置定义——次级运动、呼吸/节奏、命中枪械、可视化辅助；
+    点「实例化」创建空物体并挂载组件（默认参数开箱即用）；
+  - 🥘 **预制菜**（模板）：自动扫描 `Examples/`，蜘蛛/无人机模板，实例化即用；
+  - 🧸 **玩具**（Gameplay 小系统）：预留分类（震屏/受击抖动/相机跟随规划中）。
+- **搜索 + 双重筛选**：🔍 关键词搜索（名称/描述/组件/路径）+ 分类筛选 + 家族筛选
+  （跟随/摆动/回弹/步态/呼吸/调试，对齐全家调参体系）。
+- **预设系统**：`ToolboxPreset`（参数覆写集合）+ `ToolboxParamOverride`（组件路径/类型/字段/值）。
+  无人机模板带 3 个预设：「轻盈巡航（默认）/ 重载手感 / 轻快跟手」，实例化时一键应用
+  （值解析支持 float/int/bool/Vector3/enum/string）。
+- **清单导出（网页端数据源）**：底部按钮导出 `toolbox-manifest.json`——
+  DTO 化（分类/家族为字符串），网页端零解析成本即可消费；同时支持从 JSON 回读（`ImportJson`）。
+
+### 架构（Architecture）
+
+- 新增 `Editor/Toolbox/`：
+  - `ToolboxModels.cs`：数据模型（Item/Preset/ParamOverride/Manifest + 导出 DTO）；
+  - `ToolboxCatalog.cs`：目录构建（内置工具 + 预制菜扫描 + 预设注入）、JSON 导入导出、
+    实例化辅助（Tool 建物体 / Kit 实例化 + 预设覆写）、值类型解析器。
+- 菜单更新：`Tools/EXMach/程序化动画模板列表` → **`Tools/EXMach/程序化动画工具箱`**。
+
+### 修复（Fixes）
+
+- `SecondOrderDynamicsComponentEditor.OnEnable` 隐藏基类虚方法 → 改为 `override`（消除 CS0114 警告）。
+
+### 验证
+
+- Roslyn 双重语义编译：编辑器语义 26 源 EXIT 0；Player 语义 22 源 EXIT 0。
+- 预设覆写链路自检：Drone 预设覆写 `DroneFlyDriver.drag/hoverBobAmplitude/hoverBobFrequency`（根节点组件，路径解析正确）。
+
+---
+
+## [2.5.0] - SecondaryMotion 稳健性 + 能力增强（P0/P1/P2）
+
+### 修复（Fixes）—— P0 稳健性
+
+- **NaN/Infinity 防护**（`SecondOrderDynamics.Update`）：`deltaTime<=0` 或输入含非有限值时跳过本帧更新，
+  状态一旦被 NaN 污染将无法自愈——从根上阻断；
+- **启动突跳消除**：组件 `Awake` 时默认用**自身 Transform 当前值**初始化动力学状态
+  （`initializeFromCurrentTransform`），不会再出现"从原点飞到目标"的首帧瞬移；
+- **唤醒突跳消除**：组件 `OnEnable` 时重置状态（`resetOnEnable`），物体禁用期间状态冻结导致的
+  重新启用大幅位移问题修复；
+- **参数脱节静默错误**：组件 `Awake` 时对所有实例执行一次参数同步
+  （`UpdateDynamicsFactors`），即使未勾 `autoUpdate`，反序列化后 Inspector 参数与内核强制一致。
+
+### 新增（Features）—— P1 能力
+
+- **时间模式 `timeMode`**：`ScaledDeltaTime`（默认）/ `UnscaledDeltaTime`（暂停时惯性延续）/
+  `FixedDeltaTime`（物理帧同步，走 `FixedUpdate`）；
+- **`QuaternionRotation` 旋转模式**：四元数对数空间二阶系统（`QuaternionLog/Exp`），
+  避免万向锁与欧拉角非最短路径；逐轴遮罩在对数空间生效；适合小幅多轴旋转（大角度连续偏航仍建议欧拉模式）；
+- **`Custom` 类型实现**：`customInput`（`Func<Vector3>`）输入 + `customOutput`
+  （`Action<Vector3, Transform>`）回写委托（`[NonSerialized]`），纯代码驱动场景可用。
+- **`IsSettled` 稳态判定**：内核级 `IsSettled(posTol, velTol)` + 实例便捷方法，
+  便于外部系统感知"回弹完成"时机。
+
+### 架构优化（Refactor）—— P2
+
+- **Update 重构**：替身/非替身 × 类型 的巨型 switch 拆分为 `TickInstance` → 按类型分派
+  （`TickPosition/TickRotationEuler/TickRotationQuaternion/TickScale/TickCustom`），消除重复；
+- **运行时 Gizmos**：组件 `gizmosOn` 在 Scene 中绘制替身目标点（绿）与输出点连线（黄）、
+  旋转朝向线（蓝），运行时调试不再依赖 Inspector 曲线；
+- **API 明确**：`Configure`（仅更新参数不重置状态）与 `Set`（参数+重置）职责分离。
+
+### 兼容性
+
+- `SecondOrderDynamicInstance` 字段名**保持 `avator` 原名**（未做破坏性改名），
+  DroneMachine.prefab 序列化**完全兼容**，无需改动；
+- `SecondOrderDynamicValueType` 新增 `QuaternionRotation`（值 4，追加在末尾），
+  已有枚举值的序列化 int（0/1/2/3）不受影响；
+- 组件新增字段（timeMode/resetOnEnable/initializeFromCurrentTransform/gizmosOn）prefab 中缺失时
+  全部走默认值，行为与 2.4.x 一致。
+
+### 验证
+
+- Roslyn 双重语义编译：编辑器语义 24 源 EXIT 0；Player 语义 22 源 EXIT 0。
+- prefab 引用校验：两个脚本 GUID 正确、实例字段匹配、`m_Children` 无两行式。
+
+---
+
 ## [2.4.2] - 无人机新增悬停漂浮浮动
 
 ### 新增（Features）

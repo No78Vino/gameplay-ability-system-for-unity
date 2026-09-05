@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -8,35 +7,43 @@ using UnityEngine;
 namespace EXProceduralMachine.Editor
 {
     /// <summary>
-    ///     EXMach 程序化动画模板集中窗口。
-    ///     扫描模块 Examples 目录下的动画模板预制体，列出名称、挂载组件与预览缩略图，
-    ///     支持「定位资产」与「一键实例化到当前场景」。
-    ///     后续新增模板（轮式机械、双足/四足等）放入扫描目录后点「刷新」即可自动收录。
+    /// EXMach 程序化动画工具箱浏览器（三层体系）：
+    ///   🧰 工具（Tool）  —— 基础系统组件，点一下创建空物体并挂载
+    ///   🥘 预制菜（Kit） —— 模板预制体，实例化即用（可选预设一键改手感）
+    ///   🧸 玩具（Toy）  —— gameplay 小系统（预留分类）
+    /// 支持搜索、分类/家族筛选、预设应用、清单导出（JSON，网页端数据源）。
     /// </summary>
     public class EXMachTemplateWindow : EditorWindow
     {
-        [SerializeField]
-        private string scanFolder = "Assets/_EXProceduralMachine/Examples";
+        private const string ExportDefaultPath = "Assets/_EXProceduralMachine/Docs/toolbox-manifest.json";
 
-        private readonly List<TemplateEntry> _templates = new List<TemplateEntry>();
+        // ==================== 状态 ====================
+
+        private ToolboxManifest _manifest;
+        private string _search = "";
+        private ToolboxCategory? _categoryFilter;
+        private ToolboxFamily? _familyFilter;
+        private ToolboxItem _selected;
+        private ToolboxPreset _selectedPreset;
         private Vector2 _scroll;
 
-        [MenuItem("Tools/EXMach/程序化动画模板列表")]
+        [MenuItem("Tools/EXMach/程序化动画工具箱")]
         public static void Open()
         {
-            var window = GetWindow<EXMachTemplateWindow>("EXMach 程序化动画模板");
-            window.minSize = new Vector2(460, 340);
+            var window = GetWindow<EXMachTemplateWindow>("EXMach 程序化动画工具箱");
+            window.minSize = new Vector2(560, 400);
             window.Show();
         }
 
         private void OnEnable()
         {
-            Refresh();
+            _manifest = ToolboxCatalog.BuildManifest();
         }
 
         private void OnGUI()
         {
             DrawHeader();
+            DrawFilterBar();
             DrawList();
             DrawFooter();
         }
@@ -46,20 +53,73 @@ namespace EXProceduralMachine.Editor
         private void DrawHeader()
         {
             EditorGUILayout.BeginVertical("box");
-            EditorGUILayout.LabelField("程序化动画模板库", EditorStyles.boldLabel);
-
             using (new EditorGUILayout.HorizontalScope())
             {
-                EditorGUILayout.LabelField("扫描目录", GUILayout.Width(64));
-                scanFolder = EditorGUILayout.TextField(scanFolder);
+                EditorGUILayout.LabelField("🧰 EXMach 程序化动画工具箱", EditorStyles.boldLabel);
+                GUILayout.FlexibleSpace();
                 if (GUILayout.Button("刷新", GUILayout.Width(56)))
-                    Refresh();
+                    _manifest = ToolboxCatalog.BuildManifest();
+            }
+
+            // 搜索框
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("🔍 搜索", GUILayout.Width(44));
+                _search = EditorGUILayout.TextField(_search);
+                if (GUILayout.Button("清除", GUILayout.Width(52)))
+                    _search = "";
             }
 
             EditorGUILayout.HelpBox(
-                $"已发现 {_templates.Count} 个程序化动画模板。点击模板名可定位资产，「实例化到场景」把模板放入当前场景。",
+                $"共 {_manifest.items.Count} 个条目：\n" +
+                $"🧰 工具 {CountOf(ToolboxCategory.Tool)} 个 ｜ 🥘 预制菜 {CountOf(ToolboxCategory.Kit)} 个 ｜ 🧸 玩具 {CountOf(ToolboxCategory.Toy)} 个\n" +
+                "点击条目名可定位资产；「实例化」一键放入当前场景（工具=创建空物体挂载，预制菜=实例化模板）。",
                 MessageType.Info);
             EditorGUILayout.EndVertical();
+        }
+
+        // ==================== 筛选栏 ====================
+
+        private void DrawFilterBar()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                DrawCategoryButton(null, "全部");
+                DrawCategoryButton(ToolboxCategory.Tool, "🧰 工具");
+                DrawCategoryButton(ToolboxCategory.Kit, "🥘 预制菜");
+                DrawCategoryButton(ToolboxCategory.Toy, "🧸 玩具");
+
+                GUILayout.FlexibleSpace();
+
+                EditorGUILayout.LabelField("家族", GUILayout.Width(36));
+                var familyNames = new[] { "全部", "跟随", "摆动", "回弹", "步态", "呼吸", "调试" };
+                var familyValues = new ToolboxFamily?[]
+                {
+                    null, ToolboxFamily.Follow, ToolboxFamily.Sway, ToolboxFamily.Bounce,
+                    ToolboxFamily.Locomotion, ToolboxFamily.Breath, ToolboxFamily.Debug
+                };
+                var currentIndex = System.Array.IndexOf(familyValues, _familyFilter);
+                if (currentIndex < 0) currentIndex = 0;
+                var newIndex = EditorGUILayout.Popup(currentIndex, familyNames, GUILayout.Width(72));
+                if (newIndex != currentIndex)
+                {
+                    _familyFilter = familyValues[newIndex];
+                    _selected = null;
+                    _selectedPreset = null;
+                }
+            }
+        }
+
+        private void DrawCategoryButton(ToolboxCategory? cat, string label)
+        {
+            var active = _categoryFilter == cat;
+            var style = active ? "SelectionRect" : "Button";
+            if (GUILayout.Button(label, style, GUILayout.Width(80)))
+            {
+                _categoryFilter = active ? null : cat;
+                _selected = null;
+                _selectedPreset = null;
+            }
         }
 
         // ==================== 列表 ====================
@@ -68,30 +128,119 @@ namespace EXProceduralMachine.Editor
         {
             _scroll = EditorGUILayout.BeginScrollView(_scroll);
 
-            if (_templates.Count == 0)
+            var visible = FilteredItems().ToList();
+
+            if (visible.Count == 0)
             {
                 EditorGUILayout.HelpBox(
-                    "未找到模板预制体。\n\n请确认：\n1. 扫描目录存在且包含 .prefab 文件\n2. 模板预制体已正确创建（例如 Examples/SpiderMachine.prefab）\n3. 点击「刷新」重新扫描",
+                    _search.Length > 0 || _categoryFilter != null || _familyFilter != null
+                        ? "没有符合筛选条件的条目。试试清除搜索/筛选。"
+                        : "工具箱为空。\n\n请确认：\n1. Examples/ 目录存在模板预制体\n2. 内置工具定义有效\n3. 点击「刷新」重建清单",
                     MessageType.Warning);
             }
 
-            foreach (var entry in _templates)
-            {
-                DrawEntry(entry);
-                GUILayout.Space(4);
-            }
+            // 按分类分组展示
+            DrawGroup(ToolboxCategory.Tool, "🧰 工具（基础系统）", visible);
+            DrawGroup(ToolboxCategory.Kit, "🥘 预制菜（模板）", visible);
+            DrawGroup(ToolboxCategory.Toy, "🧸 玩具（Gameplay 小系统）", visible);
 
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawEntry(TemplateEntry entry)
+        private void DrawGroup(ToolboxCategory cat, string groupTitle, List<ToolboxItem> visible)
         {
-            EditorGUILayout.BeginVertical("box");
+            var group = visible.Where(i => i.category == cat).ToList();
+            if (group.Count == 0)
+            {
+                if (_categoryFilter == null || _categoryFilter == cat)
+                {
+                    EditorGUILayout.LabelField(groupTitle, EditorStyles.boldLabel);
+                    EditorGUILayout.HelpBox(
+                        cat == ToolboxCategory.Toy
+                            ? "玩具分类即将推出：震屏、受击抖动、相机跟随、武器摆动等 gameplay 小系统。"
+                            : "该分类暂无条目。",
+                        MessageType.Info);
+                    GUILayout.Space(6);
+                }
+                return;
+            }
+
+            EditorGUILayout.LabelField($"{groupTitle}（{group.Count}）", EditorStyles.boldLabel);
+            foreach (var item in group)
+                DrawEntry(item);
+            GUILayout.Space(8);
+        }
+
+        private void DrawEntry(ToolboxItem item)
+        {
+            var style = _selected == item ? "SelectionRect" : "box";
+            EditorGUILayout.BeginVertical(style);
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                // 预览缩略图（AssetPreview 异步生成，首帧可能为空）
-                var preview = AssetPreview.GetAssetPreview(entry.Prefab);
+                DrawThumbnail(item);
+
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    // 名称 + 家族徽章
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        if (GUILayout.Button(item.name, EditorStyles.boldLabel))
+                        {
+                            _selected = item;
+                            _selectedPreset = item.presets.Count > 0 ? item.presets[0] : null;
+                            PingItem(item);
+                        }
+                        GUILayout.FlexibleSpace();
+                        DrawFamilyBadge(item.family);
+                    }
+
+                    EditorGUILayout.LabelField(item.description, EditorStyles.miniLabel, GUILayout.MaxWidth(420));
+
+                    // 路径
+                    var pathText = item.category == ToolboxCategory.Tool
+                        ? $"组件: {ShortType(item.componentType)}"
+                        : item.prefabPath;
+                    EditorGUILayout.LabelField(pathText, EditorStyles.miniLabel);
+
+                    GUILayout.Space(4);
+
+                    // 操作行
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        // 预设下拉（仅 Kit/Toy 且有预设时）
+                        if (item.presets.Count > 0)
+                        {
+                            var presetNames = item.presets.Select(p => p.name).ToArray();
+                            var curIdx = Mathf.Max(0, item.presets.FindIndex(p => p == _selectedPreset));
+                            var newIdx = EditorGUILayout.Popup(curIdx, presetNames, GUILayout.Width(150));
+                            if (newIdx != curIdx)
+                            {
+                                _selected = item;
+                                _selectedPreset = item.presets[newIdx];
+                            }
+                        }
+
+                        GUILayout.FlexibleSpace();
+
+                        if (GUILayout.Button("实例化", GUILayout.Width(72)))
+                            Instantiate(item);
+                        if (GUILayout.Button("定位", GUILayout.Width(52)))
+                            PingItem(item);
+                    }
+                }
+            }
+
+            EditorGUILayout.EndVertical();
+            GUILayout.Space(4);
+        }
+
+        private void DrawThumbnail(ToolboxItem item)
+        {
+            if (item.category == ToolboxCategory.Kit)
+            {
+                var prefab = item.LoadPrefab();
+                var preview = prefab != null ? AssetPreview.GetAssetPreview(prefab) : null;
                 if (preview != null)
                 {
                     GUILayout.Label(preview, GUILayout.Width(72), GUILayout.Height(72));
@@ -99,31 +248,41 @@ namespace EXProceduralMachine.Editor
                 else
                 {
                     GUILayout.Box("预览…", GUILayout.Width(72), GUILayout.Height(72));
-                    Repaint(); // 等待预览生成
-                }
-
-                using (new EditorGUILayout.VerticalScope())
-                {
-                    GUILayout.Space(4);
-                    if (GUILayout.Button(entry.Name, EditorStyles.boldLabel))
-                        PingTemplate(entry);
-
-                    EditorGUILayout.LabelField(entry.Path, EditorStyles.miniLabel);
-                    if (entry.Components.Length > 0)
-                        EditorGUILayout.LabelField("组件: " + string.Join(", ", entry.Components), EditorStyles.miniLabel);
-
-                    GUILayout.Space(4);
-                    using (new EditorGUILayout.HorizontalScope())
-                    {
-                        if (GUILayout.Button("定位资产", GUILayout.Width(72)))
-                            PingTemplate(entry);
-                        if (GUILayout.Button("实例化到场景", GUILayout.Width(104)))
-                            InstantiateTemplate(entry);
-                    }
+                    Repaint();
                 }
             }
+            else
+            {
+                var icon = item.category == ToolboxCategory.Tool ? "d_SettingsIcon" : "d_Toolbar Plus";
+                var tex = EditorGUIUtility.IconContent(icon).image;
+                GUILayout.Box(tex, GUILayout.Width(72), GUILayout.Height(72));
+            }
+        }
 
-            EditorGUILayout.EndVertical();
+        private void DrawFamilyBadge(ToolboxFamily family)
+        {
+            var name = family switch
+            {
+                ToolboxFamily.Follow => "跟随",
+                ToolboxFamily.Sway => "摆动",
+                ToolboxFamily.Bounce => "回弹",
+                ToolboxFamily.Locomotion => "步态",
+                ToolboxFamily.Breath => "呼吸",
+                _ => "调试"
+            };
+            var color = family switch
+            {
+                ToolboxFamily.Follow => new Color(0.2f, 0.6f, 1f),
+                ToolboxFamily.Sway => new Color(0.9f, 0.4f, 0.7f),
+                ToolboxFamily.Bounce => new Color(1f, 0.6f, 0.2f),
+                ToolboxFamily.Locomotion => new Color(0.4f, 0.8f, 0.3f),
+                ToolboxFamily.Breath => new Color(0.6f, 0.5f, 1f),
+                _ => new Color(0.6f, 0.6f, 0.6f)
+            };
+            var prev = GUI.color;
+            GUI.color = color;
+            GUILayout.Label(name, EditorStyles.miniBoldLabel, GUILayout.Width(36));
+            GUI.color = prev;
         }
 
         // ==================== 底部 ====================
@@ -132,84 +291,105 @@ namespace EXProceduralMachine.Editor
         {
             using (new EditorGUILayout.HorizontalScope())
             {
-                EditorGUILayout.LabelField($"共 {_templates.Count} 个模板", EditorStyles.miniLabel);
+                EditorGUILayout.LabelField($"显示 {FilteredItems().Count()} / {_manifest.items.Count} 条目", EditorStyles.miniLabel);
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("在资源管理器中打开扫描目录", EditorStyles.miniButton))
-                    EditorUtility.RevealInFinder(scanFolder);
+                if (GUILayout.Button("导出清单 JSON（网页端数据源）", EditorStyles.miniButton))
+                    ExportManifest();
+                if (GUILayout.Button("打开 Examples 目录", EditorStyles.miniButton))
+                    EditorUtility.RevealInFinder(ToolboxCatalog.KitScanFolder);
             }
         }
 
         // ==================== 逻辑 ====================
 
-        /// <summary>重新扫描扫描目录下的所有 Prefab 模板</summary>
-        private void Refresh()
+        private int CountOf(ToolboxCategory cat) => _manifest.items.Count(i => i.category == cat);
+
+        private IEnumerable<ToolboxItem> FilteredItems()
         {
-            _templates.Clear();
+            IEnumerable<ToolboxItem> q = _manifest.items;
 
-            if (string.IsNullOrEmpty(scanFolder) || !Directory.Exists(scanFolder))
-                return;
+            if (_categoryFilter.HasValue)
+                q = q.Where(i => i.category == _categoryFilter.Value);
+            if (_familyFilter.HasValue)
+                q = q.Where(i => i.family == _familyFilter.Value);
 
-            var guids = AssetDatabase.FindAssets("t:Prefab", new[] { scanFolder });
-            foreach (var guid in guids)
+            if (!string.IsNullOrWhiteSpace(_search))
+            {
+                var kw = _search.Trim().ToLowerInvariant();
+                q = q.Where(i =>
+                    i.name.ToLowerInvariant().Contains(kw) ||
+                    i.description.ToLowerInvariant().Contains(kw) ||
+                    (i.componentType ?? "").ToLowerInvariant().Contains(kw) ||
+                    (i.prefabPath ?? "").ToLowerInvariant().Contains(kw));
+            }
+
+            return q.OrderBy(i => i.category).ThenBy(i => i.name);
+        }
+
+        private static string ShortType(string fullName)
+        {
+            if (string.IsNullOrEmpty(fullName)) return "";
+            var dot = fullName.LastIndexOf('.');
+            return dot >= 0 ? fullName.Substring(dot + 1) : fullName;
+        }
+
+        private static void PingItem(ToolboxItem item)
+        {
+            if (item.category == ToolboxCategory.Tool)
+            {
+                var type = ToolboxCatalog.ResolveType(item.componentType);
+                if (type != null)
+                {
+                    var mono = FindMonoScript(type);
+                    if (mono != null)
+                    {
+                        Selection.activeObject = mono;
+                        EditorGUIUtility.PingObject(mono);
+                    }
+                }
+            }
+            else
+            {
+                var prefab = item.LoadPrefab();
+                if (prefab != null)
+                {
+                    Selection.activeObject = prefab;
+                    EditorGUIUtility.PingObject(prefab);
+                }
+            }
+        }
+
+        private static MonoScript FindMonoScript(System.Type type)
+        {
+            foreach (var guid in AssetDatabase.FindAssets("t:MonoScript"))
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
-                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (prefab == null)
-                    continue;
-
-                // 收集挂载的脚本组件（过滤 Transform / Renderer 等内置组件）
-                var componentNames = prefab.GetComponentsInChildren<MonoBehaviour>(true)
-                    .Select(c => c.GetType().Name)
-                    .Where(n => !string.IsNullOrEmpty(n))
-                    .Distinct()
-                    .ToArray();
-
-                _templates.Add(new TemplateEntry
-                {
-                    Name = prefab.name,
-                    Path = path,
-                    Components = componentNames,
-                    Prefab = prefab
-                });
+                var mono = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+                if (mono != null && mono.GetClass() == type)
+                    return mono;
             }
+            return null;
         }
 
-        /// <summary>在 Project 窗口定位并选中模板资产</summary>
-        private static void PingTemplate(TemplateEntry entry)
+        private void Instantiate(ToolboxItem item)
         {
-            if (entry.Prefab == null)
-                return;
-
-            EditorGUIUtility.PingObject(entry.Prefab);
-            Selection.activeObject = entry.Prefab;
+            var go = ToolboxCatalog.InstantiateItem(item, _selectedPreset);
+            if (go == null) return;
+            Selection.activeGameObject = go;
+            if (item.category == ToolboxCategory.Tool && _selectedPreset != null && _selectedPreset.overrides.Count > 0)
+                Debug.Log($"[EXMach] 已应用预设「{_selectedPreset.name}」到 {go.name}（{_selectedPreset.overrides.Count} 项覆写）");
         }
 
-        /// <summary>把模板实例化到当前激活场景并选中</summary>
-        private static void InstantiateTemplate(TemplateEntry entry)
+        private void ExportManifest()
         {
-            if (entry.Prefab == null)
+            var path = EditorUtility.SaveFilePanel("导出工具箱清单（JSON）", "Assets/_EXProceduralMachine/Docs",
+                "toolbox-manifest", "json");
+            if (string.IsNullOrEmpty(path))
                 return;
-
-            var instance = (GameObject)PrefabUtility.InstantiatePrefab(entry.Prefab);
-            if (instance == null)
-            {
-                Debug.LogError($"[EXMach] 模板 {entry.Name} 实例化失败，请检查预制体是否有效。");
-                return;
-            }
-
-            Undo.RegisterCreatedObjectUndo(instance, $"Instantiate {entry.Name}");
-            Selection.activeGameObject = instance;
-        }
-
-        // ==================== 数据 ====================
-
-        [System.Serializable]
-        private class TemplateEntry
-        {
-            public string Name;
-            public string Path;
-            public string[] Components;
-            public GameObject Prefab;
+            // 若保存到项目内，转换为相对路径
+            if (path.StartsWith(Application.dataPath))
+                path = "Assets" + path.Substring(Application.dataPath.Length);
+            ToolboxCatalog.ExportJson(ToolboxCatalog.BuildManifest(), path);
         }
     }
 }

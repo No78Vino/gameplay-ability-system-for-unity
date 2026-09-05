@@ -62,6 +62,14 @@ namespace EXProceduralMachine
 
         public SecondOrderDynamics Dynamics { get; private set; } = new SecondOrderDynamics(); // 二阶动力学实例
 
+        /// <summary>Custom 类型的自定义输入源（每帧调用）</summary>
+        [NonSerialized]
+        public System.Func<Vector3> customInput;
+
+        /// <summary>Custom 类型的自定义输出回写（值, 自身Transform）</summary>
+        [NonSerialized]
+        public System.Action<Vector3, Transform> customOutput;
+
         [BoxGroup("次级运动")]
         [HideIf(nameof(autoUpdate))]
         [Button("刷新参数")]
@@ -73,6 +81,39 @@ namespace EXProceduralMachine
             Dynamics.UpdateFactors();
         }
 
+        /// <summary>仅更新参数不重置状态（运行时动态调参安全）</summary>
+        public void ConfigureDynamicsFactors()
+        {
+            Dynamics.Configure(Frequency, Damping, Scale);
+        }
+
+        /// <summary>按影响属性取当前 Transform 值（用于启动初始化/OnEnable 重置）</summary>
+        public Vector3 CurrentValue(Transform t)
+        {
+            switch (ValueType)
+            {
+                case SecondOrderDynamicValueType.Position: return t.position;
+                case SecondOrderDynamicValueType.Rotation: return t.localEulerAngles;
+                case SecondOrderDynamicValueType.QuaternionRotation: return QuaternionLog(t.localRotation);
+                case SecondOrderDynamicValueType.Scale: return t.localScale;
+                default: return Vector3.zero;
+            }
+        }
+
+        /// <summary>用当前 Transform 值重置动力学状态（消除启动突跳）</summary>
+        public void ResetFrom(Transform t)
+        {
+            Vector3 v = CurrentValue(t);
+            if (ValueType == SecondOrderDynamicValueType.Rotation) v = WrapEuler(v);
+            Dynamics.Reset(v);
+        }
+
+        /// <summary>便捷稳态判定</summary>
+        public bool IsSettled(float positionTolerance = 0.01f, float velocityTolerance = 0.01f)
+        {
+            return Dynamics.IsSettled(positionTolerance, velocityTolerance);
+        }
+
         public Vector3 CheckEffectedAxis(Vector3 source, Vector3 origin)
         {
             Vector3 value = source;
@@ -80,6 +121,41 @@ namespace EXProceduralMachine
             if (!y) value.y = origin.y;
             if (!z) value.z = origin.z;
             return value;
+        }
+
+        /// <summary>
+        /// 将角度分量映射到 [-180, 180)，避免欧拉角回绕（如 350° ↔ 10° 实际相邻但数值差 340°）
+        /// 被二阶系统当作长距离运动，导致方向切换时剧烈翻转。
+        /// </summary>
+        public static float WrapAngle(float a)
+        {
+            float wrapped = (a + 180f) % 360f;
+            if (wrapped < 0f) wrapped += 360f;
+            return wrapped - 180f;
+        }
+
+        public static Vector3 WrapEuler(Vector3 euler)
+        {
+            return new Vector3(WrapAngle(euler.x), WrapAngle(euler.y), WrapAngle(euler.z));
+        }
+
+        /// <summary>四元数 → 旋转向量（对数空间，角度规范化到 [-π, π] 保持连续）</summary>
+        public static Vector3 QuaternionLog(Quaternion q)
+        {
+            q.ToAngleAxis(out float angleDeg, out Vector3 axis);
+            float angle = angleDeg * Mathf.Deg2Rad;
+            // 规范化到 [-π, π]：等价旋转取最短表示（避免 350° 当 350° 走）
+            if (angle > Mathf.PI) angle -= Mathf.PI * 2f;
+            return axis * angle;
+        }
+
+        /// <summary>旋转向量 → 四元数（对数空间逆变换）</summary>
+        public static Quaternion QuaternionExp(Vector3 v)
+        {
+            float angle = v.magnitude;
+            if (angle < 1e-6f) return Quaternion.identity;
+            Vector3 axis = v / angle;
+            return Quaternion.AngleAxis(angle * Mathf.Rad2Deg, axis);
         }
 
 
