@@ -47,8 +47,8 @@ namespace GAS.Runtime
                     if (stacking.ValueRO.EffectExpirationPolicy == EffectExpirationPolicy.ClearEntireStack)
                     {
                         // 清除整个Stack，相当于直接销毁
-                        ecb.RemoveComponent<CEffectApplied>(geEntity);
-                        ecb.AddComponent<CEffectDestroy>(geEntity);
+                        ecb.AddComponent<WipDeactivateEffect>(geEntity);
+                        ecb.AddComponent<WipRemoveEffect>(geEntity);
                     }
                     else if (stacking.ValueRO.EffectExpirationPolicy ==
                              EffectExpirationPolicy.RemoveSingleStackAndRefreshDuration)
@@ -56,6 +56,7 @@ namespace GAS.Runtime
                         // 1.移除一层stack
                         TryChangeStackCount(
                             state.EntityManager,
+                            ecb,
                             geEntity,
                             stacking.ValueRO,
                             stacking.ValueRO.StackCount - 1,
@@ -104,7 +105,7 @@ namespace GAS.Runtime
             }
         }
         
-        private void TryChangeStackCount(EntityManager entityManager, Entity ge, CStacking stacking,
+        private void TryChangeStackCount(EntityManager entityManager, EntityCommandBuffer ecb, Entity ge, CStacking stacking,
             int stackCount, RefRW<CDuration> duration, GlobalTimer globalFrameTimer)
         {
             var oldStackCount = entityManager.GetComponentData<CStacking>(ge).StackCount;
@@ -114,8 +115,8 @@ namespace GAS.Runtime
             {
                 // Fix #4: 层数减到0，销毁GE  
                 newStackCount = 0;
-                entityManager.RemoveComponent<CEffectApplied>(ge);
-                entityManager.AddComponent<CEffectDestroy>(ge);
+                ecb.AddComponent<WipDeactivateEffect>(ge);
+                ecb.AddComponent<WipRemoveEffect>(ge);
             }
             else if (stackCount <= stacking.LimitCount)
             {

@@ -57,7 +57,7 @@ namespace GAS.Runtime
                 var operatedEffect = stackGe == Entity.Null ? ge : stackGe;  
                 // 读取已有堆叠GE的当前StackCount，而非新传入GE的StackCount  
                 var existingStacking = state.EntityManager.GetComponentData<CStacking>(operatedEffect);  
-                TryChangeStackCount(state.EntityManager, operatedEffect, existingStacking, existingStacking.StackCount + 1);
+                TryChangeStackCount(state.EntityManager, ecb, operatedEffect, existingStacking, existingStacking.StackCount + 1);
             }
 
             ecb.Playback(state.EntityManager);
@@ -84,7 +84,7 @@ namespace GAS.Runtime
             if (!alreadyExist) geBuff.Add(new BGameplayEffect { GameplayEffect = ge });
         }
 
-        private void TryChangeStackCount(EntityManager entityManager, Entity ge, CStacking stacking, int stackCount)
+        private void TryChangeStackCount(EntityManager entityManager, EntityCommandBuffer ecb, Entity ge, CStacking stacking, int stackCount)
         {
             // 获取旧Stacking数据
             var globalFrameTimer = _globalTimer;
@@ -147,8 +147,8 @@ namespace GAS.Runtime
                     // 当DenyOverflowApplication为True时，溢出时是否直接删除所有层数  
                     if (stacking.clearStackOnOverflow)  
                     {  
-                        EntityHelper.RemoveComponent<CEffectApplied>(ge);  
-                        EntityHelper.AddComponent<CEffectDestroy>(ge);  
+                        ecb.AddComponent<WipDeactivateEffect>(ge);
+                        ecb.AddComponent<WipRemoveEffect>(ge);
                     }  
                     // denyOverflow=true 时不刷新Duration（无论策略如何）  
                 }  
